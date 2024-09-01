@@ -1,0 +1,199 @@
+# add_newline = false
+add_newline = true
+command_timeout = 1000
+
+format = '${custom.my_directory}$all'
+
+# test commit
+
+[line_break]
+disabled = true
+
+[character]
+success_symbol = "[](green)"
+error_symbol = "[✗](red)"
+vicmd_symbol = "[](green)"
+
+[cmd_duration]
+min_time = 10_000  # Show command duration over 10,000 milliseconds (=10 sec)
+style = "yellow"
+format = "took [$duration]($style) "
+
+[c]
+style = "blue"
+symbol = ' '
+
+[nodejs]
+disabled = false
+style = "green"
+not_capable_style = "red"
+
+
+[username]
+style_user = "#C6A0F6"
+show_always = false
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = true
+format = "[@]($style)[$hostname]($style): "
+style = "#C6A0F6"
+disabled = false
+
+[directory]
+disabled = true
+read_only = " 🔒"
+style = "cyan"
+
+[docker_context]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[git_branch]
+style="blue"
+symbol = " "
+# symbol = " "
+
+[git_status]
+style = "#B4BEFE"
+deleted = "✗"
+
+[git_commit]
+style = "#C6A0F6"
+tag_disabled = false
+
+[aws]
+format = 'on [$symbol($profile )(\($region\) )(\[$duration\] )]($style)'
+style="#F9E2AF"
+symbol = "󰸏 "
+force_display = true
+
+[package]
+style="yellow"
+symbol = '📦 '
+disabled = true
+
+[custom.my_directory]
+command="""
+cwd=$(pwd)
+
+if [[ "$cwd" = "/Users/jgarcia" ]]; then
+  echo "~"
+  return
+fi
+
+git_dir=$(git rev-parse --git-dir)
+if [[ "$git_dir" =~ "worktree" ]]; then
+  root_dir=$(echo "$cwd" | awk -F'/' '{print $(NF-1)"/"$NF}')
+  echo "$root_dir"
+elif [[ "$git_dir" == ".git" ]]; then
+  pwd_c=$(echo $cwd | awk -F/ '{print $NF}')
+  echo "$pwd_c "
+  return
+else
+  echo "$cwd "
+fi
+"""
+
+when = """
+return 0
+"""
+format = "[$output]($style) "
+style = "cyan"
+
+
+[custom.giturl]
+description = "Display symbol for remote Git server"
+command = """
+GIT_REMOTE=$(command git ls-remote --get-url 2> /dev/null)
+if [[ "$GIT_REMOTE" =~ "github" ]]; then
+    GIT_REMOTE_SYMBOL="  "
+elif [[ "$GIT_REMOTE" =~ "gitlab" ]]; then
+    GIT_REMOTE_SYMBOL="  "
+elif [[ "$GIT_REMOTE" =~ "bitbucket" ]]; then
+    GIT_REMOTE_SYMBOL="  "
+elif [[ "$GIT_REMOTE" =~ "git" ]]; then
+    GIT_REMOTE_SYMBOL="󰊢  "
+else
+  GIT_REMOTE_SYMBOL=""
+  return
+fi
+echo "$GIT_REMOTE_SYMBOL "
+"""
+
+when = """
+GIT_REMOTE=$(command git ls-remote --get-url 2> /dev/null)
+if [[ "$GIT_REMOTE" == "" ]]; then
+  return 1
+fi
+
+
+IS_BARE=$(git rev-parse --is-bare-repository)
+if [[ "$IS_BARE" == "true" ]]; then
+  return 0
+fi
+
+IS_A_GIT_REPO=$(git rev-parse --is-inside-work-tree 2> /dev/null)
+if [[ "$IS_A_GIT_REPO" == "true" ]]; then
+  return 0
+fi
+
+return 1
+"""
+format = "at $output  "
+style = "blue"
+
+
+# [custom.npmv]
+# # disabled = true
+# description = "Display npm version used"
+# command = """
+# npm --version
+# """
+# when = 'which npm 2> /dev/null && git rev-parse --is-inside-work-tree 2> /dev/null'
+# # format = "at $output "
+# format = "[ ]($style)[${output}]($style) "
+# style = "purple"
+
+[julia]
+format = "[$symbol$version]($style) "
+symbol = "ஃ "
+# style = "bold green"
+style = "green"
+
+[memory_usage]
+format = "$symbol[${ram}( | ${swap})]($style) "
+show_percentage = true
+show_swap = true
+threshold = 70
+# style = "bold dimmed white"
+style = "dimmed white"
+disabled = true 
+
+
+[python]
+format = "[$symbol$version]($style) "
+style = "bold green"
+
+[dotnet]
+disabled = true
+
+[rust]
+format = "[$symbol$version]($style) "
+style = "bold green"
+
+[bun]
+disabled = true
+style = "blue"
+
+[azure]
+disabled = true
+
+[java]
+format ="via [${symbol}(${version})]($style)"
+style = "blue"

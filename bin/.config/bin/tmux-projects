@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+## cmd + 0
+
+if [[ $# -eq 1 ]]; then
+  selected=$1
+else
+  selected=$(find ~/work ~/work/mar ~/private ~/tmp ~/tmp/poc ~/tmp/prod ~/.dotfiles ~/.local/share/nvim/lazy ~/projects ~ -mindepth 1 -maxdepth 1 -type d | fzf --bind=ctrl-k:up,ctrl-j:down)
+fi
+
+if [[ -z $selected ]]; then
+  exit 0
+fi
+tmux send-keys -t ! "cd $selected" C-m C-l
+
+# tmux previous-window
+# tmux split-pane -h
+# tmux send-keys -t 1 "cd $selected && clear" C-m

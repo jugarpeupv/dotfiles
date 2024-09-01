@@ -1,0 +1,11 @@
+config:
+  fallback-icon: "" # show when no definition is found
+  # multi-pane-icon: "" # show when window has multiple panes (blank by default)
+  # multi-pane-icon: "" # show when window has multiple panes (blank by default)
+  multi-pane-icon: "" # show when window has multiple panes (blank by default)
+  show-name: false # show the window name with the icon (defaults to false)
+
+icons:
+  # zsh: "" # overwrite with your own symbol (Nerd Font icon, emoji, whatever!)
+  zsh: "" # overwrite with your own symbol (Nerd Font icon, emoji, whatever!)
+  cmatrix: "🤯" # add new entries that aren't included

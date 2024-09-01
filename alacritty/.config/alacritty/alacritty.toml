@@ -1,0 +1,165 @@
+# TERM = "alacritty"
+live_config_reload = true
+
+[colors.bright]
+black = "0x555555"
+blue = "0x94BFF3"
+cyan = "0x93E0E3"
+green = "0x8ee2cf"
+magenta = "0xEC93D3"
+red = "0xDCA3A3"
+white = "#bbc2e0"
+yellow = "0xF0DFAF"
+
+[colors.normal]
+black = "0x000000"
+blue = "#c9a8fa"
+cyan = "#8be9fd"
+green = "#8ee2cf"
+magenta = "#b7bdf8"
+red = "#f38ba8"
+white = "#bbc2e0"
+yellow = "#DFAF8F"
+
+[colors.primary]
+background = "#00122e"
+foreground = "#c0caf5"
+
+[font]
+size = 17.0
+
+[font.bold]
+family = "Hack Nerd Font"
+style = "Bold"
+
+[font.bold_italic]
+family = "Hack Nerd Font"
+style = "Bold Italic"
+
+[font.glyph_offset]
+x = 0
+y = 7
+
+[font.italic]
+family = "Hack Nerd Font Mono"
+style = "Italic"
+
+[font.normal]
+# family = "Hack Nerd Font Mono"
+family = "Hack Nerd Font Mono"
+style = "Regular"
+
+[font.offset]
+y = 9
+
+[[keyboard.bindings]]
+chars = "\u001Bp"
+key = "P"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001Bk"
+key = "K"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001Bj"
+key = "J"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001Bg"
+key = "Key7"
+mods = "Command|Shift"
+
+[[keyboard.bindings]]
+chars = "\u001B."
+key = "Period"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u00018"
+key = "Comma"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u0001f"
+key = "U"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u00019"
+key = "Key0"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u00010"
+key = "Return"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0001p"
+key = "Left"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0001n"
+key = "Right"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0001("
+key = "Down"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u0001)"
+key = "Up"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u00011"
+key = "Key1"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u00012"
+key = "Key2"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u00013"
+key = "Key3"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u00014"
+key = "Key4"
+mods = "Command"
+
+[[keyboard.bindings]]
+chars = "\u001Be"
+key = "J"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+chars = "\u001Bk"
+key = "K"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "CreateNewWindow"
+key = "N"
+mods = "Command"
+
+[mouse]
+hide_when_typing = true
+
+[window]
+decorations = "buttonless"
+dynamic_padding = false
+opacity = 0.80
+
+[window.padding]
+x = 10
+y = 3

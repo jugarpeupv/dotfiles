@@ -1,0 +1,11 @@
+return {}
+-- return {
+--   -- {
+--   --   "Jorengarenar/vim-SQL-UPPER",
+--   --   ft = { "sql", "mysql", "sql.dbee" },
+--   -- },
+--   {
+--     "jsborjesson/vim-uppercase-sql",
+--     ft = { "sql", "mysql", "sql.dbee" },
+--   },
+-- }

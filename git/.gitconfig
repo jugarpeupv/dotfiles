@@ -1,0 +1,60 @@
+[include]
+  path = ~/.git-personal.conf
+[includeIf "gitdir:~/work/"]
+  path = ~/.git-mar.conf
+[includeIf "gitdir:~/tmp/"]
+  path = ~/.git-mar.conf
+[includeIf "gitdir:~/private/"]
+  path = ~/.git-personal.conf
+
+[init]
+	defaultBranch = main
+; [core]
+;   editor = code --wait
+; [diff]
+;   tool = vscode
+; [difftool "vscode"]
+;   cmd = code --wait --diff $LOCAL $REMOTE
+; [merge]
+;   tool = vscode
+; [mergetool "vscode"]
+;   cmd = code --wait $MERGED
+
+[core]
+  editor = nvim
+	pager = nvim -R
+  ; pager = delta
+; [interactive]
+;   diffFilter = delta --color-only
+; [delta]
+;   navigate = true
+;   light = false
+
+[difftool]
+  prompt = true
+; [diff]
+;   tool = nvimdiff
+;   colorMoved = default
+; [difftool "nvimdiff"]
+;   cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+; [merge]
+;   tool = vimdiff
+;   conflictstyle = diff3
+; [mergetool "vimdiff"]
+;   path = nvim
+
+
+; [credential "https://github.com"]
+; 	helper = 
+; 	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[diff "lockb"]
+	binary = true
+	textconv = bun
+[color]
+	pager = no

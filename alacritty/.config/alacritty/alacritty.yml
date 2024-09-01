@@ -1,0 +1,372 @@
+live_config_reload: true
+TERM: alacritty
+
+window:
+  opacity: 0.97
+  padding:
+    x: 10
+    y: 3
+  dynamic_padding: false
+  decorations: buttonless
+
+font:
+  normal:
+    # family: "Input Mono"
+    # family: "Liga Input Mono"
+    # family: "Liga Menlo"
+    # family: "Comic Mono "
+    # family: "JetBrainsMono Nerd Font Mono"
+    # family: "JetBrains Mono"
+    # family: "SFMono Nerd Font"
+    # family: "DejaVu Sans Code"
+    # family: "DejaVuSansMono Nerd Font"
+    # family: "DejaVuSansM Nerd Font"
+    # family: "Fira Code"
+    # family: "Borg Sans Mono"
+    # family: "Monaco for Powerline"
+    # family: "VictorMono Nerd Font Mono"
+    # family: "Codelia Ligatures"
+    # family: "mononoki Nerd Font"
+    # family: "Agave Code"
+    # family: "agave Nerd Font Mono r"
+    family: "FuraCode Nerd Font"
+    # family: "FiraCode Nerd Font Mono"
+    # family: "JetBrainsMono Nerd Font Mono"
+    # family: "Fira Mono for Powerline"
+    # family: "FiraCode Nerd Font"
+    # family: "FiraCode Nerd Font Mono"
+    # family: "FiraCode Nerd Font Mono"
+    # family: "Fira Code"
+    # family: "Monolisa default"
+    # family: "Liga Monolisa"
+    # family: "Ubuntu Mono derivative Powerline"
+    # family: "UbuntuMono Nerd Font Mono"
+    # family: "Cousine Nerd Font Mono"
+    # family: "UbuntuMono Nerd Font"
+    # family: "DejaVu Sans Mono for Powerline Regular"
+    # family: "DejaVueSansMono Nerd Font"
+    # family: "DejaVuSansMono Code"
+    # family: "Monofur Nerd Font Mono Regular"
+    # family: "Consolas"
+    # family: "Ubuntu Nerd Font Mono"
+    # family: "SFMono Nerd Font"
+    # family: "Hack Nerd Font Mono"
+    # style: "Regular"
+    # family: "Liga SFMono Nerd Font"
+    # family: "FiraCode Nerd Font Mono"
+    # style: "Regular"
+    # family: "SF Mono Powerline"
+    # style: "Regular"
+    # family: "Liga SFMono Nerd Font"
+    # family: "Monolisa default"
+    # family: "IBM Plex Mono Regular"
+    # family: "Meslo Nerd Font"
+    # family: "Hack Nerd Font Mono"
+    # style: "Regular"
+    # family: "Dank Mono Regular"
+    # family: "Meslo LG L DZ for Powerline"
+    # family: "Monolisa Nerd Font"
+    # family: "Monolisa"
+    # family: "MonoLisa Nerd Font"
+    # family: "Liga Monolisa"
+    # family: "Liga Monolisa"
+    # family: "Lilex Nerd Font Mono"
+    # family: "Meslo LGM Nerd Font Mono"
+    # family: Monospace
+    # family: "Liga Menlo for Powerline"
+    # family: "Liga Menlo"
+    # family: "Menlo for Powerline"
+    style: Regular
+    # style: Book
+    # # style: Medium
+    # family: "SFMono Nerd Font"
+    # family: "Liga SFMono Nerd Font"
+    # # style: "Medium"
+    # # style: "Retina"
+    # # The bold font face
+  # bold:
+  #   family: "Monolisa"
+  #   style: Bold
+
+  # bold:
+  #   family: "SFMono Nerd Font"
+  #   # style: "Medium"
+  #   style: "Regular"
+  #
+  #   # The italic font face
+  #
+  bold:
+    # family: "SFMono Nerd Font"
+    family: "DejaVuSansMono Nerd Font"
+    # family: "Hack Nerd Font Mono"
+    # family: "Hack Nerd Font Mono"
+    # family: "Hack Nerd Font Mono"
+    style: "Regular"
+  # bold:
+  #   family: "Hack Nerd Font Mono"
+  #   style: "Regular"
+  # bold:
+  #   family: "Monolisa Nerd Font"
+  #   style: "Book"
+  # italic:
+  #   family: "Monolisa Nerd Font"
+  #   style: "Book"
+  # italic_bold:
+  #   family: "Monolisa Nerd Font"
+  #   style: "Book"
+  italic: 
+    # family: "Hack Nerd Font Mono"
+    # family: "SFMono Nerd Font"
+    family: "DejaVuSansMono Nerd Font"
+    # family: "DejaVu Sans Code"
+    # style: "Oblique"
+
+  # bold_italic:
+  #   family: "Hack Nerd Font Mono"
+    # family: "SFMono Nerd Font"
+    # family: "DejaVuSansMono Nerd Font"
+    # family: "Hack Nerd Font Mono"
+    # style: "Regular"
+  # #
+  # italic_bold:
+  #   family: "FiraCode Nerd Font Mono"
+  #   style: "Regular"
+  # bold:
+  #   family: "FuraCode Nerd Font"
+  #   style: "Regular Italic"
+  # bold:
+  #   family: "Liga SFMono Nerd Font"
+  #   style: "Regular"
+  # italic:
+  #   family: "Liga SFMono Nerd Font"
+  #   style: "Regular"
+  # italic:
+  #   family: "FuraCode Nerd Font"
+  #   style: "Regular Italic"
+  # italic_bold:
+  #   family: "FuraCode Nerd Font"
+  #   style: "Regular"
+  #
+  # bold:
+  #   family: "Liga SFMono Nerd Font"
+  #   style: "Regular"
+  # italic:
+  #   family: "Liga SFMono Nerd Font"
+  #   style: "Regular Italic"
+  # italic:
+  #   family: "MonoLisa Nerd Font Mono"
+  #   style: "Regular Italic"
+
+
+  size: 17.0
+  # glyph_offset:
+  #   x: 0
+  #   y: 12
+  #   # y: 0
+  # offset:
+  #   y: 27
+
+  glyph_offset:
+    x: 0
+    y: 7
+    # y: 0
+  offset:
+    y: 9
+  #
+  # glyph_offset:
+  #   x: 0
+  #   y: 4
+  # offset:
+  #   y: 4
+  # use_thin_strokes: true
+
+mouse:
+  hide_when_typing: true
+
+# alt_send_esc: false
+# alt_send_esc: false
+
+key_bindings:
+  # Send <M-p> to Neovim
+  - { key: P, mods: Command, chars: "\x1b\x70" }
+  # Send <M-j> to Neovim
+  - { key: J, mods: Command, chars: "\x1b\x6a" }
+  # Send <M-g> to Neovim
+  - { key: Key7, mods: Command|Shift, chars: "\x1b\x67" }
+  # Send <M-.> to Neovim
+  - { key: Period, mods: Command, chars: "\x1b\x2e" }
+
+  - { key: Comma, mods: Control, chars: "\x01\x38" }
+
+
+  # Send
+  - { key: U, mods: Command, chars: "\x01\x66" }
+  - { key: Key0, mods: Command, chars: "\x01\x39" }
+  - { key: Return, mods: Command, chars: "\x01\x30" }
+
+  # Switch to sibling panes
+  # - { key: Left, mods: Command, chars: "\x01\x68" }
+  # - { key: Right, mods: Command, chars: "\x01\x6c" }
+  - { key: Left, mods: Command, chars: "\x01\x70" }
+  - { key: Right, mods: Command, chars: "\x01\x6e" }
+  #
+  # # Switch to sibling sessions
+  # - { key: Down, mods: Command, chars: "\x01\x6a" }
+  # - { key: Up, mods: Command, chars: "\x01\x6b" }
+  - { key: Down, mods: Command, chars: "\x01\x28" }
+  - { key: Up, mods: Command, chars: "\x01\x29" }
+  #
+  # # Switch panes
+  - { key: Key1, mods: Command, chars: "\x01\x31" }
+  - { key: Key2, mods: Command, chars: "\x01\x32" }
+  - { key: Key3, mods: Command, chars: "\x01\x33" }
+  - { key: Key4, mods: Command, chars: "\x01\x34" }
+  # Ctrl + shift + j or k send \"<M-e>" and \"<M-k>"
+  - { key: J, mods: Control|Shift, chars: "\x1b\x65" }
+  - { key: K, mods: Control|Shift, chars: "\x1b\x6b" }
+  # - { key: N, mods: Command|Shift, command: { program: "open", args: ["alacritty"] } }
+  - { key: N, mods: Command, action: CreateNewWindow }
+
+# import:
+  # - ~/.config/alacritty/catppuccin/catppuccin-mocha.yml
+#    # - ~/.config/alacritty/catppuccin/catppuccin-macchiato.yml
+#    # - ~/.config/alacritty/catppuccin/catppuccin-frappe.yml
+#    # - ~/.config/alacritty/catppuccin/catppuccin-latte.yml
+# import:
+  # - ~/.config/alacritty/themes/themes/thelovelace.yaml
+  # - ~/.config/alacritty/themes/themes/palenight.yaml
+  # - ~/.config/alacritty/themes/themes/dracula.yaml
+  # - ~/.config/alacritty/themes/themes/zenburm.yaml
+
+# Colors (Dracula)
+colors:
+  # Default colors
+  primary:
+    # background: '0x282a36'
+    # background: '0x1b1b30'
+    # background: '0x0d1f31'
+    # background: '#051832'
+    # background: '#091624'
+    # background: '#071b30'
+    background: '00122e'
+    # background: "0x03142a"
+    # background: "#020d26"
+    # background: "0x03102b"
+    # background: "0x06182a"
+    # background: "0x0c1725"
+    # background: "0x111a2f"
+    # background: "#121826"
+    # background: "#101828"
+    # background: "#1E1E2E" # base
+    # background: "0x09152f"
+    # background: "0x040f27"
+    # background: "0x0c1025"
+    # background: "0x0a141f"
+    # background: "0x0c1725"
+    # background: "0x06192b"
+    # background: "0x071b2e"
+    # background: "0x051832"
+    # background: "0x03192c"
+    # background: "0x03172a"
+    # background: "0x0e1d2b"
+    # background : '0x0f2439'
+    # background: '0x132537'
+    # background: '0x06192b'
+    # background: '0x182838'
+    # background: '0x192632'
+    # background: '0x1e2030'
+    # foreground: "0xf8f8f2"
+    # foreground: "#DCDCCC"
+    foreground: "#c0caf5"
+    # foreground: "#bbc2e0"
+    # foreground: "#bbbbbb"
+
+  #   # Normal colors
+  # normal:
+  #   black:   '0x292d3e'
+  #   red:     '0xf07178'
+  #   # green:   '0xc3e88d'
+  #   green: "0x50fa7b"
+  #   # green: "0x94E2D5"
+  #   # green: "0xa6e3a1"
+  #   # yellow:  '0xffcb6b'
+  #   yellow:  '0xF9E2AF'
+  #   blue:    '0xc792ea'
+  #   magenta:    '0xCBA6F7'
+  #   # magenta: '0xc792ea'
+  #   # magenta: '0xc792ea'
+  #   cyan:    '0x89ddff'
+  #   # cyan:    '0xF5C2E7'
+  #   white:   '0xd0d0d0'
+  #
+  #   # Bright colors
+  # bright:
+  #   black:   '0x434758'
+  #   red:     '0xff8b92'
+  #   # green:   '0xddffa7'
+  #   green: "0x50fa7b"
+  #   yellow:  '0xffe585'
+  #   blue:    '0x9cc4ff'
+  #   magenta: '0xe1acff'
+  #   cyan:    '0xa3f7ff'
+  #   white:   '0xffffff'
+# # #
+# # Normal colors
+#   normal:
+#     black: "0x000000"
+#     red: "0xff5555"
+#     green: "0x50fa7b"
+#     yellow: "0xf1fa8c"
+#     blue: "0xbd93f9"
+#     magenta: "0xff79c6"
+#     cyan: "0x8be9fd"
+#     white: "0xbbbbbb"
+#
+#   # Bright colors
+#   bright:
+#     black: "0x555555"
+#     red: "0xff5555"
+#     green: "0x50fa7b"
+#     yellow: "0xf1fa8c"
+#     blue: "0xcaa9fa"
+#     magenta: "0xff79c6"
+#     cyan: "0x8be9fd"
+#     white: "0xffffff"
+
+
+
+
+  # Normal colors
+  normal:
+    # black:   '0x1E2320'
+    black: "0x000000"
+    red:     '#f38ba8'
+    # green:   '0x60B48A'
+    # green:   '0xA6E3A1'
+    green:   '#8ee2cf'
+    yellow:  '#DFAF8F'
+    # blue:    '0x506070'
+    blue: '#c9a8fa'
+    # magenta: '0xDC8CC3'
+    magenta: '#b7bdf8'
+    # cyan:    '0x8CD0D3'
+    cyan: "#8be9fd"
+    # white:   '#DCDCCC'
+    white: '#bbc2e0'
+    # white: "#bbbbbb"
+
+  # Bright colors
+  bright:
+    # black:   '#709080'
+    black: "0x555555"
+    red:     '0xDCA3A3'
+    # green:   '0xC3BF9F'
+    # green:   '0xA6E3A1'
+    green:   '0x8ee2cf'
+    yellow:  '0xF0DFAF'
+    blue:    '0x94BFF3'
+    magenta: '0xEC93D3'
+    cyan:    '0x93E0E3'
+    # white:   '0xFFFFFF'
+    white:   '#bbc2e0'
+    # white:   '#bbbbbb'

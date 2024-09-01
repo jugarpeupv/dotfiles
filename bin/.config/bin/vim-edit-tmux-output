@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Ctrl+a + L
+
+$HOME/bin/vim-edit-tmux-output
+
+file=`mktemp`-tmux-logs
+tmux capture-pane -peS -32768 > $file
+tmux split-window -h "nvim '+ normal G $' $file"
+tmux resize-pane -Z
+# tmux split-window -h "nvim '+ normal G $' $file"

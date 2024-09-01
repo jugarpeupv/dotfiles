@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+## ctrl + ,
+
+if [[ $# -eq 1 ]]; then
+  selected=$1
+else
+  # selected=$( tmux list-sessions -F '#{#{session_activity},#{session_name}}' | sort -r | sed '/^$/d' | cut -d',' -f2- | fzf-tmux -p80%,80% --reverse --header jump-to-session --preview 'tmux capture-pane -pt {}' --bind 'ctrl-y:execute(tmux kill-session {2..})+abort')
+  # selected=$(tmux list-sessions -F '#{#{session_activity},#{session_name}}' | sort -r | sed '/^$/d' | cut -d',' -f2- | fzf --reverse --header jump-to-session --preview 'tmux capture-pane -pt {}' --bind 'ctrl-y:execute(tmux kill-session -t)')
+  # selected=$(tmux list-sessions -F '#{#{session_activity},#{session_name}}' | sort -r | sed '/^$/d' | cut -d',' -f2- | fzf --reverse --header jump-to-session --preview 'tmux capture-pane -pt {}' --bind 'ctrl-y:execute(tmux kill-session -t {}),ctrl-r:reload(tmux list-sessions -F `#{#{session_activity},#{session_name}}` | sort -r | cut -f1 -d":")')
+  # selected=$(tmux list-sessions -F '#{#{session_activity},#{session_name}}' | sort -r | sed '/^$/d' | cut -d',' -f2- | fzf --reverse --header jump-to-session --preview 'tmux capture-pane -pt {}' --bind 'ctrl-y:execute(tmux kill-session -t {})+reload(tmux list-sessions -F `#{#{session_activity},#{session_name}}` | sort -r | cut -f1 -d":")')
+  # selected=$(tmux list-sessions -F '#{#{session_activity},#{session_name}}' | sort -r | sed '/^$/d' | cut -d',' -f2- | fzf --header jump-to-session --preview 'tmux capture-pane -ept {}' --preview-window right,80% --bind 'ctrl-y:execute(tmux kill-session -t {})+reload(tmux list-sessions -F `#{#{session_activity},#{session_name}}` | sort -r | cut -f1 -d":")')
+  # selected=$(tmux list-sessions -F '#{#{session_activity},#{session_name}}' | cut -f1 -d":" | cut -f2 -d"," | fzf --header jump-to-session --preview 'tmux capture-pane -ept {}' --preview-window right,80% --bind 'ctrl-y:execute(tmux kill-session -t {})+reload(tmux list-sessions -F `#{#{session_activity},#{session_name}}` | cut -f1 -d":" | cut -f2 -d",")')
+  # selected=$(tmux list-sessions -F '#{#{session_activity},#{session_name}}' | sort -r | sed '/^$/d' | cut -d',' -f2- | fzf --header jump-to-session --preview 'tmux capture-pane -ept {}' --preview-window right,80% --bind 'ctrl-y:execute(tmux kill-session -t {})+reload(tmux list-sessions -F "#{#{session_activity},#{session_name}}" | sort -r | sed "/^$/d" | cut -d"," -f2-)')
+  selected=$(tmux list-sessions -F '#{#{session_activity},#{session_name}}' | sort -r | sed '/^$/d' | cut -d',' -f2- | fzf --color header:#89ddff --header 'Jump to session: '  --preview 'tmux capture-pane -ept {}' --preview-window right,80% --bind 'ctrl-d:execute(tmux kill-session -t {})+reload(tmux list-sessions -F "#{#{session_activity},#{session_name}}" | sort -r | sed "/^$/d" | cut -d"," -f2-)')
+fi
+
+if [[ -z $selected ]]; then
+  exit 0
+fi
+
+tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+  tmux new-session -s $selected -c $selected
+  exit 0
+fi
+
+if ! tmux has-session -t=$selected 2> /dev/null; then
+  tmux new-session -ds $selected -c $selected
+fi
+
+tmux switch-client -t $selected
+
+tmux run-shell "/Users/jgarcia/.local/share/nvim/site/pack/packer/start/harpoon/scripts/tmux/switch-back-to-nvim >/dev/null || true" 
+
+
+#!/usr/bin/env bash
+# steal https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/bin/tmux-sessionizer
+
+# if [[ $# -eq 1 ]]; then
+#   selected=$1
+# else
+#   selected=$(find $PROJECTS/* -type d -maxdepth 0 | while read -r p; do zoxide query -l -s "$p/"; done | sort -rnk1 | fzf --no-sort | awk '{print $2}')
+# fi
+#
+# if [[ -z $selected ]]; then
+#   exit 0
+# fi
+#
+# selected_name="$(basename "$selected" | tr . _)"
+# tmux_running="$(pgrep tmux)"
+#
+# if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+#   tmux new-session -s $selected_name -c $selected
+#   exit 0
+# fi
+#
+# if ! tmux has-session -t=$selected_name 2> /dev/null; then
+#   tmux new-session -ds $selected_name -c $selected
+# fi
+#
+# tmux switch-client -t $selected_name

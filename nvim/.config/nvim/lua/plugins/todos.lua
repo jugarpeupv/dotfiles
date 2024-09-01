@@ -1,0 +1,19 @@
+return {}
+-- return {
+--   {
+--     "folke/todo-comments.nvim",
+--     event = { "BufReadPost", "BufNewFile" },
+--     -- cmd = { "TodoTelescope", "TodoTrouble", "TodoQuickFix", "TodoLocList", "Trouble" },
+--     dependencies = { "nvim-lua/plenary.nvim" },
+--     opts = {
+--       -- pattern = [[\b(KEYWORDS)\b]],     pattern = [[\b(KEYWORDS)\b]],
+--       -- pattern = [[\b(KEYWORDS)]],
+--       -- pattern = [[\b(KEYWORDS):]], -- ripgrep regex
+--       -- pattern = [[(KEYWORDS)]], -- ripgrep regex
+--       -- pattern = [[(KEYWORDS)]], -- ripgrep regex
+--       -- your configuration comes here
+--       -- or leave it empty to use the default settings
+--       -- refer to the configuration section below
+--     },
+--   },
+-- }

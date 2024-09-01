@@ -1,0 +1,15 @@
+#!/bin/sh
+# !/usr/bin/env bash
+
+# echo 'hi'
+# fc -ln 0 | awk '!NF || !seen[$0]++' | fzf --tac | tr -d '\n' | pbcopy
+# fc -ln 0
+#
+#
+# fzf
+
+function his() {
+  $(fc -ln 0 | awk '!NF || !seen[$0]++' | fzf --tac | tr -d '\n' | pbcopy)
+}
+
+his()
