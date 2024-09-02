@@ -14,11 +14,13 @@ M.is_bare = function(path)
 end
 
 M.update_git_head = function(path, branch)
-  local git_head_path = path .. "/.git/HEAD"
-  local fp = io.open(git_head_path, "w+")
-  if fp ~= nil then
-    fp:write("ref: refs/heads/" .. branch)
-    fp:close()
+  if (path) then
+    local git_head_path = path .. "/.git/HEAD"
+    local fp = io.open(git_head_path, "w+")
+    if fp ~= nil then
+      fp:write("ref: refs/heads/" .. branch)
+      fp:close()
+    end
   end
 end
 

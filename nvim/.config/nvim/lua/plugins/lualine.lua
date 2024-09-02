@@ -90,6 +90,24 @@ return {
         unnamed = "󰔉", -- Text to show for unnamed buffers.
       },
       -- color = { fg = "#4EC9B0" ,bg = "none" },
+      -- color = function(section)
+      --   local active_buf_full_path = vim.api.nvim_buf_get_name(0)
+      --
+      --   local wt_utils = require("jg.custom.worktree-utils")
+      --   local wt_info = wt_utils.get_wt_info(vim.fn.getcwd())
+      --
+      --   if next(wt_info) == nil then
+      --     return { fg = colors.alternate_black }
+      --   end
+      --
+      --   local escaped_wt_dir = wt_info["wt_dir"]:gsub("([^%w])", "%%%1")
+      --
+      --   if string.find(active_buf_full_path, escaped_wt_dir) then
+      --     return { fg = colors.alternate_black }
+      --   else
+      --     return { fg = "#F38BA8" }
+      --   end
+      -- end,
     }
 
     local diagnostics = {
@@ -128,18 +146,28 @@ return {
     local branch = {
       "branch",
       color = function(section)
-        local cwd = vim.fn.getcwd()
-        local parent_bare_lualine_path = cwd .. "/../.bare"
-        local exists_bare_dir = vim.fn.isdirectory(parent_bare_lualine_path)
+        local active_buf_full_path = vim.api.nvim_buf_get_name(0)
 
-        local active_bufnr = vim.fn.bufnr("%")
-        local branch = lualine_component.get_branch(active_bufnr)
-        local dir_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+        local wt_utils = require("jg.custom.worktree-utils")
+        local wt_info = wt_utils.get_wt_info(vim.fn.getcwd())
 
-        if dir_name ~= branch and vim.bo.filetype ~= "TelescopePrompt" and exists_bare_dir == 1 then
+        if next(wt_info) == nil then
+          return { fg = colors.alternate_black }
+        end
+
+        local escaped_wt_dir = wt_info["wt_dir"]:gsub("([^%w])", "%%%1")
+
+        -- if dir_name ~= branch and vim.bo.filetype ~= "TelescopePrompt" and exists_bare_dir == 1 then
+
+       if (vim.bo.filetype == "TelescopePrompt" or vim.bo.filetype == "toggleterm") then
+          return { fg = colors.alternate_black }
+       end
+
+        if string.find(active_buf_full_path, escaped_wt_dir) then
+          return { fg = colors.alternate_black }
+        else
           return { fg = "#F38BA8" }
         end
-        return { fg = colors.alternate_black }
       end,
     }
 

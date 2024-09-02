@@ -10,7 +10,8 @@ M.attach_lsp_config = function(client, bufnr)
   keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts) -- go to implementation
   keymap.set("n", "gH", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 
-  keymap.set("n", "gR", "<cmd>Trouble lsp_references<cr>", opts)
+  -- keymap.set("n", "gR", "<cmd>Trouble lsp_references<cr>", opts)
+  keymap.set("n", "gR", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
   keymap.set("n", "<leader>fo", "<cmd>lua vim.lsp.buf.format({ async = true})<cr>", opts)
   keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
   -- keymap.set("n", "<Leader>re", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)

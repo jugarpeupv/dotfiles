@@ -400,3 +400,7 @@ local function show_documentation()
 end
 
 vim.keymap.set("n", "K", show_documentation, { silent = true })
+
+
+vim.keymap.set({ "n" }, "<leader>wd","<cmd>windo diffthis<cr>", opts)                               -- copy to 0 register
+vim.keymap.set({ "n" }, "<leader>wo","<cmd>windo diffoff<cr>", opts)                               -- copy to 0 register

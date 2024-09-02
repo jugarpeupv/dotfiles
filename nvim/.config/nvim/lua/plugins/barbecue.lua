@@ -46,22 +46,22 @@ return {
     end
 
     bb.setup({
-      attach_navic = function()
-        local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-        if filetype == "json" then
-          return true
-        end
-        return false
-      end,
-      show_navic = function()
-        local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-        if filetype == "json" then
-          return true
-        end
-        return false
-      end,
-      -- attach_navic = true,
-      -- show_navic = true,
+      -- attach_navic = function()
+      --   local filetype = vim.api.nvim_buf_get_option(0, "filetype")
+      --   if filetype == "json" then
+      --     return true
+      --   end
+      --   return false
+      -- end,
+      -- show_navic = function()
+      --   local filetype = vim.api.nvim_buf_get_option(0, "filetype")
+      --   if filetype == "json" then
+      --     return true
+      --   end
+      --   return false
+      -- end,
+      attach_navic = false,
+      show_navic = false,
       show_modified = true,
       -- create_autocmd = false,
       lead_custom_section = function(bufnr, _)
