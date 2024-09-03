@@ -5,8 +5,8 @@ return {
     keys = { "<leader>op" },
     -- cmd = { "DirBuf" },
     -- priority = 10000,
+    opts = { update_to_buf_dir = { enable = false } },
     config = function()
-
       -- keymap("n", "<Leader>oa", "<cmd>Oil<cr>", opts)
       vim.keymap.set("n", "<Leader>op", "<cmd>Dirbuf<cr>", {})
     end,
@@ -216,5 +216,5 @@ return {
 
       vim.keymap.set("n", "<Leader>oa", "<cmd>Oil<cr>", {})
     end,
-  }
+  },
 }

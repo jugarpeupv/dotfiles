@@ -404,3 +404,5 @@ vim.keymap.set("n", "K", show_documentation, { silent = true })
 
 vim.keymap.set({ "n" }, "<leader>wd","<cmd>windo diffthis<cr>", opts)                               -- copy to 0 register
 vim.keymap.set({ "n" }, "<leader>wo","<cmd>windo diffoff<cr>", opts)                               -- copy to 0 register
+
+vim.api.nvim_set_keymap('n', '<F5>', [[:lua require"osv".launch({port = 8086})<CR>]], { noremap = true })

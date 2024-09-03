@@ -1,16 +1,23 @@
 return {
-   {
-    'Weissle/persistent-breakpoints.nvim',
+  {
+    'theHamsta/nvim-dap-virtual-text',
+    config = function()
+      require('nvim-dap-virtual-text').setup()
+    end
+  },
+  { "jbyuki/one-small-step-for-vimkind" },
+  {
+    "Weissle/persistent-breakpoints.nvim",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-      require('persistent-breakpoints').setup {
-        save_dir = vim.fn.stdpath('data') .. '/nvim_checkpoints',
+      require("persistent-breakpoints").setup({
+        save_dir = vim.fn.stdpath("data") .. "/nvim_checkpoints",
         -- when to load the breakpoints? "BufReadPost" is recommanded.
         load_breakpoints_event = { "BufReadPost" },
         -- record the performance of different function. run :lua require('persistent-breakpoints.api').print_perf_data() to see the result.
         perf_record = false,
-      }
-    end
+      })
+    end,
   },
   {
     "LiadOz/nvim-dap-repl-highlights",
@@ -199,6 +206,18 @@ return {
           processId = require("dap.utils").pick_process,
         },
       }
+
+      dap.configurations.lua = {
+        {
+          type = "nlua",
+          request = "attach",
+          name = "Attach to running Neovim instance",
+        },
+      }
+
+      dap.adapters.nlua = function(callback, config)
+        callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
+      end
 
       -- require('dap.ext.vscode').load_launchjs('.vscode/launch.json', { ['node'] = { 'typescript' } })
 

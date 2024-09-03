@@ -2,6 +2,7 @@
 -- vim.g.loaded_netrwPlugin = 1
 vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 vim.g.maplocalleader = ","
+
 -- vim.loader.enable()
 
 -- Example for configuring Neovim to load user-installed installed Lua rocks:

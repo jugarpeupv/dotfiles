@@ -20,6 +20,7 @@ return {
             surface3 = "#a3a7bc",
 
             -- yellow = "#36C0D8",
+            -- yellow = "#89dcec"
             yellow = "#89ddff",
             green = "#F2CDCD",
             maroon = "#FAB387",
@@ -162,7 +163,9 @@ return {
             -- Folded = { bg = "#1f2335", fg = "#737aa2" },
             -- Folded = { bg = "#292e42", fg = "#737aa2" },
             Folded = { bg = "#292e42" },
-            LspInlayHint = { bg = "#0F2745", fg = "#737aa2" },
+            -- LspInlayHint = { bg = "#0F2745", fg = "#737aa2" },
+            LspInlayHint = { fg = "#737aa2" },
+            NvimDapVirtualText = { fg = "#737aa2" },
             NvimTreeBookmark = { fg = "#f2cdcd" },
             HlSearchNear = { fg = "#181826", bg = "#F38BA8" },
             HlSearchLensNear = { fg = "#181826", bg = "#F38BA8" },
