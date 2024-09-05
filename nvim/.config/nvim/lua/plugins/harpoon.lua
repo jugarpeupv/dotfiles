@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-parameter
 return {
   {
     "ThePrimeagen/harpoon",
@@ -67,13 +68,15 @@ return {
           save_on_toggle = true,
           sync_on_ui_close = true,
           key = function()
-            local parent_path = vim.loop.cwd() .. "/../"
-            local exists_bare_dir = vim.fn.isdirectory(parent_path .. ".bare")
-            local parent_dir = vim.fn.fnamemodify(vim.fn.getcwd() .. "/..", ":p")
-            if exists_bare_dir ~= 0 then
-              return parent_dir
+            local wt_utils = require("jg.custom.worktree-utils")
+            local wt_switch_info = wt_utils.get_wt_info(vim.loop.cwd())
+            if wt_switch_info == nil then
+              return
             end
-            return vim.loop.cwd()
+            if next(wt_switch_info) == nil then
+              return vim.loop.cwd()
+            end
+            return wt_switch_info.wt_dir
           end,
         },
         menu = {

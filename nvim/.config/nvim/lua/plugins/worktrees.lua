@@ -103,6 +103,9 @@ return {
       local root_dir = path:match("(.*/).-$")
       local bps_path = file_utils.get_bps_path(root_dir)
       local data = file_utils.load_bps(bps_path)
+      if data == nil then
+        return
+      end
       local penultimate_wt = data.penultimate_wt
       api_nvimtree.tree.change_root(penultimate_wt)
 

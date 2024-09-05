@@ -57,10 +57,11 @@
 
 ## Menlo
 # font_family Menlo
+# font_family Liga Menlo Regular
 # bold_font Menlo
 # italic_font Menlo
 # bold_italic_font Menlo Italic
-adjust_line_height  14
+adjust_line_height  12
 adjust_column_width 0
 
 ## DEJA VU
@@ -2925,9 +2926,10 @@ map ctrl+shift+minus set_background_opacity -0.1
 # background #1c2835
 # background #03142a
 background #00122e
+# background #000d28
 # background #03162f
 # background #061930
-# background #00122e
+# background #06182a
 # # #
 # # #
 # #
@@ -3130,8 +3132,11 @@ color15 #A6ADC8
 
 
 # BEGIN_KITTY_FONTS
-font_family      family="Hack Nerd Font Mono"
+font_family      family='Iosevka Custom' features='+zero +ss04'
 bold_font        auto
 italic_font      auto
 bold_italic_font auto
 # END_KITTY_FONTS
+
+adjust_line_height  16
+adjust_column_width 0

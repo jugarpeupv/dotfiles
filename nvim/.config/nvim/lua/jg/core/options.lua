@@ -125,4 +125,4 @@ vim.o.foldtext = ''
 -- vim.o.foldmethod = "expr"
 -- vim.o.foldmethod = "indent"
 
--- opt.updatetime = 200
+opt.updatetime = 1000

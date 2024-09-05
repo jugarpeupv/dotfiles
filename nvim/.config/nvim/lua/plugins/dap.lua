@@ -1,14 +1,8 @@
 return {
   {
-    'theHamsta/nvim-dap-virtual-text',
-    config = function()
-      require('nvim-dap-virtual-text').setup()
-    end
-  },
-  { "jbyuki/one-small-step-for-vimkind" },
-  {
     "Weissle/persistent-breakpoints.nvim",
     event = { "BufReadPre", "BufNewFile" },
+    -- event = "VeryLazy",
     config = function()
       require("persistent-breakpoints").setup({
         save_dir = vim.fn.stdpath("data") .. "/nvim_checkpoints",
@@ -20,37 +14,41 @@ return {
     end,
   },
   {
-    "LiadOz/nvim-dap-repl-highlights",
-    -- event = "VeryLazy",
-    event = { "BufReadPre", "BufNewFile" },
-    config = function()
-      require("nvim-dap-repl-highlights").setup()
-    end,
-  },
-  {
-    "rcarriga/nvim-dap-ui",
-    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
-    event = { "BufReadPre", "BufNewFile" },
-    -- event = "VeryLazy",
-    config = function()
-      require("dapui").setup()
-    end,
-  },
-
-  {
-    "stevearc/overseer.nvim",
-    opts = {},
-    dependencies = { "mfussenegger/nvim-dap" },
-    event = { "BufReadPre", "BufNewFile" },
-    -- event = "VeryLazy",
-    config = function()
-      require("overseer").setup()
-    end,
-  },
-  {
     "mfussenegger/nvim-dap",
     -- event = "VeryLazy",
     event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      {
+        "LiadOz/nvim-dap-repl-highlights",
+        config = function()
+          require("nvim-dap-repl-highlights").setup()
+        end,
+      },
+      {
+        "rcarriga/nvim-dap-ui",
+        dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+        config = function()
+          require("dapui").setup()
+        end,
+      },
+      {
+        "stevearc/overseer.nvim",
+        opts = {},
+        dependencies = { "mfussenegger/nvim-dap" },
+        event = { "BufReadPre", "BufNewFile" },
+        -- event = "VeryLazy",
+        config = function()
+          require("overseer").setup()
+        end,
+      },
+      {
+        "theHamsta/nvim-dap-virtual-text",
+        config = function()
+          require("nvim-dap-virtual-text").setup()
+        end,
+      },
+      { "jbyuki/one-small-step-for-vimkind" },
+    },
     config = function()
       local dap_status, dap = pcall(require, "dap")
       if not dap_status then
@@ -237,14 +235,16 @@ return {
         dapui.close()
       end
 
-      dap.defaults.fallback.terminal_win_cmd = "vsplit new"
+      -- dap.defaults.fallback.terminal_win_cmd = "vsplit new"
       -- vim.fn.sign_define("DapBreakpoint", { text = "✋", texthl = "", linehl = "", numhl = "" })
+      -- vim.fn.sign_define('DapBreakpointRejected', { text = '🔵', texthl = '', linehl = '', numhl = '' })
 
       vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#F38BA8", bg = "none" })
       vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
+      vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
 
       vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint2", linehl = "", numhl = "" })
-      -- vim.fn.sign_define('DapBreakpointRejected', { text = '🔵', texthl = '', linehl = '', numhl = '' })
+
       vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" })
 
       -- local dap = require('dap')

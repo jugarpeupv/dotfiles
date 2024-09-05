@@ -199,6 +199,7 @@ return {
         vim.keymap.set("n", "I", api_nvimtree.tree.toggle_gitignore_filter, opts("Toggle Git Ignore"))
         -- vim.keymap.set('n', 'J',     api.node.navigate.sibling.last,        opts('Last Sibling'))
         -- vim.keymap.set('n', 'K',     api.node.navigate.sibling.first,       opts('First Sibling'))
+        vim.keymap.set("n", "M", api_nvimtree.marks.clear, opts("Clear marks"))
         vim.keymap.set("n", "m", api_nvimtree.marks.toggle, opts("Toggle Bookmark"))
         vim.keymap.set("n", "o", api_nvimtree.node.open.edit, opts("Open"))
         vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))

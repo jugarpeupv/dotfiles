@@ -165,6 +165,7 @@ return {
             Folded = { bg = "#292e42" },
             -- LspInlayHint = { bg = "#0F2745", fg = "#737aa2" },
             LspInlayHint = { fg = "#737aa2" },
+            -- Comment = { fg = "#737aa2" },
             NvimDapVirtualText = { fg = "#737aa2" },
             NvimTreeBookmark = { fg = "#f2cdcd" },
             HlSearchNear = { fg = "#181826", bg = "#F38BA8" },

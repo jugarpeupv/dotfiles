@@ -25,7 +25,7 @@ keymap("v", ">", ">gv", opts)
 keymap("n", "<C-p>", "za", opts)
 
 -- Paste
-keymap("n", "p", "p=`]", opts)
+-- keymap("n", "p", "p=`]", opts)
 keymap("v", "p", '"_dP', opts)
 keymap("n", "d", '"_d', opts)
 keymap("v", "d", '"_d', opts)
