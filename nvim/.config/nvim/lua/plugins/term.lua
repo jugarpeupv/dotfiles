@@ -2,10 +2,50 @@
 
 return {
   {
+    "ryanmsnyder/toggleterm-manager.nvim",
+    event = "TermOpen",
+    keys = {
+      {
+        "<leader>to",
+        mode = { "n" },
+        "<cmd>Telescope toggleterm_manager<CR>",
+      },
+    },
+    dependencies = {
+      "akinsho/nvim-toggleterm.lua",
+      "nvim-telescope/telescope.nvim",
+      "nvim-lua/plenary.nvim", -- only needed because it's a dependency of telescope
+    },
+    -- config = true,
+    config = function()
+      local toggleterm_manager = require("toggleterm-manager")
+      local actions = toggleterm_manager.actions
+
+      toggleterm_manager.setup({
+        results = {
+          fields = { "state", { "term_icon", "Type" }, "term_name", "space", "bufname" },
+        },
+        mappings = {
+          i = {
+            ["<CR>"] = { action = actions.open_term, exit_on_action = true },
+            ["<C-n>"] = { action = actions.create_and_name_term, exit_on_action = false }, -- creates a new terminal buffer
+            ["<C-d>"] = { action = actions.delete_term, exit_on_action = false },    -- deletes a terminal buffer
+            ["<C-r>"] = { action = actions.rename_term, exit_on_action = false },    -- provides a prompt to rename a terminal
+          },
+          n = {
+            ["<CR>"] = { action = actions.open_term, exit_on_action = true },
+            ["<C-n>"] = { action = actions.create_and_name_term, exit_on_action = true }, -- creates a new terminal buffer
+            ["<C-d>"] = { action = actions.delete_term, exit_on_action = false },   -- deletes a terminal buffer
+            ["<C-r>"] = { action = actions.rename_term, exit_on_action = false },   -- provides a prompt to rename a terminal
+          },
+        },
+      })
+    end,
+  },
+  {
     "akinsho/toggleterm.nvim",
     cmd = { "ToggleTerm" },
     keys = {
-
       {
         "<M-o>",
         mode = { "n", "t" },
