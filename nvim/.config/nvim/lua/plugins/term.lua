@@ -3,7 +3,6 @@
 return {
   {
     "ryanmsnyder/toggleterm-manager.nvim",
-    event = "TermOpen",
     keys = {
       {
         "<leader>to",
