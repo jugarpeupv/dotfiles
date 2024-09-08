@@ -135,6 +135,31 @@ vim.keymap.set({ "n", "v" }, "<Leader>ff", function()
   })
 end)
 
+vim.keymap.set({ "n", "v" }, "<Leader>f.", function()
+  require("telescope").extensions.live_grep_args.live_grep_raw({
+    disable_coordinates = true,
+    cwd = "~/dotfiles/nvim/.config/nvim",
+    -- group_by = "filename",
+    -- disable_devicons = true,
+    vimgrep_arguments = {
+      "rg",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      "--hidden",
+      "--smart-case",
+      "--glob=!icarSDK.js",
+      "--glob=!package-lock.json",
+      "--glob=!**/.git/**",
+      -- "--ignore-case",
+      -- "--smart-case",
+      -- "--word-regexp"
+    },
+  })
+end)
+
 -- keymap(
 --   "n",
 --   "<Leader>ss",

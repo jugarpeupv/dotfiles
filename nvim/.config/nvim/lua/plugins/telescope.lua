@@ -414,12 +414,13 @@ return {
       -- To get fzf loaded and working with telescope, you need to call
       -- load_extension, somewhere after setup function:
       -- telescope.load_extension("fzf")
-      telescope.load_extension("harpoon")
+      -- telescope.load_extension("harpoon")
       telescope.load_extension("zf-native")
       telescope.load_extension("ui-select")
       telescope.load_extension("bookmarks")
       telescope.load_extension("git_worktree")
       telescope.load_extension("yaml_schema")
+      telescope.load_extension("grapple")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")
       -- telescope.load_extension('node_modules')
