@@ -247,41 +247,41 @@ vim.keymap.set("n", "<leader>en", ":lua require'dap'.set_breakpoint(vim.fn.input
 -- vim.keymap.set("n", "<Leader>jj", function()
 -- 	require("dap").step_over()
 -- end)
-vim.keymap.set("n", "<leader>G", function()
+vim.keymap.set("n", "<leader>D", function()
   require("dap").continue()
 end)
-vim.keymap.set("n", "<leader>ec", function()
+vim.keymap.set("n", "<leader>dc", function()
   require("dap").run_to_cursor()
 end)
-vim.keymap.set("n", "<leader>et", function()
+vim.keymap.set("n", "<leader>dt", function()
   require("dap").terminate()
 end)
-vim.keymap.set("n", "<leader>ea", function()
+vim.keymap.set("n", "<leader>dA", function()
   require("debughelper-config").attach()
 end)
-vim.keymap.set("n", "<leader>eE", function()
+vim.keymap.set("n", "<leader>dE", function()
   require("debughelper-config").attachToRemote()
 end)
-vim.keymap.set("n", "<leader>eJ", function()
+vim.keymap.set("n", "<leader>dJ", function()
   require("debughelper-config").attachToPort8080()
 end)
-vim.keymap.set("n", "<leader>eh", function()
+vim.keymap.set("n", "<leader>dh", function()
   require("dap.ui.widgets").hover()
 end)
-vim.keymap.set("n", "<leader>es", function()
+vim.keymap.set("n", "<leader>dw", function()
   local widgets = require("dap.ui.widgets")
   widgets.centered_float(widgets.scopes)
 end)
-vim.keymap.set("n", "<leader>ek", ':lua require"dap".up()<CR>zz')
-vim.keymap.set("n", "<leader>ej", ':lua require"dap".down()<CR>zz')
-vim.keymap.set("n", "<leader>er", ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l')
+vim.keymap.set("n", "<leader>dk", ':lua require"dap".up()<CR>zz')
+vim.keymap.set("n", "<leader>dj", ':lua require"dap".down()<CR>zz')
+vim.keymap.set("n", "<leader>dr", ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l')
 -- vim.keymap.set('n', '<leader>ee', function() require"dap".set_exception_breakpoints({"all"}) end)
-vim.keymap.set(
-  "n",
-  "<leader>lo",
-  "<cmd> lua require('dap.ext.vscode').load_launchjs('.vscode/launch.json', { ['pwa-node'] = { 'typescript' }, ['node2'] = { 'typescript' }, ['node'] = { 'typescript' } })<cr>",
-  opts
-)
+-- vim.keymap.set(
+--   "n",
+--   "<leader>do",
+--   "<cmd> lua require('dap.ext.vscode').load_launchjs('.vscode/launch.json', { ['pwa-node'] = { 'typescript' }, ['node2'] = { 'typescript' }, ['node'] = { 'typescript' } })<cr>",
+--   opts
+-- )
 
 -- The Primeagean
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")

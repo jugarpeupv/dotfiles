@@ -41,12 +41,12 @@ return {
           require("overseer").setup()
         end,
       },
-      {
-        "theHamsta/nvim-dap-virtual-text",
-        config = function()
-          require("nvim-dap-virtual-text").setup()
-        end,
-      },
+      -- {
+      --   "theHamsta/nvim-dap-virtual-text",
+      --   config = function()
+      --     require("nvim-dap-virtual-text").setup()
+      --   end,
+      -- },
       { "jbyuki/one-small-step-for-vimkind" },
     },
     config = function()
@@ -64,146 +64,123 @@ return {
 
       -- mason_nvim_dap.setup()
 
-      -- node-debug2
-      dap.adapters.node2 = function(cb, config)
-        if config.preLaunchTask then
-          vim.fn.system(config.preLaunchTask)
-        end
-        local adapter = {
-          type = "executable",
-          command = "node",
-          args = { os.getenv("HOME") .. "/dev/microsoft/vscode-node-debug2/out/src/nodeDebug.js" },
-        }
-        cb(adapter)
-      end
-
-      dap.configurations.javascript = {
-        {
-          name = "[node-debug2] [javascript]: Launch",
-          type = "node2",
-          request = "launch",
-          program = "${file}",
-          cwd = vim.fn.getcwd(),
-          sourceMaps = true,
-          protocol = "inspector",
-          console = "integratedTerminal",
-        },
-        {
-          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
-          name = "[node-debug2] [javascript]: Attach to process",
-
-          type = "node2",
-          request = "attach",
-          processId = require("dap.utils").pick_process,
-        },
-      }
-
-      dap.configurations.typescript = {
-        {
-          name = "[node-debug2] [typescript]: Launch",
-          type = "node2",
-          request = "launch",
-          program = "${file}",
-          cwd = vim.fn.getcwd(),
-          sourceMaps = true,
-          protocol = "inspector",
-          console = "integratedTerminal",
-        },
-        {
-          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
-          name = "[node-debug2] [typescript]: Attach to process",
-          type = "node2",
-          request = "attach",
-          processId = require("dap.utils").pick_process,
+      dap.adapters.chrome = {
+        type = "executable",
+        command = "node",
+        args = {
+          os.getenv("HOME")
+          .. "/.local/share/nvim/mason/packages/chrome-debug-adapter/out/src/chromeDebug.js",
         },
       }
 
       -- pwa-node
-      require("dap").adapters["pwa-node"] = {
+      dap.adapters["pwa-node"] = {
         type = "server",
         host = "localhost",
         port = "${port}",
         executable = {
+          -- command = vim.fn.exepath("js-debug-adapter"),
           command = "node",
           args = {
-            os.getenv("HOME") .. "/.local/share/nvim/lazy/vscode-js-debug/out/src/vsDebugServer.js",
+            os.getenv("HOME")
+            .. "/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
             "${port}",
           },
         },
       }
 
-      dap.configurations.javascript = {
-        {
-          type = "pwa-node",
-          request = "launch",
-          name = "[pwa-node] [javascript] Launch file",
-          program = "${file}",
-          cwd = "${workspaceFolder}",
-        },
+      dap.adapters.node = {
+        type = "executable",
+        command = "node",
+        args = { os.getenv("HOME") .. "/dev/microsoft/vscode-node-debug2/out/src/nodeDebug.js" },
       }
 
-      dap.configurations.typescript = {
-        {
-          type = "pwa-node",
-          request = "launch",
-          name = "[pwa-node] [typescript] Launch file",
-          program = "${file}",
-          cwd = "${workspaceFolder}",
-        },
-      }
-
-      dap.adapters.node = function(cb, config)
-        if config.preLaunchTask then
-          vim.fn.system(config.preLaunchTask)
-        end
-        local adapter = {
-          type = "executable",
-          command = "node",
-          args = { os.getenv("HOME") .. "/dev/microsoft/vscode-node-debug2/out/src/nodeDebug.js" },
+      for _, language in ipairs({ "typescript", "javascript" }) do
+        dap.configurations[language] = {
+          {
+            name = "[node] Launch",
+            type = "node",
+            request = "launch",
+            program = "${file}",
+            cwd = vim.fn.getcwd(),
+            sourceMaps = true,
+            protocol = "inspector",
+            console = "integratedTerminal",
+          },
+          {
+            -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+            name = "[node] Attach to process",
+            type = "node",
+            request = "attach",
+            processId = require("dap.utils").pick_process,
+          },
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "[pwa-node] Launch file",
+            program = "${file}",
+            cwd = "${workspaceFolder}",
+          },
+          {
+            type = "pwa-node",
+            request = "attach",
+            name = "[pwa-node] Attach",
+            processId = require("dap.utils").pick_process,
+            cwd = "${workspaceFolder}",
+          },
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "[pwa-node] Debug Jest Tests",
+            -- trace = true, -- include debugger info
+            runtimeExecutable = "node",
+            runtimeArgs = {
+              "./node_modules/jest/bin/jest.js",
+              "--runInBand",
+            },
+            rootPath = "${workspaceFolder}",
+            cwd = "${workspaceFolder}",
+            console = "integratedTerminal",
+            internalConsoleOptions = "neverOpen",
+          },
+          -- Debug web applications (client side)
+          {
+            type = "chrome",
+            request = "launch",
+            name = "[chrome] Launch Chrome",
+            url = function()
+              local co = coroutine.running()
+              return coroutine.create(function()
+                vim.ui.input({
+                  prompt = "Enter URL: ",
+                  default = "http://localhost:9222",
+                }, function(url)
+                  if url == nil or url == "" then
+                    return
+                  else
+                    coroutine.resume(co, url)
+                  end
+                end)
+              end)
+            end,
+            webRoot = vim.fn.getcwd(),
+            protocol = "inspector",
+            sourceMaps = true,
+            userDataDir = false,
+          },
+          {
+            type = "chrome",
+            request = "attach",
+            program = "${file}",
+            name = "[chrome] Attach to Chrome",
+            cwd = vim.fn.getcwd(),
+            sourceMaps = true,
+            protocol = "inspector",
+            port = 9222,
+            webRoot = "${workspaceFolder}",
+          },
         }
-        cb(adapter)
       end
-
-      dap.configurations.javascript = {
-        {
-          name = "[node] [javascript]: Launch",
-          type = "node",
-          request = "launch",
-          program = "${file}",
-          cwd = vim.fn.getcwd(),
-          sourceMaps = true,
-          protocol = "inspector",
-          console = "integratedTerminal",
-        },
-        {
-          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
-          name = "[node] [javascript]: Attach to process",
-
-          type = "node",
-          request = "attach",
-          processId = require("dap.utils").pick_process,
-        },
-      }
-
-      dap.configurations.typescript = {
-        {
-          name = "[node] [typescript]: Launch",
-          type = "node",
-          request = "launch",
-          program = "${file}",
-          cwd = vim.fn.getcwd(),
-          sourceMaps = true,
-          protocol = "inspector",
-          console = "integratedTerminal",
-        },
-        {
-          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
-          name = "[node] [typescript]: Attach to process",
-          type = "node",
-          request = "attach",
-          processId = require("dap.utils").pick_process,
-        },
-      }
 
       dap.configurations.lua = {
         {

@@ -4,6 +4,7 @@ return {
     "nvim-tree/nvim-tree.lua",
     -- lazy = true,
     -- cmd = { "NvimTreeToggle", "NvimTreeFocus", "NvimTreeFindFile" },
+    -- commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
 
     priority = 500,
     config = function()
