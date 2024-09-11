@@ -27,7 +27,7 @@ return {
         mappings = {
           i = {
             ["<CR>"] = { action = actions.open_term, exit_on_action = true },
-            ["<C-n>"] = { action = actions.create_and_name_term, exit_on_action = false }, -- creates a new terminal buffer
+            ["<C-n>"] = { action = actions.create_and_name_term, exit_on_action = true }, -- creates a new terminal buffer
             ["<C-d>"] = { action = actions.delete_term, exit_on_action = false },    -- deletes a terminal buffer
             ["<C-r>"] = { action = actions.rename_term, exit_on_action = false },    -- provides a prompt to rename a terminal
           },
