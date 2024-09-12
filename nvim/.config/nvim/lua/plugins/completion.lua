@@ -24,7 +24,7 @@ return {
       },
       -- cmp sources plugins
       {
-        "hrsh7th/cmp-nvim-lsp-signature-help",
+        -- "hrsh7th/cmp-nvim-lsp-signature-help",
         "saadparwaiz1/cmp_luasnip",
         "hrsh7th/cmp-nvim-lua",
         "hrsh7th/cmp-nvim-lsp",
@@ -153,7 +153,7 @@ return {
             --   return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
             -- end,
           },
-          { name = "nvim_lsp_signature_help" },
+          -- { name = "nvim_lsp_signature_help" },
           { name = "nvim_lsp:marksman" },
           { name = "marksman" },
           { name = "buffer" },

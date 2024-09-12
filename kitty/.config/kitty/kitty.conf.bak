@@ -14,6 +14,8 @@
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
+# adjust_line_height  8
+# adjust_column_width 0
 
 ## Berkeley
 # font_family Berkeley Mono Regular
@@ -38,8 +40,8 @@
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  0
-# adjust_column_width 0
+# # adjust_line_height  0
+# # adjust_column_width 0
 # font_features FiraCodeNFM-Reg    +ss01 +ss03 +cv29 
 # font_features FiraCodeNFM-Ret    +ss01 +ss03 +cv29 
 # font_features FiraCodeNFM-Med    +ss01 +ss03 +cv29 
@@ -55,14 +57,13 @@
 # adjust_column_width 0
 
 
-## Menlo
-# font_family Menlo
-# font_family Liga Menlo Regular
-# bold_font Menlo
-# italic_font Menlo
-# bold_italic_font Menlo Italic
-# adjust_line_height  12
-# adjust_column_width 0
+# Menlo
+font_family Menlo
+bold_font Menlo
+italic_font Menlo
+bold_italic_font Menlo Italic
+adjust_line_height  12
+adjust_column_width 0
 
 ## DEJA VU
 # font_family DejaVu Sans Code
@@ -104,7 +105,7 @@
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  8
+# adjust_line_height  12
 # adjust_column_width 0
 
 
@@ -143,29 +144,18 @@
 # font_family IosevkaTerm Nerd Font Mono
 # font_family IosevkaTerm Nerd Font Propo
 # font_family Droid Sans Mono Regular
-# font_family LigaSFMonoNerdFont-Regular
 # font_family CommitMono Regular
-# font_family LigaSFMonoNerdFont-Medium
 # font_family FiraCode-Retina
 # font_family FiraCode-Retina
 # font_family Monolisa-Regular
 # font_family FantasqueSansM Nerd Font Mono Regular
-# font_family       SFMono Nerd Font
-# font_family SF Mono Powerline SemiBold
 # font_family Borg Sans Mono
 # font_family DroidSansMonoSW
-# font_family Liga SF Mono Regular
-# font_family Liga SF Mono Regular
-# font_family SF Mono Regular
-# font_family SF Mono Ligatures Regular
-# font_family SF Mono Powerline Regular
-# font_family SF Mono Powerline Regular
 # font_family Noto Mono for Powerline
 # font_family Noto Sans Mono Regular
 # font_family iA Writer Mono S Regular
 # font_family JuliaMono-Regular
 # font_family         Liga InputMono Regular
-# font_family SF Mono
 # font_family FiraCodeNFM-Ret
 # font_family BrutalistMono-Regular
 # font_family KawkabMono-Regular
@@ -261,7 +251,6 @@
 # font_family       Liga Ubuntu Mono derivative Regular
 # font_family        UbuntuMono Nerd Font Regular
 # font_family         Input Mono Regular
-# font_family Liga SFMono Nerd Font Regular
 # font_family         FuraCode Nerd Font
 # font_family         Fira Mono for Powerline
 # font_family         Meslo Nerd Font
@@ -270,8 +259,6 @@
 # font_family       Monaco
 # font_family       Liga Comic Mono
 # font_family Comic Code Ligatures
-# font_family SF Mono Ligatures
-# font_family SF Mono Square Regular
 # font_family       Monolisa Nerd Font
 # font_family VictorMono Nerd Font Mono Medium
 # font_family VictorMono Nerd Font Mono Medium
@@ -512,7 +499,7 @@
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 15
+font_size 14.5
 
 #: Font size (in pts)
 
@@ -620,9 +607,14 @@ symbol_map U+DB83 Symbols Nerd Font
   symbol_map U+F300-U+F313 Symbols Nerd Font
   # Pomicons
   symbol_map U+E000-U+E00D Symbols Nerd Font
+  # Codicons
+  symbol_map U+EA60-U+EBEB Symbols Nerd Font Mono
 
   # iconmoon
   symbol_map U+1f300 icomoon
+
+
+# symbol_map U+23FB-U+23FE,U+2665,U+26A1,U+2B58,U+E000-U+E00A,U+E0A0-U+E0A3,U+E0B0-U+E0D4,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E6AA,U+E700-U+E7C5,U+EA60-U+EBEB,U+F000-U+F2E0,U+F300-U+F32F,U+F400-U+F4A9,U+F500-U+F8FF,U+F0001-U+F1AF0 Symbols Nerd Font Mono
 
 # ⓘ
 # symbol_map U+24D8 nonicon
@@ -2814,8 +2806,14 @@ map kitty_mod+h show_scrollback
 
 map shift+cmd+7 no_op
 
+map shift+cmd+o no_op
+map shift+cmd+i no_op
+
 map shift+ctrl+left no_op
 map shift+ctrl+right no_op
+
+# send <M-lt> (lt = <) to nvim wich is mapped to C-S-Space
+map shift+ctrl+space send_text all \x1b\x3c
 
 # map shift+cmd+/ send_text all \x1b\x67
 
@@ -2926,6 +2924,7 @@ map ctrl+shift+minus set_background_opacity -0.1
 # background #1c2835
 # background #03142a
 background #00122e
+# background #020c26
 # background #000d28
 # background #03162f
 # background #061930
@@ -3131,9 +3130,9 @@ color7  #BAC2DE
 color15 #A6ADC8
 
 
-# BEGIN_KITTY_FONTS
-font_family      family='CommitMono Nerd Font' features='+ss01 +ss02 +ss03 +ss04 +ss05'
-bold_font        auto
-italic_font      auto
-bold_italic_font auto
-# END_KITTY_FONTS
+# # BEGIN_KITTY_FONTS
+# font_family      family='Iosevka Custom' features=+ss14
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+# # END_KITTY_FONTS

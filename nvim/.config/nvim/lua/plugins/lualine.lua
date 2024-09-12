@@ -159,7 +159,7 @@ return {
 
         -- if dir_name ~= branch and vim.bo.filetype ~= "TelescopePrompt" and exists_bare_dir == 1 then
 
-       if (vim.bo.filetype == "TelescopePrompt" or vim.bo.filetype == "toggleterm") then
+       if (vim.bo.filetype == "TelescopePrompt" or vim.bo.filetype == "toggleterm" or vim.bo.filetype == "BufTerm" or vim.bo.filetype == "") then
           return { fg = colors.alternate_black }
        end
 

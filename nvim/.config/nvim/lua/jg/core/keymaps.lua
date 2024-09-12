@@ -17,15 +17,18 @@ vim.keymap.set({ "t" }, "<S-D-Down>", "<C-\\><C-n><CMD>resize -3<CR>", opts)
 vim.keymap.set({ "t" }, "<S-D-Left>", "<C-\\><C-n><CMD>vertical resize -5<CR>", opts)
 vim.keymap.set({ "t" }, "<S-D-Right>", "<C-\\><C-n><CMD>vertical resize +5<CR>", opts)
 
+-- vim.keymap.set({ "t" }, "gT", "<C-\\><C-n>gT", opts)
+-- vim.keymap.set({ "t" }, "gt", "<C-\\><C-n>gt", opts)
+
 -- Stay in indent mode
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
 
 -- Folding
 keymap("n", "<C-p>", "za", opts)
-
 -- Paste
 -- keymap("n", "p", "p=`]", opts)
+-- keymap("n", "p", "p]", opts)
 keymap("v", "p", '"_dP', opts)
 keymap("n", "d", '"_d', opts)
 keymap("v", "d", '"_d', opts)
@@ -64,7 +67,7 @@ keymap("n", "<Leader>rg", "<cmd>lua require('telescope.builtin').registers()<cr>
 keymap("n", "<Leader>ke", "<cmd>lua require('telescope.builtin').keymaps()<cr>", opts)
 keymap("n", "<Leader>cm", "<cmd>lua require('telescope.builtin').commands()<cr>", opts)
 keymap("n", "<Leader>td", "<cmd>lua require('telescope.builtin').diagnostics()<cr>", opts)
-keymap("n", "<Leader>bo", "<cmd>lua require('telescope.builtin').bookmarks()<cr>", opts)
+keymap("n", "<Leader>bo", "<cmd>lua require('telescope').extensions.bookmarks.bookmarks()<cr>", opts)
 keymap("n", "<Leader>sy", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", opts)
 keymap("n", "<Leader>lr", "<cmd>LspRestart<cr>", opts)
 
@@ -311,11 +314,9 @@ vim.keymap.set("n", "<leader>ts", "<cmd>Trouble symbols toggle<cr>", { silent = 
 vim.keymap.set("n", "<leader>md", "<CMD>PeekOpen<CR>")
 vim.keymap.set("n", "<leader>mc", "<CMD>PeekClose<CR>")
 
-vim.cmd([[tnoremap <C-n> <C-\><C-n>]])
+-- vim.cmd([[tnoremap <C-n> <C-\><C-n>]])
+vim.cmd([[tnoremap <C-Space> <C-\><C-n>]])
 
-vim.keymap.set("n", "<leader>th", "<cmd>sp|term<cr>i", { silent = true, noremap = true })
-
-vim.keymap.set("n", "<leader>tv", "<cmd>vsp|term<cr>i", { silent = true, noremap = true })
 
 vim.cmd([[:tnoremap <C-Up> <C-\><C-N>:resize +5<cr>]])
 vim.cmd([[:tnoremap <C-Down> <C-\><C-N>:resize -5<cr>]])
@@ -350,8 +351,8 @@ vim.keymap.set("n", "<leader>ls", "<CMD>Lab code stop<CR>")
 vim.keymap.set("n", "<leader>sf", "<Plug>CtrlSFCwordPath")
 vim.keymap.set("n", "<leader>so", "<CMD>CtrlSFToggle<CR>")
 
-vim.cmd([[nmap <Leader>tn :tabnew %<CR>]])
-vim.cmd([[nmap <Leader>tc :tabclose<CR>]])
+vim.cmd([[nmap <leader>tN :tabnew %<CR>]])
+vim.cmd([[nmap <leader>tC :tabclose<CR>]])
 
 vim.keymap.set("n", "<leader>ta", require("jg.custom.telescope").curr_buf, {})
 

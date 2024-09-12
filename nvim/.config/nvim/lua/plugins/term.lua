@@ -10,11 +10,6 @@ return {
         "<cmd>Telescope toggleterm_manager<CR>",
       },
     },
-    dependencies = {
-      "akinsho/nvim-toggleterm.lua",
-      "nvim-telescope/telescope.nvim",
-      "nvim-lua/plenary.nvim", -- only needed because it's a dependency of telescope
-    },
     -- config = true,
     config = function()
       local toggleterm_manager = require("toggleterm-manager")
@@ -28,8 +23,8 @@ return {
           i = {
             ["<CR>"] = { action = actions.open_term, exit_on_action = true },
             ["<C-n>"] = { action = actions.create_and_name_term, exit_on_action = true }, -- creates a new terminal buffer
-            ["<C-d>"] = { action = actions.delete_term, exit_on_action = false },    -- deletes a terminal buffer
-            ["<C-r>"] = { action = actions.rename_term, exit_on_action = false },    -- provides a prompt to rename a terminal
+            ["<C-d>"] = { action = actions.delete_term, exit_on_action = false },   -- deletes a terminal buffer
+            ["<C-r>"] = { action = actions.rename_term, exit_on_action = false },   -- provides a prompt to rename a terminal
           },
           n = {
             ["<CR>"] = { action = actions.open_term, exit_on_action = true },
@@ -55,94 +50,56 @@ return {
         mode = { "t" },
         "<C-\\><C-n><cmd>ToggleTerm<CR>",
       },
+      {
+        "<leader>th",
+        mode = { "n" },
+        "<cmd>ToggleTerm direction=horizontal<cr>",
+      },
+      {
+        "<leader>tn",
+        mode = { "n" },
+        "<cmd>ToggleTerm direction=tab<cr>",
+      },
+      {
+        "<leader>tv",
+        mode = { "n" },
+        "<cmd>ToggleTerm direction=vertical<cr>",
+      },
+
+      -- normal terms
+      {
+        "<leader>Tv",
+        mode = { "n" },
+        "<cmd>vsp|term<cr>",
+      },
+      {
+        "<leader>Th",
+        mode = { "n" },
+        "<cmd>sp|term<cr>",
+      },
+      {
+        "<leader>Tn",
+        mode = { "n" },
+        "<cmd>tabnew|term<cr>",
+      },
     },
+
     version = "*",
-    opts = { hide_numbers = false, open_mapping = [[<M-o>]], start_in_insert = true, persist_mode = false },
+    opts = {
+      size = function(term)
+        if term.direction == "horizontal" then
+          return 15
+        elseif term.direction == "vertical" then
+          return vim.o.columns * 0.4
+        end
+      end,
+      direction = "tab",
+      hide_numbers = false,
+      open_mapping = [[<M-o>]],
+      start_in_insert = true,
+      persist_mode = false,
+      persist_size = false,
+      autochdir = true,
+    },
   },
-  -- {
-  --   "numToStr/FTerm.nvim",
-  --   cmd = { "FTerm" },
-  --   keys = {
-  --     {
-  --       "<leader>bb",
-  --       mode = { "n", "t" },
-  --       function()
-  --         require("FTerm").toggle()
-  --       end,
-  --     },
-  --     {
-  --       "<leader>bb",
-  --       mode = { "t" },
-  --       '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>',
-  --     },
-  --   },
-  --   opts = {
-  --     -- border = "none",
-  --     dimensions = {
-  --       height = 0.35, -- Height of the terminal window
-  --       width = 0.98, -- Width of the terminal window
-  --       x = 0.3,   -- X axis of the terminal window
-  --       y = 1,     -- Y axis of the terminal window
-  --     },
-  --   },
-  -- },
-  -- Lazy
-  -- {
-  --   '2kabhishek/termim.nvim',
-  --   cmd = { 'Fterm', 'FTerm', 'Sterm', 'STerm', 'Vterm', 'VTerm' },
-  -- },
-  -- {
-  --   "boltlessengineer/bufterm.nvim",
-  --   -- event = { "BufReadPost", "BufNewFile" },
-  --   -- event = { "VeryLazy" },
-  --   keys = {
-  --     {
-  --       "<leader>bb",
-  --       mode = { "n", "t" },
-  --       function()
-  --         vim.cmd("BufTermEnter")
-  --       end,
-  --     },
-  --     {
-  --       "<leader>bp",
-  --       mode = { "n", "t" },
-  --       function()
-  --         vim.cmd("BufTermPrev")
-  --       end,
-  --     },
-  --     {
-  --       "<leader>bn",
-  --       mode = { "n", "t" },
-  --       function()
-  --         vim.cmd("BufTermNext")
-  --       end,
-  --     },
-  --   },
-  --   -- vim.keymap.set("n", "<leader>bb", vim.cmd.BufTermEnter)
-  --   -- vim.keymap.set("n", "<leader>bn", vim.cmd.BufTermNext)
-  --   config = function()
-  --     require("bufterm").setup({
-  --       save_native_terms = true, -- integrate native terminals from `:terminal` command
-  --       start_in_insert = true, -- start terminal in insert mode
-  --       remember_mode = true,  -- remember vi_mode of terminal buffer
-  --       enable_ctrl_w = true,  -- use <C-w> for window navigating in terminal mode (like vim8)
-  --       terminal = {           -- default terminal settings
-  --         buflisted = true,    -- whether to set 'buflisted' option
-  --         termlisted = true,   -- list terminal in termlist (similar to buflisted)
-  --         fallback_on_exit = true, -- prevent auto-closing window on terminal exit
-  --         auto_close = true,   -- auto close buffer on terminal job ends
-  --       },
-  --     })
-  --     local term = require("bufterm.terminal")
-  --     local ui = require("bufterm.ui")
-  --
-  --     vim.keymap.set({ "n", "t" }, "<C-t>", function()
-  --       local recent_term = term.get_recent_term()
-  --       ui.toggle_float(recent_term.bufnr)
-  --     end, {
-  --       desc = "Toggle floating window with terminal buffers",
-  --     })
-  --   end,
-  -- },
-  -- { "akinsho/toggleterm.nvim", version = '*' },
 }
