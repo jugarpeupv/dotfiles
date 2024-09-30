@@ -10,7 +10,7 @@ return {
     -- event = "VeryLazy",
     -- event = "User FilePost",
     -- event = { "LspAttach" },
-    cmd = { "LspInfo", "LspInstall", "LspUninstall" },
+    cmd = { "LspInstall", "LspUninstall" },
     event = { "BufReadPost", "BufNewFile" },
     -- cmd = { "LspInfo" },
     dependencies = {

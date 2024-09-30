@@ -2,7 +2,7 @@
 add_newline = true
 command_timeout = 1000
 
-format = '${custom.my_directory}$all'
+# format = '${custom.my_directory}$all'
 
 # test commit
 
@@ -41,7 +41,9 @@ style = "#C6A0F6"
 disabled = false
 
 [directory]
-disabled = true
+truncation_length = 2
+truncate_to_repo = false
+disabled = false
 read_only = " 🔒"
 style = "cyan"
 
@@ -78,75 +80,75 @@ style="yellow"
 symbol = '📦 '
 disabled = true
 
-[custom.my_directory]
-command="""
-cwd=$(pwd)
-
-if [[ "$cwd" = "/Users/jgarcia" ]]; then
-  echo "~"
-  return
-fi
-
-git_dir=$(git rev-parse --git-dir)
-if [[ "$git_dir" =~ "worktree" ]]; then
-  root_dir=$(echo "$cwd" | awk -F'/' '{print $(NF-1)"/"$NF}')
-  echo "$root_dir"
-elif [[ "$git_dir" == ".git" ]]; then
-  pwd_c=$(echo $cwd | awk -F/ '{print $NF}')
-  echo "$pwd_c "
-  return
-else
-  echo "$cwd "
-fi
-"""
-
-when = """
-return 0
-"""
-format = "[$output]($style) "
-style = "cyan"
-
-
-[custom.giturl]
-description = "Display symbol for remote Git server"
-command = """
-GIT_REMOTE=$(command git ls-remote --get-url 2> /dev/null)
-if [[ "$GIT_REMOTE" =~ "github" ]]; then
-    GIT_REMOTE_SYMBOL="  "
-elif [[ "$GIT_REMOTE" =~ "gitlab" ]]; then
-    GIT_REMOTE_SYMBOL="  "
-elif [[ "$GIT_REMOTE" =~ "bitbucket" ]]; then
-    GIT_REMOTE_SYMBOL="  "
-elif [[ "$GIT_REMOTE" =~ "git" ]]; then
-    GIT_REMOTE_SYMBOL="󰊢  "
-else
-  GIT_REMOTE_SYMBOL=""
-  return
-fi
-echo "$GIT_REMOTE_SYMBOL "
-"""
-
-when = """
-GIT_REMOTE=$(command git ls-remote --get-url 2> /dev/null)
-if [[ "$GIT_REMOTE" == "" ]]; then
-  return 1
-fi
+# [custom.my_directory]
+# command="""
+# cwd=$(pwd)
+#
+# if [[ "$cwd" = "/Users/jgarcia" ]]; then
+#   echo "~"
+#   return
+# fi
+#
+# git_dir=$(git rev-parse --git-dir)
+# if [[ "$git_dir" =~ "worktree" ]]; then
+#   root_dir=$(echo "$cwd" | awk -F'/' '{print $(NF-1)"/"$NF}')
+#   echo "$root_dir"
+# elif [[ "$git_dir" == ".git" ]]; then
+#   pwd_c=$(echo $cwd | awk -F/ '{print $NF}')
+#   echo "$pwd_c "
+#   return
+# else
+#   echo "$cwd "
+# fi
+# """
+#
+# when = """
+# return 0
+# """
+# format = "[$output]($style) "
+# style = "cyan"
 
 
-IS_BARE=$(git rev-parse --is-bare-repository)
-if [[ "$IS_BARE" == "true" ]]; then
-  return 0
-fi
-
-IS_A_GIT_REPO=$(git rev-parse --is-inside-work-tree 2> /dev/null)
-if [[ "$IS_A_GIT_REPO" == "true" ]]; then
-  return 0
-fi
-
-return 1
-"""
-format = "at $output  "
-style = "blue"
+# [custom.giturl]
+# description = "Display symbol for remote Git server"
+# command = """
+# GIT_REMOTE=$(command git ls-remote --get-url 2> /dev/null)
+# if [[ "$GIT_REMOTE" =~ "github" ]]; then
+#     GIT_REMOTE_SYMBOL="  "
+# elif [[ "$GIT_REMOTE" =~ "gitlab" ]]; then
+#     GIT_REMOTE_SYMBOL="  "
+# elif [[ "$GIT_REMOTE" =~ "bitbucket" ]]; then
+#     GIT_REMOTE_SYMBOL="  "
+# elif [[ "$GIT_REMOTE" =~ "git" ]]; then
+#     GIT_REMOTE_SYMBOL="󰊢  "
+# else
+#   GIT_REMOTE_SYMBOL=""
+#   return
+# fi
+# echo "$GIT_REMOTE_SYMBOL "
+# """
+#
+# when = """
+# GIT_REMOTE=$(command git ls-remote --get-url 2> /dev/null)
+# if [[ "$GIT_REMOTE" == "" ]]; then
+#   return 1
+# fi
+#
+#
+# IS_BARE=$(git rev-parse --is-bare-repository)
+# if [[ "$IS_BARE" == "true" ]]; then
+#   return 0
+# fi
+#
+# IS_A_GIT_REPO=$(git rev-parse --is-inside-work-tree 2> /dev/null)
+# if [[ "$IS_A_GIT_REPO" == "true" ]]; then
+#   return 0
+# fi
+#
+# return 1
+# """
+# format = "at $output  "
+# style = "blue"
 
 
 # [custom.npmv]

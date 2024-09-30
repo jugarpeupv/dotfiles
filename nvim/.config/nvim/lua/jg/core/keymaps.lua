@@ -77,7 +77,8 @@ keymap("t", "<M-j>", "<cmd>NvimTreeToggle<cr>", opts)
 
 keymap("n", "<Leader>d", "<Nop>", opts)
 -- keymap("n", "<Leader>d", ":NvimTreeFindFile<cr>", opts)
-keymap("n", "<M-k>", ":NvimTreeFindFile<cr>", opts)
+keymap("n", "<M-k>", "<cmd>NvimTreeFindFile<cr>", opts)
+keymap("t", "<M-k>", "<C-\\><C-n><cmd>NvimTreeFindFile<cr>", opts)
 keymap("n", "<M-u>", "<cmd> lua require('trouble').next({skip_groups = true, jump = true})<cr>", opts)
 keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jump = true})<cr>", opts)
 
@@ -243,12 +244,14 @@ keymap("n", "<leader>du", "<cmd>lua require('dapui').toggle()<cr>", opts)
 keymap("n", "<leader>de", "<cmd>lua require('persistent-breakpoints.api').toggle_breakpoint()<cr>", opts)
 keymap("n", "<leader>da", "<cmd>lua require('persistent-breakpoints.api').clear_all_breakpoints()<cr>", opts)
 -- vim.keymap.set("n", "<leader>dn", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
-vim.keymap.set('n', '<Leader>do', function() require"dap".step_out() end)
+vim.keymap.set("n", "<Leader>do", function()
+  require("dap").step_out()
+end)
 vim.keymap.set("n", "<Leader>di", function()
-	require("dap").step_into()
+  require("dap").step_into()
 end)
 vim.keymap.set("n", "<Leader>dj", function()
-	require("dap").step_over()
+  require("dap").step_over()
 end)
 vim.keymap.set("n", "<leader>D", function()
   require("dap").continue()
@@ -317,7 +320,6 @@ vim.keymap.set("n", "<leader>mc", "<CMD>PeekClose<CR>")
 -- vim.cmd([[tnoremap <C-n> <C-\><C-n>]])
 vim.cmd([[tnoremap <C-Space> <C-\><C-n>]])
 
-
 vim.cmd([[:tnoremap <C-Up> <C-\><C-N>:resize +5<cr>]])
 vim.cmd([[:tnoremap <C-Down> <C-\><C-N>:resize -5<cr>]])
 vim.cmd([[:tnoremap <C-Left> <C-\><C-N>:vertical resize -5<cr>]])
@@ -349,7 +351,7 @@ vim.keymap.set("n", "<leader>ls", "<CMD>Lab code stop<CR>")
 
 -- Ctrlsf.nvim
 vim.keymap.set("n", "<leader>sf", "<Plug>CtrlSFCwordPath")
-vim.keymap.set("n", "<leader>so", "<CMD>CtrlSFToggle<CR>")
+vim.keymap.set("n", "<leader>st", "<CMD>CtrlSFToggle<CR>")
 
 vim.cmd([[nmap <leader>tN :tabnew %<CR>]])
 vim.cmd([[nmap <leader>tC :tabclose<CR>]])
@@ -427,8 +429,7 @@ end
 
 vim.keymap.set("n", "K", show_documentation, { silent = true })
 
+vim.keymap.set({ "n" }, "<leader>wd", "<cmd>windo diffthis<cr>", opts) -- copy to 0 register
+vim.keymap.set({ "n" }, "<leader>wo", "<cmd>windo diffoff<cr>", opts)  -- copy to 0 register
 
-vim.keymap.set({ "n" }, "<leader>wd","<cmd>windo diffthis<cr>", opts)                               -- copy to 0 register
-vim.keymap.set({ "n" }, "<leader>wo","<cmd>windo diffoff<cr>", opts)                               -- copy to 0 register
-
-vim.api.nvim_set_keymap('n', '<F5>', [[:lua require"osv".launch({port = 8086})<CR>]], { noremap = true })
+vim.api.nvim_set_keymap("n", "<F5>", [[:lua require"osv".launch({port = 8086})<CR>]], { noremap = true })

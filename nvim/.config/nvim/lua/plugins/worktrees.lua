@@ -49,7 +49,7 @@ return {
       -- update .git/HEAD to the new branch so when you open a new terminal on root parent it shows the corrent branch
       local wt_utils = require("jg.custom.worktree-utils")
       local wt_switch_info = wt_utils.get_wt_info(path)
-      if wt_switch_info == nil then
+      if next(wt_switch_info) == nil then
         return
       end
       wt_utils.update_git_head(wt_switch_info.wt_root_dir, wt_switch_info.wt_head)

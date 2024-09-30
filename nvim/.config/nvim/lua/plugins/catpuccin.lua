@@ -95,6 +95,7 @@ return {
         -- integrations = {},
         integrations = {
           neotest = true,
+          render_markdown = true,
           markdown = true,
           dropbar = {
             enabled = true,
@@ -136,7 +137,7 @@ return {
           percentage = 0.15,
         },
         no_italic = false, -- Force no italic
-        no_bold = false, -- Force no bold
+        no_bold = false,   -- Force no bold
         styles = {
           comments = {},
           conditionals = { "bold" },
@@ -201,6 +202,11 @@ return {
       vim.cmd([[highlight IndentBlanklineContextChar guifg=#737aa2]])
 
       vim.api.nvim_set_hl(0, "@lsp.typemod.method.defaultLibrary.typescript", { link = "Function" })
+
+
+      vim.cmd([[hi RenderMarkdownCode guibg=#394b70]])
+      -- vim.cmd([[hi RenderMarkdownCodeInline]])
+      vim.cmd([[hi RenderMarkdown_Inverse_RenderMarkdownCode guifg=#394b70]])
 
       -- vim.cmd([[@ibl           xxx cleared]])
       vim.cmd([[highlight @ibl.indent.char.1  guifg=#3b4251]])
