@@ -73,12 +73,11 @@ setup_colors
 
 repository_name=$(echo "${args[@]}" | sed 's/^.*\/\([^\/]*\)\.git$/\1/')
 
-msg "${YELLOW}Cloning bare repository to $repository_name...${NOFORMAT}"
 git clone --bare "${args[@]}" "$repository_name"
 pushd "$repository_name" > /dev/null
 mkdir -p "$location"
 mv * "$location"
-msg "${YELLOW}Adjusting origin fetch locations...${NOFORMAT}"
+msg "${BLUE}Adjusting origin fetch locations...${NOFORMAT}"
 git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 popd > /dev/null
 msg "${GREEN}Success.${NOFORMAT}"

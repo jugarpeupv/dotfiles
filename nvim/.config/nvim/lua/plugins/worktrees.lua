@@ -37,6 +37,7 @@ return {
     local api_nvimtree = require("nvim-tree.api")
 
     Hooks.register(Hooks.type.SWITCH, function(path, prev_path)
+      print("[WT-SWITCH] path: " .. path)
       local prev_node_modules_path = prev_path .. "/node_modules"
       local prev_node_modules_exists = vim.fn.isdirectory(prev_node_modules_path)
 
@@ -47,6 +48,8 @@ return {
       end
 
       -- update .git/HEAD to the new branch so when you open a new terminal on root parent it shows the corrent branch
+
+      -- TODO: The first time a branch is created on .git working dir, wt_switch_info is {}
       local wt_utils = require("jg.custom.worktree-utils")
       local wt_switch_info = wt_utils.get_wt_info(path)
       if next(wt_switch_info) == nil then
@@ -69,7 +72,7 @@ return {
     end)
 
     Hooks.register(Hooks.type.CREATE, function(path, branch, upstream)
-      print("[WT-CREATE] branch: " .. branch)
+      -- print("[WT-CREATE] branch: " .. branch)
       if upstream ~= nil then
         print("[WT-CREATE] upstream: " .. upstream)
       end

@@ -14,7 +14,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     event = { "BufReadPost", "BufNewFile" },
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+    -- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
     dependencies = { 'nvim-treesitter/nvim-treesitter-refactor' },
     build = function()
       require("nvim-treesitter.install").update({ with_sync = true })
@@ -55,12 +55,20 @@ return {
         -- },
         highlight = {
           enable = true,
+          -- disable = function(lang, bufnr)
+          --   return false
+          -- end,
           disable = function(lang, bufnr) -- Disable in large .json files like in package-lock.json
             -- if lang == "yaml" or lang == "yml" then
             --   return true
             -- end
 
-            return lang == "json" and vim.api.nvim_buf_line_count(bufnr) > 10000
+            -- disable only for package-lock.json file name
+            if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json") then
+              return true
+            end
+
+            return (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 10000
           end,
           additional_vim_regex_highlighting = true,
         },

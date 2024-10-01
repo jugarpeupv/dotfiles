@@ -18,5 +18,5 @@ return {
       vim.keymap.set("n", "<leader>va", require("jenkinsfile_linter").validate, {})
     end,
   },
-  { "neoclide/jsonc.vim", ft = { "json" } },
+  -- { "neoclide/jsonc.vim", ft = { "json" } },
 }
