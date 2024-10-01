@@ -76,7 +76,7 @@ return {
       },
     }
     require("gp").setup(conf)
-
+    vim.keymap.set({ "n" }, "<leader>ch", "<cmd>GpChatToggle<CR>", { noremap = true })
     -- Setup shortcuts here (see Usage > Shortcuts in the Documentation/Readme)
   end,
 }

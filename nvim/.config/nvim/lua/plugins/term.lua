@@ -109,7 +109,7 @@ return {
         end
       end,
       direction = "horizontal",
-      hide_numbers = false,
+      hide_numbers = true,
       open_mapping = [[<M-o>]],
       start_in_insert = true,
       persist_mode = false,
