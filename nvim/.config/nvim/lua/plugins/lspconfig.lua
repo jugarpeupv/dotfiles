@@ -382,20 +382,21 @@ return {
       capabilities_json_ls.textDocument.completion.completionItem.snippetSupport = true
 
       lspconfig["eslint"].setup({
-        root_dir = function(filename, bufnr)
-          if string.find(filename, "node_modules/") then
-            return nil
-          end
-          -- return require("lspconfig.server_configurations.eslint").default_config.root_dir(filename, bufnr)
-          local root_dir = require("lspconfig.server_configurations.eslint").default_config.root_dir(filename)
-          return root_dir
-        end,
+        -- root_dir = function(filename, bufnr)
+        --   if string.find(filename, "node_modules/") then
+        --     return nil
+        --   end
+        --   -- return require("lspconfig.server_configurations.eslint").default_config.root_dir(filename, bufnr)
+        --   local root_dir = require("lspconfig.server_configurations.eslint").default_config.root_dir(filename)
+        --   return root_dir
+        -- end,
         -- root_dir = function(filename)
         --   if string.find(filename, "node_modules/") then
         --     return nil
         --   end
         --   return require("lspconfig.server_configurations.eslint").default_config.root_dir(filename)
         -- end,
+        cmd = { "/Users/jgarcia/.local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
         settings = {
           experimental = {
             useFlatConfig = false,

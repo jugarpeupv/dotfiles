@@ -1,5 +1,8 @@
 -- return {}
 return {
+  --Create local branch to track remote branch
+  -- git branch --track feature/mytest origin/feature/mytest
+
   -- "ThePrimeagen/git-worktree.nvim",
   "polarmutex/git-worktree.nvim",
   -- "nooproblem/git-worktree.nvim",

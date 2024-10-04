@@ -1,8 +1,20 @@
 -- return {}
 return {
   keys = {
-    { "<leader>fg", mode = { "n" }, "<cmd>GrugFar<cr>" },
-    { "<leader>fg", mode = { "v" }, "<cmd>'<,'>GrugFar<cr>" },
+    {
+      "<M-f>",
+      mode = { "n" },
+      function()
+        require("grug-far").toggle_instance({ instanceName = "far", staticTitle = "Find and Replace", prefills = { flags = '-i' } })
+      end,
+    },
+    {
+      "<M-f>",
+      mode = { "v" },
+      function()
+        require("grug-far").toggle_instance({ instanceName = "far", staticTitle = "Find and Replace" })
+      end,
+    },
   },
   cmd = { "GrugFar" },
   "MagicDuck/grug-far.nvim",
@@ -33,7 +45,8 @@ return {
         help = { n = "g?" },
         toggleShowCommand = { n = "<localleader>p" },
         swapEngine = { n = "<localleader>e" },
-        previewLocation = { n = "<localleader>i" },
+        -- previewLocation = { n = "<localleader>i" },
+        previewLocation = { n = "<tab>" },
       },
       wrap = false,
       resultsHighlight = false,

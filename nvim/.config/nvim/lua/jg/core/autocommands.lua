@@ -79,27 +79,5 @@ augroup END ]])
 
 vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 
-vim.api.nvim_create_autocmd("VimEnter", {
-  group = vim.api.nvim_create_augroup("worktree-strate-enter", { clear = true }),
-  callback = function()
-    local wt_utils = require("jg.custom.worktree-utils")
-    local cwd = vim.loop.cwd()
-
-    local has_worktrees = wt_utils.has_worktrees(cwd)
-    if has_worktrees then
-      local file_utils = require("jg.custom.file-utils")
-      local key = vim.fn.fnamemodify(cwd or "", ":p")
-      local bps_path = file_utils.get_bps_path(key)
-      local data = file_utils.load_bps(bps_path)
-      if next(data) == nil or data.last_active_wt == nil then
-        return
-      end
-      local last_active_wt = data.last_active_wt
-      local api = require("nvim-tree.api")
-      api.tree.change_root(last_active_wt)
-    end
-  end,
-})
-
 -- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 4]])
 
