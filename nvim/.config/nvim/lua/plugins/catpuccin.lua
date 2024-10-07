@@ -5,6 +5,7 @@ return {
     "catppuccin/nvim",
     -- dependencies = { "mg979/vim-visual-multi" },
     priority = 1000,
+    -- lazy = true,
 
     -- event = "VeryLazy",
     --

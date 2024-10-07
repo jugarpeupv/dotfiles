@@ -15,7 +15,34 @@ return {
     "nvim-treesitter/nvim-treesitter",
     event = { "BufReadPost", "BufNewFile" },
     -- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
-    dependencies = { 'nvim-treesitter/nvim-treesitter-refactor' },
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter-refactor",
+      {
+        "nvim-treesitter/nvim-treesitter-context",
+        lazy = true,
+        -- event = { "BufReadPost", "BufNewFile" },
+        -- cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+        -- affects = "nvim-treesitter",
+        -- event = "VeryLazy",
+        config = function()
+          require("treesitter-context").setup({
+            enable = true,   -- Enable this plugin (Can be enabled/disabled later via commands)
+            max_lines = 4,   -- How many lines the window should span. Values <= 0 mean no limit.
+            trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+            min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+            zindex = 20,     -- The Z-index of the context window
+            mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
+            -- Separator between context and content. Should be a single character string, like '-'.
+            -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+            separator = nil,
+            -- on_attach = function(bufnr)
+            --   return true
+            --   -- return vim.bo[bufnr].filetype ~= 'DiffviewFiles'
+            -- end
+          })
+        end,
+      },
+    },
     build = function()
       require("nvim-treesitter.install").update({ with_sync = true })
     end,
@@ -64,7 +91,10 @@ return {
             -- end
 
             -- disable only for package-lock.json file name
-            if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json") then
+            if
+                (lang == "json" or lang == "jsonc")
+                and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json")
+            then
               return true
             end
 
@@ -204,29 +234,6 @@ return {
     cmd = { "TSPlaygroundToggle" },
     "nvim-treesitter/playground",
     after = "nvim-treesitter",
-  },
-  {
-    "nvim-treesitter/nvim-treesitter-context",
-    event = { "BufReadPost", "BufNewFile" },
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-    affects = "nvim-treesitter",
-    -- event = "VeryLazy",
-    config = function()
-      require("treesitter-context").setup({
-        enable = true,     -- Enable this plugin (Can be enabled/disabled later via commands)
-        max_lines = 4,     -- How many lines the window should span. Values <= 0 mean no limit.
-        trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-        min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
-        zindex = 20, -- The Z-index of the context window
-        mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
-        -- Separator between context and content. Should be a single character string, like '-'.
-        -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
-        separator = nil,
-        -- on_attach = function(bufnr)
-        --   return vim.bo[bufnr].filetype ~= 'DiffviewFiles'
-        -- end
-      })
-    end,
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",

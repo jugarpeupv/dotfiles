@@ -16,6 +16,7 @@ return {
       null_ls.builtins.formatting.stylua,
       null_ls.builtins.formatting.prettier,
       null_ls.builtins.formatting.black,
+      null_ls.builtins.formatting.yamlfmt,
       -- null_ls.builtins.diagnostics.eslint,
       -- null_ls.builtins.diagnostics.eslint.with({
       --   condition = function(utils)
@@ -66,10 +67,10 @@ return {
     null_ls.setup({
       debug = false,
       sources = lSsources,
-      should_attach = function(bufnr)
-        local attach = vim.api.nvim_buf_get_option(bufnr, "filetype") ~= "yaml"
-        return attach
-      end,
+      -- should_attach = function(bufnr)
+      --   local attach = vim.api.nvim_buf_get_option(bufnr, "filetype") ~= "yaml"
+      --   return attach
+      -- end,
     })
   end,
 }

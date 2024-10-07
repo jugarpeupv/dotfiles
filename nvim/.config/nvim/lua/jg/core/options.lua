@@ -100,6 +100,7 @@ vim.g.markdown_folding = 1
 opt.list = true
 -- opt.listchars:append("space:⋅")
 opt.listchars:append("trail: ")
+-- opt.listchars:append("trail:.")
 -- opt.listchars:append("eol:↴")
 
 -- vim.cmd[[set statusline+=%#Container#%{g:currentContainer}]]

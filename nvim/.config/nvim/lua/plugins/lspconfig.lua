@@ -10,11 +10,12 @@ return {
     -- event = "VeryLazy",
     -- event = "User FilePost",
     -- event = { "LspAttach" },
-    cmd = { "LspInstall", "LspUninstall" },
+    -- cmd = { "LspInstall", "LspUninstall" },
     event = { "BufReadPost", "BufNewFile" },
     -- cmd = { "LspInfo" },
     dependencies = {
-      { "folke/neodev.nvim",                opts = {} },
+      { "mfussenegger/nvim-jdtls" },
+      { "folke/neodev.nvim",      opts = {} },
       {
         "antosha417/nvim-lsp-file-operations",
         config = function()
@@ -494,10 +495,10 @@ return {
         },
       })
 
-      -- lspconfig["jdtls"].setup({
-      --   on_attach = on_attach,
-      --   capabilities = capabilities,
-      -- })
+      lspconfig["jdtls"].setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+      })
 
       lspconfig["dockerls"].setup({
         on_attach = on_attach,
