@@ -360,6 +360,15 @@ vim.cmd([[nmap <leader>tC :tabclose<CR>]])
 
 vim.keymap.set("n", "<leader>ta", require("jg.custom.telescope").curr_buf, {})
 
+vim.keymap.set("n", "<leader>te", function()
+  require("jg.custom.telescope").term_buffers({
+    show_all_buffers = true,
+    ignore_current_buffer = false,
+    only_cwd = false,
+    cwd_only = false,
+  })
+end, { silent = true })
+
 vim.api.nvim_set_keymap("n", "gn", "<cmd> lua require('illuminate').goto_next_reference()<cr>", opts)
 
 vim.api.nvim_set_keymap("n", "gN", "<cmd> lua require('illuminate').goto_prev_reference()<cr>", opts)

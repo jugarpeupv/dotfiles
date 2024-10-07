@@ -12,6 +12,11 @@ return {
     },
     config = function()
       vim.o.hidden = true
+
+      -- To rename a buffer run 
+      -- concatenate watch to term buf name
+      -- keepalt file %:watch
+
       require("nvim-terminal").setup({
         window = {
           -- Do `:h :botright` for more information
@@ -65,6 +70,13 @@ return {
       local silent = { silent = true }
       vim.api.nvim_set_keymap("n", "<M-o>", ':lua NTGlobal["terminal"]:toggle()<cr>', silent)
       vim.api.nvim_set_keymap("t", "<M-o>", '<C-\\><C-n>:lua NTGlobal["terminal"]:toggle()<cr>', silent)
+
+      -- keepalt file %:watch
+
+      vim.api.nvim_set_keymap("t", "<M-r>", '<C-\\><C-n>:keepalt file term://:', {})
+      vim.api.nvim_set_keymap("n", "<M-r>", ':keepalt file term://:', {})
+
+      -- vim.cmd([[autocmd TermOpen * setlocal nonumber norelativenumber]])
     end,
   },
   -- {

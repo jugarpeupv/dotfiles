@@ -42,7 +42,7 @@ return {
     vim.g["VimuxHeight"] = "15"
   end,
   keys = {
-    { "<leader>te", RunVimTest("TestNearest"), desc = "Run nearest test" },
+    -- { "<leader>te", RunVimTest("TestNearest"), desc = "Run nearest test" },
     { "<leader>tf", RunVimTest("TestFile"),    desc = "Run all tests in the current file" },
     -- { '<leader>', RunVimTest('TestSuite'), desc = "Run the nearest test suite" },
     -- { '<leader>rr', RunVimTest('TestLast'), desc = "Run last test again" }

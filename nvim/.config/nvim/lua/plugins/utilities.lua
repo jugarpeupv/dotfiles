@@ -1,4 +1,10 @@
 return {
+  -- { "Djancyp/regex.nvim" },
+  -- {"https://github.com/gabrielpoca/replacer.nvim"},
+  -- { "Wansmer/sibling-swap.nvim" },
+  -- { "nvim-spider" }
+  -- { "airblade/vim-matchquote" },
+  -- { "ton/vim-bufsurf" },
   -- {
   --   "kwkarlwang/bufjump.nvim",
   --   event = "VeryLazy"

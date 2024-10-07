@@ -129,9 +129,9 @@ return {
           gitgutter = true,
         },
         show_end_of_buffer = true, -- show the '~' characters after the end of buffers
+        term_colors = true,
         -- term_colors = true,
-        -- term_colors = true,
-        term_colors = false,
+        -- term_colors = false,
         dim_inactive = {
           enabled = false,
           shade = "dark",
@@ -325,8 +325,8 @@ return {
       vim.cmd([[hi @tag.attribute guifg=#B4BEFE]])
       -- vim.cmd([[hi @tag guifg=#B4BEFE]])
       -- vim.cmd([[hi @label guifg=#B4BEFE]])
-      vim.cmd([[hi Error guifg=#F38BA8]])
-      vim.cmd([[hi ErrorMsg guifg=#F38BA8]])
+      vim.cmd([[hi Error gui=none guifg=#F38BA8]])
+      vim.cmd([[hi ErrorMsg gui=none guifg=#F38BA8]])
       -- vim.cmd([[hi @property guifg=#CDD6F4]])
       vim.cmd([[hi TreesitterContextBottom guifg=none gui=none]])
 
