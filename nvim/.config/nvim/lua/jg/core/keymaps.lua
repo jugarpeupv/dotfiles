@@ -5,7 +5,9 @@ local opts = { noremap = true, silent = true }
 -- Shorten function name
 local keymap = vim.api.nvim_set_keymap
 
-vim.cmd([[nnoremap q <Nop>]])
+-- vim.cmd([[nnoremap q <Nop>]])
+-- q/ -- search history
+-- q: -- command history
 
 vim.keymap.set({ "n" }, "<S-D-Up>", ":resize +3<CR>", opts)
 vim.keymap.set({ "n" }, "<S-D-Down>", ":resize -3<CR>", opts)

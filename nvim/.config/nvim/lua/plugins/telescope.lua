@@ -4,50 +4,49 @@
 --
 return {
   {
-    "dhruvmanila/browser-bookmarks.nvim",
-    version = "*",
-    cmd = { "Telescope" },
-    -- event = "VeryLazy",
-    -- dependencies = {
-    --   "kkharji/sqlite.lua",
-    --   "nvim-telescope/telescope.nvim",
-    -- },
-    config = function()
-      require("browser_bookmarks").setup({
-        -- Available: 'brave', 'buku', 'chrome', 'chrome_beta', 'edge', 'safari', 'firefox', 'vivaldi'
-        selected_browser = "brave",
-        profile_name = "MAR",
-
-        -- Either provide a shell command to open the URL
-        url_open_command = "open",
-
-        -- Or provide the plugin name which is already installed
-        -- Available: 'vim_external', 'open_browser'
-        url_open_plugin = nil,
-
-        -- Show the full path to the bookmark instead of just the bookmark name
-        full_path = true,
-
-        -- Provide a custom profile name for Firefox
-        firefox_profile_name = nil,
-      })
-    end,
-  },
-  { "nvim-telescope/telescope-smart-history.nvim",  cmd = { "Telescope" } },
-  -- { "nvim-telescope/telescope-harpoon.nvim",        cmd = { "Telescope" } },
-  -- { "nvim-telescope/telescope-fzf-native.nvim",     cmd = { "Telescope" } },
-  { "natecraddock/telescope-zf-native.nvim",        cmd = { "Telescope" } },
-  -- { "nvim-telescope/telescope-fzf-native.nvim",     build = "make",            event = "VeryLazy" },
-  { "nvim-telescope/telescope-live-grep-args.nvim", cmd = { "Telescope" } },
-  { "nvim-telescope/telescope-ui-select.nvim",      cmd = { "Telescope" } },
-  -- "griwes/telescope.nvim",
-  -- branch = "group-by",
-  -- commit = "6f6bb8065567b56c42e283b06e8a1c670c0092a1",
-  {
     "nvim-telescope/telescope.nvim",
     -- branch = "0.1.x",
     tag = "0.1.8",
-    dependencies = { { "nvim-treesitter/nvim-treesitter" } },
+    dependencies = {
+      { "crispgm/telescope-heading.nvim" },
+      {
+        "nvim-treesitter/nvim-treesitter",
+      },
+      {
+        "dhruvmanila/browser-bookmarks.nvim",
+        version = "*",
+        cmd = { "Telescope" },
+        -- event = "VeryLazy",
+        -- dependencies = {
+        --   "kkharji/sqlite.lua",
+        --   "nvim-telescope/telescope.nvim",
+        -- },
+        config = function()
+          require("browser_bookmarks").setup({
+            -- Available: 'brave', 'buku', 'chrome', 'chrome_beta', 'edge', 'safari', 'firefox', 'vivaldi'
+            selected_browser = "brave",
+            profile_name = "MAR",
+
+            -- Either provide a shell command to open the URL
+            url_open_command = "open",
+
+            -- Or provide the plugin name which is already installed
+            -- Available: 'vim_external', 'open_browser'
+            url_open_plugin = nil,
+
+            -- Show the full path to the bookmark instead of just the bookmark name
+            full_path = true,
+
+            -- Provide a custom profile name for Firefox
+            firefox_profile_name = nil,
+          })
+        end,
+      },
+      { "nvim-telescope/telescope-smart-history.nvim",  cmd = { "Telescope" } },
+      { "natecraddock/telescope-zf-native.nvim",        cmd = { "Telescope" } },
+      { "nvim-telescope/telescope-live-grep-args.nvim", cmd = { "Telescope" } },
+      { "nvim-telescope/telescope-ui-select.nvim",      cmd = { "Telescope" } },
+    },
     cmd = { "Telescope" },
     -- event = "VeryLazy",
     config = function()
@@ -244,6 +243,9 @@ return {
           --   extension_config_key = value,
           -- }
           -- please take a look at the readme of the extension you want to configure
+          heading = {
+            treesitter = true,
+          },
           ["zf-native"] = {
             -- options for sorting file-like items
             file = {
@@ -418,6 +420,7 @@ return {
       telescope.load_extension("git_worktree")
       telescope.load_extension("yaml_schema")
       telescope.load_extension("grapple")
+      telescope.load_extension("heading")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")
       -- telescope.load_extension('node_modules')

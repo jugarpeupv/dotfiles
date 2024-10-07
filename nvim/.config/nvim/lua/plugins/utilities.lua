@@ -10,7 +10,7 @@ return {
   --     })
   --   end,
   -- },
-  { "dstein64/vim-startuptime" },
+  { "dstein64/vim-startuptime", event = "BufReadPost" },
   {
     "b0o/schemastore.nvim",
     event = "VeryLazy",

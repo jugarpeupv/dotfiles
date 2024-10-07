@@ -2,8 +2,9 @@
 return {
   {
     "nvim-tree/nvim-tree.lua",
+    commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
     -- cmd = { "NvimTreeToggle", "NvimTreeFocus", "NvimTreeFindFile" },
-    -- commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
+    -- lazy = true,
     -- event = "VeryLazy",
     -- priority = 500,
     config = function()
@@ -546,7 +547,7 @@ return {
           show_on_dirs = true,
           show_on_open_dirs = false,
           disable_for_dirs = {},
-          timeout = 400,
+          timeout = 4000,
           cygwin_support = false,
         },
         filesystem_watchers = {

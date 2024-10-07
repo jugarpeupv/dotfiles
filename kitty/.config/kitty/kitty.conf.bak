@@ -58,12 +58,21 @@
 
 
 # Menlo
-font_family Menlo
-bold_font Menlo
-italic_font Menlo
-bold_italic_font Menlo Italic
+# font_family Liga Menlo
+# font_family Menlo
+# bold_font Menlo
+# italic_font Menlo
+# bold_italic_font Menlo Italic
 adjust_line_height  12
 adjust_column_width 0
+
+
+# BEGIN_KITTY_FONTS
+font_family      family="Liga DejaVu Sans Mono"
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+# END_KITTY_FONTS
 
 ## DEJA VU
 # font_family DejaVu Sans Code
@@ -499,7 +508,7 @@ adjust_column_width 0
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 14.5
+font_size 15
 
 #: Font size (in pts)
 
@@ -1586,7 +1595,7 @@ confirm_os_window_close 0
 #: The foreground and background colors.
 
 # background_opacity 0.90
-background_opacity 0.75
+background_opacity 0.80
 # background_opacity 1
 
 background_blur 30
@@ -2853,12 +2862,29 @@ map cmd+0 send_text all \x01\x39
 map cmd+enter send_text all \x01\x30
 
 # next tmux panes
+# C-a p          previous window
+# C-a n          next window
 map cmd+left send_text all \x01\x70
 map cmd+right send_text all \x01\x6e
 
-# next tmux windows
+# next tmux session
+# C-a (          previous session
+# C-a )          next session
 map cmd+down send_text all \x01\x28
 map cmd+up send_text all \x01\x29
+
+
+# # next tmux panes
+# # gt and gT in neovim
+# map cmd+left send_text all \x67\x54
+# map cmd+right send_text all \x67\x74
+#
+# # next tmux session
+# # C-a (          previous session
+# # C-a )          next session
+# map cmd+down send_text all \x01\x70
+# map cmd+up send_text all \x01\x6e
+
 
 
 # # vim resize
@@ -3136,3 +3162,7 @@ color15 #A6ADC8
 # italic_font      auto
 # bold_italic_font auto
 # # END_KITTY_FONTS
+
+
+
+
