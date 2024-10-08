@@ -2,7 +2,7 @@
 return {
   {
     "nvim-tree/nvim-tree.lua",
-    commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
+    -- commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
     -- cmd = { "NvimTreeToggle", "NvimTreeFocus", "NvimTreeFindFile" },
     -- lazy = true,
     -- event = "VeryLazy",

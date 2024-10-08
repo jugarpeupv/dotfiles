@@ -13,7 +13,7 @@ return {
     config = function()
       vim.o.hidden = true
 
-      -- To rename a buffer run 
+      -- To rename a buffer run
       -- concatenate watch to term buf name
       -- keepalt file %:watch
 
@@ -73,8 +73,8 @@ return {
 
       -- keepalt file %:watch
 
-      vim.api.nvim_set_keymap("t", "<M-r>", '<C-\\><C-n>:keepalt file term://:', {})
-      vim.api.nvim_set_keymap("n", "<M-r>", ':keepalt file term://:', {})
+      vim.api.nvim_set_keymap("t", "<M-r>", "<C-\\><C-n>:keepalt file term://:", {})
+      vim.api.nvim_set_keymap("n", "<M-r>", ":keepalt file term://:", {})
 
       -- vim.cmd([[autocmd TermOpen * setlocal nonumber norelativenumber]])
     end,
@@ -264,19 +264,40 @@ return {
   --     end, { desc = "Toggle term" })
   --   end,
   -- }
-  -- {
-  --   "boltlessengineer/bufterm.nvim",
-  --   opts = {
-  --     save_native_terms = true, -- integrate native terminals from `:terminal` command
-  --     start_in_insert = true, -- start terminal in insert mode
-  --     remember_mode = true,  -- remember vi_mode of terminal buffer
-  --     enable_ctrl_w = true,  -- use <C-w> for window navigating in terminal mode (like vim8)
-  --     terminal = {           -- default terminal settings
-  --       buflisted = true,   -- whether to set 'buflisted' option
-  --       termlisted = true,   -- list terminal in termlist (similar to buflisted)
-  --       fallback_on_exit = true, -- prevent auto-closing window on terminal exit
-  --       auto_close = true,   -- auto close buffer on terminal job ends
-  --     },
-  --   },
-  -- },
+  {
+    "boltlessengineer/bufterm.nvim",
+    -- event = { "TermOpen" },
+    -- keys = {
+    --   { mode = { "n" }, "<leader><leader>n", "<cmd>BufTermNext<cr>" },
+    --   { mode = { "n" }, "<leader><leader>p", "<cmd>BufTermPrev<cr>" }
+    -- },
+    -- opts = {
+    --   save_native_terms = true, -- integrate native terminals from `:terminal` command
+    --   start_in_insert = false, -- start terminal in insert mode
+    --   remember_mode = false, -- remember vi_mode of terminal buffer
+    --   enable_ctrl_w = false, -- use <C-w> for window navigating in terminal mode (like vim8)
+    --   terminal = {           -- default terminal settings
+    --     buflisted = true,    -- whether to set 'buflisted' option
+    --     termlisted = true,   -- list terminal in termlist (similar to buflisted)
+    --     fallback_on_exit = true, -- prevent auto-closing window on terminal exit
+    --     auto_close = true,   -- auto close buffer on terminal job ends
+    --   },
+    -- },
+    config = function()
+      require("bufterm").setup({
+        save_native_terms = true, -- integrate native terminals from `:terminal` command
+        start_in_insert = false, -- start terminal in insert mode
+        remember_mode = false, -- remember vi_mode of terminal buffer
+        enable_ctrl_w = false, -- use <C-w> for window navigating in terminal mode (like vim8)
+        terminal = {          -- default terminal settings
+          buflisted = true,   -- whether to set 'buflisted' option
+          termlisted = true,  -- list terminal in termlist (similar to buflisted)
+          fallback_on_exit = true, -- prevent auto-closing window on terminal exit
+          auto_close = true,  -- auto close buffer on terminal job ends
+        },
+      })
+      vim.keymap.set({ "n" }, "<leader>tn", "<cmd>BufTermNext<cr>", {})
+      vim.keymap.set({ "n" }, "<leader>tp", "<cmd>BufTermNext<cr>", {})
+    end,
+  },
 }

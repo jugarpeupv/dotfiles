@@ -420,8 +420,8 @@ vim.keymap.set("n", "<leader>ti", function()
 end, opts)
 
 -- using 0 register
-vim.keymap.set({ "n" }, "<leader><leader>", [["0yy]])                               -- copy to 0 register
-vim.keymap.set({ "x" }, "<leader><leader>", [["0y]])                                -- copy to 0 register
+vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                               -- copy to 0 register
+vim.keymap.set({ "x" }, "<leader><leader>y", [["0y]])                                -- copy to 0 register
 
 vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
 
