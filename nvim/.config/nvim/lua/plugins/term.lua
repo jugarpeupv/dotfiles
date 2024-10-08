@@ -266,7 +266,7 @@ return {
   -- }
   {
     "boltlessengineer/bufterm.nvim",
-    -- event = { "TermOpen" },
+    event = { "TermOpen" },
     -- keys = {
     --   { mode = { "n" }, "<leader><leader>n", "<cmd>BufTermNext<cr>" },
     --   { mode = { "n" }, "<leader><leader>p", "<cmd>BufTermPrev<cr>" }
