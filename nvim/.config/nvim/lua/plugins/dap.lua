@@ -54,7 +54,8 @@ return {
         "stevearc/overseer.nvim",
         opts = {},
         dependencies = { "mfussenegger/nvim-dap" },
-        event = { "BufReadPre", "BufNewFile" },
+        lazy = true,
+        -- event = { "BufReadPre", "BufNewFile" },
         -- event = "VeryLazy",
         config = function()
           require("overseer").setup()

@@ -1,8 +1,9 @@
 -- return {}
 return {
   "nvimtools/none-ls.nvim",
-  event = { "BufReadPre", "BufNewFile" },
-  cmd = { "LspInfo", "LspInstall", "LspUninstall" },
+  lazy = true,
+  -- event = { "BufReadPre", "BufNewFile" },
+  -- cmd = { "LspInfo", "LspInstall", "LspUninstall" },
   config = function()
     local null_ls_status_ok, null_ls = pcall(require, "null-ls")
     if not null_ls_status_ok then
