@@ -31,6 +31,7 @@ return {
   branch = "feature/preserveIconOnBufferModified",
   -- event = "VeryLazy",
   event = { "BufReadPost", "BufNewFile" },
+  -- event = { "BufWinEnter" },
   -- version = "*",
   dependencies = {
     "SmiteshP/nvim-navic",

@@ -8,6 +8,14 @@ return {
     -- branch = "0.1.x",
     tag = "0.1.8",
     dependencies = {
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+      },
+      {
+        "someone-stole-my-name/yaml-companion.nvim",
+        ft = { "yaml", "yml" },
+      },
       { "crispgm/telescope-heading.nvim" },
       {
         "nvim-treesitter/nvim-treesitter",
@@ -43,7 +51,6 @@ return {
         end,
       },
       { "nvim-telescope/telescope-smart-history.nvim",  cmd = { "Telescope" } },
-      { "natecraddock/telescope-zf-native.nvim",        cmd = { "Telescope" } },
       { "nvim-telescope/telescope-live-grep-args.nvim", cmd = { "Telescope" } },
       { "nvim-telescope/telescope-ui-select.nvim",      cmd = { "Telescope" } },
     },
@@ -246,31 +253,31 @@ return {
           heading = {
             treesitter = true,
           },
-          ["zf-native"] = {
-            -- options for sorting file-like items
-            file = {
-              -- override default telescope file sorter
-              enable = true,
-
-              -- highlight matching text in results
-              highlight_results = true,
-
-              -- enable zf filename match priority
-              match_filename = true,
-            },
-
-            -- options for sorting all other items
-            generic = {
-              -- override default telescope generic item sorter
-              enable = true,
-
-              -- highlight matching text in results
-              highlight_results = true,
-
-              -- disable zf filename match priority
-              match_filename = true,
-            },
-          },
+          -- ["zf-native"] = {
+          --   -- options for sorting file-like items
+          --   file = {
+          --     -- override default telescope file sorter
+          --     enable = true,
+          --
+          --     -- highlight matching text in results
+          --     highlight_results = true,
+          --
+          --     -- enable zf filename match priority
+          --     match_filename = true,
+          --   },
+          --
+          --   -- options for sorting all other items
+          --   generic = {
+          --     -- override default telescope generic item sorter
+          --     enable = true,
+          --
+          --     -- highlight matching text in results
+          --     highlight_results = true,
+          --
+          --     -- disable zf filename match priority
+          --     match_filename = true,
+          --   },
+          -- },
           -- fzf = {
           --   fuzzy = true,              -- false will only do exact matching
           --   override_generic_sorter = true, -- override the generic sorter
@@ -414,7 +421,7 @@ return {
       -- load_extension, somewhere after setup function:
       -- telescope.load_extension("fzf")
       -- telescope.load_extension("harpoon")
-      telescope.load_extension("zf-native")
+      -- telescope.load_extension("zf-native")
       telescope.load_extension("ui-select")
       telescope.load_extension("bookmarks")
       telescope.load_extension("git_worktree")

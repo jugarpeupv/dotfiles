@@ -10,6 +10,7 @@ return {
     -- event = "VeryLazy",
     -- event = "User FilePost",
     -- event = { "LspAttach" },
+    -- lazy = true,
     -- cmd = { "LspInstall", "LspUninstall" },
     event = { "BufReadPost", "BufNewFile" },
     -- cmd = { "LspInfo" },
@@ -419,40 +420,36 @@ return {
         -- },
       })
 
-      -- lspconfig["yamlls"].setup {
+      -- local cfg = require("yaml-companion").setup({
       --   on_attach = on_attach,
       --   capabilities = capabilities,
-      --   settings = {
-      --     yaml = {
-      --       schemaStore = {
-      --         -- You must disable built-in schemaStore support if you want to use
-      --         -- this plugin and its advanced options like `ignore`.
-      --         enable = false,
-      --         -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
-      --         url = "",
-      --       },
-      --       schemas = require('schemastore').yaml.schemas(),
-      --     },
-      --   },
-      -- }
+      -- })
+      -- require("lspconfig")["yamlls"].setup(cfg)
 
       require("lspconfig").yamlls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
         settings = {
-          yaml = {
-            schemaStore = {
-              enable = false,
-              url = "",
-            },
-            schemas = require("schemastore").yaml.schemas(),
-          },
           -- yaml = {
-          --   schemas = {
-          --     ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+          --   schemaStore = {
+          --     enable = true,
+          --     url = "",
           --   },
-          --   -- schemas = require('schemastore').yaml.schemas(),
+          --   schemas = require("schemastore").yaml.schemas(),
           -- },
+          yaml = {
+            validate = true,
+            format = { enable = true },
+            schemaDownload = { enable = true },
+            schemaStore = {
+              enable = true,
+              url = "https://www.schemastore.org/api/json/catalog.json"
+            },
+            schemas = {
+              ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+            },
+            -- schemas = require('schemastore').yaml.schemas(),
+          },
         },
       })
 
@@ -543,25 +540,25 @@ return {
       })
 
       -- configure lua server (with special settings)
-      -- lspconfig["lua_ls"].setup({
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      --   settings = { -- custom settings for lua
-      --     Lua = {
-      --       -- make the language server recognize "vim" global
-      --       diagnostics = {
-      --         globals = { "vim", "jit", "bit", "Config" },
-      --       },
-      --       workspace = {
-      --         -- make language server aware of runtime files
-      --         library = {
-      --           [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-      --           [vim.fn.stdpath("config") .. "/lua"] = true,
-      --         },
-      --       },
-      --     },
-      --   },
-      -- })
+      lspconfig["lua_ls"].setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = { -- custom settings for lua
+          Lua = {
+            -- make the language server recognize "vim" global
+            diagnostics = {
+              globals = { "vim", "jit", "bit", "Config" },
+            },
+            workspace = {
+              -- make language server aware of runtime files
+              library = {
+                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                [vim.fn.stdpath("config") .. "/lua"] = true,
+              },
+            },
+          },
+        },
+      })
 
       require("lspconfig").clangd.setup({
         on_attach = on_attach,
@@ -581,45 +578,45 @@ return {
         -- add any options here, or leave empty to use the default settings
       })
 
-      require("lspconfig").lua_ls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-        -- on_init = function(client)
-        --   local path = client.workspace_folders[1].name
-        --   if
-        --       not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc")
-        --   then
-        --     client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
-        --       Lua = {
-        --
-        --         diagnostics = {
-        --           globals = { "vim", "jit", "bit", "Config" },
-        --         },
-        --         runtime = {
-        --           -- Tell the language server which version of Lua you're using
-        --           -- (most likely LuaJIT in the case of Neovim)
-        --           version = "LuaJIT",
-        --         },
-        --         -- Make the server aware of Neovim runtime files
-        --         workspace = {
-        --           checkThirdParty = false,
-        --           library = {
-        --             vim.env.VIMRUNTIME,
-        --             -- [vim.fn.stdpath("config") .. "/lua"] = true,
-        --             -- "${3rd}/luv/library"
-        --             -- "${3rd}/busted/library",
-        --           },
-        --           -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-        --           -- library = vim.api.nvim_get_runtime_file("", true)
-        --         },
-        --       },
-        --     })
-        --
-        --     client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-        --   end
-        --   return true
-        -- end,
-      })
+      -- require("lspconfig").lua_ls.setup({
+      --   capabilities = capabilities,
+      --   on_attach = on_attach,
+      --   -- on_init = function(client)
+      --   --   local path = client.workspace_folders[1].name
+      --   --   if
+      --   --       not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc")
+      --   --   then
+      --   --     client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
+      --   --       Lua = {
+      --   --
+      --   --         diagnostics = {
+      --   --           globals = { "vim", "jit", "bit", "Config" },
+      --   --         },
+      --   --         runtime = {
+      --   --           -- Tell the language server which version of Lua you're using
+      --   --           -- (most likely LuaJIT in the case of Neovim)
+      --   --           version = "LuaJIT",
+      --   --         },
+      --   --         -- Make the server aware of Neovim runtime files
+      --   --         workspace = {
+      --   --           checkThirdParty = false,
+      --   --           library = {
+      --   --             vim.env.VIMRUNTIME,
+      --   --             -- [vim.fn.stdpath("config") .. "/lua"] = true,
+      --   --             -- "${3rd}/luv/library"
+      --   --             -- "${3rd}/busted/library",
+      --   --           },
+      --   --           -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+      --   --           -- library = vim.api.nvim_get_runtime_file("", true)
+      --   --         },
+      --   --       },
+      --   --     })
+      --   --
+      --   --     client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+      --   --   end
+      --   --   return true
+      --   -- end,
+      -- })
 
       -- Set global defaults for all servers
       lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {

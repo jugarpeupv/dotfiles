@@ -5,7 +5,7 @@
 if [[ $# -eq 1 ]]; then
   selected=$1
 else
-  selected=$(find ~/work ~/work/mar ~/private ~/tmp ~/tmp/poc ~/tmp/prod ~/.dotfiles ~/.local/share/nvim/lazy ~/projects ~ -mindepth 1 -maxdepth 1 -type d | fzf --bind=ctrl-k:up,ctrl-j:down)
+  selected=$(find ~/work ~/work/mar ~/private ~/tmp ~/tmp/poc ~/tmp/prod ~/dotfiles/nvim/.config ~/dotfiles/bin/.config ~/dotfiles/tmux/.config/tmux ~/.config ~/.local/share/nvim/lazy ~/projects ~ -mindepth 1 -maxdepth 1 -type d | fzf --bind=ctrl-k:up,ctrl-j:down)
 fi
 
 if [[ -z $selected ]]; then

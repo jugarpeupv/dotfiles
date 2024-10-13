@@ -2,7 +2,7 @@
 return {
   {
     "haya14busa/vim-asterisk",
-    event = { "BufReadPost", "BufNewFile" },
+    -- event = { "BufReadPost", "BufNewFile" },
     keys = {
       { "n",  mode = "n" },
       { "*",  mode = "n" },

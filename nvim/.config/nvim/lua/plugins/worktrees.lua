@@ -8,13 +8,13 @@ return {
   -- "nooproblem/git-worktree.nvim",
   -- version = "^2",
   branch = "main",
-  dependencies = { "nvim-lua/plenary.nvim" },
+  -- dependencies = { "nvim-lua/plenary.nvim" },
   keys = { "<leader>wt", "<leader>wc" },
   config = function()
     vim.g.git_worktree_log_level = 1
 
     vim.g.git_worktree = {
-      change_directory_command = "cd",
+      change_directory_command = "tcd",
       update_on_change = true,
       update_on_change_command = "e .",
       clearjumps_on_change = true,
@@ -37,6 +37,44 @@ return {
 
     local Hooks = require("git-worktree.hooks")
 
+    local send_cmd_to_all_terms = function(cmd_text)
+      local function get_all_terminals()
+        local terminal_chans = {}
+        for _, chan in pairs(vim.api.nvim_list_chans()) do
+          if chan["mode"] == "terminal" and chan["pty"] ~= "" then
+            table.insert(terminal_chans, chan)
+          end
+        end
+        table.sort(terminal_chans, function(left, right)
+          return left["buffer"] < right["buffer"]
+        end)
+        if #terminal_chans == 0 then
+          return nil
+        end
+        return terminal_chans
+      end
+
+      local send_to_terminal = function(terminal_chan, term_cmd_text)
+        vim.api.nvim_chan_send(terminal_chan, term_cmd_text .. "\n")
+      end
+
+      local terminals = get_all_terminals()
+      if terminals and next(terminals) == nil then
+        return nil
+      end
+
+      if terminals == nil then
+        return nil
+      end
+
+      for _, terminal in pairs(terminals) do
+        send_to_terminal(terminal["id"], cmd_text)
+      end
+
+      return true
+    end
+
+    ---------------------------------------------------
     local terminal_send_cmd = function(cmd_text)
       local function get_first_terminal()
         local terminal_chans = {}
@@ -108,7 +146,8 @@ return {
       end
       -- Nvim terminal
       if not toggleterm_status then
-        terminal_send_cmd("cd " .. path)
+        -- terminal_send_cmd("cd " .. path)
+        send_cmd_to_all_terms("cd " .. path)
       end
 
       -- Write to disk new pointing branch
@@ -185,7 +224,8 @@ return {
         toggleterm.exec_command(cmd)
       end
       if not toggleterm_status then
-        terminal_send_cmd("cd " .. penultimate_wt)
+        -- terminal_send_cmd("cd " .. penultimate_wt)
+        send_cmd_to_all_terms("cd " .. penultimate_wt)
       end
     end)
   end,

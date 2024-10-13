@@ -45,8 +45,8 @@ family = "Hack Nerd Font Mono"
 style = "Italic"
 
 [font.normal]
-# family = "Hack Nerd Font Mono"
 family = "Hack Nerd Font Mono"
+# family = "LigaDejaVuSansMono"
 style = "Regular"
 
 [font.offset]

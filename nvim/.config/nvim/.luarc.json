@@ -17,7 +17,6 @@
         "/Users/jgarcia/.local/share/nvim/lazy/gitsigns.nvim/lua",
         "/Users/jgarcia/.local/share/nvim/lazy/lualine.nvim/lua",
         "/Users/jgarcia/.local/share/nvim/lazy/vscode.nvim/lua",
-        "/Users/jgarcia/.local/share/nvim/lazy/telescope-fzf-native.nvim/lua",
         "/Users/jgarcia/.local/share/nvim/lazy/nvim-treesitter-context/lua",
         "/Users/jgarcia/.local/share/nvim/lazy/telescope-live-grep-args.nvim/lua",
         "/Users/jgarcia/.local/share/nvim/lazy/nvim-treesitter-textobjects/lua",

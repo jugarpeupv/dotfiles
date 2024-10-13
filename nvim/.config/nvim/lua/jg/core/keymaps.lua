@@ -29,13 +29,28 @@ keymap("v", ">", ">gv", opts)
 -- Folding
 keymap("n", "<C-p>", "za", opts)
 -- Paste
--- keymap("n", "p", "p=`]", opts)
+keymap("n", "p", "p=`]", opts)
 -- keymap("n", "p", "p]", opts)
-keymap("v", "p", '"_dP', opts)
-keymap("n", "d", '"_d', opts)
-keymap("v", "d", '"_d', opts)
-keymap("n", "D", '"_D', opts)
-keymap("n", "dd", '"_dd', opts)
+-- keymap("v", "p", '"_dP', opts)
+-- keymap("n", "d", '"*d', opts)
+-- keymap("v", "d", '"*d', opts)
+-- keymap("n", "D", '"*D', opts)
+-- keymap("n", "dd", '"*dd', opts)
+
+-- keymap("n", "y", '"0y', opts)
+-- keymap("v", "y", '"0y', opts)
+-- keymap("n", "Y", '"0y', opts)
+-- keymap("n", "yy", '"0yy', opts)
+
+keymap("n", "d", '"9d', opts)
+keymap("v", "d", '"9d', opts)
+keymap("n", "D", '"9D', opts)
+keymap("n", "dd", '"9dd', opts)
+
+-- keymap("n", "x", '"9x', opts)
+-- keymap("v", "x", '"9x', opts)
+-- keymap("n", "X", '"9x', opts)
+
 keymap("n", "<leader>pu", "<cmd>pu<cr>", opts)
 
 -- Cmd modifiers
@@ -60,8 +75,6 @@ keymap(
   opts
 )
 keymap("n", "<Leader>ce", "<cmd>lua require('telescope.builtin').colorscheme()<cr>", opts)
-keymap("n", "<Leader>po", "<cmd>PeekOpen<cr>", opts)
-keymap("n", "<Leader>pc", "<cmd>PeekClose<cr>", opts)
 keymap("n", "<Leader>ht", "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
 keymap("n", "<Leader>mp", "<cmd>lua require('telescope.builtin').man_pages()<cr>", opts)
 keymap("n", "<Leader>of", "<cmd>lua require('telescope.builtin').oldfiles({ only_cwd = true })<cr>", opts)
@@ -185,12 +198,8 @@ keymap("n", "gv", "<cmd>vsp | lua vim.lsp.buf.definition()<cr>", opts)
 keymap("n", "<Leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>", opts)
 
 -- Telescope
-keymap("n", "<Leader>ga", "<cmd>G add .<cr>", opts)
-keymap("n", "<Leader>gS", "<cmd>G stash<cr>", opts)
-keymap("n", "<Leader>gO", "<cmd>G stash pop<cr>", opts)
 keymap("n", "<Leader>gs", "<cmd>lua require('telescope.builtin').git_stash()<cr>", opts)
 keymap("n", "<Leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<cr>", opts)
-keymap("n", "<leader>gt", "<cmd>GTags<CR>", opts)
 
 -- Sniprun
 keymap("n", "<Leader>sr", "<cmd>%SnipRun<cr>", opts)
@@ -217,16 +226,11 @@ vim.cmd(
 -- Vim Fugitive
 -- keymap("n", "<Leader>gu", ":diffget<cr>", opts)
 -- keymap("n", "<Leader>gs", ":diffput<cr>", opts)
-keymap("n", "<Leader>gP", "<cmd>Git! push<cr>", opts)
-keymap("n", "<Leader>gf", "<cmd>Git! fetch --all -v<cr>", opts)
-keymap("n", "<Leader>gp", "<cmd>Git! pull<cr>", opts)
 keymap("n", "<Leader>go", "<cmd>:!git-open<cr>", opts)
 keymap("n", "<Leader>np", "<cmd>:e ~/.npmrc<cr>", opts)
 keymap("n", "<Leader>aw", "<cmd>:e ~/.aws/config<cr>", opts)
 keymap("n", "<Leader>zh", "<cmd>:e ~/.zshrc<cr>", opts)
 keymap("n", "<Leader>gc", "<cmd>lua require('telescope.builtin').git_commits()<cr>", opts)
-keymap("n", "<Leader>gC", "<cmd>G checkout . | G clean -fd<cr>", opts)
-keymap("n", "<Leader>gl", "<cmd>G log -20<cr>", opts)
 
 -- Hop
 vim.api.nvim_set_keymap("n", "<leader>ww", "<cmd>lua require'hop'.hint_words()<cr>", opts)
@@ -239,57 +243,6 @@ keymap("n", "<leader>cw", ":e ++ff=dos<CR> | :set ff=unix<CR>", opts)
 
 -- Vifm
 keymap("n", "<leader>vi", "<cmd>Vifm .<cr>", opts)
-
--- DAP
--- vim.keymap.set('n', '<leader>ee', function() require "dap".toggle_breakpoint() end)
-keymap("n", "<leader>du", "<cmd>lua require('dapui').toggle()<cr>", opts)
-keymap("n", "<leader>de", "<cmd>lua require('persistent-breakpoints.api').toggle_breakpoint()<cr>", opts)
-keymap("n", "<leader>da", "<cmd>lua require('persistent-breakpoints.api').clear_all_breakpoints()<cr>", opts)
--- vim.keymap.set("n", "<leader>dn", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
-vim.keymap.set("n", "<Leader>do", function()
-  require("dap").step_out()
-end)
-vim.keymap.set("n", "<Leader>di", function()
-  require("dap").step_into()
-end)
-vim.keymap.set("n", "<Leader>dj", function()
-  require("dap").step_over()
-end)
-vim.keymap.set("n", "<leader>D", function()
-  require("dap").continue()
-end)
-vim.keymap.set("n", "<leader>dc", function()
-  require("dap").run_to_cursor()
-end)
-vim.keymap.set("n", "<leader>dt", function()
-  require("dap").terminate()
-end)
-vim.keymap.set("n", "<leader>dA", function()
-  require("debughelper-config").attach()
-end)
-vim.keymap.set("n", "<leader>dE", function()
-  require("debughelper-config").attachToRemote()
-end)
-vim.keymap.set("n", "<leader>dJ", function()
-  require("debughelper-config").attachToPort8080()
-end)
-vim.keymap.set("n", "<leader>dd", function()
-  require("dap.ui.widgets").hover()
-end)
-vim.keymap.set("n", "<leader>dw", function()
-  local widgets = require("dap.ui.widgets")
-  widgets.centered_float(widgets.scopes)
-end)
-vim.keymap.set("n", "<leader>dh", ':lua require"dap".up()<CR>zz')
-vim.keymap.set("n", "<leader>dl", ':lua require"dap".down()<CR>zz')
-vim.keymap.set("n", "<leader>dr", ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l')
--- vim.keymap.set('n', '<leader>ee', function() require"dap".set_exception_breakpoints({"all"}) end)
--- vim.keymap.set(
---   "n",
---   "<leader>do",
---   "<cmd> lua require('dap.ext.vscode').load_launchjs('.vscode/launch.json', { ['pwa-node'] = { 'typescript' }, ['node2'] = { 'typescript' }, ['node'] = { 'typescript' } })<cr>",
---   opts
--- )
 
 -- The Primeagean
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -314,10 +267,6 @@ vim.keymap.set("n", "<leader>ts", "<cmd>Trouble symbols toggle<cr>", { silent = 
 -- vim.keymap.set("n", "gR", "<cmd>TroubleToggle lsp_references<cr>",
 --   { silent = true, noremap = true }
 -- )
-
--- Peek markdown
-vim.keymap.set("n", "<leader>md", "<CMD>PeekOpen<CR>")
-vim.keymap.set("n", "<leader>mc", "<CMD>PeekClose<CR>")
 
 -- vim.cmd([[tnoremap <C-n> <C-\><C-n>]])
 vim.cmd([[tnoremap <C-Space> <C-\><C-n>]])
@@ -347,9 +296,6 @@ vim.keymap.set("n", "<leader>ih", function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end)
 
--- lab
-vim.keymap.set("n", "<leader>la", "<CMD>Lab code run<CR>")
-vim.keymap.set("n", "<leader>ls", "<CMD>Lab code stop<CR>")
 
 -- Ctrlsf.nvim
 vim.keymap.set("n", "<leader>sf", "<Plug>CtrlSFCwordPath")

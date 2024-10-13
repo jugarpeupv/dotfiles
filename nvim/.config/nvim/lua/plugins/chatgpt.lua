@@ -1,6 +1,6 @@
 return {
   "robitx/gp.nvim",
-  event = { "BufReadPost", "BufNewFile" },
+  cmd = { "GpChatToggle", "GpChatNew", "GpChatPaste", "GpWhisper" },
   config = function()
     local conf = {
       -- openai_api_key = os.getenv("OPENAI_API_KEY"),

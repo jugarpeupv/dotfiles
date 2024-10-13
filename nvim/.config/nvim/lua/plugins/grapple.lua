@@ -5,8 +5,8 @@ return {
     opts = {
       scope = "git", -- also try out "git_branch"
     },
-    event = { "BufReadPost", "BufNewFile" },
-    cmd = { "Grapple", "Telescope" },
+    -- event = { "BufReadPost", "BufNewFile" },
+    -- cmd = { "Grapple", "Telescope" },
     keys = {
       { "<leader>ha", "<cmd>Telescope grapple tags<cr>" },
       { "<leader>hh", "<cmd>Grapple toggle_tags<cr>",     desc = "Grapple open tags window" },

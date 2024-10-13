@@ -6,7 +6,7 @@ return {
     -- cmd = { "NvimTreeToggle", "NvimTreeFocus", "NvimTreeFindFile" },
     -- lazy = true,
     -- event = "VeryLazy",
-    -- priority = 500,
+    priority = 500,
     config = function()
       local api_nvimtree = require("nvim-tree.api")
       local nvim_tree_jg_utils = require("jg.custom.nvim-tree-utils")
@@ -41,7 +41,7 @@ return {
             local node = api_nvimtree.tree.get_node_under_cursor()
             local is_folder = node.fs_stat and node.fs_stat.type == "directory" or false
             local target_path = is_folder and node.absolute_path
-                or vim.fn.fnamemodify(node.absolute_path, ":h")
+            or vim.fn.fnamemodify(node.absolute_path, ":h")
             for _, source_path in ipairs(source_paths) do
               vim.fn.system({ "cp", "-R", source_path, target_path })
             end
@@ -609,6 +609,87 @@ return {
       vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
     end,
   },
+  -- {
+  --   "echasnovski/mini.files",
+  --   version = "*",
+  --   keys = {
+  --     {
+  --       "<leader>E",
+  --       function()
+  --         require("mini.files").open(vim.uv.cwd(), true)
+  --       end,
+  --     },
+  --   },
+  --   -- No need to copy this inside `setup()`. Will be used automatically.
+  --   config = function()
+  --     require("mini.files").setup(
+  --     -- No need to copy this inside `setup()`. Will be used automatically.
+  --       {
+  --         -- Customization of shown content
+  --         content = {
+  --           -- Predicate for which file system entries to show
+  --           filter = nil,
+  --           -- What prefix to show to the left of file system entry
+  --           prefix = nil,
+  --           -- In which order to show file system entries
+  --           sort = nil,
+  --         },
+  --
+  --         -- Module mappings created only inside explorer.
+  --         -- Use `''` (empty string) to not create one.
+  --         mappings = {
+  --           close = "q",
+  --           go_in = "l",
+  --           go_in_plus = "L",
+  --           go_out = "h",
+  --           go_out_plus = "H",
+  --           mark_goto = "'",
+  --           mark_set = "m",
+  --           reset = "<BS>",
+  --           reveal_cwd = "@",
+  --           show_help = "g?",
+  --           synchronize = "=",
+  --           trim_left = "<",
+  --           trim_right = ">",
+  --         },
+  --
+  --         -- General options
+  --         options = {
+  --           -- Whether to delete permanently or move into module-specific trash
+  --           permanent_delete = true,
+  --           -- Whether to use for editing directories
+  --           use_as_default_explorer = true,
+  --         },
+  --
+  --         -- Customization of explorer windows
+  --         windows = {
+  --           -- Maximum number of windows to show side by side
+  --           max_number = math.huge,
+  --           -- Whether to show preview of file/directory under cursor
+  --           preview = true,
+  --           -- Width of focused window
+  --           width_focus = 50,
+  --           -- Width of non-focused window
+  --           width_nofocus = 50,
+  --           -- Width of preview window
+  --           width_preview = 50,
+  --         },
+  --       }
+  --     )
+  --   end,
+  -- },
+  -- {
+  --   "kelly-lin/ranger.nvim",
+  --   config = function()
+  --     require("ranger-nvim").setup({ replace_netrw = true })
+  --     vim.api.nvim_set_keymap("n", "<leader>ef", "", {
+  --       noremap = true,
+  --       callback = function()
+  --         require("ranger-nvim").open(true)
+  --       end,
+  --     })
+  --   end,
+  -- },
   -- {
   --   "nvim-neo-tree/neo-tree.nvim",
   --   branch = "v3.x",

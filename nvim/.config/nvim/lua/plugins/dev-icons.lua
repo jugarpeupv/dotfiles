@@ -7,6 +7,16 @@ return {
     -- priority = 800,
     opts = {
       override = {
+        yml = {
+          icon = '󰘧',
+          color = "#9CDCFE",
+          name = "yml",
+        },
+        yaml = {
+          icon = '󰘧',
+          color = "#9CDCFE",
+          name = "yaml",
+        },
         dot = {
           icon = '󱁉',
           color = "#9CDCFE",

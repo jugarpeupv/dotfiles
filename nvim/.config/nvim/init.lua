@@ -1,5 +1,7 @@
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrwPlugin = 1
+vim.loader.enable()
+
 vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 vim.g.maplocalleader = ","
 
@@ -25,8 +27,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 -- require("lazy").setup({{ import = "plugins" } })
-require('lazy').setup('plugins', {
+require("lazy").setup("plugins", {
   change_detection = { notify = false },
+  -- install = { colorscheme = { "catpuccin " } },
   ui = {
     backdrop = 100,
     icons = {
@@ -71,5 +74,16 @@ require('lazy').setup('plugins', {
     },
   },
 })
+
 require("jg.core.autocommands")
 require("jg.core.keymaps")
+
+-- vim.api.nvim_create_autocmd("User", {
+--   pattern = "VeryLazy",
+--   callback = function()
+--     -- require("config.autocmds")
+--     -- require("config.keymaps")
+--     require("jg.core.autocommands")
+--     require("jg.core.keymaps")
+--   end,
+-- })

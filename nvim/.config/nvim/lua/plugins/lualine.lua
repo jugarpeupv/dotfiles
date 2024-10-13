@@ -5,7 +5,8 @@ return {
   -- event = { "BufReadPost" },
 
   ft = { "DiffviewFiles" },
-  event = { "TermOpen" ,"BufReadPre", "BufNewFile" },
+  -- event = { "TermOpen" ,"BufReadPre", "BufNewFile" },
+  event = { "TermOpen" ,"BufReadPost", "BufNewFile" },
   config = function()
     local colors = {
       blue = "#9CDCFE",

@@ -3,7 +3,7 @@ local M = {}
 M.attach_lsp_config = function(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
   local keymap = vim.keymap                                               -- for conciseness
-  keymap.set("n", "gI", "<cmd>Lspsaga finder<CR>", opts)                  -- show definition, references
+  -- keymap.set("n", "gI", "<cmd>Lspsaga finder<CR>", opts)                  -- show definition, references
   keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)   -- got to declaration
   keymap.set("n", "<leader>gD", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
   keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)    -- see definition and make edits in window
@@ -14,11 +14,11 @@ M.attach_lsp_config = function(client, bufnr)
   keymap.set("n", "gR", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
   keymap.set("n", "<leader>fo", "<cmd>lua vim.lsp.buf.format({ async = true})<cr>", opts)
   keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-  -- keymap.set("n", "<Leader>re", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+  keymap.set("n", "<Leader>re", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
   -- keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
   -- keymap.set("n", "<leader>rn", "<cmd>Lspsaga rename<CR>", opts) -- smart rename
-  keymap.set("n", "<Leader>re", "<cmd>Lspsaga rename<CR>", opts) -- smart rename
-  keymap.set("n", "<leader>ot", "<cmd>Lspsaga outline<CR>", opts)
+  -- keymap.set("n", "<Leader>re", "<cmd>Lspsaga rename<CR>", opts) -- smart rename
+  -- keymap.set("n", "<leader>ot", "<cmd>Lspsaga outline<CR>", opts)
 
   -- keymap.set("n", "gL", "<cmd>Lspsaga show_line_diagnostics<CR>", opts) -- show  diagnostics for line
   keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts) -- show  diagnostics for line
@@ -39,7 +39,7 @@ M.attach_lsp_config = function(client, bufnr)
   -- keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts) -- show documentation for what is under cursor
   -- keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)      -- show documentation for what is under cursor
   -- keymap.set("n", "gH", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)              -- show documentation for what is under cursor
-  keymap.set("n", "<leader>oo", "<cmd>LSoutlineToggle<CR>", opts) -- see outline on right hand side
+  -- keymap.set("n", "<leader>oo", "<cmd>LSoutlineToggle<CR>", opts) -- see outline on right hand side
 
   -- version 10 of nvim
   -- if client.server_capabilities.inlayHintProvider then

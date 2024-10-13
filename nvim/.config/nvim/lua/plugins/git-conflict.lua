@@ -6,16 +6,16 @@ return {
     -- "CWood-sdf/git-conflict.nvim",
     -- version = "*",
     branch = "main",
-    -- cmd = { "DiffviewOpen" },
+    cmd = { "DiffviewOpen" },
 
-    keys = {
-      { "<leader>gd", mode = "n" },
-      { "<leader>gv", mode = { "n", "v" } },
-      { "<leader>cc", mode = "n" },
-      { "<leader>ll", mode = "n" },
-      { "<leader>l5", mode = "n" },
-      { "<leader>l0", mode = "n" },
-    },
+    -- keys = {
+    --   { "<leader>gd", mode = "n" },
+    --   -- { "<leader>gv", mode = { "n", "v" } },
+    --   -- { "<leader>cc", mode = "n" },
+    --   { "<leader>ll", mode = "n" },
+    --   { "<leader>l5", mode = "n" },
+    --   { "<leader>l0", mode = "n" },
+    -- },
     config = function()
       require("git-conflict").setup({
         -- default_mappings = true,    -- disable buffer local mapping created by this plugin

@@ -80,6 +80,6 @@ mv * "$location"
 msg "${BLUE}Adjusting origin fetch locations...${NOFORMAT}"
 git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 msg "${BLUE}Fetching origin...${NOFORMAT}"
-git fetch --all
+git fetch --all --quiet
 popd > /dev/null
 msg "${GREEN}Success.${NOFORMAT}"

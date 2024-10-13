@@ -7,7 +7,7 @@ return {
   config = function()
     require("early-retirement").setup({
       -- If a buffer has been inactive for this many minutes, close it.
-      retirementAgeMins = 5,
+      retirementAgeMins = 7,
       -- Filetypes to ignore.
       ignoredFiletypes = {},
       -- Ignore files matching this lua pattern; empty string disables this setting.
@@ -34,10 +34,10 @@ return {
 
       -- ignore unloaded buffers. Session-management plugin often add buffers
       -- to the buffer list without loading them.
-      ignoreUnloadedBufs = false,
+      ignoreUnloadedBufs = true,
 
       -- Show notification on closing. Works with plugins like nvim-notify.
-      notificationOnAutoClose = false,
+      notificationOnAutoClose = true,
 
       -- When a file is deleted, for example via an external program, delete the
       -- associated buffer as well.

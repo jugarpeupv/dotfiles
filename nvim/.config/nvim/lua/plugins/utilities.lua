@@ -1,4 +1,5 @@
 return {
+  -- { "VidocqH/data-viewer.nvim" },
   -- { "Djancyp/regex.nvim" },
   -- {"https://github.com/gabrielpoca/replacer.nvim"},
   -- { "Wansmer/sibling-swap.nvim" },
@@ -16,10 +17,12 @@ return {
   --     })
   --   end,
   -- },
-  { "dstein64/vim-startuptime", event = "BufReadPost" },
+  -- { "dstein64/vim-startuptime", event = "BufReadPost" },
+  -- { "dstein64/vim-startuptime", event = "VeryLazy" },
   {
     "b0o/schemastore.nvim",
-    event = "VeryLazy",
+    -- event = "VeryLazy",
+    lazy = true
   },
   {
     "chrisgrieser/nvim-various-textobjs",
@@ -31,7 +34,8 @@ return {
   },
   {
     "christoomey/vim-tmux-navigator",
-    event = "VeryLazy",
+    -- event = "VeryLazy",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       vim.g.tmux_navigator_disable_when_zoomed = 1
       vim.g.tmux_navigator_preserve_zoom = 1
