@@ -14,7 +14,8 @@ return {
   {
     "stevearc/oil.nvim",
     -- event = { "BufReadPost", "BufNewFile" },
-    keys = { "<leader>oa" },
+    -- keys = { "<leader>oa" },
+    keys = { mode = {"n"}, "<leader>oa", "<cmd>Oil<cr>" },
     opts = {},
     -- Optional dependencies
     -- dependencies = { "echasnovski/mini.icons" },
@@ -23,7 +24,7 @@ return {
       require("oil").setup({
         -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
         -- Set to false if you want some other plugin (e.g. netrw) to open when you edit directories.
-        default_file_explorer = false,
+        default_file_explorer = true,
         -- Id is automatically added at the beginning, and name at the end
         -- See :help oil-columns
         columns = {
@@ -213,8 +214,6 @@ return {
           border = "rounded",
         },
       })
-
-      vim.keymap.set("n", "<Leader>oa", "<cmd>Oil<cr>", {})
     end,
   },
 }

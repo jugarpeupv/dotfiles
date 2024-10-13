@@ -81,5 +81,4 @@ vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wra
 
 vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 
-
 -- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 4]])

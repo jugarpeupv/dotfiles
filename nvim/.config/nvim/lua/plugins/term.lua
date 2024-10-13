@@ -3,12 +3,30 @@ return {
   {
     "s1n7ax/nvim-terminal",
     keys = {
-      { "<M-o>",  mode = { "n", "t" } },
+      { "<M-o>",  mode = { "n" }, ':lua NTGlobal["terminal"]:toggle()<cr>' },
+      { "<M-o>", mode = { "t" }, '<C-\\><C-n>:lua NTGlobal["terminal"]:toggle()<cr>'},
+      { "<M-r>", mode = { "n" }, '<C-\\><C-n>:keepalt file term://:'},
+      { "<M-r>", mode = { "n" }, ':keepalt file term://:'},
       { "1<M-o>", mode = { "n", "t" } },
       { "2<M-o>", mode = { "n", "t" } },
       { "3<M-o>", mode = { "n", "t" } },
       { "4<M-o>", mode = { "n", "t" } },
       { "5<M-o>", mode = { "n", "t" } },
+      {
+        "<leader>Tv",
+        mode = { "n" },
+        "<cmd>vsp|term<cr>",
+      },
+      {
+        "<leader>Th",
+        mode = { "n" },
+        "<cmd>sp|term<cr>",
+      },
+      {
+        "<leader>Tn",
+        mode = { "n" },
+        "<cmd>tabnew|term<cr>",
+      },
     },
     config = function()
       vim.o.hidden = true
@@ -66,17 +84,6 @@ return {
           { keymap = "5<M-o>" },
         },
       })
-
-      local silent = { silent = true }
-      vim.api.nvim_set_keymap("n", "<M-o>", ':lua NTGlobal["terminal"]:toggle()<cr>', silent)
-      vim.api.nvim_set_keymap("t", "<M-o>", '<C-\\><C-n>:lua NTGlobal["terminal"]:toggle()<cr>', silent)
-
-      -- keepalt file %:watch
-
-      vim.api.nvim_set_keymap("t", "<M-r>", "<C-\\><C-n>:keepalt file term://:", {})
-      vim.api.nvim_set_keymap("n", "<M-r>", ":keepalt file term://:", {})
-
-      -- vim.cmd([[autocmd TermOpen * setlocal nonumber norelativenumber]])
     end,
   },
   -- {

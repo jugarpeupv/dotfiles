@@ -24,18 +24,20 @@ opt.ea = true -- equal always, windows same size
 opt.cursorline = true -- highlight the current cursor line
 opt.scrolloff = 4
 opt.sidescrolloff = 4
+opt.hlsearch = false
 opt.incsearch = true
 opt.showcmd = true
 opt.path:append({ "**" })
 opt.wildignore:append({ "*/node_modules/*" })
 -- opt.expandtab = true
-opt.showbreak = string.rep(" ", 0) -- Make it so that long lines wrap smartly
+-- opt.showbreak = string.rep(" ", 0) -- Make it so that long lines wrap smartly
 opt.linebreak = true
 opt.modelines = 1
 opt.belloff = "all" -- Just turn the dang bell off
 opt.inccommand = "split"
 opt.mouse = "n"
 opt.swapfile = false
+opt.backup = false
 opt.hidden = true
 
 opt.formatoptions = opt.formatoptions - "c" - "r" - "o"
