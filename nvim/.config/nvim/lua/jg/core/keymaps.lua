@@ -1,5 +1,4 @@
 -- set leader key to space
-vim.g.mapleader = " "
 local opts = { noremap = true, silent = true }
 
 -- Shorten function name
@@ -53,7 +52,7 @@ keymap("n", "dd", '"9dd', opts)
 
 keymap("n", "<leader>pu", "<cmd>pu<cr>", opts)
 
--- Cmd modifiers
+-- Cmd modifiers cooresponds to cmd+shift+7
 vim.cmd([[map <M-g> gcc]])
 
 vim.keymap.set({ "n", "t" }, "<M-p>", function()

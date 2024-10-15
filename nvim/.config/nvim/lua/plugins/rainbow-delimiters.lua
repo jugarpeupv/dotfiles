@@ -1,11 +1,10 @@
-return {
+-- return {}
 
+return {
   {
     "HiPhish/rainbow-delimiters.nvim",
-    after = "nvim-treesitter",
     -- event = "VeryLazy",
-    -- event = { "BufReadPost", "BufNewFile" },
-    event = { "InsertEnter" },
+    event = { "BufReadPost", "BufNewFile" },
     -- cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
     config = function()
       -- This module contains a number of default definitions

@@ -29,8 +29,12 @@ M.attach_lsp_config = function(client, bufnr)
   -- keymap("n", "<M-.>", "<cmd>Lspsaga code_action<CR>", opts)
 
   -- keymap.set("n", "<leader>d", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts) -- show diagnostics for cursor
-  keymap.set("n", "<leader>gk", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to previous diagnostic in buffer
-  keymap.set("n", "<leader>gj", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer
+
+  keymap.set("n", "<leader>gk", "<cmd>lua vim.diagnostic.goto_prev<cr>", opts) -- jump to previous diagnostic in buffer
+  keymap.set("n", "<leader>gj", "<cmd>lua vim.diagnostic.goto_next()<cr>", opts) -- jump to previous diagnostic in buffer
+
+  -- keymap.set("n", "<leader>gk", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to previous diagnostic in buffer
+  -- keymap.set("n", "<leader>gj", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer
   -- keymap.set("n", "gh", "<cmd>Lspsaga hover_doc<CR>", opts)                    -- show documentation for what is under cursor
   keymap.set({ "n" }, "gh", function()
     require("lsp_signature").toggle_float_win()

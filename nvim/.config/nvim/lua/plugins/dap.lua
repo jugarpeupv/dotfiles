@@ -33,6 +33,7 @@ return {
     "mfussenegger/nvim-dap",
     -- event = "VeryLazy",
     -- event = { "BufReadPre", "BufNewFile" },
+    lazy = true,
     keys = {
       { "leader>D" },
     },

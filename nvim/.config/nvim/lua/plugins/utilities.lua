@@ -17,6 +17,7 @@ return {
   --     })
   --   end,
   -- },
+  -- { https://github.com/axieax/urlview.nvim }
   { "dstein64/vim-startuptime", cmd = { "StartupTime" } },
   -- { "dstein64/vim-startuptime", event = "VeryLazy" },
   {
@@ -63,7 +64,6 @@ return {
   { "nvim-lua/plenary.nvim",   lazy = true },
   { "tpope/vim-surround",      event = { "BufReadPost", "BufNewFile" } },
   { "windwp/nvim-ts-autotag",  ft = "html" },
-  { "tpope/vim-fugitive",      cmd = { "G" } },
   { "tpope/vim-dispatch",      lazy = true },
   { "kkharji/sqlite.lua",      lazy = true },
   {

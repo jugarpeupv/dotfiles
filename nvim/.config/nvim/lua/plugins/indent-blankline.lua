@@ -1,3 +1,4 @@
+-- return {}
 return {
   "lukas-reineke/indent-blankline.nvim",
   event = "BufReadPost",
@@ -30,7 +31,7 @@ return {
       indent = {
         char = "▏",
         -- tab_char = ">"
-        tab_char = "",
+        -- tab_char = "",
         repeat_linebreak = true,
         -- tab_char = "┋",
         -- tab_char = ">",

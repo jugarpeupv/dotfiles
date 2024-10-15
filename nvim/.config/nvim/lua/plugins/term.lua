@@ -5,8 +5,8 @@ return {
     keys = {
       { "<M-o>",  mode = { "n" }, ':lua NTGlobal["terminal"]:toggle()<cr>' },
       { "<M-o>", mode = { "t" }, '<C-\\><C-n>:lua NTGlobal["terminal"]:toggle()<cr>'},
-      { "<M-r>", mode = { "n" }, '<C-\\><C-n>:keepalt file term://:'},
-      { "<M-r>", mode = { "n" }, ':keepalt file term://:'},
+      { "<M-r>", mode = { "n" }, "<C-\\><C-n>:keepalt file term://"},
+      { "<M-r>", mode = { "n" }, ":keepalt file term://"},
       { "1<M-o>", mode = { "n", "t" } },
       { "2<M-o>", mode = { "n", "t" } },
       { "3<M-o>", mode = { "n", "t" } },

@@ -138,7 +138,7 @@ return {
           percentage = 0.15,
         },
         no_italic = false, -- Force no italic
-        no_bold = false,   -- Force no bold
+        no_bold = false, -- Force no bold
         styles = {
           comments = {},
           conditionals = { "bold" },
@@ -187,14 +187,29 @@ return {
             MatchupVirtualText = { fg = "#747ebd" },
             GitSignsCurrentLineBlame = { fg = "black" },
             FloatBorder = { fg = "#394b70" },
-            -- LineNR = { guifg = "#3b4261" },
+
+            -- VIRA
+            viraTitles = { fg = "#F9E2AF" },
+            viraDetailsStatusInProgress = { fg = "#F38BA8" },
+            viraDetailsEpic = { fg = "#F5C2E7" },
+            viraDetailsTypeStory = { fg = "#8ee2cf" },
+            viraDetails = { fg = "#89ddff" },
+            viraDetailsDates = { fg = "#89ddff" },
+            viraCommentAuthor = { fg = "#89ddff" },
+            viraCommentDate = { fg = "#89ddff" },
+            viraCommentOpen = { fg = "#89ddff" },
+            viraIssuesDescription = { fg = "#F5C2E7" },
+            viraIssuesIssue = { fg = "#89ddff" },
+            viraIssuesUsername = { fg = "#8ee2cf" },
+            viraIssuesStatus = { fg = "#F38BA8" },
+            viraIssuesDates = { fg = "#B4BEFE" },
           }
         end,
       })
 
       -- setup must be called before loading
       vim.cmd.colorscheme("catppuccin")
-      vim.cmd([[hi gitcommitOverflow gui=italic]])
+      vim.cmd([[hi gitcommitOverflow gui=none]])
 
       vim.cmd([[highlight LineNR guifg=#3b4261]])
       vim.cmd([[highlight CursorLineNR guifg=#737aa2]])
@@ -203,7 +218,6 @@ return {
       vim.cmd([[highlight IndentBlanklineContextChar guifg=#737aa2]])
 
       vim.api.nvim_set_hl(0, "@lsp.typemod.method.defaultLibrary.typescript", { link = "Function" })
-
 
       vim.cmd([[hi RenderMarkdownCode guibg=#394b70]])
       -- vim.cmd([[hi RenderMarkdownCodeInline]])

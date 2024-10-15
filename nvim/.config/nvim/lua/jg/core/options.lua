@@ -8,6 +8,7 @@ opt.number = true         -- shows absolute line number on cursor line (when rel
 opt.tabstop = 2       -- 2 spaces for tabs (prettier default)
 opt.shiftwidth = 2    -- 2 spaces for indent width
 opt.expandtab = true  -- expand tab to spaces
+-- opt.expandtab = false -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
 -- opt.shortmess:append("I") -- remove :intro
 
@@ -18,13 +19,13 @@ opt.wrap = true -- disable line wrapping
 -- search settings
 opt.ignorecase = true -- ignore case when searching
 opt.smartcase = true  -- if you include mixed case in your search, assumes you want case-sensitive
-opt.ea = true -- equal always, windows same size
+opt.ea = true         -- equal always, windows same size
 
 -- cursor line
 opt.cursorline = true -- highlight the current cursor line
 opt.scrolloff = 4
 opt.sidescrolloff = 4
-opt.hlsearch = false
+opt.hlsearch = true
 opt.incsearch = true
 opt.showcmd = true
 opt.path:append({ "**" })
@@ -52,7 +53,6 @@ opt.showbreak = "↪\\"
 
 -- vim.cmd([[set fillchars+=diff:╱]])
 -- vim.cmd([[set breakindent]])
--- ListChars
 -- vim.cmd([[set showbreak=↪\]])
 
 -- vim.o.ls = 0
@@ -88,10 +88,8 @@ opt.laststatus = 0
 
 opt.winblend = 0
 
-
 -- vim.cmd([[let &t_Cs = "\e[4:3m]"]])
 -- vim.cmd([[let &t_Ce = "\e[4:0m]"]])
-
 
 opt.showmode = false
 vim.g.markdown_folding = 1
@@ -100,8 +98,17 @@ vim.g.markdown_folding = 1
 -- vim.cmd[[set shada+=r/mnt/exdisk]]
 
 opt.list = true
--- opt.listchars:append("space:⋅")
-opt.listchars:append("trail: ")
+
+local space = "·"
+opt.listchars:append({
+	-- tab = "» ",
+  tab="  ",
+	-- multispace = space,
+	-- lead = space,
+	-- trail = "󱁐",
+  trail = space,
+	nbsp = "&",
+})
 -- opt.listchars:append("trail:.")
 -- opt.listchars:append("eol:↴")
 
@@ -111,14 +118,12 @@ opt.listchars:append("trail: ")
 -- vim.cmd([[let g:TerminusInsertCursorShape=1]])
 vim.g.TerminusInsertCursorShape = 1
 
-
-
-vim.o.foldcolumn = '0'
+vim.o.foldcolumn = "0"
 vim.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = false
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.o.foldtext = ''
+vim.o.foldtext = ""
 
 opt.updatetime = 1000
