@@ -36,7 +36,8 @@ return {
   {
     "christoomey/vim-tmux-navigator",
     -- event = "VeryLazy",
-    event = { "BufReadPost", "BufNewFile" },
+    -- event = { "BufReadPost", "BufNewFile" },
+    keys = { "<C-h>", "<C-j>", "<C-k>", "<C-l>" },
     config = function()
       vim.g.tmux_navigator_disable_when_zoomed = 1
       vim.g.tmux_navigator_preserve_zoom = 1

@@ -1,6 +1,7 @@
 return {
   "robitx/gp.nvim",
   cmd = { "GpChatToggle", "GpChatNew", "GpChatPaste", "GpWhisper" },
+  keys = { { "<leader>ch", "<cmd>GpChatToggle<CR>" } },
   config = function()
     local conf = {
       -- openai_api_key = os.getenv("OPENAI_API_KEY"),
@@ -48,9 +49,9 @@ return {
         -- GpImplement rewrites the provided selection/range based on comments in it
         Implement = function(gp, params)
           local template = "Having following from {{filename}}:\n\n"
-          .. "```{{filetype}}\n{{selection}}\n```\n\n"
-          .. "Please rewrite this according to the contained instructions."
-          .. "\n\nRespond exclusively with the snippet that should replace the selection above."
+              .. "```{{filetype}}\n{{selection}}\n```\n\n"
+              .. "Please rewrite this according to the contained instructions."
+              .. "\n\nRespond exclusively with the snippet that should replace the selection above."
 
           local agent = gp.get_command_agent()
           gp.logger.info("Implementing selection with agent: " .. agent.name)
@@ -67,16 +68,15 @@ return {
 
         -- example of adding command which explains the selected code
         Explain = function(gp, params)
-        	local template = "I have the following code from {{filename}}:\n\n"
-        		.. "```{{filetype}}\n{{selection}}\n```\n\n"
-        		.. "Please respond by explaining the code above."
-        	local agent = gp.get_chat_agent()
-        	gp.Prompt(params, gp.Target.popup, agent, template)
+          local template = "I have the following code from {{filename}}:\n\n"
+              .. "```{{filetype}}\n{{selection}}\n```\n\n"
+              .. "Please respond by explaining the code above."
+          local agent = gp.get_chat_agent()
+          gp.Prompt(params, gp.Target.popup, agent, template)
         end,
       },
     }
     require("gp").setup(conf)
-    vim.keymap.set({ "n" }, "<leader>ch", "<cmd>GpChatToggle<CR>", { noremap = true })
     -- Setup shortcuts here (see Usage > Shortcuts in the Documentation/Readme)
   end,
 }
