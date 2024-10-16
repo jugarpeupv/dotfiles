@@ -12,6 +12,7 @@ return {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
       },
+      { "natecraddock/telescope-zf-native.nvim" },
       {
         "someone-stole-my-name/yaml-companion.nvim",
         ft = { "yaml", "yml" },
@@ -421,7 +422,7 @@ return {
       -- load_extension, somewhere after setup function:
       -- telescope.load_extension("fzf")
       -- telescope.load_extension("harpoon")
-      -- telescope.load_extension("zf-native")
+      telescope.load_extension("zf-native")
       telescope.load_extension("ui-select")
       telescope.load_extension("bookmarks")
       telescope.load_extension("git_worktree")
