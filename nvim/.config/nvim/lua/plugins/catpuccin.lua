@@ -112,6 +112,7 @@ return {
           -- ts_rainbow2 = false,
           lsp_trouble = true,
           neotree = true,
+          octo = true,
           lsp_saga = true,
           mason = true,
           dap = true,

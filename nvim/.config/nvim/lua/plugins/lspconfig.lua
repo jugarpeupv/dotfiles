@@ -15,10 +15,10 @@ return {
 		event = { "BufReadPost", "BufNewFile" },
 		-- cmd = { "LspInfo" },
 		dependencies = {
-      {
-        "nvim-java/nvim-java",
-        event = { "BufEnter *.java" },
-      },
+      -- {
+      --   "nvim-java/nvim-java",
+      --   event = { "BufEnter *.java" },
+      -- },
 			{ "mfussenegger/nvim-jdtls" },
 			{ "folke/neodev.nvim",       opts = {} },
 			{
@@ -496,7 +496,7 @@ return {
 				},
 			})
 
-      require("java").setup()
+      -- require("java").setup()
 			lspconfig["jdtls"].setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
