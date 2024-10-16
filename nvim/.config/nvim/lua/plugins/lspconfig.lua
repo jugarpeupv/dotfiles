@@ -6,13 +6,6 @@ return {
 	--   lazy = false, -- This plugin is already lazy
 	-- },
 	{
-		"nvim-java/nvim-java",
-		event = { "BufEnter *.java" },
-			config = function()
-				require("java").setup()
-			end,
-	},
-	{
 		"neovim/nvim-lspconfig",
 		-- event = "VeryLazy",
 		-- event = "User FilePost",
@@ -22,6 +15,10 @@ return {
 		event = { "BufReadPost", "BufNewFile" },
 		-- cmd = { "LspInfo" },
 		dependencies = {
+      {
+        "nvim-java/nvim-java",
+        event = { "BufEnter *.java" },
+      },
 			{ "mfussenegger/nvim-jdtls" },
 			{ "folke/neodev.nvim",       opts = {} },
 			{
@@ -499,6 +496,7 @@ return {
 				},
 			})
 
+      require("java").setup()
 			lspconfig["jdtls"].setup({
 				on_attach = on_attach,
 				capabilities = capabilities,

@@ -60,10 +60,12 @@
 --   },
 -- }
 
+local java_cmd = vim.fn.expand("~/.local/share/nvim/mason/bin/jdtls")
+print("java_cmd: " .. java_cmd)
 
-local config = {
-  cmd = { vim.fn.expand("~/.local/share/nvim/mason/bin/jdtls") },
-  root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", ".git", "mvnw" }, { upward = true })[1])
-}
-
-require("jdtls").start_or_attach(config)
+-- local config = {
+--   cmd = { vim.fn.expand("~/.local/share/nvim/mason/bin/jdtls") },
+--   root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", ".git", "mvnw" }, { upward = true })[1])
+-- }
+--
+-- require("jdtls").start_or_attach(config)

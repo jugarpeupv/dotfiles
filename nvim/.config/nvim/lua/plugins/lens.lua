@@ -4,6 +4,8 @@ return {
     "haya14busa/vim-asterisk",
     -- event = { "BufReadPost", "BufNewFile" },
     keys = {
+      { "?",  mode = "n" },
+      { "/",  mode = "n" },
       { "n",  mode = "n" },
       { "*",  mode = "n" },
       { "#",  mode = "n" },
@@ -24,6 +26,8 @@ return {
   {
     "kevinhwang91/nvim-hlslens",
     keys = {
+      { "?",  mode = "n" },
+      { "/",  mode = "n" },
       { "n",  mode = "n" },
       { "*",  mode = "n" },
       { "#",  mode = "n" },

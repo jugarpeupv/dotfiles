@@ -22,3 +22,4 @@ hi viraDetailsTypeTask gui=none guifg=#F5C2E7
 hi viraDetailsTypeReporter gui=none guifg=#94E2D5
 hi viraCommentAuthor gui=underline guifg=#89ddff
 hi viraCodeQuote guifg=#94E2D5
+hi viraDetailsStatusDone gui=bold guifg=#94E2D5 guibg=none

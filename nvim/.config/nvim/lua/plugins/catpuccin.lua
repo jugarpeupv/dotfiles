@@ -24,6 +24,7 @@ return {
             -- yellow = "#89dcec"
             yellow = "#89ddff",
             green = "#F2CDCD",
+            -- green = "#94E2D5",
             maroon = "#FAB387",
 
             -- yellow = "#2ac3de",
