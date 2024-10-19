@@ -1,11 +1,11 @@
 # Descripción
 
-Cambios en los pipelines de github para incluir ENTITY, y varias modificaciones pequeñas
+Descripción place holder
 
 
 # Tarea de Jira con detalle tarea
 
-[https://mapfrealm.atlassian.net/browse/AM20-2243](https://mapfrealm.atlassian.net/browse/AM20-2243)
+https://mapfrealm.atlassian.net/browse/AM20-2243
 
 # Test coverage -> mínimo 60%
 
@@ -19,14 +19,14 @@ Lines        : 98.2% ( 4000/4073 )
 
 # Documentación
 
-No aplica, solo se modifican test unitarios
+Consultar en la tarea de JIRA
 
 # Ejecución CI correcta
 
-En la PR se puede ver
+Consultar en la tarea de JIRA
 
 # Explicación de retrocompatibilidad en caso de requerir
 
-No aplica, solo se modifican test unitarios.
+No aplica
 
 # Evidencias de pruebas

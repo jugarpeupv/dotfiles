@@ -89,26 +89,31 @@ return {
           ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
           ["<C-e>"] = cmp.mapping.abort(),   -- close completion window
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          ["<Right>"] = cmp.mapping(function(fallback)
+            local copilot = require("copilot.suggestion")
+            if copilot.is_visible() then
+              copilot.accept()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
           -- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
           -- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
           -- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
           -- Overload tab to accept Copilot suggestions.
-          -- ["<Tab>"] = cmp.mapping(function(fallback)
-          --   local copilot = require("copilot.suggestion")
-          --   if cmp.visible() then
-          --     -- cmp.mapping.confirm({ select = false })
-          --     cmp.confirm({ select = true  })
-          --     -- cmp.
-          --     -- cmp.select_next_item()
-          --     -- cmp.select_next_item()
-          --   elseif copilot.is_visible() then
-          --     copilot.accept()
-          --   elseif luasnip.expand_or_locally_jumpable() then
-          --     luasnip.expand_or_jump()
-          --   else
-          --     fallback()
-          --   end
-          -- end, { "i", "s" }),
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            -- local copilot = require("copilot.suggestion")
+            -- if copilot.is_visible() then
+            --   copilot.accept()
+            -- elseif cmp.visible() then
+            if cmp.visible() then
+              cmp.confirm()
+            elseif luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
           -- ["<S-Tab>"] = cmp.mapping(function(fallback)
           --   local copilot = require("copilot.suggestion")
           --   if copilot.is_visible() then
@@ -144,6 +149,7 @@ return {
         -- sources for autocompletion
         sources = cmp.config.sources({
           { name = "lazydev", group_index = 0 },
+          { name = "path" }, -- file system paths
           {
             name = "nvim_lsp",
             -- entry_filter = function(entry, ctx)
@@ -155,10 +161,9 @@ return {
           },
           -- { name = "nvim_lsp_signature_help" },
           { name = "nvim_lsp:marksman" },
-          { name = "marksman" },
-          { name = "buffer" },
           { name = "luasnip" }, -- snippets
-          { name = "path" }, -- file system paths
+          { name = "buffer" },
+          { name = "marksman" },
           { name = "crates" },
           -- { name = "buffer", keyword_length = 5, max_item_count = 5 },
           -- { name = "buffer" },

@@ -3,27 +3,27 @@ return {
   {
     "s1n7ax/nvim-terminal",
     keys = {
-      { "<M-o>",  mode = { "n" }, ':lua NTGlobal["terminal"]:toggle()<cr>' },
-      { "<M-o>", mode = { "t" }, '<C-\\><C-n>:lua NTGlobal["terminal"]:toggle()<cr>'},
-      { "<M-r>", mode = { "n" }, "<C-\\><C-n>:keepalt file term://"},
-      { "<M-r>", mode = { "n" }, ":keepalt file term://"},
-      { "1<M-o>", mode = { "n", "t" } },
-      { "2<M-o>", mode = { "n", "t" } },
-      { "3<M-o>", mode = { "n", "t" } },
-      { "4<M-o>", mode = { "n", "t" } },
-      { "5<M-o>", mode = { "n", "t" } },
+      { "<M-o>",  mode = { "n" },     ':lua NTGlobal["terminal"]:toggle()<cr>', silent = true },
+      { "<M-o>",  mode = { "t" },     '<C-\\><C-n>:lua NTGlobal["terminal"]:toggle()<cr>', silent = true },
+      { "<M-r>",  mode = { "n" },     "<C-\\><C-n>:keepalt file term://", silent = true },
+      { "<M-r>",  mode = { "n" },     ":keepalt file term://", silent = true },
+      { "1<M-o>", mode = { "n", "t" }, silent = true },
+      { "2<M-o>", mode = { "n", "t" }, silent = true },
+      { "3<M-o>", mode = { "n", "t" }, silent = true },
+      { "4<M-o>", mode = { "n", "t" }, silent = true },
+      { "5<M-o>", mode = { "n", "t" }, silent = true },
       {
-        "<leader>Tv",
+        "<leader>fl",
         mode = { "n" },
         "<cmd>vsp|term<cr>",
       },
       {
-        "<leader>Th",
+        "<leader>fh",
         mode = { "n" },
-        "<cmd>sp|term<cr>",
+        "<cmd>15sp|term<cr>",
       },
       {
-        "<leader>Tn",
+        "<leader>fn",
         mode = { "n" },
         "<cmd>tabnew|term<cr>",
       },
@@ -274,10 +274,30 @@ return {
   {
     "boltlessengineer/bufterm.nvim",
     event = { "TermOpen" },
-    -- keys = {
-    --   { mode = { "n" }, "<leader><leader>n", "<cmd>BufTermNext<cr>" },
-    --   { mode = { "n" }, "<leader><leader>p", "<cmd>BufTermPrev<cr>" }
-    -- },
+
+    -- vim.keymap.set({ "n" }, "<M-o>", function()
+    --   local active_buffer = vim.api.nvim_win_get_buf(0)
+    --   print(active_buffer)
+    -- end, {})
+    -- vim.keymap.set({ "n" }, "<leader>fe", "<cmd>BufTermEnter<cr>", {})
+    -- vim.keymap.set({ "n" }, "<leader>fj", "<cmd>BufTermNext<cr>", {})
+    -- vim.keymap.set({ "n" }, "<leader>fk", "<cmd>BufTermNext<cr>", {})
+    keys = {
+      {
+        mode = { "n" },
+        "<leader>fp",
+        function()
+          if vim.bo.filetype == "BufTerm" or vim.bo.filetype == "terminal" then
+            vim.cmd("close")
+          else
+            vim.cmd("BufTermEnter")
+          end
+        end,
+      },
+      { mode = { "n" }, "<leader>fe", "<cmd>BufTermEnter<cr>" },
+      { mode = { "n" }, "<leader>fj", "<cmd>BufTermNext<cr>" },
+      { mode = { "n" }, "<leader<fk", "<cmd>BufTermPrev<cr>" },
+    },
     -- opts = {
     --   save_native_terms = true, -- integrate native terminals from `:terminal` command
     --   start_in_insert = false, -- start terminal in insert mode
@@ -303,8 +323,6 @@ return {
           auto_close = true,  -- auto close buffer on terminal job ends
         },
       })
-      vim.keymap.set({ "n" }, "<leader>tn", "<cmd>BufTermNext<cr>", {})
-      vim.keymap.set({ "n" }, "<leader>tp", "<cmd>BufTermNext<cr>", {})
     end,
   },
 }

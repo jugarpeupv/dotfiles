@@ -1,8 +1,7 @@
 return {
   {
     "Weissle/persistent-breakpoints.nvim",
-    -- event = { "BufReadPre", "BufNewFile" },
-    -- event = "VeryLazy",
+    event = { "BufReadPost", "BufNewFile" },
     keys = {
       {
         mode = { "n" },
@@ -35,7 +34,7 @@ return {
     -- event = { "BufReadPre", "BufNewFile" },
     lazy = true,
     keys = {
-      { "leader>D" },
+      { "<leader>D" },
     },
     dependencies = {
       {
@@ -114,6 +113,16 @@ return {
         type = "executable",
         command = "node",
         args = { os.getenv("HOME") .. "/dev/microsoft/vscode-node-debug2/out/src/nodeDebug.js" },
+      }
+
+      dap.configurations.java = {
+        {
+          type = "java",
+          request = "attach",
+          name = "Attach to the process",
+          hostName = "localhost",
+          port = "8000",
+        },
       }
 
       for _, language in ipairs({ "typescript", "javascript" }) do

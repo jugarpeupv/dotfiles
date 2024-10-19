@@ -196,6 +196,11 @@ style = "blue"
 [azure]
 disabled = true
 
+
 [java]
-format ="via [${symbol}(${version})]($style)"
-style = "blue"
+format ="via [${symbol}(${version}) ]($style)"
+style = "bold blue"
+symbol = "󰬷 "
+
+[gradle]
+symbol = " "

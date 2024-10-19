@@ -7,10 +7,20 @@ return {
     -- priority = 800,
     opts = {
       override = {
+        http = {
+          icon = '',
+          name = "http",
+          color = "#9CDCFE"
+        },
         yml = {
           icon = '󰘧',
           color = "#9CDCFE",
           name = "yml",
+        },
+        png = {
+          icon = '',
+          color = "#CBA6F7",
+          name = "png",
         },
         yaml = {
           icon = '󰘧',

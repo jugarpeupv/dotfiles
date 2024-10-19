@@ -14,7 +14,34 @@ M.attach_lsp_config = function(client, bufnr)
   keymap.set("n", "gR", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
   keymap.set("n", "<leader>fo", "<cmd>lua vim.lsp.buf.format({ async = true})<cr>", opts)
   keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-  keymap.set("n", "<Leader>re", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+  -- keymap.set("n", "<Leader>re", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+
+  vim.keymap.set("n", "<leader>re", function()
+    -- when rename opens the prompt, this autocommand will trigger
+    -- it will "press" CTRL-F to enter the command-line window `:h cmdwin`
+    -- in this window I can use normal mode keybindings
+    local cmdId
+    cmdId = vim.api.nvim_create_autocmd({ "CmdlineEnter" }, {
+      callback = function()
+        local key = vim.api.nvim_replace_termcodes("<C-f>", true, false, true)
+        vim.api.nvim_feedkeys(key, "c", false)
+        vim.api.nvim_feedkeys("0", "n", false)
+        -- autocmd was triggered and so we can remove the ID and return true to delete the autocmd
+        cmdId = nil
+        return true
+      end,
+    })
+    vim.lsp.buf.rename()
+    -- if LPS couldn't trigger rename on the symbol, clear the autocmd
+    vim.defer_fn(function()
+      -- the cmdId is not nil only if the LSP failed to rename
+      if cmdId then
+        vim.api.nvim_del_autocmd(cmdId)
+      end
+    end, 500)
+  end, opts)
+
+  -- keymap.set("n", "<Leader>re", "<cmd>lua require('renamer').rename()<CR>", opts)
   -- keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
   -- keymap.set("n", "<leader>rn", "<cmd>Lspsaga rename<CR>", opts) -- smart rename
   -- keymap.set("n", "<Leader>re", "<cmd>Lspsaga rename<CR>", opts) -- smart rename
@@ -30,7 +57,7 @@ M.attach_lsp_config = function(client, bufnr)
 
   -- keymap.set("n", "<leader>d", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts) -- show diagnostics for cursor
 
-  keymap.set("n", "<leader>gk", "<cmd>lua vim.diagnostic.goto_prev<cr>", opts) -- jump to previous diagnostic in buffer
+  keymap.set("n", "<leader>gk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", opts) -- jump to previous diagnostic in buffer
   keymap.set("n", "<leader>gj", "<cmd>lua vim.diagnostic.goto_next()<cr>", opts) -- jump to previous diagnostic in buffer
 
   -- keymap.set("n", "<leader>gk", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to previous diagnostic in buffer
@@ -53,6 +80,43 @@ M.attach_lsp_config = function(client, bufnr)
   -- end
 
   -- typescript specific keymaps (e.g. rename file and update imports)
+
+  if client.name == "jdtls" then
+    vim.keymap.set(
+      "n",
+      "<leader>oi",
+      "<Cmd>lua require'jdtls'.organize_imports()<CR>",
+      { desc = "Organize Imports" }
+    )
+
+    keymap.set({ "n" }, "<leader>jr", function()
+      require("java").runner.built_in.run_app({})
+    end, opts)
+
+    keymap.set({ "n" }, "<leader>js", function()
+      require("java").runner.built_in.stop_app()
+    end, opts)
+
+    keymap.set({ "n" }, "<leader>jt", function()
+      require("java").test.run_current_class()
+    end, opts)
+
+    keymap.set({ "n" }, "<leader>jd", function()
+      require("java").test.debug_current_class()
+    end, opts)
+
+    keymap.set({ "n" }, "<leader>jo", function()
+      require("java").test.view_last_report()
+    end, opts)
+
+    keymap.set({ "n" }, "<leader>jp", function()
+      require("java").profile.ui()
+    end, opts)
+
+    keymap.set({ "n" }, "<leader>jR", function()
+      require("java").settings.change_runtime()
+    end, opts)
+  end
 
   if client.name == "vtsls" then
     keymap.set({ "n" }, "<leader>oi", function()

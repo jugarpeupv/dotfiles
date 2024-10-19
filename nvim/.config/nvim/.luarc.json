@@ -2,7 +2,8 @@
     "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
     "Lua.diagnostics.globals": [
         "vim",
-        "generate_diff_colors"
+        "generate_diff_colors",
+        "show_dap_centered_scopes"
     ],
     "workspace.library": [
         "/Users/jgarcia/.local/share/nvim/lazy/neodev.nvim/types/stable",

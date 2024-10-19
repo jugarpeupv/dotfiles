@@ -8,6 +8,7 @@ return {
     -- branch = "0.1.x",
     tag = "0.1.8",
     dependencies = {
+      { "nvim-telescope/telescope-dap.nvim" },
       {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
@@ -56,6 +57,7 @@ return {
       { "nvim-telescope/telescope-ui-select.nvim",      cmd = { "Telescope" } },
     },
     cmd = { "Telescope" },
+    keys = { "<M-.>" },
     -- event = "VeryLazy",
     config = function()
       local open_with_trouble = require("trouble.sources.telescope").open
@@ -155,8 +157,8 @@ return {
               ["<Up>"] = actions.move_selection_previous,
 
               ["<CR>"] = actions.select_default,
-              ["<C-x>"] = actions.select_horizontal,
-              ["<C-Enter>"] = actions.select_vertical,
+              ["<C-s>"] = actions.select_horizontal,
+              -- ["<C-Enter>"] = actions.select_vertical,
               ["<C-t>"] = actions.select_tab,
               -- ["<C-t>"] = trouble.open_with_trouble,
               ["<C-e>"] = open_with_trouble,
@@ -174,7 +176,7 @@ return {
               ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
               ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
               ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-              ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist,
+              ["<C-x>"] = actions.send_selected_to_qflist + actions.open_qflist,
               -- ["<C-l>"] = actions.complete_tag,
               ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
               ["<C-a>"] = actions.git_create_branch,
@@ -183,9 +185,9 @@ return {
             n = {
               ["<esc>"] = actions.close,
               ["<CR>"] = actions.select_default,
-              ["<C-x>"] = actions.select_horizontal,
-              -- ["<C-v>"] = actions.select_vertical,
-              ["<C-Enter>"] = actions.select_vertical,
+              ["<C-s>"] = actions.select_horizontal,
+              ["<C-v>"] = actions.select_vertical,
+              -- ["<C-Enter>"] = actions.select_vertical,
               ["<C-t>"] = actions.select_tab,
               -- ["<C-t>"] = trouble.open_with_trouble,
               ["<C-e>"] = open_with_trouble,
@@ -422,6 +424,7 @@ return {
       -- load_extension, somewhere after setup function:
       -- telescope.load_extension("fzf")
       -- telescope.load_extension("harpoon")
+      telescope.load_extension('dap')
       telescope.load_extension("zf-native")
       telescope.load_extension("ui-select")
       telescope.load_extension("bookmarks")

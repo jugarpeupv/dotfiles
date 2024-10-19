@@ -240,9 +240,6 @@ keymap("n", "<leader>cp", "<cmd>JsonPath<CR>", opts)
 -- Reformat file
 keymap("n", "<leader>cw", ":e ++ff=dos<CR> | :set ff=unix<CR>", opts)
 
--- Vifm
-keymap("n", "<leader>vi", "<cmd>Vifm .<cr>", opts)
-
 -- The Primeagean
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
@@ -321,17 +318,17 @@ vim.api.nvim_set_keymap("n", "gN", "<cmd> lua require('illuminate').goto_prev_re
 vim.cmd([[nnoremap * /\<<C-R>=expand('<cword>')<CR>\><CR>]])
 vim.cmd([[nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>]])
 
-vim.keymap.set("i", "<Tab>", function()
-  if require("copilot.suggestion").is_visible() then
-    require("copilot.suggestion").accept()
-  else
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
-  end
-end, { desc = "Super Tab" })
+-- vim.keymap.set("i", "<Tab>", function()
+--   if require("copilot.suggestion").is_visible() then
+--     require("copilot.suggestion").accept()
+--   else
+--     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+--   end
+-- end, { desc = "Super Tab" })
 
 vim.keymap.set("n", "<leader>uu", vim.cmd.UndotreeToggle)
 vim.keymap.set("n", "<leader>us", vim.cmd.UndotreeShow)
-vim.keymap.set("n", "<leader>js", vim.cmd.Neogen)
+vim.keymap.set("n", "<leader>ns", vim.cmd.Neogen)
 
 vim.cmd([[nnoremap <F6> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_DIR<CR>]])
 
@@ -389,3 +386,6 @@ vim.keymap.set({ "n" }, "<leader>wd", "<cmd>windo diffthis<cr>", opts) -- copy t
 vim.keymap.set({ "n" }, "<leader>wo", "<cmd>windo diffoff<cr>", opts)  -- copy to 0 register
 
 vim.api.nvim_set_keymap("n", "<F5>", [[:lua require"osv".launch({port = 8086})<CR>]], { noremap = true })
+
+
+vim.api.nvim_set_keymap("n", "<leader>vf", "<cmd>Vifm .<cr>", { noremap = true, silent = true })
