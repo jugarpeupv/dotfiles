@@ -116,12 +116,36 @@ return {
       }
 
       dap.configurations.java = {
+        -- MAVEN
+        -- mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
+
+        -- GRADLE
+        -- build.gradle
+        -- bootRun {
+        --   debugOptions {
+        --     enabled = true
+        --     port = 8000
+        --     server = true
+        --     suspend = false
+        --   }
+        -- }
+        -- Then run:
+        -- ./gradlew bootRun --debug-jvm
         {
           type = "java",
           request = "attach",
           name = "Attach to the process",
           hostName = "localhost",
           port = "8000",
+          -- processId = require("dap.utils").pick_process({
+          --   filter = function(proc)
+          --     print("proc name: " .. proc.name)
+          --     if string.find(proc.name, "agentlib") ~= nil then
+          --       return true
+          --     end
+          --     return false
+          --   end,
+          -- }),
         },
       }
 

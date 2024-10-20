@@ -112,12 +112,16 @@ keymap(
   "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true })<cr>",
   opts
 )
-keymap(
-  "n",
-  "<Leader>bu",
-  "<cmd>lua require('telescope.builtin').buffers({ ignore_current_buffer = true, show_all_buffers = false, sort_mru = true })<cr>",
-  opts
-)
+vim.keymap.set({ "n" }, "<Leader>bu", function()
+  require("telescope.builtin").buffers({
+    ignore_current_buffer = true,
+    show_all_buffers = false,
+    sort_mru = true,
+    sort_lastused = true,
+    initial_mode = "normal",
+    theme = "ivy",
+  })
+end, opts)
 keymap("n", "<leader>tr", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
 keymap("n", "<leader>tm", "<cmd>lua require('telescope.builtin').node_modules list<cr>", opts)
 keymap(
@@ -292,7 +296,6 @@ vim.keymap.set("n", "<leader>ih", function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end)
 
-
 -- Ctrlsf.nvim
 vim.keymap.set("n", "<leader>sf", "<Plug>CtrlSFCwordPath")
 vim.keymap.set("n", "<leader>st", "<CMD>CtrlSFToggle<CR>")
@@ -362,8 +365,8 @@ vim.keymap.set("n", "<leader>ti", function()
 end, opts)
 
 -- using 0 register
-vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                               -- copy to 0 register
-vim.keymap.set({ "x" }, "<leader><leader>y", [["0y]])                                -- copy to 0 register
+vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                              -- copy to 0 register
+vim.keymap.set({ "x" }, "<leader><leader>y", [["0y]])                               -- copy to 0 register
 
 vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
 
@@ -386,6 +389,5 @@ vim.keymap.set({ "n" }, "<leader>wd", "<cmd>windo diffthis<cr>", opts) -- copy t
 vim.keymap.set({ "n" }, "<leader>wo", "<cmd>windo diffoff<cr>", opts)  -- copy to 0 register
 
 vim.api.nvim_set_keymap("n", "<F5>", [[:lua require"osv".launch({port = 8086})<CR>]], { noremap = true })
-
 
 vim.api.nvim_set_keymap("n", "<leader>vf", "<cmd>Vifm .<cr>", { noremap = true, silent = true })
