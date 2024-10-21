@@ -1,4 +1,5 @@
 return {
+  -- https://github.com/johmsalas/text-case.nvim
   -- { "VidocqH/data-viewer.nvim" },
   -- { "Djancyp/regex.nvim" },
   -- {"https://github.com/gabrielpoca/replacer.nvim"},
@@ -6,6 +7,34 @@ return {
   -- { "nvim-spider" }
   -- { "airblade/vim-matchquote" },
   -- { "ton/vim-bufsurf" },
+  {
+    "chrisgrieser/nvim-spider",
+    keys = {
+      {
+        "w",
+        "<cmd>lua require('spider').motion('w')<CR>",
+        mode = { "n", "o", "x" },
+      },
+
+      {
+        "b",
+        "<cmd>lua require('spider').motion('b')<CR>",
+        mode = { "n", "o", "x" },
+      },
+
+      {
+        "e",
+        "<cmd>lua require('spider').motion('e')<CR>",
+        mode = { "n", "o", "x" },
+      },
+    },
+    opts = {
+      skipInsignificantPunctuation = true,
+      consistentOperatorPending = true, -- see "Consistent Operator-pending Mode" in the README
+      subwordMovement = true,
+      customPatterns = {},            -- check "Custom Movement Patterns" in the README for details
+    },
+  },
   {
     "kwkarlwang/bufjump.nvim",
     -- event = "VeryLazy",
@@ -16,7 +45,7 @@ return {
         -- backward_key = "<C-p>",
         -- on_success = nil
       })
-      local opts = { silent=true, noremap=true }
+      local opts = { silent = true, noremap = true }
       vim.api.nvim_set_keymap("n", "<C-b>", ":lua require('bufjump').backward()<cr>", opts)
       vim.api.nvim_set_keymap("n", "<C-f>", ":lua require('bufjump').forward()<cr>", opts)
       -- vim.api.nvim_set_keymap("n", "<M-i>", ":lua require('bufjump').forward()<cr>", opts)
@@ -38,12 +67,15 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("various-textobjs").setup({ useDefaultKeymaps = true })
+      -- example: `as` for outer subword, `is` for inner subword
+      vim.keymap.set({ "o", "x" }, "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>')
+      vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
     end,
   },
   {
     "christoomey/vim-tmux-navigator",
-    event = "VeryLazy",
-    -- keys = { "<C-h>", "<C-j>", "<C-k>", "<C-l>" },
+    -- event = "VeryLazy",
+    keys = { "<C-h>", "<C-j>", "<C-k>", "<C-l>" },
     config = function()
       vim.g.tmux_navigator_disable_when_zoomed = 1
       vim.g.tmux_navigator_preserve_zoom = 1
@@ -51,8 +83,8 @@ return {
   },
 
   { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
-  { "junegunn/fzf",             build = "./install --all", cmd = "VeryLazy" },
-  { "stsewd/fzf-checkout.vim", keys = { { "<leader>gt", "<cmd>GTags<CR>" } } },
+  { "junegunn/fzf",             build = "./install --all",                    cmd = "VeryLazy" },
+  { "stsewd/fzf-checkout.vim",  keys = { { "<leader>gt", "<cmd>GTags<CR>" } } },
   {
     "junegunn/fzf.vim",
     keys = {
@@ -67,12 +99,12 @@ return {
       { mode = { "n" }, "<Leader>gl", "<cmd>G log -20<cr>",                  { silent = true, noremap = true } },
     },
   },
-  { "tpope/vim-repeat",        keys = { "." } },
-  { "nvim-lua/plenary.nvim",   lazy = true },
-  { "tpope/vim-surround",      event = { "BufReadPost", "BufNewFile" } },
-  { "windwp/nvim-ts-autotag",  ft = "html" },
-  { "tpope/vim-dispatch",      lazy = true },
-  { "kkharji/sqlite.lua",      lazy = true },
+  { "tpope/vim-repeat",       keys = { "." } },
+  { "nvim-lua/plenary.nvim",  lazy = true },
+  { "tpope/vim-surround",     event = { "BufReadPost", "BufNewFile" } },
+  { "windwp/nvim-ts-autotag", ft = "html" },
+  { "tpope/vim-dispatch",     lazy = true },
+  { "kkharji/sqlite.lua",     lazy = true },
   {
     "ckipp01/nvim-jenkinsfile-linter",
     -- event = { "BufReadPost", "BufNewFile" },

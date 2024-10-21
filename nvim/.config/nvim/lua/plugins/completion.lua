@@ -16,6 +16,7 @@ return {
     event = "InsertEnter",
     "hrsh7th/nvim-cmp",
     dependencies = {
+      { 'crazyhulk/cmp-sign' },
       {
         -- snippet plugin
         "L3MON4D3/LuaSnip",
@@ -64,6 +65,11 @@ return {
         sources = {},
       })
 
+
+      local t = function(str)
+        return vim.api.nvim_replace_termcodes(str, true, true, true)
+      end
+
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -72,8 +78,24 @@ return {
         },
         -- preslect = cmp.PreselectMode.Item,
         mapping = cmp.mapping.preset.insert({
-          ["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
-          ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
+          ['<C-j>'] = cmp.mapping({
+            c = function()
+                vim.api.nvim_feedkeys(t('<Down>'), 'm', true)
+            end,
+            i = function()
+              vim.api.nvim_feedkeys(t('<Down>'), 'm', true)
+            end
+          }),
+          ['<C-k>'] = cmp.mapping({
+            c = function()
+              vim.api.nvim_feedkeys(t('<Up>'), 'm', true)
+            end,
+            i = function()
+              vim.api.nvim_feedkeys(t('<Up>'), 'm', true)
+            end
+          }),
+          -- ["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
+          -- ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           -- ["<C-y>"] = cmp.mapping(function()
@@ -88,7 +110,7 @@ return {
           -- end, { "i", "s" }),
           ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
           ["<C-e>"] = cmp.mapping.abort(),   -- close completion window
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
           ["<Right>"] = cmp.mapping(function(fallback)
             local copilot = require("copilot.suggestion")
             if copilot.is_visible() then
@@ -107,7 +129,7 @@ return {
             --   copilot.accept()
             -- elseif cmp.visible() then
             if cmp.visible() then
-              cmp.confirm()
+              cmp.confirm({ select = true })
             elseif luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
             else
@@ -161,6 +183,7 @@ return {
           },
           -- { name = "nvim_lsp_signature_help" },
           { name = "nvim_lsp:marksman" },
+          { name = 'nvim_cmp_sign' },
           { name = "luasnip" }, -- snippets
           { name = "buffer" },
           { name = "marksman" },

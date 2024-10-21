@@ -255,6 +255,9 @@ return {
         ["tsconfig.app.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile1" },
         ["tsconfig.lib.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile1" },
         ["tsconfig.spec.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile1" },
+        ["mvnw"] = { icon = "", color = "#f38ba8", name = "mvnw" },
+        ["mvnw.cmd"] = { icon = "", color = "#f38ba8", name = "mvnw.cmd" },
+        ["pom.xml"] = { icon = "", color = "#f38ba8", name = "pomxml" },
         ["settings.gradle"] = {
           icon = "",
           color = "#89B4FA",
@@ -278,6 +281,11 @@ return {
           color = "#89B4FA",
           cterm_color = "24",
           name = "GradleWrapperProperties",
+        },
+        [".factorypath"] = {
+          icon = "󰗀",
+          color = "#f38ba8",
+          name = ".classpath",
         },
         [".classpath"] = {
           icon = "󰗀",
