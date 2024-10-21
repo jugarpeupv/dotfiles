@@ -18,7 +18,6 @@ function _G.RunVimTest(cmd_name)
     -- end
 
     local marker_file = vim.fn.findfile("nx.json", vim.fn.expand("%:p:h") .. ";")
-    print("marker_file: " .. marker_file)
     if #marker_file > 0 then
       vim.g["test#javascript#runner"] = "nx"
     else

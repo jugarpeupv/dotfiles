@@ -192,8 +192,12 @@ return {
 
       -- we cant move node_modules because they are already removed
 
-      -- remove last element of the path
-      local root_dir = path:match("(.*/).-$")
+      local root_dir
+      if string.find(path, "wt") then
+        root_dir = path:match("(.+)wt/.*")
+      else
+        root_dir = path:match("(.*/).-$")
+      end
       local bps_path = file_utils.get_bps_path(root_dir)
       local data = file_utils.load_bps(bps_path)
       if data == nil then

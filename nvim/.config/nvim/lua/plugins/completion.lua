@@ -16,7 +16,6 @@ return {
     event = "InsertEnter",
     "hrsh7th/nvim-cmp",
     dependencies = {
-      { 'crazyhulk/cmp-sign' },
       {
         -- snippet plugin
         "L3MON4D3/LuaSnip",
@@ -111,6 +110,24 @@ return {
           ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
           ["<C-e>"] = cmp.mapping.abort(),   -- close completion window
           -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          ["<CR>"] = cmp.mapping(function(fallback)
+            -- local copilot = require("copilot.suggestion")
+            -- if copilot.is_visible() then
+            --   copilot.accept()
+            -- elseif cmp.visible() then
+            local filetype = vim.bo.filetype
+            if filetype == "" then
+              print("filetype is nil")
+              vim.api.nvim_feedkeys(t('<CR>'), 'n', true)
+              return
+            elseif cmp.visible() then
+              cmp.confirm({ select = true })
+              return
+            else
+              fallback()
+              return
+            end
+          end, { "i", "s" }),
           ["<Right>"] = cmp.mapping(function(fallback)
             local copilot = require("copilot.suggestion")
             if copilot.is_visible() then
@@ -183,7 +200,6 @@ return {
           },
           -- { name = "nvim_lsp_signature_help" },
           { name = "nvim_lsp:marksman" },
-          { name = 'nvim_cmp_sign' },
           { name = "luasnip" }, -- snippets
           { name = "buffer" },
           { name = "marksman" },

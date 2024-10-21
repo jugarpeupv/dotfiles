@@ -1,6 +1,6 @@
 # Descripción
 
-Descripción place holder
+Consultar en la tarea de JIRA
 
 
 # Tarea de Jira con detalle tarea

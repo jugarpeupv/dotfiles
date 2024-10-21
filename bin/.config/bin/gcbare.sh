@@ -75,8 +75,8 @@ repository_name=$(echo "${args[@]}" | sed 's/^.*\/\([^\/]*\)\.git$/\1/')
 
 git clone --bare "${args[@]}" "$repository_name"
 pushd "$repository_name" > /dev/null
-mkdir -p "$location"
-mv * "$location"
+# mkdir -p "$location"
+# mv * "$location"
 msg "${BLUE}Adjusting origin fetch locations...${NOFORMAT}"
 git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 msg "${BLUE}Fetching origin...${NOFORMAT}"

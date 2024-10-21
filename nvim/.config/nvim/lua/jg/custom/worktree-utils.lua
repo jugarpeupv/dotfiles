@@ -15,8 +15,17 @@ end
 
 M.update_git_head = function(path, branch)
   if (path) then
+    -- old way
     local git_head_path = path .. "/.git/HEAD"
     local fp = io.open(git_head_path, "w+")
+    if fp ~= nil then
+      fp:write("ref: refs/heads/" .. branch)
+      fp:close()
+    end
+
+    -- new way
+    git_head_path = path .. "/HEAD"
+    fp = io.open(git_head_path, "w+")
     if fp ~= nil then
       fp:write("ref: refs/heads/" .. branch)
       fp:close()
@@ -25,36 +34,40 @@ M.update_git_head = function(path, branch)
 end
 
 M.has_worktrees = function(path_to_git_folder)
-  local git_worktree_path = path_to_git_folder .. "/.git/worktrees"
-  local exists_worktrees = vim.fn.isdirectory(git_worktree_path)
-  if exists_worktrees == 0 then
+  local is_bare = vim.fn.system("git rev-parse --is-bare-repository")
+  if is_bare ~= "true\n" then
     return false
   end
+
+  local is_inside_work_tree = vim.fn.system("git rev-parse --is-inside-work-tree")
+  if is_inside_work_tree == "true\n" then
+    return true
+  end
+
+  local git_dir = vim.fn.system("git rev-parse --git-dir")
+  local git_common_dir = vim.fn.system("git rev-parse --git-common-dir")
+
+  local is_root_dir = git_dir == git_common_dir
+
+
+  local git_worktree_path = path_to_git_folder .. "/worktrees"
+
+  local git_worktree_path_alt_location = path_to_git_folder .. "/.git/worktrees"
+
+  local exists_worktrees = vim.fn.isdirectory(git_worktree_path)
+  local exists_worktrees_alt_location = vim.fn.isdirectory(git_worktree_path_alt_location)
+
+  if is_root_dir and exists_worktrees == 0 and exists_worktrees_alt_location == 0 then
+    return false
+  end
+
   return true
 end
-
--- M.get_wt_root_dir = function()
---   local cwd = vim.loop.cwd()
---   local parent_dir = vim.fn.fnamemodify(cwd .. "/..", ":p")
---
---   local current_dir_has_wt = M.has_worktrees(cwd)
---   if current_dir_has_wt then
---     return cwd
---   end
---
---   local parent_dir_has_wt = M.has_worktrees(parent_dir)
---
---   if parent_dir_has_wt then
---     return parent_dir
---   end
---
---   return nil
--- end
 
 M.get_wt_info = function(path_to_wt)
   local wt_info = {}
 
-  local git_file_path = (path_to_wt or vim.loop.cwd) .. "/.git"
+  local git_file_path = (path_to_wt or vim.loop.cwd()) .. "/.git"
   local git_file_exists = M.file_exists(git_file_path)
 
   if git_file_exists then
@@ -63,7 +76,7 @@ M.get_wt_info = function(path_to_wt)
       local git_file_raw = fp:read("*a")
       local wt_gitdir = string.match(git_file_raw, "gitdir: (.*)"):match("[^\n]*")
       local wt_name = string.match(wt_gitdir, ".*/(.*)"):match("[^\n]*")
-      local wt_root_dir = string.match(wt_gitdir, "(.*)/.git/worktrees/(.*)"):match("[^\n]*")
+      local wt_root_dir = string.match(wt_gitdir, "(.*)/worktrees/(.*)"):match("[^\n]*")
 
       local wt_dir_fp = io.open(wt_gitdir .. "/gitdir", "r")
       if wt_dir_fp ~= nil then
@@ -87,10 +100,9 @@ M.get_wt_info = function(path_to_wt)
       fp:close()
     end
   end
-
-
   return wt_info
 end
+
 
 M.file_exists = function(name)
   local result = vim.fn.filereadable(name)
