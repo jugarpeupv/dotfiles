@@ -396,7 +396,7 @@ return {
       --   end,
       -- })
 
-      lspconfig.pyright.setup({
+      lspconfig.jedi_language_server.setup({
         capabilities = capabilities,
         on_attach = on_attach,
       })
@@ -519,32 +519,32 @@ return {
       -- })
       -- require("lspconfig")["yamlls"].setup(cfg)
 
-      require("lspconfig").yamlls.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
-        settings = {
-          -- yaml = {
-          --   schemaStore = {
-          --     enable = true,
-          --     url = "",
-          --   },
-          --   schemas = require("schemastore").yaml.schemas(),
-          -- },
-          yaml = {
-            -- validate = true,
-            format = { enable = true },
-            -- schemaDownload = { enable = true },
-            -- schemaStore = {
-            --   enable = true,
-            --   url = "https://www.schemastore.org/api/json/catalog.json"
-            -- },
-            -- schemas = {
-            --   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-            -- },
-            -- schemas = require('schemastore').yaml.schemas(),
-          },
-        },
-      })
+      -- require("lspconfig").yamlls.setup({
+      --   on_attach = on_attach,
+      --   capabilities = capabilities,
+      --   settings = {
+      --     -- yaml = {
+      --     --   schemaStore = {
+      --     --     enable = true,
+      --     --     url = "",
+      --     --   },
+      --     --   schemas = require("schemastore").yaml.schemas(),
+      --     -- },
+      --     yaml = {
+      --       -- validate = true,
+      --       format = { enable = true },
+      --       -- schemaDownload = { enable = true },
+      --       -- schemaStore = {
+      --       --   enable = true,
+      --       --   url = "https://www.schemastore.org/api/json/catalog.json"
+      --       -- },
+      --       -- schemas = {
+      --       --   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+      --       -- },
+      --       -- schemas = require('schemastore').yaml.schemas(),
+      --     },
+      --   },
+      -- })
 
       lspconfig["jsonls"].setup({
         -- filetypes = { "json", "jsonc" },

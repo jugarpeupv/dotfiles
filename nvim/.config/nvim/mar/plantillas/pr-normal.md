@@ -5,16 +5,23 @@ Consultar en la tarea de JIRA
 
 # Tarea de Jira con detalle tarea
 
-https://mapfrealm.atlassian.net/browse/AM20-2243
+https://mapfrealm.atlassian.net/browse/AM20-2174
 
 # Test coverage -> mínimo 60%
 
 ```
 =============================== Coverage summary ===============================
-Statements   : 98.2% ( 4000/4073 )
-Branches     : 79.09% ( 227/287 )
-Functions    : 97.64% ( 166/170 )
-Lines        : 98.2% ( 4000/4073 )
+Statements   : 84.09% ( 1861/2213 )
+Branches     : 62.12% ( 899/1447 )
+Functions    : 88.72% ( 307/346 )
+Lines        : 84.03% ( 1847/2198 )
+================================================================================
+
+Test Suites: 48 passed, 48 total
+Tests:       256 passed, 256 total
+Snapshots:   14 passed, 14 total
+Time:        20.771 s
+Ran all test suites.
 ```
 
 # Documentación

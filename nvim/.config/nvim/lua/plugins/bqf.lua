@@ -1,9 +1,9 @@
 return {
   {
     "kevinhwang91/nvim-bqf",
-    dependencies = {
-      { "junegunn/fzf", build = "./install --all" },
-    },
+    -- dependencies = {
+    --   { "junegunn/fzf", build = "./install --all" },
+    -- },
     -- event = "VeryLazy",
     -- event = {},
     ft = { "qf" },

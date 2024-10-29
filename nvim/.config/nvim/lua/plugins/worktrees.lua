@@ -4,10 +4,14 @@ return {
   -- git branch --track feature/mytest origin/feature/mytest
 
   -- "ThePrimeagen/git-worktree.nvim",
-  "polarmutex/git-worktree.nvim",
+  -- "polarmutex/git-worktree.nvim",
+  -- "jugarpeupv/git-worktree.nvim",
+  -- "/Users/jgarcia/projects/git-worktree.nvim/wt-main",
   -- "nooproblem/git-worktree.nvim",
   -- version = "^2",
-  branch = "main",
+  dir='~/projects/git-worktree.nvim',
+  dev = true,
+  -- branch = "main",
   -- dependencies = { "nvim-lua/plenary.nvim" },
   keys = { "<leader>wt", "<leader>wc" },
   config = function()
@@ -214,23 +218,23 @@ return {
       }
       file_utils.write_bps(file_utils.get_bps_path(root_dir), my_table)
 
-      -- update .git/HEAD to the new branch so when you open a new terminal on root parent it shows the correct branch
-      local wt_switch_info = wt_utils.get_wt_info(penultimate_wt)
-      if wt_switch_info == nil then
-        return
-      end
-      wt_utils.update_git_head(wt_switch_info.wt_root_dir, wt_switch_info.wt_head)
-
-      -- Send command to the terminal to change the directory
-      local cmd = "cmd='cd " .. penultimate_wt .. "'" .. "open=0"
-      local toggleterm_status, toggleterm = pcall(require, "toggleterm")
-      if toggleterm_status then
-        toggleterm.exec_command(cmd)
-      end
-      if not toggleterm_status then
-        -- terminal_send_cmd("cd " .. penultimate_wt)
-        send_cmd_to_all_terms("cd " .. penultimate_wt)
-      end
+      -- -- update .git/HEAD to the new branch so when you open a new terminal on root parent it shows the correct branch
+      -- local wt_switch_info = wt_utils.get_wt_info(penultimate_wt)
+      -- if wt_switch_info == nil then
+      --   return
+      -- end
+      -- wt_utils.update_git_head(wt_switch_info.wt_root_dir, wt_switch_info.wt_head)
+      --
+      -- -- Send command to the terminal to change the directory
+      -- local cmd = "cmd='cd " .. penultimate_wt .. "'" .. "open=0"
+      -- local toggleterm_status, toggleterm = pcall(require, "toggleterm")
+      -- if toggleterm_status then
+      --   toggleterm.exec_command(cmd)
+      -- end
+      -- if not toggleterm_status then
+      --   -- terminal_send_cmd("cd " .. penultimate_wt)
+      --   send_cmd_to_all_terms("cd " .. penultimate_wt)
+      -- end
     end)
   end,
 }

@@ -14,7 +14,7 @@ return {
       { "<leader>vc", ":ViraComment<cr>",    silent = true },
       { "<leader>vs", ":ViraSetStatus<cr>", silent = true },
       {
-        "<leader>ja",
+        "<leader>va",
         function()
           local current_branch = vim.fn.system("git branch --show-current")
           if current_branch == "" then

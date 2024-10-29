@@ -205,6 +205,13 @@ return {
             viraIssuesUsername = { fg = "#8ee2cf" },
             viraIssuesStatus = { fg = "#F38BA8" },
             viraIssuesDates = { fg = "#B4BEFE" },
+
+            -- Avante
+            AvanteTitle = { bg = "#94E2D5", fg = "#1e222a" },
+            AvanteReversedTitle = { fg = "#94E2D5" },
+
+            AvanteThirdTitle = { bg = "#F2CDCD", fg = "#1e222a" },
+            AvanteReversedThirdTitle = { fg = "#F2CDCD" },
           }
         end,
       })

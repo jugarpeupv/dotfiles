@@ -81,4 +81,16 @@ vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wra
 
 vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 
+
+-- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
+
 -- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 4]])
+
+
+
+-- vim.api.nvim_create_autocmd("TermOpen", {
+--   group = vim.api.nvim_create_augroup("term-open-buflisted", { clear = true }),
+--   callback = function()
+--     vim.bo.buflisted = false
+--   end,
+-- })

@@ -71,6 +71,7 @@ return {
             return
           end
           local last_active_wt = data.last_active_wt
+          -- vim.cmd("cd " .. last_active_wt)
           api_nvimtree.tree.change_root(last_active_wt)
         end
         -- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")

@@ -26,7 +26,8 @@ keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
 
 -- Folding
-keymap("n", "<C-p>", "za", opts)
+-- keymap("n", "<C-p>", "za", opts)
+keymap("n", ";", "za", opts)
 -- Paste
 keymap("n", "p", "p=`]", opts)
 -- keymap("n", "p", "p]", opts)
@@ -258,12 +259,12 @@ vim.keymap.set("n", "<leader>rs", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left
 
 -- Trouble
 -- vim.keymap.set("n", "<leader>xx", "<cmd>TroubleToggle<cr>", { silent = true, noremap = true })
-vim.keymap.set("n", "<leader>tw", "<cmd>Trouble diagnostics toggle<cr>", { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>xw", "<cmd>Trouble diagnostics toggle<cr>", { silent = true, noremap = true })
 vim.keymap.set("n", "<leader>xd", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", { silent = true, noremap = true })
-vim.keymap.set("n", "<leader>tl", "<cmd>Trouble loclist toggle<cr>", { silent = true, noremap = true })
-vim.keymap.set("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", { silent = true, noremap = true })
+-- vim.keymap.set("n", "<leader>tl", "<cmd>Trouble loclist toggle<cr>", { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>xq", "<cmd>Trouble qflist toggle<cr>", { silent = true, noremap = true })
 
-vim.keymap.set("n", "<leader>ts", "<cmd>Trouble symbols toggle<cr>", { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>xs", "<cmd>Trouble symbols toggle<cr>", { silent = true, noremap = true })
 -- vim.keymap.set("n", "gR", "<cmd>TroubleToggle lsp_references<cr>",
 --   { silent = true, noremap = true }
 -- )
@@ -314,9 +315,9 @@ vim.keymap.set("n", "<leader>te", function()
   })
 end, { silent = true })
 
-vim.api.nvim_set_keymap("n", "gn", "<cmd> lua require('illuminate').goto_next_reference()<cr>", opts)
-
-vim.api.nvim_set_keymap("n", "gN", "<cmd> lua require('illuminate').goto_prev_reference()<cr>", opts)
+-- vim.api.nvim_set_keymap("n", "gn", "<cmd> lua require('illuminate').goto_next_reference()<cr>", opts)
+--
+-- vim.api.nvim_set_keymap("n", "gN", "<cmd> lua require('illuminate').goto_prev_reference()<cr>", opts)
 
 vim.cmd([[nnoremap * /\<<C-R>=expand('<cword>')<CR>\><CR>]])
 vim.cmd([[nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>]])

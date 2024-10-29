@@ -32,7 +32,7 @@ return {
       skipInsignificantPunctuation = true,
       consistentOperatorPending = true, -- see "Consistent Operator-pending Mode" in the README
       subwordMovement = true,
-      customPatterns = {},            -- check "Custom Movement Patterns" in the README for details
+      customPatterns = {},           -- check "Custom Movement Patterns" in the README for details
     },
   },
   {
@@ -45,9 +45,9 @@ return {
         -- backward_key = "<C-p>",
         -- on_success = nil
       })
-      local opts = { silent = true, noremap = true }
-      vim.api.nvim_set_keymap("n", "<C-b>", ":lua require('bufjump').backward()<cr>", opts)
-      vim.api.nvim_set_keymap("n", "<C-f>", ":lua require('bufjump').forward()<cr>", opts)
+      -- local opts = { silent = true, noremap = true }
+      -- vim.api.nvim_set_keymap("n", "<C-b>", ":lua require('bufjump').backward()<cr>", opts)
+      -- vim.api.nvim_set_keymap("n", "<C-f>", ":lua require('bufjump').forward()<cr>", opts)
       -- vim.api.nvim_set_keymap("n", "<M-i>", ":lua require('bufjump').forward()<cr>", opts)
       -- vim.api.nvim_set_keymap("n", "<M-o>", ":lua require('bufjump').backward_same_buf()<cr>", opts)
       -- vim.api.nvim_set_keymap("n", "<M-i>", ":lua require('bufjump').forward_same_buf()<cr>", opts)
@@ -83,7 +83,7 @@ return {
   },
 
   { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
-  { "junegunn/fzf",             build = "./install --all",                    cmd = "VeryLazy" },
+  { "junegunn/fzf",             build = "./install --all" },
   { "stsewd/fzf-checkout.vim",  keys = { { "<leader>gt", "<cmd>GTags<CR>" } } },
   {
     "junegunn/fzf.vim",
@@ -108,7 +108,7 @@ return {
   {
     "ckipp01/nvim-jenkinsfile-linter",
     -- event = { "BufReadPost", "BufNewFile" },
-    keys = { "<leader>va" },
+    keys = { "<leader>jv" },
     config = function()
       vim.keymap.set("n", "<leader>va", require("jenkinsfile_linter").validate, {})
     end,

@@ -8,6 +8,7 @@ opt.number = true         -- shows absolute line number on cursor line (when rel
 opt.tabstop = 2       -- 2 spaces for tabs (prettier default)
 opt.shiftwidth = 2    -- 2 spaces for indent width
 opt.expandtab = true  -- expand tab to spaces
+
 -- opt.expandtab = false -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
 -- opt.shortmess:append("I") -- remove :intro
@@ -24,6 +25,7 @@ opt.ea = true         -- equal always, windows same size
 -- cursor line
 opt.cursorline = true -- highlight the current cursor line
 opt.scrolloff = 4
+opt.scrollback = 4000
 opt.sidescrolloff = 4
 opt.hlsearch = true
 opt.incsearch = true
@@ -79,8 +81,8 @@ opt.splitbelow = true     -- split horizontal window to the bottom
 opt.iskeyword:append("-") -- consider string-string as whole word
 
 -- global statusline
--- opt.laststatus = 3
-opt.laststatus = 0
+opt.laststatus = 3
+-- opt.laststatus = 0
 
 -- opt.winbar ="%=%m %f"
 

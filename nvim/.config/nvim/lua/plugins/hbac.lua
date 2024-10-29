@@ -7,9 +7,9 @@ return {
   config = function()
     require("early-retirement").setup({
       -- If a buffer has been inactive for this many minutes, close it.
-      retirementAgeMins = 7,
+      retirementAgeMins = 10,
       -- Filetypes to ignore.
-      ignoredFiletypes = {},
+      ignoredFiletypes = { "BufTerm" },
       -- Ignore files matching this lua pattern; empty string disables this setting.
       ignoreFilenamePattern = "",
       -- Will not close the alternate file.
