@@ -6,8 +6,6 @@ return {
   -- "ThePrimeagen/git-worktree.nvim",
   -- "polarmutex/git-worktree.nvim",
   -- "jugarpeupv/git-worktree.nvim",
-  -- "/Users/jgarcia/projects/git-worktree.nvim/wt-main",
-  -- "nooproblem/git-worktree.nvim",
   -- version = "^2",
   dir='~/projects/git-worktree.nvim',
   dev = true,
@@ -18,7 +16,7 @@ return {
     vim.g.git_worktree_log_level = 1
 
     vim.g.git_worktree = {
-      change_directory_command = "tcd",
+      change_directory_command = "cd",
       update_on_change = true,
       update_on_change_command = "e .",
       clearjumps_on_change = true,
@@ -40,6 +38,8 @@ return {
     )
 
     local Hooks = require("git-worktree.hooks")
+    local update_on_switch = Hooks.builtins.update_current_buffer_on_switch
+    local config = require("git-worktree.config")
 
     local send_cmd_to_all_terms = function(cmd_text)
       local function get_all_terminals()
@@ -120,6 +120,7 @@ return {
 
     Hooks.register(Hooks.type.SWITCH, function(path, prev_path)
       -- print("[WT-SWITCH] path: " .. path)
+      -- print("[WT-SWITCH] prev_path: " .. prev_path)
       local prev_node_modules_path = prev_path .. "/node_modules"
       local prev_node_modules_exists = vim.fn.isdirectory(prev_node_modules_path)
 
@@ -162,6 +163,13 @@ return {
         last_active_wt = wt_switch_info.wt_dir,
       }
       file_utils.write_bps(file_utils.get_bps_path(wt_root_dir_with_ending), my_table)
+
+      -- Update current file opened
+      if vim.bo.filetype == "NvimTree" then
+        return
+      else
+        update_on_switch(path, prev_path)
+      end
     end)
 
     Hooks.register(Hooks.type.CREATE, function(path, branch, upstream)
@@ -181,6 +189,9 @@ return {
       local prev_node_modules_path = original_path .. "/node_modules"
       local worktree_path = original_path .. "/" .. relative_path
       local destination_path = worktree_path .. "/node_modules"
+      -- print("[WT-CREATE] prev_node_modules_path: " .. prev_node_modules_path)
+      -- print("[WT-CREATE] worktree_path: " .. worktree_path)
+      -- print("[WT-CREATE] destination_path: " .. destination_path)
 
       local prev_node_modules_exists = vim.fn.isdirectory(prev_node_modules_path)
       if prev_node_modules_exists ~= 0 then
@@ -235,6 +246,9 @@ return {
       --   -- terminal_send_cmd("cd " .. penultimate_wt)
       --   send_cmd_to_all_terms("cd " .. penultimate_wt)
       -- end
+
+      -- Update onChange command
+      -- vim.cmd(config.update_on_change_command)
     end)
   end,
 }

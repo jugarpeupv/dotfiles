@@ -42,7 +42,10 @@ vim.list_extend(bundles, spring)
 -- local is_inside_wt = run("git rev-parse --is-inside-work-tree")
 
 --maybe add .git
-local root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", ".git", "mvnw" }, { upward = true })[1])
+-- local root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", ".git", "mvnw" }, { upward = true })[1])
+
+local root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", "mvnw" }, { upward = true })[1])
+
 -- local workspace_folder = "/Users/jgarcia/.local/share/eclipse/" .. root_dir:gsub("/", "-")
 local workspace_folder = "/Users/jgarcia/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
 

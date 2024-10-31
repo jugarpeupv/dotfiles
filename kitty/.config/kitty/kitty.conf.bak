@@ -40,8 +40,8 @@
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# # adjust_line_height  0
-# # adjust_column_width 0
+# adjust_line_height  0
+# adjust_column_width 0
 # font_features FiraCodeNFM-Reg    +ss01 +ss03 +cv29 
 # font_features FiraCodeNFM-Ret    +ss01 +ss03 +cv29 
 # font_features FiraCodeNFM-Med    +ss01 +ss03 +cv29 
@@ -53,22 +53,22 @@
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  8
-# adjust_column_width 0
+adjust_line_height  10
+adjust_column_width 0
 
 
 # Menlo
 # font_family Liga Menlo
-# font_family Menlo
+# # font_family Menlo
 # bold_font Menlo
 # italic_font Menlo
 # bold_italic_font Menlo Italic
-adjust_line_height  12
-adjust_column_width 0
+# adjust_line_height  12
+# adjust_column_width 0
 
 
 # BEGIN_KITTY_FONTS
-font_family      family="Liga DejaVu Sans Mono"
+font_family      family="Agave Nerd Font Mono"
 bold_font        auto
 italic_font      auto
 bold_italic_font auto
@@ -102,7 +102,7 @@ bold_italic_font auto
 # # # i    ss15
 # #
 # # #&&
-# font_features MonoLisadefault-Regular +ss04
+# font_features MonoLisadefault-Regular +ss04 +ss15 +ss02
 # font_features MonoLisadefault-RegularItalic  +ss04 +ss15
 # font_features MonoLisadefaultSemiBold-Regular  +ss04 +ss15
 # font_features MonolisadefaultSemiBold-Italic  +ss04 +ss15
@@ -114,7 +114,7 @@ bold_italic_font auto
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  12
+# adjust_line_height  10
 # adjust_column_width 0
 
 
@@ -123,7 +123,6 @@ bold_italic_font auto
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-
 
 # font_family ComicCode-Regular
 # font_family Comic Mono
@@ -508,7 +507,7 @@ bold_italic_font auto
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 15
+font_size 16
 
 #: Font size (in pts)
 
@@ -1595,7 +1594,7 @@ confirm_os_window_close 0
 #: The foreground and background colors.
 
 # background_opacity 0.90
-background_opacity 0.80
+background_opacity 0.75
 # background_opacity 1
 
 background_blur 30
@@ -2410,6 +2409,7 @@ map kitty_mod+h show_scrollback
 
 # map kitty_mod+r start_resizing_window
 # map cmd+r       start_resizing_window
+map cmd+r no_op
 
 #: First window
 
@@ -2948,8 +2948,9 @@ map ctrl+shift+minus set_background_opacity -0.1
 # background #13293e
 # background #192632
 # background #1c2835
-# background #03142a
-background #00122e
+background #03142a
+# background #00122e
+# background #0b1a2c
 # background #020c26
 # background #000d28
 # background #03162f
@@ -3166,3 +3167,55 @@ color15 #A6ADC8
 
 
 
+
+
+
+# How to add ctrl-shift mappings in neovim
+# Example:
+#
+# map('n', '<C-j>', '<cmd>:cn<cr>')
+# map('n', '<C-k>', '<cmd>:cp<cr>')
+# map('n', '<C-S-j>', '<cmd>:cnf<cr>')
+# map('n', '<C-S-k>', '<cmd>:cpf<cr>')
+# The problem is: terminal emulators don't recognize control-shift chords, unless we tell them how to. We'll use alacritty for this example, but most terminal emulators can be configured almost the same way.
+#
+# The first step is to choose the char we want to map (e.g. j if we're mapping C-S-j).
+#
+# Then, lookup the decimal value of that capitalized unicode char (e.g. the decimal value for J is 74). Use the wikipedia page on unicode chars as a reference.
+#
+# Once you've found that value, we need to tell our terminal emulator how to recognize the chord, and translate it into something that neovim can understand.
+#
+# Add the following line under the mappings section in your alacritty.yml config file:
+#
+#   - { key: J,        mods: Control|Shift, chars: "\x1b[74;5u"                }
+# This means: the char J, combined with the mods Control and Shift (the pipe here is the join char), will translate to the escape sequence \x1b[74;5u.
+#
+# The escape sequence is made of the following parts:
+#
+# \x1b[ is a CSI (control sequence introducer), meaning ESC+[;
+#
+# 74 is the decimal value of char J (see above);
+#
+# 5 is the sum of bits for the ctrl and shift modifiers (1 is shift, 2 is alt, 4 is ctrl);
+#
+# u stands for unicode.
+#
+# Save the config file, then add the mapping in your init.vim or init.lua:
+#
+# -- init.lua
+# local function map(mode, lhs, rhs, opts)
+#   local options = {noremap = true}
+#   if opts then options = vim.tbl_extend('force', options, opts) end
+#   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+# end
+#
+# map('n', '<C-S-j>', '<cmd>:cnf<cr>')
+# Or:
+#
+# nnoremap <C-S-j> :cnf<cr>
+# And that's it!
+#
+# Kitty terminal
+# The syntax used to add a custom mapping in kitty is the following:
+#
+# map ctrl+shift+j send_text all \x1b[74;5u

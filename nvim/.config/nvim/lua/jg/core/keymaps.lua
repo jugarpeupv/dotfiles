@@ -205,6 +205,8 @@ keymap("n", "<Leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>"
 keymap("n", "<Leader>gs", "<cmd>lua require('telescope.builtin').git_stash()<cr>", opts)
 keymap("n", "<Leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<cr>", opts)
 
+keymap("n", "<Leader>gB", "<cmd>G branch -vv<cr>", opts)
+
 -- Sniprun
 keymap("n", "<Leader>sr", "<cmd>%SnipRun<cr>", opts)
 
@@ -230,6 +232,7 @@ vim.cmd(
 -- Vim Fugitive
 -- keymap("n", "<Leader>gu", ":diffget<cr>", opts)
 -- keymap("n", "<Leader>gs", ":diffput<cr>", opts)
+keymap("n", "<Leader>sU", ":G branch --set-upstream-to=origin/", opts)
 keymap("n", "<Leader>go", "<cmd>:!git-open<cr>", opts)
 keymap("n", "<Leader>np", "<cmd>:e ~/.npmrc<cr>", opts)
 keymap("n", "<Leader>aw", "<cmd>:e ~/.aws/config<cr>", opts)
@@ -336,7 +339,12 @@ vim.keymap.set("n", "<leader>ns", vim.cmd.Neogen)
 
 vim.cmd([[nnoremap <F6> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_DIR<CR>]])
 
-vim.keymap.set("n", "<M-i>", ":split term://%:p:h//zsh<cr>", opts)
+-- vim.keymap.set("n", "<M-i>", "<cmd>split term://%:p:h//zsh<cr>", opts)
+vim.keymap.set("n", "<M-i>", function()
+  require("terminal").run("", {
+    cwd = vim.fn.expand("%:p:h"),
+  })
+end)
 
 vim.keymap.set({ "i", "s" }, "<C-e>", function()
   local ls = require("luasnip")

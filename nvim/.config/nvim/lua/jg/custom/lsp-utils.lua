@@ -118,6 +118,12 @@ M.attach_lsp_config = function(client, bufnr)
     end, opts)
   end
 
+  if client.name == "pyright" then
+    keymap.set({ "n" }, "<leader>oi", function()
+      vim.cmd("PyrightOrganizeImports")
+    end, opts)
+  end
+
   if client.name == "vtsls" then
     keymap.set({ "n" }, "<leader>oi", function()
       require("vtsls").commands.organize_imports(bufnr)

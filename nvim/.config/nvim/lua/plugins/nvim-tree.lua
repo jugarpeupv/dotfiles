@@ -41,7 +41,7 @@ return {
             local node = api_nvimtree.tree.get_node_under_cursor()
             local is_folder = node.fs_stat and node.fs_stat.type == "directory" or false
             local target_path = is_folder and node.absolute_path
-            or vim.fn.fnamemodify(node.absolute_path, ":h")
+                or vim.fn.fnamemodify(node.absolute_path, ":h")
             for _, source_path in ipairs(source_paths) do
               vim.fn.system({ "cp", "-R", source_path, target_path })
             end
@@ -164,10 +164,9 @@ return {
           api_nvimtree.tree.reload()
         end
 
-        local lib = require("nvim-tree.lib")
         -- add custom key mapping to search in directory with grug-far
         vim.keymap.set("n", "S", function()
-          local node = lib.get_node_at_cursor()
+          local node = api_nvimtree.tree.get_node_under_cursor()
           local grugFar = require("grug-far")
           if node then
             -- get directory of current file if it's a file
@@ -180,23 +179,19 @@ return {
               path = vim.fn.fnamemodify(node.absolute_path, ":h")
             end
 
-            -- escape all spaces in the path with "\ "
-            path = path:gsub(" ", "\\ ")
-
             local prefills = {
               paths = path,
             }
 
-            -- instance check
             if not grugFar.has_instance("tree") then
-              grugFar.open({
+              grugFar.grug_far({
                 instanceName = "tree",
                 prefills = prefills,
                 staticTitle = "Find and Replace from Tree",
               })
             else
               grugFar.open_instance("tree")
-              -- updating the prefills without clearing the search and other fields
+              -- updating the prefills without clearing the search
               grugFar.update_instance_prefills("tree", prefills, false)
             end
           end

@@ -8,7 +8,7 @@ return {
   {
     "JavaHello/spring-boot.nvim", --"eslam-allam/spring-boot.nvim"
     version = "*",
-    ft = {"java"},
+    ft = { "java" },
     dependencies = {
       "mfussenegger/nvim-jdtls",
     },
@@ -16,12 +16,13 @@ return {
       -- mason for sonarlint-language path
       local mason_registery_status, mason_registery = pcall(require, "mason-registry")
       if not mason_registery_status then
-        vim.notify("Mason registery not found", vim.log.levels.ERROR, {title = "Spring boot"})
+        vim.notify("Mason registery not found", vim.log.levels.ERROR, { title = "Spring boot" })
         return
       end
 
       local opts = {}
-      opts.ls_path = mason_registery.get_package("spring-boot-tools"):get_install_path() ..  "/extension/language-server"
+      opts.ls_path = mason_registery.get_package("spring-boot-tools"):get_install_path()
+          .. "/extension/language-server"
       -- opts.ls_path = "/home/sangram/.vscode/extensions/vmware.vscode-spring-boot-1.55.1"
       -- vim.notify("spring boot ls path : " .. opts.ls_path, vim.log.levels.INFO, {title = "Spring boot"})
       opts.java_cmd = "java"
@@ -30,7 +31,7 @@ return {
       opts.log_file = "/Users/jgarcia/.local/state/nvim/spring-boot-ls.log"
 
       return opts
-    end
+    end,
   },
   {
     "neovim/nvim-lspconfig",
@@ -396,15 +397,26 @@ return {
       --   end,
       -- })
 
-      lspconfig.jedi_language_server.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-      })
-
-      -- lspconfig["pyright"].setup({
+      -- lspconfig.jedi_language_server.setup({
       --   capabilities = capabilities,
       --   on_attach = on_attach,
       -- })
+
+      lspconfig["pyright"].setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+        -- root_dir = function(fname)
+        --   local root_files = {
+        --     "pyproject.toml",
+        --     "setup.py",
+        --     "setup.cfg",
+        --     "requirements.txt",
+        --     "Pipfile",
+        --     "pyrightconfig.json",
+        --   }
+        --   return root_pattern(unpack(root_files))(fname)
+        -- end,
+      })
 
       -- configure tailwindcss server
       lspconfig["tailwindcss"].setup({

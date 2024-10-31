@@ -87,10 +87,14 @@ M.get_wt_info = function(path_to_wt)
       end
 
       local wt_head_file = io.open(wt_gitdir .. "/HEAD", "r")
+      -- print("wt_gitdir", wt_gitdir)
       if wt_head_file ~= nil then
         local wt_head_raw = wt_head_file:read("*a")
-        local wt_head = string.match(wt_head_raw, "ref: refs/heads/(.*)"):match("[^\n]*")
-        wt_info["wt_head"] = wt_head
+        local wt_head = string.match(wt_head_raw, "ref: refs/heads/(.*)")
+        if wt_head then
+          wt_head = wt_head:match("[^\n]*")
+          wt_info["wt_head"] = wt_head
+        end
         wt_head_file:close()
       end
 
