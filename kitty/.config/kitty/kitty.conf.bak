@@ -66,24 +66,24 @@
 # adjust_line_height  12
 # adjust_column_width 0
 
-text_composition_strategy 0.3 10
+text_composition_strategy 0.3 15
 
 # BEGIN_KITTY_FONTS
-# font_family      family="Agave"
-# bold_font        auto
-# italic_font      auto
-# bold_italic_font auto
-# # END_KITTY_FONTS
+font_family      family="Fragment Mono"
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+# END_KITTY_FONTS
 # adjust_line_height  8
 # adjust_column_width 2
 
 
 ## DEJA VU
-font_family DejaVu Sans Code
-font_family   DejaVu Sans Code
-bold_font DejaVu Sans Code Bold
-italic_font DejaVu Sans Code Oblique
-bold_italic_font DejaVu Sans Code Oblique
+# font_family DejaVu Sans Code
+# font_family   DejaVu Sans Code
+# bold_font DejaVu Sans Code Bold
+# italic_font DejaVu Sans Code Oblique
+# bold_italic_font DejaVu Sans Code Oblique
 adjust_line_height  8
 adjust_column_width 0
 
@@ -511,7 +511,7 @@ adjust_column_width 0
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 17
+font_size 15
 
 #: Font size (in pts)
 
@@ -2820,6 +2820,11 @@ map shift+cmd+7 no_op
 
 map shift+cmd+o no_op
 map shift+cmd+i no_op
+
+# send <M-e> mapped to yanky cycle history
+map shift+cmd+n send_text all \x1b\x65
+# send <M-r> mapped to yanky cycle history
+map shift+cmd+p send_text all \x1b\x72
 
 map shift+ctrl+left no_op
 map shift+ctrl+right no_op
