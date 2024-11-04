@@ -4,7 +4,7 @@ return {
     "rebelot/terminal.nvim",
     keys = {
       {
-        "<M-o>",
+        "<M-l>",
         mode = { "n", "t" },
         function()
           -- require'terminal'.run("", { layout = { open_cmd = "float", border = "single" } })
@@ -64,7 +64,7 @@ return {
         end,
       },
       {
-        "<leader>tf",
+        "<leader>tF",
         mode = { "n" },
         function()
           local term_map = require("terminal.mappings")
@@ -75,6 +75,7 @@ return {
     config = function()
       require("terminal").setup({
         layout = {
+          open_cmd = "botright 15 new",
           border = "rounded",
         },
       })

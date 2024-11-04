@@ -97,9 +97,8 @@ keymap("t", "<M-k>", "<C-\\><C-n><cmd>NvimTreeFindFile<cr>", opts)
 keymap("n", "<M-u>", "<cmd> lua require('trouble').next({skip_groups = true, jump = true})<cr>", opts)
 keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jump = true})<cr>", opts)
 
-keymap("n", "<M-e>", "<cmd>cnext<cr>", opts)
-keymap("n", "<M-l>", "<cmd>cprev<cr>", opts)
-
+keymap("n", "<M-8>", "<cmd>cnext<cr>", opts)
+keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
 -- Utilities
 keymap("n", "<BS>", "<C-^>", opts)
 keymap("o", "<BS>", "^", opts)
@@ -282,20 +281,6 @@ vim.cmd([[:tnoremap <C-Right> <C-\><C-N>:vertical resize +5<cr>]])
 
 vim.cmd([[:tnoremap <C-o> <C-\><C-N><C-o>]])
 
-vim.keymap.set("n", "cc", "<Plug>(git-conflict-ours)")
-vim.keymap.set("n", "ci", "<Plug>(git-conflict-theirs)")
-vim.keymap.set("n", "cb", "<Plug>(git-conflict-both)")
-vim.keymap.set("n", "cn", "<Plug>(git-conflict-none)")
-vim.keymap.set("n", "ck", "<Plug>(git-conflict-prev-conflict)")
-vim.keymap.set("n", "cj", "<Plug>(git-conflict-next-conflict)")
-
-vim.keymap.set("v", "cc", "<Plug>(git-conflict-ours)")
-vim.keymap.set("v", "ci", "<Plug>(git-conflict-theirs)")
-vim.keymap.set("v", "cb", "<Plug>(git-conflict-both)")
-vim.keymap.set("v", "cn", "<Plug>(git-conflict-none)")
-vim.keymap.set("v", "ck", "<Plug>(git-conflict-prev-conflict)")
-vim.keymap.set("v", "cj", "<Plug>(git-conflict-next-conflict)")
-
 vim.keymap.set("n", "<leader>ih", function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end)
@@ -340,25 +325,25 @@ vim.keymap.set("n", "<leader>ns", vim.cmd.Neogen)
 vim.cmd([[nnoremap <F6> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_DIR<CR>]])
 
 -- vim.keymap.set("n", "<M-i>", "<cmd>split term://%:p:h//zsh<cr>", opts)
-vim.keymap.set("n", "<M-i>", function()
+vim.keymap.set("n", "<M-b>", function()
   require("terminal").run("", {
     cwd = vim.fn.expand("%:p:h"),
   })
 end)
 
-vim.keymap.set({ "i", "s" }, "<C-e>", function()
-  local ls = require("luasnip")
-  if ls.jumpable(-1) then
-    ls.jump(-1)
-  end
-end, { silent = true })
-
-vim.keymap.set({ "i", "s" }, "<C-f>", function()
-  local ls = require("luasnip")
-  if ls.expand_or_jumpable() then
-    ls.expand_or_jump()
-  end
-end, { silent = true })
+-- vim.keymap.set({ "i", "s" }, "<C-e>", function()
+--   local ls = require("luasnip")
+--   if ls.jumpable(-1) then
+--     ls.jump(-1)
+--   end
+-- end, { silent = true })
+--
+-- vim.keymap.set({ "i", "s" }, "<C-f>", function()
+--   local ls = require("luasnip")
+--   if ls.expand_or_jumpable() then
+--     ls.expand_or_jump()
+--   end
+-- end, { silent = true })
 
 vim.keymap.set("n", "<leader>cl", function()
   require("telescope").extensions.neoclip.default()
@@ -374,8 +359,8 @@ vim.keymap.set("n", "<leader>ti", function()
 end, opts)
 
 -- using 0 register
-vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                              -- copy to 0 register
-vim.keymap.set({ "x" }, "<leader><leader>y", [["0y]])                               -- copy to 0 register
+-- vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                              -- copy to 0 register
+-- vim.keymap.set({ "x" }, "<leader><leader>y", [["0y]])                               -- copy to 0 register
 
 vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
 

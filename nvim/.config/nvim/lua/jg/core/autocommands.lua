@@ -94,3 +94,19 @@ vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 --     vim.bo.buflisted = false
 --   end,
 -- })
+
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'GitConflictDetected',
+  callback = function()
+    vim.notify('Conflict detected in '..vim.fn.expand('<afile>'))
+
+    vim.keymap.set({"n", "v"}, "cc", "<Plug>(git-conflict-ours)")
+    vim.keymap.set({"n", "v"}, "ci", "<Plug>(git-conflict-theirs)")
+    vim.keymap.set({"n", "v"}, "cb", "<Plug>(git-conflict-both)")
+    vim.keymap.set({"n", "v"}, "cn", "<Plug>(git-conflict-none)")
+    vim.keymap.set({"n", "v"}, "ck", "<Plug>(git-conflict-prev-conflict)")
+    vim.keymap.set({"n", "v"}, "cj", "<Plug>(git-conflict-next-conflict)")
+  end
+})
+
+

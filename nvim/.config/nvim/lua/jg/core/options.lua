@@ -129,3 +129,5 @@ vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.o.foldtext = ""
 
 opt.updatetime = 1000
+
+vim.g.suda_smart_edit = 1

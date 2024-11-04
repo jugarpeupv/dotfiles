@@ -10,11 +10,11 @@
 
 
 ## Roboto Mono
-# font_family      family="RobotoMono Nerd Font"
-# bold_font        auto
+#   font_family      family="RobotoMono Nerd Font"
+#   bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  8
+# adjust_line_height  4
 # adjust_column_width 0
 
 ## Berkeley
@@ -53,8 +53,8 @@
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-adjust_line_height  10
-adjust_column_width 0
+# adjust_line_height  8
+# adjust_column_width 0
 
 
 # Menlo
@@ -66,30 +66,39 @@ adjust_column_width 0
 # adjust_line_height  12
 # adjust_column_width 0
 
+text_composition_strategy 0.3 10
 
 # BEGIN_KITTY_FONTS
-font_family      family="Agave Nerd Font Mono"
-bold_font        auto
-italic_font      auto
-bold_italic_font auto
-# END_KITTY_FONTS
+# font_family      family="Agave"
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+# # END_KITTY_FONTS
+# adjust_line_height  8
+# adjust_column_width 2
+
 
 ## DEJA VU
-# font_family DejaVu Sans Code
-# font_family   DejaVu Sans Code
-# bold_font DejaVu Sans Code Bold
-# italic_font DejaVu Sans Code Oblique
-# bold_italic_font DejaVu Sans Code Oblique
-# adjust_line_height  8
-# adjust_column_width 0
+font_family DejaVu Sans Code
+font_family   DejaVu Sans Code
+bold_font DejaVu Sans Code Bold
+italic_font DejaVu Sans Code Oblique
+bold_italic_font DejaVu Sans Code Oblique
+adjust_line_height  8
+adjust_column_width 0
 
 ## Monolisa
 # font_family Monolisadefault-Regular
 # bold_font Monolisadefault-Bold
 # italic_font MonolisadefaultSemiBold-Italic
 # bold_italic_font Monolisadefault-BoldItalic
-# adjust_line_height  8
+# adjust_line_height  4
 # adjust_column_width 0
+# font_features MonoLisadefault-Regular +ss04 +ss02
+# font_features MonoLisadefault-RegularItalic  +ss04
+# font_features MonoLisadefaultSemiBold-Regular  +ss04
+# font_features MonolisadefaultSemiBold-Italic  +ss04
+# font_features MonoLisadefault-Bold  +ss04
 # #
 # # ## Monolisa 
 # # # ss07 {}
@@ -102,11 +111,6 @@ bold_italic_font auto
 # # # i    ss15
 # #
 # # #&&
-# font_features MonoLisadefault-Regular +ss04 +ss15 +ss02
-# font_features MonoLisadefault-RegularItalic  +ss04 +ss15
-# font_features MonoLisadefaultSemiBold-Regular  +ss04 +ss15
-# font_features MonolisadefaultSemiBold-Italic  +ss04 +ss15
-# font_features MonoLisadefault-Bold  +ss04 +ss15
 
 
 ## SF Mono
@@ -507,7 +511,7 @@ bold_italic_font auto
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 16
+font_size 17
 
 #: Font size (in pts)
 
@@ -535,7 +539,6 @@ modify_font underline_thickness 30%
 modify_font strikethrough_position 8px
 # text_composition_strategy 0.8 0
 # text_composition_strategy 0.2 5
-text_composition_strategy 0.5 15
 # text_composition_strategy 1 15
 # text_composition_strategy 1 30
 # text_composition_strategy platform
@@ -575,7 +578,7 @@ adjust_baseline 2
 #: E.g. symbol_map U+E0A0-U+E0A3,U+E0C0-U+E0C7 PowerlineSymbols
 # symbol_map <Unicode codepoints> Symbols Nerd Font
 
-# symbol_map U+E0A0-U+E0A3,U+E0C0-U+E0C7 PowerlineSymbols
+symbol_map U+E0A0-U+E0A3,U+E0C0-U+E0C7 PowerlineSymbols
 
 # 
 symbol_map U+E0a0 Symbols Nerd Font
@@ -628,7 +631,7 @@ symbol_map U+DB83 Symbols Nerd Font
 # symbol_map U+24D8 nonicon
 
 # ⧗ U+29D7
-symbol_map U+29D7 Symbola
+# symbol_map U+29D7 Symbola
 # symbol_map U+29D7 nonicon
 
   
@@ -2844,10 +2847,10 @@ map shift+cmd+7 send_text all \x1b\x67
 # map cmd+. send_text all \x1b\x2e
 
 
-# keymap("n", "<M-e>", "<cmd>cnext<cr>", opts)
-map shift+ctrl+j send_text all \x1b\x65
-# keymap("n", "<M-k>", "<cmd>cprev<cr>", opts)
-map shift+ctrl+k send_text all \x1b\x6c
+# keymap("n", "<M-8>", "<cmd>cnext<cr>", opts)
+map shift+ctrl+j send_text all \x1b\x38
+# keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
+map shift+ctrl+k send_text all \x1b\x36
 
 
 # keymap("n", "<M-u>", "<cmd>trouble next<cr>", opts)
@@ -3196,7 +3199,7 @@ color15 #A6ADC8
 #
 # 74 is the decimal value of char J (see above);
 #
-# 5 is the sum of bits for the ctrl and shift modifiers (1 is shift, 2 is alt, 4 is ctrl);
+# 6 is the sum of bits for the ctrl and shift modifiers (1 is shift, 2 is alt, 4 is ctrl);
 #
 # u stands for unicode.
 #
@@ -3219,3 +3222,8 @@ color15 #A6ADC8
 # The syntax used to add a custom mapping in kitty is the following:
 #
 # map ctrl+shift+j send_text all \x1b[74;5u
+
+
+# Nerd Fonts v3.2.0
+
+# symbol_map U+e000-U+e00a,U+ea60-U+ebeb,U+e0a0-U+e0c8,U+e0ca,U+e0cc-U+e0d7,U+e200-U+e2a9,U+e300-U+e3e3,U+e5fa-U+e6b1,U+e700-U+e7c5,U+ed00-U+efc1,U+f000-U+f2ff,U+f000-U+f2e0,U+f300-U+f372,U+f400-U+f533,U+f0001-U+f1af0 Symbols Nerd Font Mono

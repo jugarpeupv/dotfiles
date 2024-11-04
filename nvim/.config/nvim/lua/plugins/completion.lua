@@ -64,7 +64,6 @@ return {
         sources = {},
       })
 
-
       local t = function(str)
         return vim.api.nvim_replace_termcodes(str, true, true, true)
       end
@@ -77,36 +76,42 @@ return {
         },
         -- preslect = cmp.PreselectMode.Item,
         mapping = cmp.mapping.preset.insert({
-          ['<C-j>'] = cmp.mapping({
+          ["<C-j>"] = cmp.mapping({
             c = function()
-                vim.api.nvim_feedkeys(t('<Down>'), 'm', true)
+              vim.api.nvim_feedkeys(t("<Down>"), "m", true)
             end,
             i = function()
-              vim.api.nvim_feedkeys(t('<Down>'), 'm', true)
-            end
+              vim.api.nvim_feedkeys(t("<Down>"), "m", true)
+            end,
           }),
-          ['<C-k>'] = cmp.mapping({
+          ["<C-k>"] = cmp.mapping({
             c = function()
-              vim.api.nvim_feedkeys(t('<Up>'), 'm', true)
+              vim.api.nvim_feedkeys(t("<Up>"), "m", true)
             end,
             i = function()
-              vim.api.nvim_feedkeys(t('<Up>'), 'm', true)
-            end
+              vim.api.nvim_feedkeys(t("<Up>"), "m", true)
+            end,
           }),
           -- ["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
           -- ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          -- ["<C-y>"] = cmp.mapping(function()
-          --   if luasnip.jumpable(-1) then
-          --     luasnip.jump(-1)
-          --   end
-          -- end, { "i", "s" }),
-          -- ["<C-i>"] = cmp.mapping(function()
-          --   if luasnip.expand_or_jumpable() then
-          --     luasnip.expand_or_jump()
-          --   end
-          -- end, { "i", "s" }),
+          ["<C-y>"] = cmp.mapping(function()
+            -- if luasnip.jumpable(-1) then
+            --   luasnip.jump(-1)
+            -- end
+            if luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            end
+          end, { "i", "s" }),
+          ["<C-x>"] = cmp.mapping(function()
+            -- if luasnip.expand_or_jumpable() then
+            --   luasnip.expand_or_jump()
+            -- end
+            if luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            end
+          end, { "i", "s" }),
           ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
           ["<C-e>"] = cmp.mapping.abort(),   -- close completion window
           -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
@@ -118,7 +123,7 @@ return {
             local filetype = vim.bo.filetype
             if filetype == "" then
               print("filetype is nil")
-              vim.api.nvim_feedkeys(t('<CR>'), 'n', true)
+              vim.api.nvim_feedkeys(t("<CR>"), "n", true)
               return
             elseif cmp.visible() then
               cmp.confirm({ select = true })
@@ -140,26 +145,33 @@ return {
           -- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
           -- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
           -- Overload tab to accept Copilot suggestions.
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            -- local copilot = require("copilot.suggestion")
-            -- if copilot.is_visible() then
-            --   copilot.accept()
-            -- elseif cmp.visible() then
-            if cmp.visible() then
-              cmp.confirm({ select = true })
-            elseif luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            else
-              fallback()
-            end
-          end, { "i", "s" }),
-          -- ["<S-Tab>"] = cmp.mapping(function(fallback)
-          --   local copilot = require("copilot.suggestion")
-          --   if copilot.is_visible() then
-          --     copilot.accept()
+          -- ["<Tab>"] = cmp.mapping(function(fallback)
+          --   -- local copilot = require("copilot.suggestion")
+          --   -- if copilot.is_visible() then
+          --   --   copilot.accept()
+          --   -- elseif cmp.visible() then
+          --
+          --   if luasnip.expand_or_jumpable() then
+          --     luasnip.expand_or_jump()
           --   else
           --     fallback()
           --   end
+          --
+          --   -- if cmp.visible() then
+          --   --   cmp.confirm({ select = true })
+          --   --   -- elseif luasnip.expand_or_locally_jumpable() then
+          --   --   --   luasnip.expand_or_jump()
+          --   -- else
+          --   --   fallback()
+          --   -- end
+          -- end, { "i", "s" }),
+          -- ["<S-Tab>"] = cmp.mapping(function(fallback)
+          --   -- local copilot = require("copilot.suggestion")
+          --   -- if copilot.is_visible() then
+          --   --   copilot.accept()
+          --   -- else
+          --   --   fallback()
+          --   -- end
           --   -- if cmp.visible() then
           --   --   cmp.select_prev_item()
           --   -- elseif luasnip.expand_or_locally_jumpable(-1) then
@@ -167,7 +179,12 @@ return {
           --   -- else
           --   --   fallback()
           --   -- end
-          -- end, { "i", "s" }),
+          --   if luasnip.expand_or_locally_jumpable(-1) then
+          --     luasnip.jump(-1)
+          --   else
+          --     fallback()
+          --   end
+          -- end, { "i", "s"}),
         }),
         -- window = {
         --   completion = cmp.config.window.bordered(),
