@@ -1,7 +1,7 @@
 return {
   {
     "mg979/vim-visual-multi",
-    keys = { "<C-n>", mode = { "n", "v" } },
+    keys = { { "<C-n>", mode = { "n", "v" } } },
     -- event = { "BufRead", "BufNewFile" },
     config = function()
       vim.cmd([[highlight! VM_Mono guibg=#004b72]])

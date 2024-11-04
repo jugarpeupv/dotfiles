@@ -1,5 +1,7 @@
 # Dotfiles
 
+![](./docs/desktop_setup.png)
+
 ## Dependencies
 
 - `stow`: Install instructions

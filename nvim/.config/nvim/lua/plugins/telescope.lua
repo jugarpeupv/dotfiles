@@ -433,6 +433,7 @@ return {
       telescope.load_extension("yaml_schema")
       telescope.load_extension("grapple")
       telescope.load_extension("heading")
+      telescope.load_extension("yank_history")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")
       -- telescope.load_extension('node_modules')
