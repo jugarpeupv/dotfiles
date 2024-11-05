@@ -66,12 +66,12 @@ return {
             desc = "Put yanked text before selection",
           },
           {
-            "<M-e>",
+            "<C-p>",
             "<Plug>(YankyPreviousEntry)",
             desc = "Select previous entry through yank history",
           },
           {
-            "<M-r>",
+            "<C-n>",
             "<Plug>(YankyNextEntry)",
             desc = "Select next entry through yank history",
           },

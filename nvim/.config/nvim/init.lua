@@ -32,7 +32,7 @@ require("lazy").setup("plugins", {
     ---@type string | fun(plugin: LazyPlugin): string directory where you store your local plugin projects
     path = "~/projects",
     ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
-    patterns = {}, -- For example {"folke"}
+    patterns = {},  -- For example {"folke"}
     fallback = false, -- Fallback to git when local plugin doesn't exist
   },
   ui = {

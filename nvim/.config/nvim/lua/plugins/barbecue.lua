@@ -115,8 +115,8 @@ return {
         -- create_autocmd = false,
         lead_custom_section = function(bufnr, _)
           local icons = {
-            -- Error = '',
-            Error = "",
+            -- Error = "",
+            Error = "",
             Warn = "",
             Info = "",
             -- Info = '',

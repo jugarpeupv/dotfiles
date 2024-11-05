@@ -68,14 +68,13 @@
 
 text_composition_strategy 0.3 15
 
-# BEGIN_KITTY_FONTS
-font_family      family="Fragment Mono"
-bold_font        auto
-italic_font      auto
-bold_italic_font auto
-# END_KITTY_FONTS
-# adjust_line_height  8
-# adjust_column_width 2
+# font_family      family='Fira Code' postscript_name=FiraCode-Regular
+# bold_font        family='Fira Code' style=Retina
+# italic_font      auto
+# bold_italic_font family='Fira Code' style=Retina
+#
+# font_features FiraCode-Regular  +ss01 +ss03 +cv29
+# font_features FiraCode-SemiBold  +ss01 +ss03 +cv29
 
 
 ## DEJA VU
@@ -84,8 +83,8 @@ bold_italic_font auto
 # bold_font DejaVu Sans Code Bold
 # italic_font DejaVu Sans Code Oblique
 # bold_italic_font DejaVu Sans Code Oblique
-adjust_line_height  8
-adjust_column_width 0
+# adjust_line_height  8
+# adjust_column_width 0
 
 ## Monolisa
 # font_family Monolisadefault-Regular
@@ -118,7 +117,7 @@ adjust_column_width 0
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  10
+# adjust_line_height  8
 # adjust_column_width 0
 
 
@@ -511,7 +510,7 @@ adjust_column_width 0
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 15
+font_size 16
 
 #: Font size (in pts)
 
@@ -1597,7 +1596,7 @@ confirm_os_window_close 0
 #: The foreground and background colors.
 
 # background_opacity 0.90
-background_opacity 0.75
+background_opacity 0.80
 # background_opacity 1
 
 background_blur 30
@@ -2928,36 +2927,17 @@ map ctrl+shift+minus set_background_opacity -0.1
 
 ## Dracula Colorscheme
 
-# background #1e1f28
-# background #0d1f31
-# background #132537
-# background #0e2439
-# background #0d1f31
-# background #06182a
-# background #06192b
-# background #1E1E2E
-# background #111a2f
 # background #051832
-# background #0c1025
-# background #15152b
-# background #12121C
-# background #181825
-# background #1b1b2d
-# background #1a1a2b
-# background #0b1a2c
-# background #071b30
 # background #112131
 # background #091624
 # background #0b1b2c
-# background #1d2331
 # background #0d1629
-# background #0e182d
 # background #192837
 # background #13293e
 # background #192632
 # background #1c2835
-background #03142a
-# background #00122e
+# background #03142a
+background #00122e
 # background #0b1a2c
 # background #020c26
 # background #000d28

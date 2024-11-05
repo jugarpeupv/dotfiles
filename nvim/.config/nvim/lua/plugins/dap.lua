@@ -1,5 +1,40 @@
 return {
   {
+    "linux-cultist/venv-selector.nvim",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "mfussenegger/nvim-dap-python",
+      "nvim-lua/plenary.nvim",
+    },
+    keys = {
+      -- Keymap to open VenvSelector to pick a venv.
+      { "<leader>ve", "<cmd>VenvSelect<cr>" },
+      -- -- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
+      -- { "<leader>vc", "<cmd>VenvSelectCached<cr>" },
+    },
+    opts = {
+      -- anaconda_base_path = "/opt/homebrew/anaconda3",
+      -- anaconda_envs_path = "/opt/homebrew/anaconda3/envs",
+      stay_on_this_version = true,
+      dap_enabled = true,
+      settings = {
+        options = {
+          notify_user_on_venv_activation = true,
+        },
+      },
+    },
+    cmd = { "VenvSelect" },
+  },
+  {
+    "mfussenegger/nvim-dap-python",
+    dependencies = "mfussenegger/nvim-dap",
+    ft = "python",
+    config = function(_, opts)
+      local path = "/Users/jgarcia/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+      require("dap-python").setup(path)
+    end,
+  },
+  {
     "Weissle/persistent-breakpoints.nvim",
     event = { "BufReadPost", "BufNewFile" },
     keys = {
