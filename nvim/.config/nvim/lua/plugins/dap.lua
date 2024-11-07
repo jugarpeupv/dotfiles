@@ -29,7 +29,7 @@ return {
     "mfussenegger/nvim-dap-python",
     dependencies = "mfussenegger/nvim-dap",
     ft = "python",
-    config = function(_, opts)
+    config = function()
       local path = "/Users/jgarcia/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
       require("dap-python").setup(path)
     end,
@@ -310,8 +310,8 @@ return {
       vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
 
       vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint2", linehl = "", numhl = "" })
-
-      vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" })
+      -- vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" })
+      vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" })
 
       -- local dap = require('dap')
       -- local api = vim.api
@@ -367,19 +367,19 @@ return {
       vim.keymap.set("n", "<leader>dt", function()
         require("dap").terminate()
       end)
-      vim.keymap.set("n", "<leader>dA", function()
-        require("debughelper-config").attach()
-      end)
-      vim.keymap.set("n", "<leader>dE", function()
-        require("debughelper-config").attachToRemote()
-      end)
-      vim.keymap.set("n", "<leader>dJ", function()
-        require("debughelper-config").attachToPort8080()
-      end)
-      vim.keymap.set("n", "<leader>dd", function()
+      -- vim.keymap.set("n", "<leader>dA", function()
+      --   require("debughelper-config").attach()
+      -- end)
+      -- vim.keymap.set("n", "<leader>dE", function()
+      --   require("debughelper-config").attachToRemote()
+      -- end)
+      -- vim.keymap.set("n", "<leader>dJ", function()
+      --   require("debughelper-config").attachToPort8080()
+      -- end)
+      vim.keymap.set("n", "<leader>dw", function()
         require("dap.ui.widgets").hover()
       end)
-      vim.keymap.set("n", "<leader>dw", function()
+      vim.keymap.set("n", "<leader>dd", function()
         local widgets = require("dap.ui.widgets")
         widgets.centered_float(widgets.scopes)
       end)

@@ -9,7 +9,8 @@ return {
     tag = "0.1.8",
     dependencies = {
       { "nvim-telescope/telescope-dap.nvim" },
-      {   "jugarpeupv/git-worktree.nvim", },
+      { "gbprod/yanky.nvim" },
+      { "jugarpeupv/git-worktree.nvim" },
       {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
@@ -246,6 +247,9 @@ return {
           -- },
           git_branches = {
             layout_strategy = "vertical",
+            mappings = {
+              i = { ["<C-m>"] = require("jg.custom.telescope").set_upstream }
+            },
           },
         },
         extensions = {
@@ -425,7 +429,7 @@ return {
       -- load_extension, somewhere after setup function:
       -- telescope.load_extension("fzf")
       -- telescope.load_extension("harpoon")
-      telescope.load_extension('dap')
+      telescope.load_extension("dap")
       telescope.load_extension("zf-native")
       telescope.load_extension("ui-select")
       telescope.load_extension("bookmarks")

@@ -174,9 +174,9 @@ return {
 
     Hooks.register(Hooks.type.CREATE, function(path, branch, upstream)
       -- print("[WT-CREATE] branch: " .. branch)
-      if upstream ~= nil then
-        print("[WT-CREATE] upstream: " .. upstream)
-      end
+      -- if upstream ~= nil then
+      --   print("[WT-CREATE] upstream: " .. upstream)
+      -- end
       local relative_path = path
       local Path = require("plenary.path")
       local original_path = ""

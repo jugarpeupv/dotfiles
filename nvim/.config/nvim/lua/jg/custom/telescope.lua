@@ -1,6 +1,63 @@
--- local action_state = require("telescope.actions.state")
--- local actions = require("telescope.actions")
 local M = {}
+
+-- git branch --set-upstream-to=origin/release release
+-- Selection:  {
+--   authorname = "Garcia Perera, Julio",
+--   committerdate = "2024/11/06 09:59:49",
+--   display = <function 1>,
+--   head = " ",
+--   index = 24,
+--   name = "origin/develop",
+--   ordinal = "origin/develop",
+--   upstream = "",
+--   value = "origin/develop",
+--   <metatable> = {
+--     __index = <function 2>
+--   }
+-- }
+-- Branch:  origin/develop
+--
+local function branch_name()
+	local branch = vim.fn.system("git branch --show-current 2> /dev/null | tr -d '\n'")
+	if branch ~= "" then
+		return branch
+	else
+		return ""
+	end
+end
+
+M.set_upstream = function(prompt_bufnr)
+  local actions = require("telescope.actions")
+  local utils = require("telescope.utils")
+  local action_state = require("telescope.actions.state")
+  local cwd = action_state.get_current_picker(prompt_bufnr).cwd
+  local selection = action_state.get_selected_entry()
+  if selection == nil then
+    utils.__warn_no_selection("actions.set_upstream")
+    return
+  end
+  local active_branch = branch_name()
+  actions.close(prompt_bufnr)
+  local remote_branch = selection.value
+
+  local upstream_string = "--set-upstream-to=" .. remote_branch
+  local _, ret, stderr = utils.get_os_command_output({ "git", "branch",upstream_string, active_branch }, cwd)
+  if ret == 0 then
+    utils.notify("actions.set_upstream", {
+      msg = string.format("Set branch '%s' upstream to: '%s'", active_branch, remote_branch),
+      level = "INFO",
+    })
+  else
+    utils.notify("actions.set_upstream", {
+      msg = string.format(
+        "Error when setting upstream to: %s. Git returned: '%s'",
+        remote_branch,
+        table.concat(stderr, " ")
+      ),
+      level = "ERROR",
+    })
+  end
+end
 
 M.curr_buf = function()
   local opts = {}

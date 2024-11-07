@@ -185,6 +185,7 @@ return {
         matchup = {
           enable = true,
           disable_virtual_text = false,
+          disable = { "javascript", "typescript"  },
         },
         textobjects = {
           select = {

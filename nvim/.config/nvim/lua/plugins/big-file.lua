@@ -24,7 +24,7 @@ return {
           -- "syntax",
           "matchparen",
           "vimopts",
-          "filetype",
+          -- "filetype",
         },
       })
     end,

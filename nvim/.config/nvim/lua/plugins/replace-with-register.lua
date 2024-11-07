@@ -7,8 +7,11 @@ return {
         "gbprod/yanky.nvim",
         dependencies = {
           { "kkharji/sqlite.lua" },
+          { "nvim-telescope/telescope.nvim" }
         },
         config = function()
+          local utils = require("yanky.utils")
+          local mapping = require("yanky.telescope.mapping")
           require("yanky").setup({
             ring = { storage = "sqlite" },
             highlight = {
@@ -22,6 +25,25 @@ return {
             textobj = {
               enabled = true,
             },
+            -- picker = {
+            --   telescope = {
+            --     mappings = {
+            --       default = mapping.put("p"),
+            --       i = {
+            --         ["<c-p>"] = mapping.put("p"),
+            --         ["<c-g>"] = mapping.put("P"),
+            --         ["<c-x>"] = mapping.delete(),
+            --         ["<c-r>"] = mapping.set_register("a"),
+            --       },
+            --       n = {
+            --         p = mapping.put("p"),
+            --         P = mapping.put("P"),
+            --         d = mapping.delete(),
+            --         r = mapping.set_register(utils.get_default_register()),
+            --       },
+            --     },
+            --   },
+            -- },
           })
         end,
         keys = {

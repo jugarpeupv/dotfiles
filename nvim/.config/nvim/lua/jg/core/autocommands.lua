@@ -21,8 +21,8 @@ vim.cmd([[
   " augroup end
 ]])
 
-vim.cmd([[autocmd BufRead,BufNewFile */node_modules/* lua vim.diagnostic.disable(0)]])
-vim.cmd([[autocmd BufRead,BufNewFile */assets/* lua vim.diagnostic.disable(0)]])
+-- vim.cmd([[autocmd BufRead,BufNewFile */node_modules/* lua vim.diagnostic.disable(0)]])
+-- vim.cmd([[autocmd BufRead,BufNewFile */assets/* lua vim.diagnostic.disable(0)]])
 
 vim.cmd([[
   augroup filetypedetect
@@ -77,7 +77,7 @@ vim.cmd([[ augroup JsonToJsonc
     autocmd! FileType json set filetype=jsonc
 augroup END ]])
 
-vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wrap' | endif]])
+-- vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wrap' | endif]])
 
 vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 

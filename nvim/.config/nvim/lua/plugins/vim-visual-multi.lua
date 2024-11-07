@@ -1,7 +1,7 @@
 return {
   {
     "mg979/vim-visual-multi",
-    -- keys = { { "<M-e>" }, { "<M-r>", mode = { "n", "v" } } },
+    keys = { { "<M-e>" }, { "<M-r>", mode = { "n", "v" } } },
     -- event = "VeryLazy",
     -- event = { "BufRead", "BufNewFile" },
     init = function()
