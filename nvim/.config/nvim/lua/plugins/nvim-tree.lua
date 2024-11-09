@@ -545,7 +545,7 @@ return {
           show_on_open_dirs = false,
           disable_for_dirs = {},
           -- timeout = 4000,
-          timeout = 400,
+          timeout = 200,
           cygwin_support = false,
         },
         filesystem_watchers = {

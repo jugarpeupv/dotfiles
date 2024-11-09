@@ -7,6 +7,7 @@ return {
   -- { "nvim-spider" }
   -- { "airblade/vim-matchquote" },
   -- { "ton/vim-bufsurf" },
+  { 'taybart/b64.nvim', cmd = { "B64Encode", "B64Decode" } },
   {
     "lambdalisue/vim-suda",
     cmd = { "SudaWrite", "SudaRead" },
@@ -36,7 +37,7 @@ return {
       skipInsignificantPunctuation = true,
       consistentOperatorPending = true, -- see "Consistent Operator-pending Mode" in the README
       subwordMovement = true,
-      customPatterns = {},           -- check "Custom Movement Patterns" in the README for details
+      customPatterns = {},              -- check "Custom Movement Patterns" in the README for details
     },
   },
   -- { https://github.com/axieax/urlview.nvim }
@@ -68,7 +69,7 @@ return {
     end,
   },
 
-  { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
+  { "wellle/targets.vim",      event = { "BufReadPost", "BufNewFile" } },
   {
     "junegunn/fzf",
     build = "./install --all",
@@ -140,12 +141,12 @@ return {
       { mode = { "n" }, "<Leader>gl", "<cmd>G log -20<cr>",                  { silent = true, noremap = true } },
     },
   },
-  { "tpope/vim-repeat",        keys = { "." } },
-  { "nvim-lua/plenary.nvim",   lazy = true },
-  { "tpope/vim-surround",      event = { "BufReadPost", "BufNewFile" } },
-  { "windwp/nvim-ts-autotag",  ft = "html" },
-  { "tpope/vim-dispatch",      lazy = true },
-  { "kkharji/sqlite.lua",      lazy = true },
+  { "tpope/vim-repeat",       keys = { "." } },
+  { "nvim-lua/plenary.nvim",  lazy = true },
+  { "tpope/vim-surround",     event = { "BufReadPost", "BufNewFile" } },
+  { "windwp/nvim-ts-autotag", ft = "html" },
+  { "tpope/vim-dispatch",     lazy = true },
+  { "kkharji/sqlite.lua",     lazy = true },
   {
     "ckipp01/nvim-jenkinsfile-linter",
     -- event = { "BufReadPost", "BufNewFile" },

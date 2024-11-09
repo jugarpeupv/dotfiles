@@ -96,12 +96,12 @@ return {
           require("overseer").setup()
         end,
       },
-      -- {
-      --   "theHamsta/nvim-dap-virtual-text",
-      --   config = function()
-      --     require("nvim-dap-virtual-text").setup()
-      --   end,
-      -- },
+      {
+        "theHamsta/nvim-dap-virtual-text",
+        config = function()
+          require("nvim-dap-virtual-text").setup()
+        end,
+      },
       { "jbyuki/one-small-step-for-vimkind" },
     },
     config = function()
@@ -109,8 +109,6 @@ return {
       if not dap_status then
         return
       end
-
-      local dapui = require("dapui")
 
       -- local mason_status, mason_nvim_dap = pcall(require, "mason-nvim-dap")
       -- if not mason_status then
@@ -291,6 +289,7 @@ return {
 
       -- require('dapui').setup()
 
+      local dapui = require("dapui")
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open()
       end
@@ -304,8 +303,13 @@ return {
       -- dap.defaults.fallback.terminal_win_cmd = "vsplit new"
       -- vim.fn.sign_define("DapBreakpoint", { text = "✋", texthl = "", linehl = "", numhl = "" })
       -- vim.fn.sign_define('DapBreakpointRejected', { text = '🔵', texthl = '', linehl = '', numhl = '' })
+      vim.fn.sign_define('DapBreakpointRejected', { text = "⊚", texthl = '', linehl = '', numhl = '' })
+
+      -- vim.fn.sign_define('DapBreakpointRejected', { text = "⚇", texthl = '', linehl = '', numhl = '' })
+
 
       vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#D20F39", bg = "none" })
+
       vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
       vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
 
@@ -386,6 +390,29 @@ return {
       vim.keymap.set("n", "<leader>dh", ':lua require"dap".up()<CR>zz')
       vim.keymap.set("n", "<leader>dl", ':lua require"dap".down()<CR>zz')
       vim.keymap.set("n", "<leader>dr", ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l')
+
+      vim.keymap.set({ "n", "v" }, "<Leader>ds", function()
+        local widgets = require("dap.ui.widgets")
+        local my_sidebar = widgets.sidebar(widgets.scopes)
+        my_sidebar.open()
+      end)
+
+      vim.keymap.set({ "n", "v" }, "<Leader>dH", function()
+        require("dap.ui.widgets").hover()
+      end)
+
+      vim.keymap.set({ "n", "v" }, "<Leader>dE", function()
+        require("dap.ui.widgets").preview()
+      end)
+
+      -- vim.keymap.set("n", "<leader>dP", function()
+      --   print("hi")
+      --   require("dap").list_breakpoints(true)
+      -- end)
+
+      vim.keymap.set("n", "<leader>dp", function()
+        require("telescope").extensions.dap.list_breakpoints({})
+      end)
       -- vim.keymap.set('n', '<leader>ee', function() require"dap".set_exception_breakpoints({"all"}) end)
       -- vim.keymap.set(
       --   "n",

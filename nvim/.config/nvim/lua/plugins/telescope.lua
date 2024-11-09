@@ -59,7 +59,7 @@ return {
       { "nvim-telescope/telescope-ui-select.nvim",      cmd = { "Telescope" } },
     },
     cmd = { "Telescope" },
-    keys = { "<M-.>" },
+    -- keys = { "<M-.>" },
     -- event = "VeryLazy",
     config = function()
       local open_with_trouble = require("trouble.sources.telescope").open
@@ -248,7 +248,7 @@ return {
           git_branches = {
             layout_strategy = "vertical",
             mappings = {
-              i = { ["<C-m>"] = require("jg.custom.telescope").set_upstream }
+              i = { ["<C-y>"] = require("jg.custom.telescope").set_upstream }
             },
           },
         },
