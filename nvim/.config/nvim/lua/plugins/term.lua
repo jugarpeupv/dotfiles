@@ -10,10 +10,14 @@ return {
           -- require'terminal'.run("", { layout = { open_cmd = "float", border = "single" } })
           local get_terminal_bufs = function()
             return vim.tbl_filter(function(bufnr)
-              return vim.fn.getbufvar(bufnr, "&buftype") == "terminal"
+              return vim.fn.getbufvar(bufnr, "&buftype") == "terminal" and vim.fn.getbufvar(bufnr, "&ft") == ""
             end, vim.api.nvim_list_bufs())
           end
-          local there_are_no_terminal_buffers = next(get_terminal_bufs()) == nil
+
+          local terminals = get_terminal_bufs()
+          print(vim.inspect(terminals))
+
+          local there_are_no_terminal_buffers = next(terminals) == nil
 
           if there_are_no_terminal_buffers then
             vim.cmd("15sp|term")
@@ -43,7 +47,7 @@ return {
         "<cmd>15sp|term<cr>",
       },
       {
-        "<leader>tn",
+        "<leader>tT",
         mode = { "n" },
         "<cmd>tabnew|term<cr>",
       },

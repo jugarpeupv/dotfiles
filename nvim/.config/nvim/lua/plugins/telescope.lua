@@ -10,6 +10,7 @@ return {
     dependencies = {
       { "nvim-telescope/telescope-dap.nvim" },
       { "gbprod/yanky.nvim" },
+      -- { "Myzel394/jsonfly.nvim" },
       { "jugarpeupv/git-worktree.nvim" },
       {
         "nvim-telescope/telescope-fzf-native.nvim",
@@ -248,7 +249,7 @@ return {
           git_branches = {
             layout_strategy = "vertical",
             mappings = {
-              i = { ["<C-y>"] = require("jg.custom.telescope").set_upstream }
+              i = { ["<C-y>"] = require("jg.custom.telescope").set_upstream },
             },
           },
         },
@@ -261,6 +262,15 @@ return {
           heading = {
             treesitter = true,
           },
+          -- jsonfly = {
+          --   layout_strategy = "horizontal",
+          --   prompt_position = "top",
+          --   layout_config = {
+          --     mirror = false,
+          --     prompt_position = "top",
+          --     preview_width = 0.35
+          --   }
+          -- },
           ["zf-native"] = {
             -- options for sorting file-like items
             file = {
@@ -296,13 +306,13 @@ return {
           egrepify = {
             -- intersect tokens in prompt ala "str1.*str2" that ONLY matches
             -- if str1 and str2 are consecutively in line with anything in between (wildcard)
-            AND = true,             -- default
-            permutations = false,   -- opt-in to imply AND & match all permutations of prompt tokens
-            lnum = true,            -- default, not required
-            lnum_hl = "EgrepifyLnum", -- default, not required, links to `Constant`
-            col = false,            -- default, not required
-            col_hl = "EgrepifyCol", -- default, not required, links to `Constant`
-            title = true,           -- default, not required, show filename as title rather than inline
+            AND = true,                   -- default
+            permutations = false,         -- opt-in to imply AND & match all permutations of prompt tokens
+            lnum = true,                  -- default, not required
+            lnum_hl = "EgrepifyLnum",     -- default, not required, links to `Constant`
+            col = false,                  -- default, not required
+            col_hl = "EgrepifyCol",       -- default, not required, links to `Constant`
+            title = true,                 -- default, not required, show filename as title rather than inline
             filename_hl = "EgrepifyFile", -- default, not required, links to `Title`
             -- suffix = long line, see screenshot
             -- EXAMPLE ON HOW TO ADD PREFIX!
@@ -438,6 +448,7 @@ return {
       telescope.load_extension("grapple")
       telescope.load_extension("heading")
       telescope.load_extension("yank_history")
+      -- telescope.load_extension("jsonfly")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")
       -- telescope.load_extension('node_modules')

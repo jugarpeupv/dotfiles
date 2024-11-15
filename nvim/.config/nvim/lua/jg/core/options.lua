@@ -5,9 +5,9 @@ opt.relativenumber = true -- show relative line numbers
 opt.number = true         -- shows absolute line number on cursor line (when relative number is on)
 
 -- tabs & indentation
-opt.tabstop = 2       -- 2 spaces for tabs (prettier default)
-opt.shiftwidth = 2    -- 2 spaces for indent width
-opt.expandtab = true  -- expand tab to spaces
+opt.tabstop = 2      -- 2 spaces for tabs (prettier default)
+opt.shiftwidth = 2   -- 2 spaces for indent width
+opt.expandtab = true -- expand tab to spaces
 
 -- opt.expandtab = false -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
@@ -25,7 +25,7 @@ opt.ea = true         -- equal always, windows same size
 -- cursor line
 opt.cursorline = true -- highlight the current cursor line
 opt.scrolloff = 4
-opt.scrollback = 4000
+opt.scrollback = 6000
 opt.sidescrolloff = 4
 opt.hlsearch = true
 opt.incsearch = true
@@ -103,13 +103,13 @@ opt.list = true
 
 local space = "·"
 opt.listchars:append({
-	-- tab = "» ",
-  tab="  ",
-	-- multispace = space,
-	-- lead = space,
-	-- trail = "󱁐",
+  -- tab = "» ",
+  tab = "  ",
+  -- multispace = space,
+  -- lead = space,
+  -- trail = "󱁐",
   trail = space,
-	nbsp = "&",
+  nbsp = "&",
 })
 -- opt.listchars:append("trail:.")
 -- opt.listchars:append("eol:↴")
@@ -127,7 +127,26 @@ vim.o.foldenable = false
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.o.foldtext = ""
+vim.o.foldopen = "search,tag,undo"
 
 opt.updatetime = 1000
 
 vim.g.suda_smart_edit = 1
+
+-- vim.opt.foldnestmax = 3
+-- vim.opt.foldlevel = 99
+-- vim.opt.foldlevelstart = 99
+--
+-- vim.opt.foldmethod = "expr"
+-- vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- vim.opt.foldtext = ""
+
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--   callback = function()
+--     vim.defer_fn(function()
+--       vim.opt.foldmethod = "expr"
+--       vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+--       vim.opt.foldtext = ""
+--     end, 100)
+--   end,
+-- })

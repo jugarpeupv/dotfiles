@@ -168,7 +168,7 @@ return {
   -- },
   {
     "ziontee113/icon-picker.nvim",
-    keys = { { "<leader>pi", "<cmd>IconPickerYank<cr>" } },
+    keys = { { "<leader>ip", "<cmd>IconPickerYank<cr>" } },
     -- dependencies = { "nvim-telescope/telescope-ui-select.nvim" },
     config = function()
       require("icon-picker").setup({ disable_legacy_commands = true })

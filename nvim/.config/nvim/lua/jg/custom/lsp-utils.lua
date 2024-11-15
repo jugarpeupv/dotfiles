@@ -1,6 +1,9 @@
+local navbuddy = require("nvim-navbuddy")
+
 local M = {}
 
 M.attach_lsp_config = function(client, bufnr)
+  navbuddy.attach(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
   local keymap = vim.keymap                                               -- for conciseness
   -- keymap.set("n", "gI", "<cmd>Lspsaga finder<CR>", opts)                  -- show definition, references

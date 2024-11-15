@@ -34,7 +34,7 @@ return {
             -- yellow = "#74C7EC",
             -- yellow = "#0db9d7",
             -- yellow = "#90dcd1",
-            -- yellow = "#F9E2AF",
+            -- yellow = "#F5E0DC",
             -- yellow = "#F38BA8",
             -- yellow = "#F5C2E7",
             -- yellow = "#A6E3A1",
@@ -85,7 +85,7 @@ return {
             -- maroon = "#F38BA8",
             -- yellow = "#8ee2cf",
             -- red = "#89B4FA",
-            -- teal = "#F9E2AF",
+            -- teal = "#F5E0DC",
             -- sky = "#F5C2E7"
             -- maroon = "#89ddff",
             -- maroon = "#9d7cd8",
@@ -178,7 +178,7 @@ return {
             ["@markup.heading.1.markdow"] = { fg = "#F5C2E7" },
             ["@markup.heading.2.markdow"] = { fg = "#89ddff" },
             ["@markup.heading.3.markdow"] = { fg = "#94E2D5" },
-            ["@markup.heading.4.markdow"] = { fg = "#F9E2AF" },
+            ["@markup.heading.4.markdow"] = { fg = "#F5E0DC" },
             Ignore = { fg = "#394b70" },
             NeotestPassed = { fg = "#8ee2cf" },
             EgrepifyFile = { fg = "#f2cdcd" },
@@ -191,7 +191,7 @@ return {
             FloatBorder = { fg = "#394b70" },
 
             -- VIRA
-            viraTitles = { fg = "#F9E2AF" },
+            viraTitles = { fg = "#F5E0DC" },
             viraDetailsStatusInProgress = { fg = "#F38BA8" },
             viraDetailsEpic = { fg = "#F5C2E7" },
             viraDetailsTypeStory = { fg = "#8ee2cf" },
@@ -253,7 +253,7 @@ return {
       vim.cmd([[highlight TSRainbowViolet guifg=#89B4FA]])
       vim.cmd([[highlight TSRainbowCyan guifg=#74C7EC]])
 
-      vim.cmd([[highlight DiagnosticUnderlineWarn gui=undercurl guisp=#F9E2AF]])
+      vim.cmd([[highlight DiagnosticUnderlineWarn gui=undercurl guisp=#F5E0DC]])
       vim.cmd([[highlight DiagnosticUnderlineHint gui=underline guisp=#89ddff]])
       vim.cmd([[highlight DiagnosticUnderlineInfo gui=undercurl guisp=#89B4FA]])
       vim.cmd([[highlight DiagnosticUnderlineError gui=undercurl guisp=#f38bad]])
@@ -418,6 +418,19 @@ return {
       vim.cmd([[hi DiagnosticUnderlineHint gui=undercurl]])
       vim.cmd([[hi barbecue_modified guifg=#bbc2e0]])
 
+
+      vim.cmd([[hi NvimTreeFolderIcon guifg=#89B4FA]])
+      vim.cmd([[hi NvimTreeRootFolder gui=none]])
+      vim.cmd([[highlight NvimTreeGitDirty guifg=#F5E0DC]])
+      vim.cmd([[highlight NvimTreeGitStaged guifg=#8ee2cf]])
+      vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F5C2E7]])
+      -- vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F38BA8]])
+      vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#737aa2]])
+      -- vim.cmd [[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]]
+      vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
+      vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
+      vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
+
       -- Name	Latte	Frappe	Macchiato	Mocha	Usage
       -- rosewater	#dc8a78	#F2D5CF	#F4DBD6	#F5E0DC	Winbar
       -- flamingo	#DD7878	#EEBEBE	#F0C6C6	#F2CDCD	Target word
@@ -426,7 +439,7 @@ return {
       -- red	#D20F39	#E78284	#ED8796	#F38BA8	Error
       -- maroon	#E64553	#EA999C	#EE99A0	#EBA0AC	Lighter red
       -- peach	#FE640B	#EF9F76	#F5A97F	#FAB387	Number
-      -- yellow	#df8e1d	#E5C890	#EED49F	#F9E2AF	Warning
+      -- yellow	#df8e1d	#E5C890	#EED49F	#F5E0DC	Warning
       -- green	#40A02B	#A6D189	#A6DA95	#A6E3A1	Diff add
       -- teal	#179299	#81C8BE	#8BD5CA	#94E2D5	Hint
       -- sky	#04A5E5	#99D1DB	#91D7E3	#89DCEB	Operator
@@ -491,7 +504,7 @@ return {
       vim.g.terminal_color_0 = "#a3a7bc"
       vim.g.terminal_color_1 = "#F38BA8"
       vim.g.terminal_color_2 = "#94E2D5"
-      vim.g.terminal_color_3 = "#F9E2AF"
+      vim.g.terminal_color_3 = "#F5E0DC"
       vim.g.terminal_color_4 = "#B4BEFE"
       vim.g.terminal_color_5 = "#CA9EE6"
       vim.g.terminal_color_6 = "#89DCEB"
@@ -499,7 +512,7 @@ return {
       vim.g.terminal_color_8 = "#a3a7bc"
       vim.g.terminal_color_9 = "#F38BA8"
       vim.g.terminal_color_10 = "#94E2D5"
-      vim.g.terminal_color_11 = "#F9E2AF"
+      vim.g.terminal_color_11 = "#F5E0DC"
       vim.g.terminal_color_12 = "#89DCEB"
       vim.g.terminal_color_13 = "#F2CDCD"
       vim.g.terminal_color_14 = "#89DCEB"

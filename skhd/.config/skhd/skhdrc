@@ -30,7 +30,7 @@ shift + alt - 1 : osascript ~/.config/skhd/Scripts/drawio.scpt
 shift + alt - 3 : osascript ~/.config/skhd/Scripts/new-figma-window.scpt
 shift + alt - 2 : osascript ~/.config/skhd/Scripts/new-powerpoint-window.scpt
 shift + alt - 4 : osascript ~/.config/skhd/Scripts/new-simulator-window.scpt
-shift + alt - y : osascript ~/.config/skhd/Scripts/new-citrix-window.scpt
+shift + alt - y : osascript ~/.config/skhd/Scripts/new-obs-window.scpt
 
 
 

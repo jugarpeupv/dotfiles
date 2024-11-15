@@ -7,28 +7,33 @@ return {
     -- priority = 800,
     opts = {
       override = {
+        pptx = {
+          icon = '󱎐',
+          name = "ppxpowerpiont",
+          color = "#8ee2cf",
+        },
         http = {
-          icon = '',
+          icon = "",
           name = "http",
-          color = "#9CDCFE"
+          color = "#9CDCFE",
         },
         yml = {
-          icon = '󰘧',
+          icon = "󰘧",
           color = "#9CDCFE",
           name = "yml",
         },
         png = {
-          icon = '',
+          icon = "",
           color = "#CBA6F7",
           name = "png",
         },
         yaml = {
-          icon = '󰘧',
+          icon = "󰘧",
           color = "#9CDCFE",
           name = "yaml",
         },
         dot = {
-          icon = '󱁉',
+          icon = "󱁉",
           color = "#9CDCFE",
           name = "puntodot",
         },
@@ -99,7 +104,7 @@ return {
           icon = "",
           name = "java",
           -- color = "#9CDCFE",
-          color = "#F38BA8"
+          color = "#F38BA8",
         },
         gradle = {
           icon = "",
@@ -115,16 +120,16 @@ return {
         js = {
           icon = "",
           name = "javascript",
-          color = "#F9E2AF",
+          color = "#F5E0DC",
         },
         ["cjs"] = {
           icon = "",
-          color = "#F9E2AF",
+          color = "#F5E0DC",
           name = "Cjs",
         },
         ["mjs"] = {
           icon = "",
-          color = "#F9E2AF",
+          color = "#F5E0DC",
           name = "mjs1",
         },
         pdf = {
@@ -145,7 +150,7 @@ return {
         zip = {
           icon = "",
           name = "zipp",
-          color = "#F9E2AF",
+          color = "#F5E0DC",
         },
         ["CODEOWNERS"] = { icon = "󱖨", color = "#73daca", name = "codeownersfile1" },
         ["d.ts"] = {
@@ -200,6 +205,8 @@ return {
         ["webpack.config.js"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfig" },
         ["README.md"] = { icon = "", color = "#9CDCFE", name = "readmemd" },
         [".gitattributes"] = { icon = "󰊢", color = "#f38bad", name = "gitattributes" },
+        ["CODE_OF_CONDUCT.md"] = { icon = "", color = "#f38bad", name = "codeofconduct" },
+        ["LICENSE"] = { icon = "", color = "#f38bad", name = "licensefile" },
         [".gitignore"] = { icon = "󰊢", color = "#7C7F93", name = "gitignore" },
         [".git"] = { icon = "󰊢", color = "#CA9EE6", name = "giticonworktree" },
         ["readme.md"] = { icon = "", color = "#9CDCFE", name = "readmemd1" },
@@ -211,8 +218,8 @@ return {
         ["*.package.json"] = { icon = "", color = "#73daca", name = "PackageJson2" },
         ["*package.json"] = { icon = "", color = "#73daca", name = "PackageJson3" },
         ["package-lock.json"] = { icon = "", color = "#73daca", name = "PackageLockJson" },
-        ["pnpm-lock.yaml"] = { icon = "", color = "#F9E2AF", name = "pnpmLockYaml" },
-        ["favicon.ico"] = { icon = "", color = "#F9E2AF", name = "faviconico" },
+        ["pnpm-lock.yaml"] = { icon = "", color = "#F5E0DC", name = "pnpmLockYaml" },
+        ["favicon.ico"] = { icon = "", color = "#F5E0DC", name = "faviconico" },
         ["codeowners"] = { icon = "󱖨", color = "#73daca", name = "codeownersfile2" },
         ["jenkinsfile"] = { icon = "", name = "Jenkins8", color = "#c0caf5" },
         ["jenkinsfileci"] = { icon = "", name = "Jenkins3", color = "#c0caf5" },
@@ -230,7 +237,7 @@ return {
         ["eslint.config.ts"] = { icon = "󰱺", color = "#9CDCFE", name = "eslintconfigts" },
         ["eslint.config.mjs"] = { icon = "󰱺", color = "#9CDCFE", name = "eslintconfigmjs" },
         [".eslintrc.json"] = { icon = "󰱺", color = "#9CDCFE", name = "eslintrcjson" },
-        [".eslintrc.base.json"] = { icon = "󰱺", color = "#9CDCFE", name = "eslintrcjson" },
+        [".eslintrc.base.json"] = { icon = "󰱺", color = "#9CDCFE", name = "eslintrcbasejson" },
         [".eslint-report.json"] = { icon = "󰱺", color = "#9CDCFE", name = "eslintreportjson" },
         [".actrc"] = { icon = "", color = "#CBA6F7", name = "actrc" },
         ["commitlint.config.ts"] = { icon = "󰜘", color = "#CBA6F7", name = "commitlintconfig12" },
@@ -312,8 +319,8 @@ return {
         ["module.ts"] = { icon = "", color = "#CBA6F7", name = "AngularModule1" },
         ["*.module.ts"] = { icon = "", color = "#CBA6F7", name = "AngularModule2" },
         [".module.ts"] = { icon = "", color = "#CBA6F7", name = "AngularModule" },
-        ["service.ts"] = { icon = "", color = "#F9E2AF", name = "AngularService1" },
-        [".service.ts"] = { icon = "", color = "#F9E2AF", name = "AngularService2" },
+        ["service.ts"] = { icon = "", color = "#F5E0DC", name = "AngularService1" },
+        [".service.ts"] = { icon = "", color = "#F5E0DC", name = "AngularService2" },
 
         ["component.ts"] = { icon = "󰚿", color = "#89b4fa", name = "AngularComponent1" },
 
@@ -333,7 +340,7 @@ return {
         ["bun.lockb"] = { icon = "", color = "#F5C2E7", name = "bunlock" },
         ["codeowners"] = { icon = "󱖨", color = "#73daca", name = "codeownersfile3" },
         [".editorconfig"] = { icon = "", color = "#c0caf5", name = "Editorconfig" },
-        ["drawio"] = { icon = "󰇟", color = "#F9E2AF", name = "drawio1" },
+        ["drawio"] = { icon = "󰇟", color = "#F5E0DC", name = "drawio1" },
         ["spec.js"] = {
           icon = "",
           color = "#9CDCFE",

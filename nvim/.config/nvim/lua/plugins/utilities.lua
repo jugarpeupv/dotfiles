@@ -1,4 +1,40 @@
 return {
+  -- lazy.nvim
+  {
+    "gennaro-tedesco/nvim-jqx",
+    event = { "BufReadPost" },
+    ft = { "json", "yaml" },
+  },
+  {
+    "sontungexpt/url-open",
+    -- event = "VeryLazy",
+    keys = { { "gx", "<esc>:URLOpenUnderCursor<cr>" } },
+    cmd = "URLOpenUnderCursor",
+    config = function()
+      local status_ok, url_open = pcall(require, "url-open")
+      if not status_ok then
+        return
+      end
+      url_open.setup({
+        highlight_url = {
+          all_urls = {
+            enabled = false,
+            fg = "#21d5ff", -- "text" or "#rrggbb"
+            -- fg = "text", -- text will set underline same color with text
+            bg = nil, -- nil or "#rrggbb"
+            underline = true,
+          },
+          cursor_move = {
+            enabled = false,
+            fg = "#199eff", -- "text" or "#rrggbb"
+            -- fg = "text", -- text will set underline same color with text
+            bg = nil, -- nil or "#rrggbb"
+            underline = true,
+          },
+        },
+      })
+    end,
+  },
   -- https://github.com/johmsalas/text-case.nvim
   -- { "VidocqH/data-viewer.nvim" },
   -- { "Djancyp/regex.nvim" },
@@ -7,7 +43,7 @@ return {
   -- { "nvim-spider" }
   -- { "airblade/vim-matchquote" },
   -- { "ton/vim-bufsurf" },
-  { 'taybart/b64.nvim', cmd = { "B64Encode", "B64Decode" } },
+  { "taybart/b64.nvim",         cmd = { "B64Encode", "B64Decode" } },
   {
     "lambdalisue/vim-suda",
     cmd = { "SudaWrite", "SudaRead" },
@@ -37,7 +73,7 @@ return {
       skipInsignificantPunctuation = true,
       consistentOperatorPending = true, -- see "Consistent Operator-pending Mode" in the README
       subwordMovement = true,
-      customPatterns = {},              -- check "Custom Movement Patterns" in the README for details
+      customPatterns = {},           -- check "Custom Movement Patterns" in the README for details
     },
   },
   -- { https://github.com/axieax/urlview.nvim }

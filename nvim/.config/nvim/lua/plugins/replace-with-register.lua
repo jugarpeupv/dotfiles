@@ -148,13 +148,13 @@ return {
           require("substitute").line()
         end,
       },
-      {
-        "S",
-        mode = { "n" },
-        function()
-          require("substitute").eol()
-        end,
-      },
+      -- {
+      --   "S",
+      --   mode = { "n" },
+      --   function()
+      --     require("substitute").eol()
+      --   end,
+      -- },
       {
         "s",
         mode = { "x" },

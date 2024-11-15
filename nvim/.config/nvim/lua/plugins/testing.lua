@@ -29,22 +29,45 @@ function _G.RunVimTest(cmd_name)
 end
 
 return {
-  "vim-test/vim-test",
-  --   event = {
-  --     "BufEnter *.test.[tj]s",
-  --     "BufEnter *.spec.[tj]s",
-  config = function()
-    vim.g["test#strategy"] = "neovim_sticky"
-    vim.g["test#neovim_sticky#reopen_window"] = 1
-    vim.g["test#preserve_screen"] = 1
-    vim.g["test#neovim_sticky#kill_previous"] = 1
-    vim.g["VimuxHeight"] = "15"
-  end,
-  keys = {
-    -- { "<leader>te", RunVimTest("TestNearest"), desc = "Run nearest test" },
-    { "<leader>tf", RunVimTest("TestFile"),    desc = "Run all tests in the current file" },
-    -- { '<leader>', RunVimTest('TestSuite'), desc = "Run the nearest test suite" },
-    -- { '<leader>rr', RunVimTest('TestLast'), desc = "Run last test again" }
+  -- {
+  --   "David-Kunz/jester",
+  --   keys = {
+  --     {
+  --       "<leader>DN",
+  --       function()
+  --         require("jester").debug()
+  --       end,
+  --       desc = "Debug test file",
+  --     },
+  --   },
+  --   config = function()
+  --     require("jester").setup({
+  --       dap = {
+  --         type = "pwa-node",
+  --         sourceMaps = false,
+  --       },
+  --     })
+  --   end,
+  -- },
+  {
+    "vim-test/vim-test",
+    --   event = {
+    --     "BufEnter *.test.[tj]s",
+    --     "BufEnter *.spec.[tj]s",
+    config = function()
+      vim.g["test#strategy"] = "neovim_sticky"
+      vim.g["test#neovim_sticky#reopen_window"] = 1
+      vim.g["test#preserve_screen"] = 1
+      vim.g["test#neovim_sticky#kill_previous"] = 1
+      vim.g["VimuxHeight"] = "15"
+    end,
+    keys = {
+      -- { "<leader>te", RunVimTest("TestNearest"), desc = "Run nearest test" },
+      { "<leader>tn", RunVimTest("TestNearest"), desc = "Run nearest test" },
+      { "<leader>tf", RunVimTest("TestFile"),    desc = "Run all tests in the current file" },
+      -- { '<leader>', RunVimTest('TestSuite'), desc = "Run the nearest test suite" },
+      -- { '<leader>rr', RunVimTest('TestLast'), desc = "Run last test again" }
+    },
   },
   -- {
   --   "David-Kunz/jester",
@@ -74,46 +97,54 @@ return {
   --   end,
   -- },
 
-  -- {
-  --   "nvim-neotest/neotest",
-  --   event = {
-  --     "BufEnter *.test.[tj]s",
-  --     "BufEnter *.spec.[tj]s",
-  --   },
-  --   dependencies = {
-  --     "mortepau/codicons.nvim",
-  --     "nvim-neotest/neotest-jest",
-  --     "nvim-neotest/nvim-nio",
-  --     "nvim-lua/plenary.nvim",
-  --     "antoinemadec/FixCursorHold.nvim",
-  --     "nvim-treesitter/nvim-treesitter",
-  --   },
-  --   config = function()
-  --     require("neotest").setup({
-  --       adapters = {
-  --         require("neotest-jest")({
-  --           -- jestCommand = "npm test --",
-  --           -- env = { CI = true },
-  --           -- cwd = function(path)
-  --           --   return vim.fn.getcwd()
-  --           -- end,
-  --         }),
-  --       },
-  --     })
-  --
-  --     vim.keymap.set({ "n" }, "<leader>Tr", function()
-  --       require("neotest").run.run()
-  --     end, {})
-  --
-  --     vim.keymap.set({ "n" }, "<leader>Td", function()
-  --       require("neotest").run.run({ strategy = "dap" })
-  --     end, {})
-  --
-  --     vim.keymap.set({ "n" }, "<leader>Tf", function()
-  --       require("neotest").run.run(vim.fn.expand("%"))
-  --     end, {})
-  --   end,
-  -- },
+  {
+    "nvim-neotest/neotest",
+    event = {
+      "BufEnter *.test.[tj]s",
+      "BufEnter *.spec.[tj]s",
+    },
+    dependencies = {
+      "mortepau/codicons.nvim",
+      "nvim-neotest/neotest-jest",
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require("neotest-jest")({
+            -- jestCommand = "npm test --",
+            -- env = { CI = true },
+            -- cwd = function(path)
+            --   return vim.fn.getcwd()
+            -- end,
+          }),
+        },
+      })
+
+      vim.keymap.set({ "n" }, "<leader>oo", function()
+        require("neotest").output_panel.toggle()
+        local win = vim.fn.bufwinid("Neotest Output Panel")
+        if win > -1 then
+          vim.api.nvim_set_current_win(win)
+        end
+      end, {})
+
+      vim.keymap.set({ "n" }, "<leader>Tn", function()
+        require("neotest").run.run()
+      end, {})
+
+      vim.keymap.set({ "n" }, "<leader>DN", function()
+        require("neotest").run.run({ strategy = "dap" })
+      end, {})
+
+      vim.keymap.set({ "n" }, "<leader>Tf", function()
+        require("neotest").run.run(vim.fn.expand("%"))
+      end, {})
+    end,
+  },
 }
 
 --

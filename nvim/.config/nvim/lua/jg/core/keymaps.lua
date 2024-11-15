@@ -27,7 +27,7 @@ keymap("v", ">", ">gv", opts)
 
 -- Folding
 -- keymap("n", "<C-p>", "za", opts)
-keymap("n", ";", "za", opts)
+-- keymap("n", ";", "za", opts)
 -- Paste
 keymap("n", "p", "p=`]", opts)
 -- keymap("n", "p", "p]", opts)
@@ -239,7 +239,8 @@ keymap("n", "<Leader>zh", "<cmd>:e ~/.zshrc<cr>", opts)
 keymap("n", "<Leader>gc", "<cmd>lua require('telescope.builtin').git_commits()<cr>", opts)
 
 -- Hop
-vim.api.nvim_set_keymap("n", "<leader>ww", "<cmd>lua require'hop'.hint_words()<cr>", opts)
+-- vim.api.nvim_set_keymap("n", "<leader>ww", "<cmd>lua require'hop'.hint_words()<cr>", opts)
+vim.api.nvim_set_keymap("n", "S", "<cmd>lua require'hop'.hint_words()<cr>", opts)
 
 -- JsonPath
 keymap("n", "<leader>cp", "<cmd>JsonPath<CR>", opts)

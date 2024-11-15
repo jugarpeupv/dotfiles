@@ -1,4 +1,7 @@
 return {
+-- {
+--     'mrloop/telescope-git-branch.nvim'
+-- },
   {
     "isakbm/gitgraph.nvim",
     dependencies = { "sindrets/diffview.nvim" },

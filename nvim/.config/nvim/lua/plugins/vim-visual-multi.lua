@@ -1,7 +1,7 @@
 return {
   {
     "mg979/vim-visual-multi",
-    keys = { { "<M-e>" }, { "<M-r>", mode = { "n", "v" } } },
+    keys = { { "<M-e>", mode = { "n", "v" } }, { "<M-r>", mode = { "n", "v" } } },
     -- event = "VeryLazy",
     -- event = { "BufRead", "BufNewFile" },
     init = function()
@@ -22,7 +22,7 @@ return {
         -- ["Redo"] = "<C-r>",
         ["Find Under"] = "<M-e>",
         ["Select All"] = "<M-a>",
-        -- ["Find Subword Under"] = "<M-e>",
+        ["Find Subword Under"] = "<M-e>",
         -- ["Skip Region"] = "<C-s>",
         ["Select h"] = "<S-Left>",
         ["Select l"] = "<S-Right>",

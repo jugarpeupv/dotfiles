@@ -4,14 +4,17 @@ return {
     -- event = "VeryLazy",
     -- cmd = { "DiffviewOpen" },
     -- event = { "BufReadPost", "BufNewFile" },
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
     keys = {
-      { "<leader>gd", mode = "n", "<cmd>DiffviewOpen<cr>" },
-      { "<leader>cc", mode = "n", "<cmd>DiffviewClose<cr>" },
+      { "<leader>gd", mode = "n",     "<cmd>DiffviewOpen<cr>" },
+      { "<leader>cc", mode = "n",     "<cmd>DiffviewClose<cr>" },
       { "<leader>gv", mode = { "v" }, "<cmd>'<,'>DiffviewFileHistory<cr>" },
       { "<leader>gv", mode = { "n" }, "<cmd>DiffviewFileHistory %<cr>" },
-      { "<leader>ll", mode = "n", "<CMD>DiffviewFileHistory --range=HEAD<CR>" },
-      { "<leader>l5", mode = "n", "<CMD>DiffviewFileHistory --range=HEAD~50..HEAD<CR>" },
-      { "<leader>l0", mode = "n", "<CMD>DiffviewFileHistory --range=HEAD~10..HEAD<CR>" },
+      { "<leader>ll", mode = "n",     "<CMD>DiffviewFileHistory --range=HEAD<CR>" },
+      { "<leader>l5", mode = "n",     "<CMD>DiffviewFileHistory --range=HEAD~50..HEAD<CR>" },
+      { "<leader>l0", mode = "n",     "<CMD>DiffviewFileHistory --range=HEAD~10..HEAD<CR>" },
     },
     config = function()
       -- vim.cmd([[hi StatusLine guifg=#cdd6f5 guibg=#292e42]])
@@ -197,7 +200,7 @@ return {
             ["gf"] = actions.goto_file,                   -- Open the file in a new split in the previous tabpage
             ["<C-w><C-f>"] = actions.goto_file_split,     -- Open the file in a new split
             ["<C-w>gf"] = actions.goto_file_tab,          -- Open the file in a new tabpage
-            ["<M-k>"] = actions.focus_files,          -- Bring focus to the file panel
+            ["<M-k>"] = actions.focus_files,              -- Bring focus to the file panel
             ["<M-j>"] = actions.toggle_files,             -- Toggle the file panel.
             ["<BS>"] = actions.cycle_layout,
             ["[x"] = actions.prev_conflict,               -- In the merge_tool: jump to the previous conflict
@@ -252,8 +255,8 @@ return {
             ["i"] = actions.listing_style, -- Toggle between 'list' and 'tree' views
             ["f"] = actions.toggle_flatten_dirs, -- Flatten empty subdirectories in tree listing style.
             ["R"] = actions.refresh_files, -- Update stats and entries in the file list.
-            ["<M-k>"] = actions.focus_files,          -- Bring focus to the file panel
-            ["<M-j>"] = actions.toggle_files,             -- Toggle the file panel.
+            ["<M-k>"] = actions.focus_files, -- Bring focus to the file panel
+            ["<M-j>"] = actions.toggle_files, -- Toggle the file panel.
             ["<BS>"] = actions.cycle_layout,
             ["[x"] = actions.prev_conflict,
             ["]x"] = actions.next_conflict,
@@ -279,8 +282,8 @@ return {
             ["gf"] = actions.goto_file,
             ["<C-w><C-f>"] = actions.goto_file_split,
             ["<C-w>gf"] = actions.goto_file_tab,
-            ["<M-k>"] = actions.focus_files,          -- Bring focus to the file panel
-            ["<M-j>"] = actions.toggle_files,             -- Toggle the file panel.
+            ["<M-k>"] = actions.focus_files, -- Bring focus to the file panel
+            ["<M-j>"] = actions.toggle_files, -- Toggle the file panel.
             ["<BS>"] = actions.cycle_layout,
           },
           option_panel = {

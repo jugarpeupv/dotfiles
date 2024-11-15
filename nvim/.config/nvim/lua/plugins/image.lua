@@ -6,7 +6,7 @@ return {
   -- event = "VeryLazy",
   ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
   -- branch = "feat/toggle-rendering",
-  init = function ()
+  config = function ()
     require("image").setup({
       backend = "kitty",
       integrations = {

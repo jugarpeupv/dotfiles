@@ -43,6 +43,20 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     -- cmd = { "LspInfo" },
     dependencies = {
+      {
+        "SmiteshP/nvim-navbuddy",
+        dependencies = {
+          "SmiteshP/nvim-navic",
+          "MunifTanjim/nui.nvim",
+        },
+        opts = {
+          lsp = { auto_attach = true },
+          window = {
+            border = "single", -- "rounded", "double", "solid", "none"
+            size = "80%", -- Or table format example: { height = "40%", width = "100%"}
+            }
+          }
+        },
       -- {
       --   "nvim-java/nvim-java",
       --   event = { "BufEnter *.java" },
@@ -506,11 +520,11 @@ return {
         --   return require("lspconfig.server_configurations.eslint").default_config.root_dir(filename)
         -- end,
         cmd = { "/Users/jgarcia/.local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
-        settings = {
-          experimental = {
-            useFlatConfig = false,
-          },
-        },
+        -- settings = {
+        --   experimental = {
+        --     useFlatConfig = true,
+        --   },
+        -- },
         on_attach = on_attach,
         capabilities = capabilities,
         -- filetypes = {

@@ -1,5 +1,16 @@
 -- return {}
 return {
+  -- {
+  --   "nvim-tree/nvim-tree.lua",
+  --   version = "*",
+  --   lazy = false,
+  --   dependencies = {
+  --     "nvim-tree/nvim-web-devicons",
+  --   },
+  --   config = function()
+  --     require("nvim-tree").setup({})
+  --   end,
+  -- },
   {
     "nvim-tree/nvim-tree.lua",
     -- commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
@@ -76,11 +87,6 @@ return {
         end
         -- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
       end)
-
-      local status_ok, nvim_tree = pcall(require, "nvim-tree")
-      if not status_ok then
-        return
-      end
 
       local function on_attach(bufnr)
         local opts = function(desc)
@@ -300,6 +306,11 @@ return {
       local WIDTH_RATIO = 0.5 -- You can change this too
 
       -- setup with all defaults
+      local status_ok, nvim_tree = pcall(require, "nvim-tree")
+      if not status_ok then
+        return
+      end
+
       nvim_tree.setup({
         ui = {
           confirm = {
@@ -594,17 +605,17 @@ return {
         },
       }) -- END_DEFAULT_OPTS
 
-      vim.cmd([[hi NvimTreeFolderIcon guifg=#89B4FA]])
-      vim.cmd([[hi NvimTreeRootFolder gui=none]])
-      vim.cmd([[highlight NvimTreeGitDirty guifg=#F9E2AF]])
-      vim.cmd([[highlight NvimTreeGitStaged guifg=#8ee2cf]])
-      vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F5C2E7]])
-      -- vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F38BA8]])
-      vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#737aa2]])
-      -- vim.cmd [[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]]
-      vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
-      vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
-      vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
+      -- vim.cmd([[hi NvimTreeFolderIcon guifg=#89B4FA]])
+      -- vim.cmd([[hi NvimTreeRootFolder gui=none]])
+      -- vim.cmd([[highlight NvimTreeGitDirty guifg=#F9E2AF]])
+      -- vim.cmd([[highlight NvimTreeGitStaged guifg=#8ee2cf]])
+      -- vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F5C2E7]])
+      -- -- vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F38BA8]])
+      -- vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#737aa2]])
+      -- -- vim.cmd [[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]]
+      -- vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
+      -- vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
+      -- vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
     end,
   },
   -- {
