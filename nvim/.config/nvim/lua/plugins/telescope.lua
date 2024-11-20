@@ -9,6 +9,7 @@ return {
     tag = "0.1.8",
     dependencies = {
       { "nvim-telescope/telescope-dap.nvim" },
+      -- { "tom-anders/telescope-vim-bookmarks.nvim" },
       { "gbprod/yanky.nvim" },
       -- { "Myzel394/jsonfly.nvim" },
       { "jugarpeupv/git-worktree.nvim" },
@@ -179,7 +180,8 @@ return {
               ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
               ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
               ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-              ["<C-x>"] = actions.send_selected_to_qflist + actions.open_qflist,
+              ["<C-y>"] = actions.send_selected_to_qflist + actions.open_qflist,
+              ["<C-x>"] = "delete_buffer",
               -- ["<C-l>"] = actions.complete_tag,
               ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
               ["<C-a>"] = actions.git_create_branch,
@@ -206,6 +208,7 @@ return {
               ["M"] = actions.move_to_middle,
               ["L"] = actions.move_to_bottom,
               ["<BS>"] = "delete_buffer",
+              ["<C-x>"] = "delete_buffer",
 
               ["<C-j>"] = actions.move_selection_next,
               ["<C-k>"] = actions.move_selection_previous,

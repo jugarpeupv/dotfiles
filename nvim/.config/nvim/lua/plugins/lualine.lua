@@ -146,30 +146,30 @@ return {
 
     local branch = {
       "branch",
-      color = function(section)
-        local active_buf_full_path = vim.api.nvim_buf_get_name(0)
-
-        local wt_utils = require("jg.custom.worktree-utils")
-        local wt_info = wt_utils.get_wt_info(vim.fn.getcwd())
-
-        if next(wt_info) == nil then
-          return { fg = colors.alternate_black }
-        end
-
-        local escaped_wt_dir = wt_info["wt_dir"]:gsub("([^%w])", "%%%1")
-
-        -- if dir_name ~= branch and vim.bo.filetype ~= "TelescopePrompt" and exists_bare_dir == 1 then
-
-       if (vim.bo.filetype == "TelescopePrompt" or vim.bo.filetype == "toggleterm" or vim.bo.filetype == "BufTerm" or vim.bo.filetype == "") then
-          return { fg = colors.alternate_black }
-       end
-
-        if string.find(active_buf_full_path, escaped_wt_dir) then
-          return { fg = colors.alternate_black }
-        else
-          return { fg = "#F38BA8" }
-        end
-      end,
+      -- color = function(section)
+      --   local active_buf_full_path = vim.api.nvim_buf_get_name(0)
+      --
+      --   local wt_utils = require("jg.custom.worktree-utils")
+      --   local wt_info = wt_utils.get_wt_info(vim.fn.getcwd())
+      --
+      --   if next(wt_info) == nil then
+      --     return { fg = colors.alternate_black }
+      --   end
+      --
+      --   local escaped_wt_dir = wt_info["wt_dir"]:gsub("([^%w])", "%%%1")
+      --
+      --   -- if dir_name ~= branch and vim.bo.filetype ~= "TelescopePrompt" and exists_bare_dir == 1 then
+      --
+      --  if (vim.bo.filetype == "TelescopePrompt" or vim.bo.filetype == "toggleterm" or vim.bo.filetype == "BufTerm" or vim.bo.filetype == "") then
+      --     return { fg = colors.alternate_black }
+      --  end
+      --
+      --   if string.find(active_buf_full_path, escaped_wt_dir) then
+      --     return { fg = colors.alternate_black }
+      --   else
+      --     return { fg = "#F38BA8" }
+      --   end
+      -- end,
     }
 
     local diff = {

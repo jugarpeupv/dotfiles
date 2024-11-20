@@ -15,7 +15,6 @@ return {
           end
 
           local terminals = get_terminal_bufs()
-          print(vim.inspect(terminals))
 
           local there_are_no_terminal_buffers = next(terminals) == nil
 

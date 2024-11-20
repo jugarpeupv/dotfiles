@@ -97,20 +97,20 @@ return {
           require("overseer").setup()
         end,
       },
-      {
-        "theHamsta/nvim-dap-virtual-text",
-        config = function()
-          require("nvim-dap-virtual-text").setup({
-            display_callback = function (variable)
-              if #variable > 15 then
-                return " " .. string.sub(variable.value, 1, 15) .. "... "
-              end
-
-              return " " .. variable.value
-            end
-          })
-        end,
-      },
+      -- {
+      --   "theHamsta/nvim-dap-virtual-text",
+      --   config = function()
+      --     require("nvim-dap-virtual-text").setup({
+      --       display_callback = function (variable)
+      --         if #variable > 15 then
+      --           return " 󱐋 " .. string.sub(variable.value, 1, 15) .. "... "
+      --         end
+      --
+      --         return " 󱐋 " .. variable.value
+      --       end
+      --     })
+      --   end,
+      -- },
       { "jbyuki/one-small-step-for-vimkind" },
     },
     config = function()

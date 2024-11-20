@@ -188,7 +188,10 @@ return {
         show_dirname = true,
         show_basename = true,
         symbols = {
-          modified = "",
+          -- modified = "●",
+          modified = "⏺",
+          -- modified = "",
+          -- modified = "",
           -- modified = "●",
           -- modified = " "
           -- modified = "",

@@ -97,12 +97,18 @@ return {
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-y>"] = cmp.mapping(function()
+            if cmp.visible() then
+              cmp.confirm({ select = true })
+              return
+            elseif luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            end
             -- if luasnip.jumpable(-1) then
             --   luasnip.jump(-1)
             -- end
-            if luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            end
+            -- if luasnip.expand_or_locally_jumpable() then
+            --   luasnip.expand_or_jump()
+            -- end
           end, { "i", "s" }),
           ["<C-x>"] = cmp.mapping(function()
             -- if luasnip.expand_or_jumpable() then
@@ -122,7 +128,6 @@ return {
             -- elseif cmp.visible() then
             local filetype = vim.bo.filetype
             if filetype == "" then
-              print("filetype is nil")
               vim.api.nvim_feedkeys(t("<CR>"), "n", true)
               return
             elseif cmp.visible() then

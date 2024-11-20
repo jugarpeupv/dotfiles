@@ -43,20 +43,20 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     -- cmd = { "LspInfo" },
     dependencies = {
-      {
-        "SmiteshP/nvim-navbuddy",
-        dependencies = {
-          "SmiteshP/nvim-navic",
-          "MunifTanjim/nui.nvim",
-        },
-        opts = {
-          lsp = { auto_attach = true },
-          window = {
-            border = "single", -- "rounded", "double", "solid", "none"
-            size = "80%", -- Or table format example: { height = "40%", width = "100%"}
-            }
-          }
-        },
+      -- {
+      --   "SmiteshP/nvim-navbuddy",
+      --   dependencies = {
+      --     "SmiteshP/nvim-navic",
+      --     "MunifTanjim/nui.nvim",
+      --   },
+      --   opts = {
+      --     lsp = { auto_attach = true },
+      --     window = {
+      --       border = "single", -- "rounded", "double", "solid", "none"
+      --       size = "80%", -- Or table format example: { height = "40%", width = "100%"}
+      --       }
+      --     }
+      --   },
       -- {
       --   "nvim-java/nvim-java",
       --   event = { "BufEnter *.java" },

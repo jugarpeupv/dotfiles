@@ -15,10 +15,10 @@ vim.cmd([[
   " autocmd FileType qf set nobuflisted
   augroup end
 
-  " augroup _auto_resize
-  " autocmd!
-  " autocmd VimResized * tabdo wincmd =
-  " augroup end
+  augroup _auto_resize
+  autocmd!
+  autocmd VimResized * tabdo wincmd =
+  augroup end
 ]])
 
 vim.cmd([[autocmd BufRead,BufNewFile */node_modules/* lua vim.diagnostic.disable(0)]])

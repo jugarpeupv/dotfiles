@@ -81,7 +81,13 @@ keymap("n", "<Leader>of", "<cmd>lua require('telescope.builtin').oldfiles({ only
 keymap("n", "<Leader>rg", "<cmd>lua require('telescope.builtin').registers()<cr>", opts)
 keymap("n", "<Leader>ke", "<cmd>lua require('telescope.builtin').keymaps()<cr>", opts)
 keymap("n", "<Leader>cm", "<cmd>lua require('telescope.builtin').commands()<cr>", opts)
+keymap("n", "<Leader>mm", "<cmd>lua require('telescope.builtin').marks()<cr>", opts)
 keymap("n", "<Leader>td", "<cmd>lua require('telescope.builtin').diagnostics()<cr>", opts)
+
+
+keymap("n", "<Leader>Cd", "<cmd>lua vim.diagnostic.reset()<cr>", opts)
+
+
 keymap("n", "<Leader>bo", "<cmd>lua require('telescope').extensions.bookmarks.bookmarks()<cr>", opts)
 keymap("n", "<Leader>sy", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", opts)
 keymap("n", "<Leader>lr", "<cmd>LspRestart<cr>", opts)
@@ -96,6 +102,9 @@ keymap("n", "<M-k>", "<cmd>NvimTreeFindFile<cr>", opts)
 keymap("t", "<M-k>", "<C-\\><C-n><cmd>NvimTreeFindFile<cr>", opts)
 keymap("n", "<M-u>", "<cmd> lua require('trouble').next({skip_groups = true, jump = true})<cr>", opts)
 keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jump = true})<cr>", opts)
+
+keymap("t", "<M-o>", "<C-\\><C-n><M-o>", opts)
+keymap("t", "<M-i>", "<C-\\><C-n><M-i>", opts)
 
 keymap("n", "<M-8>", "<cmd>cnext<cr>", opts)
 keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
@@ -118,7 +127,7 @@ vim.keymap.set({ "n" }, "<Leader>bu", function()
     show_all_buffers = false,
     sort_mru = true,
     sort_lastused = true,
-    initial_mode = "normal",
+    -- initial_mode = "normal",
     theme = "ivy",
   })
 end, opts)

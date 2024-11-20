@@ -1,5 +1,108 @@
 return {
-  -- lazy.nvim
+  -- {
+  --   "chentoast/marks.nvim",
+  --   event = "VeryLazy",
+  --   opts = {},
+  -- },
+  -- {
+  --   "MattesGroeger/vim-bookmarks",
+  --   config = function()
+  --     vim.g.bookmark_save_per_working_dir = 1
+  --     vim.g.bookmark_auto_save = 1
+  --     vim.g.bookmark_sign = ''
+  --     vim.cmd([[highlight BookmarkSign guifg=#89B4FA]])
+  --     vim.cmd([[" Finds the Git super-project directory.
+  --       function! g:BMWorkDirFileLocation()
+  --           let filename = 'bookmarks'
+  --           let location = ''
+  --           if isdirectory('.git')
+  --               " Current work dir is git's work tree
+  --               let location = getcwd().'/.git'
+  --           else
+  --               " Look upwards (at parents) for a directory named '.git'
+  --               let location = finddir('info', '.;')
+  --           endif
+  --           if len(location) > 0
+  --               return location.'/'.filename
+  --           else
+  --               return getcwd().'/.'.filename
+  --           endif
+  --       endfunction]])
+  --     vim.keymap.set("n", "<leader>mm", "<cmd>Telescope vim_bookmarks all<cr>", { noremap = true, silent = true })
+  --   end,
+  -- },
+  {
+    "fnune/recall.nvim",
+    version = "*",
+    keys = {
+      {
+        mode = { "n" },
+        -- "<leader>mm",
+        "mm",
+        "<cmd>lua require('recall').toggle()<CR>",
+        { noremap = true, silent = true },
+      },
+      {
+        mode = { "n" },
+        -- "<leader>mn",
+        "mn",
+        "<cmd>lua require('recall').goto_next()<CR>",
+        { noremap = true, silent = true },
+      },
+      {
+        mode = { "n" },
+        -- "<leader>mp",
+        "mp",
+        "<cmd>lua require('recall').goto_prev()<CR>",
+        { noremap = true, silent = true },
+      },
+      {
+        mode = { "n" },
+        -- "<leader>mc",
+        "mc",
+        "<cmd>lua require('recall').clear()<CR>",
+        { noremap = true, silent = true },
+      },
+      {
+        mode = { "n" },
+        -- "<leader>ml",
+        "ml",
+        "<cmd>Telescope recall<CR>",
+        { noremap = true, silent = true },
+      },
+    },
+    config = function()
+      local recall = require("recall")
+      recall.setup({
+        sign = "",
+        sign_highlight = "Function",
+
+        telescope = {
+          autoload = true,
+          mappings = {
+            unmark_selected_entry = {
+              normal = "dd",
+              -- insert = "<M-d>",
+              insert = "<C-x>",
+            },
+          },
+        },
+
+        wshada = vim.fn.has("nvim-0.10") == 0,
+      })
+    end,
+  },
+  {
+    "hedyhli/outline.nvim",
+    lazy = true,
+    cmd = { "Outline", "OutlineOpen" },
+    keys = { -- Example mapping to toggle outline
+      { "<leader>ot", "<cmd>Outline<CR>", desc = "Toggle outline" },
+    },
+    opts = {
+      -- Your setup opts here
+    },
+  },
   {
     "gennaro-tedesco/nvim-jqx",
     event = { "BufReadPost" },

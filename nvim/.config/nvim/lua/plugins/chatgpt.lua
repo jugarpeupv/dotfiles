@@ -1,7 +1,40 @@
 return {
   {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    dependencies = {
+      { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
+      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+    },
+    build = "make tiktoken",    -- Only on MacOS or Linux
+    opts = {
+      -- See Configuration section for options
+    },
+    keys = {
+      { "<leader>ct", "<cmd>lua require('copilot').toggle()<CR>", desc = "Toggle Copilot" },
+    }
+    -- See Commands section for default commands if you want to lazy load on them
+  },
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "hrsh7th/nvim-cmp",                                                                 -- Optional: For using slash commands and variables in the chat buffer
+      "nvim-telescope/telescope.nvim",                                                    -- Optional: For using slash commands
+      { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } }, -- Optional: For prettier markdown rendering
+      { "stevearc/dressing.nvim",                    opts = {} },                         -- Optional: Improves `vim.ui.select`
+    },
+    config = true,
+    keys = {
+      { "<leader>at", "<cmd>CodeCompanionChat Toggle<CR>" },
+    },
+  },
+  {
     "yetone/avante.nvim",
     -- event = "BufReadPost",
+    -- version = "*",
+    version = false,
     opts = {
       provider = "copilot",
       mappings = {
@@ -9,11 +42,11 @@ return {
         edit = "<leader>ae", -- edit
         refresh = "<leader>ar", -- refresh
         diff = {
-          ours = "co",
-          theirs = "ct",
+          ours = "cc",
+          theirs = "ci",
           all_theirs = "ca",
           both = "cb",
-          cursor = "ci",
+          cursor = "cu",
           next = "]x",
           prev = "[x",
         },
@@ -78,7 +111,6 @@ return {
       end, mappings)
       return vim.list_extend(mappings, keys)
     end,
-
     -- lazy = false,
     -- version = false, -- set this if you want to always pull the latest change
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`

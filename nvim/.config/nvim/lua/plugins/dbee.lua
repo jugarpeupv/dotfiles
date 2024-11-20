@@ -13,13 +13,22 @@ return {
       local source = require("dbee.sources")
       require("dbee").setup({
         sources = {
+          -- source.MemorySource:new({
+          --   -- ---@diagnostic disable-next-line: missing-fields
+          --   {
+          --     type = "mysql",
+          --     name = "mysql-dev",
+          --     -- url = "mysql://auth_user:auth_pass@127.0.0.1:3306/auth",
+          --     url = "auth_user:auth_pass@tcp(127.0.0.1:3306)/auth"
+          --   },
+          -- }),
           source.MemorySource:new({
             -- ---@diagnostic disable-next-line: missing-fields
             {
-              type = "mysql",
-              name = "mysql-dev",
+              type = "mongo",
+              name = "mongo-dev",
               -- url = "mysql://root@127.0.0.1:3306/auth",
-              url = "root@tcp(127.0.0.1:3306)"
+              url = "@tcp(127.0.0.1:27017)/videos",
             },
           }),
         },
@@ -27,7 +36,7 @@ return {
       -- require "custom.dbee"
 
       vim.keymap.set("n", "<leader>od", function()
-        require("dbee").open()
+        require("dbee").toggle()
       end)
 
       ---@diagnostic disable-next-line: param-type-mismatch

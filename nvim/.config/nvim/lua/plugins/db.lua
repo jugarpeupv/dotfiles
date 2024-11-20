@@ -2,6 +2,21 @@ return {
   -- { "tpope/vim-dadbod", cmd = { "DB" } },
   -- { "kristijanhusak/vim-dadbod-ui" },
   -- { "kristijanhusak/vim-dadbod-completion" },
+  -- {
+  --   "kndndrj/nvim-dbee",
+  --   dependencies = {
+  --     "MunifTanjim/nui.nvim",
+  --   },
+  --   build = function()
+  --     -- Install tries to automatically detect the install method.
+  --     -- if it fails, try calling it with one of these parameters:
+  --     --    "curl", "wget", "bitsadmin", "go"
+  --     require("dbee").install("go")
+  --   end,
+  --   config = function()
+  --     require("dbee").setup()
+  --   end,
+  -- },
   {
     "kristijanhusak/vim-dadbod-ui",
     dependencies = {
@@ -27,7 +42,8 @@ return {
         --     return vim.fn.system('get-prod-url')
         --   end
         -- },
-        { name = "mysql-dev", url = "mysql://root@localhost" },
+        { name = "mysql-dev", url = "mysql://auth_user:auth_pass@127.0.0.1" },
+        { name = "mongo-dev", url = "mongodb://localhost" },
       }
     end,
     config = function()

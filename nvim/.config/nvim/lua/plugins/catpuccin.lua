@@ -331,6 +331,7 @@ return {
       vim.cmd([[hi DiagnosticSignError guifg=#F38BA8]])
 
       vim.cmd([[highlight GitSignsAdd guifg=#2ac3de]])
+      -- vim.cmd([[highlight GitSignsAdd guifg=#94E2D5]])
       vim.cmd([[highlight GitSignsChange guifg=#F2CDCD]])
       vim.cmd([[highlight GitSignsChangeInLine guifg=#F2CDCD]])
       vim.cmd([[highlight GitSignsDelete guifg=#F38BA8]])
@@ -416,7 +417,9 @@ return {
       vim.cmd([[highlight DiagnosticVirtualTextHintLine guifg=#89DCEB guibg=#292e42]])
 
       vim.cmd([[hi DiagnosticUnderlineHint gui=undercurl]])
-      vim.cmd([[hi barbecue_modified guifg=#bbc2e0]])
+      -- vim.cmd([[hi barbecue_modified guifg=#bbc2e0]])
+      vim.cmd([[hi barbecue_modified guifg=#737aa2]])
+      -- vim.cmd([[hi barbecue_modified guifg=red]])
 
 
       vim.cmd([[hi NvimTreeFolderIcon guifg=#89B4FA]])
@@ -425,7 +428,8 @@ return {
       vim.cmd([[highlight NvimTreeGitStaged guifg=#8ee2cf]])
       vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F5C2E7]])
       -- vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F38BA8]])
-      vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#737aa2]])
+      -- vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#737aa2]])
+      vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#c0caf5]])
       -- vim.cmd [[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]]
       vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
       vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])

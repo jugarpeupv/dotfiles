@@ -51,6 +51,9 @@ return {
   -- },
   {
     "vim-test/vim-test",
+    dependencies = {
+      "rebelot/terminal.nvim",
+    },
     --   event = {
     --     "BufEnter *.test.[tj]s",
     --     "BufEnter *.spec.[tj]s",

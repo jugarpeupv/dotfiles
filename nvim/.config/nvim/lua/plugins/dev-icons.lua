@@ -7,8 +7,13 @@ return {
     -- priority = 800,
     opts = {
       override = {
+        sql = {
+          icon = "",
+          name = "sql",
+          color = "#9CDCFE",
+        },
         pptx = {
-          icon = '󱎐',
+          icon = "󱎐",
           name = "ppxpowerpiont",
           color = "#8ee2cf",
         },
@@ -205,7 +210,6 @@ return {
         ["webpack.config.js"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfig" },
         ["README.md"] = { icon = "", color = "#9CDCFE", name = "readmemd" },
         [".gitattributes"] = { icon = "󰊢", color = "#f38bad", name = "gitattributes" },
-        ["CODE_OF_CONDUCT.md"] = { icon = "", color = "#f38bad", name = "codeofconduct" },
         ["LICENSE"] = { icon = "", color = "#f38bad", name = "licensefile" },
         [".gitignore"] = { icon = "󰊢", color = "#7C7F93", name = "gitignore" },
         [".git"] = { icon = "󰊢", color = "#CA9EE6", name = "giticonworktree" },
@@ -304,6 +308,7 @@ return {
           color = "#f38ba8",
           name = ".classpath",
         },
+        ["CODE_OF_CONDUCT.md"] = { icon = "", color = "#f38bad", name = "codeofconduct" },
       },
       override_by_extension = {
         [".env"] = {
@@ -341,6 +346,7 @@ return {
         ["codeowners"] = { icon = "󱖨", color = "#73daca", name = "codeownersfile3" },
         [".editorconfig"] = { icon = "", color = "#c0caf5", name = "Editorconfig" },
         ["drawio"] = { icon = "󰇟", color = "#F5E0DC", name = "drawio1" },
+        ["sql"] = { icon = "", color = "#9CDCFE", name = "sqlextension" },
         ["spec.js"] = {
           icon = "",
           color = "#9CDCFE",
