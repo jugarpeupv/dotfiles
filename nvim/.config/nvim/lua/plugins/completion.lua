@@ -97,7 +97,10 @@ return {
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-y>"] = cmp.mapping(function()
-            if cmp.visible() then
+            local copilot = require("copilot.suggestion")
+            if copilot.is_visible() then
+              copilot.accept()
+            elseif cmp.visible() then
               cmp.confirm({ select = true })
               return
             elseif luasnip.expand_or_locally_jumpable() then

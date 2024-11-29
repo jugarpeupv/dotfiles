@@ -42,10 +42,10 @@ keymap("n", "p", "p=`]", opts)
 -- keymap("n", "Y", '"0y', opts)
 -- keymap("n", "yy", '"0yy', opts)
 
--- keymap("n", "d", '"9d', opts)
--- keymap("v", "d", '"9d', opts)
--- keymap("n", "D", '"9D', opts)
--- keymap("n", "dd", '"9dd', opts)
+keymap("n", "d", '"9d', opts)
+keymap("v", "d", '"9d', opts)
+keymap("n", "D", '"9D', opts)
+keymap("n", "dd", '"9dd', opts)
 
 -- keymap("n", "x", '"9x', opts)
 -- keymap("v", "x", '"9x', opts)
@@ -84,9 +84,7 @@ keymap("n", "<Leader>cm", "<cmd>lua require('telescope.builtin').commands()<cr>"
 keymap("n", "<Leader>mm", "<cmd>lua require('telescope.builtin').marks()<cr>", opts)
 keymap("n", "<Leader>td", "<cmd>lua require('telescope.builtin').diagnostics()<cr>", opts)
 
-
 keymap("n", "<Leader>Cd", "<cmd>lua vim.diagnostic.reset()<cr>", opts)
-
 
 keymap("n", "<Leader>bo", "<cmd>lua require('telescope').extensions.bookmarks.bookmarks()<cr>", opts)
 keymap("n", "<Leader>sy", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", opts)
@@ -206,7 +204,6 @@ keymap(
 )
 
 keymap("n", "<Leader>sl", "<cmd>BLines<cr>", opts)
-keymap("n", "gv", "<cmd>vsp | lua vim.lsp.buf.definition()<cr>", opts)
 keymap("n", "<Leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>", opts)
 
 -- Telescope
@@ -225,8 +222,8 @@ keymap("n", "<Leader>bt", "<cmd>Gitsigns toggle_current_line_blame<cr>", opts)
 keymap("n", "<Leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 
 -- Replace
-vim.cmd([[nnoremap <Leader>rr :%s///gc<Left><Left><Left>]])
-vim.cmd([[xnoremap <Leader>rr :s///gc<Left><Left><Left>]])
+vim.cmd([[nnoremap <Leader>rr :%s///gc<Left><Left><Left><Left>]])
+vim.cmd([[xnoremap <Leader>rr :s///gc<Left><Left><Left><Left>]])
 vim.cmd([[nnoremap <Leader>sw /\<\><Left><Left>]])
 
 vim.cmd(
@@ -249,7 +246,8 @@ keymap("n", "<Leader>gc", "<cmd>lua require('telescope.builtin').git_commits()<c
 
 -- Hop
 -- vim.api.nvim_set_keymap("n", "<leader>ww", "<cmd>lua require'hop'.hint_words()<cr>", opts)
-vim.api.nvim_set_keymap("n", "S", "<cmd>lua require'hop'.hint_words()<cr>", opts)
+-- vim.api.nvim_set_keymap("n", "S", "<cmd>lua require'hop'.hint_words()<cr>", opts)
+vim.api.nvim_set_keymap("n", ";", "<cmd>lua require'hop'.hint_words()<cr>", opts)
 
 -- JsonPath
 keymap("n", "<leader>cp", "<cmd>JsonPath<CR>", opts)
@@ -391,3 +389,32 @@ vim.keymap.set({ "n" }, "<leader>wo", "<cmd>windo diffoff<cr>", opts)  -- copy t
 vim.api.nvim_set_keymap("n", "<F5>", [[:lua require"osv".launch({port = 8086})<CR>]], { noremap = true })
 
 vim.api.nvim_set_keymap("n", "<leader>vf", "<cmd>Vifm .<cr>", { noremap = true, silent = true })
+
+
+-- clear scrollback buffer in terminal buffer
+-- vim.keymap.set({ "t", "n" }, "<leader>CL", "<C-\\><C-n><cmd>lua vim.bo.scrollback=1<cr>", opts)
+
+
+local function find_directory_and_focus()
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  local function open_nvim_tree(prompt_bufnr, _)
+    actions.select_default:replace(function()
+      local api = require("nvim-tree.api")
+
+      actions.close(prompt_bufnr)
+      local selection = action_state.get_selected_entry()
+      api.tree.open()
+      api.tree.find_file(selection.cwd .. "/" .. selection.value)
+    end)
+    return true
+  end
+
+  require("telescope.builtin").find_files({
+    find_command = { "fd", "--type", "directory", "--hidden", "--exclude", ".git/*" },
+    attach_mappings = open_nvim_tree,
+  })
+end
+
+vim.keymap.set("n", "fd", find_directory_and_focus)

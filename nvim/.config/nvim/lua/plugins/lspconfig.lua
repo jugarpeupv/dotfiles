@@ -1,10 +1,62 @@
 -- return {}
 return {
-  -- {
-  --   "mrcjkb/rustaceanvim",
-  --   version = "^4", -- Recommended
-  --   lazy = false, -- This plugin is already lazy
-  -- },
+  {
+    dir = "~/projects/springboot-nvim",
+    dev = true,
+    ft = "java",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "mfussenegger/nvim-jdtls",
+      "rebelot/terminal.nvim",
+    },
+    keys = {
+      {
+        mode = { "n" },
+        "<leader>Jr",
+        "<cmd>lua require('springboot-nvim').new_boot_run()<CR>",
+        { noremap = true, silent = true, desc = "Spring Boot Run Project" },
+      },
+      {
+        mode = { "n" },
+        "<leader>Jc",
+        "<cmd>lua require('springboot-nvim').generate_class()<CR>",
+        { noremap = true, silent = true, desc = "Java Create Class" },
+      },
+      {
+        mode = { "n" },
+        "<leader>Ji",
+        "<cmd>lua require('springboot-nvim').generate_interface()<CR>",
+        { noremap = true, silent = true, desc = "Java Create Interface" },
+      },
+      {
+        mode = { "n" },
+        "<leader>Je",
+        "<cmd>lua require('springboot-nvim').generate_enum()<CR>",
+        { noremap = true, silent = true, desc = "Java Create Enum" },
+      },
+    },
+    config = function()
+      local springboot_nvim = require("springboot-nvim")
+      springboot_nvim.setup({})
+    end,
+  },
+  {
+    "JavaHello/java-deps.nvim",
+    lazy = true,
+    ft = "java",
+    dependencies = {
+      { "mfussenegger/nvim-jdtls" },
+      {
+        "simrat39/symbols-outline.nvim",
+        config = function()
+          require("symbols-outline").setup()
+        end,
+      },
+    },
+    config = function()
+      require("java-deps").setup({})
+    end,
+  },
   {
     "JavaHello/spring-boot.nvim", --"eslam-allam/spring-boot.nvim"
     version = "*",
@@ -35,94 +87,35 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    -- event = "VeryLazy",
-    -- event = "User FilePost",
-    -- event = { "LspAttach" },
-    -- lazy = true,
-    -- cmd = { "LspInstall", "LspUninstall" },
     event = { "BufReadPost", "BufNewFile" },
-    -- cmd = { "LspInfo" },
     dependencies = {
       -- {
-      --   "SmiteshP/nvim-navbuddy",
-      --   dependencies = {
-      --     "SmiteshP/nvim-navic",
-      --     "MunifTanjim/nui.nvim",
-      --   },
-      --   opts = {
-      --     lsp = { auto_attach = true },
-      --     window = {
-      --       border = "single", -- "rounded", "double", "solid", "none"
-      --       size = "80%", -- Or table format example: { height = "40%", width = "100%"}
-      --       }
-      --     }
-      --   },
-      -- {
-      --   "nvim-java/nvim-java",
-      --   event = { "BufEnter *.java" },
-      --   opts = {
-      --     --  list of file that exists in root of the project
-      --     root_markers = {
-      --       "settings.gradle",
-      --       "settings.gradle.kts",
-      --       "pom.xml",
-      --       "build.gradle",
-      --       "mvnw",
-      --       "gradlew",
-      --       "build.gradle",
-      --       "build.gradle.kts",
-      --       ".git",
-      --     },
-      --
-      --     -- load java test plugins
-      --     java_test = {
-      --       enable = true,
-      --     },
-      --
-      --     -- load java debugger plugins
-      --     java_debug_adapter = {
-      --       enable = true,
-      --     },
-      --     spring_boot_tools = {
-      --       enable = true,
-      --     },
-      --     jdk = {
-      --       -- install jdk using mason.nvim
-      --       auto_install = false,
-      --     },
-      --
-      --     notifications = {
-      --       -- enable 'Configuring DAP' & 'DAP configured' messages on start up
-      --       dap = true,
-      --     },
-      --
-      --     -- We do multiple verifications to make sure things are in place to run this
-      --     -- plugin
-      --     verification = {
-      --       -- nvim-java checks for the order of execution of following
-      --       -- * require('java').setup()
-      --       -- * require('lspconfig').jdtls.setup()
-      --       -- IF they are not executed in the correct order, you will see a error
-      --       -- notification.
-      --       -- Set following to false to disable the notification if you know what you
-      --       -- are doing
-      --       invalid_order = true,
-      --
-      --       -- nvim-java checks if the require('java').setup() is called multiple
-      --       -- times.
-      --       -- IF there are multiple setup calls are executed, an error will be shown
-      --       -- Set following property value to false to disable the notification if
-      --       -- you know what you are doing
-      --       duplicate_setup_calls = true,
-      --
-      --       -- nvim-java checks if nvim-java/mason-registry is added correctly to
-      --       -- mason.nvim plugin.
-      --       -- IF it's not registered correctly, an error will be thrown and nvim-java
-      --       -- will stop setup
-      --       invalid_mason_registry = true,
-      --     },
-      --   },
+      --   "smjonas/inc-rename.nvim",
+      --   lazy = true,
+      --   config = function()
+      --     require("inc_rename").setup()
+      --   end,
       -- },
+      {
+        "rmagatti/goto-preview",
+        lazy = true,
+        config = true, -- necessary as per https://github.com/rmagatti/goto-preview/issues/88
+        keys = {
+          {
+            "gpd",
+            function()
+              require("goto-preview").goto_preview_definition()
+            end,
+          },
+
+          {
+            "gpr",
+            function()
+              require("goto-preview").goto_preview_references()
+            end,
+          },
+        },
+      },
       { "mfussenegger/nvim-jdtls", dependencies = { "JavaHello/spring-boot.nvim", "mfussenegger/nvim-dap" } },
       { "folke/neodev.nvim",       opts = {} },
       {
@@ -138,7 +131,6 @@ return {
       -- { "nanotee/sqls.nvim" },
       {
         "yioneko/nvim-vtsls",
-        -- cmd = { "LspInfo", "LspInstall", "LspUninstall" },
         config = function()
           require("vtsls").config({
             refactor_auto_rename = true,
@@ -575,30 +567,30 @@ return {
       })
 
       lspconfig["jsonls"].setup({
-        -- filetypes = { "json", "jsonc" },
+        filetypes = { "jsonc" },
         on_attach = on_attach,
         capabilities = capabilities_json_ls,
         -- capabilities = capabilities,
-        filetypes = { "json", "jsonc", "json5" },
-        settings = {
-          json = {
-            schemas = require("schemastore").json.schemas({
-              -- extra = {
-              --   {
-              --     description = 'My custom JSON schema',
-              --     fileMatch = 'project.json',
-              --     name = 'project.json',
-              --     url = 'https://github.com/nrwl/nx/blob/master/packages/nx/schemas/project-schema.json',
-              --   }
-              -- }
-              -- ignore = {
-              --   -- 'catalog-info.yaml',
-              --   -- 'mkdocs.yml'
-              -- }
-            }),
-            validate = { enable = true },
-          },
-        },
+        -- filetypes = { "json", "jsonc", "json5" },
+        -- settings = {
+        --   json = {
+        --     schemas = require("schemastore").json.schemas({
+        --       -- extra = {
+        --       --   {
+        --       --     description = 'My custom JSON schema',
+        --       --     fileMatch = 'project.json',
+        --       --     name = 'project.json',
+        --       --     url = 'https://github.com/nrwl/nx/blob/master/packages/nx/schemas/project-schema.json',
+        --       --   }
+        --       -- }
+        --       -- ignore = {
+        --       --   -- 'catalog-info.yaml',
+        --       --   -- 'mkdocs.yml'
+        --       -- }
+        --     }),
+        --     -- validate = { enable = true },
+        --   },
+        -- },
       })
 
       lspconfig["rust_analyzer"].setup({

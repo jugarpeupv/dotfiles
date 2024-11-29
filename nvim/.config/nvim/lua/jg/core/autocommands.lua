@@ -110,3 +110,26 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 
+-- vim.api.nvim_create_autocmd("VimLeave", {
+--   group = vim.api.nvim_create_augroup("VimLeaveSaveChatCopilot", { clear = true }),
+--   callback = function()
+--     local chat = require("CopilotChat")
+--     -- if vim.g.chat_title then
+--     --   chat.save(vim.g.chat_title)
+--     --   return
+--     -- end
+--
+--     local cwd = vim.fn.getcwd()
+--     local wt_utils = require("jg.custom.worktree-utils")
+--     local wt_info = wt_utils.get_wt_info(cwd)
+--
+--     if next(wt_info) == nil then
+--       vim.g.chat_title = vim.trim(cwd:gsub(vim.env.HOME, ""):gsub("/", "-"))
+--     else
+--       vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub(vim.env.HOME, ""):gsub("/", "-"))
+--     end
+--     chat.save(vim.g.chat_title)
+--   end,
+-- })
+
+

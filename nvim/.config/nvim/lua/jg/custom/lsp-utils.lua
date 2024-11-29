@@ -1,15 +1,42 @@
 -- local navbuddy = require("nvim-navbuddy")
 
+local FeedKeys = function(keymap, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keymap, true, false, true), mode, false)
+end
+
 local M = {}
 
 M.attach_lsp_config = function(client, bufnr)
   -- navbuddy.attach(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
-  local keymap = vim.keymap                                               -- for conciseness
+  local keymap = vim.keymap                                              -- for conciseness
   -- keymap.set("n", "gI", "<cmd>Lspsaga finder<CR>", opts)                  -- show definition, references
-  keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)   -- got to declaration
+  keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)  -- got to declaration
   keymap.set("n", "<leader>gD", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
   keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)    -- see definition and make edits in window
+
+  -- vim.keymap.set({ "n" }, "gd", function()
+  --   require("telescope.builtin").lsp_definitions()
+  --   -- vim.schedule(function()
+  --   --   FeedKeys("zz", "n")
+  --   --   -- vim.api.nvim_feedkeys("zz", "n", true)
+  --   -- end)
+  -- end, { noremap = true, silent = true })
+
+
+  vim.keymap.set({"n"}, "gv", "<cmd>vsp | lua vim.lsp.buf.definition()<cr>", opts)
+
+  -- vim.keymap.set({ "n" }, "gv", function()
+  --   require("telescope.builtin").lsp_definitions({ jump_type = "vsplit" })
+  --   -- vim.schedule(function()
+  --   --   FeedKeys("zz", "n")
+  --   --   -- vim.api.nvim_feedkeys("zz", "n", true)
+  --   -- end)
+  --   -- vim.schedule(function()
+  --   --   vim.api.nvim_feedkeys("zz", "n", true)
+  --   -- end)
+  -- end, { noremap = true, silent = true })
+
   keymap.set("n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts) -- go to implementation
   keymap.set("n", "gH", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 
@@ -35,6 +62,8 @@ M.attach_lsp_config = function(client, bufnr)
       end,
     })
     vim.lsp.buf.rename()
+    -- vim.cmd(":IncRename " .. vim.fn.expand("<cword>"))
+
     -- if LPS couldn't trigger rename on the symbol, clear the autocmd
     vim.defer_fn(function()
       -- the cmdId is not nil only if the LSP failed to rename

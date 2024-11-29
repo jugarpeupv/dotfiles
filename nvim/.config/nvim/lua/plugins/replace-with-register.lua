@@ -63,18 +63,18 @@ return {
           },
           -- { "p", "<Plug>(YankyPutAfterFilter)", mode = { "n", "x" }, desc = "Put yanked text after cursor" },
           -- { "P", "<Plug>(YankyPutBeforeFilter)", mode = { "n", "x" }, desc = "Put yanked text before cursor" },
-          {
-            "p",
-            "<Plug>(YankyPutAfter)",
-            mode = { "n", "x" },
-            desc = "Put yanked text after cursor",
-          },
-          {
-            "P",
-            "<Plug>(YankyPutBefore)",
-            mode = { "n", "x" },
-            desc = "Put yanked text before cursor",
-          },
+          -- {
+          --   "p",
+          --   "<Plug>(YankyPutAfter)",
+          --   mode = { "n", "x" },
+          --   desc = "Put yanked text after cursor",
+          -- },
+          -- {
+          --   "P",
+          --   "<Plug>(YankyPutBefore)",
+          --   mode = { "n", "x" },
+          --   desc = "Put yanked text before cursor",
+          -- },
           {
             "gp",
             "<Plug>(YankyGPutAfter)",

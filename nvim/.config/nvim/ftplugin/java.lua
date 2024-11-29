@@ -1,13 +1,3 @@
--- local jdtls_setup = require("jdtls.setup")
--- local function run(cmd)
---   local output = vim.fn.system(cmd)
---   if vim.v.shell_error ~= 0  then
---     error(('Command failed: ↓\n' .. cmd .. '\nOutput from command: ↓\n' .. output))
---   end
---   return output
--- end
-require("spring_boot").setup({})
-
 local bundles = {}
 
 ---
@@ -37,30 +27,39 @@ local spring_path = require("mason-registry").get_package("spring-boot-tools"):g
 local spring = vim.split(vim.fn.glob(spring_path), "\n", {})
 vim.list_extend(bundles, spring)
 
--- vim.list_extend(bundles, require("spring_boot").java_extensions())
 
--- local is_inside_wt = run("git rev-parse --is-inside-work-tree")
+---
+-- Include vscode-java-dependency bundle if present (Java project libs visualizer)
+---
+local java_dependency_bundle = vim.split(
+  vim.fn.glob(
+    "/Users/jgarcia/projects/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"
+  ),
+  "\n"
+)
+if java_dependency_bundle[1] ~= "" then
+  vim.list_extend(bundles, java_dependency_bundle)
+end
 
---maybe add .git
--- local root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", ".git", "mvnw" }, { upward = true })[1])
 
 local root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", "mvnw" }, { upward = true })[1])
 
--- local workspace_folder = "/Users/jgarcia/.local/share/eclipse/" .. root_dir:gsub("/", "-")
 local workspace_folder = "/Users/jgarcia/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
 
 local extendedClientCapabilities = require("jdtls").extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
+
 local jar = vim.fn.glob(
   "/Users/jgarcia/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar",
   false,
   false
 )
+
 local lombok = "/Users/jgarcia/.local/share/nvim/mason/packages/lombok-nightly/lombok.jar"
+
 local config = {
   settings = {
     java = {
-      -- server = { launchMode = "Hybrid" },
       eclipse = {
         downloadSources = true,
       },
@@ -102,28 +101,24 @@ local config = {
     allow_incremental_sync = true,
   },
   capabilities = require("cmp_nvim_lsp").default_capabilities(),
-  -- capabilities = require("config.lsp").get_capabilities(),
   on_attach = function(client, bufnr)
-    vim.lsp.codelens.refresh()
-    -- keymaps
     require("jdtls").setup_dap({ hotcodereplace = "auto" })
     require("jg.custom.lsp-utils").attach_lsp_config(client, bufnr)
     require("jdtls.dap").setup_dap_main_class_configs()
+
     vim.api.nvim_create_autocmd("BufWritePost", {
       pattern = { "*.java" },
       callback = function()
         local _, _ = pcall(vim.lsp.codelens.refresh)
       end,
     })
+
+    local create_command = vim.api.nvim_buf_create_user_command
+    create_command(bufnr, "JavaProjects", require("java-deps").toggle_outline, {
+      nargs = 0,
+    })
   end,
-  --on_init = function(client)
-  --  if client.config.settings then
-  --    client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-  --  end
-  --end,
-  -- stylua: ignore
   cmd = {
-    -- "java",
     "java",
     "-Declipse.application=org.eclipse.jdt.ls.core.id1",
     "-Dosgi.bundles.defaultStartLevel=4",
@@ -138,7 +133,6 @@ local config = {
     "-jar", jar,
     "-configuration", "/Users/jgarcia/.local/share/nvim/mason/packages/jdtls/config_linux",
     "-data", workspace_folder,
-    -- "-Xbootclasspath/a:" .. lombok,
   },
   root_dir = root_dir,
   init_options = {
@@ -146,21 +140,11 @@ local config = {
     extendedClientCapabilities = extendedClientCapabilities,
   },
 }
+
 require("jdtls").start_or_attach(config)
 
--- local _, _ = pcall(vim.lsp.codelens.refresh)
--- vim.api.nvim_create_autocmd({ "BufWritePost" }, {
---   pattern = { "*.java" },
---   callback = function()
---     local _, _ = pcall(vim.lsp.codelens.refresh)
---   end,
--- })
 
 --------------------------------------------------------------------------------
-
-local key_map = function(mode, key, result)
-  vim.api.nvim_set_keymap(mode, key, result, { noremap = true, silent = true })
-end
 
 -- run debug
 local function get_test_runner(test_name, debug)
@@ -241,3 +225,17 @@ end)
 -- }
 -- Then run:
 -- ./gradlew bootRun --debug-jvm
+
+-- Then dap.continue() and select Attach to process:
+-- 
+
+
+
+-- local _, _ = pcall(vim.lsp.codelens.refresh)
+-- vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+--   pattern = { "*.java" },
+--   callback = function()
+--     local _, _ = pcall(vim.lsp.codelens.refresh)
+--   end,
+-- })
+

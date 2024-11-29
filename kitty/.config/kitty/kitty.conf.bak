@@ -28,7 +28,7 @@
 # bold_font JetBrains Mono Bold
 # italic_font JetBrains Mono Italic
 # bold_italic_font JetBrains Mono BoldItalic
-# adjust_line_height  10
+# adjust_line_height  4
 # adjust_column_width 0
 # font_features JetBrainsMono-Regular +cv10
 # font_features JetBrainsMono-Bold +cv10
@@ -53,8 +53,8 @@
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  8
-# adjust_column_width 0
+adjust_line_height  6
+adjust_column_width 0
 
 
 # font_family      family="Liga DejaVu Sans Mono"
@@ -67,14 +67,16 @@
 
 # Menlo
 # font_family Liga Menlo
-# # font_family Menlo
+# font_family Menlo
 # bold_font Menlo
 # italic_font Menlo
 # bold_italic_font Menlo Italic
-# adjust_line_height  12
+# adjust_line_height  10
 # adjust_column_width 0
 
-text_composition_strategy 0.3 15
+# text_composition_strategy 0.3 15
+text_composition_strategy 0.5 15
+# text_composition_strategy 1 30
 
 # font_family      family='Fira Code' postscript_name=FiraCode-Regular
 # bold_font        family='Fira Code' style=Retina
@@ -125,7 +127,7 @@ text_composition_strategy 0.3 15
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  8
+# adjust_line_height  4
 # adjust_column_width 0
 
 
@@ -518,7 +520,7 @@ text_composition_strategy 0.3 15
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 18
+font_size 16
 
 #: Font size (in pts)
 
@@ -656,7 +658,7 @@ symbol_map U+DB83 Symbols Nerd Font
 
 # narrow_symbols
 # narrow_symbols U+F111,U+F114,U+F115 1
-narrow_symbols U+F111 1
+narrow_symbols U+F111,U+25cf 1
 # narrow_symbols U+E0A0-U+E0A3,U+E0C0-U+E0C7,U+F111,U+F114 1
 
 #: E.g. narrow_symbols U+E0A0-U+E0A3,U+E0C0-U+E0C7 1
@@ -1604,7 +1606,7 @@ confirm_os_window_close 0
 #: The foreground and background colors.
 
 # background_opacity 0.90
-background_opacity 0.87
+background_opacity 0.75
 # background_opacity 1
 
 background_blur 30
@@ -3223,11 +3225,19 @@ color15 #A6ADC8
 
 
 
+# # # BEGIN_KITTY_FONTS
+# font_family      family="Liga DejaVu Sans Mono"
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+# END_KITTY_FONTS
+adjust_line_height  8
+adjust_column_width 0
+
+
 # BEGIN_KITTY_FONTS
-font_family      family="Comic Mono"
+font_family      family="NRK Mono"
 bold_font        auto
 italic_font      auto
 bold_italic_font auto
 # END_KITTY_FONTS
-adjust_line_height  8
-adjust_column_width 0

@@ -56,21 +56,21 @@ return {
         opts
       )
 
-      -- if Neovim is 0.8.0 before, remap yourself.
-      local function nN(char)
-        local ok, winid = require('hlslens').nNPeekWithUFO(char)
-        if ok and winid then
-          -- Safe to override buffer scope keymaps remapped by ufo,
-          -- ufo will restore previous buffer keymaps before closing preview window
-          -- Type <CR> will switch to preview window and fire `trace` action
-          vim.keymap.set('n', '<CR>', function()
-            return '<Tab><CR>'
-          end, {buffer = true, remap = true, expr = true})
-        end
-      end
-
-      vim.keymap.set({'n', 'x'}, 'n', function() nN('n') end)
-      vim.keymap.set({'n', 'x'}, 'N', function() nN('N') end)
+      -- -- if Neovim is 0.8.0 before, remap yourself.
+      -- local function nN(char)
+      --   local ok, winid = require('hlslens').nNPeekWithUFO(char)
+      --   if ok and winid then
+      --     -- Safe to override buffer scope keymaps remapped by ufo,
+      --     -- ufo will restore previous buffer keymaps before closing preview window
+      --     -- Type <CR> will switch to preview window and fire `trace` action
+      --     vim.keymap.set('n', '<CR>', function()
+      --       return '<Tab><CR>'
+      --     end, {buffer = true, remap = true, expr = true})
+      --   end
+      -- end
+      --
+      -- vim.keymap.set({'n', 'x'}, 'n', function() nN('n') end)
+      -- vim.keymap.set({'n', 'x'}, 'N', function() nN('N') end)
       -- vim.api.nvim_set_keymap("n", "*", [[*<Cmd>lua require('hlslens').start()<CR>]], opts)
       -- vim.api.nvim_set_keymap("n", "#", [[#<Cmd>lua require('hlslens').start()<CR>]], opts)
       -- vim.api.nvim_set_keymap("n", "g*", [[g*<Cmd>lua require('hlslens').start()<CR>]], opts)

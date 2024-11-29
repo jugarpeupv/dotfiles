@@ -116,6 +116,11 @@ return {
     },
     config = function()
       require("neotest").setup({
+        status = {
+          enabled = true,
+          signs = false,
+          virtual_text = true
+        },
         adapters = {
           require("neotest-jest")({
             -- jestCommand = "npm test --",
@@ -139,7 +144,7 @@ return {
         require("neotest").run.run()
       end, {})
 
-      vim.keymap.set({ "n" }, "<leader>DN", function()
+      vim.keymap.set({ "n" }, "<leader>Dn", function()
         require("neotest").run.run({ strategy = "dap" })
       end, {})
 

@@ -1,4 +1,28 @@
 return {
+  { "heavenshell/vim-jsdoc", cmd = { "JsDoc" } },
+  {
+    "barrett-ruth/live-server.nvim",
+    build = "pnpm add -g live-server",
+    cmd = { "LiveServerStart", "LiveServerStop" },
+    config = true,
+  },
+  {
+    "danymat/neogen",
+    keys = {
+      {
+        "<leader>nt",
+        function()
+          require("neogen").generate()
+        end,
+      },
+    },
+    config = function()
+      require("neogen").setup({ enabled = true, snippet_engine = "luasnip" })
+    end,
+
+    -- Uncomment next line if you want to follow only stable versions
+    -- version = "*"
+  },
   -- {
   --   "chentoast/marks.nvim",
   --   event = "VeryLazy",
@@ -146,7 +170,7 @@ return {
   -- { "nvim-spider" }
   -- { "airblade/vim-matchquote" },
   -- { "ton/vim-bufsurf" },
-  { "taybart/b64.nvim",         cmd = { "B64Encode", "B64Decode" } },
+  { "taybart/b64.nvim",      cmd = { "B64Encode", "B64Decode" } },
   {
     "lambdalisue/vim-suda",
     cmd = { "SudaWrite", "SudaRead" },
@@ -208,7 +232,7 @@ return {
     end,
   },
 
-  { "wellle/targets.vim",      event = { "BufReadPost", "BufNewFile" } },
+  { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
   {
     "junegunn/fzf",
     build = "./install --all",
@@ -280,18 +304,21 @@ return {
       { mode = { "n" }, "<Leader>gl", "<cmd>G log -20<cr>",                  { silent = true, noremap = true } },
     },
   },
-  { "tpope/vim-repeat",       keys = { "." } },
-  { "nvim-lua/plenary.nvim",  lazy = true },
-  { "tpope/vim-surround",     event = { "BufReadPost", "BufNewFile" } },
-  { "windwp/nvim-ts-autotag", ft = "html" },
-  { "tpope/vim-dispatch",     lazy = true },
-  { "kkharji/sqlite.lua",     lazy = true },
+  { "tpope/vim-repeat",        keys = { "." } },
+  { "nvim-lua/plenary.nvim",   lazy = true },
+  { "tpope/vim-surround",      event = { "BufReadPost", "BufNewFile" } },
+  { "windwp/nvim-ts-autotag",  ft = "html" },
+  { "tpope/vim-dispatch",      lazy = true },
+  { "kkharji/sqlite.lua",      lazy = true },
   {
     "ckipp01/nvim-jenkinsfile-linter",
-    -- event = { "BufReadPost", "BufNewFile" },
-    keys = { "<leader>jv" },
-    config = function()
-      vim.keymap.set("n", "<leader>va", require("jenkinsfile_linter").validate, {})
-    end,
+    keys = {
+      {
+        "<leader>va",
+        function()
+          require("jenkinsfile_linter").validate()
+        end,
+      },
+    },
   },
 }

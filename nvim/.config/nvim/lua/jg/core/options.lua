@@ -82,6 +82,10 @@ opt.iskeyword:append("-") -- consider string-string as whole word
 
 -- global statusline
 opt.laststatus = 3
+
+
+opt.conceallevel = 1
+
 -- opt.laststatus = 0
 
 -- opt.winbar ="%=%m %f"

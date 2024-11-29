@@ -7,14 +7,9 @@ return {
       "nvim-lua/plenary.nvim",
     },
     keys = {
-      -- Keymap to open VenvSelector to pick a venv.
       { "<leader>ve", "<cmd>VenvSelect<cr>" },
-      -- -- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
-      -- { "<leader>vc", "<cmd>VenvSelectCached<cr>" },
     },
     opts = {
-      -- anaconda_base_path = "/opt/homebrew/anaconda3",
-      -- anaconda_envs_path = "/opt/homebrew/anaconda3/envs",
       stay_on_this_version = true,
       dap_enabled = true,
       settings = {
@@ -56,23 +51,113 @@ return {
     config = function()
       require("persistent-breakpoints").setup({
         save_dir = vim.fn.stdpath("data") .. "/nvim_checkpoints",
-        -- when to load the breakpoints? "BufReadPost" is recommanded.
         load_breakpoints_event = { "BufReadPost" },
-        -- record the performance of different function. run :lua require('persistent-breakpoints.api').print_perf_data() to see the result.
         perf_record = false,
       })
     end,
   },
   {
     "mfussenegger/nvim-dap",
-    -- event = "VeryLazy",
-    -- event = { "BufReadPre", "BufNewFile" },
     lazy = true,
     keys = {
-      { "<leader>DD" },
+      {
+        "<leader>dd",
+        function()
+          require("dap").continue()
+        end,
+      },
+      {
+        "<leader>du",
+        "<cmd>lua require('dapui').toggle()<cr>",
+        { noremap = true, silent = true }
+      },
+      {
+        "<Leader>dk",
+        function()
+          require("dap").step_out()
+        end,
+      },
+      {
+        "<Leader>dj",
+        function()
+          require("dap").step_into()
+        end,
+      },
+      {
+        "<Leader>do",
+        function()
+          require("dap").step_over()
+        end,
+      },
+      {
+        "<leader>dc",
+        function()
+          require("dap").run_to_cursor()
+        end,
+      },
+      {
+        "<leader>dh",
+        ':lua require"dap".up()<CR>zz'
+      },
+      {
+        "<leader>dl",
+        ':lua require"dap".down()<CR>zz'
+      },
+      {
+        "<leader>dt",
+        function()
+          require("dap").terminate()
+        end,
+      },
+      {
+        "<leader>dw",
+        function()
+          require("dap.ui.widgets").hover()
+        end,
+      },
+      {
+        "<leader>di",
+        function()
+          require("dapui").eval(nil, { enter = true })
+        end,
+      },
+      {
+        "<leader>dr",
+        ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l'
+      },
+      {
+        "<Leader>dv",
+        function()
+          local widgets = require("dap.ui.widgets")
+          local my_sidebar = widgets.sidebar(widgets.scopes)
+          my_sidebar.open()
+        end,
+        { "n", "v" }
+      },
+      {
+        "<Leader>dC",
+        function()
+          local widgets = require("dap.ui.widgets")
+          widgets.centered_float(widgets.scopes)
+        end,
+        { "n", "v" }
+      },
+      {
+        "<Leader>dP",
+        function()
+          require("dap.ui.widgets").preview()
+        end,
+        { "n", "v" }
+      },
+      {
+        "<leader>dp",
+        function()
+          require("telescope").extensions.dap.list_breakpoints({})
+        end,
+      },
     },
     dependencies = {
-      {     "nvim-telescope/telescope.nvim" },
+      { "nvim-telescope/telescope.nvim" },
       {
         "LiadOz/nvim-dap-repl-highlights",
         config = function()
@@ -119,13 +204,6 @@ return {
         return
       end
 
-      -- local mason_status, mason_nvim_dap = pcall(require, "mason-nvim-dap")
-      -- if not mason_status then
-      --   return
-      -- end
-
-      -- mason_nvim_dap.setup()
-
       dap.adapters.chrome = {
         type = "executable",
         command = "node",
@@ -156,7 +234,6 @@ return {
         host = "localhost",
         port = "${port}",
         executable = {
-          -- command = vim.fn.exepath("js-debug-adapter"),
           command = "node",
           args = {
             os.getenv("HOME")
@@ -166,43 +243,13 @@ return {
         },
       }
 
-      -- dap.adapters.node = {
-      --   type = "executable",
-      --   command = "node",
-      --   args = { os.getenv("HOME") .. "/dev/microsoft/vscode-node-debug2/out/src/nodeDebug.js" },
-      -- }
-
       dap.configurations.java = {
-        -- MAVEN
-        -- mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
-
-        -- GRADLE
-        -- build.gradle
-        -- bootRun {
-        --   debugOptions {
-        --     enabled = true
-        --     port = 8000
-        --     server = true
-        --     suspend = false
-        --   }
-        -- }
-        -- Then run:
-        -- ./gradlew bootRun --debug-jvm
         {
           type = "java",
           request = "attach",
-          name = "Attach to the process",
+          name = "Attach to process",
           hostName = "localhost",
-          port = "8000",
-          -- processId = require("dap.utils").pick_process({
-          --   filter = function(proc)
-          --     print("proc name: " .. proc.name)
-          --     if string.find(proc.name, "agentlib") ~= nil then
-          --       return true
-          --     end
-          --     return false
-          --   end,
-          -- }),
+          processId = require("dap.utils").pick_process
         },
       }
 
@@ -225,20 +272,6 @@ return {
             request = "attach",
             processId = require("dap.utils").pick_process,
           },
-          -- {
-          --   type = "pwa-node",
-          --   request = "launch",
-          --   name = "[pwa-node] Launch file",
-          --   program = "${file}",
-          --   cwd = "${workspaceFolder}",
-          -- },
-          -- {
-          --   type = "pwa-node",
-          --   request = "attach",
-          --   name = "[pwa-node] Attach",
-          --   processId = require("dap.utils").pick_process,
-          --   cwd = "${workspaceFolder}",
-          -- },
           {
             type = "node",
             request = "launch",
@@ -305,19 +338,11 @@ return {
         callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
       end
 
-      -- require('dap.ext.vscode').load_launchjs('.vscode/launch.json', { ['node'] = { 'typescript' } })
 
-      -- require('dap.ext.vscode').load_launchjs('.vscode/launch.json', { ['pwa-node'] = { 'typescript' } })
+      
       require("dap.ext.vscode").json_decode = require("overseer.json").decode
-      -- require("overseer").patch_dap(true)
-
-      -- require('dapui').setup()
 
       local dapui = require("dapui")
-
-      -- dap.listeners.after.event_initialized["dapui_config"] = function()
-      --   dapui.open()
-      -- end
 
       dap.listeners.before.attach["dapui_config"] = function()
         dapui.open()
@@ -334,133 +359,14 @@ return {
         dapui.close()
       end
 
-      -- dap.defaults.fallback.terminal_win_cmd = "vsplit new"
-      -- vim.fn.sign_define("DapBreakpoint", { text = "✋", texthl = "", linehl = "", numhl = "" })
-      -- vim.fn.sign_define('DapBreakpointRejected', { text = '🔵', texthl = '', linehl = '', numhl = '' })
-      vim.fn.sign_define('DapBreakpointRejected', { text = "⊚", texthl = '', linehl = '', numhl = '' })
-
-      -- vim.fn.sign_define('DapBreakpointRejected', { text = "⚇", texthl = '', linehl = '', numhl = '' })
-
-
       vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#D20F39", bg = "none" })
-
       vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
       vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
 
+      vim.fn.sign_define("DapBreakpointRejected", { text = "⊚", texthl = "", linehl = "", numhl = "" })
       vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint2", linehl = "", numhl = "" })
-      -- vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" })
       vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" })
 
-      -- local dap = require('dap')
-      -- local api = vim.api
-      -- local keymap_restore = {}
-      -- dap.listeners.after['event_initialized']['me'] = function()
-      --   for _, buf in pairs(api.nvim_list_bufs()) do
-      --     local keymaps = api.nvim_buf_get_keymap(buf, 'n')
-      --     for _, keymap in pairs(keymaps) do
-      --       if keymap.lhs == "K" then
-      --         table.insert(keymap_restore, keymap)
-      --         api.nvim_buf_del_keymap(buf, 'n', 'K')
-      --       end
-      --     end
-      --   end
-      --   api.nvim_set_keymap(
-      --     'n', 'K', '<Cmd>lua require("dap.ui.widgets").hover()<CR>', { silent = true })
-      -- end
-
-      -- dap.listeners.after['event_terminated']['me'] = function()
-      --   for _, keymap in pairs(keymap_restore) do
-      --     api.nvim_buf_set_keymap(
-      --       keymap.buffer,
-      --       keymap.mode,
-      --       keymap.lhs,
-      --       keymap.rhs,
-      --       { silent = keymap.silent == 1 }
-      --     )
-      --   end
-      --   keymap_restore = {}
-      -- end
-
-      -- DAP
-      local keymap = vim.api.nvim_set_keymap
-      local opts = { noremap = true, silent = true }
-      -- vim.keymap.set('n', '<leader>ee', function() require "dap".toggle_breakpoint() end)
-      keymap("n", "<leader>du", "<cmd>lua require('dapui').toggle()<cr>", opts)
-      -- vim.keymap.set("n", "<leader>dn", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
-      vim.keymap.set("n", "<Leader>dh", function()
-        require("dap").step_out()
-      end)
-      vim.keymap.set("n", "<Leader>dl", function()
-        require("dap").step_into()
-      end)
-      vim.keymap.set("n", "<Leader>do", function()
-        require("dap").step_over()
-      end)
-      vim.keymap.set("n", "<leader>dd", function()
-        require("dap").continue()
-      end)
-      vim.keymap.set("n", "<leader>dc", function()
-        require("dap").run_to_cursor()
-      end)
-      vim.keymap.set("n", "<leader>dk", ':lua require"dap".up()<CR>zz')
-      vim.keymap.set("n", "<leader>dj", ':lua require"dap".down()<CR>zz')
-      vim.keymap.set("n", "<leader>dt", function()
-        require("dap").terminate()
-      end)
-
-      -- vim.keymap.set("n", "<leader>dA", function()
-      --   require("debughelper-config").attach()
-      -- end)
-      -- vim.keymap.set("n", "<leader>dE", function()
-      --   require("debughelper-config").attachToRemote()
-      -- end)
-      -- vim.keymap.set("n", "<leader>dJ", function()
-      --   require("debughelper-config").attachToPort8080()
-      -- end)
-      vim.keymap.set("n", "<leader>dw", function()
-        require("dap.ui.widgets").hover()
-      end)
-
-      -- vim.keymap.set({ "n" }, "<Leader>?", function()
-      --   require("dap.ui.widgets").hover()
-      -- end)
-
-      vim.keymap.set("n", "<leader>di", function()
-        require("dapui").eval(nil, { enter = true })
-      end)
-      vim.keymap.set("n", "<leader>dr", ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l')
-
-      vim.keymap.set({ "n", "v" }, "<Leader>dv", function()
-        local widgets = require("dap.ui.widgets")
-        local my_sidebar = widgets.sidebar(widgets.scopes)
-        my_sidebar.open()
-      end)
-
-
-      vim.keymap.set({ "n", "v" }, "<Leader>dC", function()
-        local widgets = require("dap.ui.widgets")
-        widgets.centered_float(widgets.scopes)
-      end)
-
-      vim.keymap.set({ "n", "v" }, "<Leader>dP", function()
-        require("dap.ui.widgets").preview()
-      end)
-
-      -- vim.keymap.set("n", "<leader>dP", function()
-      --   print("hi")
-      --   require("dap").list_breakpoints(true)
-      -- end)
-
-      vim.keymap.set("n", "<leader>dp", function()
-        require("telescope").extensions.dap.list_breakpoints({})
-      end)
-      -- vim.keymap.set('n', '<leader>ee', function() require"dap".set_exception_breakpoints({"all"}) end)
-      -- vim.keymap.set(
-      --   "n",
-      --   "<leader>do",
-      --   "<cmd> lua require('dap.ext.vscode').load_launchjs('.vscode/launch.json', { ['pwa-node'] = { 'typescript' }, ['node2'] = { 'typescript' }, ['node'] = { 'typescript' } })<cr>",
-      --   opts
-      -- )
     end,
   },
 }

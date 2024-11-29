@@ -91,6 +91,12 @@ return {
             --   return true
             -- end
 
+            -- if
+            --   (lang == "json" or lang == "jsonc")
+            -- then
+            --   return true
+            -- end
+
             -- disable only for package-lock.json file name
             if
                 (lang == "json" or lang == "jsonc")
@@ -99,7 +105,22 @@ return {
               return true
             end
 
-            return (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 10000
+            if
+              (lang == "json" or lang == "jsonc")
+              and  vim.api.nvim_buf_line_count(bufnr) > 1000
+            then
+              return true
+            end
+
+            local line_number = 1
+            local line = vim.fn.getline(line_number)
+            local char_count = #line
+
+            if char_count > 1000 then
+              return true
+            end
+
+            return (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 10000 and char_count > 1000
           end,
           additional_vim_regex_highlighting = true,
         },
@@ -127,7 +148,6 @@ return {
           "luadoc",
           "vim",
           "lua",
-          "markdown",
           "javascript",
           "xml",
           "http",

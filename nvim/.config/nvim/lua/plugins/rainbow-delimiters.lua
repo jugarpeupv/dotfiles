@@ -13,7 +13,26 @@ return {
       vim.g.rainbow_delimiters = {
         strategy = {
           -- Use global strategy by default
-          [""] = rainbow.strategy["global"],
+          -- [""] = rainbow.strategy["global"],
+          [""] = function(bufnr)
+            local line_number = 1
+            local line = vim.fn.getline(line_number)
+            local char_count = #line
+
+            if char_count > 1000 then
+              return nil
+            end
+
+            local line_count = vim.api.nvim_buf_line_count(bufnr)
+            if line_count > 10000 then
+              return nil
+            elseif line_count > 2000 then
+              return rainbow.strategy['local']
+            end
+
+            return rainbow.strategy['global']
+          end,
+
           -- Use local for HTML
           -- Pick the strategy for LaTeX dynamically based on the buffer size
           ["json"] = function(bufnr)

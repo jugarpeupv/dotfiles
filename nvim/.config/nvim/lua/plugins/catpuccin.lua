@@ -220,6 +220,8 @@ return {
       vim.cmd.colorscheme("catppuccin")
       vim.cmd([[hi gitcommitOverflow gui=none]])
 
+      vim.cmd([[hi AvanteConflictIncoming gui=none guibg=#103235]])
+      vim.cmd([[hi AvanteConflictCurrent gui=none guibg=#394b70]])
       vim.cmd([[highlight LineNR guifg=#3b4261]])
       vim.cmd([[highlight CursorLineNR guifg=#737aa2]])
 
@@ -389,6 +391,9 @@ return {
       vim.cmd([[highlight SagaTitle  guifg=#394b70]])
       vim.cmd([[highlight ctrlsfMatch guifg=#F2CDCD guibg=#394b70]])
 
+      vim.cmd([[highlight jsonKeyword guifg=#b4beff ]])
+      -- @property      xxx guifg=#b4beff
+
       vim.cmd([[highlight @text.uri gui=none]])
 
       vim.cmd([[highlight QuickFixLine gui=none guibg=#264F78]])
@@ -429,11 +434,14 @@ return {
       vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F5C2E7]])
       -- vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F38BA8]])
       -- vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#737aa2]])
-      vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#c0caf5]])
-      -- vim.cmd [[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]]
+      -- vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#c0caf5]])
+
+      vim.cmd [[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]]
       vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
       vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
       vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
+
+      vim.api.nvim_set_hl(0, "SubstituteSubstituted", { link = "Visual" })
 
       -- Name	Latte	Frappe	Macchiato	Mocha	Usage
       -- rosewater	#dc8a78	#F2D5CF	#F4DBD6	#F5E0DC	Winbar
