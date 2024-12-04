@@ -84,7 +84,7 @@ opt.iskeyword:append("-") -- consider string-string as whole word
 opt.laststatus = 3
 
 
-opt.conceallevel = 1
+opt.conceallevel = 0
 
 -- opt.laststatus = 0
 

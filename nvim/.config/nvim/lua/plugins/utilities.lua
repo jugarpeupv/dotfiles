@@ -6,6 +6,12 @@ return {
     cmd = { "LiveServerStart", "LiveServerStop" },
     config = true,
   },
+  -- {
+  --   "andrewferrier/wrapping.nvim",
+  --   config = function()
+  --     require("wrapping").setup()
+  --   end,
+  -- },
   {
     "danymat/neogen",
     keys = {

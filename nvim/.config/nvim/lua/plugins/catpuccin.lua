@@ -26,6 +26,7 @@ return {
             green = "#F2CDCD",
             -- green = "#94E2D5",
             maroon = "#FAB387",
+            -- maroon = "#94E2D5",
 
             -- yellow = "#2ac3de",
             -- green = "#F2CDCD",
@@ -171,6 +172,7 @@ return {
             LspInlayHint = { fg = "#737aa2" },
             -- Comment = { fg = "#737aa2" },
             NvimDapVirtualText = { fg = "#737aa2" },
+            DapUIDecoration = { fg="#89B4FA" },
             NvimTreeBookmark = { fg = "#f2cdcd" },
             HlSearchNear = { fg = "#181826", bg = "#F38BA8" },
             HlSearchLensNear = { fg = "#181826", bg = "#F38BA8" },

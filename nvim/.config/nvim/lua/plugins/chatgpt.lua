@@ -1,7 +1,7 @@
 return {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "canary",
+    branch = "main",
     dependencies = {
       -- { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
       { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
@@ -150,6 +150,14 @@ return {
       )
 
       local mappings = {
+        {
+          "<leader>ip",
+          function()
+            return vim.bo.filetype == "AvanteInput" and require("avante.clipboard").paste_image()
+              or require("img-clip").paste_image()
+          end,
+          desc = "clip: paste image",
+        },
         {
           opts.mappings.ask,
           function()

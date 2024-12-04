@@ -17,6 +17,11 @@ return {
           name = "ppxpowerpiont",
           color = "#8ee2cf",
         },
+        hurl = {
+          icon = "",
+          name = "hurl",
+          color = "#F5BDE6",
+        },
         http = {
           icon = "",
           name = "http",

@@ -98,6 +98,11 @@ return {
             -- end
 
             -- disable only for package-lock.json file name
+
+            -- if lang == "yaml" or lang == "yml" then
+            --   return true
+            -- end
+
             if
                 (lang == "json" or lang == "jsonc")
                 and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json")
@@ -105,10 +110,7 @@ return {
               return true
             end
 
-            if
-              (lang == "json" or lang == "jsonc")
-              and  vim.api.nvim_buf_line_count(bufnr) > 1000
-            then
+            if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 1000 then
               return true
             end
 
@@ -120,7 +122,9 @@ return {
               return true
             end
 
-            return (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 10000 and char_count > 1000
+            return (lang == "json" or lang == "jsonc")
+                and vim.api.nvim_buf_line_count(bufnr) > 10000
+                and char_count > 1000
           end,
           additional_vim_regex_highlighting = true,
         },
@@ -157,9 +161,9 @@ return {
           "groovy",
           "typescript",
           "tsx",
-          "yaml",
           "html",
           "css",
+          "yaml",
           -- "sql",
           "markdown",
           "markdown_inline",
@@ -205,7 +209,7 @@ return {
         matchup = {
           enable = true,
           disable_virtual_text = false,
-          disable = { "javascript", "typescript"  },
+          disable = { "javascript", "typescript" },
         },
         textobjects = {
           select = {

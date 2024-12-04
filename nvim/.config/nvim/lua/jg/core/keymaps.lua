@@ -56,6 +56,14 @@ keymap("n", "<leader>pu", "<cmd>pu<cr>", opts)
 -- Cmd modifiers cooresponds to cmd+shift+7
 vim.cmd([[map <M-g> gcc]])
 
+
+vim.keymap.set({ "n", "t" }, "<D-p>", function()
+  require("telescope.builtin").find_files({
+    hidden = true,
+    find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
+  })
+end, opts)
+
 vim.keymap.set({ "n", "t" }, "<M-p>", function()
   require("telescope.builtin").find_files({
     hidden = true,
@@ -96,6 +104,8 @@ keymap("t", "<M-j>", "<cmd>NvimTreeToggle<cr>", opts)
 
 keymap("n", "<Leader>d", "<Nop>", opts)
 -- keymap("n", "<Leader>d", ":NvimTreeFindFile<cr>", opts)
+keymap("n", "<D-k>", "<cmd>NvimTreeFindFile<cr>", opts)
+keymap("t", "<D-k>", "<C-\\><C-n><cmd>NvimTreeFindFile<cr>", opts)
 keymap("n", "<M-k>", "<cmd>NvimTreeFindFile<cr>", opts)
 keymap("t", "<M-k>", "<C-\\><C-n><cmd>NvimTreeFindFile<cr>", opts)
 keymap("n", "<M-u>", "<cmd> lua require('trouble').next({skip_groups = true, jump = true})<cr>", opts)

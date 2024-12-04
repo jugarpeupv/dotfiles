@@ -77,7 +77,7 @@ vim.cmd([[ augroup JsonToJsonc
     autocmd! FileType json set filetype=jsonc
 augroup END ]])
 
-vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wrap' | endif]])
+-- vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wrap' | endif]])
 
 vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 
@@ -91,7 +91,8 @@ vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 -- vim.api.nvim_create_autocmd("TermOpen", {
 --   group = vim.api.nvim_create_augroup("term-open-buflisted", { clear = true }),
 --   callback = function()
---     vim.bo.buflisted = false
+--     vim.cmd("setlocal wrap")
+--     -- vim.bo.buflisted = false
 --   end,
 -- })
 

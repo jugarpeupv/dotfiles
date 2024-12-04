@@ -3,7 +3,7 @@ return {
   -- { "hrsh7th/cmp-nvim-lua", event = "InsertEnter" },
   -- { "hrsh7th/cmp-nvim-lsp", event = "InsertEnter" },
   -- -- { "hrsh7th/cmp-buffer" },
-  -- -- { "hrsh7th/cmp-cmdline" },
+  -- { "hrsh7th/cmp-cmdline" },
   -- { "hrsh7th/cmp-path",     event = "InsertEnter" },
   -- { "saadparwaiz1/cmp_luasnip", event = "InsertEnter" },
   -- {
@@ -25,6 +25,7 @@ return {
       -- cmp sources plugins
       {
         -- "hrsh7th/cmp-nvim-lsp-signature-help",
+        "hrsh7th/cmp-cmdline",
         "saadparwaiz1/cmp_luasnip",
         "hrsh7th/cmp-nvim-lua",
         "hrsh7th/cmp-nvim-lsp",
@@ -33,6 +34,7 @@ return {
       },
     },
     config = function()
+      local types = require("cmp.types")
       -- import nvim-cmp plugin safely
       local cmp_status, cmp = pcall(require, "cmp")
       if not cmp_status then
@@ -213,9 +215,10 @@ return {
         -- sources for autocompletion
         sources = cmp.config.sources({
           { name = "lazydev", group_index = 0 },
-          { name = "path" }, -- file system paths
+          { name = "path",    priority = 1 }, -- file system paths
           {
             name = "nvim_lsp",
+            priority = 2,
             -- entry_filter = function(entry, ctx)
             --   return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
             -- end,
@@ -224,8 +227,8 @@ return {
             -- end,
           },
           -- { name = "nvim_lsp_signature_help" },
-          { name = "nvim_lsp:marksman" },
-          { name = "luasnip" }, -- snippets
+          { name = "nvim_lsp:marksman", priority = 3 },
+          { name = "luasnip",           priority = 4 }, -- snippets
           { name = "buffer" },
           { name = "marksman" },
           { name = "crates" },
@@ -235,6 +238,35 @@ return {
           -- { name = 'markdown' },
         }),
         sorting = {
+          -- comparators = {
+          --   -- cmp.config.compare.offset,
+          --   cmp.config.compare.order,
+          --   cmp.config.compare.exact,
+          --   cmp.config.compare.score,
+          --   function(entry1, entry2)
+          --     local kind1 = entry1:get_kind()
+          --     kind1 = kind1 == types.lsp.CompletionItemKind.Text and 100 or kind1
+          --     local kind2 = entry2:get_kind()
+          --     kind2 = kind2 == types.lsp.CompletionItemKind.Text and 100 or kind2
+          --     if kind1 ~= kind2 then
+          --       if kind1 == types.lsp.CompletionItemKind.Snippet then
+          --         return false
+          --       end
+          --       if kind2 == types.lsp.CompletionItemKind.Snippet then
+          --         return true
+          --       end
+          --       local diff = kind1 - kind2
+          --       if diff < 0 then
+          --         return true
+          --       elseif diff > 0 then
+          --         return false
+          --       end
+          --     end
+          --   end,
+          --   cmp.config.compare.sort_text,
+          --   cmp.config.compare.length,
+          -- },
+
           comparators = {
             cmp.config.compare.exact,
             -- cmp.config.compare.offset,
@@ -322,26 +354,39 @@ return {
         },
       })
       -- `/` cmdline setup.
-      -- cmp.setup.cmdline("/", {
-      --   mapping = cmp.mapping.preset.cmdline(),
-      --   sources = {
-      --     { name = "buffer" },
-      --   },
-      -- })
+      cmp.setup.cmdline("/", {
+        mapping = cmp.mapping.preset.cmdline({
+          ["<C-j>"] = { c = cmp.mapping.select_next_item() },
+          ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
+          -- ["<Tab>"] = cmp.mapping(function(fallback)
+          --   -- local copilot = require("copilot.suggestion")
+          --   -- if copilot.is_visible() then
+          --   --   copilot.accept()
+          --   -- elseif cmp.visible() then
+          --   fallback()
+          -- end),
+        }),
+        sources = {
+          { name = "buffer" },
+        },
+      })
       -- `:` cmdline setup.
-      -- cmp.setup.cmdline(":", {
-      --   mapping = cmp.mapping.preset.cmdline(),
-      --   sources = cmp.config.sources({
-      --     { name = "path" },
-      --   }, {
-      --     {
-      --       name = "cmdline",
-      --       option = {
-      --         ignore_cmds = { "Man", "!" },
-      --       },
-      --     },
-      --   }),
-      -- })
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline({
+          ["<C-j>"] = { c = cmp.mapping.select_next_item() },
+          ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
+        }),
+        sources = cmp.config.sources({
+          { name = "path" },
+        }, {
+          {
+            name = "cmdline",
+            option = {
+              ignore_cmds = { "Man", "!", "read", "write" },
+            },
+          },
+        }),
+      })
 
       local autocomplete_group = vim.api.nvim_create_augroup("vimrc_autocompletion", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {

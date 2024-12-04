@@ -21,6 +21,10 @@ return {
     config = function()
       local api_nvimtree = require("nvim-tree.api")
       local nvim_tree_jg_utils = require("jg.custom.nvim-tree-utils")
+      vim.keymap.set({"n"}, "<leader>ur", function()
+        api_nvimtree.tree.open({ find_file = true, update_root = true })
+      end, { remap = true })
+
 
       vim.api.nvim_create_autocmd("filetype", {
         pattern = "NvimTree",
