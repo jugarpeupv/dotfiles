@@ -336,8 +336,6 @@ vim.cmd([[nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>]])
 --   end
 -- end, { desc = "Super Tab" })
 
-vim.keymap.set("n", "<leader>uu", vim.cmd.UndotreeToggle)
-vim.keymap.set("n", "<leader>us", vim.cmd.UndotreeShow)
 vim.keymap.set("n", "<leader>ns", vim.cmd.Neogen)
 
 vim.cmd([[nnoremap <F6> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_DIR<CR>]])
@@ -428,3 +426,7 @@ local function find_directory_and_focus()
 end
 
 vim.keymap.set("n", "fd", find_directory_and_focus)
+
+vim.keymap.set("n", "<leader><leader>x", "<cmd>source %<CR>")
+vim.keymap.set("n", "<leader>xx", ":.lua<CR>")
+vim.keymap.set("v", "<leader>xx", ":lua<CR>")

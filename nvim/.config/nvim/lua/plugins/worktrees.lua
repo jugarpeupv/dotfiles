@@ -138,6 +138,7 @@ return {
       local wt_utils = require("jg.custom.worktree-utils")
       local wt_switch_info = wt_utils.get_wt_info(path)
       if next(wt_switch_info) == nil then
+        print("[WT-SWITCH] wt_switch_info: " .. vim.inspect(wt_switch_info))
         return
       end
       wt_utils.update_git_head(wt_switch_info.wt_root_dir, wt_switch_info.wt_head)
@@ -199,35 +200,50 @@ return {
         local api_nvimtree = require("nvim-tree.api")
         api_nvimtree.tree.reload()
       end
+
+      local file_utils = require("jg.custom.file-utils")
+      -- print("[WT-CREATE] path: " .. original_path)
+      local my_table = {
+        penultimate_wt = "",
+        last_active_wt = worktree_path,
+      }
+      file_utils.write_bps(file_utils.get_bps_path(original_path .. "_"), my_table)
     end)
 
     Hooks.register(Hooks.type.DELETE, function(path)
-      local wt_utils = require("jg.custom.worktree-utils")
-      local file_utils = require("jg.custom.file-utils")
-
-      -- we cant move node_modules because they are already removed
-
-      local root_dir
-      if string.find(path, "wt") then
-        root_dir = path:match("(.+)wt/.*")
-      else
-        root_dir = path:match("(.*/).-$")
-      end
-      local bps_path = file_utils.get_bps_path(root_dir)
-      local data = file_utils.load_bps(bps_path)
-      if data == nil then
-        return
-      end
-      local penultimate_wt = data.penultimate_wt
       local api_nvimtree = require("nvim-tree.api")
-      api_nvimtree.tree.change_root(penultimate_wt)
+      api_nvimtree.tree.reload()
 
-      -- Write to disk new last active worktree pointing to penultimate worktree
-      local my_table = {
-        penultimate_wt = penultimate_wt,
-        last_active_wt = penultimate_wt,
-      }
-      file_utils.write_bps(file_utils.get_bps_path(root_dir), my_table)
+      -- local wt_utils = require("jg.custom.worktree-utils")
+      -- local file_utils = require("jg.custom.file-utils")
+      --
+      -- -- we cant move node_modules because they are already removed
+      --
+      -- local root_dir
+      -- if string.find(path, "wt") then
+      --   root_dir = path:match("(.+)wt/.*")
+      -- else
+      --   root_dir = path:match("(.*/).-$")
+      -- end
+      -- print("[WT-DELETE] path: " .. path)
+      -- print("[WT-DELETE] root_dir: ", root_dir)
+      -- local bps_path = file_utils.get_bps_path(root_dir)
+      -- local data = file_utils.load_bps(bps_path)
+      -- local api_nvimtree = require("nvim-tree.api")
+      -- print("[WT-DELETE] data: " .. vim.inspect(data))
+      -- if data == nil then
+      --   api_nvimtree.tree.reload()
+      --   return
+      -- end
+      -- local penultimate_wt = data.penultimate_wt
+      -- api_nvimtree.tree.change_root(penultimate_wt)
+      --
+      -- -- Write to disk new last active worktree pointing to penultimate worktree
+      -- local my_table = {
+      --   penultimate_wt = penultimate_wt,
+      --   last_active_wt = penultimate_wt,
+      -- }
+      -- file_utils.write_bps(file_utils.get_bps_path(root_dir), my_table)
 
       -- -- update .git/HEAD to the new branch so when you open a new terminal on root parent it shows the correct branch
       -- local wt_switch_info = wt_utils.get_wt_info(penultimate_wt)

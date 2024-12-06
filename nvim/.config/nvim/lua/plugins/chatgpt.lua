@@ -9,6 +9,13 @@ return {
     build = "make tiktoken",    -- Only on MacOS or Linux
     opts = {
       log_level = 'fatal',
+      -- window = {
+      --   layout = 'float',
+      --   relative = 'cursor',
+      --   width = 1,
+      --   height = 0.4,
+      --   row = 1
+      -- },
       -- See Configuration section for options
       callback = function()
         local chat = require("CopilotChat")

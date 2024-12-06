@@ -48,9 +48,9 @@ return {
     keys = {
       -- Run API request
       -- { "<leader>A",  "<cmd>HurlRunner<CR>",        desc = "Run All requests" },
-      { "<leader>Hm", "<cmd>HurlManageVariable<CR>", desc = "manage variables", mode = "n" },
-      { "<leader>He", "<cmd>HurlShowLastResponse<CR>", desc = "Hurl show last response", mode = "n" },
-      { "<leader>Hr", "<cmd>HurlRunnerAt<CR>",         desc = "Run Api request",         mode = "n" },
+      { "<leader>um", "<cmd>HurlManageVariable<CR>", desc = "manage variables", mode = "n" },
+      { "<leader>ue", "<cmd>HurlShowLastResponse<CR>", desc = "Hurl show last response", mode = "n" },
+      { "<leader>ur", "<cmd>HurlRunnerAt<CR>",         desc = "Run Api request",         mode = "n" },
       -- { "<leader>te", "<cmd>HurlRunnerToEntry<CR>", desc = "Run Api request to entry" },
       -- { "<leader>tE", "<cmd>HurlRunnerToEnd<CR>",   desc = "Run Api request from current entry to end" },
       -- { "<leader>tm", "<cmd>HurlToggleMode<CR>",    desc = "Hurl Toggle Mode" },

@@ -252,7 +252,7 @@ return {
           git_branches = {
             layout_strategy = "vertical",
             mappings = {
-              i = { ["<C-y>"] = require("jg.custom.telescope").set_upstream },
+              i = { ["<C-b>"] = require("jg.custom.telescope").set_upstream },
             },
           },
         },

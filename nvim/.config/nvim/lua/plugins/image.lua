@@ -3,6 +3,7 @@
 return {
   "3rd/image.nvim",
   rocks = { "magick" },
+  branch = "feat/toggle-rendering",
   -- event = "VeryLazy",
   ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
   -- branch = "feat/toggle-rendering",
@@ -12,9 +13,10 @@ return {
       integrations = {
         markdown = {
           enabled = true,
-          clear_in_insert_mode = true,
+          clear_in_insert_mode = false,
           download_remote_images = true,
           only_render_image_at_cursor = true,
+          floating_windows = true,
           filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
           resolve_image_path = function(document_path, image_path, fallback)
             local cwd = vim.loop.cwd()
@@ -50,7 +52,19 @@ return {
       editor_only_render_when_focused = false,                               -- auto show/hide images when the editor gains/looses focus
       tmux_show_only_in_active_window = true,                                -- auto show/hide images in the correct Tmux window (needs visual-activity off)
       hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" }, -- render image files as images when opened
+
+      -- hijack_file_patterns = {}, -- render image files as images when opened
     })
+
+    local image = require("image")
+    vim.keymap.set({ "n", "v" }, "<leader>it", function()
+      if image.is_enabled() then
+        image.disable()
+      else
+        image.enable()
+      end
+    end, {})
+
   end,
   -- config = function()
   --   -- default config
