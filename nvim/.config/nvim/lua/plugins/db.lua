@@ -18,6 +18,17 @@ return {
   --   end,
   -- },
   {
+    "kopecmaciej/vi-mongo.nvim",
+    -- config = function()
+    --   require("vi-mongo").setup()
+    -- end,
+    opts = {},
+    cmd = { "ViMongo" },
+    keys = {
+      { "<leader>vm", "<cmd>ViMongo<cr>", desc = "ViMongo" },
+    },
+  },
+  {
     "kristijanhusak/vim-dadbod-ui",
     dependencies = {
       { "tpope/vim-dadbod",                     lazy = true },

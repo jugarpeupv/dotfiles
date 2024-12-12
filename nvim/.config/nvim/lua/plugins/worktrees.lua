@@ -138,7 +138,7 @@ return {
       local wt_utils = require("jg.custom.worktree-utils")
       local wt_switch_info = wt_utils.get_wt_info(path)
       if next(wt_switch_info) == nil then
-        print("[WT-SWITCH] wt_switch_info: " .. vim.inspect(wt_switch_info))
+        -- print("[WT-SWITCH] wt_switch_info: " .. vim.inspect(wt_switch_info))
         return
       end
       wt_utils.update_git_head(wt_switch_info.wt_root_dir, wt_switch_info.wt_head)

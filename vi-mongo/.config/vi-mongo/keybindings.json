@@ -1,0 +1,402 @@
+{
+    "global": {
+        "closeApp": {
+            "keys": [
+                "Ctrl+C"
+            ],
+            "runes": [
+                "q"
+            ],
+            "description": "Close application"
+        },
+        "toggleFullScreenHelp": {
+            "runes": [
+                "?"
+            ],
+            "description": "Toggle full screen help"
+        },
+        "openConnection": {
+            "keys": [
+                "Ctrl+O"
+            ],
+            "description": "Open connection page"
+        },
+        "showStyleModal": {
+            "keys": [
+                "Ctrl+T"
+            ],
+            "description": "Toggle style change modal"
+        }
+    },
+    "help": {
+        "close": {
+            "keys": [
+                "Esc"
+            ],
+            "description": "Close help"
+        }
+    },
+    "welcome": {
+        "moveFocusUp": {
+            "keys": [
+                "Backtab"
+            ],
+            "description": "Move focus up"
+        },
+        "moveFocusDown": {
+            "keys": [
+                "Tab"
+            ],
+            "description": "Move focus down"
+        }
+    },
+    "connection": {
+        "toggleFocus": {
+            "keys": [
+                "Tab",
+                "Backtab"
+            ],
+            "description": "Toggle focus"
+        },
+        "connectionForm": {
+            "saveConnection": {
+                "keys": [
+                    "Ctrl+S",
+                    "Enter"
+                ],
+                "description": "Save connection"
+            },
+            "focusList": {
+                "keys": [
+                    "Ctrl+H",
+                    "Ctrl+Left"
+                ],
+                "description": "Focus Connection List"
+            }
+        },
+        "connectionList": {
+            "focusForm": {
+                "keys": [
+                    "Ctrl+L",
+                    "Ctrl+Right"
+                ],
+                "description": "Move focus to form"
+            },
+            "deleteConnection": {
+                "runes": [
+                    "D"
+                ],
+                "description": "Delete selected connection"
+            },
+            "setConnection": {
+                "keys": [
+                    "Enter",
+                    "Space"
+                ],
+                "description": "Set selected connection"
+            }
+        }
+    },
+    "main": {
+        "focusNext": {
+            "keys": [
+                "Ctrl+L",
+                "Tab"
+            ],
+            "description": "Focus next component"
+        },
+        "focusPrevious": {
+            "keys": [
+                "Ctrl+H",
+                "Backtab"
+            ],
+            "description": "Focus previous component"
+        },
+        "hideDatabases": {
+            "keys": [
+                "Ctrl+N"
+            ],
+            "description": "Hide databases"
+        },
+        "showAIQuery": {
+            "keys": [
+                "Ctrl+A"
+            ],
+            "description": "Show AI prompt"
+        },
+        "showServerInfo": {
+            "keys": [
+                "Ctrl+S"
+            ],
+            "description": "Show server info"
+        }
+    },
+    "databases": {
+        "filterBar": {
+            "runes": [
+                "/"
+            ],
+            "description": "Focus filter bar"
+        },
+        "expandAll": {
+            "runes": [
+                "E"
+            ],
+            "description": "Expand all"
+        },
+        "collapseAll": {
+            "runes": [
+                "W"
+            ],
+            "description": "Collapse all"
+        },
+        "addCollection": {
+            "runes": [
+                "A"
+            ],
+            "description": "Add collection"
+        },
+        "deleteCollection": {
+            "runes": [
+                "D"
+            ],
+            "description": "Delete collection"
+        },
+        "renameCollection": {
+            "runes": [
+                "R"
+            ],
+            "description": "Rename collection"
+        }
+    },
+    "content": {
+        "switchView": {
+            "runes": [
+                "f"
+            ],
+            "description": "Change view"
+        },
+        "peekDocument": {
+            "keys": [
+                "Enter"
+            ],
+            "runes": [
+                "p"
+            ],
+            "description": "Quick peek"
+        },
+        "fullPagePeek": {
+            "runes": [
+                "P"
+            ],
+            "description": "Full page peek"
+        },
+        "addDocument": {
+            "runes": [
+                "A"
+            ],
+            "description": "Add new"
+        },
+        "editDocument": {
+            "runes": [
+                "E"
+            ],
+            "description": "Edit"
+        },
+        "duplicateDocument": {
+            "runes": [
+                "D"
+            ],
+            "description": "Duplicate"
+        },
+        "deleteDocument": {
+            "runes": [
+                "d"
+            ],
+            "description": "Delete"
+        },
+        "copyValue": {
+            "runes": [
+                "c"
+            ],
+            "description": "Copy highlighted"
+        },
+        "copyDocument": {
+            "runes": [
+                "C"
+            ],
+            "description": "Copy document"
+        },
+        "refresh": {
+            "runes": [
+                "R"
+            ],
+            "description": "Refresh"
+        },
+        "toggleQueryBar": {
+            "runes": [
+                "/"
+            ],
+            "description": "Toggle query bar"
+        },
+        "nextDocument": {
+            "runes": [
+                "]"
+            ],
+            "description": "Next document"
+        },
+        "previousDocument": {
+            "runes": [
+                "["
+            ],
+            "description": "Previous document"
+        },
+        "nextPage": {
+            "runes": [
+                "n"
+            ],
+            "description": "Next page"
+        },
+        "previousPage": {
+            "runes": [
+                "b"
+            ],
+            "description": "Previous page"
+        },
+        "toggleSortBar": {
+            "runes": [
+                "s"
+            ],
+            "description": "Toggle sort bar"
+        }
+    },
+    "peeker": {
+        "moveToTop": {
+            "runes": [
+                "g"
+            ],
+            "description": "Move to top"
+        },
+        "moveToBottom": {
+            "runes": [
+                "G"
+            ],
+            "description": "Move to bottom"
+        },
+        "copyHighlight": {
+            "runes": [
+                "c"
+            ],
+            "description": "Copy highlighted"
+        },
+        "copyValue": {
+            "runes": [
+                "C"
+            ],
+            "description": "Copy only value"
+        },
+        "toggleFullScreen": {
+            "runes": [
+                "F"
+            ],
+            "description": "Toggle full screen"
+        },
+        "exit": {
+            "runes": [
+                "p",
+                "P"
+            ],
+            "description": "Exit"
+        }
+    },
+    "queryBar": {
+        "showHistory": {
+            "keys": [
+                "Ctrl+Y"
+            ],
+            "description": "Show history"
+        },
+        "clearInput": {
+            "keys": [
+                "Ctrl+D"
+            ],
+            "description": "Clear input"
+        },
+        "paste": {
+            "keys": [
+                "Ctrl+V"
+            ],
+            "description": "Paste from clipboard"
+        }
+    },
+    "sortBar": {
+        "clearInput": {
+            "keys": [
+                "Ctrl+D"
+            ],
+            "description": "Clear input"
+        },
+        "paste": {
+            "keys": [
+                "Ctrl+V"
+            ],
+            "description": "Paste from clipboard"
+        }
+    },
+    "index": {
+        "exitModal": {
+            "keys": [
+                "Esc"
+            ],
+            "description": "Exit modal"
+        },
+        "addIndex": {
+            "runes": [
+                "A"
+            ],
+            "description": "Add index"
+        },
+        "deleteIndex": {
+            "runes": [
+                "D"
+            ],
+            "description": "Delete index"
+        }
+    },
+    "aiPrompt": {
+        "exitAIQuery": {
+            "keys": [
+                "Esc"
+            ],
+            "description": "Exit AI query"
+        },
+        "clearPrompt": {
+            "keys": [
+                "Ctrl+D"
+            ],
+            "description": "Clear prompt"
+        }
+    },
+    "history": {
+        "clearHistory": {
+            "runes": [
+                "C"
+            ],
+            "description": "Clear history"
+        },
+        "acceptEntry": {
+            "keys": [
+                "Enter",
+                "Space"
+            ],
+            "description": "Accept entry"
+        },
+        "closeHistory": {
+            "keys": [
+                "Esc",
+                "Ctrl+Y"
+            ],
+            "description": "Close history"
+        }
+    }
+}

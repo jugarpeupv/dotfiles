@@ -1,5 +1,54 @@
 -- return {}
 return {
+  -- {
+  --   'saghen/blink.cmp',
+  --   lazy = false, -- lazy loading handled internally
+  --   -- optional: provides snippets for the snippet source
+  --   dependencies = 'rafamadriz/friendly-snippets',
+  --
+  --   -- use a release tag to download pre-built binaries
+  --   version = 'v0.*',
+  --   -- OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+  --   -- build = 'cargo build --release',
+  --   -- If you use nix, you can build from source using latest nightly rust with:
+  --   -- build = 'nix run .#build-plugin',
+  --
+  --   ---@module 'blink.cmp'
+  --   ---@type blink.cmp.Config
+  --   opts = {
+  --     -- 'default' for mappings similar to built-in completion
+  --     -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
+  --     -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
+  --     -- see the "default configuration" section below for full documentation on how to define
+  --     -- your own keymap.
+  --     keymap = { preset = 'default' },
+  --
+  --     appearance = {
+  --       -- Sets the fallback highlight groups to nvim-cmp's highlight groups
+  --       -- Useful for when your theme doesn't support blink.cmp
+  --       -- will be removed in a future release
+  --       use_nvim_cmp_as_default = true,
+  --       -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+  --       -- Adjusts spacing to ensure icons are aligned
+  --       nerd_font_variant = 'normal'
+  --     },
+  --
+  --     -- default list of enabled providers defined so that you can extend it
+  --     -- elsewhere in your config, without redefining it, via `opts_extend`
+  --     sources = {
+  --       default = { 'lsp', 'path', 'snippets', 'buffer' },
+  --     },
+  --
+  --     -- experimental auto-brackets support
+  --     -- completion = { accept = { auto_brackets = { enabled = true } } }
+  --
+  --     -- experimental signature help support
+  --     -- signature = { enabled = true }
+  --   },
+  --   -- allows extending the providers array elsewhere in your config
+  --   -- without having to redefine it
+  --   opts_extend = { "sources.default" }
+  -- },
   -- { "hrsh7th/cmp-nvim-lua", event = "InsertEnter" },
   -- { "hrsh7th/cmp-nvim-lsp", event = "InsertEnter" },
   -- -- { "hrsh7th/cmp-buffer" },
@@ -16,6 +65,7 @@ return {
     event = "InsertEnter",
     "hrsh7th/nvim-cmp",
     dependencies = {
+      { "neovim/nvim-lspconfig" },
       {
         -- snippet plugin
         "L3MON4D3/LuaSnip",
@@ -23,15 +73,13 @@ return {
         opts = { history = true, updateevents = "TextChanged,TextChangedI" },
       },
       -- cmp sources plugins
-      {
-        -- "hrsh7th/cmp-nvim-lsp-signature-help",
-        -- "hrsh7th/cmp-cmdline",
-        "saadparwaiz1/cmp_luasnip",
-        "hrsh7th/cmp-nvim-lua",
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-      },
+      -- "hrsh7th/cmp-nvim-lsp-signature-help",
+      -- "hrsh7th/cmp-cmdline",
+      "saadparwaiz1/cmp_luasnip",
+      "hrsh7th/cmp-nvim-lua",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
     },
     config = function()
       local types = require("cmp.types")
@@ -214,11 +262,10 @@ return {
         },
         -- sources for autocompletion
         sources = cmp.config.sources({
-          { name = "lazydev", group_index = 0 },
-          { name = "path",    priority = 1 }, -- file system paths
+          { name = "lazydev",           group_index = 0 },
           {
             name = "nvim_lsp",
-            priority = 2,
+            priority = 1000,
             -- entry_filter = function(entry, ctx)
             --   return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
             -- end,
@@ -226,16 +273,16 @@ return {
             --   return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
             -- end,
           },
+          { name = "path",              priority = 900 }, -- file system paths
           -- { name = "nvim_lsp_signature_help" },
-          { name = "nvim_lsp:marksman", priority = 3 },
-          { name = "luasnip",           priority = 4 }, -- snippets
-          { name = "buffer" },
-          { name = "marksman" },
-          { name = "crates" },
-          -- { name = "buffer", keyword_length = 5, max_item_count = 5 },
-          -- { name = "buffer" },
-          -- { name = 'markdown-link' },
-          -- { name = 'markdown' },
+          { name = "luasnip",           priority = 800 }, -- snippets
+          -- { name = "nvim_lsp:marksman", priority = 600 },
+          { name = "render-markdown",   priority = 400 },
+          { name = "crates",            priority = 300 },
+          { name = "obsidian",            priority = 300 },
+          { name = "obsidian_new",            priority = 200 },
+          { name = "obsidian_tags",            priority = 100 },
+          { name = "buffer",            priority = 5 },
         }),
         sorting = {
           -- comparators = {
@@ -268,50 +315,32 @@ return {
           -- },
 
           comparators = {
+            cmp.config.compare.order,
+            cmp.config.compare.offset,
             cmp.config.compare.exact,
-            -- cmp.config.compare.offset,
             cmp.config.compare.score,
-            cmp.config.compare.recently_used,
-            -- require("cmp-under-comparator").under,
-            -- function(entry1, entry2)
-            --   local _, entry1_under = entry1.completion_item.label:find("^_+")
-            --   local _, entry2_under = entry2.completion_item.label:find("^_+")
-            --   entry1_under = entry1_under or 0
-            --   entry2_under = entry2_under or 0
-            --   if entry1_under > entry2_under then
-            --     return false
-            --   elseif entry1_under < entry2_under then
-            --     return true
-            --   end
-            -- end,
-            cmp.config.compare.kind,
-            -- cmp.config.compare.offset,
-            -- cmp.config.compare.exact,
-            -- cmp.config.compare.score,
-            -- -- cmp.config.compare.kind,
-            -- -- cmp.config.compare.sort_text,
-            -- -- cmp.config.compare.length,
-            -- -- cmp.config.compare.order,
-
-            -- -- TODO: Would be cool to add stuff like "See variable names before method names" in rust, or something like that.
-            -- -- -- copied from cmp-under, but I don't think I need the plugin for this.
-            -- -- -- I might add some more of my own.
-            -- function(entry1, entry2)
-            --   local _, entry1_under = entry1.completion_item.label:find("^_+")
-            --   local _, entry2_under = entry2.completion_item.label:find("^_+")
-            --   entry1_under = entry1_under or 0
-            --   entry2_under = entry2_under or 0
-            --   if entry1_under > entry2_under then
-            --     return false
-            --   elseif entry1_under < entry2_under then
-            --     return true
-            --   end
-            -- end,
-
-            -- cmp.config.compare.kind,
-            -- cmp.config.compare.sort_text,
-            -- cmp.config.compare.length,
-            -- cmp.config.compare.order,
+            function(entry1, entry2)
+              local kind1 = entry1:get_kind()
+              kind1 = kind1 == types.lsp.CompletionItemKind.Text and 100 or kind1
+              local kind2 = entry2:get_kind()
+              kind2 = kind2 == types.lsp.CompletionItemKind.Text and 100 or kind2
+              if kind1 ~= kind2 then
+                if kind1 == types.lsp.CompletionItemKind.Snippet then
+                  return false
+                end
+                if kind2 == types.lsp.CompletionItemKind.Snippet then
+                  return true
+                end
+                local diff = kind1 - kind2
+                if diff < 0 then
+                  return true
+                elseif diff > 0 then
+                  return false
+                end
+              end
+            end,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.length,
           },
         },
         -- configure lspkind for vs-code like icons
@@ -323,7 +352,7 @@ return {
             mode = "symbol_text",
             menu = {
               nvim_lsp = "[LSP]",
-              -- buffer = "[Buffer]",
+              buffer = "[Buffer]",
               luasnip = "[LuaSnip]",
               nvim_lua = "[Lua]",
               latex_symbols = "[Latex]",

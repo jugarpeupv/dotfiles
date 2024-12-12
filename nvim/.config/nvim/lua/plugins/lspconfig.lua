@@ -12,6 +12,14 @@ return {
   --   },
   -- },
   {
+    "andreluisos/nvim-javagenie",
+    enabled = false,
+    dependencies = {
+      "grapp-dev/nui-components.nvim",
+      "MunifTanjim/nui.nvim",
+    },
+  },
+  {
     dir = "~/projects/springboot-nvim",
     dev = true,
     ft = "java",
@@ -236,6 +244,7 @@ return {
 
       -- used to enable autocompletion (assign to every lsp server config)
       local capabilities = cmp_nvim_lsp.default_capabilities()
+      -- local capabilities = require('blink.cmp').get_lsp_capabilities()
       -- capabilities.textDocument.foldingRange = {
       --   dynamicRegistration = false,
       --   lineFoldingOnly = true,
@@ -569,32 +578,32 @@ return {
       -- })
       -- require("lspconfig")["yamlls"].setup(cfg)
 
-      require("lspconfig").yamlls.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
-        -- settings = {
-        --   -- yaml = {
-        --   --   schemaStore = {
-        --   --     enable = true,
-        --   --     url = "",
-        --   --   },
-        --   --   schemas = require("schemastore").yaml.schemas(),
-        --   -- },
-        --   yaml = {
-        --     -- validate = true,
-        --     format = { enable = true },
-        --     -- schemaDownload = { enable = true },
-        --     -- schemaStore = {
-        --     --   enable = true,
-        --     --   url = "https://www.schemastore.org/api/json/catalog.json"
-        --     -- },
-        --     -- schemas = {
-        --     --   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-        --     -- },
-        --     -- schemas = require('schemastore').yaml.schemas(),
-        --   },
-        -- },
-      })
+      -- require("lspconfig").yamlls.setup({
+      --   on_attach = on_attach,
+      --   capabilities = capabilities,
+      --   -- settings = {
+      --   --   -- yaml = {
+      --   --   --   schemaStore = {
+      --   --   --     enable = true,
+      --   --   --     url = "",
+      --   --   --   },
+      --   --   --   schemas = require("schemastore").yaml.schemas(),
+      --   --   -- },
+      --   --   yaml = {
+      --   --     -- validate = true,
+      --   --     format = { enable = true },
+      --   --     -- schemaDownload = { enable = true },
+      --   --     -- schemaStore = {
+      --   --     --   enable = true,
+      --   --     --   url = "https://www.schemastore.org/api/json/catalog.json"
+      --   --     -- },
+      --   --     -- schemas = {
+      --   --     --   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+      --   --     -- },
+      --   --     -- schemas = require('schemastore').yaml.schemas(),
+      --   --   },
+      --   -- },
+      -- })
 
       local default_schemas = nil
       local status_ok, jsonls_settings = pcall(require, "nlspsettings.jsonls")
@@ -603,7 +612,6 @@ return {
       else
         default_schemas = require("schemastore").json.schemas()
       end
-
 
       local schemas = {
         {

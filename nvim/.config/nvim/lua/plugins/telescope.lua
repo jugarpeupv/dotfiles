@@ -114,6 +114,36 @@ return {
             bottom_pane = { width = 0.99, height = 0.99 },
             prompt_position = "top",
           },
+          preview = {
+            filesize_limit = 0.8, -- MB
+            hide_on_startup = true,
+            mime_hook = function(filepath, bufnr, opts)
+              local is_image = function(filepath)
+                local image_extensions = { "png", "jpg" } -- Supported image formats
+                local split_path = vim.split(filepath:lower(), ".", { plain = true })
+                local extension = split_path[#split_path]
+                return vim.tbl_contains(image_extensions, extension)
+              end
+              if is_image(filepath) then
+                local term = vim.api.nvim_open_term(bufnr, {})
+                local function send_output(_, data, _)
+                  for _, d in ipairs(data) do
+                    vim.api.nvim_chan_send(term, d .. "\r\n")
+                  end
+                end
+                vim.fn.jobstart({
+                  "catimg",
+                  filepath, -- Terminal image viewer command
+                }, { on_stdout = send_output, stdout_buffered = true, pty = true })
+              else
+                require("telescope.previewers.utils").set_preview_message(
+                  bufnr,
+                  opts.winid,
+                  "Binary cannot be previewed"
+                )
+              end
+            end,
+          },
 
           -- preview = {
           --   mime_hook = function(filepath, bufnr, opts)
@@ -149,6 +179,7 @@ return {
 
           mappings = {
             i = {
+              ["<C-space>"] = actions.to_fuzzy_refine,
               ["<C-n>"] = actions.cycle_history_next,
               ["<C-p>"] = actions.cycle_history_prev,
 
@@ -166,6 +197,7 @@ return {
               ["<C-t>"] = actions.select_tab,
               -- ["<C-t>"] = trouble.open_with_trouble,
               ["<C-e>"] = open_with_trouble,
+              ["<C-w>"] = require("telescope.actions.layout").toggle_preview,
               -- ["<C-t>"] = trouble.open_with_trouble,
 
               -- ["<C-u>"] = actions.preview_scrolling_up,
@@ -179,11 +211,12 @@ return {
 
               ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
               ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+
               ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
               ["<C-y>"] = actions.send_selected_to_qflist + actions.open_qflist,
               ["<C-x>"] = "delete_buffer",
               -- ["<C-l>"] = actions.complete_tag,
-              ["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
+              ["<C-h>"] = actions.which_key, -- keys from pressing <C-/>
               ["<C-a>"] = actions.git_create_branch,
             },
 
@@ -242,12 +275,19 @@ return {
           -- }
           -- Now the picker_config_key will be applied every time you call this
           -- builtin picker
-          -- find_files = {
-          --   theme = "dropdown",
-          -- }
+          buffers = {
+            theme = "ivy",
+          },
+          oldfiles = {
+            theme = "ivy",
+          },
+          find_files = {
+            theme = "ivy",
+          },
           -- live_grep = {
-          --   layout_strategy = "vertical",
-          --   path_display = { 'hidden' }
+          --   theme = "ivy"
+          --   -- layout_strategy = "vertical",
+          --   -- path_display = { 'hidden' }
           -- },
           git_branches = {
             layout_strategy = "vertical",
@@ -309,13 +349,13 @@ return {
           egrepify = {
             -- intersect tokens in prompt ala "str1.*str2" that ONLY matches
             -- if str1 and str2 are consecutively in line with anything in between (wildcard)
-            AND = true,                   -- default
-            permutations = false,         -- opt-in to imply AND & match all permutations of prompt tokens
-            lnum = true,                  -- default, not required
-            lnum_hl = "EgrepifyLnum",     -- default, not required, links to `Constant`
-            col = false,                  -- default, not required
-            col_hl = "EgrepifyCol",       -- default, not required, links to `Constant`
-            title = true,                 -- default, not required, show filename as title rather than inline
+            AND = true,             -- default
+            permutations = false,   -- opt-in to imply AND & match all permutations of prompt tokens
+            lnum = true,            -- default, not required
+            lnum_hl = "EgrepifyLnum", -- default, not required, links to `Constant`
+            col = false,            -- default, not required
+            col_hl = "EgrepifyCol", -- default, not required, links to `Constant`
+            title = true,           -- default, not required, show filename as title rather than inline
             filename_hl = "EgrepifyFile", -- default, not required, links to `Title`
             -- suffix = long line, see screenshot
             -- EXAMPLE ON HOW TO ADD PREFIX!
@@ -408,9 +448,13 @@ return {
             --   prompt_prefix = "> ",
             --   prompt_position = "bottom"
             -- }),
+            theme = "ivy",
             auto_quoting = false,
             mappings = {
               i = {
+                ["<C-space>"] = actions.to_fuzzy_refine,
+                ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+                ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
                 ["<C-l>"] = actions_live_grep_args.quote_prompt(),
                 ["<C-k>"] = actions.move_selection_previous,
                 ["<C-i>"] = actions_live_grep_args.quote_prompt({ postfix = " --iglob " }),

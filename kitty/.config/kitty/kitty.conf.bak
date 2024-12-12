@@ -14,7 +14,7 @@
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  4
+# adjust_line_height  0
 # adjust_column_width 0
 
 ## Berkeley
@@ -40,7 +40,7 @@
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  0
+# adjust_line_height  -2
 # adjust_column_width 0
 # font_features FiraCodeNFM-Reg    +ss01 +ss03 +cv29 
 # font_features FiraCodeNFM-Ret    +ss01 +ss03 +cv29 
@@ -53,8 +53,8 @@
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-adjust_line_height  6
-adjust_column_width 0
+# adjust_line_height  6
+# adjust_column_width 0
 
 
 # font_family      family="Liga DejaVu Sans Mono"
@@ -122,13 +122,6 @@ text_composition_strategy 0.5 15
 # # #&&
 
 
-## SF Mono
-# font_family      family="SF Mono"
-# bold_font        auto
-# italic_font      auto
-# bold_italic_font auto
-# adjust_line_height  4
-# adjust_column_width 0
 
 
 ### Zed Mono
@@ -1606,7 +1599,7 @@ confirm_os_window_close 0
 #: The foreground and background colors.
 
 # background_opacity 0.90
-background_opacity 0.75
+background_opacity 0.70
 # background_opacity 1
 
 background_blur 30
@@ -2583,14 +2576,15 @@ map cmd+r no_op
 # map kitty_mod+kp_add change_font_size all +2.0
 # map cmd+plus         change_font_size all +2.0
 # map cmd+equal        change_font_size all +2.0
-# map shift+cmd+equal  change_font_size all +2.0
+map shift+cmd+equal  change_font_size current +2.0
+# map shift+cmd+plus  change_font_size current +2.0
 
 #: Decrease font size
 
 # map kitty_mod+minus       change_font_size all -2.0
 # map kitty_mod+kp_subtract change_font_size all -2.0
-# map cmd+minus             change_font_size all -2.0
-# map shift+cmd+minus       change_font_size all -2.0
+map cmd+minus             change_font_size current -2.0
+# map shift+cmd+minus       change_font_size current -2.0
 
 #: Reset font size
 
@@ -3231,13 +3225,46 @@ color15 #A6ADC8
 # italic_font      auto
 # bold_italic_font auto
 # END_KITTY_FONTS
-adjust_line_height  8
-adjust_column_width 0
+# adjust_line_height  8
+# adjust_column_width 0
+
+
+# cv01 l
+# cv02 t
+# cv03 g
+# cv04 j
+# cv05 l
+# cv06 m
+# cv07 w
+# cv08 k
+# cv09 f
+# cv10 r
+# cv11 y
+# cv12 u
+# # BEGIN_KITTY_FONTS
+# font_family      family='JetBrains Mono' features='cv12=1 cv07=1 cv11=1'
+# font_family      family='JetBrains Mono'
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+# adjust_line_height  2
+# adjust_column_width 0
+# # END_KITTY_FONTS
 
 
 # BEGIN_KITTY_FONTS
-font_family      family="NRK Mono"
-bold_font        auto
-italic_font      auto
-bold_italic_font auto
+# font_family      family="CommitMono Nerd Font"
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+# adjust_line_height  3
+# adjust_column_width 0
 # END_KITTY_FONTS
+
+## SF Mono
+# font_family      family="SF Mono"
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+# adjust_line_height  4
+# adjust_column_width 0

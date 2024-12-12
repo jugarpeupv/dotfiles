@@ -177,10 +177,10 @@ return {
             HlSearchNear = { fg = "#181826", bg = "#F38BA8" },
             HlSearchLensNear = { fg = "#181826", bg = "#F38BA8" },
             ["@markup.heading.1.marker"] = { fg = "#F5C2E7" },
-            ["@markup.heading.1.markdow"] = { fg = "#F5C2E7" },
-            ["@markup.heading.2.markdow"] = { fg = "#89ddff" },
-            ["@markup.heading.3.markdow"] = { fg = "#94E2D5" },
-            ["@markup.heading.4.markdow"] = { fg = "#F5E0DC" },
+            ["@markup.heading.1.markdown"] = { fg = "#F5C2E7" },
+            ["@markup.heading.2.markdown"] = { fg = "#89ddff" },
+            ["@markup.heading.3.markdown"] = { fg = "#94E2D5" },
+            ["@markup.heading.4.markdown"] = { fg = "#B4BEFE" },
             Ignore = { fg = "#394b70" },
             NeotestPassed = { fg = "#8ee2cf" },
             EgrepifyFile = { fg = "#f2cdcd" },
@@ -232,15 +232,24 @@ return {
 
       vim.api.nvim_set_hl(0, "@lsp.typemod.method.defaultLibrary.typescript", { link = "Function" })
 
-      vim.cmd([[hi RenderMarkdownCode guibg=#394b70]])
+      -- vim.cmd([[hi RenderMarkdownCode guibg=#1f2335]])
+      -- vim.cmd([[hi RenderMarkdownCode guibg=none cterm=none gui=none ctermbg=none]])
+      -- vim.cmd([[hi RenderMarkdownCode guibg=#00122e]])
+      -- vim.cmd([[hi RenderMarkdownH3Bg guibg=#4a716b]])
+      -- vim.cmd([[hi RenderMarkdownH4Bg guibg=#6c7298]])
+      -- vim.cmd([[hi RenderMarkdownH2Bg guibg=#456f80]])
+      vim.cmd([[hi RenderMarkdownCode guibg=#00122e]])
       -- vim.cmd([[hi RenderMarkdownCodeInline]])
       vim.cmd([[hi RenderMarkdown_Inverse_RenderMarkdownCode guifg=#394b70]])
+      vim.cmd[[hi RenderMarkdown_DevIconBash_RenderMarkdownSign guifg=#94E2D5 gui=none]]
+      vim.cmd[[hi DevIconBash guifg=#94E2D5 gui=none]]
 
       -- vim.cmd([[@ibl           xxx cleared]])
       vim.cmd([[highlight @ibl.indent.char.1  guifg=#3b4251]])
       vim.cmd([[highlight @ibl.whitespace.char.1 guifg=#3b4251]])
       vim.cmd([[highlight @ibl.scope.char.1 guifg=#737aa2]])
       vim.cmd([[highlight @ibl.scope.underline.1 guisp=#737aa2]])
+      vim.cmd([[hi @markup.strong gui=bold guifg=#F5C2E7]])
       vim.cmd([[hi @markup.heading.gitcommit gui=none guifg=#89B4FA]])
       vim.cmd([[hi gitcommitSummary cterm=none gui=none guifg=#f5e0dd]])
 

@@ -129,14 +129,13 @@ keymap(
   "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true })<cr>",
   opts
 )
-vim.keymap.set({ "n" }, "<Leader>bu", function()
+vim.keymap.set({ "n" }, "<leader>bu", function()
   require("telescope.builtin").buffers({
     ignore_current_buffer = true,
     show_all_buffers = false,
     sort_mru = true,
     sort_lastused = true,
     -- initial_mode = "normal",
-    theme = "ivy",
   })
 end, opts)
 keymap("n", "<leader>tr", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
@@ -178,6 +177,7 @@ vim.keymap.set({ "n", "v" }, "<Leader>f.", function()
   require("telescope").extensions.live_grep_args.live_grep_raw({
     disable_coordinates = true,
     cwd = "~/dotfiles/nvim/.config/nvim",
+    theme = "ivy",
     -- group_by = "filename",
     -- disable_devicons = true,
     vimgrep_arguments = {
@@ -208,7 +208,7 @@ end)
 
 keymap(
   "n",
-  "<Leader>ss",
+  "<Leader>sf",
   "<cmd>lua require('telescope.builtin').live_grep({ search_dirs={'%:p'}, vimgrep_arguments={ 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case' }})<cr>",
   opts
 )
@@ -234,7 +234,7 @@ keymap("n", "<Leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 -- Replace
 vim.cmd([[nnoremap <Leader>rr :%s///gc<Left><Left><Left><Left>]])
 vim.cmd([[xnoremap <Leader>rr :s///gc<Left><Left><Left><Left>]])
-vim.cmd([[nnoremap <Leader>sw /\<\><Left><Left>]])
+vim.cmd([[nnoremap <Leader>ss /\<\><Left><Left>]])
 
 vim.cmd(
   [[nnoremap <Leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]
@@ -304,8 +304,8 @@ vim.keymap.set("n", "<leader>ih", function()
 end)
 
 -- Ctrlsf.nvim
-vim.keymap.set("n", "<leader>sf", "<Plug>CtrlSFCwordPath")
-vim.keymap.set("n", "<leader>st", "<CMD>CtrlSFToggle<CR>")
+-- vim.keymap.set("n", "<leader>sf", "<Plug>CtrlSFCwordPath")
+-- vim.keymap.set("n", "<leader>st", "<CMD>CtrlSFToggle<CR>")
 
 vim.cmd([[nmap <leader>tN :tabnew %<CR>]])
 vim.cmd([[nmap <leader>tC :tabclose<CR>]])
@@ -430,3 +430,7 @@ vim.keymap.set("n", "fd", find_directory_and_focus)
 vim.keymap.set("n", "<leader><leader>x", "<cmd>source %<CR>")
 vim.keymap.set("n", "<leader>xx", ":.lua<CR>")
 vim.keymap.set("v", "<leader>xx", ":lua<CR>")
+
+
+keymap("n", "<leader>sw", "<cmd>set wrap<cr>", opts)
+keymap("n", "<leader>sn", "<cmd>set nowrap<cr>", opts)

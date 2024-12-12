@@ -21,6 +21,7 @@ return {
     -- event = { "BufReadPost", "BufNewFile" },
     dependencies = {
       "nvim-telescope/telescope.nvim",
+      "akinsho/git-conflict.nvim"
     },
     keys = {
       { "<leader>gd", mode = "n",     "<cmd>DiffviewOpen<cr>" },

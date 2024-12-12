@@ -41,8 +41,8 @@ if java_dependency_bundle[1] ~= "" then
   vim.list_extend(bundles, java_dependency_bundle)
 end
 
-
-local root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", "mvnw" }, { upward = true })[1])
+-- local root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", "mvnw" }, { upward = true })[1])
+local root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", "mvnw" })[1])
 
 local workspace_folder = "/Users/jgarcia/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
 
@@ -117,6 +117,7 @@ local config = {
     create_command(bufnr, "JavaProjects", require("java-deps").toggle_outline, {
       nargs = 0,
     })
+
   end,
   cmd = {
     "java",

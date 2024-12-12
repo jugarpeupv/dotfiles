@@ -1,0 +1,86 @@
+global:
+  backgroundColor: "#FFFFFF"
+  contrastBackgroundColor: "#D0E8CF"
+  moreContrastBackgroundColor: "#B7D0B6"
+  textColor: "#2A2A3F"
+  secondaryTextColor: "#4A5B8C"
+  borderColor: "#B0B2C0"
+  focusColor: "#FF9580"
+  titleColor: "#0184BC"
+  graphicsColor: "#0184BC"
+welcome:
+  formLabelColor: "#FF9580"
+  formInputColor: "#2A2A3F"
+  formInputBackgroundColor: "#ECEDF2"
+connection:
+  formLabelColor: "#FF9580"
+  formInputBackgroundColor: "#ECEDF2"
+  formInputColor: "#2A2A3F"
+  formButtonColor: "#0184BC"
+  listTextColor: "#2A2A3F"
+  listSelectedTextColor: "#FFFFFF"
+  listSelectedBackgroundColor: "#0184BC"
+  listSecondaryTextColor: "#4A5B8C"
+  listSecondaryBackgroundColor: "#FFFFFF"
+header:
+  keyColor: "#FF9580"
+  valueColor: "#0184BC"
+  activeSymbol: ●
+  inactiveSymbol: ○
+tabBar:
+  activeTextColor: "#FF9580"
+  activeBackgroundColor: "#0184BC"
+databases:
+  nodeTextColor: "#0184BC"
+  leafTextColor: "#2A2A3F"
+  nodeSymbolColor: "#FF8700"
+  leafSymbolColor: "#00A86B"
+  openNodeSymbol: " "
+  closedNodeSymbol: " "
+  leafSymbol: "󰈙 "
+content:
+  statusTextColor: "#4A5B8C"
+  headerRowColor: "#C8CAD5"
+  columnKeyColor: "#FF9580"
+  columnTypeColor: "#00A86B"
+  cellTextColor: "#2A2A3F"
+  activeRowColor: "#0184BC"
+  selectedRowColor: "#0184BC"
+docPeeker:
+  keyColor: "#FF9580"
+  valueColor: "#2A2A3F"
+  bracketColor: "#FF6B8B"
+  highlightColor: "#e2e2e2"
+inputBar:
+  labelColor: "#FF9580"
+  inputColor: "#2A2A3F"
+  autocomplete:
+    backgroundColor: "#ECEDF2"
+    textColor: "#2A2A3F"
+    activeBackgroundColor: "#0184BC"
+    activeTextColor: "#FFFFFF"
+    secondaryTextColor: "#4A5B8C"
+history:
+  textColor: "#2A2A3F"
+  selectedTextColor: "#FFFFFF"
+  selectedBackgroundColor: "#0184BC"
+help:
+  headerColor: "#0184BC"
+  keyColor: "#FF9580"
+  descriptionColor: "#2A2A3F"
+others:
+  buttonsTextColor: "#2A2A3F"
+  buttonsBackgroundColor: "#0184BC"
+  deleteButtonSelectedBackgroundColor: "#DA3312"
+  modalTextColor: "#2A2A3F"
+  modalSecondaryTextColor: "#0184BC"
+  separatorSymbol: "|"
+  separatorColor: "#B0B2C0"
+styleChange:
+  textColor: "#2A2A3F"
+  selectedTextColor: "#FFFFFF"
+  selectedBackgroundColor: "#0184BC"
+aiPrompt:
+  formLabelColor: "#FF9580"
+  formInputColor: "#2A2A3F"
+  formInputBackgroundColor: "#ECEDF2"

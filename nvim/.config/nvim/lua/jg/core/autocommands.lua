@@ -79,14 +79,11 @@ augroup END ]])
 
 -- vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wrap' | endif]])
 
-vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
-
+-- vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 
 -- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
 
 -- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 4]])
-
-
 
 -- vim.api.nvim_create_autocmd("TermOpen", {
 --   group = vim.api.nvim_create_augroup("term-open-buflisted", { clear = true }),
@@ -96,20 +93,35 @@ vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 --   end,
 -- })
 
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'GitConflictDetected',
+vim.api.nvim_create_autocmd("User", {
+  pattern = "GitConflictDetected",
   callback = function()
-    vim.notify('Conflict detected in '..vim.fn.expand('<afile>'))
+    vim.notify("Conflict detected in " .. vim.fn.expand("<afile>"))
 
-    vim.keymap.set({"n", "v"}, "cc", "<Plug>(git-conflict-ours)")
-    vim.keymap.set({"n", "v"}, "ci", "<Plug>(git-conflict-theirs)")
-    vim.keymap.set({"n", "v"}, "cb", "<Plug>(git-conflict-both)")
-    vim.keymap.set({"n", "v"}, "cn", "<Plug>(git-conflict-none)")
-    vim.keymap.set({"n", "v"}, "ck", "<Plug>(git-conflict-prev-conflict)")
-    vim.keymap.set({"n", "v"}, "cj", "<Plug>(git-conflict-next-conflict)")
-  end
+    vim.keymap.set({ "n", "v" }, "cc", "<Plug>(git-conflict-ours)")
+    vim.keymap.set({ "n", "v" }, "ci", "<Plug>(git-conflict-theirs)")
+    vim.keymap.set({ "n", "v" }, "cb", "<Plug>(git-conflict-both)")
+    vim.keymap.set({ "n", "v" }, "cn", "<Plug>(git-conflict-none)")
+    vim.keymap.set({ "n", "v" }, "ck", "<Plug>(git-conflict-prev-conflict)")
+    vim.keymap.set({ "n", "v" }, "cj", "<Plug>(git-conflict-next-conflict)")
+  end,
 })
 
+vim.api.nvim_create_autocmd("User", {
+  pattern = "TelescopePreviewerLoaded",
+  callback = function(args)
+    -- if args.data.filetype ~= "help" then
+    --   vim.wo.number = true
+    --   return
+    -- end
+    -- -- elseif args.data.bufname:match("*.csv") then
+    -- --   vim.wo.wrap = false
+    -- -- end
+    vim.wo.wrap = true
+  end,
+})
+
+-- vim.cmd([[autocmd OptionSet * execute 'set foldtext=""']])
 
 -- vim.api.nvim_create_autocmd("VimLeave", {
 --   group = vim.api.nvim_create_augroup("VimLeaveSaveChatCopilot", { clear = true }),
@@ -134,3 +146,11 @@ vim.api.nvim_create_autocmd('User', {
 -- })
 
 
+-- local autocomplete_group = vim.api.nvim_create_augroup("foldtext_for_md", { clear = true })
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = { "markdown" },
+--   callback = function()
+--     vim.o.foldtext = ""
+--   end,
+--   group = autocomplete_group,
+-- })

@@ -1,7 +1,12 @@
 return {
   {
     "mg979/vim-visual-multi",
-    keys = { { "<M-e>", mode = { "n", "v" } }, { "<M-r>", mode = { "n", "v" } } },
+    keys = {
+      { "<M-e>",   mode = { "n", "v" } },
+      { "<M-r>",   mode = { "n", "v" } },
+      { "<C-Down>", mode = { "n", "v" } },
+      { "<C-Up>",   mode = { "n", "v" } },
+    },
     -- event = "VeryLazy",
     -- event = { "BufRead", "BufNewFile" },
     init = function()
@@ -28,7 +33,7 @@ return {
         ["Select l"] = "<S-Right>",
         ["Add Cursor Up"] = "<C-Up>",
         ["Add Cursor Down"] = "<C-Down>",
-        ["Select Operator"] = "gs"
+        ["Select Operator"] = "gs",
         -- ["Mouse Cursor"] = "<C-LeftMouse>",
         -- ["Mouse Column"] = "<C-RightMouse>",
       }

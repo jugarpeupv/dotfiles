@@ -1,10 +1,37 @@
 return {}
+
+-- return {
+--   "nvim-neo-tree/neo-tree.nvim",
+--   cmd = { "Neotree" },
+--   dependencies = { "adelarsq/image_preview.nvim" },
+--   config = function()
+--     require("neo-tree").setup({
+--       filesystem = {
+--         window = {
+--           mappings = {
+--             ["P"] = "image_wezterm", -- " or another map
+--           },
+--         },
+--         commands = {
+--           image_wezterm = function(state)
+--             local node = state.tree:get_node()
+--             if node.type == "file" then
+--               require("image_preview").PreviewImage(node.path)
+--             end
+--           end,
+--         },
+--       },
+--     })
+--   end
+--
+-- }
+
 -- return {
 --   "nvim-neo-tree/neo-tree.nvim",
 --   branch = "v3.x",
---   -- cmd = { "Neotree" },
---   event = { "VeryLazy" },
-
+--   cmd = { "Neotree" },
+--   -- event = { "VeryLazy" },
+--
 --   dependencies = {
 --     "nvim-lua/plenary.nvim",
 --     "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
@@ -17,7 +44,7 @@ return {}
 --     vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
 --     vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
 --     vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
-
+--
 --     require("neo-tree").setup({
 --       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
 --       popup_border_style = "rounded",
@@ -60,7 +87,7 @@ return {}
 --           -- folder_empty = "󰜌",
 --           -- folder_empty = "",
 --           folder_empty = "󱞞",
-
+--
 -- --               default = "",
 -- --               open = "",
 -- -- --               empty_open = "󱞞",
@@ -91,7 +118,7 @@ return {}
 --             modified  = "", -- or "", but this is redundant info if you use git_status_colors on the name
 --             -- deleted   = "✖", -- this can only be used in the git_status source
 --             deleted = "󰧧",
-
+--
 --             -- renamed   = "󰁕", -- this can only be used in the git_status source
 --             renamed = "󰕛 ",
 --             -- Status type
@@ -276,7 +303,7 @@ return {}
 --             ["<C-k>"] = "move_cursor_up",
 --           },
 --         },
-
+--
 --         commands = {}, -- Add a custom command or override a global one using the same function name
 --       },
 --       buffers = {
@@ -324,9 +351,9 @@ return {}
 --         },
 --       },
 --     })
-
+--
 --     -- vim.cmd([[nnoremap \ :Neotree reveal<cr>]])
-
+--
 --   -- vim.cmd([[highlight NeoTreeRootName gui=none]])
 --   --   vim.cmd([[highlight NeoTreeFileStatsHeader guifg=#3b4261]])
 --   -- vim.cmd([[highlight NeoTreeFileStats guifg=#3b4261]])

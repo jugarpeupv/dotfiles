@@ -7,6 +7,11 @@ return {
     config = true,
   },
   -- {
+  --   "alexxGmZ/Md2Pdf",
+  --   cmd = "Md2Pdf"
+  -- },
+
+  -- {
   --   "andrewferrier/wrapping.nvim",
   --   config = function()
   --     require("wrapping").setup()
@@ -154,14 +159,14 @@ return {
             enabled = false,
             fg = "#21d5ff", -- "text" or "#rrggbb"
             -- fg = "text", -- text will set underline same color with text
-            bg = nil, -- nil or "#rrggbb"
+            bg = nil,       -- nil or "#rrggbb"
             underline = true,
           },
           cursor_move = {
             enabled = false,
             fg = "#199eff", -- "text" or "#rrggbb"
             -- fg = "text", -- text will set underline same color with text
-            bg = nil, -- nil or "#rrggbb"
+            bg = nil,       -- nil or "#rrggbb"
             underline = true,
           },
         },
@@ -206,7 +211,7 @@ return {
       skipInsignificantPunctuation = true,
       consistentOperatorPending = true, -- see "Consistent Operator-pending Mode" in the README
       subwordMovement = true,
-      customPatterns = {},           -- check "Custom Movement Patterns" in the README for details
+      customPatterns = {},              -- check "Custom Movement Patterns" in the README for details
     },
   },
   -- { https://github.com/axieax/urlview.nvim }
@@ -221,12 +226,21 @@ return {
     "chrisgrieser/nvim-various-textobjs",
     -- event = "VeryLazy",
     event = { "BufReadPost", "BufNewFile" },
-    config = function()
-      require("various-textobjs").setup({ useDefaultKeymaps = true })
-      -- example: `as` for outer subword, `is` for inner subword
-      vim.keymap.set({ "o", "x" }, "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>')
-      vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
-    end,
+    keys = {
+      { mode = { "o", "x" }, "as", "<cmd>lua require('various-textobjs').subword('outer')<CR>" },
+      { mode = { "o", "x" }, "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>" },
+    },
+    opts = {
+      keymaps = {
+        useDefaults = true,
+      },
+    },
+    -- config = function(_, opts)
+    --   require("various-textobjs").setup(opts)
+    --   -- example: `as` for outer subword, `is` for inner subword
+    --   vim.keymap.set({ "o", "x" }, "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>')
+    --   vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
+    -- end,
   },
   {
     "christoomey/vim-tmux-navigator",

@@ -8,7 +8,7 @@ return {
     branch = "main",
     -- cmd = { "DiffviewOpen" },
     -- event = { "BufReadPost" },
-    event = "User GitConflictDetected",
+    -- event = "User GitConflictDetected",
 
     -- keys = {
     --   { "<leader>gd", mode = "n" },

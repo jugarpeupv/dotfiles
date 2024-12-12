@@ -238,7 +238,7 @@ return {
         vim.keymap.set("n", "<CR>", api_nvimtree.node.open.edit, opts("Open"))
         -- vim.keymap.set('n', '<CR>', toggle_replace, opts('Open: In Place'))
         -- vim.keymap.set('n', '<CR>', api.node.open.replace_tree_buffer, opts('Open: In Place'))
-        vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
+        -- vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
         vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
         vim.keymap.set("n", "<", api_nvimtree.node.navigate.sibling.prev, opts("Previous Sibling"))
         vim.keymap.set("n", ".", api_nvimtree.node.run.cmd, opts("Run Command"))
@@ -295,6 +295,12 @@ return {
         -- You might tidy things by removing these along with their default mapping.
         vim.keymap.set("n", "<C-e>", "", { buffer = bufnr })
         vim.keymap.del("n", "<C-e>", { buffer = bufnr })
+
+        vim.keymap.set("n", "<C-i>", "", { buffer = bufnr })
+        -- vim.keymap.del("n", "<C-i>", { buffer = bufnr })
+
+        vim.keymap.set("n", "<C-o>", "", { buffer = bufnr })
+        -- vim.keymap.del("n", "<C-o>", { buffer = bufnr })
 
         -- vim.keymap.set('n', '<C-k>', '', { buffer = bufnr })
         -- vim.keymap.del('n', '<C-k>', { buffer = bufnr })
