@@ -56,12 +56,20 @@ keymap("n", "<leader>pu", "<cmd>pu<cr>", opts)
 -- Cmd modifiers cooresponds to cmd+shift+7
 vim.cmd([[map <M-g> gcc]])
 
-
 vim.keymap.set({ "n", "t" }, "<D-p>", function()
   require("telescope.builtin").find_files({
     hidden = true,
     find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
   })
+  -- local builtin = require("telescope.builtin")
+  --
+  -- local themes = require("telescope.themes")
+  -- local opts_ivy = {
+  --   layout_config = { height = 0.5 },
+  --   hidden = true,
+  --   find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
+  -- }
+  -- builtin.find_files(themes.get_ivy(opts_ivy))
 end, opts)
 
 vim.keymap.set({ "n", "t" }, "<M-p>", function()
@@ -69,7 +77,17 @@ vim.keymap.set({ "n", "t" }, "<M-p>", function()
     hidden = true,
     find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
   })
+  -- local builtin = require("telescope.builtin")
+  --
+  -- local themes = require("telescope.themes")
+  -- local opts_ivy = {
+  --   layout_config = { height = 0.4 },
+  --   hidden = true,
+  --   find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
+  -- }
+  -- builtin.find_files(themes.get_ivy(opts_ivy))
 end, opts)
+
 
 -- cd into dir of the current buffer
 vim.keymap.set({ "n" }, "<leader>cd", function()
@@ -398,10 +416,8 @@ vim.api.nvim_set_keymap("n", "<F5>", [[:lua require"osv".launch({port = 8086})<C
 
 vim.api.nvim_set_keymap("n", "<leader>vf", "<cmd>Vifm .<cr>", { noremap = true, silent = true })
 
-
 -- clear scrollback buffer in terminal buffer
 -- vim.keymap.set({ "t", "n" }, "<leader>CL", "<C-\\><C-n><cmd>lua vim.bo.scrollback=1<cr>", opts)
-
 
 local function find_directory_and_focus()
   local actions = require("telescope.actions")
@@ -431,6 +447,6 @@ vim.keymap.set("n", "<leader><leader>x", "<cmd>source %<CR>")
 vim.keymap.set("n", "<leader>xx", ":.lua<CR>")
 vim.keymap.set("v", "<leader>xx", ":lua<CR>")
 
-
 keymap("n", "<leader>sw", "<cmd>set wrap<cr>", opts)
 keymap("n", "<leader>sn", "<cmd>set nowrap<cr>", opts)
+

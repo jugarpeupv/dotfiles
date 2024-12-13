@@ -107,10 +107,12 @@ return {
                 (lang == "json" or lang == "jsonc")
                 and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json")
             then
+              print("disable json treesitter")
               return true
             end
 
             if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 1000 then
+              print("disable json treesitter")
               return true
             end
 
@@ -119,12 +121,20 @@ return {
             local char_count = #line
 
             if char_count > 1000 then
+              print("disable json treesitter")
               return true
             end
 
-            return (lang == "json" or lang == "jsonc")
+            if
+                (lang == "json" or lang == "jsonc")
                 and vim.api.nvim_buf_line_count(bufnr) > 10000
                 and char_count > 1000
+            then
+              print("disable json treesitter")
+              return true
+            end
+
+            return false
           end,
           additional_vim_regex_highlighting = true,
         },

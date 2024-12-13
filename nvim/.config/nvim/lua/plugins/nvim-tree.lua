@@ -296,7 +296,7 @@ return {
         vim.keymap.set("n", "<C-e>", "", { buffer = bufnr })
         vim.keymap.del("n", "<C-e>", { buffer = bufnr })
 
-        vim.keymap.set("n", "<C-i>", "", { buffer = bufnr })
+        -- vim.keymap.set("n", "<C-i>", "", { buffer = bufnr })
         -- vim.keymap.del("n", "<C-i>", { buffer = bufnr })
 
         vim.keymap.set("n", "<C-o>", "", { buffer = bufnr })

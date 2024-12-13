@@ -69,6 +69,7 @@ return {
       {
         -- snippet plugin
         "L3MON4D3/LuaSnip",
+        build = "make install_jsregexp",
         dependencies = "rafamadriz/friendly-snippets",
         opts = { history = true, updateevents = "TextChanged,TextChangedI" },
       },
@@ -273,15 +274,16 @@ return {
             --   return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
             -- end,
           },
+          { name = 'ecolog', priority = 901 },
           { name = "path",              priority = 900 }, -- file system paths
           -- { name = "nvim_lsp_signature_help" },
-          { name = "luasnip",           priority = 800 }, -- snippets
+          { name = "render-markdown",   priority = 850 },
+          { name = "obsidian",            priority = 800 },
+          { name = "obsidian_new",            priority = 800 },
+          { name = "obsidian_tags",            priority = 800 },
+          { name = "luasnip",           priority = 700 }, -- snippets
           -- { name = "nvim_lsp:marksman", priority = 600 },
-          { name = "render-markdown",   priority = 400 },
           { name = "crates",            priority = 300 },
-          { name = "obsidian",            priority = 300 },
-          { name = "obsidian_new",            priority = 200 },
-          { name = "obsidian_tags",            priority = 100 },
           { name = "buffer",            priority = 5 },
         }),
         sorting = {

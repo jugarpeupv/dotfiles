@@ -1,4 +1,41 @@
 return {
+  {
+    "philosofonusus/ecolog.nvim",
+    dependencies = {
+      "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
+    },
+    -- Optional: you can add some keybindings
+    -- (I personally use lspsaga so check out lspsaga integration or lsp integration for a smoother experience without separate keybindings)
+    keys = {
+      { "<leader>eg", "<cmd>EcologGoto<cr>",   desc = "Go to env file" },
+      { "<leader>ep", "<cmd>EcologPeek<cr>",   desc = "Ecolog peek variable" },
+      { "<leader>es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
+    },
+    lazy = true,
+    opts = {
+      integrations = {
+        lsp = true,
+      },
+      -- Enables shelter mode for sensitive values
+      shelter = {
+        configuration = {
+          partial_mode = false, -- false by default, disables partial mode, for more control check out shelter partial mode
+          mask_char = "*", -- Character used for masking
+        },
+        modules = {
+          cmp = true,   -- Mask values in completion
+          peek = false, -- Mask values in peek view
+          files = false, -- Mask values in files
+          telescope = false, -- Mask values in telescope
+        },
+      },
+      -- true by default, enables built-in types (database_url, url, etc.)
+      types = true,
+      path = vim.fn.getcwd(),             -- Path to search for .env files
+      preferred_environment = "development", -- Optional: prioritize specific env files
+    },
+  },
+
   { "heavenshell/vim-jsdoc", cmd = { "JsDoc" } },
   {
     "barrett-ruth/live-server.nvim",
@@ -159,14 +196,14 @@ return {
             enabled = false,
             fg = "#21d5ff", -- "text" or "#rrggbb"
             -- fg = "text", -- text will set underline same color with text
-            bg = nil,       -- nil or "#rrggbb"
+            bg = nil, -- nil or "#rrggbb"
             underline = true,
           },
           cursor_move = {
             enabled = false,
             fg = "#199eff", -- "text" or "#rrggbb"
             -- fg = "text", -- text will set underline same color with text
-            bg = nil,       -- nil or "#rrggbb"
+            bg = nil, -- nil or "#rrggbb"
             underline = true,
           },
         },
@@ -211,7 +248,7 @@ return {
       skipInsignificantPunctuation = true,
       consistentOperatorPending = true, -- see "Consistent Operator-pending Mode" in the README
       subwordMovement = true,
-      customPatterns = {},              -- check "Custom Movement Patterns" in the README for details
+      customPatterns = {},           -- check "Custom Movement Patterns" in the README for details
     },
   },
   -- { https://github.com/axieax/urlview.nvim }
@@ -255,8 +292,12 @@ return {
   { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
   {
     "junegunn/fzf",
+    dependencies = { "junegunn/fzf.vim" },
     build = "./install --all",
+    cmd = { "G" },
     keys = {
+
+      { "<leader>jp", "<cmd>Jumps<CR>" },
       { "<leader>gt", "<cmd>GTags<CR>" },
       {
         mode = { "n" },
@@ -312,17 +353,18 @@ return {
   { "stsewd/fzf-checkout.vim", keys = { { "<leader>gt", "<cmd>GTags<CR>" } } },
   {
     "junegunn/fzf.vim",
-    keys = {
-      { mode = { "n" }, "<leader>ga", "<cmd>G add .<cr>",                    { silent = true, noremap = true } },
-      { mode = { "n" }, "<Leader>gS", "<cmd>G stash<cr>",                    { silent = true, noremap = true } },
-      { mode = { "n" }, "<Leader>gO", "<cmd>G stash pop<cr>",                { silent = true, noremap = true } },
-
-      { mode = { "n" }, "<Leader>gP", "<cmd>G! push<cr>",                    { silent = true, noremap = true } },
-      { mode = { "n" }, "<leader>gf", "<cmd>G! fetch --all -v<cr>",          { silent = true, noremap = true } },
-      { mode = { "n" }, "<Leader>gp", "<cmd>G! pull<cr>",                    { silent = true, noremap = true } },
-      { mode = { "n" }, "<Leader>gC", "<cmd>G checkout . | G clean -fd<cr>", { silent = true, noremap = true } },
-      { mode = { "n" }, "<Leader>gl", "<cmd>G log -20<cr>",                  { silent = true, noremap = true } },
-    },
+    lazy = true,
+    -- keys = {
+    --   { mode = { "n" }, "<leader>ga", "<cmd>G add .<cr>",                    { silent = true, noremap = true } },
+    --   { mode = { "n" }, "<Leader>gS", "<cmd>G stash<cr>",                    { silent = true, noremap = true } },
+    --   { mode = { "n" }, "<Leader>gO", "<cmd>G stash pop<cr>",                { silent = true, noremap = true } },
+    --
+    --   { mode = { "n" }, "<Leader>gP", "<cmd>G! push<cr>",                    { silent = true, noremap = true } },
+    --   { mode = { "n" }, "<leader>gf", "<cmd>G! fetch --all -v<cr>",          { silent = true, noremap = true } },
+    --   { mode = { "n" }, "<Leader>gp", "<cmd>G! pull<cr>",                    { silent = true, noremap = true } },
+    --   { mode = { "n" }, "<Leader>gC", "<cmd>G checkout . | G clean -fd<cr>", { silent = true, noremap = true } },
+    --   { mode = { "n" }, "<Leader>gl", "<cmd>G log -20<cr>",                  { silent = true, noremap = true } },
+    -- },
   },
   { "tpope/vim-repeat",        keys = { "." } },
   { "nvim-lua/plenary.nvim",   lazy = true },

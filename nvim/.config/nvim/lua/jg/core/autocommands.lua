@@ -1,3 +1,9 @@
+local get_option = vim.filetype.get_option
+vim.filetype.get_option = function(filetype, option)
+  return option == "commentstring" and require("ts_context_commentstring.internal").calculate_commentstring()
+    or get_option(filetype, option)
+end
+
 vim.api.nvim_create_autocmd("BufRead", {
   group = vim.api.nvim_create_augroup("CmpSourceCargo", { clear = true }),
   pattern = "Cargo.toml",
@@ -67,15 +73,20 @@ vim.filetype.add({
   },
 })
 
-local get_option = vim.filetype.get_option
-vim.filetype.get_option = function(filetype, option)
-  return option == "commentstring" and require("ts_context_commentstring.internal").calculate_commentstring()
-      or get_option(filetype, option)
-end
 
 vim.cmd([[ augroup JsonToJsonc
     autocmd! FileType json set filetype=jsonc
 augroup END ]])
+
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "json",
+--   callback = function()
+--     vim.cmd([[set commentstring=//\ %s]])
+--   end,
+-- })
+
+
+-- vim.cmd([[autocmd BufReadPost * if &filetype == 'json' | execute 'set filetype jsonc' | endif]])
 
 -- vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wrap' | endif]])
 
@@ -120,6 +131,8 @@ vim.api.nvim_create_autocmd("User", {
     vim.wo.wrap = true
   end,
 })
+
+
 
 -- vim.cmd([[autocmd OptionSet * execute 'set foldtext=""']])
 

@@ -4,6 +4,7 @@ return {
     "NeogitOrg/neogit",
     cmd = { "Neogit" },
     dependencies = {
+      "junegunn/fzf",
       "nvim-lua/plenary.nvim", -- required
       "sindrets/diffview.nvim", -- optional - Diff integration
 
@@ -20,6 +21,7 @@ return {
     -- cmd = { "DiffviewOpen" },
     -- event = { "BufReadPost", "BufNewFile" },
     dependencies = {
+      "junegunn/fzf",
       "nvim-telescope/telescope.nvim",
       "akinsho/git-conflict.nvim"
     },

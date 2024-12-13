@@ -430,6 +430,23 @@ return {
               initial_mode = "normal",
             }),
           },
+          ecolog = {
+            shelter = {
+              -- Whether to show masked values when copying to clipboard
+              mask_on_copy = false,
+            },
+            -- Default keybindings
+            mappings = {
+              -- Key to copy value to clipboard
+              copy_value = "<C-y>",
+              -- Key to copy name to clipboard
+              copy_name = "<C-n>",
+              -- Key to append value to buffer
+              append_value = "<C-a>",
+              -- Key to append name to buffer (defaults to <CR>)
+              append_name = "<CR>",
+            },
+          },
           live_grep_args = {
             path_display = { "smart" },
             -- layout_strategy = "vertical",
@@ -495,6 +512,7 @@ return {
       telescope.load_extension("grapple")
       telescope.load_extension("heading")
       telescope.load_extension("yank_history")
+      telescope.load_extension('ecolog')
       -- telescope.load_extension("jsonfly")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")
