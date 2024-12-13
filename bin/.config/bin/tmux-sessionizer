@@ -6,7 +6,11 @@
 if [[ $# -eq 1 ]]; then
   selected=$1
 else
-  selected=$(find ~/work ~/work/mar ~/private ~/tmp ~/tmp/poc ~/tmp/prod ~/work/Okode ~/dotfiles/nvim/.config ~/dotfiles/bin/.config ~/dotfiles/tmux/.config ~/.config ~/.local/share/nvim/lazy ~/projects ~ -mindepth 1 -maxdepth 1 -type d | fzf --bind=ctrl-k:up,ctrl-j:down)
+
+  session_name=$(tmux display-message -p '#{session_name}')
+  original_window=$(tmux display-message -p -t $session_name:1 '#{window_id}')
+
+  selected=$(find ~/work ~/work/mar ~/private ~/tmp ~/tmp/poc ~/tmp/prod ~/work/Okode ~/dotfiles/nvim/.config ~/dotfiles/bin/.config ~/dotfiles/tmux/.config ~/.config ~/.local/share/nvim/lazy ~/projects ~ -mindepth 1 -maxdepth 1 -type d | fzf --bind=ctrl-k:up,ctrl-j:down --bind 'ctrl-v:abort+execute(tmux split-window -h -t '"$original_window"' -c {})')
 fi
 
 if [[ -z $selected ]]; then
