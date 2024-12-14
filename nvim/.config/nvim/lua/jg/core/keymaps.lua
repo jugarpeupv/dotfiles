@@ -88,7 +88,6 @@ vim.keymap.set({ "n", "t" }, "<M-p>", function()
   -- builtin.find_files(themes.get_ivy(opts_ivy))
 end, opts)
 
-
 -- cd into dir of the current buffer
 vim.keymap.set({ "n" }, "<leader>cd", function()
   vim.cmd("lcd " .. vim.fn.expand("%:p:h"))
@@ -447,6 +446,7 @@ vim.keymap.set("n", "<leader><leader>x", "<cmd>source %<CR>")
 vim.keymap.set("n", "<leader>xx", ":.lua<CR>")
 vim.keymap.set("v", "<leader>xx", ":lua<CR>")
 
-keymap("n", "<leader>sw", "<cmd>set wrap<cr>", opts)
-keymap("n", "<leader>sn", "<cmd>set nowrap<cr>", opts)
-
+vim.keymap.set({ "n" }, "<leader>sn", function()
+  vim.wo.wrap = not vim.wo.wrap
+  -- vim.cmd("windo set wrap!")
+end, opts)

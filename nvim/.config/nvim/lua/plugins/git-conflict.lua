@@ -10,9 +10,6 @@ return {
     -- event = { "BufReadPost" },
     -- event = "User GitConflictDetected",
 
-    keys = {
-      { "<leader>gd", mode = "n" },
-    },
     config = function()
       require("git-conflict").setup({
         -- default_mappings = true,    -- disable buffer local mapping created by this plugin

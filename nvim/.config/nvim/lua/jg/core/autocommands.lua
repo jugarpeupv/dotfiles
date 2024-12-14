@@ -90,6 +90,7 @@ augroup END ]])
 
 -- vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wrap' | endif]])
 
+
 -- vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 
 -- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
