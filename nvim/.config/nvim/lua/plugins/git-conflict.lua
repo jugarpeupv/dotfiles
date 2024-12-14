@@ -3,6 +3,7 @@ return {
   {
     "akinsho/git-conflict.nvim",
     dependencies = { "sindrets/diffview.nvim" },
+    lazy = true,
     -- "CWood-sdf/git-conflict.nvim",
     -- version = "*",
     branch = "main",
