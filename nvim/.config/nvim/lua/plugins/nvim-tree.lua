@@ -21,10 +21,29 @@ return {
     config = function()
       local api_nvimtree = require("nvim-tree.api")
       local nvim_tree_jg_utils = require("jg.custom.nvim-tree-utils")
-      vim.keymap.set({"n"}, "<leader>ur", function()
+
+      local attach_git = function()
+        local should_attach = true
+        local git_dir = vim.fn.finddir(".git", vim.fn.expand("%:p:h"))
+        -- print("git_dir: ", git_dir)
+
+
+        local head_file = vim.fn.findfile("HEAD", vim.fn.expand("%:p:h"))
+        -- print("head_file: ", head_file)
+
+        if git_dir == "" and head_file == "" then
+          should_attach = false
+        end
+
+        -- print("should_attach: ", should_attach)
+        return should_attach
+      end
+
+      local should_attach_git = attach_git()
+
+      vim.keymap.set({ "n" }, "<leader>ur", function()
         api_nvimtree.tree.open({ find_file = true, update_root = true })
       end, { remap = true })
-
 
       vim.api.nvim_create_autocmd("filetype", {
         pattern = "NvimTree",
@@ -565,11 +584,11 @@ return {
           exclude = {},
         },
         git = {
-          ignore = false,
-          enable = true,
+          -- ignore = false,
+          enable = should_attach_git,
           show_on_dirs = true,
           show_on_open_dirs = false,
-          disable_for_dirs = {},
+          disable_for_dirs = { "node_modules" },
           -- timeout = 4000,
           timeout = 200,
           cygwin_support = false,

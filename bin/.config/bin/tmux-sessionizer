@@ -6,9 +6,8 @@
 if [[ $# -eq 1 ]]; then
   selected=$1
 else
-
-  session_name=$(tmux display-message -p '#{session_name}')
-  original_window=$(tmux display-message -p -t $session_name:1 '#{window_id}')
+  session_name=$(tmux display-message -p '#{session_name}' 2> /dev/null)
+  original_window=$(tmux display-message -p -t $session_name:1 '#{window_id}' 2> /dev/null)
 
   selected=$(find ~/work ~/work/mar ~/private ~/tmp ~/tmp/poc ~/tmp/prod ~/work/Okode ~/dotfiles/nvim/.config ~/dotfiles/bin/.config ~/dotfiles/tmux/.config ~/.config ~/.local/share/nvim/lazy ~/projects ~ -mindepth 1 -maxdepth 1 -type d | fzf --bind=ctrl-k:up,ctrl-j:down --bind 'ctrl-v:abort+execute(tmux split-window -h -t '"$original_window"' -c {})')
 fi
@@ -18,7 +17,7 @@ if [[ -z $selected ]]; then
 fi
 
 selected_name=$(basename "$selected" | tr . _)
-tmux_running=$(pgrep tmux)
+tmux_running=$(pgrep tmux 2> /dev/null)
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
   tmux new-session -s $selected_name -c $selected

@@ -75,7 +75,7 @@ return {
       },
       -- cmp sources plugins
       -- "hrsh7th/cmp-nvim-lsp-signature-help",
-      -- "hrsh7th/cmp-cmdline",
+      "hrsh7th/cmp-cmdline",
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-nvim-lsp",
@@ -263,7 +263,7 @@ return {
         },
         -- sources for autocompletion
         sources = cmp.config.sources({
-          { name = "lazydev",           group_index = 0 },
+          { name = "lazydev",         group_index = 0 },
           {
             name = "nvim_lsp",
             priority = 1000,
@@ -274,17 +274,17 @@ return {
             --   return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
             -- end,
           },
-          { name = 'ecolog', priority = 901 },
-          { name = "path",              priority = 900 }, -- file system paths
+          { name = "ecolog",          priority = 901 },
+          { name = "path",            priority = 900 }, -- file system paths
           -- { name = "nvim_lsp_signature_help" },
-          { name = "render-markdown",   priority = 850 },
-          { name = "obsidian",            priority = 800 },
-          { name = "obsidian_new",            priority = 800 },
-          { name = "obsidian_tags",            priority = 800 },
-          { name = "luasnip",           priority = 700 }, -- snippets
+          { name = "render-markdown", priority = 850 },
+          { name = "obsidian",        priority = 800 },
+          { name = "obsidian_new",    priority = 800 },
+          { name = "obsidian_tags",   priority = 800 },
+          { name = "luasnip",         priority = 700 }, -- snippets
           -- { name = "nvim_lsp:marksman", priority = 600 },
-          { name = "crates",            priority = 300 },
-          { name = "buffer",            priority = 5 },
+          { name = "crates",          priority = 300 },
+          { name = "buffer",          priority = 5 },
         }),
         sorting = {
           -- comparators = {
@@ -385,39 +385,47 @@ return {
         },
       })
       -- `/` cmdline setup.
-      -- cmp.setup.cmdline("/", {
-      --   mapping = cmp.mapping.preset.cmdline({
-      --     ["<C-j>"] = { c = cmp.mapping.select_next_item() },
-      --     ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-      --     -- ["<Tab>"] = cmp.mapping(function(fallback)
-      --     --   -- local copilot = require("copilot.suggestion")
-      --     --   -- if copilot.is_visible() then
-      --     --   --   copilot.accept()
-      --     --   -- elseif cmp.visible() then
-      --     --   fallback()
-      --     -- end),
-      --   }),
-      --   sources = {
-      --     { name = "buffer" },
-      --   },
-      -- })
+      cmp.setup.cmdline("/", {
+        mapping = cmp.mapping.preset.cmdline({
+          ["<C-j>"] = { c = cmp.mapping.select_next_item() },
+          ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
+          -- ["<Tab>"] = cmp.config.disable,
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            -- local copilot = require("copilot.suggestion")
+            -- if copilot.is_visible() then
+            --   copilot.accept()
+            -- elseif cmp.visible() then
+            fallback()
+          end),
+        }),
+        sources = {
+          { name = "buffer" },
+        },
+      })
       -- -- `:` cmdline setup.
-      -- cmp.setup.cmdline(":", {
-      --   mapping = cmp.mapping.preset.cmdline({
-      --     ["<C-j>"] = { c = cmp.mapping.select_next_item() },
-      --     ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-      --   }),
-      --   sources = cmp.config.sources({
-      --     { name = "path" },
-      --   }, {
-      --     {
-      --       name = "cmdline",
-      --       option = {
-      --         ignore_cmds = { "Man", "!", "read", "write" },
-      --       },
-      --     },
-      --   }),
-      -- })
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline({
+          ["<C-j>"] = { c = cmp.mapping.select_next_item() },
+          ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            -- local copilot = require("copilot.suggestion")
+            -- if copilot.is_visible() then
+            --   copilot.accept()
+            -- elseif cmp.visible() then
+            fallback()
+          end),
+        }),
+        sources = cmp.config.sources({
+          { name = "path" },
+        }, {
+          {
+            name = "cmdline",
+            option = {
+              ignore_cmds = { "Man", "!", "read", "write" },
+            },
+          },
+        }),
+      })
 
       local autocomplete_group = vim.api.nvim_create_augroup("vimrc_autocompletion", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {
