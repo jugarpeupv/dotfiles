@@ -87,6 +87,7 @@ return {
           selection_caret = " ",
           initial_mode = "insert",
           cache_picker = { limit_entries = 100 },
+          scroll_strategy = "limit",
           -- file_ignore_patterns = { "node_modules" },
           -- file_ignore_patterns = { "%__template__" },
           -- path_display = { "smart" },

@@ -28,63 +28,11 @@
 
 return {
   {
-    "ramilito/winbar.nvim",
-    enabled = false,
-    -- event = "VimEnter", -- Alternatively, BufReadPre if we don't care about the empty file when starting with 'nvim'
-    event = "BufReadPre", -- Alternatively, BufReadPre if we don't care about the empty file when starting with 'nvim'
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("winbar").setup({
-        -- your configuration comes here, for example:
-        icons = true,
-        diagnostics = true,
-        buf_modified = true,
-        -- buf_modified_symbol = "M",
-        -- or use an icon
-        buf_modified_symbol = "⏺",
-        dim_inactive = {
-          enabled = true,
-          highlight = "WinbarNC",
-          icons = true, -- whether to dim the icons
-          name = true,  -- whether to dim the name
-        },
-        dir_levels = 4,
-        filetype_exclude = {
-          "terminal",
-          "help",
-          "startify",
-          "dashboard",
-          "packer",
-          "neo-tree",
-          "neogitstatus",
-          "NvimTree",
-          "Trouble",
-          "alpha",
-          "lir",
-          "Outline",
-          "spectre_panel",
-          "toggleterm",
-          "TelescopePrompt",
-          "prompt"
-        }
-      })
-    end
-  },
-  {
-    'Bekaboo/dropbar.nvim',
-    enabled = false,
-    event = "BufReadPre",
-    -- optional, but required for fuzzy finder support
-    dependencies = {
-      'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'make'
-    }
-  },
-  {
-    "jugarpe/barbecue.nvim",
+    "jugarpeupv/barbecue.nvim",
     enabled = true,
     name = "barbecue",
-    branch = "feature/preserveIconOnBufferModified",
+    -- branch = "feature/preserveIconOnBufferModified",
+    branch = "main",
     -- event = "VeryLazy",
     event = { "BufReadPost", "BufNewFile" },
     -- event = { "BufWinEnter" },
@@ -137,7 +85,7 @@ return {
           local label = {}
           for severity, icon in pairs(icons) do
             local n =
-                #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity[string.upper(severity)] })
+            #vim.diagnostic.get(bufnr, { severity = vim.diagnostic.severity[string.upper(severity)] })
             if n > 0 then
               table.insert(label, { icon .. " " .. n .. " ", "DiagnosticSign" .. severity })
             end
@@ -256,5 +204,58 @@ return {
         },
       })
     end,
+  },
+  {
+    "ramilito/winbar.nvim",
+    enabled = false,
+    -- event = "VimEnter", -- Alternatively, BufReadPre if we don't care about the empty file when starting with 'nvim'
+    event = "BufReadPre", -- Alternatively, BufReadPre if we don't care about the empty file when starting with 'nvim'
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("winbar").setup({
+        -- your configuration comes here, for example:
+        icons = true,
+        diagnostics = true,
+        buf_modified = true,
+        -- buf_modified_symbol = "M",
+        -- or use an icon
+        buf_modified_symbol = "⏺",
+        dim_inactive = {
+          enabled = true,
+          highlight = "WinbarNC",
+          icons = true, -- whether to dim the icons
+          name = true,  -- whether to dim the name
+        },
+        dir_levels = 4,
+        filetype_exclude = {
+          "terminal",
+          "help",
+          "startify",
+          "dashboard",
+          "packer",
+          "neo-tree",
+          "neogitstatus",
+          "NvimTree",
+          "Trouble",
+          "alpha",
+          "lir",
+          "Outline",
+          "spectre_panel",
+          "toggleterm",
+          "TelescopePrompt",
+          "prompt"
+        }
+      })
+    end
+  },
+  {
+    'Bekaboo/dropbar.nvim',
+    enabled = false,
+    event = "BufReadPre",
+    -- optional, but required for fuzzy finder support
+    dependencies = {
+      'nvim-telescope/telescope-fzf-native.nvim',
+      build = 'make'
+    }
   },
 }

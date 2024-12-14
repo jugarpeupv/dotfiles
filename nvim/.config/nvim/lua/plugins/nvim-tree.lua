@@ -584,11 +584,11 @@ return {
           exclude = {},
         },
         git = {
-          -- ignore = false,
+          ignore = false,
           enable = should_attach_git,
           show_on_dirs = true,
           show_on_open_dirs = false,
-          disable_for_dirs = { "node_modules" },
+          disable_for_dirs = {},
           -- timeout = 4000,
           timeout = 200,
           cygwin_support = false,
