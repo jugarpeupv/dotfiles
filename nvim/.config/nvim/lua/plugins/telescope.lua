@@ -275,6 +275,7 @@ return {
           -- }
           -- Now the picker_config_key will be applied every time you call this
           -- builtin picker
+          live_grep = { theme = "ivy" },
           buffers = {
             theme = "ivy",
           },

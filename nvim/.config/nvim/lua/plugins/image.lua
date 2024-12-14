@@ -11,8 +11,9 @@ return {
   {
     "3rd/image.nvim",
     -- rocks = { "magick" },
-    enabled = false,
+    enabled = true,
     rocks = { hererocks = true },
+    -- branch = "feature/only_render_image_at_cursor_mode",
     -- branch = "main",
     -- event = "VeryLazy",
     ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
@@ -26,6 +27,7 @@ return {
             clear_in_insert_mode = false,
             download_remote_images = true,
             only_render_image_at_cursor = true,
+            -- only_render_image_at_cursor_mode = "inline",
             floating_windows = true,
             filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
             resolve_image_path = function(document_path, image_path, fallback)

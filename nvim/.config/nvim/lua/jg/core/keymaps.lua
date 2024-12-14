@@ -115,16 +115,16 @@ keymap("n", "<Leader>bo", "<cmd>lua require('telescope').extensions.bookmarks.bo
 keymap("n", "<Leader>sy", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", opts)
 keymap("n", "<Leader>lr", "<cmd>LspRestart<cr>", opts)
 
-keymap("n", "<M-j>", "<cmd>NvimTreeToggle<cr>", opts)
-keymap("i", "<M-j>", "<cmd>NvimTreeToggle<cr>", opts)
-keymap("t", "<M-j>", "<cmd>NvimTreeToggle<cr>", opts)
+keymap("n", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
+keymap("i", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
+keymap("t", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 
 keymap("n", "<Leader>d", "<Nop>", opts)
 -- keymap("n", "<Leader>d", ":NvimTreeFindFile<cr>", opts)
-keymap("n", "<D-k>", "<cmd>NvimTreeFindFile<cr>", opts)
-keymap("t", "<D-k>", "<C-\\><C-n><cmd>NvimTreeFindFile<cr>", opts)
-keymap("n", "<M-k>", "<cmd>NvimTreeFindFile<cr>", opts)
-keymap("t", "<M-k>", "<C-\\><C-n><cmd>NvimTreeFindFile<cr>", opts)
+keymap("n", "<D-k>", "<cmd>keepjumps NvimTreeFindFile<cr>", opts)
+keymap("t", "<D-k>", "<C-\\><C-n><cmd>keepjumps NvimTreeFindFile<cr>", opts)
+keymap("n", "<M-k>", "<cmd>keepjumps NvimTreeFindFile<cr>", opts)
+keymap("t", "<M-k>", "<C-\\><C-n><cmd>keepjumps NvimTreeFindFile<cr>", opts)
 keymap("n", "<M-u>", "<cmd> lua require('trouble').next({skip_groups = true, jump = true})<cr>", opts)
 keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jump = true})<cr>", opts)
 
@@ -225,7 +225,7 @@ end)
 
 keymap(
   "n",
-  "<Leader>sf",
+  "<Leader>ss",
   "<cmd>lua require('telescope.builtin').live_grep({ search_dirs={'%:p'}, vimgrep_arguments={ 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case' }})<cr>",
   opts
 )
@@ -251,7 +251,7 @@ keymap("n", "<Leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 -- Replace
 vim.cmd([[nnoremap <Leader>rr :%s///gc<Left><Left><Left><Left>]])
 vim.cmd([[xnoremap <Leader>rr :s///gc<Left><Left><Left><Left>]])
-vim.cmd([[nnoremap <Leader>ss /\<\><Left><Left>]])
+vim.cmd([[nnoremap <Leader>sw /\<\><Left><Left>]])
 
 vim.cmd(
   [[nnoremap <Leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]

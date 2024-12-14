@@ -150,14 +150,16 @@ return {
           DiffviewFileHistory = {},
         },
         hooks = {
-          -- diff_buf_win_enter = function(bufnr, winid, ctx)
-          --   -- print("bufnr: ", bufnr)
-          --   -- print("ctx: ", vim.inspect(ctx))
-          --   -- print("winid: ", winid)
-          --   if winid == 1004 or ctx.symbol == 'b' then
-          --     vim.api.nvim_buf_set_option('wrap', true, { buf = bufnr})
-          --   end
-          -- end,
+          diff_buf_win_enter = function(bufnr, winid, ctx)
+            -- print("bufnr: ", bufnr)
+            -- print("ctx: ", vim.inspect(ctx))
+            -- print("winid: ", winid)
+            -- if winid == 1004 or ctx.symbol == 'b' then
+            --   vim.api.nvim_buf_set_option('wrap', true, { buf = bufnr})
+            -- end
+
+            vim.api.nvim_buf_set_option(bufnr, "wrap", false)
+          end,
           -- diff_buf_read = function(bufnr, win)
           --   print("win: ", vim.inspect(win))
           --   -- print('bufnr', bufnr)

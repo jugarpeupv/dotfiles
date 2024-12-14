@@ -38,7 +38,7 @@ vim.cmd([[
 
 vim.cmd([[
   augroup WrapMarkdownAu
-  autocmd! FileType markdown set wrap
+  autocmd! FileType markdown set nowrap
   augroup END
 ]])
 
@@ -167,4 +167,12 @@ vim.api.nvim_create_autocmd("User", {
 --     vim.o.foldtext = ""
 --   end,
 --   group = autocomplete_group,
+-- })
+
+
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--   group = vim.api.nvim_create_augroup("VimEnterClearJumps", { clear = true }),
+--   callback = function()
+--     vim.cmd("clearjumps")
+--   end,
 -- })

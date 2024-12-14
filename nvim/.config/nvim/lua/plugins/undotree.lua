@@ -6,6 +6,8 @@ return {
     -- event = "VeryLazy",
     event = { "BufReadPost", "BufNewFile" },
     config = function()
+      -- I am using this to clear the jumps list so that when we hit <C-o> we do not jump to nvimtree
+      vim.cmd("clearjumps")
       vim.cmd([[
         if has("persistent_undo")
            let target_path = expand('~/.undodir')
