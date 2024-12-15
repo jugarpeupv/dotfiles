@@ -1,5 +1,82 @@
 return {
   {
+    "vuki656/package-info.nvim",
+    dependencies = { "MunifTanjim/nui.nvim" },
+    ft = { "json" },
+    -- config = function (_, opts)
+    --   require("package-info").setup(opts)
+    -- end,
+    config = function(_, opts)
+      require("package-info").setup(opts)
+      -- manually register them
+      vim.cmd("highlight PackageInfoUpToDateVersion guifg=#94E2D5 guibg=#394b70")
+      vim.cmd("highlight PackageInfoOutdatedVersion guifg=#747ebd guibg=#394b70")
+      vim.cmd("highlight PackageInfoInvalidVersion guifg=#F38BA8 guibg=#394b70")
+
+      -- Show dependency versions
+      -- vim.keymap.set({ "n" }, "<leader>ns", require("package-info").show, { silent = true, noremap = true })
+      vim.api.nvim_set_keymap(
+        "n",
+        "<leader>nr",
+        "<cmd>lua require('package-info').show({ force = true })<cr>",
+        { silent = true, noremap = true }
+      )
+
+      -- -- Hide dependency versions
+      -- vim.keymap.set({ "n" }, "<leader>nh", require("package-info").hide, { silent = true, noremap = true })
+
+      -- Toggle dependency versions
+      vim.keymap.set({ "n" }, "<leader>nt", require("package-info").toggle, { silent = true, noremap = true })
+
+      -- vim.api.nvim_set_keymap(
+      --   "n",
+      --   "<leader>nt",
+      --   "<cmd>lua require('package-info').toggle({ force = true })<cr>",
+      --   { silent = true, noremap = true }
+      -- )
+
+      -- Update dependency on the line
+      vim.keymap.set({ "n" }, "<leader>nu", require("package-info").update, { silent = true, noremap = true })
+
+      -- Delete dependency on the line
+      vim.keymap.set({ "n" }, "<leader>nd", require("package-info").delete, { silent = true, noremap = true })
+
+      -- Install a new dependency
+      vim.keymap.set({ "n" }, "<leader>ni", require("package-info").install, { silent = true, noremap = true })
+
+      -- Install a different dependency version
+      vim.keymap.set(
+        { "n" },
+        "<leader>nc",
+        require("package-info").change_version,
+        { silent = true, noremap = true }
+      )
+    end,
+    opts = {
+      -- colors = {
+      --   up_to_date = "#94E2D5", -- Text color for up to date dependency virtual text
+      --   outdated = "#313244", -- Text color for outdated dependency virtual text
+      --   invalid = "#F38BA8", -- Text color for invalid dependency virtual text
+      -- },
+      icons = {
+        enable = true, -- Whether to display icons
+        style = {
+          up_to_date = "|  ", -- Icon for up to date dependencies
+          outdated = "| 󰃰 ", -- Icon for outdated dependencies
+          invalid = "|  ", -- Icon for invalid dependencies
+        },
+      },
+      autostart = true,           -- Whether to autostart when `package.json` is opened
+      hide_up_to_date = false,     -- It hides up to date versions when displaying virtual text
+      hide_unstable_versions = true, -- It hides unstable versions from version list e.g next-11.1.3-canary3
+      -- Can be `npm`, `yarn`, or `pnpm`. Used for `delete`, `install` etc...
+      -- The plugin will try to auto-detect the package manager based on
+      -- `yarn.lock` or `package-lock.json`. If none are found it will use the
+      -- provided one, if nothing is provided it will use `yarn`
+      package_manager = "npm",
+    },
+  },
+  {
     "philosofonusus/ecolog.nvim",
     dependencies = {
       "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
@@ -57,8 +134,10 @@ return {
   {
     "danymat/neogen",
     keys = {
+
+      -- vim.keymap.set("n", "<leader>ns", vim.cmd.Neogen)
       {
-        "<leader>nt",
+        "<leader>ng",
         function()
           require("neogen").generate()
         end,

@@ -19,8 +19,9 @@ return {
       -- Replaces '#+' of 'atx_h._marker'
       -- The number of '#' in the heading determines the 'level'
       -- The 'level' is used to index into the list using a cycle
-      icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
-      -- icons = { '#', '##', '###', '####', '#####', '#######' },
+      -- icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
+      -- icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
+      icons = { '# ', '## ', '### ', '#### ', '##### ', '####### ' },
       -- Added to the sign column if enabled
       -- The 'level' is used to index into the list using a cycle
       signs = { '󰫎 ' },
@@ -104,7 +105,7 @@ return {
       -- Or a boolean to make behavior apply to all languages
       -- Borders above & below blocks will continue to be rendered
       -- disable_background = { 'diff' },
-      disable_background = true,
+      disable_background = false,
       -- Width of the code block background:
       --  block: width of the code block
       --  full:  full width of the window

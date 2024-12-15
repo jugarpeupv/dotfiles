@@ -117,7 +117,9 @@ M.attach_lsp_config = function(client, bufnr)
     vim.keymap.set(
       "n",
       "<leader>oi",
-      "<Cmd>lua require'jdtls'.organize_imports()<CR>",
+      function ()
+        require'jdtls'.organize_imports()
+      end,
       { desc = "Organize Imports" }
     )
 

@@ -238,7 +238,9 @@ return {
       -- vim.cmd([[hi RenderMarkdownH3Bg guibg=#4a716b]])
       -- vim.cmd([[hi RenderMarkdownH4Bg guibg=#6c7298]])
       -- vim.cmd([[hi RenderMarkdownH2Bg guibg=#456f80]])
-      vim.cmd([[hi RenderMarkdownCode guibg=#00122e]])
+      vim.cmd([[hi RenderMarkdownCode guibg=#03162f]])
+      -- vim.cmd([[hi RenderMarkdownCode guibg=none]])
+      -- vim.cmd([[hi RenderMarkdownCode guibg=#00122e]])
       -- vim.cmd([[hi RenderMarkdownCodeInline]])
       vim.cmd([[hi RenderMarkdown_Inverse_RenderMarkdownCode guifg=#394b70]])
       vim.cmd[[hi RenderMarkdown_DevIconBash_RenderMarkdownSign guifg=#94E2D5 gui=none]]

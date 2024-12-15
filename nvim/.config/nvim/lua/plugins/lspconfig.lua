@@ -582,32 +582,32 @@ return {
       -- })
       -- require("lspconfig")["yamlls"].setup(cfg)
 
-      -- require("lspconfig").yamlls.setup({
-      --   on_attach = on_attach,
-      --   capabilities = capabilities,
-      --   -- settings = {
-      --   --   -- yaml = {
-      --   --   --   schemaStore = {
-      --   --   --     enable = true,
-      --   --   --     url = "",
-      --   --   --   },
-      --   --   --   schemas = require("schemastore").yaml.schemas(),
-      --   --   -- },
-      --   --   yaml = {
-      --   --     -- validate = true,
-      --   --     format = { enable = true },
-      --   --     -- schemaDownload = { enable = true },
-      --   --     -- schemaStore = {
-      --   --     --   enable = true,
-      --   --     --   url = "https://www.schemastore.org/api/json/catalog.json"
-      --   --     -- },
-      --   --     -- schemas = {
-      --   --     --   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-      --   --     -- },
-      --   --     -- schemas = require('schemastore').yaml.schemas(),
-      --   --   },
-      --   -- },
-      -- })
+      require("lspconfig").yamlls.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        -- settings = {
+        --   -- yaml = {
+        --   --   schemaStore = {
+        --   --     enable = true,
+        --   --     url = "",
+        --   --   },
+        --   --   schemas = require("schemastore").yaml.schemas(),
+        --   -- },
+        --   yaml = {
+        --     -- validate = true,
+        --     format = { enable = true },
+        --     -- schemaDownload = { enable = true },
+        --     -- schemaStore = {
+        --     --   enable = true,
+        --     --   url = "https://www.schemastore.org/api/json/catalog.json"
+        --     -- },
+        --     -- schemas = {
+        --     --   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+        --     -- },
+        --     -- schemas = require('schemastore').yaml.schemas(),
+        --   },
+        -- },
+      })
 
       -- local default_schemas = nil
       -- local status_ok, jsonls_settings = pcall(require, "nlspsettings.jsonls")

@@ -353,8 +353,6 @@ vim.cmd([[nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>]])
 --   end
 -- end, { desc = "Super Tab" })
 
-vim.keymap.set("n", "<leader>ns", vim.cmd.Neogen)
-
 vim.cmd([[nnoremap <F6> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_DIR<CR>]])
 
 -- vim.keymap.set("n", "<M-i>", "<cmd>split term://%:p:h//zsh<cr>", opts)

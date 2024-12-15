@@ -75,7 +75,7 @@ return {
       },
       -- cmp sources plugins
       -- "hrsh7th/cmp-nvim-lsp-signature-help",
-      "hrsh7th/cmp-cmdline",
+      -- "hrsh7th/cmp-cmdline",
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-nvim-lsp",
@@ -390,46 +390,50 @@ return {
       })
       -- `/` cmdline setup.
       cmp.setup.cmdline("/", {
-        mapping = cmp.mapping.preset.cmdline({
+        -- mapping = cmp.mapping.preset.cmdline({
+        --   ["<C-j>"] = { c = cmp.mapping.select_next_item() },
+        --   ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
+        --   -- ["<Tab>"] = cmp.config.disable,
+        --   ["<Tab>"] = cmp.mapping(function(fallback)
+        --     -- local copilot = require("copilot.suggestion")
+        --     -- if copilot.is_visible() then
+        --     --   copilot.accept()
+        --     -- elseif cmp.visible() then
+        --     fallback()
+        --   end),
+        -- }),
+        mapping = {
           ["<C-j>"] = { c = cmp.mapping.select_next_item() },
           ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-          -- ["<Tab>"] = cmp.config.disable,
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            -- local copilot = require("copilot.suggestion")
-            -- if copilot.is_visible() then
-            --   copilot.accept()
-            -- elseif cmp.visible() then
-            fallback()
-          end),
-        }),
+        },
         sources = {
           { name = "buffer" },
         },
       })
       -- -- `:` cmdline setup.
-      cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline({
-          ["<C-j>"] = { c = cmp.mapping.select_next_item() },
-          ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            -- local copilot = require("copilot.suggestion")
-            -- if copilot.is_visible() then
-            --   copilot.accept()
-            -- elseif cmp.visible() then
-            fallback()
-          end),
-        }),
-        sources = cmp.config.sources({
-          { name = "path" },
-        }, {
-          {
-            name = "cmdline",
-            option = {
-              ignore_cmds = { "Man", "!", "read", "write" },
-            },
-          },
-        }),
-      })
+      -- cmp.setup.cmdline(":", {
+      --   mapping = cmp.mapping.preset.cmdline({
+      --     ["<C-j>"] = { c = cmp.mapping.select_next_item() },
+      --     ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
+      --     ["<Tab>"] = cmp.mapping(function(fallback)
+      --       -- local copilot = require("copilot.suggestion")
+      --       -- if copilot.is_visible() then
+      --       --   copilot.accept()
+      --       -- elseif cmp.visible() then
+      --       fallback()
+      --     end),
+      --   }),
+      --   sources = cmp.config.sources({
+      --     { name = "path" },
+      --   }, {
+      --     {
+      --       name = "cmdline",
+      --       option = {
+      --         ignore_cmds = { "Man", "!", "read", "write" },
+      --       },
+      --     },
+      --   }),
+      -- })
 
       local autocomplete_group = vim.api.nvim_create_augroup("vimrc_autocompletion", { clear = true })
       vim.api.nvim_create_autocmd("FileType", {
