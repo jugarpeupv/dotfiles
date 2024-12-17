@@ -215,6 +215,7 @@ return {
         ["dockerfile"] = { icon = "", color = "#9CDCFE", name = "Dockerfile5" },
         ["app.routes.ts"] = { icon = "󰑪", color = "#73daca", name = "AngularRoutes" },
         ["webpack.config.js"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfig" },
+        ["README"] = { icon = "", color = "#9CDCFE", name = "readmeasecas" },
         ["README.md"] = { icon = "", color = "#9CDCFE", name = "readmemd" },
         [".gitattributes"] = { icon = "󰊢", color = "#f38bad", name = "gitattributes" },
         ["LICENSE"] = { icon = "", color = "#f38bad", name = "licensefile" },

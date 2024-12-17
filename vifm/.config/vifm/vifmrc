@@ -251,9 +251,9 @@ filetype {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm},<image/*>
 
 "fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif catimg -w $((%pw * 2)) -ct -r 2 %c
 fileviewer {*.jpg,*.jpeg,*.png,*.gif}
-    \ kitten icat --silent --transfer-mode=file --place=%pwx%ph@%pxx%py %c >/dev/tty </dev/tty %N
-    \ %pc
-    \ kitten icat --clear --silent >/dev/tty </dev/tty %N
+   \ kitten icat --silent --transfer-mode=file --place=%pwx%ph@%pxx%py %c >/dev/tty </dev/tty %N
+  \ %pc
+  \ kitten icat --clear --silent >/dev/tty </dev/tty %N
 
 
 "
@@ -371,6 +371,9 @@ fileviewer {*.docx},
 " for unknown file types.
 " For OS X:
 " filetype * open
+
+
+
 
 " ------------------------------------------------------------------------------
 

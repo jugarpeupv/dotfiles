@@ -1,5 +1,17 @@
 return {
   {
+    "troydm/zoomwintab.vim"
+  },
+  -- { "dhruvasagar/vim-zoom" },
+  {
+    "fasterius/simple-zoom.nvim",
+    enabled = false,
+    config = true,
+    opts = {
+      hide_tabline = false,
+    },
+  },
+  {
     "vuki656/package-info.nvim",
     dependencies = { "MunifTanjim/nui.nvim" },
     ft = { "json" },
@@ -67,7 +79,7 @@ return {
         },
       },
       autostart = true,           -- Whether to autostart when `package.json` is opened
-      hide_up_to_date = false,     -- It hides up to date versions when displaying virtual text
+      hide_up_to_date = false,    -- It hides up to date versions when displaying virtual text
       hide_unstable_versions = true, -- It hides unstable versions from version list e.g next-11.1.3-canary3
       -- Can be `npm`, `yarn`, or `pnpm`. Used for `delete`, `install` etc...
       -- The plugin will try to auto-detect the package manager based on
@@ -369,10 +381,21 @@ return {
   },
 
   { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
+  -- {
+  --   "ibhagwan/fzf-lua",
+  --   -- optional for icon support
+  --   dependencies = { "nvim-tree/nvim-web-devicons" },
+  --   event = { "BufReadPost" },
+  --   config = function()
+  --     -- calling `setup` is optional for customization
+  --     require("fzf-lua").setup({})
+  --   end,
+  -- },
   {
     "junegunn/fzf",
     dependencies = { "junegunn/fzf.vim" },
     build = "./install --all",
+    event = { "BufReadPost" },
     cmd = { "G" },
     keys = {
 
@@ -430,21 +453,6 @@ return {
     },
   },
   { "stsewd/fzf-checkout.vim", keys = { { "<leader>gt", "<cmd>GTags<CR>" } } },
-  {
-    "junegunn/fzf.vim",
-    lazy = true,
-    -- keys = {
-    --   { mode = { "n" }, "<leader>ga", "<cmd>G add .<cr>",                    { silent = true, noremap = true } },
-    --   { mode = { "n" }, "<Leader>gS", "<cmd>G stash<cr>",                    { silent = true, noremap = true } },
-    --   { mode = { "n" }, "<Leader>gO", "<cmd>G stash pop<cr>",                { silent = true, noremap = true } },
-    --
-    --   { mode = { "n" }, "<Leader>gP", "<cmd>G! push<cr>",                    { silent = true, noremap = true } },
-    --   { mode = { "n" }, "<leader>gf", "<cmd>G! fetch --all -v<cr>",          { silent = true, noremap = true } },
-    --   { mode = { "n" }, "<Leader>gp", "<cmd>G! pull<cr>",                    { silent = true, noremap = true } },
-    --   { mode = { "n" }, "<Leader>gC", "<cmd>G checkout . | G clean -fd<cr>", { silent = true, noremap = true } },
-    --   { mode = { "n" }, "<Leader>gl", "<cmd>G log -20<cr>",                  { silent = true, noremap = true } },
-    -- },
-  },
   { "tpope/vim-repeat",        keys = { "." } },
   { "nvim-lua/plenary.nvim",   lazy = true },
   { "tpope/vim-surround",      event = { "BufReadPost", "BufNewFile" } },

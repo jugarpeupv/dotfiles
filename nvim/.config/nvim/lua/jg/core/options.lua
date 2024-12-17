@@ -154,3 +154,7 @@ vim.g.suda_smart_edit = 1
 --     end, 100)
 --   end,
 -- })
+
+
+vim.g.zoomwintab_remap = false
+vim.g.zoomwintab_remap = 0

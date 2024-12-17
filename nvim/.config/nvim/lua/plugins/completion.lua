@@ -66,6 +66,7 @@ return {
     "hrsh7th/nvim-cmp",
     dependencies = {
       { "neovim/nvim-lspconfig" },
+      { "davidsierradz/cmp-conventionalcommits" },
       {
         -- snippet plugin
         "L3MON4D3/LuaSnip",
@@ -278,6 +279,8 @@ return {
             --   return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
             -- end,
           },
+          { name = "nvim_lsp:yamlls", priority = 999 },
+          -- { name = 'nvim_lsp_signature_help', priority = 998 },
           { name = "ecolog",          priority = 901 },
           { name = "path",            priority = 900 }, -- file system paths
           -- { name = "nvim_lsp_signature_help" },
@@ -285,6 +288,7 @@ return {
           { name = "obsidian",        priority = 800 },
           { name = "obsidian_new",    priority = 800 },
           { name = "obsidian_tags",   priority = 800 },
+          { name = "nvim_lua",        priority = 799 },
           { name = "luasnip",         priority = 700 }, -- snippets
           -- { name = "nvim_lsp:marksman", priority = 600 },
           { name = "crates",          priority = 300 },
@@ -321,10 +325,10 @@ return {
           -- },
 
           comparators = {
+            cmp.config.compare.score,
             cmp.config.compare.order,
             cmp.config.compare.offset,
             cmp.config.compare.exact,
-            cmp.config.compare.score,
             function(entry1, entry2)
               local kind1 = entry1:get_kind()
               kind1 = kind1 == types.lsp.CompletionItemKind.Text and 100 or kind1
@@ -358,8 +362,14 @@ return {
             mode = "symbol_text",
             menu = {
               nvim_lsp = "[LSP]",
+              ["nvim_lsp:yamlls"] = "[LSP-yamlls]",
+              ["nvim_lsp:null-ls"] = "[LSP-nulls]",
+              ["nvim_lsp:lua_ls"] = "[LSP-luals]",
               buffer = "[Buffer]",
               luasnip = "[LuaSnip]",
+              obsidian = "[Obsidian]",
+              obsidian_new = "[Obsidian]",
+              obsidian_tags = "[Obsidian]",
               nvim_lua = "[Lua]",
               latex_symbols = "[Latex]",
               ["vim-dadbod-completion"] = "[DB]",

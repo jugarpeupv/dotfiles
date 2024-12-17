@@ -109,7 +109,7 @@ return {
       -- Width of the code block background:
       --  block: width of the code block
       --  full:  full width of the window
-      width = 'full',
+      width = 'block',
       -- Amount of margin to add to the left of code blocks
       -- If a floating point value < 1 is provided it is treated as a percentage of the available window space
       -- Margin available space is computed after accounting for padding

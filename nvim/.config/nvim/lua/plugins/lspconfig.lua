@@ -846,26 +846,26 @@ return {
         -- },
         -- capabilities = capabilities,
         -- filetypes = { "json", "jsonc", "json5" },
-        -- settings = {
-        --   json = {
-        --     -- schemas = extended_schemas,
-        --     schemas = require("schemastore").json.schemas({
-        --       -- extra = {
-        --       --   {
-        --       --     description = 'My custom JSON schema',
-        --       --     fileMatch = 'project.json',
-        --       --     name = 'project.json',
-        --       --     url = 'https://github.com/nrwl/nx/blob/master/packages/nx/schemas/project-schema.json',
-        --       --   }
-        --       -- }
-        --       -- ignore = {
-        --       --   -- 'catalog-info.yaml',
-        --       --   -- 'mkdocs.yml'
-        --       -- }
-        --     }),
-        --     -- validate = { enable = true },
-        --   },
-        -- },
+        settings = {
+          json = {
+            -- schemas = extended_schemas,
+            schemas = require("schemastore").json.schemas({
+              -- extra = {
+              --   {
+              --     description = 'My custom JSON schema',
+              --     fileMatch = 'project.json',
+              --     name = 'project.json',
+              --     url = 'https://github.com/nrwl/nx/blob/master/packages/nx/schemas/project-schema.json',
+              --   }
+              -- }
+              -- ignore = {
+              --   -- 'catalog-info.yaml',
+              --   -- 'mkdocs.yml'
+              -- }
+            }),
+            -- validate = { enable = true },
+          },
+        },
       })
 
       lspconfig["rust_analyzer"].setup({

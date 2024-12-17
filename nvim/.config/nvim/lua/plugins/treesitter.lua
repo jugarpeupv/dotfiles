@@ -107,12 +107,12 @@ return {
                 (lang == "json" or lang == "jsonc")
                 and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json")
             then
-              print("disable json treesitter")
+              vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
               return true
             end
 
-            if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 1000 then
-              print("disable json treesitter")
+            if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 5000 then
+              vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
               return true
             end
 
@@ -120,17 +120,17 @@ return {
             local line = vim.fn.getline(line_number)
             local char_count = #line
 
-            if char_count > 1000 then
-              print("disable json treesitter")
+            if char_count > 1500 then
+              vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
               return true
             end
 
             if
                 (lang == "json" or lang == "jsonc")
                 and vim.api.nvim_buf_line_count(bufnr) > 10000
-                and char_count > 1000
+                and char_count > 1500
             then
-              print("disable json treesitter")
+              vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
               return true
             end
 

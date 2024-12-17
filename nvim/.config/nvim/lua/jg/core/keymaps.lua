@@ -115,6 +115,10 @@ keymap("n", "<Leader>bo", "<cmd>lua require('telescope').extensions.bookmarks.bo
 keymap("n", "<Leader>sy", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", opts)
 keymap("n", "<Leader>lr", "<cmd>LspRestart<cr>", opts)
 
+
+keymap("n", "<D-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
+keymap("i", "<D-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
+keymap("t", "<D-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 keymap("n", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 keymap("i", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 keymap("t", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
@@ -444,7 +448,14 @@ vim.keymap.set("n", "<leader><leader>x", "<cmd>source %<CR>")
 vim.keymap.set("n", "<leader>xx", ":.lua<CR>")
 vim.keymap.set("v", "<leader>xx", ":lua<CR>")
 
+
 vim.keymap.set({ "n" }, "<leader>sn", function()
   vim.wo.wrap = not vim.wo.wrap
   -- vim.cmd("windo set wrap!")
 end, opts)
+
+-- vim.keymap.set("n", "<C-w>m", ":tab split<CR>")
+-- vim.cmd([[noremap <C-w>m <c-w>_ \| <c-w>\|]])
+-- vim.cmd([[noremap Zo <c-w>=]])
+
+vim.keymap.set("n", "<c-w>m", "<cmd>ZoomWinTabToggle<CR>")
