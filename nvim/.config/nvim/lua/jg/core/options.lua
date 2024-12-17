@@ -3,6 +3,7 @@ local opt = vim.opt -- for conciseness
 -- line numbers
 opt.relativenumber = true -- show relative line numbers
 opt.number = true         -- shows absolute line number on cursor line (when relative number is on)
+-- opt.jumpoptions = 'clean'
 
 -- tabs & indentation
 opt.tabstop = 2      -- 2 spaces for tabs (prettier default)
@@ -158,3 +159,5 @@ vim.g.suda_smart_edit = 1
 
 vim.g.zoomwintab_remap = false
 vim.g.zoomwintab_remap = 0
+
+

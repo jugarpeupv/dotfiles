@@ -159,6 +159,11 @@ return {
             -- end
 
             vim.api.nvim_buf_set_option(bufnr, "wrap", false)
+
+            -- vim.keymap.set({ "n" }, "<leader>sn", function()
+            --   -- vim.wo.wrap = not vim.wo.wrap
+            --   vim.cmd("windo set wrap!")
+            -- end, { buffer = bufnr, noremap = true, silent = true })
           end,
           -- diff_buf_read = function(bufnr, win)
           --   print("win: ", vim.inspect(win))

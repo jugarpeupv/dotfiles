@@ -36,17 +36,17 @@ vim.cmd([[
   augroup END
 ]])
 
-vim.cmd([[
-  augroup WrapMarkdownAu
-  autocmd! FileType markdown set nowrap
-  augroup END
-]])
+-- vim.cmd([[
+--   augroup WrapMarkdownAu
+--   autocmd! FileType markdown set nowrap
+--   augroup END
+-- ]])
 
-vim.cmd([[
-  augroup WrapTelescopePreview
-  autocmd! FileType TelescopePreview set wrap
-  augroup END
-]])
+-- vim.cmd([[
+--   augroup WrapTelescopePreview
+--   autocmd! FileType TelescopePreview set wrap
+--   augroup END
+-- ]])
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufEnter" }, {
   group = vim.api.nvim_create_augroup("set-png-ft", { clear = true }),
@@ -171,6 +171,13 @@ vim.api.nvim_create_autocmd("User", {
 
 
 -- vim.api.nvim_create_autocmd("BufReadPost", {
+--   group = vim.api.nvim_create_augroup("VimEnterClearJumps", { clear = true }),
+--   callback = function()
+--     vim.cmd("clearjumps")
+--   end,
+-- })
+
+-- vim.api.nvim_create_autocmd("VimEnter", {
 --   group = vim.api.nvim_create_augroup("VimEnterClearJumps", { clear = true }),
 --   callback = function()
 --     vim.cmd("clearjumps")

@@ -76,198 +76,403 @@ return {
       local actions_live_grep_args = require("telescope-live-grep-args.actions")
 
       telescope.setup({
-        defaults = {
+        defaults = vim.tbl_extend(
+          "force",
+          require("telescope.themes").get_ivy(), -- or get_cursor, get_ivy
+          {
+            -- prompt_prefix = " ",
+            prompt_prefix = "> ",
+            history = {
+              path = "~/.local/share/nvim/databases/telescope_history.sqlite3",
+              limit = 50,
+            },
+            selection_caret = " ",
+            initial_mode = "insert",
+            cache_picker = { limit_entries = 100 },
+            scroll_strategy = "limit",
+            -- file_ignore_patterns = { "node_modules" },
+            -- file_ignore_patterns = { "%__template__" },
+            -- path_display = { "smart" },
+            -- path_display = { "tail" },
+            -- path_display = { shorten = { len = 5, exclude = { -1 } } },
+            -- path_display = { shorten = { len = 3, exclude = { -1 } } },
+            -- path_display = { "hidden" },
+            path_display = { truncate = 5 },
+            wrap_results = false,
+            vimgrep_arguments = {
+              "rg",
+              -- "--color=never",
+              "--no-heading",
+              "--with-filename",
+              "--line-number",
+              "--column",
+              "--smart-case",
+            },
+            -- layout_strategy = 'bottom_pane',
+            -- layout_config = {
+            --   height = 0.4,
+            -- },
 
-          -- prompt_prefix = " ",
-          prompt_prefix = "> ",
-          history = {
-            path = "~/.local/share/nvim/databases/telescope_history.sqlite3",
-            limit = 50,
-          },
-          selection_caret = " ",
-          initial_mode = "insert",
-          cache_picker = { limit_entries = 100 },
-          scroll_strategy = "limit",
-          -- file_ignore_patterns = { "node_modules" },
-          -- file_ignore_patterns = { "%__template__" },
-          -- path_display = { "smart" },
-          -- path_display = { "tail" },
-          -- path_display = { shorten = { len = 5, exclude = { -1 } } },
-          -- path_display = { shorten = { len = 3, exclude = { -1 } } },
-          -- path_display = { "hidden" },
-          path_display = { truncate = 5 },
-          wrap_results = false,
-          vimgrep_arguments = {
-            "rg",
-            -- "--color=never",
-            "--no-heading",
-            "--with-filename",
-            "--line-number",
-            "--column",
-            "--smart-case",
-          },
-          layout_strategy = "horizontal",
-          sorting_strategy = "ascending",
-          layout_config = {
-            horizontal = { width = 0.97, height = 0.9, preview_width = 0.45 },
-            vertical = { width = 0.90, height = 0.99, preview_height = 0.35 },
-            center = { width = 0.99, height = 0.99 },
-            bottom_pane = { width = 0.99, height = 0.99 },
-            prompt_position = "top",
-          },
-          preview = {
-            filesize_limit = 0.8, -- MB
-            hide_on_startup = true,
-            mime_hook = function(filepath, bufnr, opts)
-              local is_image = function(filepath)
-                local image_extensions = { "png", "jpg" } -- Supported image formats
-                local split_path = vim.split(filepath:lower(), ".", { plain = true })
-                local extension = split_path[#split_path]
-                return vim.tbl_contains(image_extensions, extension)
-              end
-              if is_image(filepath) then
-                local term = vim.api.nvim_open_term(bufnr, {})
-                local function send_output(_, data, _)
-                  for _, d in ipairs(data) do
-                    vim.api.nvim_chan_send(term, d .. "\r\n")
-                  end
+            -- layout_strategy = "horizontal",
+            sorting_strategy = "ascending",
+            layout_config = {
+              horizontal = { width = 0.97, height = 0.9, preview_width = 0.45 },
+              vertical = { width = 0.90, height = 0.99, preview_height = 0.35 },
+              center = { width = 0.99, height = 0.99 },
+              bottom_pane = { width = 1, height = 0.6 },
+              prompt_position = "top",
+            },
+            preview = {
+              filesize_limit = 0.8, -- MB
+              hide_on_startup = true,
+              mime_hook = function(filepath, bufnr, opts)
+                local is_image = function(filepath)
+                  local image_extensions = { "png", "jpg" } -- Supported image formats
+                  local split_path = vim.split(filepath:lower(), ".", { plain = true })
+                  local extension = split_path[#split_path]
+                  return vim.tbl_contains(image_extensions, extension)
                 end
-                vim.fn.jobstart({
-                  "catimg",
-                  filepath, -- Terminal image viewer command
-                }, { on_stdout = send_output, stdout_buffered = true, pty = true })
-              else
-                require("telescope.previewers.utils").set_preview_message(
-                  bufnr,
-                  opts.winid,
-                  "Binary cannot be previewed"
-                )
-              end
-            end,
-          },
-
-          -- preview = {
-          --   mime_hook = function(filepath, bufnr, opts)
-          --     local is_image = function(filepath)
-          --       local image_extensions = { "png", "jpg", "jpeg", "gif" } -- Supported image formats
-          --       local split_path = vim.split(filepath:lower(), ".", { plain = true })
-          --       local extension = split_path[#split_path]
-          --       return vim.tbl_contains(image_extensions, extension)
-          --     end
-          --     if is_image(filepath) then
-          --       local term = vim.api.nvim_open_term(bufnr, {})
-          --       local function send_output(_, data, _)
-          --         for _, d in ipairs(data) do
-          --           vim.api.nvim_chan_send(term, d .. "\r\n")
-          --         end
-          --       end
-          --       vim.fn.jobstart({
-          --         "viu",
-          --         filepath,
-          --         }, {
-          --           on_stdout = send_output,
-          --           stdout_buffered = true,
-          --       })
-          --     else
-          --       require("telescope.previewers.utils").set_preview_message(
-          --         bufnr,
-          --         opts.winid,
-          --         "Binary cannot be previewed"
-          --       )
-          --     end
-          --   end,
-          -- },
-
-          mappings = {
-            i = {
-              ["<C-space>"] = actions.to_fuzzy_refine,
-              ["<C-n>"] = actions.cycle_history_next,
-              ["<C-p>"] = actions.cycle_history_prev,
-
-              ["<C-j>"] = actions.move_selection_next,
-              ["<C-k>"] = actions.move_selection_previous,
-
-              ["<C-c>"] = actions.close,
-
-              ["<Down>"] = actions.move_selection_next,
-              ["<Up>"] = actions.move_selection_previous,
-
-              ["<CR>"] = actions.select_default,
-              ["<C-s>"] = actions.select_horizontal,
-              -- ["<C-Enter>"] = actions.select_vertical,
-              ["<C-t>"] = actions.select_tab,
-              -- ["<C-t>"] = trouble.open_with_trouble,
-              ["<C-e>"] = open_with_trouble,
-              ["<C-w>"] = require("telescope.actions.layout").toggle_preview,
-              -- ["<C-t>"] = trouble.open_with_trouble,
-
-              -- ["<C-u>"] = actions.preview_scrolling_up,
-              -- ["<C-d>"] = actions.preview_scrolling_down,
-
-              ["<C-u>"] = actions.results_scrolling_up,
-              ["<C-d>"] = actions.results_scrolling_down,
-
-              ["<PageUp>"] = actions.preview_scrolling_up,
-              ["<PageDown>"] = actions.preview_scrolling_down,
-
-              ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-              ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-
-              ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-              ["<C-y>"] = actions.send_selected_to_qflist + actions.open_qflist,
-              ["<C-x>"] = "delete_buffer",
-              -- ["<C-l>"] = actions.complete_tag,
-              ["<C-h>"] = actions.which_key, -- keys from pressing <C-/>
-              ["<C-a>"] = actions.git_create_branch,
+                if is_image(filepath) then
+                  local term = vim.api.nvim_open_term(bufnr, {})
+                  local function send_output(_, data, _)
+                    for _, d in ipairs(data) do
+                      vim.api.nvim_chan_send(term, d .. "\r\n")
+                    end
+                  end
+                  vim.fn.jobstart({
+                    "catimg",
+                    filepath, -- Terminal image viewer command
+                  }, { on_stdout = send_output, stdout_buffered = true, pty = true })
+                else
+                  require("telescope.previewers.utils").set_preview_message(
+                    bufnr,
+                    opts.winid,
+                    "Binary cannot be previewed"
+                  )
+                end
+              end,
             },
 
-            n = {
-              ["<esc>"] = actions.close,
-              ["<CR>"] = actions.select_default,
-              ["<C-s>"] = actions.select_horizontal,
-              ["<C-v>"] = actions.select_vertical,
-              -- ["<C-Enter>"] = actions.select_vertical,
-              ["<C-t>"] = actions.select_tab,
-              -- ["<C-t>"] = trouble.open_with_trouble,
-              ["<C-e>"] = open_with_trouble,
+            -- preview = {
+            --   mime_hook = function(filepath, bufnr, opts)
+            --     local is_image = function(filepath)
+            --       local image_extensions = { "png", "jpg", "jpeg", "gif" } -- Supported image formats
+            --       local split_path = vim.split(filepath:lower(), ".", { plain = true })
+            --       local extension = split_path[#split_path]
+            --       return vim.tbl_contains(image_extensions, extension)
+            --     end
+            --     if is_image(filepath) then
+            --       local term = vim.api.nvim_open_term(bufnr, {})
+            --       local function send_output(_, data, _)
+            --         for _, d in ipairs(data) do
+            --           vim.api.nvim_chan_send(term, d .. "\r\n")
+            --         end
+            --       end
+            --       vim.fn.jobstart({
+            --         "viu",
+            --         filepath,
+            --         }, {
+            --           on_stdout = send_output,
+            --           stdout_buffered = true,
+            --       })
+            --     else
+            --       require("telescope.previewers.utils").set_preview_message(
+            --         bufnr,
+            --         opts.winid,
+            --         "Binary cannot be previewed"
+            --       )
+            --     end
+            --   end,
+            -- },
 
-              ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-              ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-              ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-              ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+            mappings = {
+              i = {
+                ["<C-space>"] = actions.to_fuzzy_refine,
+                ["<C-n>"] = actions.cycle_history_next,
+                ["<C-p>"] = actions.cycle_history_prev,
 
-              ["j"] = actions.move_selection_next,
-              ["k"] = actions.move_selection_previous,
-              ["H"] = actions.move_to_top,
-              ["M"] = actions.move_to_middle,
-              ["L"] = actions.move_to_bottom,
-              ["<BS>"] = "delete_buffer",
-              ["<C-x>"] = "delete_buffer",
+                ["<C-j>"] = actions.move_selection_next,
+                ["<C-k>"] = actions.move_selection_previous,
 
-              ["<C-j>"] = actions.move_selection_next,
-              ["<C-k>"] = actions.move_selection_previous,
+                ["<C-c>"] = actions.close,
 
-              ["<Down>"] = actions.move_selection_next,
-              ["<Up>"] = actions.move_selection_previous,
-              ["gg"] = actions.move_to_top,
-              ["G"] = actions.move_to_bottom,
+                ["<Down>"] = actions.move_selection_next,
+                ["<Up>"] = actions.move_selection_previous,
 
-              -- ["<C-u>"] = actions.preview_scrolling_up,
-              -- ["<C-d>"] = actions.preview_scrolling_down,
+                ["<CR>"] = actions.select_default,
+                ["<C-s>"] = actions.select_horizontal,
+                -- ["<C-Enter>"] = actions.select_vertical,
+                ["<C-t>"] = actions.select_tab,
+                -- ["<C-t>"] = trouble.open_with_trouble,
+                ["<C-e>"] = open_with_trouble,
+                ["<C-w>"] = require("telescope.actions.layout").toggle_preview,
+                -- ["<C-t>"] = trouble.open_with_trouble,
 
-              -- ["<PageUp>"] = actions.results_scrolling_up,
-              -- ["<PageDown>"] = actions.results_scrolling_down,
+                -- ["<C-u>"] = actions.preview_scrolling_up,
+                -- ["<C-d>"] = actions.preview_scrolling_down,
 
-              ["<C-u>"] = actions.results_scrolling_up,
-              ["<C-d>"] = actions.results_scrolling_down,
+                ["<C-u>"] = actions.results_scrolling_up,
+                ["<C-d>"] = actions.results_scrolling_down,
 
-              ["<PageUp>"] = actions.preview_scrolling_up,
-              ["<PageDown>"] = actions.preview_scrolling_down,
+                ["<PageUp>"] = actions.preview_scrolling_up,
+                ["<PageDown>"] = actions.preview_scrolling_down,
 
-              ["?"] = actions.which_key,
+                ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+                ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+
+                ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+                ["<C-y>"] = actions.send_selected_to_qflist + actions.open_qflist,
+                ["<C-x>"] = "delete_buffer",
+                -- ["<C-l>"] = actions.complete_tag,
+                ["<C-h>"] = actions.which_key, -- keys from pressing <C-/>
+                ["<C-a>"] = actions.git_create_branch,
+              },
+
+              n = {
+                ["<esc>"] = actions.close,
+                ["<CR>"] = actions.select_default,
+                ["<C-s>"] = actions.select_horizontal,
+                ["<C-v>"] = actions.select_vertical,
+                -- ["<C-Enter>"] = actions.select_vertical,
+                ["<C-t>"] = actions.select_tab,
+                -- ["<C-t>"] = trouble.open_with_trouble,
+                ["<C-e>"] = open_with_trouble,
+
+                ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+                ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+                ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+                ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+
+                ["j"] = actions.move_selection_next,
+                ["k"] = actions.move_selection_previous,
+                ["H"] = actions.move_to_top,
+                ["M"] = actions.move_to_middle,
+                ["L"] = actions.move_to_bottom,
+                ["<BS>"] = "delete_buffer",
+                ["<C-x>"] = "delete_buffer",
+
+                ["<C-j>"] = actions.move_selection_next,
+                ["<C-k>"] = actions.move_selection_previous,
+
+                ["<Down>"] = actions.move_selection_next,
+                ["<Up>"] = actions.move_selection_previous,
+                ["gg"] = actions.move_to_top,
+                ["G"] = actions.move_to_bottom,
+
+                -- ["<C-u>"] = actions.preview_scrolling_up,
+                -- ["<C-d>"] = actions.preview_scrolling_down,
+
+                -- ["<PageUp>"] = actions.results_scrolling_up,
+                -- ["<PageDown>"] = actions.results_scrolling_down,
+
+                ["<C-u>"] = actions.results_scrolling_up,
+                ["<C-d>"] = actions.results_scrolling_down,
+
+                ["<PageUp>"] = actions.preview_scrolling_up,
+                ["<PageDown>"] = actions.preview_scrolling_down,
+
+                ["?"] = actions.which_key,
+              },
             },
-          },
-        },
+          }
+        ),
+        -- defaults = {
+        --
+        --   -- prompt_prefix = " ",
+        --   prompt_prefix = "> ",
+        --   history = {
+        --     path = "~/.local/share/nvim/databases/telescope_history.sqlite3",
+        --     limit = 50,
+        --   },
+        --   selection_caret = " ",
+        --   initial_mode = "insert",
+        --   cache_picker = { limit_entries = 100 },
+        --   scroll_strategy = "limit",
+        --   -- file_ignore_patterns = { "node_modules" },
+        --   -- file_ignore_patterns = { "%__template__" },
+        --   -- path_display = { "smart" },
+        --   -- path_display = { "tail" },
+        --   -- path_display = { shorten = { len = 5, exclude = { -1 } } },
+        --   -- path_display = { shorten = { len = 3, exclude = { -1 } } },
+        --   -- path_display = { "hidden" },
+        --   path_display = { truncate = 5 },
+        --   wrap_results = false,
+        --   vimgrep_arguments = {
+        --     "rg",
+        --     -- "--color=never",
+        --     "--no-heading",
+        --     "--with-filename",
+        --     "--line-number",
+        --     "--column",
+        --     "--smart-case",
+        --   },
+        --   -- layout_strategy = 'bottom_pane',
+        --   -- layout_config = {
+        --   --   height = 0.4,
+        --   -- },
+        --
+        --   -- layout_strategy = "horizontal",
+        --   sorting_strategy = "ascending",
+        --   layout_config = {
+        --     horizontal = { width = 0.97, height = 0.9, preview_width = 0.45 },
+        --     vertical = { width = 0.90, height = 0.99, preview_height = 0.35 },
+        --     center = { width = 0.99, height = 0.99 },
+        --     bottom_pane = { width = 1, height = 0.4 },
+        --     prompt_position = "top",
+        --   },
+        --   preview = {
+        --     filesize_limit = 0.8, -- MB
+        --     hide_on_startup = true,
+        --     mime_hook = function(filepath, bufnr, opts)
+        --       local is_image = function(filepath)
+        --         local image_extensions = { "png", "jpg" } -- Supported image formats
+        --         local split_path = vim.split(filepath:lower(), ".", { plain = true })
+        --         local extension = split_path[#split_path]
+        --         return vim.tbl_contains(image_extensions, extension)
+        --       end
+        --       if is_image(filepath) then
+        --         local term = vim.api.nvim_open_term(bufnr, {})
+        --         local function send_output(_, data, _)
+        --           for _, d in ipairs(data) do
+        --             vim.api.nvim_chan_send(term, d .. "\r\n")
+        --           end
+        --         end
+        --         vim.fn.jobstart({
+        --           "catimg",
+        --           filepath, -- Terminal image viewer command
+        --         }, { on_stdout = send_output, stdout_buffered = true, pty = true })
+        --       else
+        --         require("telescope.previewers.utils").set_preview_message(
+        --           bufnr,
+        --           opts.winid,
+        --           "Binary cannot be previewed"
+        --         )
+        --       end
+        --     end,
+        --   },
+        --
+        --   -- preview = {
+        --   --   mime_hook = function(filepath, bufnr, opts)
+        --   --     local is_image = function(filepath)
+        --   --       local image_extensions = { "png", "jpg", "jpeg", "gif" } -- Supported image formats
+        --   --       local split_path = vim.split(filepath:lower(), ".", { plain = true })
+        --   --       local extension = split_path[#split_path]
+        --   --       return vim.tbl_contains(image_extensions, extension)
+        --   --     end
+        --   --     if is_image(filepath) then
+        --   --       local term = vim.api.nvim_open_term(bufnr, {})
+        --   --       local function send_output(_, data, _)
+        --   --         for _, d in ipairs(data) do
+        --   --           vim.api.nvim_chan_send(term, d .. "\r\n")
+        --   --         end
+        --   --       end
+        --   --       vim.fn.jobstart({
+        --   --         "viu",
+        --   --         filepath,
+        --   --         }, {
+        --   --           on_stdout = send_output,
+        --   --           stdout_buffered = true,
+        --   --       })
+        --   --     else
+        --   --       require("telescope.previewers.utils").set_preview_message(
+        --   --         bufnr,
+        --   --         opts.winid,
+        --   --         "Binary cannot be previewed"
+        --   --       )
+        --   --     end
+        --   --   end,
+        --   -- },
+        --
+        --   mappings = {
+        --     i = {
+        --       ["<C-space>"] = actions.to_fuzzy_refine,
+        --       ["<C-n>"] = actions.cycle_history_next,
+        --       ["<C-p>"] = actions.cycle_history_prev,
+        --
+        --       ["<C-j>"] = actions.move_selection_next,
+        --       ["<C-k>"] = actions.move_selection_previous,
+        --
+        --       ["<C-c>"] = actions.close,
+        --
+        --       ["<Down>"] = actions.move_selection_next,
+        --       ["<Up>"] = actions.move_selection_previous,
+        --
+        --       ["<CR>"] = actions.select_default,
+        --       ["<C-s>"] = actions.select_horizontal,
+        --       -- ["<C-Enter>"] = actions.select_vertical,
+        --       ["<C-t>"] = actions.select_tab,
+        --       -- ["<C-t>"] = trouble.open_with_trouble,
+        --       ["<C-e>"] = open_with_trouble,
+        --       ["<C-w>"] = require("telescope.actions.layout").toggle_preview,
+        --       -- ["<C-t>"] = trouble.open_with_trouble,
+        --
+        --       -- ["<C-u>"] = actions.preview_scrolling_up,
+        --       -- ["<C-d>"] = actions.preview_scrolling_down,
+        --
+        --       ["<C-u>"] = actions.results_scrolling_up,
+        --       ["<C-d>"] = actions.results_scrolling_down,
+        --
+        --       ["<PageUp>"] = actions.preview_scrolling_up,
+        --       ["<PageDown>"] = actions.preview_scrolling_down,
+        --
+        --       ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        --       ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        --
+        --       ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        --       ["<C-y>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        --       ["<C-x>"] = "delete_buffer",
+        --       -- ["<C-l>"] = actions.complete_tag,
+        --       ["<C-h>"] = actions.which_key, -- keys from pressing <C-/>
+        --       ["<C-a>"] = actions.git_create_branch,
+        --     },
+        --
+        --     n = {
+        --       ["<esc>"] = actions.close,
+        --       ["<CR>"] = actions.select_default,
+        --       ["<C-s>"] = actions.select_horizontal,
+        --       ["<C-v>"] = actions.select_vertical,
+        --       -- ["<C-Enter>"] = actions.select_vertical,
+        --       ["<C-t>"] = actions.select_tab,
+        --       -- ["<C-t>"] = trouble.open_with_trouble,
+        --       ["<C-e>"] = open_with_trouble,
+        --
+        --       ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        --       ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        --       ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        --       ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        --
+        --       ["j"] = actions.move_selection_next,
+        --       ["k"] = actions.move_selection_previous,
+        --       ["H"] = actions.move_to_top,
+        --       ["M"] = actions.move_to_middle,
+        --       ["L"] = actions.move_to_bottom,
+        --       ["<BS>"] = "delete_buffer",
+        --       ["<C-x>"] = "delete_buffer",
+        --
+        --       ["<C-j>"] = actions.move_selection_next,
+        --       ["<C-k>"] = actions.move_selection_previous,
+        --
+        --       ["<Down>"] = actions.move_selection_next,
+        --       ["<Up>"] = actions.move_selection_previous,
+        --       ["gg"] = actions.move_to_top,
+        --       ["G"] = actions.move_to_bottom,
+        --
+        --       -- ["<C-u>"] = actions.preview_scrolling_up,
+        --       -- ["<C-d>"] = actions.preview_scrolling_down,
+        --
+        --       -- ["<PageUp>"] = actions.results_scrolling_up,
+        --       -- ["<PageDown>"] = actions.results_scrolling_down,
+        --
+        --       ["<C-u>"] = actions.results_scrolling_up,
+        --       ["<C-d>"] = actions.results_scrolling_down,
+        --
+        --       ["<PageUp>"] = actions.preview_scrolling_up,
+        --       ["<PageDown>"] = actions.preview_scrolling_down,
+        --
+        --       ["?"] = actions.which_key,
+        --     },
+        --   },
+        -- },
         pickers = {
           -- Default configuration for builtin pickers goes here:
           -- picker_name = {
@@ -291,8 +496,11 @@ return {
           --   -- layout_strategy = "vertical",
           --   -- path_display = { 'hidden' }
           -- },
+          -- git_worktree = { theme = "ivy" },
+          -- create_git_worktree = { theme = "ivy" },
           git_branches = {
-            layout_strategy = "vertical",
+            theme = "ivy",
+            -- layout_strategy = "vertical",
             mappings = {
               i = { ["<C-b>"] = require("jg.custom.telescope").set_upstream },
             },
@@ -514,7 +722,7 @@ return {
       telescope.load_extension("grapple")
       telescope.load_extension("heading")
       telescope.load_extension("yank_history")
-      telescope.load_extension('ecolog')
+      telescope.load_extension("ecolog")
       -- telescope.load_extension("jsonfly")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")

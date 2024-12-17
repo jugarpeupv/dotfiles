@@ -292,7 +292,9 @@ return {
 
       vim.cmd([[highlight DiffAdd gui=none guifg=none guibg=#103235]])
       vim.cmd([[highlight DiffChange gui=none guifg=none guibg=#272D43]])
-      vim.cmd([[highlight DiffText gui=none guifg=none guibg=#394b70]])
+      -- vim.cmd([[highlight DiffText gui=none guifg=none guibg=#394b70]])
+
+      vim.cmd([[highlight DiffText gui=none guifg=none guibg=#456f80]])
       vim.cmd([[highlight DiffDelete gui=none guifg=none guibg=#3F2D3D]])
       vim.cmd([[highlight DiffviewDiffAddAsDelete guibg=#3f2d3d gui=none guifg=none]])
       vim.cmd([[highlight DiffviewDiffDelete gui=none guifg=#3B4252 guibg=none]])
@@ -316,12 +318,12 @@ return {
       -- "DiffChange:DiffAddAsDelete",
       -- "DiffText:DiffDeleteText",
       vim.cmd([[highlight DiffAddAsDelete gui=none guifg=none guibg=#3F2D3D]])
-      vim.cmd([[highlight DiffDeleteText gui=none guifg=none guibg=#4B1818]])
+      vim.cmd([[highlight DiffDeleteText gui=none guifg=none guibg=#7b3038]])
 
       -- Right panel
       -- "DiffChange:DiffAdd",
       -- "DiffText:DiffAddText",
-      vim.cmd([[highlight DiffAddText gui=none guifg=none guibg=#1C5458]])
+      vim.cmd([[highlight DiffAddText gui=none guifg=none guibg=#456f80]])
       vim.cmd([[highlight DiffDelete guifg=#011528]])
 
       vim.cmd([[highlight BufferLineTabSeparator gui=none guifg=#13182e]])
@@ -458,6 +460,7 @@ return {
       vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
       vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
       vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
+      vim.cmd([[hi @markup.raw guifg=#F5E0DC]])
 
       vim.api.nvim_set_hl(0, "SubstituteSubstituted", { link = "Visual" })
 

@@ -8,7 +8,31 @@ return {
     },
     build = "make tiktoken",    -- Only on MacOS or Linux
     opts = {
-      log_level = 'fatal',
+      log_level = "fatal",
+      mappings = {
+        jump_to_diff = {
+          normal = "go",
+        },
+        quickfix_diffs = {
+          normal = "gq",
+        },
+        yank_diff = {
+          normal = "gy",
+          register = '"',
+        },
+        show_diff = {
+          normal = "gd",
+        },
+        show_info = {
+          normal = "gi",
+        },
+        show_context = {
+          normal = "gc",
+        },
+        show_help = {
+          normal = "gh",
+        },
+      },
       -- window = {
       --   layout = 'float',
       --   relative = 'cursor',
@@ -49,36 +73,43 @@ return {
       },
 
       -- { "<leader>ct", mode = { "n", "v" }, "<cmd>CopilotChatToggle<CR>", desc = "Toggle Copilot" },
-      { "<leader>ct", mode = { "n", "v" }, function ()
-        -- local chat = require("CopilotChat")
-        -- chat.toggle()
-        local chat = require("CopilotChat")
+      {
+        "<leader>ct",
+        mode = { "n", "v" },
+        function()
+          -- local chat = require("CopilotChat")
+          -- chat.toggle()
+          local chat = require("CopilotChat")
 
-        local cwd = vim.fn.getcwd()
-        local wt_utils = require("jg.custom.worktree-utils")
-        local wt_info = wt_utils.get_wt_info(cwd)
+          local cwd = vim.fn.getcwd()
+          local wt_utils = require("jg.custom.worktree-utils")
+          local wt_info = wt_utils.get_wt_info(cwd)
 
-        if next(wt_info) == nil then
-          vim.g.chat_title = vim.trim(cwd:gsub(vim.env.HOME, ""):gsub("/", "-"))
-        else
-          vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub(vim.env.HOME, ""):gsub("/", "-"))
-        end
+          if next(wt_info) == nil then
+            vim.g.chat_title = vim.trim(cwd:gsub(vim.env.HOME, ""):gsub("/", "-"))
+          else
+            vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub(vim.env.HOME, ""):gsub("/", "-"))
+          end
 
-        print("vim.g.chat_title", vim.g.chat_title)
+          print("vim.g.chat_title", vim.g.chat_title)
 
-        local existing_chat_path = vim.fn.stdpath('data') .. '/copilotchat_history/' .. vim.g.chat_title .. ".json"
-        print("existing_chat_path", existing_chat_path)
+          local existing_chat_path = vim.fn.stdpath("data")
+              .. "/copilotchat_history/"
+              .. vim.g.chat_title
+              .. ".json"
+          print("existing_chat_path", existing_chat_path)
 
-        local chat_exits = wt_utils.file_exists(existing_chat_path)
+          local chat_exits = wt_utils.file_exists(existing_chat_path)
 
-        if chat_exits then
-          chat.toggle()
-          chat.load(vim.g.chat_title)
-        else
-          chat.toggle()
-        end
-
-      end, desc = "Toggle Copilot" },
+          if chat_exits then
+            chat.toggle()
+            chat.load(vim.g.chat_title)
+          else
+            chat.toggle()
+          end
+        end,
+        desc = "Toggle Copilot",
+      },
       {
         "<leader>co",
         function()
@@ -161,7 +192,7 @@ return {
           "<leader>ip",
           function()
             return vim.bo.filetype == "AvanteInput" and require("avante.clipboard").paste_image()
-              or require("img-clip").paste_image()
+                or require("img-clip").paste_image()
           end,
           desc = "clip: paste image",
         },
