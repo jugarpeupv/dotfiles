@@ -1,3 +1,5 @@
+local home = os.getenv("HOME")
+
 return {
   "epwalsh/obsidian.nvim",
   version = "*", -- recommended, use latest release instead of latest commit
@@ -24,7 +26,7 @@ return {
     workspaces = {
       {
         name = "work",
-        path = "/Users/jgarcia/work/Okode/ObsVault",
+        path = home .. "/work/Okode/ObsVault",
       },
     },
 

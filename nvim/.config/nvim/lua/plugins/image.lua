@@ -32,6 +32,7 @@ return {
     branch = "master",
     -- branch = "main",
     -- event = "VeryLazy",
+    -- event = { "BufReadPost" },
     ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
     -- branch = "feat/toggle-rendering",
     config = function()
@@ -73,57 +74,17 @@ return {
         },
         max_width = 1500,
         max_height = 1500,
-        max_width_window_percentage = 95,
-        max_height_window_percentage = 95,
-        window_overlap_clear_enabled = true,                                  -- toggles images when windows are overlapped
-        scale_factor = 6,                                                     -- scales the window size up or down
+        max_width_window_percentage = 80,
+        max_height_window_percentage = 80,
+        window_overlap_clear_enabled = false,                                  -- toggles images when windows are overlapped
+        scale_factor = 2,                                                     -- scales the window size up or down
         window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
-        editor_only_render_when_focused = false,                              -- auto show/hide images when the editor gains/looses focus
+        editor_only_render_when_focused = true,                              -- auto show/hide images when the editor gains/looses focus
         tmux_show_only_in_active_window = true,                               -- auto show/hide images in the correct Tmux window (needs visual-activity off)
         hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" }, -- render image files as images when opened
 
         -- hijack_file_patterns = {}, -- render image files as images when opened
       })
-
-      local image = require("image")
-
-      -- vim.keymap.set({ "n", "v" }, "<leader>it", function()
-      --   if image.is_enabled() then
-      --     image.disable()
-      --   else
-      --     image.enable()
-      --   end
-      -- end, {})
-
-      vim.keymap.set({ "n", "v" }, "<leader>it", function()
-        local api = require("image")
-
-        -- from a file (absolute path)
-        local my_image = api.from_file(
-          "/Users/jgarcia/work/mar/arch-mar2-arqref_frontend/wt-release/docs/changelog/img/v5.2.0/skip_nx_cloud.png",
-          {
-            id = "my_image_id", -- optional, defaults to a random string
-            -- window = 1000, -- optional, binds image to a window and its bounds
-            -- buffer = 1000, -- optional, binds image to a buffer (paired with window binding)
-            -- with_virtual_padding = true, -- optional, pads vertically with extmarks, defaults to false
-
-            -- optional, binds image to an extmark which it follows. Forced to be true when
-            -- `with_virtual_padding` is true. defaults to false.
-            inline = true,
-            -- geometry (optional)
-            x = 1,
-            y = 1,
-            width = 500,
-            height = 500,
-          }
-        )
-
-        if not my_image then
-          return
-        end
-
-        my_image:render() -- render image
-      end, {})
     end,
   },
 }

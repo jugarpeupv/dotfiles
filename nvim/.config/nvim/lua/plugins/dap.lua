@@ -25,7 +25,8 @@ return {
     dependencies = "mfussenegger/nvim-dap",
     ft = "python",
     config = function()
-      local path = "/Users/jgarcia/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+      local home = os.getenv("HOME")
+      local path = home .. "/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
       require("dap-python").setup(path)
     end,
   },

@@ -79,7 +79,7 @@ return {
         'RenderMarkdownH6',
       },
     },
-    render_modes = { 'n', 'c', 't', 'i' },
+    render_modes = { 'n', 'c', 't', 'i', 'v', 'Vs', 'V' },
     code = {
       -- Turn on / off code block & inline code rendering
       enabled = true,

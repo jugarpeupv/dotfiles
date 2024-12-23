@@ -7,14 +7,14 @@ shift + alt - p : osascript ~/.config/skhd/Scripts/new-brave-window.scpt
 shift + alt - i : osascript ~/.config/skhd/Scripts/new-spotify2-window.scpt
 shift + alt - o : osascript ~/.config/skhd/Scripts/new-vscode-window.scpt
 shift + alt - e : osascript ~/.config/skhd/Scripts/new-excel-window.scpt
-## shift + alt - u : osascript ~/.config/skhd/Scripts/new-onepassword-window.scpt
 shift + alt - v : osascript ~/.config/skhd/Scripts/new-zeplin-window.scpt
-## shift + alt - m : osascript ~/.config/skhd/Scripts/new-slack-window.scpt
 shift + alt - b : osascript ~/.config/skhd/Scripts/new-notes-window.scpt
 shift + alt - r : osascript ~/.config/skhd/Scripts/new-finder-window.scpt
 shift + alt - q : osascript ~/.config/skhd/Scripts/new-docker-window.scpt
 shift + alt - z : osascript ~/.config/skhd/Scripts/new-msword-window.scpt
 shift + alt - w : osascript ~/.config/skhd/Scripts/new-deno-window.scpt
+shift + alt - y : osascript ~/.config/skhd/Scripts/new-obs-window.scpt
+shift + alt - u : osascript ~/.config/skhd/Scripts/new-onepassword-window.scpt
 
 
 shift + alt - 7 : osascript ~/.config/skhd/Scripts/new-android-studio-window.scpt
@@ -23,16 +23,15 @@ shift + alt - 6 : osascript ~/.config/skhd/Scripts/new-android-simulator-window.
 shift + alt - 8 : osascript ~/.config/skhd/Scripts/new-deno-window.scpt
 shift + alt - 0 : osascript ~/.config/skhd/Scripts/new-teams-window.scpt
 shift + alt - 9 : osascript ~/.config/skhd/Scripts/new-postman-window.scpt
-## shift + alt - 9 : osascript ~/.config/skhd/Scripts/new-outlook.scpt
 
 
 shift + alt - 1 : osascript ~/.config/skhd/Scripts/drawio.scpt
 shift + alt - 3 : osascript ~/.config/skhd/Scripts/new-figma-window.scpt
 shift + alt - 2 : osascript ~/.config/skhd/Scripts/new-powerpoint-window.scpt
 shift + alt - 4 : osascript ~/.config/skhd/Scripts/new-simulator-window.scpt
-shift + alt - y : osascript ~/.config/skhd/Scripts/new-obs-window.scpt
 
 
 
-
+## shift + alt - m : osascript ~/.config/skhd/Scripts/new-slack-window.scpt
+## shift + alt - 9 : osascript ~/.config/skhd/Scripts/new-outlook.scpt
 

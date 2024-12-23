@@ -10,7 +10,7 @@ return {
     },
     cmd = { "Octo" },
     opts = {
-      github_hostname = "github.com", -- Change to your own ghe host
+      -- github_hostname = "github.com", -- Change to your own ghe host
       ssh_aliases = {
         ["github.com-mar"] = "github.com",
         ["github.com-work"] = "github.com",

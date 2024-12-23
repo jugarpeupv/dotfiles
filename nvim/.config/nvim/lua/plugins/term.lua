@@ -4,6 +4,30 @@ return {
     "rebelot/terminal.nvim",
     keys = {
       {
+        "<D-l>",
+        mode = { "n", "t" },
+        function()
+          -- require'terminal'.run("", { layout = { open_cmd = "float", border = "single" } })
+          local get_terminal_bufs = function()
+            return vim.tbl_filter(function(bufnr)
+              return vim.fn.getbufvar(bufnr, "&buftype") == "terminal" and vim.fn.getbufvar(bufnr, "&ft") == ""
+            end, vim.api.nvim_list_bufs())
+          end
+
+          local terminals = get_terminal_bufs()
+
+          local there_are_no_terminal_buffers = next(terminals) == nil
+
+          if there_are_no_terminal_buffers then
+            vim.cmd("15sp|term")
+            return
+          else -- there are terminal buffers
+            local term_map = require("terminal.mappings")
+            term_map.toggle()
+          end
+        end,
+      },
+      {
         "<M-l>",
         mode = { "n", "t" },
         function()

@@ -1,3 +1,5 @@
+local home = os.getenv("HOME")
+
 local bundles = {}
 
 ---
@@ -33,7 +35,7 @@ vim.list_extend(bundles, spring)
 ---
 local java_dependency_bundle = vim.split(
   vim.fn.glob(
-    "/Users/jgarcia/projects/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"
+    home .. "/projects/vscode-java-dependency/jdtls.ext/com.microsoft.jdtls.ext.core/target/com.microsoft.jdtls.ext.core-*.jar"
   ),
   "\n"
 )
@@ -44,18 +46,18 @@ end
 -- local root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", "mvnw" }, { upward = true })[1])
 local root_dir = vim.fs.dirname(vim.fs.find({ "gradlew", "mvnw" })[1])
 
-local workspace_folder = "/Users/jgarcia/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
+local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
 
 local extendedClientCapabilities = require("jdtls").extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 
 local jar = vim.fn.glob(
-  "/Users/jgarcia/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar",
+  home .. "/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar",
   false,
   false
 )
 
-local lombok = "/Users/jgarcia/.local/share/nvim/mason/packages/lombok-nightly/lombok.jar"
+local lombok = home .. "/.local/share/nvim/mason/packages/lombok-nightly/lombok.jar"
 
 local config = {
   settings = {
@@ -132,7 +134,7 @@ local config = {
     "--add-opens", "java.base/java.lang=ALL-UNNAMED",
     "-javaagent:" .. lombok,
     "-jar", jar,
-    "-configuration", "/Users/jgarcia/.local/share/nvim/mason/packages/jdtls/config_linux",
+    "-configuration", home .. "/.local/share/nvim/mason/packages/jdtls/config_linux",
     "-data", workspace_folder,
   },
   root_dir = root_dir,

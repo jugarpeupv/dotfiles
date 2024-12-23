@@ -1,4 +1,5 @@
 return {
+  -- { "sam4llis/nvim-lua-gf",  keys = { "gf" } },
   {
     "troydm/zoomwintab.vim",
     keys = { { mode = { "n" }, "<c-w>m", "<cmd>ZoomWinTabToggle<CR>" } },
@@ -311,7 +312,7 @@ return {
   -- { "nvim-spider" }
   -- { "airblade/vim-matchquote" },
   -- { "ton/vim-bufsurf" },
-  { "taybart/b64.nvim",      cmd = { "B64Encode", "B64Decode" } },
+  { "taybart/b64.nvim",         cmd = { "B64Encode", "B64Decode" } },
   {
     "lambdalisue/vim-suda",
     cmd = { "SudaWrite", "SudaRead" },
@@ -382,7 +383,7 @@ return {
     end,
   },
 
-  { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
+  { "wellle/targets.vim",      event = { "BufReadPost", "BufNewFile" } },
   -- {
   --   "ibhagwan/fzf-lua",
   --   -- optional for icon support

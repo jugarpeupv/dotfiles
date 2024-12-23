@@ -84,6 +84,7 @@ return {
       "mfussenegger/nvim-jdtls",
     },
     opts = function()
+      local home = os.getenv("HOME")
       -- mason for sonarlint-language path
       local mason_registery_status, mason_registery = pcall(require, "mason-registry")
       if not mason_registery_status then
@@ -99,7 +100,7 @@ return {
       opts.java_cmd = "java"
       opts.exploded_ls_jar_data = true
       opts.jdtls_name = "jdtls"
-      opts.log_file = "/Users/jgarcia/.local/state/nvim/spring-boot-ls.log"
+      opts.log_file = home .. "/.local/state/nvim/spring-boot-ls.log"
 
       return opts
     end,
@@ -178,6 +179,8 @@ return {
       },
     },
     config = function()
+
+      local home = os.getenv("HOME")
       -- import lspconfig plugin safely
       local on_attach = require("jg.custom.lsp-utils").attach_lsp_config
       local lspconfig_status, lspconfig = pcall(require, "lspconfig")
@@ -331,19 +334,10 @@ return {
         settings = {
           typescript = {
             preferences = {
-              -- other preferences...
               importModuleSpecifier = "relative",
               importModuleSpecifierEnding = "minimal",
             },
             inlayHints = {
-
-              --           includeInlayEnumMemberValueHints = false,
-              --           includeInlayFunctionLikeReturnTypeHints = false,
-              --           includeInlayFunctionParameterTypeHints = true,
-              --           includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-              --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-              --           includeInlayPropertyDeclarationTypeHints = false,
-              --           includeInlayVariableTypeHints = false,
               parameterNames = { enabled = "all" },
               parameterTypes = { enabled = true },
               variableTypes = { enabled = true },
@@ -357,47 +351,6 @@ return {
         on_attach = on_attach,
       })
 
-      -- require'lspconfig'.html.setup{
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      -- }
-
-      -- configure typescript server with plugin
-      -- typescript.setup({
-      --   server = {
-      --     capabilities = capabilities,
-      --     on_attach = on_attach,
-      --     -- root_dir = root_pattern("tsconfig.base.json", "package.json", "jsconfig.json", ".git", "tsconfig.json"),
-      --     -- root_dir = root_pattern("tsconfig.base.json", "package.json", ".git"),
-      --     -- root_dir = root_pattern("tsconfig.base.json", ".git"),
-      --     -- root_dir = root_pattern("tsconfig.json","tsconfig.base.json", ".git"),
-      --     root_dir = root_pattern("tsconfig.base.json", "package.json", "jsconfig.json", ".git"),
-      --     settings = {
-      --       javascript = {
-      --         inlayHints = {
-      --           includeInlayEnumMemberValueHints = true,
-      --           includeInlayFunctionLikeReturnTypeHints = false,
-      --           includeInlayFunctionParameterTypeHints = true,
-      --           includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-      --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-      --           includeInlayPropertyDeclarationTypeHints = false,
-      --           includeInlayVariableTypeHints = false,
-      --         },
-      --       },
-      --       typescript = {
-      --         inlayHints = {
-      --           includeInlayEnumMemberValueHints = false,
-      --           includeInlayFunctionLikeReturnTypeHints = false,
-      --           includeInlayFunctionParameterTypeHints = true,
-      --           includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-      --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-      --           includeInlayPropertyDeclarationTypeHints = false,
-      --           includeInlayVariableTypeHints = false,
-      --         },
-      --       },
-      --     },
-      --   },
-      -- })
 
       -- configure css server
       lspconfig["cssls"].setup({
@@ -405,68 +358,10 @@ return {
         on_attach = on_attach,
       })
 
-      -- lspconfig.sqlls.setup({
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      --   filetypes = { 'sql' },
-      --   root_dir = function(_)
-      --     return vim.loop.cwd()
-      --   end,
-      -- })
-
-      -- lspconfig.sqls.setup({
-      --   capabilities = capabilities,
-
-      --   on_attach = function(client, bufnr)
-      --     require("sqls").on_attach(client, bufnr)
-      --     require("jg.custom.lsp-utils").attach_lsp_config(client, bufnr)
-      --   end,
-      --   -- settings = {
-      --   --   sqls = {
-      --   --     connections = {
-      --   --       {
-      --   --         alias = "auth",
-      --   --         driver = "mysql",
-      --   --         -- mysql://root@localhost/auth
-      --   --         -- dataSourceName = 'mysql://root@localhost/auth',
-      --   --         -- dataSourceName = 'mysql://root@tcp(127.0.0.1:3306)/auth',
-      --   --         -- dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
-      --   --         proto = "tcp",
-      --   --         user = "root",
-      --   --         passwd = "",
-      --   --         host = "127.0.0.1",
-      --   --         port = "3306",
-      --   --         dbName = "auth",
-      --   --       },
-      --   --     },
-      --   --   },
-      --   -- },
-      --   -- on_attach = on_attach,
-      --   filetypes = { "sql", "mysql", "plsql" },
-      --   root_dir = function(_)
-      --     return vim.loop.cwd()
-      --   end,
-      -- })
-
-      -- lspconfig.jedi_language_server.setup({
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      -- })
 
       lspconfig["pyright"].setup({
         capabilities = capabilities,
         on_attach = on_attach,
-        -- root_dir = function(fname)
-        --   local root_files = {
-        --     "pyproject.toml",
-        --     "setup.py",
-        --     "setup.cfg",
-        --     "requirements.txt",
-        --     "Pipfile",
-        --     "pyrightconfig.json",
-        --   }
-        --   return root_pattern(unpack(root_files))(fname)
-        -- end,
       })
 
       -- configure tailwindcss server
@@ -526,7 +421,7 @@ return {
         cmd = {
           "java",
           "-jar",
-          "/Users/jgarcia/.config/groovy-language-server/build/libs/groovy-language-server-all.jar",
+          home .. "/.config/groovy-language-server/build/libs/groovy-language-server-all.jar",
           -- "~/.local/share/nvim/mason/packages/groovy-language-server/build/libs/groovy-language-server-all.jar",
         },
       })
@@ -540,330 +435,35 @@ return {
       capabilities_json_ls.textDocument.completion.completionItem.snippetSupport = true
 
       lspconfig["eslint"].setup({
-        -- root_dir = function(filename, bufnr)
-        --   if string.find(filename, "node_modules/") then
-        --     return nil
-        --   end
-        --   -- return require("lspconfig.server_configurations.eslint").default_config.root_dir(filename, bufnr)
-        --   local root_dir = require("lspconfig.server_configurations.eslint").default_config.root_dir(filename)
-        --   return root_dir
-        -- end,
-        -- root_dir = function(filename)
-        --   if string.find(filename, "node_modules/") then
-        --     return nil
-        --   end
-        --   return require("lspconfig.server_configurations.eslint").default_config.root_dir(filename)
-        -- end,
-        cmd = { "/Users/jgarcia/.local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
-        -- settings = {
-        --   experimental = {
-        --     useFlatConfig = true,
-        --   },
-        -- },
+        cmd = { home .. ".local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
         on_attach = on_attach,
         capabilities = capabilities,
-        -- filetypes = {
-        --   "javascript",
-        --   "html",
-        --   "javascriptreact",
-        --   "javascript.jsx",
-        --   "typescript",
-        --   "typescriptreact",
-        --   "typescript.tsx",
-        --   "vue",
-        --   "svelte",
-        --   "astro",
-        -- },
       })
 
-      -- local cfg = require("yaml-companion").setup({
-      --   on_attach = on_attach,
-      --   capabilities = capabilities,
-      -- })
-      -- require("lspconfig")["yamlls"].setup(cfg)
 
       require("lspconfig").yamlls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
-        -- settings = {
-        --   -- yaml = {
-        --   --   schemaStore = {
-        --   --     enable = true,
-        --   --     url = "",
-        --   --   },
-        --   --   schemas = require("schemastore").yaml.schemas(),
-        --   -- },
-        --   yaml = {
-        --     -- validate = true,
-        --     format = { enable = true },
-        --     -- schemaDownload = { enable = true },
-        --     -- schemaStore = {
-        --     --   enable = true,
-        --     --   url = "https://www.schemastore.org/api/json/catalog.json"
-        --     -- },
-        --     -- schemas = {
-        --     --   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
-        --     -- },
-        --     -- schemas = require('schemastore').yaml.schemas(),
-        --   },
-        -- },
+        settings = {
+          yaml = {
+            schemaStore = {
+              enable = false,
+              url = "",
+            },
+            schemas = {}
+          },
+        }
       })
 
-      -- local default_schemas = nil
-      -- local status_ok, jsonls_settings = pcall(require, "nlspsettings.jsonls")
-      -- if status_ok then
-      --   default_schemas = jsonls_settings.get_default_schemas()
-      -- else
-      --   default_schemas = require("schemastore").json.schemas()
-      -- end
-      --
-      -- local schemas = {
-      --   {
-      --     description = "TypeScript compiler configuration file",
-      --     fileMatch = {
-      --       "tsconfig.json",
-      --       "tsconfig.*.json",
-      --     },
-      --     url = "https://json.schemastore.org/tsconfig.json",
-      --   },
-      --   {
-      --     description = "Lerna config",
-      --     fileMatch = { "lerna.json" },
-      --     url = "https://json.schemastore.org/lerna.json",
-      --   },
-      --   {
-      --     description = "Babel configuration",
-      --     fileMatch = {
-      --       ".babelrc.json",
-      --       ".babelrc",
-      --       "babel.config.json",
-      --     },
-      --     url = "https://json.schemastore.org/babelrc.json",
-      --   },
-      --   {
-      --     description = "ESLint config",
-      --     fileMatch = {
-      --       ".eslintrc.json",
-      --       ".eslintrc",
-      --     },
-      --     url = "https://json.schemastore.org/eslintrc.json",
-      --   },
-      --   {
-      --     description = "Bucklescript config",
-      --     fileMatch = { "bsconfig.json" },
-      --     url = "https://raw.githubusercontent.com/rescript-lang/rescript-compiler/8.2.0/docs/docson/build-schema.json",
-      --   },
-      --   {
-      --     description = "Prettier config",
-      --     fileMatch = {
-      --       ".prettierrc",
-      --       ".prettierrc.json",
-      --       "prettier.config.json",
-      --     },
-      --     url = "https://json.schemastore.org/prettierrc",
-      --   },
-      --   {
-      --     description = "Vercel Now config",
-      --     fileMatch = { "now.json" },
-      --     url = "https://json.schemastore.org/now",
-      --   },
-      --   {
-      --     description = "Stylelint config",
-      --     fileMatch = {
-      --       ".stylelintrc",
-      --       ".stylelintrc.json",
-      --       "stylelint.config.json",
-      --     },
-      --     url = "https://json.schemastore.org/stylelintrc",
-      --   },
-      --   {
-      --     description = "A JSON schema for the ASP.NET LaunchSettings.json files",
-      --     fileMatch = { "launchsettings.json" },
-      --     url = "https://json.schemastore.org/launchsettings.json",
-      --   },
-      --   {
-      --     description = "Schema for CMake Presets",
-      --     fileMatch = {
-      --       "CMakePresets.json",
-      --       "CMakeUserPresets.json",
-      --     },
-      --     url = "https://raw.githubusercontent.com/Kitware/CMake/master/Help/manual/presets/schema.json",
-      --   },
-      --   {
-      --     description = "Configuration file as an alternative for configuring your repository in the settings page.",
-      --     fileMatch = {
-      --       ".codeclimate.json",
-      --     },
-      --     url = "https://json.schemastore.org/codeclimate.json",
-      --   },
-      --   {
-      --     description = "LLVM compilation database",
-      --     fileMatch = {
-      --       "compile_commands.json",
-      --     },
-      --     url = "https://json.schemastore.org/compile-commands.json",
-      --   },
-      --   {
-      --     description = "Config file for Command Task Runner",
-      --     fileMatch = {
-      --       "commands.json",
-      --     },
-      --     url = "https://json.schemastore.org/commands.json",
-      --   },
-      --   {
-      --     description =
-      --     "AWS CloudFormation provides a common language for you to describe and provision all the infrastructure resources in your cloud environment.",
-      --     fileMatch = {
-      --       "*.cf.json",
-      --       "cloudformation.json",
-      --     },
-      --     url = "https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/cloudformation.schema.json",
-      --   },
-      --   {
-      --     description =
-      --     "The AWS Serverless Application Model (AWS SAM, previously known as Project Flourish) extends AWS CloudFormation to provide a simplified way of defining the Amazon API Gateway APIs, AWS Lambda functions, and Amazon DynamoDB tables needed by your serverless application.",
-      --     fileMatch = {
-      --       "serverless.template",
-      --       "*.sam.json",
-      --       "sam.json",
-      --     },
-      --     url = "https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/sam.schema.json",
-      --   },
-      --   {
-      --     description = "Json schema for properties json file for a GitHub Workflow template",
-      --     fileMatch = {
-      --       ".github/workflow-templates/**.properties.json",
-      --     },
-      --     url = "https://json.schemastore.org/github-workflow-template-properties.json",
-      --   },
-      --   {
-      --     description = "golangci-lint configuration file",
-      --     fileMatch = {
-      --       ".golangci.toml",
-      --       ".golangci.json",
-      --     },
-      --     url = "https://json.schemastore.org/golangci-lint.json",
-      --   },
-      --   {
-      --     description = "JSON schema for the JSON Feed format",
-      --     fileMatch = {
-      --       "feed.json",
-      --     },
-      --     url = "https://json.schemastore.org/feed.json",
-      --     versions = {
-      --       ["1"] = "https://json.schemastore.org/feed-1.json",
-      --       ["1.1"] = "https://json.schemastore.org/feed.json",
-      --     },
-      --   },
-      --   {
-      --     description = "Packer template JSON configuration",
-      --     fileMatch = {
-      --       "packer.json",
-      --     },
-      --     url = "https://json.schemastore.org/packer.json",
-      --   },
-      --   {
-      --     description = "NPM configuration file",
-      --     fileMatch = {
-      --       "package.json",
-      --     },
-      --     url = "https://json.schemastore.org/package.json",
-      --   },
-      --   {
-      --     description = "JSON schema for Visual Studio component configuration files",
-      --     fileMatch = {
-      --       "*.vsconfig",
-      --     },
-      --     url = "https://json.schemastore.org/vsconfig.json",
-      --   },
-      --   {
-      --     description = "Resume json",
-      --     fileMatch = { "resume.json" },
-      --     url = "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
-      --   },
-      -- }
-
-      -- local function extend(tab1, tab2)
-      --   for _, value in ipairs(tab2 or {}) do
-      --     table.insert(tab1, value)
-      --   end
-      --   return tab1
-      -- end
-
-      -- local extended_schemas = extend(schemas, default_schemas)
-      -- local opd = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics)
 
       lspconfig["jsonls"].setup({
         filetypes = { "jsonc", "json", "json5" },
         on_attach = on_attach,
-        -- init_options = {
-        --   provideFormatter = false
-        -- },
-        -- handlers = {
-        --   ["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
-        --     print(vim.inspect(result))
-        --     local matches = string.match(result.uri, "%.json5$", -6)
-        --     print("matches: " .. vim.inspect(matches))
-        --     -- jsonls doesn't really support json5
-        --     -- remove some annoying errors
-        --     if string.match(result.uri, "%.json5$", -6) and result.diagnostics ~= nil then
-        --       local idx = 1
-        --       while idx <= #result.diagnostics do
-        --         -- "Comments are not permitted in JSON."
-        --         if result.diagnostics[idx].code == 521 then
-        --           table.remove(result.diagnostics, idx)
-        --         else
-        --           idx = idx + 1
-        --         end
-        --       end
-        --     end
-        --     opd(err, result, ctx, config)
-        --   end,
-        -- },
-        -- handlers = {
-        --   ["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
-        --     -- jsonls doesn't really support json5
-        --     -- remove some annoying errors
-        --     if string.match(result.uri, "%.json5$", -6) and result.diagnostics ~= nil then
-        --       local idx = 1
-        --       while idx <= #result.diagnostics do
-        --         -- "Comments are not permitted in JSON."
-        --         if result.diagnostics[idx].code == 521 then
-        --           table.remove(result.diagnostics, idx)
-        --         else
-        --           idx = idx + 1
-        --         end
-        --       end
-        --     end
-        --     opd(err, result, ctx, config)
-        --   end,
-        -- },
         capabilities = capabilities_json_ls,
-        -- settings = {
-        --   json = {
-        --     shemas = extended_schemas,
-        --   },
-        -- },
-        -- capabilities = capabilities,
-        -- filetypes = { "json", "jsonc", "json5" },
         settings = {
           json = {
-            -- schemas = extended_schemas,
             schemas = require("schemastore").json.schemas({
-              -- extra = {
-              --   {
-              --     description = 'My custom JSON schema',
-              --     fileMatch = 'project.json',
-              --     name = 'project.json',
-              --     url = 'https://github.com/nrwl/nx/blob/master/packages/nx/schemas/project-schema.json',
-              --   }
-              -- }
-              -- ignore = {
-              --   -- 'catalog-info.yaml',
-              --   -- 'mkdocs.yml'
-              -- }
             }),
-            -- validate = { enable = true },
           },
         },
       })
@@ -880,14 +480,6 @@ return {
         },
       })
 
-      -- require("java").setup()
-
-      -- lspconfig["jdtls"].setup({})
-      -- lspconfig["jdtls"].setup({
-      --   -- on_attach = on_attach,
-      --   -- capabilities = capabilities,
-      -- })
-
       lspconfig["dockerls"].setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -898,32 +490,12 @@ return {
         capabilities = capabilities,
       })
 
-      -- require("lspconfig").cssmodules_ls.setup({
-      --   on_attach = on_attach,
-      --   capabilities = capabilities,
-      -- })
-
-      -- require'lspconfig'.markdown_oxide.setup{
-      --   on_attach = on_attach,
-      --   capabilities = capabilities,
-      -- }
 
       lspconfig["marksman"].setup({
         on_attach = on_attach,
         capabilities = capabilities,
       })
 
-      -- require("lspconfig").nxls.setup({
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      -- })
-
-      -- require("lspconfig").emmet_language_server.setup({
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      -- })
-
-      -- require'lspconfig'.emmet_language_server.setup{}
 
       require("lspconfig").emmet_ls.setup({
         capabilities = capabilities,
@@ -936,12 +508,10 @@ return {
         on_attach = on_attach,
         settings = { -- custom settings for lua
           Lua = {
-            -- make the language server recognize "vim" global
             diagnostics = {
               globals = { "vim", "jit", "bit", "Config" },
             },
             workspace = {
-              -- make language server aware of runtime files
               library = {
                 [vim.fn.expand("$VIMRUNTIME/lua")] = true,
                 [vim.fn.stdpath("config") .. "/lua"] = true,
@@ -964,50 +534,6 @@ return {
         capabilities = capabilities,
         on_attach = on_attach,
       })
-
-      require("neodev").setup({
-        -- add any options here, or leave empty to use the default settings
-      })
-
-      -- require("lspconfig").lua_ls.setup({
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      --   -- on_init = function(client)
-      --   --   local path = client.workspace_folders[1].name
-      --   --   if
-      --   --       not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc")
-      --   --   then
-      --   --     client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
-      --   --       Lua = {
-      --   --
-      --   --         diagnostics = {
-      --   --           globals = { "vim", "jit", "bit", "Config" },
-      --   --         },
-      --   --         runtime = {
-      --   --           -- Tell the language server which version of Lua you're using
-      --   --           -- (most likely LuaJIT in the case of Neovim)
-      --   --           version = "LuaJIT",
-      --   --         },
-      --   --         -- Make the server aware of Neovim runtime files
-      --   --         workspace = {
-      --   --           checkThirdParty = false,
-      --   --           library = {
-      --   --             vim.env.VIMRUNTIME,
-      --   --             -- [vim.fn.stdpath("config") .. "/lua"] = true,
-      --   --             -- "${3rd}/luv/library"
-      --   --             -- "${3rd}/busted/library",
-      --   --           },
-      --   --           -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-      --   --           -- library = vim.api.nvim_get_runtime_file("", true)
-      --   --         },
-      --   --       },
-      --   --     })
-      --   --
-      --   --     client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-      --   --   end
-      --   --   return true
-      --   -- end,
-      -- })
 
       -- Set global defaults for all servers
       lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {

@@ -15,7 +15,7 @@ return {
     "stevearc/oil.nvim",
     -- event = { "BufReadPost", "BufNewFile" },
     -- keys = { "<leader>oa" },
-    keys = { { mode = { "n" }, "<leader>oa", "<cmd>Oil<cr>" } },
+    keys = { { mode = { "n" }, "<leader>oa", "<cmd>Oil<cr>" }, { mode = { "n" }, "-", "<cmd>Oil<cr>" } },
     opts = {},
     -- Optional dependencies
     -- dependencies = { "echasnovski/mini.icons" },
