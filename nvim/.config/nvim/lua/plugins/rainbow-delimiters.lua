@@ -27,7 +27,8 @@ return {
             if line_count > 10000 then
               return nil
             elseif line_count > 2000 then
-              return rainbow.strategy['local']
+              -- return rainbow.strategy['local']
+              return nil
             end
 
             return rainbow.strategy['global']

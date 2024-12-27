@@ -116,7 +116,7 @@ return {
             -- layout_strategy = "horizontal",
             sorting_strategy = "ascending",
             layout_config = {
-              horizontal = { width = 0.97, height = 0.9, preview_width = 0.45 },
+              horizontal = { width = 0.98, height = 0.9, preview_width = 0.45, prompt_position = "top" },
               vertical = { width = 0.90, height = 0.99, preview_height = 0.35 },
               center = { width = 0.99, height = 0.99 },
               bottom_pane = { width = 1, height = 0.6 },

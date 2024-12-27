@@ -435,7 +435,7 @@ return {
       capabilities_json_ls.textDocument.completion.completionItem.snippetSupport = true
 
       lspconfig["eslint"].setup({
-        cmd = { home .. ".local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
+        cmd = { home .. "/.local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
         on_attach = on_attach,
         capabilities = capabilities,
       })
@@ -444,13 +444,21 @@ return {
       require("lspconfig").yamlls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
+        editor = {
+          formatOnType = false,
+        },
+        format = {
+          enable = true,
+        },
         settings = {
           yaml = {
-            schemaStore = {
-              enable = false,
-              url = "",
-            },
-            schemas = {}
+            validate = true,
+            hover = false,
+            -- schemaStore = {
+            --   enable = true,
+            --   url = "",
+            -- },
+            -- schemas = {}
           },
         }
       })

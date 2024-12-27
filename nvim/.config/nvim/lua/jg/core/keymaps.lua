@@ -172,6 +172,7 @@ vim.keymap.set({ "n", "v" }, "<Leader>fr", "<cmd>lua require('telescope.builtin'
 vim.keymap.set({ "n", "v" }, "<Leader>ff", function()
   require("telescope").extensions.live_grep_args.live_grep_raw({
     disable_coordinates = true,
+    path_display = { "absolute" },
     -- group_by = "filename",
     -- disable_devicons = true,
     vimgrep_arguments = {

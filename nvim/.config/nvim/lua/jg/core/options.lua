@@ -21,11 +21,10 @@ opt.wrap = true -- disable line wrapping
 -- search settings
 opt.ignorecase = true -- ignore case when searching
 opt.smartcase = true  -- if you include mixed case in your search, assumes you want case-sensitive
-opt.ea = true         -- equal always, windows same size
 
 -- cursor line
 opt.cursorline = true -- highlight the current cursor line
-opt.scrolloff = 4
+opt.scrolloff = 2
 opt.scrollback = 6000
 opt.sidescrolloff = 4
 opt.hlsearch = true
@@ -78,6 +77,8 @@ opt.clipboard:append("unnamedplus") -- use system clipboard as default register
 -- split windows
 opt.splitright = true     -- split vertical window to the right
 opt.splitbelow = true     -- split horizontal window to the bottom
+-- opt.ea = true         -- equal always, windows same size
+opt.ea = false         -- equal always, windows same size
 
 opt.iskeyword:append("-") -- consider string-string as whole word
 
@@ -134,7 +135,7 @@ vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.o.foldtext = ""
 vim.o.foldopen = "search,tag,undo"
 
-opt.updatetime = 1000
+-- opt.updatetime = 1000
 
 vim.g.suda_smart_edit = 1
 

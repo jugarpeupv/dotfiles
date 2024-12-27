@@ -16,7 +16,7 @@ return {
 
     require("ibl").setup({
       scope = {
-        enabled = true,
+        enabled = false,
         show_start = true,
         show_end = false,
         injected_languages = true,
