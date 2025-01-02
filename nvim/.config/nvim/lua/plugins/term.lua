@@ -7,7 +7,6 @@ return {
         "<D-l>",
         mode = { "n", "t" },
         function()
-          -- require'terminal'.run("", { layout = { open_cmd = "float", border = "single" } })
           local get_terminal_bufs = function()
             return vim.tbl_filter(function(bufnr)
               return vim.fn.getbufvar(bufnr, "&buftype") == "terminal" and vim.fn.getbufvar(bufnr, "&ft") == ""
@@ -31,7 +30,6 @@ return {
         "<M-l>",
         mode = { "n", "t" },
         function()
-          -- require'terminal'.run("", { layout = { open_cmd = "float", border = "single" } })
           local get_terminal_bufs = function()
             return vim.tbl_filter(function(bufnr)
               return vim.fn.getbufvar(bufnr, "&buftype") == "terminal" and vim.fn.getbufvar(bufnr, "&ft") == ""
@@ -108,17 +106,9 @@ return {
       })
 
       local term_map = require("terminal.mappings")
-      -- vim.keymap.set({ "n", "x" }, "<leader>ts", term_map.operator_send, { expr = true })
-      -- vim.keymap.set("n", "<leader>tr", term_map.run)
-      -- vim.keymap.set("n", "<leader>tR", term_map.run(nil, { layout = { open_cmd = "enew" } }))
       vim.keymap.set("n", "<leader>tx", term_map.kill)
       vim.keymap.set("n", "<leader>tj", term_map.cycle_next)
       vim.keymap.set("n", "<leader>tk", term_map.cycle_prev)
-      -- vim.keymap.set("n", "<leader>tl", term_map.move({ open_cmd = "belowright vnew" }))
-      -- vim.keymap.set("n", "<leader>tL", term_map.move({ open_cmd = "botright vnew" }))
-      -- vim.keymap.set("n", "<leader>th", term_map.move({ open_cmd = "belowright new" }))
-      -- vim.keymap.set("n", "<leader>tH", term_map.move({ open_cmd = "botright new" }))
-      -- vim.keymap.set("n", "<leader>tf", term_map.move({ open_cmd = "float", border = "rounded" }))
     end,
   },
 

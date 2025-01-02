@@ -713,6 +713,14 @@ return {
       -- load_extension, somewhere after setup function:
       -- telescope.load_extension("fzf")
       -- telescope.load_extension("harpoon")
+
+      -- TODO: Check if yank_history plugin is installed
+
+      local yanky_status = pcall(require, "yanky")
+      if yanky_status then
+        telescope.load_extension("yank_history")
+      end
+
       telescope.load_extension("dap")
       telescope.load_extension("zf-native")
       telescope.load_extension("ui-select")
@@ -721,7 +729,6 @@ return {
       telescope.load_extension("yaml_schema")
       telescope.load_extension("grapple")
       telescope.load_extension("heading")
-      telescope.load_extension("yank_history")
       telescope.load_extension("ecolog")
       -- telescope.load_extension("jsonfly")
       -- telescope.load_extension('media_files')

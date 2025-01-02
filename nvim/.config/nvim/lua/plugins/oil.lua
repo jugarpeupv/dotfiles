@@ -15,7 +15,10 @@ return {
     "stevearc/oil.nvim",
     -- event = { "BufReadPost", "BufNewFile" },
     -- keys = { "<leader>oa" },
-    keys = { { mode = { "n" }, "<leader>oa", "<cmd>Oil<cr>" }, { mode = { "n" }, "-", "<cmd>Oil<cr>" } },
+    keys = {
+      { mode = { "n" }, "<leader>oa", "<cmd>Oil<cr>" },
+      { mode = { "n" }, "-",          "<cmd>Oil<cr>" },
+    },
     opts = {},
     -- Optional dependencies
     -- dependencies = { "echasnovski/mini.icons" },
@@ -24,7 +27,7 @@ return {
       require("oil").setup({
         -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
         -- Set to false if you want some other plugin (e.g. netrw) to open when you edit directories.
-        default_file_explorer = true,
+        default_file_explorer = false,
         -- Id is automatically added at the beginning, and name at the end
         -- See :help oil-columns
         columns = {
@@ -189,7 +192,7 @@ return {
             winblend = 0,
           },
           -- Whether the preview window is automatically updated when the cursor is moved
-          update_on_cursor_moved = false,
+          update_on_cursor_moved = true,
         },
         -- Configuration for the floating progress window
         progress = {

@@ -13,7 +13,7 @@ return {
       theme = "dark",       -- 'dark' or 'light'
       update_on_change = true,
       -- app = "webview",      -- 'webview', 'browser', string or a table of strings
-      app = "browser",      -- 'webview', 'browser', string or a table of strings
+      app = "webview",      -- 'webview', 'browser', string or a table of strings
       -- explained below
 
       filetype = { "markdown" }, -- list of filetypes to recognize as markdown

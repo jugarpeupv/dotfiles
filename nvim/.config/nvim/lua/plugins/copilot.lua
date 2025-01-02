@@ -4,6 +4,13 @@ return {
   cmd = "Copilot",
   -- event = "InsertEnter",
   event = { "BufReadPost" },
+  enabled = function()
+    local is_headless = #vim.api.nvim_list_uis() == 0
+    if is_headless then
+      return false
+    end
+    return true
+  end,
   config = function()
     require("copilot").setup({
       panel = {

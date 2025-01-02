@@ -20,9 +20,17 @@ return {
     },
   },
   {
-    dir = "~/projects/springboot-nvim",
-    dev = true,
+    "jugarpeupv/springboot-nvim",
+    -- dir = "~/projects/springboot-nvim",
+    -- dev = true,
     ft = "java",
+    enabled = function()
+      local is_headless = #vim.api.nvim_list_uis() == 0
+      if is_headless then
+        return false
+      end
+      return true
+    end,
     dependencies = {
       "neovim/nvim-lspconfig",
       "mfussenegger/nvim-jdtls",
@@ -63,6 +71,13 @@ return {
     "JavaHello/java-deps.nvim",
     lazy = true,
     ft = "java",
+    enabled = function()
+      local is_headless = #vim.api.nvim_list_uis() == 0
+      if is_headless then
+        return false
+      end
+      return true
+    end,
     dependencies = {
       { "mfussenegger/nvim-jdtls" },
       {
@@ -79,6 +94,14 @@ return {
   {
     "JavaHello/spring-boot.nvim", --"eslam-allam/spring-boot.nvim"
     version = "*",
+
+    enabled = function()
+      local is_headless = #vim.api.nvim_list_uis() == 0
+      if is_headless then
+        return false
+      end
+      return true
+    end,
     ft = { "java" },
     dependencies = {
       "mfussenegger/nvim-jdtls",
@@ -108,6 +131,13 @@ return {
   {
     "neovim/nvim-lspconfig",
     -- event = { "BufReadPost", "BufNewFile" },
+    enabled = function()
+      local is_headless = #vim.api.nvim_list_uis() == 0
+      if is_headless then
+        return false
+      end
+      return true
+    end,
     event = { "InsertEnter" },
     dependencies = {
       {
@@ -156,8 +186,18 @@ return {
           },
         },
       },
-      { "mfussenegger/nvim-jdtls", dependencies = { "JavaHello/spring-boot.nvim", "mfussenegger/nvim-dap" } },
-      { "folke/neodev.nvim",       opts = {} },
+      {
+        "mfussenegger/nvim-jdtls",
+        enabled = function()
+          local is_headless = #vim.api.nvim_list_uis() == 0
+          if is_headless then
+            return false
+          end
+          return true
+        end,
+        dependencies = { "JavaHello/spring-boot.nvim", "mfussenegger/nvim-dap" }
+      },
+      { "folke/neodev.nvim", opts = {} },
       {
         "antosha417/nvim-lsp-file-operations",
         config = function()
@@ -165,9 +205,37 @@ return {
         end,
       },
       { "hrsh7th/nvim-cmp" },
-      { "williamboman/mason.nvim" },
-      { "williamboman/mason-lspconfig.nvim" },
-      { "jayp0521/mason-null-ls.nvim" },
+      {
+        "williamboman/mason.nvim",
+
+        enabled = function()
+          local is_headless = #vim.api.nvim_list_uis() == 0
+          if is_headless then
+            return false
+          end
+          return true
+        end,
+      },
+      {
+        "williamboman/mason-lspconfig.nvim",
+        enabled = function()
+          local is_headless = #vim.api.nvim_list_uis() == 0
+          if is_headless then
+            return false
+          end
+          return true
+        end,
+      },
+      {
+        "jayp0521/mason-null-ls.nvim",
+        enabled = function()
+          local is_headless = #vim.api.nvim_list_uis() == 0
+          if is_headless then
+            return false
+          end
+          return true
+        end,
+      },
       -- { "nanotee/sqls.nvim" },
       {
         "yioneko/nvim-vtsls",
@@ -179,7 +247,6 @@ return {
       },
     },
     config = function()
-
       local home = os.getenv("HOME")
       -- import lspconfig plugin safely
       local on_attach = require("jg.custom.lsp-utils").attach_lsp_config
@@ -351,13 +418,11 @@ return {
         on_attach = on_attach,
       })
 
-
       -- configure css server
       lspconfig["cssls"].setup({
         capabilities = capabilities,
         on_attach = on_attach,
       })
-
 
       lspconfig["pyright"].setup({
         capabilities = capabilities,
@@ -440,7 +505,6 @@ return {
         capabilities = capabilities,
       })
 
-
       require("lspconfig").yamlls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -460,9 +524,8 @@ return {
             -- },
             -- schemas = {}
           },
-        }
+        },
       })
-
 
       lspconfig["jsonls"].setup({
         filetypes = { "jsonc", "json", "json5" },
@@ -470,8 +533,7 @@ return {
         capabilities = capabilities_json_ls,
         settings = {
           json = {
-            schemas = require("schemastore").json.schemas({
-            }),
+            schemas = require("schemastore").json.schemas({}),
           },
         },
       })
@@ -498,12 +560,10 @@ return {
         capabilities = capabilities,
       })
 
-
       lspconfig["marksman"].setup({
         on_attach = on_attach,
         capabilities = capabilities,
       })
-
 
       require("lspconfig").emmet_ls.setup({
         capabilities = capabilities,

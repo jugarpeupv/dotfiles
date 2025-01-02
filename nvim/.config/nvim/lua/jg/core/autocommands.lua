@@ -21,10 +21,10 @@ vim.cmd([[
   " autocmd FileType qf set nobuflisted
   augroup end
 
-  augroup _auto_resize
-  autocmd!
-  autocmd VimResized * tabdo wincmd =
-  augroup end
+  " augroup _auto_resize
+  " autocmd!
+  " autocmd VimResized * tabdo wincmd =
+  " augroup end
 ]])
 
 vim.cmd([[autocmd BufRead,BufNewFile */node_modules/* lua vim.diagnostic.disable(0)]])
@@ -181,5 +181,14 @@ vim.api.nvim_create_autocmd("User", {
 --   group = vim.api.nvim_create_augroup("VimEnterClearJumps", { clear = true }),
 --   callback = function()
 --     vim.cmd("clearjumps")
+--   end,
+-- })
+
+
+--  vim.api.nvim_create_autocmd("WinClosed", {
+--   nested = true,
+--   callback = function(args)
+--     if vim.api.nvim_get_current_win() ~= tonumber(args.match) then return end
+--     vim.cmd.wincmd("p")
 --   end,
 -- })

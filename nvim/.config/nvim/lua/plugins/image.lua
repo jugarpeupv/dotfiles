@@ -48,6 +48,7 @@ return {
             floating_windows = true,
             filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
             resolve_image_path = function(document_path, image_path, fallback)
+              image_path = image_path.gsub(image_path, "|.*", "")
               local cwd = vim.loop.cwd()
               local image_cwd_path = cwd .. "/" .. image_path
               if vim.fn.filereadable(image_cwd_path) == 1 then
@@ -76,7 +77,7 @@ return {
         max_height = 1500,
         max_width_window_percentage = 80,
         max_height_window_percentage = 80,
-        window_overlap_clear_enabled = false,                                  -- toggles images when windows are overlapped
+        window_overlap_clear_enabled = true,                                  -- toggles images when windows are overlapped
         scale_factor = 2,                                                     -- scales the window size up or down
         window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
         editor_only_render_when_focused = true,                              -- auto show/hide images when the editor gains/looses focus
@@ -85,6 +86,16 @@ return {
 
         -- hijack_file_patterns = {}, -- render image files as images when opened
       })
+
+      local image = require("image")
+
+      vim.keymap.set({ "n", "v" }, "<leader>it", function()
+        if image.is_enabled() then
+          image.disable()
+        else
+          image.enable()
+        end
+      end, {})
     end,
   },
 }

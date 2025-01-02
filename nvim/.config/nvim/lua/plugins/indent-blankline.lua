@@ -16,9 +16,9 @@ return {
 
     require("ibl").setup({
       scope = {
-        enabled = false,
+        enabled = true,
         show_start = true,
-        show_end = false,
+        show_end = true,
         injected_languages = true,
         -- highlight = { "Function", "Label" },
         -- char = "|",

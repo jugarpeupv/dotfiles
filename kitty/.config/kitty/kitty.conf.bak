@@ -102,7 +102,7 @@ text_composition_strategy 0.5 15
 # italic_font MonolisadefaultSemiBold-Italic
 # bold_italic_font Monolisadefault-BoldItalic
 # adjust_line_height  0
-# adjust_column_width -1
+# adjust_column_width 0
 # font_features MonoLisadefault-Regular +ss04 +ss02
 # font_features MonoLisadefault-RegularItalic  +ss04
 # font_features MonoLisadefaultSemiBold-Regular  +ss04
@@ -1598,11 +1598,11 @@ confirm_os_window_close 0
 
 #: The foreground and background colors.
 
-# background_opacity 0.90
-background_opacity 0.70
+background_opacity 0.80
+# background_opacity 1
 # background_opacity 1
 
-background_blur 30
+background_blur 20
 
 #: The opacity of the background. A number between zero and one, where
 #: one is opaque and zero is fully transparent. This will only work if
@@ -1631,6 +1631,7 @@ background_blur 30
 # background_image ~/Pictures/data/pictures/alien.png
 # background_image ~/Pictures/data/pictures/alien.png
 # background_image ~/Pictures/data/pictures/pngprobando.png
+# background_image ~/Documents/earth.png
 
 #: Path to a background image. Must be in PNG format.
 
@@ -1651,7 +1652,7 @@ dynamic_background_opacity yes
 #: decrease_background_opacity) or the remote control facility.
 #: Changing this option by reloading the config is not supported.
 
-background_tint 0.4
+background_tint 0.92
 
 #: How much to tint the background image by the background color. The
 #: tint is applied only under the text area, not margin/borders. This
@@ -2866,11 +2867,28 @@ map shift+ctrl+n send_text all \x1b\x75
 # keymap("n", "<M-y>", "<cmd>trouble prev<cr>", opts)
 map shift+ctrl+p send_text all \x1b\x79
 
+# https://www.physics.udel.edu/~watson/scen103/ascii.html
+# C-a --> x01
+# C-g --> x07
+
+map ctrl+, send_text all \x01\x38
+# ## ctrl+, is binded in Kitty to (prefix) + 8
+# bind-key -r 8 run-shell "tmux neww tmux-session-switcher"
 
 map cmd+u send_text all \x01\x66
-map ctrl+, send_text all \x01\x38
+# ## cmd+u, is binded in Kitty to (prefix) + f
+# bind-key -r f run-shell "tmux neww tmux-sessionizer"
+
+
 map cmd+0 send_text all \x01\x39
-map cmd+enter send_text all \x01\x30
+# ## cmd+0, is binded in Kitty to (prefix) + 9
+# bind-key -r 9 run-shell "tmux neww tmux-projects"
+
+# list sessions
+# map cmd+enter send_text all \x01\x30
+
+# map cmd+enter send_text all \x01
+map cmd+enter send_text all \x01
 
 # next tmux panes
 # C-a p          previous window
@@ -2935,13 +2953,17 @@ map ctrl+shift+minus set_background_opacity -0.1
 # background #112131
 # background #091624
 # background #0b1b2c
-# background #0d1629
+background #0d1629
 # background #192837
 # background #13293e
 # background #192632
 # background #1c2835
 # background #03142a
-background #00122e
+# background #00122e
+# background #000E23
+# background #000d23
+# background #00142e
+# background #0d1829
 # background #0b1a2c
 # background #020c26
 # background #000d28
@@ -3219,14 +3241,14 @@ color15 #A6ADC8
 
 
 
-# # # BEGIN_KITTY_FONTS
-# font_family      family="Liga DejaVu Sans Mono"
-# bold_font        auto
-# italic_font      auto
-# bold_italic_font auto
-# END_KITTY_FONTS
-# adjust_line_height  8
-# adjust_column_width 0
+# # BEGIN_KITTY_FONTS
+font_family      family="Liga DejaVu Sans Mono"
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+adjust_line_height  10
+adjust_column_width 0
+# # END_KITTY_FONTS
 
 
 # cv01 l
@@ -3253,12 +3275,10 @@ color15 #A6ADC8
 
 
 # BEGIN_KITTY_FONTS
-# font_family      family="CommitMono Nerd Font"
+# font_family      family="FiraCode+ DejaVu Sans Mono"
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  3
-# adjust_column_width 0
 # END_KITTY_FONTS
 
 ## SF Mono
@@ -3266,5 +3286,5 @@ color15 #A6ADC8
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  4
+# adjust_line_height  8
 # adjust_column_width 0

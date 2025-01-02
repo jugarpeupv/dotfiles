@@ -5,6 +5,13 @@ return {
     dependencies = {
       {
         "gbprod/yanky.nvim",
+        enabled = function()
+          local is_headless = #vim.api.nvim_list_uis() == 0
+          if is_headless then
+            return false
+          end
+          return true
+        end,
         dependencies = {
           { "kkharji/sqlite.lua" },
           { "nvim-telescope/telescope.nvim" }

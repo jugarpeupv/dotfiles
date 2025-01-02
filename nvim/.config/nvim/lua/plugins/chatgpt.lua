@@ -1,6 +1,13 @@
 return {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
+    enabled = function()
+      local is_headless = #vim.api.nvim_list_uis() == 0
+      if is_headless then
+        return false
+      end
+      return true
+    end,
     branch = "main",
     dependencies = {
       -- { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
@@ -123,6 +130,13 @@ return {
   },
   {
     "olimorris/codecompanion.nvim",
+    enabled = function()
+      local is_headless = #vim.api.nvim_list_uis() == 0
+      if is_headless then
+        return false
+      end
+      return true
+    end,
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
@@ -139,6 +153,13 @@ return {
   },
   {
     "yetone/avante.nvim",
+    enabled = function()
+      local is_headless = #vim.api.nvim_list_uis() == 0
+      if is_headless then
+        return false
+      end
+      return true
+    end,
     -- event = "BufReadPost",
     -- version = "*",
     version = false,
@@ -433,6 +454,13 @@ return {
   },
   {
     "robitx/gp.nvim",
+    enabled = function()
+      local is_headless = #vim.api.nvim_list_uis() == 0
+      if is_headless then
+        return false
+      end
+      return true
+    end,
     cmd = { "GpChatToggle", "GpChatNew", "GpChatPaste", "GpWhisper" },
     keys = { { "<leader>ch", "<cmd>GpChatToggle<CR>" } },
     config = function()

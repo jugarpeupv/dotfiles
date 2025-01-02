@@ -7,9 +7,10 @@ return {
   -- "polarmutex/git-worktree.nvim",
   -- "jugarpeupv/git-worktree.nvim",
   -- version = "^2",
-  dir='~/projects/git-worktree.nvim',
-  dev = true,
-  -- branch = "main",
+  "jugarpeupv/git-worktree.nvim",
+  -- dir='~/projects/git-worktree.nvim',
+  -- dev = true,
+  branch = "main",
   -- dependencies = { "nvim-lua/plenary.nvim" },
   keys = { "<leader>wt", "<leader>wc" },
   config = function()
@@ -39,7 +40,7 @@ return {
 
     local Hooks = require("git-worktree.hooks")
     local update_on_switch = Hooks.builtins.update_current_buffer_on_switch
-    local config = require("git-worktree.config")
+    -- local config = require("git-worktree.config")
 
     local send_cmd_to_all_terms = function(cmd_text)
       local function get_all_terminals()

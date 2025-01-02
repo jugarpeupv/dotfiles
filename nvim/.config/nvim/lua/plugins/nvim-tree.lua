@@ -594,7 +594,7 @@ return {
           cygwin_support = false,
         },
         filesystem_watchers = {
-          enable = false,
+          enable = true,
           debounce_delay = 30,
           ignore_dirs = { "node_modules" },
         },
