@@ -24,10 +24,7 @@ end
 ---
 -- Include spring boot ls bundle if present
 ---
-local spring_path = require("mason-registry").get_package("spring-boot-tools"):get_install_path()
-    .. "/extension/jars/*.jar"
-local spring = vim.split(vim.fn.glob(spring_path), "\n", {})
-vim.list_extend(bundles, spring)
+vim.list_extend(bundles, require("spring_boot").java_extensions())
 
 
 ---
@@ -51,11 +48,9 @@ local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(
 local extendedClientCapabilities = require("jdtls").extendedClientCapabilities
 extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 
-local jar = vim.fn.glob(
-  home .. "/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar",
-  false,
-  false
-)
+local mason_path = vim.fn.stdpath('data') .. '/mason'
+local jdtls_path = mason_path .. '/packages/jdtls'
+local jar = vim.fn.glob(jdtls_path .. '/plugins/org.eclipse.equinox.launcher.jar')
 
 local lombok = home .. "/.local/share/nvim/mason/packages/lombok-nightly/lombok.jar"
 
@@ -134,7 +129,7 @@ local config = {
     "--add-opens", "java.base/java.lang=ALL-UNNAMED",
     "-javaagent:" .. lombok,
     "-jar", jar,
-    "-configuration", home .. "/.local/share/nvim/mason/packages/jdtls/config_linux",
+    "-configuration", home .. "/.local/share/nvim/mason/packages/jdtls/config_mac_arm",
     "-data", workspace_folder,
   },
   root_dir = root_dir,

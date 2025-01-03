@@ -256,7 +256,7 @@ return {
         vim.keymap.set("n", "l", api_nvimtree.node.open.edit, opts("Open"))
         vim.keymap.set("n", "<CR>", api_nvimtree.node.open.edit, opts("Open"))
         -- vim.keymap.set('n', '<CR>', toggle_replace, opts('Open: In Place'))
-        -- vim.keymap.set('n', '<CR>', api.node.open.replace_tree_buffer, opts('Open: In Place'))
+        vim.keymap.set('n', "O", api_nvimtree.node.open.replace_tree_buffer, opts('Open: In Place'))
         -- vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
         vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
         vim.keymap.set("n", "<", api_nvimtree.node.navigate.sibling.prev, opts("Previous Sibling"))
@@ -287,7 +287,7 @@ return {
         vim.keymap.set("n", "M", api_nvimtree.marks.clear, opts("Clear marks"))
         vim.keymap.set("n", "m", api_nvimtree.marks.toggle, opts("Toggle Bookmark"))
         vim.keymap.set("n", "o", api_nvimtree.node.open.edit, opts("Open"))
-        vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
+        -- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
         vim.keymap.set("n", "p", api_nvimtree.fs.paste, opts("Paste"))
         vim.keymap.set("n", "P", api_nvimtree.node.navigate.parent, opts("Parent Directory"))
         vim.keymap.set("n", "q", api_nvimtree.tree.close, opts("Close"))
@@ -588,7 +588,7 @@ return {
           enable = should_attach_git,
           show_on_dirs = true,
           show_on_open_dirs = false,
-          disable_for_dirs = {},
+          disable_for_dirs = { "node_modules", "/node_modules" },
           -- timeout = 4000,
           timeout = 200,
           cygwin_support = false,
@@ -596,7 +596,7 @@ return {
         filesystem_watchers = {
           enable = true,
           debounce_delay = 30,
-          ignore_dirs = { "node_modules" },
+          ignore_dirs = { "/node_modules", "/dist", "node_modules", "/target", "node_modules" },
         },
         actions = {
           use_system_clipboard = true,

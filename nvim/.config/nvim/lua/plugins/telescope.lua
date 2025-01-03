@@ -124,7 +124,7 @@ return {
             },
             preview = {
               filesize_limit = 0.8, -- MB
-              hide_on_startup = true,
+              hide_on_startup = false,
               mime_hook = function(filepath, bufnr, opts)
                 local is_image = function(filepath)
                   local image_extensions = { "png", "jpg" } -- Supported image formats

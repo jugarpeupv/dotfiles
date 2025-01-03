@@ -94,7 +94,6 @@ return {
   {
     "JavaHello/spring-boot.nvim", --"eslam-allam/spring-boot.nvim"
     version = "*",
-
     enabled = function()
       local is_headless = #vim.api.nvim_list_uis() == 0
       if is_headless then
@@ -121,10 +120,9 @@ return {
       -- opts.ls_path = "/home/sangram/.vscode/extensions/vmware.vscode-spring-boot-1.55.1"
       -- vim.notify("spring boot ls path : " .. opts.ls_path, vim.log.levels.INFO, {title = "Spring boot"})
       opts.java_cmd = "java"
-      opts.exploded_ls_jar_data = true
+      -- opts.exploded_ls_jar_data = true
       opts.jdtls_name = "jdtls"
       opts.log_file = home .. "/.local/state/nvim/spring-boot-ls.log"
-
       return opts
     end,
   },

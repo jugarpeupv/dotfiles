@@ -122,12 +122,46 @@ keymap("n", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 keymap("i", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 keymap("t", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 
+-- vim.keymap.set("n", "<D-j>", function()
+--   local api = require("nvim-tree.api")
+--   if api.tree.is_visible() then
+--     api.tree.close()
+--   else
+--     -- api.node.open.replace_tree_buffer()
+--     api.tree.open({ winid = vim.api.nvim_get_current_win() })
+--   end
+-- end, { noremap = true, silent = true })
+--
+-- vim.keymap.set("n", "<M-j>", function()
+--   local api = require("nvim-tree.api")
+--   if api.tree.is_visible() then
+--     api.tree.close()
+--   else
+--     -- api.node.open.replace_tree_buffer()
+--     api.tree.open({ winid = vim.api.nvim_get_current_win() })
+--   end
+-- end, { noremap = true, silent = true })
+
 keymap("n", "<Leader>d", "<Nop>", opts)
 -- keymap("n", "<Leader>d", ":NvimTreeFindFile<cr>", opts)
 keymap("n", "<D-k>", "<cmd>keepjumps NvimTreeFindFile<cr>", opts)
 keymap("t", "<D-k>", "<C-\\><C-n><cmd>keepjumps NvimTreeFindFile<cr>", opts)
+
 keymap("n", "<M-k>", "<cmd>keepjumps NvimTreeFindFile<cr>", opts)
 keymap("t", "<M-k>", "<C-\\><C-n><cmd>keepjumps NvimTreeFindFile<cr>", opts)
+
+-- vim.keymap.set("n", "<D-k>", function()
+--   local api = require("nvim-tree.api")
+--   -- api.node.open.replace_tree_buffer()
+--   api.tree.find_file({ winid = vim.api.nvim_get_current_win(), focus = true })
+-- end, { noremap = true, silent = true })
+--
+-- vim.keymap.set("n", "<M-k>", function()
+--   local api = require("nvim-tree.api")
+--   -- api.node.open.replace_tree_buffer()
+--   api.tree.find_file({ winid = vim.api.nvim_get_current_win(), focus = true })
+-- end, { noremap = true, silent = true })
+
 keymap("n", "<M-u>", "<cmd> lua require('trouble').next({skip_groups = true, jump = true})<cr>", opts)
 keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jump = true})<cr>", opts)
 
@@ -453,4 +487,3 @@ vim.keymap.set({ "n" }, "<leader>sn", function()
   --   -- vim.wo.wrap = not vim.wo.wrap
   vim.cmd([[windo if &ma | set wrap! | endif]])
 end, opts)
-
