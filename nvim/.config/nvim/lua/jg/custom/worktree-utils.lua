@@ -124,4 +124,21 @@ M.directory_exists = function(path)
   return true
 end
 
+M.get_ignored_root_files = function(worktree_path, worktree_git_path)
+  local ignored_files = vim.system({ "git", "--work-tree", worktree_path, "--git-dir", worktree_git_path ,"ls-files", "--others", "--ignored", "--exclude-standard", "--directory",
+    "--deduplicate" }):wait().stdout
+  -- git --work-tree=/Users/jgarcia/private/micro-arch/wt-main --git-dir=/Users/jgarcia/private/micro-arch/wt-main/.git ls-files --ignored --exclude-standard --others --directory
+
+  -- print("ignored_files", vim.inspect(ignored_files))
+
+
+  local function filter_func(line)
+    return not string.find(line, "/") and vim.fn.filereadable(worktree_path .. "/" .. line) == 1
+  end
+
+  local lines = vim.fn.split(ignored_files, "\n")
+  local filtered_lines = vim.tbl_filter(filter_func, lines)
+  return filtered_lines
+end
+
 return M

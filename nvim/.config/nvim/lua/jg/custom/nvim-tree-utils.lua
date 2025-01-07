@@ -16,11 +16,14 @@ local function get_formatted_lines(node)
   local file_name = vim.fn.expand(node.absolute_path)
   local file_permissions = vim.fn.getfperm(file_name)
 
+  local improved_size = vim.system({"du", "-sh", file_name }):wait().stdout:match("^[^\t]+")
+
   local fpath = " fullpath: " .. node.absolute_path
   local created_at = " created:  " .. os.date("%x %X", stats.birthtime.sec)
   local modified_at = " modified: " .. os.date("%x %X", stats.mtime.sec)
   local accessed_at = " accessed: " .. os.date("%x %X", stats.atime.sec)
-  local size = " size:     " .. utils.format_bytes(stats.size)
+  -- local size = " size:     " .. utils.format_bytes(stats.size)
+  local size = " size:     " .. improved_size
   local permissions = " permis:   " .. file_permissions
 
   return {

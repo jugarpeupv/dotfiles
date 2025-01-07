@@ -128,7 +128,7 @@ keymap("t", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 --     api.tree.close()
 --   else
 --     -- api.node.open.replace_tree_buffer()
---     api.tree.open({ winid = vim.api.nvim_get_current_win() })
+--     api.tree.find_file({ winid = vim.api.nvim_get_current_win(), focus = true, open = true })
 --   end
 -- end, { noremap = true, silent = true })
 --
@@ -138,7 +138,7 @@ keymap("t", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 --     api.tree.close()
 --   else
 --     -- api.node.open.replace_tree_buffer()
---     api.tree.open({ winid = vim.api.nvim_get_current_win() })
+--     api.tree.find_file({ winid = vim.api.nvim_get_current_win(), focus = true, open = true })
 --   end
 -- end, { noremap = true, silent = true })
 

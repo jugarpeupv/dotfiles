@@ -48,7 +48,18 @@ return {
             floating_windows = true,
             filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
             resolve_image_path = function(document_path, image_path, fallback)
+              if image_path:match("^<") then
+                -- Remove < and > characters
+                image_path = string.gsub(image_path, "[<>]", "")
+
+                -- Substitute white space with %20
+                image_path = string.gsub(image_path, " ", "%%20")
+              end
+
+
+              print("image_path_before", image_path)
               image_path = image_path.gsub(image_path, "|.*", "")
+              print("image_path_after", image_path)
               local cwd = vim.loop.cwd()
               local image_cwd_path = cwd .. "/" .. image_path
               if vim.fn.filereadable(image_cwd_path) == 1 then

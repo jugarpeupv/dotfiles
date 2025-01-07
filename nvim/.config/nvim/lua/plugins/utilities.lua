@@ -1,5 +1,14 @@
 return {
-  -- { "sam4llis/nvim-lua-gf",  keys = { "gf" } },
+  { "sam4llis/nvim-lua-gf",  keys = { "gf" } },
+  -- {
+  --   "matthewmturner/rfsee",
+  --   opts = {},
+  --   cmd = { "RFSeeIndex", "RFSee" },
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --   },
+  -- },
+  { "benelori/vim-rfc",         cmd = { "RFC" } },
   {
     "troydm/zoomwintab.vim",
     keys = { { mode = { "n" }, "<c-w>m", "<cmd>ZoomWinTabToggle<CR>" } },

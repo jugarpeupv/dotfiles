@@ -13,6 +13,8 @@ return {
   },
   {
     "stevearc/oil.nvim",
+    commit = "ba858b662599eab8ef1cba9ab745afded99cb180",
+    cmd = { "Oil" },
     -- event = { "BufReadPost", "BufNewFile" },
     -- keys = { "<leader>oa" },
     keys = {
@@ -85,34 +87,29 @@ return {
         -- it will use the mapping at require("oil.actions").<name>
         -- Set to `false` to remove a keymap
         -- See :help oil-actions for a list of all available actions
-        -- keymaps = {
-        --   ["g?"] = "actions.show_help",
-        --   ["<CR>"] = "actions.select",
-        --   ["<C-s>"] = {
-        --     "actions.select",
-        --     opts = { vertical = true },
-        --     desc = "Open the entry in a vertical split",
-        --   },
-        --   ["<C-h>"] = {
-        --     "actions.select",
-        --     opts = { horizontal = true },
-        --     desc = "Open the entry in a horizontal split",
-        --   },
-        --   ["<C-t>"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
-        --   ["<C-p>"] = "actions.preview",
-        --   ["<C-c>"] = "actions.close",
-        --   ["<C-l>"] = "actions.refresh",
-        --   ["-"] = "actions.parent",
-        --   ["_"] = "actions.open_cwd",
-        --   ["`"] = "actions.cd",
-        --   ["~"] = { "actions.cd", opts = { scope = "tab" }, desc = ":tcd to the current oil directory" },
-        --   ["gs"] = "actions.change_sort",
-        --   ["gx"] = "actions.open_external",
-        --   ["g."] = "actions.toggle_hidden",
-        --   ["g\\"] = "actions.toggle_trash",
-        -- },
+        keymaps = {
+          ["g?"] = { "actions.show_help", mode = "n" },
+          ["<CR>"] = "actions.select",
+          ["<C-v>"] = { "actions.select", opts = { vertical = true } },
+          ["<C-s>"] = { "actions.select", opts = { horizontal = true } },
+          ["<C-t>"] = { "actions.select", opts = { tab = true } },
+          ["<C-p>"] = "actions.preview",
+          ["<C-c>"] = { "actions.close", mode = "n" },
+          -- ["<C-l>"] = "actions.refresh",
+          -- ["<C-h>"] = "",
+          -- ["<C-l>"] = "",
+          ["R"] = "actions.refresh",
+          ["-"] = { "actions.parent", mode = "n" },
+          ["_"] = { "actions.open_cwd", mode = "n" },
+          ["`"] = { "actions.cd", mode = "n" },
+          ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+          ["gs"] = { "actions.change_sort", mode = "n" },
+          ["gx"] = "actions.open_external",
+          ["g."] = { "actions.toggle_hidden", mode = "n" },
+          ["g\\"] = { "actions.toggle_trash", mode = "n" },
+        },
         -- Set to false to disable all of the above keymaps
-        use_default_keymaps = true,
+        use_default_keymaps = false,
         view_options = {
           -- Show files and directories that start with "."
           show_hidden = true,

@@ -27,11 +27,13 @@ return {
         local git_dir = vim.fn.finddir(".git", vim.fn.expand("%:p:h"))
         -- print("git_dir: ", git_dir)
 
+        local git_file = vim.fn.findfile(".git", vim.fn.expand("%:p:h"))
+        -- print("git_file: ", git_file)
 
         local head_file = vim.fn.findfile("HEAD", vim.fn.expand("%:p:h"))
         -- print("head_file: ", head_file)
 
-        if git_dir == "" and head_file == "" then
+        if git_dir == "" and head_file == "" and git_file == "" then
           should_attach = false
         end
 
@@ -111,10 +113,35 @@ return {
         -- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
       end)
 
+      local function find_directory_and_focus()
+        local actions = require("telescope.actions")
+        local action_state = require("telescope.actions.state")
+
+        local function open_nvim_tree(prompt_bufnr, _)
+          actions.select_default:replace(function()
+            local api = require("nvim-tree.api")
+
+            actions.close(prompt_bufnr)
+            local selection = action_state.get_selected_entry()
+            api.tree.open()
+            api.tree.find_file(selection.cwd .. "/" .. selection.value)
+          end)
+          return true
+        end
+
+        require("telescope.builtin").find_files({
+          find_command = { "fd", "--type", "directory", "--hidden", "--exclude", ".git/*" },
+          attach_mappings = open_nvim_tree,
+        })
+      end
+
+      vim.keymap.set("n", "<leader>fd", find_directory_and_focus)
+
       local function on_attach(bufnr)
         local opts = function(desc)
           return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
         end
+
 
         -- mark operation
         local mark_move_j = function()
@@ -256,8 +283,9 @@ return {
         vim.keymap.set("n", "l", api_nvimtree.node.open.edit, opts("Open"))
         vim.keymap.set("n", "<CR>", api_nvimtree.node.open.edit, opts("Open"))
         -- vim.keymap.set('n', '<CR>', toggle_replace, opts('Open: In Place'))
-        vim.keymap.set('n', "O", api_nvimtree.node.open.replace_tree_buffer, opts('Open: In Place'))
-        -- vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
+        -- vim.keymap.set('n', "O", api_nvimtree.node.open.replace_tree_buffer, opts('Open: In Place'))
+        vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
+        -- vim.keymap.set("n", "O", api_nvimtree.node.open.preview, opts("Open Preview"))
         vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
         vim.keymap.set("n", "<", api_nvimtree.node.navigate.sibling.prev, opts("Previous Sibling"))
         vim.keymap.set("n", ".", api_nvimtree.node.run.cmd, opts("Run Command"))
@@ -287,6 +315,17 @@ return {
         vim.keymap.set("n", "M", api_nvimtree.marks.clear, opts("Clear marks"))
         vim.keymap.set("n", "m", api_nvimtree.marks.toggle, opts("Toggle Bookmark"))
         vim.keymap.set("n", "o", api_nvimtree.node.open.edit, opts("Open"))
+
+        vim.keymap.set('n', 'O', function()
+          local node = api_nvimtree.tree.get_node_under_cursor()
+          local path = node.absolute_path
+
+          if (path and vim.fn.isdirectory(path) == 0) then
+            path = vim.fn.fnamemodify(path, ':h')
+          end
+          vim.cmd('vsplit')
+          require("oil").open(path)
+        end, { buffer = true })
         -- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
         vim.keymap.set("n", "p", api_nvimtree.fs.paste, opts("Paste"))
         vim.keymap.set("n", "P", api_nvimtree.node.navigate.parent, opts("Parent Directory"))

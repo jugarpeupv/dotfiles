@@ -195,7 +195,7 @@ return {
         end,
         dependencies = { "JavaHello/spring-boot.nvim", "mfussenegger/nvim-dap" }
       },
-      { "folke/neodev.nvim", opts = {} },
+      -- { "folke/neodev.nvim", opts = {} },
       {
         "antosha417/nvim-lsp-file-operations",
         config = function()
