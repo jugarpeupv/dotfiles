@@ -301,6 +301,7 @@ return {
         -- sources for autocompletion
         sources = cmp.config.sources({
           { name = "lazydev",         group_index = 0 },
+          { name = "nvim_lua",        priority = 1100 },
           {
             name = "nvim_lsp",
             priority = 1000,
@@ -320,7 +321,6 @@ return {
           { name = "obsidian",        priority = 800 },
           { name = "obsidian_new",    priority = 800 },
           { name = "obsidian_tags",   priority = 800 },
-          { name = "nvim_lua",        priority = 799 },
           { name = "luasnip",         priority = 700 }, -- snippets
           -- { name = "nvim_lsp:marksman", priority = 600 },
           { name = "crates",          priority = 300 },
@@ -383,7 +383,7 @@ return {
                 Constructor = 1,
                 Interface = 1,
                 Snippet = 0,
-                Text = 1,
+                Text = 0,
                 TypeParameter = 1,
                 Unit = 1,
                 Value = 1,

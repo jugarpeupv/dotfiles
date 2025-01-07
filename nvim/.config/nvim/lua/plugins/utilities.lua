@@ -115,7 +115,7 @@ return {
     lazy = true,
     opts = {
       integrations = {
-        lsp = true,
+        lsp = false,
       },
       -- Enables shelter mode for sensitive values
       shelter = {
