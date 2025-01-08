@@ -18,6 +18,7 @@ return {
     -- event = { "BufReadPost", "BufNewFile" },
     -- keys = { "<leader>oa" },
     keys = {
+      { mode = { "n" }, "<leader>ou", "<cmd>Oil /Users/jgarcia<cr>" },
       { mode = { "n" }, "<leader>oa", "<cmd>Oil<cr>" },
       { mode = { "n" }, "-",          "<cmd>Oil<cr>" },
     },
@@ -105,6 +106,27 @@ return {
           ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
           ["gs"] = { "actions.change_sort", mode = "n" },
           ["gx"] = "actions.open_external",
+          ["gz"] = {
+            callback = function()
+              local oil = require("oil")
+              local entry = oil.get_cursor_entry()
+              local dir = oil.get_current_dir()
+              if not entry or not dir then
+                return
+              end
+              local path = dir .. entry.name
+
+
+              local cmd, err = { "zathura", path }, nil
+              if not cmd then
+                vim.notify(string.format("Could not open %s: %s", path, err), vim.log.levels.ERROR)
+                return
+              end
+              local jid = vim.fn.jobstart(cmd, { detach = true })
+              assert(jid > 0, "Failed to start job")
+            end,
+            mode = "n"
+          },
           ["g."] = { "actions.toggle_hidden", mode = "n" },
           ["g\\"] = { "actions.toggle_trash", mode = "n" },
         },

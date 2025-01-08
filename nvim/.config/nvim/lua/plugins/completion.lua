@@ -324,7 +324,7 @@ return {
           { name = "luasnip",         priority = 700 }, -- snippets
           -- { name = "nvim_lsp:marksman", priority = 600 },
           { name = "crates",          priority = 300 },
-          { name = "buffer",          priority = 5 },
+          { name = "buffer",          priority = 5, keyword_length = 3 },
         }),
         sorting = {
           -- comparators = {

@@ -87,6 +87,9 @@ return {
           --   return false
           -- end,
           disable = function(lang, bufnr) -- Disable in large .json files like in package-lock.json
+             if lang == "nvimtree" then
+               return true
+             end
             -- if lang == "yaml" or lang == "yml" then
             --   return true
             -- end

@@ -99,6 +99,10 @@ keymap(
   "<cmd> lua require('telescope.builtin').find_files({ prompt_title = '< VimRC >', cwd = '~/dotfiles/nvim/.config/nvim',hidden = false })<cr>",
   opts
 )
+
+keymap("n", "sf", "<cmd>Telescope file_browser<cr>", opts)
+keymap("n", "sb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", opts)
+
 keymap("n", "<Leader>ce", "<cmd>lua require('telescope.builtin').colorscheme()<cr>", opts)
 keymap("n", "<Leader>ht", "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
 keymap("n", "<Leader>mp", "<cmd>lua require('telescope.builtin').man_pages()<cr>", opts)
