@@ -3,29 +3,12 @@ return {
   {
     "rebelot/terminal.nvim",
     keys = {
-      {
-        "<D-l>",
-        mode = { "n", "t" },
-        function()
-          local get_terminal_bufs = function()
-            return vim.tbl_filter(function(bufnr)
-              return vim.fn.getbufvar(bufnr, "&buftype") == "terminal" and vim.fn.getbufvar(bufnr, "&ft") == ""
-            end, vim.api.nvim_list_bufs())
-          end
-
-          local terminals = get_terminal_bufs()
-
-          local there_are_no_terminal_buffers = next(terminals) == nil
-
-          if there_are_no_terminal_buffers then
-            vim.cmd("15sp|term")
-            return
-          else -- there are terminal buffers
-            local term_map = require("terminal.mappings")
-            term_map.toggle()
-          end
-        end,
-      },
+      -- {
+      --   "<M-ñ>",
+      --   mode = { "n", "t" },
+      --   ":lua require('terminal.mappings').toggle({ open_cmd = 'tabnew' })<cr>",
+      --   { silent = true }
+      -- },
       {
         "<M-l>",
         mode = { "n", "t" },
@@ -51,8 +34,8 @@ return {
       },
       {
         "<leader>ti",
-        function ()
-          local term = require"terminal"
+        function()
+          local term = require "terminal"
           local index = term.current_term_index()
           term.set_target(index)
         end
@@ -107,8 +90,40 @@ return {
 
       local term_map = require("terminal.mappings")
       vim.keymap.set("n", "<leader>tx", term_map.kill)
-      vim.keymap.set("n", "<leader>tj", term_map.cycle_next)
-      vim.keymap.set("n", "<leader>tk", term_map.cycle_prev)
+      -- vim.keymap.set("n", "<leader>tj", term_map.cycle_next)
+      -- vim.keymap.set("n", "<leader>tk", term_map.cycle_prev)
+
+      vim.keymap.set("n", "<leader>t0", term_map.toggle({ open_cmd = "enew" }))
+
+      vim.keymap.set("n", "<leader>t1", term_map.toggle({ open_cmd = "tabnew" }))
+
+      local opts = { noremap = true, silent = true }
+      vim.keymap.set({ "n", "t" }, "<M-ñ>", term_map.toggle({ open_cmd = "tabnew" }), opts)
+
+
+
+      -- vim.keymap.set("n", "<M-ñ>", function()
+      --   term_map.toggle({ open_cmd = "tabnew" })
+      --   -- local get_terminal_bufs = function()
+      --   --   return vim.tbl_filter(function(bufnr)
+      --   --     return vim.fn.getbufvar(bufnr, "&buftype") == "terminal" and vim.fn.getbufvar(bufnr, "&ft") == ""
+      --   --   end, vim.api.nvim_list_bufs())
+      --   -- end
+      --   --
+      --   -- local terminals = get_terminal_bufs()
+      --   --
+      --   -- local there_are_no_terminal_buffers = next(terminals) == nil
+      --   --
+      --   -- if there_are_no_terminal_buffers then
+      --   --   vim.cmd("tabnew|term")
+      --   --   return
+      --   -- else -- there are terminal buffers
+      --   --   term_map.toggle({ open_cmd = "tabnew" })
+      --   -- end
+      -- end , { silent = true })
+
+      vim.keymap.set("n", "<leader>tL", term_map.move({ open_cmd = "botright vnew" }))
+      vim.keymap.set("n", "<leader>tH", term_map.move({ open_cmd = "botright new" }))
     end,
   },
 

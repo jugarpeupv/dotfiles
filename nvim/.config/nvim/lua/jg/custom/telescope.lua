@@ -1,7 +1,6 @@
 local M = {}
 
--- git branch --set-upstream-to=origin/release release
--- Selection:  {
+-- git branch --set-upstream-to=origin/release release Selection:  {
 --   authorname = "Garcia Perera, Julio",
 --   committerdate = "2024/11/06 09:59:49",
 --   display = <function 1>,
@@ -306,6 +305,83 @@ M.telescope_image_preview = function()
   end
 
   return { buffer_previewer_maker = buffer_previewer_maker, file_previewer = file_previewer.new }
+end
+
+M.read_file = function(file_path)
+  local file = io.open(file_path, "r")
+  if not file then
+    return nil
+  end
+
+  local content = file:read("*a")
+  file:close()
+
+  return content
+end
+
+M.get_npm_scripts = function()
+  local package_json_path = "package.json"
+  local status, package_json_content = pcall(M.read_file, package_json_path)
+  if not status then
+    return
+  end
+
+  local status_decode, package_data = pcall(vim.json.decode, package_json_content)
+  if not status_decode then
+    print("Impossible to parse package.json")
+    return {}
+  end
+
+  local scripts = package_data.scripts
+  return scripts
+end
+
+M.compile_mode_on_npm_scripts = function()
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+  local compile_mode = require("compile-mode")
+
+  local scripts = M.get_npm_scripts() or {}
+
+  local script_list = {}
+  for key, value in pairs(scripts) do
+    table.insert(script_list, { script_name = "npm run " .. key, script_value = value })
+  end
+
+  local commands = function(opts)
+    opts = opts or {}
+    pickers
+        .new(opts, {
+          prompt_title = "commands",
+          finder = finders.new_table({
+            results = script_list,
+            entry_maker = function(entry)
+              return {
+                value = entry,
+                -- display = "npm run " .. entry.script_name .. "                      (" .. entry.script_value .. ")",
+                display = entry.script_name,
+                ordinal = entry.script_name,
+              }
+            end,
+          }),
+          sorter = conf.generic_sorter(opts),
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local selection = action_state.get_selected_entry()
+              -- local command = selection[1]
+              compile_mode.compile({ args = selection.value.script_name })
+            end)
+            return true
+          end,
+        })
+        :find()
+  end
+
+  commands()
 end
 
 return M

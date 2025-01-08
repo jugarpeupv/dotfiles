@@ -283,8 +283,8 @@ return {
 
         -- Function to check if a specific dependency is present in the package.json file
         local function has_dependency(package_json_content, dependency_name)
-          local package_data = vim.json.decode(package_json_content)
-          if not package_data then
+          local status_decode, package_data = pcall(vim.json.decode,package_json_content)
+          if not status_decode then
             return false
           end
           local dependencies = package_data.dependencies

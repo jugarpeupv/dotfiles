@@ -325,7 +325,7 @@ return {
           end
           vim.cmd('vsplit')
           require("oil").open(path)
-        end, { buffer = true })
+        end, opts("Open Oil"))
         -- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
         vim.keymap.set("n", "p", api_nvimtree.fs.paste, opts("Paste"))
         vim.keymap.set("n", "P", api_nvimtree.node.navigate.parent, opts("Parent Directory"))

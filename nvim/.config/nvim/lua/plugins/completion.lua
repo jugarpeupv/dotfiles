@@ -212,20 +212,34 @@ return {
           ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
           ["<C-e>"] = cmp.mapping.abort(),   -- close completion window
           -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
-          ["<CR>"] = cmp.mapping(function(fallback)
-            -- local copilot = require("copilot.suggestion")
-            -- if copilot.is_visible() then
-            --   copilot.accept()
-            -- elseif cmp.visible() then
+            -- ["<CR>"] = cmp.mapping(function(fallback)
+            --   -- local copilot = require("copilot.suggestion")
+            --   -- if copilot.is_visible() then
+            --   --   copilot.accept()
+            --   -- elseif cmp.visible() then
+            --   local filetype = vim.bo.filetype
+            --   if filetype == "" then
+            --     vim.api.nvim_feedkeys(t("<CR>"), "n", true)
+            --     return
+            --   elseif cmp.visible() then
+            --     cmp.confirm({ select = true })
+            --     return
+            --   else
+            --     fallback()
+            --     return
+            --   end
+            -- end, { "i", "s" }),
+          ["<CR>"] = cmp.mapping(function()
+            local selected_entry = cmp.get_selected_entry()
             local filetype = vim.bo.filetype
             if filetype == "" then
               vim.api.nvim_feedkeys(t("<CR>"), "n", true)
               return
-            elseif cmp.visible() then
+            elseif cmp.visible() and selected_entry ~= nil then
               cmp.confirm({ select = true })
               return
             else
-              fallback()
+              vim.api.nvim_feedkeys(t("<CR>"), "n", true)
               return
             end
           end, { "i", "s" }),
@@ -237,7 +251,8 @@ return {
               fallback()
             end
           end, { "i", "s" }),
-          -- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+          ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+          -- ["<S-Tab>"] = cmp.mapping.select_prev_item(),
           -- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
           -- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
           -- Overload tab to accept Copilot suggestions.

@@ -1,5 +1,8 @@
 ## shift + cmd - return : osascript ~/.config/skhd/Scripts/new-iterm-window.scpt
-shift + cmd - return : osascript ~/.config/skhd/Scripts/new-onepassword-window.scpt
+# shift + cmd - return : osascript ~/.config/skhd/Scripts/new-onepassword-window.scpt
+# shift+ cmd - return : osascript ~/.config/skhd/Scripts/new-onepassword-window.scpt
+# shift + cmd - return : osascript ~/.config/skhd/Scripts/new-onepassword-window.scpt
+# shift + alt - return : osascript ~/.config/skhd/Scripts/new-onepassword-window.scpt
 shift + alt - return : osascript ~/.config/skhd/Scripts/new-space.scpt
 
 shift + alt - n : osascript ~/.config/skhd/Scripts/kitty.scpt

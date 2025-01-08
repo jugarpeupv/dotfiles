@@ -255,7 +255,7 @@ return {
           -- { 'location', separator = { left = '', right = '' }, left_padding = 2 },
           -- { 'location', left_padding = 2 },
           -- { 'progress', 'location' }
-          -- 'location'
+          'location'
         },
       },
       inactive_sections = {

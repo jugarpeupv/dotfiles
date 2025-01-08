@@ -436,7 +436,10 @@ vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true
 local function show_documentation()
   local filetype = vim.bo.filetype
   if filetype == "vim" or filetype == "help" then
-    vim.cmd("h " .. vim.fn.expand("<cword>"))
+    local status, _ = pcall(vim.cmd, "h " .. vim.fn.expand("<cword>"))
+    if not status then
+      print("No help for " .. vim.fn.expand("<cword>"))
+    end
   elseif filetype == "man" then
     vim.cmd("Man " .. vim.fn.expand("<cword>"))
   elseif vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
@@ -490,4 +493,13 @@ vim.keymap.set({ "n" }, "<leader>sn", function()
   -- run this command on modifiable windows
   --   -- vim.wo.wrap = not vim.wo.wrap
   vim.cmd([[windo if &ma | set wrap! | endif]])
+end, opts)
+
+
+
+vim.keymap.set({ "n" }, "<leader>se", function()
+  local status, _ = pcall(vim.cmd, "vert h " .. vim.fn.expand("<cword>"))
+  if not status then
+    print("No help for " .. vim.fn.expand("<cword>"))
+  end
 end, opts)
