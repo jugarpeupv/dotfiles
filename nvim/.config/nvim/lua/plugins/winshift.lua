@@ -63,7 +63,7 @@ return {
         end,
       })
       -- Winshift.nvim
-      -- vim.api.nvim_set_keymap("n", "<Leader>sh", "<cmd>WinShift<cr>", {})
+      vim.api.nvim_set_keymap("n", "<Leader>sh", "<cmd>WinShift<cr>", {})
     end,
   },
 }

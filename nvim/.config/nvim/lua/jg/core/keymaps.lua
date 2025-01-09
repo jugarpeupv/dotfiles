@@ -100,8 +100,26 @@ keymap(
   opts
 )
 
-keymap("n", "sf", "<cmd>Telescope file_browser<cr>", opts)
-keymap("n", "sb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", opts)
+-- keymap("n", "su", "<cmd>Telescope file_browser path=/Users/jgarcia<cr>", opts)
+-- keymap("n", "sf", "<cmd>Telescope file_browser<cr>", opts)
+-- keymap("n", "sb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", opts)
+
+vim.keymap.set({"n"}, "su", function()
+  require("telescope").extensions.file_browser.file_browser({ grouped = true, path = vim.fn.expand("~/"), use_ui_input = false })
+end, opts)
+
+vim.keymap.set({"n"}, "sf", function()
+  require("telescope").extensions.file_browser.file_browser({ grouped = true })
+end, opts)
+
+vim.keymap.set({"n"}, "sf", function()
+  require("telescope").extensions.file_browser.file_browser({
+    grouped = true,
+    use_ui_input = false,
+    path = vim.fn.expand("%:p:h"),
+    select_buffer = true,
+  })
+end, opts)
 
 keymap("n", "<Leader>ce", "<cmd>lua require('telescope.builtin').colorscheme()<cr>", opts)
 keymap("n", "<Leader>ht", "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
@@ -433,6 +451,8 @@ end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
 
+vim.keymap.set({ "n" }, "<leader>bi", ":Bufferize Inspect<cr>", { silent = true })  -- paste from 0 register
+
 local function show_documentation()
   local filetype = vim.bo.filetype
   if filetype == "vim" or filetype == "help" then
@@ -494,8 +514,6 @@ vim.keymap.set({ "n" }, "<leader>sn", function()
   --   -- vim.wo.wrap = not vim.wo.wrap
   vim.cmd([[windo if &ma | set wrap! | endif]])
 end, opts)
-
-
 
 vim.keymap.set({ "n" }, "<leader>se", function()
   local status, _ = pcall(vim.cmd, "vert h " .. vim.fn.expand("<cword>"))

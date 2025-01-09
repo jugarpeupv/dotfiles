@@ -1,13 +1,8 @@
--- vim.g.loaded_netrw = 1
--- vim.g.loaded_netrwPlugin = 1
 vim.loader.enable()
-vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
+vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.g.loaded_matchit = 1
 
--- vim.g.python3_host_prog = vim.fn.expand('~/.pyenv/versions/neovim3/bin/python')
-
--- Example for configuring Neovim to load user-installed installed Lua rocks:
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
 
@@ -20,22 +15,18 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "--branch=stable",
     lazypath,
   })
 end
 vim.opt.rtp:prepend(lazypath)
--- require("lazy").setup({{ import = "plugins" } })
 require("lazy").setup("plugins", {
   change_detection = { notify = false },
-  -- install = { colorscheme = { "catpuccin " } },
   rocks = { enabled = false },
   dev = {
-    ---@type string | fun(plugin: LazyPlugin): string directory where you store your local plugin projects
     path = "~/projects",
-    ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
-    patterns = {},  -- For example {"folke"}
-    fallback = true, -- Fallback to git when local plugin doesn't exist
+    patterns = {},
+    fallback = true,
   },
   ui = {
     backdrop = 100,

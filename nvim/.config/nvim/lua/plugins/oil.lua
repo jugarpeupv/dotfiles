@@ -46,6 +46,9 @@ return {
         },
         -- Window-local options to use for oil buffers
         win_options = {
+          winbar = "%#@attribute.builtin#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
+          -- winbar = "%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
+          -- winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
           wrap = false,
           signcolumn = "no",
           cursorcolumn = false,

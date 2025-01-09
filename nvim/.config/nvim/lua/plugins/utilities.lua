@@ -207,8 +207,9 @@ return {
   --   end,
   -- },
   {
-    "fnune/recall.nvim",
+    "jugarpeupv/recall.nvim",
     version = "*",
+    event = { "BufReadPost" },
     keys = {
       {
         mode = { "n" },

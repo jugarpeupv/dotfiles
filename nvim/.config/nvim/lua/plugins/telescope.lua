@@ -10,7 +10,7 @@ return {
     dependencies = {
       {
         "nvim-telescope/telescope-file-browser.nvim",
-        dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+        dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
       },
       { "nvim-telescope/telescope-dap.nvim" },
       -- { "tom-anders/telescope-vim-bookmarks.nvim" },
@@ -133,8 +133,38 @@ return {
               prompt_position = "top",
             },
             preview = {
-              filesize_limit = 0.8, -- MB
+              filesize_limit = 1, -- MB
               hide_on_startup = false,
+              -- 1) Do not show previewer for certain files
+              filetype_hook = function(filepath, bufnr, opts)
+                -- you could analogously check opts.ft for filetypes
+                local putils = require("telescope.previewers.utils")
+                local excluded = vim.tbl_filter(function(ending)
+                  return filepath:match(ending)
+                end, {
+                  ".*%.pdf",
+                  ".*%.docx",
+                  ".*%.csv",
+                  ".*%.toml",
+                })
+                if not vim.tbl_isempty(excluded) then
+                  putils.set_preview_message(
+                    bufnr,
+                    opts.winid,
+                    string.format("I don't like %s files!", excluded[1]:sub(5, -1))
+                  )
+                  return false
+                end
+                return true
+              end,
+              -- 2) Truncate lines to preview window for too large files
+              filesize_hook = function(filepath, bufnr, opts)
+                local path = require("plenary.path"):new(filepath)
+                -- opts exposes winid
+                local height = vim.api.nvim_win_get_height(opts.winid)
+                local lines = vim.split(path:head(height), "[\r]?\n")
+                vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+              end,
             },
             mappings = {
               i = {
@@ -162,8 +192,18 @@ return {
                 -- ["<C-u>"] = actions.preview_scrolling_up,
                 -- ["<C-d>"] = actions.preview_scrolling_down,
 
-                ["<C-u>"] = actions.results_scrolling_up,
-                ["<C-d>"] = actions.results_scrolling_down,
+                -- ["<C-u>"] = actions.results_scrolling_up,
+                -- ["<C-d>"] = actions.results_scrolling_down,
+                ["<C-u>"] = function(prompt_bufnr)
+                  for _ = 1, 5 do
+                    actions.move_selection_previous(prompt_bufnr)
+                  end
+                end,
+                ["<C-d>"] = function(prompt_bufnr)
+                  for _ = 1, 5 do
+                    actions.move_selection_next(prompt_bufnr)
+                  end
+                end,
 
                 ["<PageUp>"] = actions.preview_scrolling_up,
                 ["<PageDown>"] = actions.preview_scrolling_down,
@@ -256,15 +296,38 @@ return {
         extensions = {
           file_browser = {
             theme = "ivy",
-            initial_mode = "normal",
+            -- initial_mode = "normal",
             hijack_netrw = false,
             mappings = {
-            --   ["i"] = {
-            --     -- your custom insert mode mappings
-            --   },
+              ["i"] = {
+                ["<C-t>"] = fb_actions.change_cwd,
+                ["<C-y>"] = fb_actions.copy,
+                ["<C-x>"] = fb_actions.remove,
+                ["<C-r>"] = fb_actions.move,
+                ["<C-w>"] = fb_actions.goto_cwd,
+                ["<C-e>"] = fb_actions.goto_home_dir,
+                ["<C-c>"] = fb_actions.create,
+                ["<C-o>"] = fb_actions.sort_by_date,
+                ["<C-q>"] = fb_actions.open,
+                ["<C-u>"] = function(prompt_bufnr)
+                  for _ = 1, 5 do
+                    actions.move_selection_previous(prompt_bufnr)
+                  end
+                end,
+                ["<C-d>"] = function(prompt_bufnr)
+                  for _ = 1, 5 do
+                    actions.move_selection_next(prompt_bufnr)
+                  end
+                end,
+              },
               ["n"] = {
                 -- your custom normal mode mappings
-                ["/"] = function() vim.cmd("startinsert") end,
+                ["<BS>"] = fb_actions.change_cwd,
+                ["gx"] = fb_actions.open,
+                ["o"] = false,
+                ["/"] = function()
+                  vim.cmd("startinsert")
+                end,
                 ["l"] = actions.select_default,
                 ["h"] = fb_actions.goto_parent_dir,
                 ["N"] = fb_actions.create,
@@ -297,13 +360,13 @@ return {
             },
           },
           egrepify = {
-            AND = true,                   -- default
-            permutations = false,         -- opt-in to imply AND & match all permutations of prompt tokens
-            lnum = true,                  -- default, not required
-            lnum_hl = "EgrepifyLnum",     -- default, not required, links to `Constant`
-            col = false,                  -- default, not required
-            col_hl = "EgrepifyCol",       -- default, not required, links to `Constant`
-            title = true,                 -- default, not required, show filename as title rather than inline
+            AND = true,             -- default
+            permutations = false,   -- opt-in to imply AND & match all permutations of prompt tokens
+            lnum = true,            -- default, not required
+            lnum_hl = "EgrepifyLnum", -- default, not required, links to `Constant`
+            col = false,            -- default, not required
+            col_hl = "EgrepifyCol", -- default, not required, links to `Constant`
+            title = true,           -- default, not required, show filename as title rather than inline
             filename_hl = "EgrepifyFile", -- default, not required, links to `Title`
             prefixes = {
               -- ADDED ! to invert matches
