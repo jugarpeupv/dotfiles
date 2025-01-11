@@ -272,14 +272,12 @@ return {
   {
     cmd = { "TSPlaygroundToggle" },
     "nvim-treesitter/playground",
-    after = "nvim-treesitter",
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     event = { "BufReadPost", "BufNewFile" },
     cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
     -- event = "VeryLazy",
-    after = "nvim-treesitter/nvim-treesitter",
     -- dependencies = "nvim-treesitter/nvim-treesitter",
   },
 }

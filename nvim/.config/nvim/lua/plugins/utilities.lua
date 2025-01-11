@@ -208,6 +208,8 @@ return {
   -- },
   {
     "jugarpeupv/recall.nvim",
+    -- dir = "~/projects/recall.nvim",
+    -- dev = true,
     version = "*",
     event = { "BufReadPost" },
     keys = {
@@ -235,14 +237,14 @@ return {
       {
         mode = { "n" },
         -- "<leader>mc",
-        "mc",
+        "<leader>mc",
         "<cmd>lua require('recall').clear()<CR>",
         { noremap = true, silent = true },
       },
       {
         mode = { "n" },
         -- "<leader>ml",
-        "ml",
+        "<leader>ml",
         "<cmd>Telescope recall<CR>",
         { noremap = true, silent = true },
       },
@@ -412,7 +414,7 @@ return {
     cmd = { "G" },
     keys = {
 
-      { "<leader>jp", "<cmd>Jumps<CR>" },
+      { "<leader>jl", "<cmd>Jumps<CR>" },
       { "<leader>gt", "<cmd>GTags<CR>" },
       {
         mode = { "n" },

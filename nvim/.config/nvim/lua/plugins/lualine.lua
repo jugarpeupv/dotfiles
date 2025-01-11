@@ -3,8 +3,10 @@ return {
   "nvim-lualine/lualine.nvim",
   -- event = "VeryLazy",
   -- event = { "BufReadPost" },
-
   ft = { "DiffviewFiles" },
+  lazy = true,
+  -- dependencies = { "catppuccin/nvim" },
+  -- priority = 10,
   -- event = { "TermOpen" ,"BufReadPre", "BufNewFile" },
   event = { "TermOpen" ,"BufReadPost" },
   config = function()

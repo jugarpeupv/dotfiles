@@ -66,6 +66,7 @@ return {
       { "nvim-telescope/telescope-ui-select.nvim",      cmd = { "Telescope" } },
     },
     cmd = { "Telescope" },
+    -- lazy = false,
     -- keys = { "<M-.>" },
     -- event = "VeryLazy",
     config = function()
@@ -296,6 +297,7 @@ return {
         extensions = {
           file_browser = {
             theme = "ivy",
+            hidden = true,
             -- initial_mode = "normal",
             hijack_netrw = false,
             mappings = {
@@ -303,8 +305,8 @@ return {
                 ["<C-t>"] = fb_actions.change_cwd,
                 ["<C-y>"] = fb_actions.copy,
                 ["<C-x>"] = fb_actions.remove,
-                ["<C-r>"] = fb_actions.move,
-                ["<C-w>"] = fb_actions.goto_cwd,
+                ["<C-v>"] = fb_actions.move,
+                ["<C-r>"] = fb_actions.goto_cwd,
                 ["<C-e>"] = fb_actions.goto_home_dir,
                 ["<C-c>"] = fb_actions.create,
                 ["<C-o>"] = fb_actions.sort_by_date,

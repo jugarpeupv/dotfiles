@@ -14,6 +14,7 @@ return {
   {
     "nvim-tree/nvim-tree.lua",
     -- commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
+    -- enabled = false,
     -- cmd = { "NvimTreeToggle", "NvimTreeFocus", "NvimTreeFindFile" },
     -- lazy = true,
     -- event = "VeryLazy",
@@ -289,7 +290,24 @@ return {
         vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
         vim.keymap.set("n", "<", api_nvimtree.node.navigate.sibling.prev, opts("Previous Sibling"))
         vim.keymap.set("n", ".", api_nvimtree.node.run.cmd, opts("Run Command"))
-        vim.keymap.set("n", "-", api_nvimtree.tree.change_root_to_parent, opts("Up"))
+        -- vim.keymap.set("n", "-", api_nvimtree.tree.change_root_to_parent, opts("Up"))
+        vim.keymap.set("n", "-", function()
+          vim.cmd("vsplit");
+          -- get current path of nvimtree
+          local path = api_nvimtree.tree.get_node_under_cursor().absolute_path
+          local function check_and_modify_path(path_to)
+            if vim.fn.isdirectory(path_to) == 1 then
+              -- Path is a directory, do nothing
+              return path_to
+            else
+              -- Path is a file, remove the last part
+              local last_part = vim.fn.fnamemodify(path_to, ":h")
+              return last_part
+            end
+          end
+          local modified_path = check_and_modify_path(path)
+          require("oil").open(modified_path)
+        end, opts("Open Oil"))
         vim.keymap.set("n", "a", api_nvimtree.fs.create, opts("Create"))
         -- vim.keymap.set('n', '<leader>cr', change_root_to_global_cwd, opts('Change Root To Global CWD'))
         -- vim.keymap.set('n', 'bmv',   api.marks.bulk.move,                   opts('Move Bookmarked'))
@@ -628,15 +646,16 @@ return {
           enable = should_attach_git,
           show_on_dirs = true,
           show_on_open_dirs = false,
-          disable_for_dirs = { "node_modules", "/node_modules" },
+          disable_for_dirs = { "node_modules", "/node_modules", "/Users/jgarcia/", "/Users/jgarcia" },
           -- timeout = 4000,
           timeout = 200,
           cygwin_support = false,
         },
         filesystem_watchers = {
-          enable = true,
+          -- enable = true,
+          enable = should_attach_git,
           debounce_delay = 30,
-          ignore_dirs = { "/node_modules", "/dist", "node_modules", "/target", "node_modules" },
+          ignore_dirs = { "/node_modules", "/dist", "node_modules", "/target", "node_modules", "/Users/jgarcia/", "/Users/jgarcia" },
         },
         actions = {
           use_system_clipboard = true,

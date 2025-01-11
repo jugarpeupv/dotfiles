@@ -384,4 +384,65 @@ M.compile_mode_on_npm_scripts = function()
   commands()
 end
 
+M.oil_fzf_dir = function(path)
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  local find_command = {
+    "fd",
+    ".",
+    path,
+    "--type",
+    "d",
+    "--exclude",
+    ".git",
+    "--exclude",
+    "node_modules",
+    -- "--one-file-system",
+    "--max-depth",
+    "4",
+    "--hidden",
+  }
+
+  -- Function to escape special characters in a string for use in a pattern
+  local function escape_pattern(text)
+    return text:gsub("([^%w])", "%%%1")
+  end
+
+  local escaped_path = escape_pattern(path)
+
+  local commands = function(opts)
+    opts = opts or {}
+    pickers
+        .new(opts, {
+          prompt_title = "commands",
+          finder = finders.new_oneshot_job(find_command, {
+            entry_maker = function(entry)
+              local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
+              return {
+                value = entry,
+                display = entry_substituted,
+                ordinal = entry,
+              }
+            end,
+          }),
+          sorter = conf.generic_sorter(opts),
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local selection = action_state.get_selected_entry()
+              require("oil").open(selection.value)
+            end)
+            return true
+          end,
+        })
+        :find()
+  end
+
+  commands()
+end
+
 return M

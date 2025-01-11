@@ -13,7 +13,8 @@ return {
   },
   {
     "stevearc/oil.nvim",
-    commit = "ba858b662599eab8ef1cba9ab745afded99cb180",
+    dependencies = { "nvim-lualine/lualine.nvim" },
+    -- commit = "ba858b662599eab8ef1cba9ab745afded99cb180",
     cmd = { "Oil" },
     -- event = { "BufReadPost", "BufNewFile" },
     -- keys = { "<leader>oa" },
@@ -46,7 +47,8 @@ return {
         },
         -- Window-local options to use for oil buffers
         win_options = {
-          winbar = "%#@attribute.builtin#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
+          -- winbar = "%#@attribute.builtin#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
+          winbar = "%#@attribute.builtin#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
           -- winbar = "%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
           -- winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
           wrap = false,
@@ -72,6 +74,7 @@ return {
         cleanup_delay_ms = 2000,
         -- cleanup_delay_ms = false,
         lsp_file_methods = {
+          enabled = true,
           -- Time to wait for LSP file operations to complete before skipping
           timeout_ms = 1000,
           -- Set to true to autosave buffers that are updated with LSP willRenameFiles
@@ -84,7 +87,7 @@ return {
         -- constrain_cursor = "editable",
         constrain_cursor = "editable",
         -- Set to true to watch the filesystem for changes and reload oil
-        watch_for_changes = true,
+        watch_for_changes = false,
         -- Keymaps in oil buffer. Can be any value that `vim.keymap.set` accepts OR a table of keymap
         -- options with a `callback` (e.g. { callback = function() ... end, desc = "", mode = "n" })
         -- Additionally, if it is a string that matches "actions.<name>",
@@ -108,28 +111,80 @@ return {
           ["`"] = { "actions.cd", mode = "n" },
           ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
           ["gs"] = { "actions.change_sort", mode = "n" },
-          ["gx"] = "actions.open_external",
-          ["gz"] = {
+
+          ["gu"] = {
             callback = function()
               local oil = require("oil")
               local entry = oil.get_cursor_entry()
               local dir = oil.get_current_dir()
+
               if not entry or not dir then
                 return
               end
-              local path = dir .. entry.name
+              local home = vim.fn.expand("$HOME")
+
+              require("jg.custom.telescope").oil_fzf_dir(home)
 
 
-              local cmd, err = { "zathura", path }, nil
-              if not cmd then
-                vim.notify(string.format("Could not open %s: %s", path, err), vim.log.levels.ERROR)
-                return
-              end
-              local jid = vim.fn.jobstart(cmd, { detach = true })
-              assert(jid > 0, "Failed to start job")
+              -- oil.open(path)
             end,
             mode = "n"
           },
+          ["gf"] = {
+            callback = function()
+              local oil = require("oil")
+              local entry = oil.get_cursor_entry()
+              local dir = oil.get_current_dir()
+
+              if not entry or not dir then
+                return
+              end
+              local root_dir = vim.fs.dirname(vim.fs.find({ ".git" })[1])
+
+              if not root_dir then
+                root_dir = dir
+              end
+
+              require("jg.custom.telescope").oil_fzf_dir(root_dir)
+            end,
+            mode = "n"
+          },
+          ["gt"] = {
+            callback = function()
+              local oil = require("oil")
+              -- local entry = oil.get_cursor_entry()
+              local dir = oil.get_current_dir()
+              -- local term_map = require("terminal.mappings")
+              -- term_map.toggle(nil, { cwd = dir })
+              local htop = require("terminal").terminal:new({
+                layout = { open_cmd = "botright new" },
+                cwd = dir,
+              })
+              htop:open()
+            end,
+          },
+          ["gx"] = "actions.open_external",
+          -- ["gz"] = {
+          --   callback = function()
+          --     local oil = require("oil")
+          --     local entry = oil.get_cursor_entry()
+          --     local dir = oil.get_current_dir()
+          --     if not entry or not dir then
+          --       return
+          --     end
+          --     local path = dir .. entry.name
+          --
+          --
+          --     local cmd, err = { "zathura", path }, nil
+          --     if not cmd then
+          --       vim.notify(string.format("Could not open %s: %s", path, err), vim.log.levels.ERROR)
+          --       return
+          --     end
+          --     local jid = vim.fn.jobstart(cmd, { detach = true })
+          --     assert(jid > 0, "Failed to start job")
+          --   end,
+          --   mode = "n"
+          -- },
           ["g."] = { "actions.toggle_hidden", mode = "n" },
           ["g\\"] = { "actions.toggle_trash", mode = "n" },
         },
