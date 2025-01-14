@@ -84,6 +84,16 @@ return {
     vim.cmd([[hi CompileModeMessageCol guifg=#F5C2E7]])
     vim.cmd([[hi CompileModeCommandOutput gui=none guifg=#c0caf5]])
 
+    -- vim.cmd([[hi CompileModeMessage cleared]])
+    vim.cmd([[hi CompileModeWarning guifg=#F5E0DC]])
+    vim.cmd([[hi CompileModeInfo guifg=#94E2D5]])
+    vim.cmd([[hi CompileModeCommandOutput guifg=#c0caf5]])
+    vim.cmd([[hi CompileModeDirectoryMessage guifg=#89B4FA]])
+    vim.cmd([[hi CompileModeOutputFile guifg=#B4BEFE]])
+    vim.cmd([[hi CompileModeCheckResult cterm=bold gui=bold guifg=#FAB387]])
+    vim.cmd([[hi CompileModeCheckTarget guifg=#FAB387]])
+
+
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "compilation",
       callback = function()

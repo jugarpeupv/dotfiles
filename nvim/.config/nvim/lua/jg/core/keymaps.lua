@@ -104,20 +104,42 @@ keymap(
 -- keymap("n", "sf", "<cmd>Telescope file_browser<cr>", opts)
 -- keymap("n", "sb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", opts)
 
-vim.keymap.set({"n"}, "su", function()
-  require("telescope").extensions.file_browser.file_browser({ grouped = true, path = vim.fn.expand("~/"), use_ui_input = false })
-end, opts)
-
-vim.keymap.set({"n"}, "sf", function()
-  require("telescope").extensions.file_browser.file_browser({ grouped = true })
-end, opts)
-
-vim.keymap.set({"n"}, "sf", function()
+vim.keymap.set({ "n" }, "su", function()
   require("telescope").extensions.file_browser.file_browser({
     grouped = true,
+    path = vim.fn.expand("~/"),
+    -- depth = 2,
+    -- use_ui_input = false,
+    git_status = false,
+    respect_gitignore = true,
+    prompt_path = true,
+  })
+end, opts)
+
+vim.keymap.set({ "n" }, "sf", function()
+  require("telescope").extensions.file_browser.file_browser({
+    grouped = true,
+    depth = false,
     use_ui_input = false,
+    follow_links = true,
+    respect_gitignore = true,
+    git_status = false,
+    prompt_path = true,
     path = vim.fn.expand("%:p:h"),
     select_buffer = true,
+  })
+end, opts)
+
+vim.keymap.set({ "n" }, "sd", function()
+  require("telescope").extensions.file_browser.file_browser({
+    grouped = true,
+    depth = 1,
+    use_ui_input = false,
+    path = vim.fn.expand("%:p:h"),
+    git_status = false,
+    select_buffer = true,
+    respect_gitignore = true,
+    prompt_path = true,
   })
 end, opts)
 
@@ -304,7 +326,7 @@ keymap("n", "<Leader>sr", "<cmd>%SnipRun<cr>", opts)
 
 -- Git blame
 keymap("n", "<Leader>bl", "<cmd>lua require 'gitsigns'.blame_line()<cr>", opts)
-keymap("n", "<Leader>bh", "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", opts)
+-- keymap("n", "<Leader>bh", "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", opts)
 keymap("n", "<Leader>bt", "<cmd>Gitsigns toggle_current_line_blame<cr>", opts)
 keymap("n", "<Leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 
@@ -449,23 +471,50 @@ end, opts)
 -- vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                              -- copy to 0 register
 -- vim.keymap.set({ "x" }, "<leader><leader>y", [["0y]])                               -- copy to 0 register
 
+vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true }) -- paste from 0 register
+
 vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
 
 vim.keymap.set({ "n" }, "<leader>bi", ":Bufferize Inspect<cr>", { silent = true })  -- paste from 0 register
 
+-- local function show_documentation()
+--   local filetype = vim.bo.filetype
+--   if filetype == "vim" or filetype == "help" then
+--     local status, _ = pcall(vim.cmd, "h " .. vim.fn.expand("<cword>"))
+--     if not status then
+--       print("No help for " .. vim.fn.expand("<cword>"))
+--     end
+--   elseif filetype == "man" then
+--     vim.cmd("Man " .. vim.fn.expand("<cword>"))
+--   elseif vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
+--     require("crates").show_popup()
+--   else
+--     vim.lsp.buf.hover()
+--   end
+-- end
+
 local function show_documentation()
   local filetype = vim.bo.filetype
+  local cword = vim.fn.expand("<cword>")
+
   if filetype == "vim" or filetype == "help" then
-    local status, _ = pcall(vim.cmd, "h " .. vim.fn.expand("<cword>"))
+    local status, _ = pcall(vim.cmd, "h " .. cword)
     if not status then
-      print("No help for " .. vim.fn.expand("<cword>"))
+      print("No help for " .. cword)
     end
   elseif filetype == "man" then
-    vim.cmd("Man " .. vim.fn.expand("<cword>"))
+    vim.cmd("Man " .. cword)
   elseif vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
     require("crates").show_popup()
   else
-    vim.lsp.buf.hover()
+    local params = vim.lsp.util.make_position_params()
+    vim.lsp.buf_request(0, "textDocument/hover", params, function(err, result, ctx, config)
+      if err or not result or not result.contents then
+        vim.cmd("h " .. cword)
+      else
+        vim.lsp.handlers.hover(err, result, ctx, config)
+      end
+    end)
   end
 end
 
@@ -480,6 +529,22 @@ vim.api.nvim_set_keymap("n", "<leader>vf", "<cmd>Vifm .<cr>", { noremap = true, 
 
 -- clear scrollback buffer in terminal buffer
 -- vim.keymap.set({ "t", "n" }, "<leader>CL", "<C-\\><C-n><cmd>lua vim.bo.scrollback=1<cr>", opts)
+
+vim.keymap.set("n", "<leader>xf", "<cmd>source %<CR>")
+vim.keymap.set({ "n", "v" }, "<leader>xx", ":.lua<CR>")
+
+vim.keymap.set({ "n" }, "<leader>sn", function()
+  -- run this command on modifiable windows
+  --   -- vim.wo.wrap = not vim.wo.wrap
+  vim.cmd([[windo if &ma | set wrap! | endif]])
+end, opts)
+
+vim.keymap.set({ "n" }, "<leader>se", function()
+  local status, _ = pcall(vim.cmd, "vert h " .. vim.fn.expand("<cword>"))
+  if not status then
+    print("No help for " .. vim.fn.expand("<cword>"))
+  end
+end, opts)
 
 local function find_directory_and_focus()
   local actions = require("telescope.actions")
@@ -505,19 +570,40 @@ end
 
 vim.keymap.set("n", "fd", find_directory_and_focus)
 
-vim.keymap.set("n", "<leader><leader>x", "<cmd>source %<CR>")
-vim.keymap.set("n", "<leader>xx", ":.lua<CR>")
-vim.keymap.set("v", "<leader>xx", ":lua<CR>")
+local function find_in_node_modules()
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
 
-vim.keymap.set({ "n" }, "<leader>sn", function()
-  -- run this command on modifiable windows
-  --   -- vim.wo.wrap = not vim.wo.wrap
-  vim.cmd([[windo if &ma | set wrap! | endif]])
-end, opts)
+  local cwd = vim.loop.cwd()
+  local node_modules_path = cwd .. "/node_modules"
 
-vim.keymap.set({ "n" }, "<leader>se", function()
-  local status, _ = pcall(vim.cmd, "vert h " .. vim.fn.expand("<cword>"))
-  if not status then
-    print("No help for " .. vim.fn.expand("<cword>"))
+  local function open_nvim_tree(prompt_bufnr, _)
+    actions.select_default:replace(function()
+      local api = require("nvim-tree.api")
+
+      actions.close(prompt_bufnr)
+      local selection = action_state.get_selected_entry()
+      api.tree.open()
+      api.tree.find_file(selection.value)
+    end)
+    return true
   end
-end, opts)
+
+  require("telescope.builtin").find_files({
+    prompt_title = 'Find dependency in "node_modules"',
+    find_command = {
+      "fd",
+      ".",
+      node_modules_path,
+      "--no-ignore",
+      "--exclude",
+      "node_modules/*/node_modules",
+      "--prune",
+    },
+    attach_mappings = open_nvim_tree,
+  })
+end
+
+vim.keymap.set("n", "<leader>fn", find_in_node_modules, opts)
+
+-- fd . "node_modules" --no-ignore --exclude .git/* --exclude **/node_modules/**

@@ -161,7 +161,7 @@ return {
 
       -- vim.keymap.set("n", "<leader>ns", vim.cmd.Neogen)
       {
-        "<leader>ng",
+        "<leader>nG",
         function()
           require("neogen").generate()
         end,

@@ -38,7 +38,6 @@ return {
           should_attach = false
         end
 
-        -- print("should_attach: ", should_attach)
         return should_attach
       end
 
@@ -114,29 +113,6 @@ return {
         -- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
       end)
 
-      local function find_directory_and_focus()
-        local actions = require("telescope.actions")
-        local action_state = require("telescope.actions.state")
-
-        local function open_nvim_tree(prompt_bufnr, _)
-          actions.select_default:replace(function()
-            local api = require("nvim-tree.api")
-
-            actions.close(prompt_bufnr)
-            local selection = action_state.get_selected_entry()
-            api.tree.open()
-            api.tree.find_file(selection.cwd .. "/" .. selection.value)
-          end)
-          return true
-        end
-
-        require("telescope.builtin").find_files({
-          find_command = { "fd", "--type", "directory", "--hidden", "--exclude", ".git/*" },
-          attach_mappings = open_nvim_tree,
-        })
-      end
-
-      vim.keymap.set("n", "<leader>fd", find_directory_and_focus)
 
       local function on_attach(bufnr)
         local opts = function(desc)
@@ -284,14 +260,15 @@ return {
         vim.keymap.set("n", "l", api_nvimtree.node.open.edit, opts("Open"))
         vim.keymap.set("n", "<CR>", api_nvimtree.node.open.edit, opts("Open"))
         -- vim.keymap.set('n', '<CR>', toggle_replace, opts('Open: In Place'))
-        -- vim.keymap.set('n', "O", api_nvimtree.node.open.replace_tree_buffer, opts('Open: In Place'))
         vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
-        -- vim.keymap.set("n", "O", api_nvimtree.node.open.preview, opts("Open Preview"))
         vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
         vim.keymap.set("n", "<", api_nvimtree.node.navigate.sibling.prev, opts("Previous Sibling"))
         vim.keymap.set("n", ".", api_nvimtree.node.run.cmd, opts("Run Command"))
-        -- vim.keymap.set("n", "-", api_nvimtree.tree.change_root_to_parent, opts("Up"))
-        vim.keymap.set("n", "-", function()
+        vim.keymap.set("n", "-", api_nvimtree.tree.change_root_to_parent, opts("Up"))
+        -- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
+        -- vim.keymap.set("n", "O", api_nvimtree.node.open.preview, opts("Open Preview"))
+        -- vim.keymap.set('n', "O", api_nvimtree.node.open.replace_tree_buffer, opts('Open: In Place'))
+        vim.keymap.set("n", "O", function()
           vim.cmd("vsplit");
           -- get current path of nvimtree
           local path = api_nvimtree.tree.get_node_under_cursor().absolute_path
@@ -317,6 +294,7 @@ return {
         vim.keymap.set("n", "[c", api_nvimtree.node.navigate.git.prev, opts("Prev Git"))
         vim.keymap.set("n", "]c", api_nvimtree.node.navigate.git.next, opts("Next Git"))
         vim.keymap.set("n", "d", api_nvimtree.fs.remove, opts("Delete"))
+        -- vim.keymap.set("n", "D", api_nvimtree.fs.trash, opts("Trash"))
         vim.keymap.set("n", "D", api_nvimtree.fs.trash, opts("Trash"))
         -- vim.keymap.set("n", "E", api.tree.expand_all, opts("Expand All"))
         vim.keymap.set("n", "e", api_nvimtree.fs.rename_basename, opts("Rename: Basename"))
@@ -344,7 +322,6 @@ return {
           vim.cmd('vsplit')
           require("oil").open(path)
         end, opts("Open Oil"))
-        -- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
         vim.keymap.set("n", "p", api_nvimtree.fs.paste, opts("Paste"))
         vim.keymap.set("n", "P", api_nvimtree.node.navigate.parent, opts("Parent Directory"))
         vim.keymap.set("n", "q", api_nvimtree.tree.close, opts("Close"))
@@ -621,7 +598,7 @@ return {
           enable = true,
           show_on_dirs = false,
           show_on_open_dirs = false,
-          debounce_delay = 30,
+          -- debounce_delay = 30,
           severity = {
             min = vim.diagnostic.severity.HINT,
             max = vim.diagnostic.severity.ERROR,
@@ -646,16 +623,19 @@ return {
           enable = should_attach_git,
           show_on_dirs = true,
           show_on_open_dirs = false,
-          disable_for_dirs = { "node_modules", "/node_modules", "/Users/jgarcia/", "/Users/jgarcia" },
+          disable_for_dirs = { "node_modules", "/node_modules", "/Users/jgarcia/", "/Users/jgarcia", "/dist" },
           -- timeout = 4000,
-          timeout = 200,
+          -- timeout = 200,
           cygwin_support = false,
         },
         filesystem_watchers = {
           -- enable = true,
+          -- enable = false,
           enable = should_attach_git,
-          debounce_delay = 30,
-          ignore_dirs = { "/node_modules", "/dist", "node_modules", "/target", "node_modules", "/Users/jgarcia/", "/Users/jgarcia" },
+          -- debounce_delay = 30,
+          -- debounce_delay = 1000,
+          -- ignore_dirs = { "/target", "/.ccls-cache" },
+          -- ignore_dirs = { "/node_modules", "node_modules", "/target", "node_modules", "/Users/jgarcia/", "/Users/jgarcia" },
         },
         actions = {
           use_system_clipboard = true,

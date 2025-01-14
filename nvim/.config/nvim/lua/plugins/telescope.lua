@@ -309,8 +309,21 @@ return {
                 ["<C-r>"] = fb_actions.goto_cwd,
                 ["<C-e>"] = fb_actions.goto_home_dir,
                 ["<C-c>"] = fb_actions.create,
-                ["<C-o>"] = fb_actions.sort_by_date,
-                ["<C-q>"] = fb_actions.open,
+                ["<C-q>"] = fb_actions.sort_by_date,
+                ["<C-b>"] = fb_actions.open,
+                ["<C-o>"] = function (prompt_bufnr)
+                  local action_state = require("telescope.actions.state")
+                  actions.close(prompt_bufnr)
+                  local selection = action_state.get_selected_entry()
+                  if vim.fn.isdirectory(selection.value) == 1 then
+                    require("oil").open(selection.value)
+                  else
+                    -- remove the last part of the path from selection.value
+                    local dir_path = selection.value:match("(.*/)")
+                    require("oil").open(dir_path)
+                  end
+                  return true
+                end,
                 ["<C-u>"] = function(prompt_bufnr)
                   for _ = 1, 5 do
                     actions.move_selection_previous(prompt_bufnr)

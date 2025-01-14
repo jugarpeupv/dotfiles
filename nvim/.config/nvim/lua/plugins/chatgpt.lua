@@ -17,6 +17,18 @@ return {
     opts = {
       log_level = "fatal",
       mappings = {
+        toggle_sticky = {
+          detail = 'Makes line under cursor sticky or deletes sticky line.',
+          normal = 'gR',
+        },
+        accept_diff = {
+          normal = '<C-y>',
+          insert = '<C-y>',
+        },
+        reset = {
+          normal = '<C-x>',
+          insert = '<C-x>',
+        },
         jump_to_diff = {
           normal = "go",
         },
@@ -28,7 +40,7 @@ return {
           register = '"',
         },
         show_diff = {
-          normal = "gd",
+          normal = "gF",
         },
         show_info = {
           normal = "gi",

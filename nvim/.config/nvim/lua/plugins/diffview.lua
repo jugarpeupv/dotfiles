@@ -3,6 +3,12 @@ return {
   {
     "NeogitOrg/neogit",
     cmd = { "Neogit" },
+    keys = {
+      {
+        "<leader>ng",
+        "<cmd>Neogit<cr>",
+      },
+    },
     dependencies = {
       "junegunn/fzf",
       "nvim-lua/plenary.nvim", -- required
@@ -23,7 +29,7 @@ return {
     dependencies = {
       "junegunn/fzf",
       "nvim-telescope/telescope.nvim",
-      "akinsho/git-conflict.nvim"
+      "akinsho/git-conflict.nvim",
     },
     keys = {
       { "<leader>gd", mode = "n",     "<cmd>DiffviewOpen<cr>" },

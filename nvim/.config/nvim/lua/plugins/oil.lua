@@ -112,7 +112,7 @@ return {
           ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
           ["gs"] = { "actions.change_sort", mode = "n" },
 
-          ["gu"] = {
+          ["su"] = {
             callback = function()
               local oil = require("oil")
               local entry = oil.get_cursor_entry()
@@ -130,7 +130,7 @@ return {
             end,
             mode = "n"
           },
-          ["gf"] = {
+          ["sd"] = {
             callback = function()
               local oil = require("oil")
               local entry = oil.get_cursor_entry()
@@ -146,6 +146,26 @@ return {
               end
 
               require("jg.custom.telescope").oil_fzf_dir(root_dir)
+            end,
+            mode = "n"
+          },
+          ["sf"] = {
+            callback = function()
+              local oil = require("oil")
+              local entry = oil.get_cursor_entry()
+              local dir = oil.get_current_dir()
+
+              if not entry or not dir then
+                return
+              end
+              local root_dir = vim.fs.dirname(vim.fs.find({ ".git" })[1])
+
+              if not root_dir then
+                root_dir = dir
+              end
+
+              -- require("jg.custom.telescope").oil_fzf_dir(root_dir)
+              require("jg.custom.telescope").oil_fzf_files_builtin(root_dir)
             end,
             mode = "n"
           },
