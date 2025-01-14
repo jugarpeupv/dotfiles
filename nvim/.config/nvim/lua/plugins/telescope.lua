@@ -17,11 +17,12 @@ return {
       { "gbprod/yanky.nvim" },
       -- { "Myzel394/jsonfly.nvim" },
       { "jugarpeupv/git-worktree.nvim" },
-      {
-        "nvim-telescope/telescope-fzf-native.nvim",
-        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
-      },
-      { "natecraddock/telescope-zf-native.nvim" },
+      -- {
+      --   "nvim-telescope/telescope-fzf-native.nvim",
+      --   build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+      --   cmd = { "Telescope" },
+      -- },
+      { "natecraddock/telescope-zf-native.nvim", cmd = { "Telescope" } },
       {
         "someone-stole-my-name/yaml-companion.nvim",
         ft = { "yaml", "yml" },
@@ -311,7 +312,7 @@ return {
                 ["<C-c>"] = fb_actions.create,
                 ["<C-q>"] = fb_actions.sort_by_date,
                 ["<C-b>"] = fb_actions.open,
-                ["<C-o>"] = function (prompt_bufnr)
+                ["<C-o>"] = function(prompt_bufnr)
                   local action_state = require("telescope.actions.state")
                   actions.close(prompt_bufnr)
                   local selection = action_state.get_selected_entry()

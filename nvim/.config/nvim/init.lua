@@ -10,9 +10,6 @@ vim.g.loaded_matchit = 1
 --   vim.cmd([[autocmd UILeave * if v:event.chan ==# 0 | call chansend(v:stderr, "\x1b[<1u") | endif]])
 -- end
 
-package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
-package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
-
 require("jg.core.options")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -29,7 +26,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins", {
   change_detection = { notify = false },
-  rocks = { enabled = false },
+  -- rocks = { enabled = false },
+  rocks = {  enabled = true, hererocks = true },
   dev = {
     path = "~/projects",
     patterns = {},

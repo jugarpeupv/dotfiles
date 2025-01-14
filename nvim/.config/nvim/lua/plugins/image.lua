@@ -27,7 +27,6 @@ return {
     -- rocks = { "magick" },
     enabled = true,
     -- branch = "feat/toggle-rendering",
-    rocks = { hererocks = true },
     -- branch = "feature/only_render_image_at_cursor_mode",
     branch = "master",
     -- branch = "main",
