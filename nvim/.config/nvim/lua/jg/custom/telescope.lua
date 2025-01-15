@@ -520,41 +520,40 @@ M.oil_fzf_dir = function(path)
   local commands = function(opts)
     opts = opts or {}
     pickers
-      .new(opts, {
-        prompt_title = "Open directory in Oil",
-        finder = finders.new_oneshot_job(find_command, {
-          entry_maker = function(entry)
-            local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
-            return {
-              value = entry,
-              display = "  ".. entry_substituted,
-              ordinal = entry,
-            }
+        .new(opts, {
+          prompt_title = "Open directory in Oil",
+          finder = finders.new_oneshot_job(find_command, {
+            entry_maker = function(entry)
+              local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
+              return {
+                value = entry,
+                display = "  " .. entry_substituted,
+                ordinal = entry,
+              }
+            end,
+          }),
+          sorter = conf.generic_sorter(opts),
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local selection = action_state.get_selected_entry()
+              require("oil").open(selection.value)
+            end)
+
+            actions.select_vertical:replace(function()
+              vim.cmd("vsplit")
+              local selection = action_state.get_selected_entry()
+              require("oil").open(selection.value)
+            end)
+
+            return true
           end,
-        }),
-        sorter = conf.generic_sorter(opts),
-        attach_mappings = function(prompt_bufnr)
-          actions.select_default:replace(function()
-            actions.close(prompt_bufnr)
-            local selection = action_state.get_selected_entry()
-            require("oil").open(selection.value)
-          end)
-
-          actions.select_vertical:replace(function ()
-           vim.cmd("vsplit")
-            local selection = action_state.get_selected_entry()
-            require("oil").open(selection.value)
-          end)
-
-          return true
-        end,
-      })
-      :find()
+        })
+        :find()
   end
 
   commands()
 end
-
 
 M.nvimtree_fzf_dir = function(path)
   local pickers = require("telescope.pickers")
@@ -588,37 +587,103 @@ M.nvimtree_fzf_dir = function(path)
   local commands = function(opts)
     opts = opts or {}
     pickers
-      .new(opts, {
-        prompt_title = "Open directory in Nvimtree",
-        finder = finders.new_oneshot_job(find_command, {
-          entry_maker = function(entry)
-            local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
-            return {
-              value = entry,
-              display = "  ".. entry_substituted,
-              ordinal = entry,
-            }
+        .new(opts, {
+          prompt_title = "Open directory in Nvimtree",
+          finder = finders.new_oneshot_job(find_command, {
+            entry_maker = function(entry)
+              local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
+              return {
+                value = entry,
+                display = "  " .. entry_substituted,
+                ordinal = entry,
+              }
+            end,
+          }),
+          sorter = conf.generic_sorter(opts),
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local selection = action_state.get_selected_entry()
+              local api = require("nvim-tree.api")
+              -- api.tree.open({ update_root = true, path = selection.value })
+              api.tree.change_root(selection.value)
+              api.tree.find_file(selection.value)
+            end)
+            return true
           end,
-        }),
-        sorter = conf.generic_sorter(opts),
-        attach_mappings = function(prompt_bufnr)
-          actions.select_default:replace(function()
-            actions.close(prompt_bufnr)
-            local selection = action_state.get_selected_entry()
-            local api = require("nvim-tree.api")
-            -- api.tree.open({ update_root = true, path = selection.value })
-            api.tree.change_root(selection.value)
-            api.tree.find_file(selection.value)
-          end)
-          return true
-        end,
-      })
-      :find()
+        })
+        :find()
   end
 
   commands()
 end
 
+M.run_npm_scripts = function()
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+  local compile_mode = require("compile-mode")
 
+  local scripts = M.get_npm_scripts() or {}
+
+  local script_list = {}
+  for key, value in pairs(scripts) do
+    table.insert(script_list, { script_name = "npm run " .. key, script_value = value })
+  end
+
+  local commands = function(opts)
+    opts = opts or {}
+    pickers
+        .new(opts, {
+          prompt_title = "commands",
+          finder = finders.new_table({
+            results = script_list,
+            entry_maker = function(entry)
+              return {
+                value = entry,
+                -- display = "npm run " .. entry.script_name .. "                      (" .. entry.script_value .. ")",
+                display = entry.script_name,
+                ordinal = entry.script_name,
+              }
+            end,
+          }),
+          sorter = conf.generic_sorter(opts),
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local selection = action_state.get_selected_entry()
+
+              -- local function toggle_terminal_with_command(command)
+              --   -- Create a new terminal or get the existing one
+              --   local Terminal = require('terminal')
+              --   local term = Terminal:new({
+              --     layout = 'horizontal',
+              --     cmd = command,
+              --     hidden = true,
+              --   })
+              --
+              --   -- Toggle the terminal
+              --   term:toggle()
+              -- end
+              --
+              -- toggle_terminal_with_command(selection.value.script_name)
+              local myterm = require("terminal").terminal:new({
+                layout = { open_cmd = "botright new" },
+                -- cmd = { selection.value.script_name },
+                autoclose = false,
+              })
+              myterm:open()
+              myterm:send(selection.value.script_name)
+            end)
+            return true
+          end,
+        })
+        :find()
+  end
+
+  commands()
+end
 
 return M

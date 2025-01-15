@@ -7,9 +7,9 @@ end
 local M = {}
 
 M.attach_lsp_config = function(client, bufnr)
-  if string.match(vim.api.nvim_buf_get_name(bufnr), 'node_modules') then
-    vim.lsp.stop_client(client.id)
-  end
+  -- if string.match(vim.api.nvim_buf_get_name(bufnr), 'node_modules') then
+  --   vim.lsp.stop_client(client.id)
+  -- end
 
   -- navbuddy.attach(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }

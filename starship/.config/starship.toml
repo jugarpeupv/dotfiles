@@ -32,14 +32,15 @@ not_capable_style = "red"
 
 
 [username]
-style_user = "#C6A0F6"
+style_root = "#F2CDCD"
+style_user = "#F2CDCD"
 show_always = false
 format = "[$user]($style)"
 
 [hostname]
-ssh_only = true
+ssh_only = true 
 format = "[@]($style)[$hostname]($style): "
-style = "#C6A0F6"
+style = "#F2CDCD"
 disabled = false
 
 [directory]

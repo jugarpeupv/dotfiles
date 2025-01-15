@@ -71,12 +71,37 @@ opt.signcolumn = "yes"  -- show sign column so that text doesn't shift
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
+
 -- clipboard
-opt.clipboard:append("unnamedplus") -- use system clipboard as default register
+if os.getenv("SSH_TTY") == nil then
+  opt.clipboard:append("unnamedplus")
+else
+  -- On ssh, use cmd+v to paste, copy should work just fine
+  opt.clipboard:append("unnamedplus")
+
+  local function my_paste(reg)
+    return function(lines)
+      local content = vim.fn.getreg('"')
+      return vim.split(content, "\n")
+    end
+  end
+
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    },
+    paste = {
+      ["+"] = my_paste("+"),
+      ["*"] = my_paste("*"),
+    },
+  }
+end
 
 -- split windows
-opt.splitright = true     -- split vertical window to the right
-opt.splitbelow = true     -- split horizontal window to the bottom
+opt.splitright = true -- split vertical window to the right
+opt.splitbelow = true -- split horizontal window to the bottom
 opt.ea = true         -- equal always, windows same size
 -- opt.ea = false         -- equal always, windows same size
 
@@ -84,7 +109,6 @@ opt.iskeyword:append("-") -- consider string-string as whole word
 
 -- global statusline
 opt.laststatus = 3
-
 
 opt.conceallevel = 0
 
@@ -157,8 +181,5 @@ vim.g.suda_smart_edit = 1
 --   end,
 -- })
 
-
 vim.g.zoomwintab_remap = false
 vim.g.zoomwintab_remap = 0
-
-

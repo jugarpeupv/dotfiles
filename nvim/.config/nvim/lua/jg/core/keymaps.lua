@@ -645,3 +645,7 @@ end
 vim.keymap.set("n", "<leader>fn", find_in_node_modules, opts)
 
 -- fd . "node_modules" --no-ignore --exclude .git/* --exclude **/node_modules/**
+
+vim.keymap.set({ "n" }, "<leader>co", function()
+  require("jg.custom.telescope").run_npm_scripts()
+end, opts)
