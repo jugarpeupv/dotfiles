@@ -231,6 +231,12 @@ return {
         end, opts("Search in directory"))
 
         vim.keymap.set("n", "p", api_nvimtree.fs.paste, opts("Paste"))
+
+        vim.keymap.set("n", "su", function()
+          local jg_telescope = require("jg.custom.telescope")
+          jg_telescope.nvimtree_fzf_dir(vim.fn.expand("~/"))
+        end, opts("Find dir in home"))
+
         vim.keymap.set("n", "<down>", mark_move_j, opts("Toggle Bookmark Down"))
         vim.keymap.set("n", "<up>", mark_move_k, opts("Toggle Bookmark Up"))
 
@@ -264,27 +270,35 @@ return {
         vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
         vim.keymap.set("n", "<", api_nvimtree.node.navigate.sibling.prev, opts("Previous Sibling"))
         vim.keymap.set("n", ".", api_nvimtree.node.run.cmd, opts("Run Command"))
-        vim.keymap.set("n", "-", api_nvimtree.tree.change_root_to_parent, opts("Up"))
+        vim.keymap.set("n", "H", api_nvimtree.tree.change_root_to_parent, opts("Up"))
         -- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
         -- vim.keymap.set("n", "O", api_nvimtree.node.open.preview, opts("Open Preview"))
         -- vim.keymap.set('n', "O", api_nvimtree.node.open.replace_tree_buffer, opts('Open: In Place'))
-        vim.keymap.set("n", "O", function()
+        -- vim.keymap.set("n", "O", function()
+        --   vim.cmd("vsplit");
+        --   -- get current path of nvimtree
+        --   local path = api_nvimtree.tree.get_node_under_cursor().absolute_path
+        --   local function check_and_modify_path(path_to)
+        --     if vim.fn.isdirectory(path_to) == 1 then
+        --       -- Path is a directory, do nothing
+        --       return path_to
+        --     else
+        --       -- Path is a file, remove the last part
+        --       local last_part = vim.fn.fnamemodify(path_to, ":h")
+        --       return last_part
+        --     end
+        --   end
+        --   local modified_path = check_and_modify_path(path)
+        --   require("oil").open(modified_path)
+        -- end, opts("Open Oil"))
+
+        vim.keymap.set("n", "O", api_nvimtree.tree.change_root_to_parent, opts("Up"))
+
+        vim.keymap.set("n", "-", function()
           vim.cmd("vsplit");
-          -- get current path of nvimtree
-          local path = api_nvimtree.tree.get_node_under_cursor().absolute_path
-          local function check_and_modify_path(path_to)
-            if vim.fn.isdirectory(path_to) == 1 then
-              -- Path is a directory, do nothing
-              return path_to
-            else
-              -- Path is a file, remove the last part
-              local last_part = vim.fn.fnamemodify(path_to, ":h")
-              return last_part
-            end
-          end
-          local modified_path = check_and_modify_path(path)
-          require("oil").open(modified_path)
+          require("oil").open(vim.loop.cwd())
         end, opts("Open Oil"))
+
         vim.keymap.set("n", "a", api_nvimtree.fs.create, opts("Create"))
         -- vim.keymap.set('n', '<leader>cr', change_root_to_global_cwd, opts('Change Root To Global CWD'))
         -- vim.keymap.set('n', 'bmv',   api.marks.bulk.move,                   opts('Move Bookmarked'))
@@ -304,7 +318,7 @@ return {
         -- vim.keymap.set("n", "f", api_nvimtree.live_filter.start, opts("Filter"))
         vim.keymap.set("n", "g?", api_nvimtree.tree.toggle_help, opts("Help"))
         vim.keymap.set("n", "gy", api_nvimtree.fs.copy.absolute_path, opts("Copy Absolute Path"))
-        vim.keymap.set("n", "H", api_nvimtree.tree.toggle_hidden_filter, opts("Toggle Dotfiles"))
+        -- vim.keymap.set("n", "H", api_nvimtree.tree.toggle_hidden_filter, opts("Toggle Dotfiles"))
         vim.keymap.set("n", "I", api_nvimtree.tree.toggle_gitignore_filter, opts("Toggle Git Ignore"))
         -- vim.keymap.set('n', 'J',     api.node.navigate.sibling.last,        opts('Last Sibling'))
         -- vim.keymap.set('n', 'K',     api.node.navigate.sibling.first,       opts('First Sibling'))
@@ -312,16 +326,16 @@ return {
         vim.keymap.set("n", "m", api_nvimtree.marks.toggle, opts("Toggle Bookmark"))
         vim.keymap.set("n", "o", api_nvimtree.node.open.edit, opts("Open"))
 
-        vim.keymap.set('n', 'O', function()
-          local node = api_nvimtree.tree.get_node_under_cursor()
-          local path = node.absolute_path
-
-          if (path and vim.fn.isdirectory(path) == 0) then
-            path = vim.fn.fnamemodify(path, ':h')
-          end
-          vim.cmd('vsplit')
-          require("oil").open(path)
-        end, opts("Open Oil"))
+        -- vim.keymap.set('n', 'O', function()
+        --   local node = api_nvimtree.tree.get_node_under_cursor()
+        --   local path = node.absolute_path
+        --
+        --   if (path and vim.fn.isdirectory(path) == 0) then
+        --     path = vim.fn.fnamemodify(path, ':h')
+        --   end
+        --   vim.cmd('vsplit')
+        --   require("oil").open(path)
+        -- end, opts("Open Oil"))
         vim.keymap.set("n", "p", api_nvimtree.fs.paste, opts("Paste"))
         vim.keymap.set("n", "P", api_nvimtree.node.navigate.parent, opts("Parent Directory"))
         vim.keymap.set("n", "q", api_nvimtree.tree.close, opts("Close"))

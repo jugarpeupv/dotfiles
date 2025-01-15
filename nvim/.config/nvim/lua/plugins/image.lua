@@ -11,11 +11,11 @@ return {
     end,
   },
   -- {
-  --   "adelarsq/image_preview.nvim",
-  --   event = "VeryLazy",
-  --   config = function()
-  --     require("image_preview").setup({})
-  --   end,
+  --   "vhyrro/luarocks.nvim",
+  --   priority = 10001, -- this plugin needs to run before anything else
+  --   opts = {
+  --     rocks = { "magick" },
+  --   },
   -- },
   {
     "kjuq/sixelview.nvim",
@@ -24,10 +24,7 @@ return {
   },
   {
     "3rd/image.nvim",
-    -- rocks = { "magick" },
     enabled = true,
-    -- branch = "feat/toggle-rendering",
-    -- branch = "feature/only_render_image_at_cursor_mode",
     branch = "master",
     -- branch = "main",
     -- event = "VeryLazy",
@@ -54,7 +51,6 @@ return {
                 -- Substitute white space with %20
                 image_path = string.gsub(image_path, " ", "%%20")
               end
-
 
               print("image_path_before", image_path)
               image_path = image_path.gsub(image_path, "|.*", "")
@@ -87,11 +83,11 @@ return {
         max_height = 1500,
         max_width_window_percentage = 80,
         max_height_window_percentage = 80,
-        window_overlap_clear_enabled = true,                                  -- toggles images when windows are overlapped
-        scale_factor = 2,                                                     -- scales the window size up or down
+        window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
+        scale_factor = 2,                   -- scales the window size up or down
         window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
-        editor_only_render_when_focused = true,                              -- auto show/hide images when the editor gains/looses focus
-        tmux_show_only_in_active_window = true,                               -- auto show/hide images in the correct Tmux window (needs visual-activity off)
+        editor_only_render_when_focused = true, -- auto show/hide images when the editor gains/looses focus
+        tmux_show_only_in_active_window = true, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
         -- hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" }, -- render image files as images when opened
 
         hijack_file_patterns = {}, -- render image files as images when opened

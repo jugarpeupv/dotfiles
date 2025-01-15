@@ -27,7 +27,10 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins", {
   change_detection = { notify = false },
   -- rocks = { enabled = false },
-  rocks = {  enabled = true, hererocks = true },
+  rocks = {
+    hererocks = true,  -- recommended if you do not have global installation of Lua 5.1.
+  },
+  -- rocks = {  enabled = true, hererocks = nil },
   dev = {
     path = "~/projects",
     patterns = {},

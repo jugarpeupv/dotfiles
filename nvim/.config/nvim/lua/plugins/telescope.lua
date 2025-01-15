@@ -184,6 +184,7 @@ return {
 
                 ["<CR>"] = actions.select_default,
                 ["<C-s>"] = actions.select_horizontal,
+                ["<C-v>"] = actions.select_vertical,
                 -- ["<C-Enter>"] = actions.select_vertical,
                 ["<C-t>"] = actions.select_tab,
                 -- ["<C-t>"] = trouble.open_with_trouble,
@@ -209,6 +210,7 @@ return {
 
                 ["<PageUp>"] = actions.preview_scrolling_up,
                 ["<PageDown>"] = actions.preview_scrolling_down,
+
 
                 ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
                 ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
@@ -303,6 +305,7 @@ return {
             hijack_netrw = false,
             mappings = {
               ["i"] = {
+                -- C-f toggle browser
                 ["<C-t>"] = fb_actions.change_cwd,
                 ["<C-y>"] = fb_actions.copy,
                 ["<C-x>"] = fb_actions.remove,

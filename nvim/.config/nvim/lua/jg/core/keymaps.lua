@@ -104,12 +104,36 @@ keymap(
 -- keymap("n", "sf", "<cmd>Telescope file_browser<cr>", opts)
 -- keymap("n", "sb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", opts)
 
+vim.keymap.set({ "n" }, "so", function()
+  require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
+end, opts)
+
 vim.keymap.set({ "n" }, "su", function()
+  -- local find_command = {
+  --   "fd",
+  --   ".",
+  --   vim.fn.expand("~/"),
+  --   "--type",
+  --   "d",
+  --   "--exclude",
+  --   ".git",
+  --   "--exclude",
+  --   "node_modules",
+  --   -- "--one-file-system",
+  --   "--max-depth",
+  --   "4",
+  --   "--hidden",
+  -- }
+  -- local f_browser_finder = require "telescope".extensions.file_browser.finder
+
   require("telescope").extensions.file_browser.file_browser({
     grouped = true,
-    path = vim.fn.expand("~/"),
-    -- depth = 2,
+    -- path = vim.fn.expand("~/"),
+    cwd = vim.fn.expand("~/"),
+    -- picker = f_browser_finder.browse_folders,
+    depth = 1,
     -- use_ui_input = false,
+    -- find_command,
     git_status = false,
     respect_gitignore = true,
     prompt_path = true,
@@ -217,10 +241,24 @@ keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
 -- Utilities
 keymap("n", "<BS>", "<C-^>", opts)
 keymap("o", "<BS>", "^", opts)
-keymap("n", "<Leader><BS>", "<cmd>qa!<CR>", opts)
-keymap("n", "<Leader>q", "<cmd>q!<CR>", opts)
+keymap("n", "<leader><BS>", "<cmd>qa!<CR>", opts)
+-- keymap("n", "<Leader>q", "<cmd>q!<CR>", opts)
+-- keymap("n", "<Leader>q", "<C-w>c", opts)
+vim.keymap.set({ "n" }, "<leader>q", function()
+  local function is_last_window()
+    return vim.fn.winnr("$") == 1
+  end
+
+  -- Example usage
+  if is_last_window() then
+    vim.cmd("q!")
+  else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>c", true, false, true), "n", true)
+  end
+end, opts)
+
 -- keymap("t", "<Leader>q", "<cmd>q!<CR>", opts)
-keymap("n", "<Leader>nn", "<cmd>nohlsearch<CR>", opts)
+keymap("n", "<leader>nn", "<cmd>nohlsearch<CR>", opts)
 keymap(
   "n",
   "<Leader>fi",
@@ -471,7 +509,7 @@ end, opts)
 -- vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                              -- copy to 0 register
 -- vim.keymap.set({ "x" }, "<leader><leader>y", [["0y]])                               -- copy to 0 register
 
-vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true }) -- paste from 0 register
+vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true })       -- paste from 0 register
 
 vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
 
