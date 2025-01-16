@@ -18,16 +18,16 @@ return {
       log_level = "fatal",
       mappings = {
         toggle_sticky = {
-          detail = 'Makes line under cursor sticky or deletes sticky line.',
-          normal = 'gR',
+          detail = "Makes line under cursor sticky or deletes sticky line.",
+          normal = "gR",
         },
         accept_diff = {
-          normal = '<C-y>',
-          insert = '<C-y>',
+          normal = "<C-y>",
+          insert = "<C-y>",
         },
         reset = {
-          normal = '<C-x>',
-          insert = '<C-x>',
+          normal = "<C-x>",
+          insert = "<C-x>",
         },
         jump_to_diff = {
           normal = "go",
@@ -130,7 +130,7 @@ return {
         desc = "Toggle Copilot",
       },
       {
-        "<leader>co",
+        "<leader>ca",
         function()
           local actions = require("CopilotChat.actions")
           require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
@@ -153,11 +153,34 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       "hrsh7th/nvim-cmp",                                                                 -- Optional: For using slash commands and variables in the chat buffer
+      "echasnovski/mini.diff",
       "nvim-telescope/telescope.nvim",                                                    -- Optional: For using slash commands
       { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } }, -- Optional: For prettier markdown rendering
       { "stevearc/dressing.nvim",                    opts = {} },                         -- Optional: Improves `vim.ui.select`
     },
-    config = true,
+    -- config = true,
+    config = function()
+      require("codecompanion").setup({
+        display = {
+          chat = {
+            diff = {
+              enabled = true,
+              close_chat_at = 240, -- Close an open chat buffer if the total columns of your display are less than...
+              layout = "vertical", -- vertical|horizontal split for default provider
+              opts = {
+                "internal",
+                "filler",
+                "closeoff",
+                "algorithm:patience",
+                "followwrap",
+                "linematch:120",
+              },
+              provider = "mini_diff", -- default|mini_diff
+            },
+          },
+        },
+      })
+    end,
     keys = {
       { mode = { "n", "v" }, "<leader>at", "<cmd>CodeCompanionChat Toggle<CR>" },
       { mode = { "v" },      "ga",         "<cmd>CodeCompanionChat Add<CR>" },

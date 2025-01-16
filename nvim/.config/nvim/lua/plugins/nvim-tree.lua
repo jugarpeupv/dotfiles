@@ -266,38 +266,38 @@ return {
         vim.keymap.set("n", "l", api_nvimtree.node.open.edit, opts("Open"))
         vim.keymap.set("n", "<CR>", api_nvimtree.node.open.edit, opts("Open"))
         -- vim.keymap.set('n', '<CR>', toggle_replace, opts('Open: In Place'))
-        vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
+        -- vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
         vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
         vim.keymap.set("n", "<", api_nvimtree.node.navigate.sibling.prev, opts("Previous Sibling"))
         vim.keymap.set("n", ".", api_nvimtree.node.run.cmd, opts("Run Command"))
         vim.keymap.set("n", "H", api_nvimtree.tree.change_root_to_parent, opts("Up"))
         -- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
-        -- vim.keymap.set("n", "O", api_nvimtree.node.open.preview, opts("Open Preview"))
+        vim.keymap.set("n", "O", api_nvimtree.node.open.preview, opts("Open Preview"))
         -- vim.keymap.set('n', "O", api_nvimtree.node.open.replace_tree_buffer, opts('Open: In Place'))
-        -- vim.keymap.set("n", "O", function()
-        --   vim.cmd("vsplit");
-        --   -- get current path of nvimtree
-        --   local path = api_nvimtree.tree.get_node_under_cursor().absolute_path
-        --   local function check_and_modify_path(path_to)
-        --     if vim.fn.isdirectory(path_to) == 1 then
-        --       -- Path is a directory, do nothing
-        --       return path_to
-        --     else
-        --       -- Path is a file, remove the last part
-        --       local last_part = vim.fn.fnamemodify(path_to, ":h")
-        --       return last_part
-        --     end
-        --   end
-        --   local modified_path = check_and_modify_path(path)
-        --   require("oil").open(modified_path)
-        -- end, opts("Open Oil"))
-
-        vim.keymap.set("n", "O", api_nvimtree.tree.change_root_to_parent, opts("Up"))
-
         vim.keymap.set("n", "-", function()
           vim.cmd("vsplit");
-          require("oil").open(vim.loop.cwd())
+          -- get current path of nvimtree
+          local path = api_nvimtree.tree.get_node_under_cursor().absolute_path
+          local function check_and_modify_path(path_to)
+            if vim.fn.isdirectory(path_to) == 1 then
+              -- Path is a directory, do nothing
+              return path_to
+            else
+              -- Path is a file, remove the last part
+              local last_part = vim.fn.fnamemodify(path_to, ":h")
+              return last_part
+            end
+          end
+          local modified_path = check_and_modify_path(path)
+          require("oil").open(modified_path)
         end, opts("Open Oil"))
+
+        -- vim.keymap.set("n", "O", api_nvimtree.tree.change_root_to_parent, opts("Up"))
+
+        -- vim.keymap.set("n", "-", function()
+        --   vim.cmd("vsplit");
+        --   require("oil").open(vim.loop.cwd())
+        -- end, opts("Open Oil"))
 
         vim.keymap.set("n", "a", api_nvimtree.fs.create, opts("Create"))
         -- vim.keymap.set('n', '<leader>cr', change_root_to_global_cwd, opts('Change Root To Global CWD'))
@@ -364,8 +364,8 @@ return {
         vim.keymap.set("n", "<C-e>", "", { buffer = bufnr })
         vim.keymap.del("n", "<C-e>", { buffer = bufnr })
 
-        -- vim.keymap.set("n", "<C-i>", "", { buffer = bufnr })
-        -- vim.keymap.del("n", "<C-i>", { buffer = bufnr })
+        vim.keymap.set("n", "<C-i>", "", { buffer = bufnr })
+        -- vim.keymap.del("n", "<C-i>", "", { buffer = bufnr })
 
         vim.keymap.set("n", "<C-o>", "", { buffer = bufnr })
         -- vim.keymap.del("n", "<C-o>", { buffer = bufnr })

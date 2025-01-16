@@ -1,3 +1,4 @@
+
 -- return {}
 return {
   -- {
@@ -193,7 +194,7 @@ return {
           end
           return true
         end,
-        dependencies = { "JavaHello/spring-boot.nvim", "mfussenegger/nvim-dap" }
+        dependencies = { "JavaHello/spring-boot.nvim", "mfussenegger/nvim-dap" },
       },
       -- { "folke/neodev.nvim", opts = {} },
       {
@@ -283,7 +284,7 @@ return {
 
         -- Function to check if a specific dependency is present in the package.json file
         local function has_dependency(package_json_content, dependency_name)
-          local status_decode, package_data = pcall(vim.json.decode,package_json_content)
+          local status_decode, package_data = pcall(vim.json.decode, package_json_content)
           if not status_decode then
             return false
           end
@@ -300,6 +301,7 @@ return {
           if package_json_content then
             local dependency_name = "@angular/core"
             local hasAngularCore = has_dependency(package_json_content, dependency_name)
+            print("hasAngularCore: ", hasAngularCore)
 
             if hasAngularCore then
               return root_pattern("angular.json", "nx.json", "project.json")
@@ -470,9 +472,10 @@ return {
           new_config.cmd = angular_cmd
         end,
         filetypes = { "typescript", "myangular", "html", "typescriptreact", "typescript.tsx" },
-        -- root_dir = root_pattern("angular.json", "project.json"),
+        root_dir = root_pattern("angular.json", "project.json", "nx.json"),
+        -- root_dir = angular_root_path
         -- root_dir = root_pattern("angular.json", "nx.json"),
-        root_dir = calculate_angularls_root_dir(),
+        -- root_dir = calculate_angularls_root_dir(),
       })
 
       lspconfig["groovyls"].setup({
@@ -532,6 +535,12 @@ return {
         settings = {
           json = {
             schemas = require("schemastore").json.schemas({}),
+            format = {
+              enable = true,
+            },
+            validate = {
+              enable = true,
+            },
           },
         },
       })

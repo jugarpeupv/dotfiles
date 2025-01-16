@@ -461,6 +461,7 @@ return {
       vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
       vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
       vim.cmd([[hi @markup.raw guifg=#F5E0DC]])
+      -- vim.cmd([[hi @none guifg=#7384a4]])
 
       vim.api.nvim_set_hl(0, "SubstituteSubstituted", { link = "Visual" })
 

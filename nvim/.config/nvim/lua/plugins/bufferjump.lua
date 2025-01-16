@@ -1,6 +1,7 @@
 -- return {}
 return {
   "kwkarlwang/bufjump.nvim",
+  enabled = false,
   -- event = "VeryLazy",
   event = { "BufReadPost", "BufNewFile" },
   config = function()

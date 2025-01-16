@@ -28,6 +28,50 @@ return {
     -- dependencies = { "echasnovski/mini.icons" },
     -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
     config = function()
+      -- Declare a global function to retrieve the current directory
+      function _G.get_oil_winbar()
+        local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+        local dir = require("oil").get_current_dir(bufnr)
+        if dir then
+          return vim.fn.fnamemodify(dir, ":~")
+        else
+          -- If there is no current directory (e.g. over ssh), just show the buffer name
+          return vim.api.nvim_buf_get_name(0)
+        end
+      end
+
+      -- Function to get SSH information
+      -- function _G.get_ssh_info()
+      --   local user = os.getenv("USER") or ""
+      --   local host = os.getenv("HOST") or ""
+      --   local ssh_tty = os.getenv("SSH_TTY")
+      --   print("USER: ", user)
+      --   print("HOST: ", host)
+      --   print("SSH_TTY: ", ssh_tty)
+      --
+      --   if os.getenv("SSH_TTY") == nil then
+      --     return ""
+      --   end
+      --   return user .. "@" .. host
+      -- end
+
+      -- Function to get the current directory
+      function _G.get_current_dir()
+        local dir = vim.fn.substitute(vim.fn.getcwd(), "^" .. vim.fn.expand("$HOME"), "~", "")
+
+        if dir == "" then
+          return ""
+        end
+        return dir
+      end
+
+      -- Function to combine SSH information and current directory for the winbar
+      function _G.get_winbar()
+        -- local ssh_info = get_ssh_info()
+        local current_dir = get_current_dir()
+        return current_dir
+      end
+
       require("oil").setup({
         -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
         -- Set to false if you want some other plugin (e.g. netrw) to open when you edit directories.
@@ -47,10 +91,8 @@ return {
         },
         -- Window-local options to use for oil buffers
         win_options = {
-          -- winbar = "%#@attribute.builtin#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
           winbar = "%#@attribute.builtin#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
-          -- winbar = "%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
-          -- winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}",
+          -- winbar = "%#@attribute.builtin#%{v:lua.get_winbar()} %#ModeMsg#%{%&modified ? '⏺' : ''%}",
           wrap = false,
           signcolumn = "no",
           cursorcolumn = false,
@@ -97,7 +139,7 @@ return {
         keymaps = {
           ["g?"] = { "actions.show_help", mode = "n" },
           ["<CR>"] = "actions.select",
-          ["<C-v>"] = { "actions.select", opts = { vertical = true } },
+          -- ["<C-v>"] = { "actions.select", opts = { vertical = true } },
           ["<C-s>"] = { "actions.select", opts = { horizontal = true } },
           ["<C-t>"] = { "actions.select", opts = { tab = true } },
           ["<C-p>"] = "actions.preview",
@@ -125,10 +167,9 @@ return {
 
               require("jg.custom.telescope").oil_fzf_dir(home)
 
-
               -- oil.open(path)
             end,
-            mode = "n"
+            mode = "n",
           },
           ["sd"] = {
             callback = function()
@@ -147,7 +188,7 @@ return {
 
               require("jg.custom.telescope").oil_fzf_dir(root_dir)
             end,
-            mode = "n"
+            mode = "n",
           },
           ["sf"] = {
             callback = function()
@@ -167,7 +208,7 @@ return {
               -- require("jg.custom.telescope").oil_fzf_dir(root_dir)
               require("jg.custom.telescope").oil_fzf_files_builtin(root_dir)
             end,
-            mode = "n"
+            mode = "n",
           },
           ["gt"] = {
             callback = function()
@@ -230,6 +271,7 @@ return {
             -- sort order can be "asc" or "desc"
             -- see :help oil-columns to see which columns are sortable
             { "type", "asc" },
+            { "birthtime", "desc" },
             { "name", "asc" },
           },
         },

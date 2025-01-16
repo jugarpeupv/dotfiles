@@ -27,7 +27,8 @@ vim.cmd([[
   " augroup end
 ]])
 
--- vim.cmd([[autocmd BufRead,BufNewFile */node_modules/* lua vim.diagnostic.disable(0)]])
+vim.cmd([[autocmd BufRead */node_modules/* lua vim.diagnostic.disable(0)]])
+-- vim.cmd([[autocmd BufRead,BufNewFile */dist/* lua vim.diagnostic.disable(0)]])
 -- vim.cmd([[autocmd BufRead,BufNewFile */assets/* lua vim.diagnostic.disable(0)]])
 
 vim.cmd([[
@@ -95,7 +96,7 @@ augroup END ]])
 
 -- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
 
--- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 4]])
+-- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 1]])
 
 -- vim.api.nvim_create_autocmd("TermOpen", {
 --   group = vim.api.nvim_create_augroup("term-open-buflisted", { clear = true }),

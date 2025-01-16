@@ -355,7 +355,7 @@ M.compile_mode_on_npm_scripts = function()
     opts = opts or {}
     pickers
         .new(opts, {
-          prompt_title = "commands",
+          prompt_title = "Compile Mode on npm scripts",
           finder = finders.new_table({
             results = script_list,
             entry_maker = function(entry)
@@ -454,7 +454,7 @@ M.oil_fzf_files = function(path)
     opts = opts or {}
     pickers
         .new(opts, {
-          prompt_title = "commands",
+          prompt_title = "Oil fzf files",
           finder = finders.new_oneshot_job(find_command, {
             entry_maker = function(entry)
               local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
@@ -637,7 +637,7 @@ M.run_npm_scripts = function()
     opts = opts or {}
     pickers
         .new(opts, {
-          prompt_title = "commands",
+          prompt_title = "Select npm script to run",
           finder = finders.new_table({
             results = script_list,
             entry_maker = function(entry)

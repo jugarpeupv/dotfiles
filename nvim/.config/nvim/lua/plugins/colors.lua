@@ -17,6 +17,7 @@ return {
     --     lsp = true,
     --   },
     -- },
+    event = { "BufReadPost" },
     keys = { { "<leader>cC", "<cmd>CccHighlighterToggle<cr>" } },
     cmd = { "CccPick", "CccHighlighterToggle", "CccConvert", "CccHighlighterEnable", "CccHighlighterDisable" },
     -- event = { "BufReadPost", "BufNewFile" },

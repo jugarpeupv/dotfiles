@@ -235,6 +235,8 @@ keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jum
 
 keymap("t", "<M-o>", "<C-\\><C-n><M-o>", opts)
 keymap("t", "<M-i>", "<C-\\><C-n><M-i>", opts)
+vim.keymap.set({ "n" }, "<M-o>", "<cmd>bp<cr>", opts)
+vim.keymap.set({ "n" }, "<M-i>", "<cmd>bn<cr>", opts)
 
 keymap("n", "<M-8>", "<cmd>cnext<cr>", opts)
 keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
@@ -267,7 +269,7 @@ keymap(
 )
 vim.keymap.set({ "n" }, "<leader>bu", function()
   require("telescope.builtin").buffers({
-    ignore_current_buffer = true,
+    -- ignore_current_buffer = true,
     show_all_buffers = false,
     sort_mru = true,
     sort_lastused = true,
