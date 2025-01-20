@@ -30,7 +30,7 @@ opt.sidescrolloff = 4
 opt.hlsearch = true
 opt.incsearch = true
 opt.showcmd = true
-opt.path:append({ "**" })
+-- opt.path:append({ "**" })
 opt.wildignore:append({ "*/node_modules/*" })
 -- opt.expandtab = true
 -- opt.showbreak = string.rep(" ", 0) -- Make it so that long lines wrap smartly

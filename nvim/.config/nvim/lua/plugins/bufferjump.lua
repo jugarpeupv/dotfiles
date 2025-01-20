@@ -1,14 +1,21 @@
 -- return {}
 return {
   "kwkarlwang/bufjump.nvim",
-  enabled = false,
+  enabled = true,
+  keys = {
+    { "<M-i>" },
+    { "<M-o>" }
+  },
   -- event = "VeryLazy",
-  event = { "BufReadPost", "BufNewFile" },
+  -- event = { "BufReadPost", "BufNewFile" },
   config = function()
     require("bufjump").setup({
       forward_key = "<M-i>",
       backward_key = "<M-o>",
       -- on_success = nil
+      on_success = function()
+        vim.cmd([[execute "normal! g`\"zz"]])
+      end,
     })
     -- local opts = { silent = true, noremap = true }
     -- vim.api.nvim_set_keymap("n", "<C-b>", ":lua require('bufjump').backward()<cr>", opts)

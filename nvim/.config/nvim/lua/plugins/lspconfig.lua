@@ -171,14 +171,14 @@ return {
         config = true, -- necessary as per https://github.com/rmagatti/goto-preview/issues/88
         keys = {
           {
-            "gpd",
+            "<leader>pd",
             function()
               require("goto-preview").goto_preview_definition()
             end,
           },
 
           {
-            "gpr",
+            "<leader>pr",
             function()
               require("goto-preview").goto_preview_references()
             end,

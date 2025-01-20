@@ -1,5 +1,16 @@
 return {
-  { "sam4llis/nvim-lua-gf",  keys = { "gf" } },
+  { "sam4llis/nvim-lua-gf", keys = { "gf" } },
+  -- { "mrjones2014/tldr.nvim", cmd = { "Tldr", "Telescope" } ,dependencies = { "nvim-telescope/telescope.nvim" } },
+  {
+    "tldr-pages/tldr-neovim-extension",
+    -- cmd = { "Tldr", "Telescope" },
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
+    config = function()
+      require("tldr").setup()
+    end,
+  },
   -- {
   --   "matthewmturner/rfsee",
   --   opts = {},
@@ -8,7 +19,7 @@ return {
   --     "nvim-lua/plenary.nvim",
   --   },
   -- },
-  { "benelori/vim-rfc",         cmd = { "RFC" } },
+  { "benelori/vim-rfc",     cmd = { "RFC" } },
   {
     "troydm/zoomwintab.vim",
     keys = { { mode = { "n" }, "<c-w>m", "<cmd>ZoomWinTabToggle<CR>" } },
@@ -102,38 +113,61 @@ return {
   },
   {
     "philosofonusus/ecolog.nvim",
-    dependencies = {
-      "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
-    },
+    -- enabled = false,
+    -- dependencies = {
+    --   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
+    --   "nvim-tree/nvim-tree.lua"
+    -- },
+    event = { "BufReadPre", "BufNewFile" },
     -- Optional: you can add some keybindings
     -- (I personally use lspsaga so check out lspsaga integration or lsp integration for a smoother experience without separate keybindings)
     keys = {
-      { "<leader>eg", "<cmd>EcologGoto<cr>",   desc = "Go to env file" },
-      { "<leader>ep", "<cmd>EcologPeek<cr>",   desc = "Ecolog peek variable" },
-      { "<leader>es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
+      { "<leader>eg", "<cmd>EcologGoto<cr>",            desc = "Go to env file" },
+      { "<leader>ep", "<cmd>EcologPeek<cr>",            desc = "Ecolog peek variable" },
+      { "<leader>es", "<cmd>EcologSelect<cr>",          desc = "Switch env file" },
+      { "<leader>el", "<cmd>EcologShelterLinePeek<cr>", desc = "Ecolog Shelter Line Peek" },
+      { "<leader>et", "<cmd>EcologShelterToggle<cr>",   desc = "Ecolog Shelter Line Peek" },
     },
     lazy = true,
     opts = {
       integrations = {
         lsp = false,
+        fzf = true,
       },
       -- Enables shelter mode for sensitive values
       shelter = {
         configuration = {
           partial_mode = false, -- false by default, disables partial mode, for more control check out shelter partial mode
           mask_char = "*", -- Character used for masking
+          -- patterns = {
+          --   ["*_KEY"] = "full", -- Always fully mask API keys
+          --   ["*_TOKEN"] = "full", -- Always fully mask API keys
+          --   ["*_PAT"] = "full", -- Always fully mask API keys
+          --   ["*_KEY_*"] = "full", -- Always fully mask API keys
+          -- },
         },
         modules = {
-          cmp = true,   -- Mask values in completion
+          cmp = true,  -- Mask values in completion
           peek = false, -- Mask values in peek view
-          files = false, -- Mask values in files
-          telescope = false, -- Mask values in telescope
+          files = true, -- Mask values in files
+          telescope = true, -- Mask values in telescope
         },
       },
       -- true by default, enables built-in types (database_url, url, etc.)
       types = true,
-      path = vim.fn.getcwd(),             -- Path to search for .env files
-      preferred_environment = "development", -- Optional: prioritize specific env files
+      path = vim.fn.getcwd(), -- Path to search for .env files
+      -- env_file_pattern = {
+      --   "^%.env%.%w+$",       -- Matches .env.development, .env.production, etc.
+      --   "^config/env%.%w+$",  -- Matches config/env.development, config/env.production, etc.
+      --   "^%.env%.local%.%w+$", -- Matches .env.local.development, .env.local.production, etc.
+      --   ".+%.zsh$",
+      --   ".+%.zshrc$",
+      --   "^.config/zshrc/.+%.zshrc$",
+      --   "/Users/jgarcia/.config/zshrc/.zshrc",
+      --   "^%.config/zshrc/%.zshrc$", -- Matches .config/zshrc/.zshrc
+      --   "^.config/zshrc/^%.env%.%w+$",  -- Matches config/env.development, config/env.production, etc.
+      -- },
+      -- preferred_environment = "development", -- Optional: prioritize specific env files
     },
   },
 
@@ -324,7 +358,7 @@ return {
   -- { "nvim-spider" }
   -- { "airblade/vim-matchquote" },
   -- { "ton/vim-bufsurf" },
-  { "taybart/b64.nvim",         cmd = { "B64Encode", "B64Decode" } },
+  { "taybart/b64.nvim",      cmd = { "B64Encode", "B64Decode" } },
   {
     "lambdalisue/vim-suda",
     cmd = { "SudaWrite", "SudaRead" },
@@ -395,7 +429,7 @@ return {
     end,
   },
 
-  { "wellle/targets.vim",      event = { "BufReadPost", "BufNewFile" } },
+  { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
   -- {
   --   "ibhagwan/fzf-lua",
   --   -- optional for icon support

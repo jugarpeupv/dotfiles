@@ -27,7 +27,7 @@ vim.cmd([[
   " augroup end
 ]])
 
-vim.cmd([[autocmd BufRead */node_modules/* lua vim.diagnostic.disable(0)]])
+-- vim.cmd([[autocmd BufRead */node_modules/* lua vim.diagnostic.disable(0)]])
 -- vim.cmd([[autocmd BufRead,BufNewFile */dist/* lua vim.diagnostic.disable(0)]])
 -- vim.cmd([[autocmd BufRead,BufNewFile */assets/* lua vim.diagnostic.disable(0)]])
 
@@ -131,5 +131,16 @@ vim.api.nvim_create_autocmd("User", {
     -- --   vim.wo.wrap = false
     -- -- end
     vim.wo.wrap = true
+  end,
+})
+
+
+local group = vim.api.nvim_create_augroup("__env", {clear=true})
+vim.api.nvim_create_autocmd({"BufEnter"}, {
+  pattern = ".env",
+  group = group,
+  callback = function()
+    print("env file")
+    vim.o.wrap = false
   end,
 })

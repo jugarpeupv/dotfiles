@@ -17,8 +17,8 @@ return {
           { "nvim-telescope/telescope.nvim" }
         },
         config = function()
-          local utils = require("yanky.utils")
-          local mapping = require("yanky.telescope.mapping")
+          -- local utils = require("yanky.utils")
+          -- local mapping = require("yanky.telescope.mapping")
           require("yanky").setup({
             ring = { storage = "sqlite" },
             highlight = {
@@ -82,18 +82,18 @@ return {
           --   mode = { "n", "x" },
           --   desc = "Put yanked text before cursor",
           -- },
-          {
-            "gp",
-            "<Plug>(YankyGPutAfter)",
-            mode = { "n", "x" },
-            desc = "Put yanked text after selection",
-          },
-          {
-            "gP",
-            "<Plug>(YankyGPutBefore)",
-            mode = { "n", "x" },
-            desc = "Put yanked text before selection",
-          },
+          -- {
+          --   "gp",
+          --   "<Plug>(YankyGPutAfter)",
+          --   mode = { "n", "x" },
+          --   desc = "Put yanked text after selection",
+          -- },
+          -- {
+          --   "gP",
+          --   "<Plug>(YankyGPutBefore)",
+          --   mode = { "n", "x" },
+          --   desc = "Put yanked text before selection",
+          -- },
           {
             "<C-p>",
             "<Plug>(YankyPreviousEntry)",

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Install oh-my-zsh
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# apt install ffmpeg 7zip jq poppler-utils fd-find ripgrep fzf zoxide imagemagick
+
 # Function to install starship
 install_starship() {
     curl -sS https://starship.rs/install.sh | sh -s -- -y

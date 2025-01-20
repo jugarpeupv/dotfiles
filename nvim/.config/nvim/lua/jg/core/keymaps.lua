@@ -235,8 +235,8 @@ keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jum
 
 keymap("t", "<M-o>", "<C-\\><C-n><M-o>", opts)
 keymap("t", "<M-i>", "<C-\\><C-n><M-i>", opts)
-vim.keymap.set({ "n" }, "<M-o>", "<cmd>bp<cr>", opts)
-vim.keymap.set({ "n" }, "<M-i>", "<cmd>bn<cr>", opts)
+-- vim.keymap.set({ "n" }, "<M-o>", "<cmd>bp<cr>", opts)
+-- vim.keymap.set({ "n" }, "<M-i>", "<cmd>bn<cr>", opts)
 
 keymap("n", "<M-8>", "<cmd>cnext<cr>", opts)
 keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
@@ -651,3 +651,6 @@ vim.keymap.set("n", "<leader>fn", find_in_node_modules, opts)
 vim.keymap.set({ "n" }, "<leader>co", function()
   require("jg.custom.telescope").run_npm_scripts()
 end, opts)
+
+vim.keymap.set({"n"}, "<leader>bn","<cmd>bn<cr>", opts)
+vim.keymap.set({"n"}, "<leader>bp","<cmd>bp<cr>", opts)

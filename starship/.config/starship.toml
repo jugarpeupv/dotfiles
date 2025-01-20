@@ -29,17 +29,22 @@ symbol = ' '
 disabled = false
 style = "green"
 not_capable_style = "red"
+symbol = ' '
 
 
 [username]
-style_root = "#F2CDCD"
+style_root = "#F38BA8"
 style_user = "#F2CDCD"
 show_always = false
 format = "[$user]($style)"
+# format = '[\[]($style)[$user]($style)'
+# format = "$user@"
 
 [hostname]
-ssh_only = true 
-format = "[@]($style)[$hostname]($style): "
+ssh_only = true
+# format = '[@]($style)[$hostname]($style)[\]]($style) '
+format = '[@]($style)[$hostname]($style): '
+# format = "$hostname"
 style = "#F2CDCD"
 disabled = false
 

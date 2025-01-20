@@ -8,6 +8,7 @@ return {
     -- branch = "0.1.x",
     tag = "0.1.8",
     dependencies = {
+      { "nvim-lualine/lualine.nvim" },
       {
         "nvim-telescope/telescope-file-browser.nvim",
         dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
