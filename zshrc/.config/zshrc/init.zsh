@@ -4,7 +4,7 @@
 
 [[ -x $HOME/.oh-my-zsh/custom/plugins/fzf-tab ]] || sh -c "$(git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab)"
 
-[[ -x $HOME/.oh-my-zsh/custom/plugins/zsh-vi-mode ]] || sh -c "$(git clone https://github.com/jeffreytse/zsh-vi-mode \ $ZSH_CUSTOM/plugins/zsh-vi-mode)"
+[[ -x $HOME/.oh-my-zsh/custom/plugins/zsh-vi-mode ]] || sh -c "$(git clone https://github.com/jeffreytse/zsh-vi-mode $ZSH_CUSTOM/plugins/zsh-vi-mode)"
 
 [[ -x $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]] || sh -c "$(git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting)"
 
