@@ -33,7 +33,7 @@ symbol = ' '
 
 
 [username]
-style_root = "#F38BA8"
+style_root = "#F2CDCD"
 style_user = "#F2CDCD"
 show_always = false
 format = "[$user]($style)"
