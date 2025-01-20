@@ -11,7 +11,8 @@ return {
       local registers = require("registers")
       registers.setup({
         -- Show these registers in the order of the string
-        show = '+"0123456789*abcdefghijklmnopqrstuvwxyz:-/_=#%.',
+        -- show = '+"0123456789*abcdefghijklmnopqrstuvwxyz:-/_=#%.',
+        show = '+1234567890"*abcdefghi',
         -- Show a line at the bottom with registers that aren't filled
         show_empty = true,
         -- Expose the :Registers user command
