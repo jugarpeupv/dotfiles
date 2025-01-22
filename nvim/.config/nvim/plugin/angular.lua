@@ -5,12 +5,6 @@
 --   },
 -- })
 
-vim.filetype.add({
-  pattern = {
-    [".*%.component%.html"] = "myangular", -- Sets the filetype to `htmlangular` if it matches the pattern
-  },
-})
-
 -- vim.api.nvim_create_autocmd({ 'BufRead', 'BufEnter' }, {
 -- 	group = vim.api.nvim_create_augroup('set-angular-filetype', { clear = true }),
 -- 	pattern = '*.component.html',
@@ -21,22 +15,30 @@ vim.filetype.add({
 -- 	end,
 -- })
 
+-- vim.filetype.add({
+--   pattern = {
+--     [".*%.component%.html"] = "myangular", -- Sets the filetype to `htmlangular` if it matches the pattern
+--   },
+-- })
+
+vim.filetype.add({
+  pattern = {
+    [".*%.component%.html"] = "htmlangular", -- Sets the filetype to `htmlangular` if it matches the pattern
+  },
+})
+
+
+vim.api.nvim_create_augroup('MyHtmlAngularGroup', { clear = true })
+
 vim.api.nvim_create_autocmd("FileType", {
   -- pattern = "angular.html",
-  pattern = "myangular",
+  -- pattern = "myangular",
+  pattern = "htmlangular",
+  group = "MyHtmlAngularGroup",
   callback = function()
-    -- vim.treesitter.language.register("angular", "angular.html") -- Register the filetype with treesitter for the `angular` language/parser
-    -- vim.treesitter.language.register("html", "myangular") -- Register the filetype with treesitter for the `angular` language/parser
-    vim.treesitter.language.register("angular", "myangular") -- Register the filetype with treesitter for the `angular` language/parser
-    -- vim.treesitter.language.register("html", "myangular") -- Register the filetype with treesitter for the `angular` language/parser
+    -- vim.treesitter.language.register("angular", "myangular") -- Register the filetype with treesitter for the `angular` language/parser
+    -- vim.treesitter.language.register("angular", "htmlangular") -- Register the filetype with treesitter for the `angular` language/parser
     vim.cmd([[set commentstring=<!--%s-->]])
-    -- vim.cmd([[hi @variable guifg=#F2CDCD]])
-    -- local luasnip_status, luasnip = pcall(require, "luasnip")
-    -- if not luasnip_status then
-    --   return
-    -- end
-
-    -- luasnip.filetype_extend("myangular", { "html" })
   end,
 })
 

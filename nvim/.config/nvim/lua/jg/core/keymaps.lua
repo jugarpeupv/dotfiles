@@ -109,21 +109,21 @@ vim.keymap.set({ "n" }, "so", function()
 end, opts)
 
 vim.keymap.set({ "n" }, "su", function()
-  -- local find_command = {
-  --   "fd",
-  --   ".",
-  --   vim.fn.expand("~/"),
-  --   "--type",
-  --   "d",
-  --   "--exclude",
-  --   ".git",
-  --   "--exclude",
-  --   "node_modules",
-  --   -- "--one-file-system",
-  --   "--max-depth",
-  --   "4",
-  --   "--hidden",
-  -- }
+  local find_command = {
+    "fd",
+    ".",
+    vim.fn.expand("~/"),
+    "--type",
+    "d",
+    "--exclude",
+    ".git",
+    "--exclude",
+    "node_modules",
+    -- "--one-file-system",
+    "--max-depth",
+    "4",
+    "--hidden",
+  }
   -- local f_browser_finder = require "telescope".extensions.file_browser.finder
 
   require("telescope").extensions.file_browser.file_browser({
@@ -133,7 +133,7 @@ vim.keymap.set({ "n" }, "su", function()
     -- picker = f_browser_finder.browse_folders,
     depth = 1,
     -- use_ui_input = false,
-    -- find_command,
+    find_command,
     git_status = false,
     respect_gitignore = true,
     prompt_path = true,

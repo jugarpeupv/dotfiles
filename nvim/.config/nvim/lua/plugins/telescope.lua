@@ -68,7 +68,7 @@ return {
       { "nvim-telescope/telescope-ui-select.nvim",      cmd = { "Telescope" } },
     },
     cmd = { "Telescope" },
-    -- lazy = false,
+    lazy = true,
     -- keys = { "<M-.>" },
     -- event = "VeryLazy",
     config = function()

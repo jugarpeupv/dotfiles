@@ -4,14 +4,37 @@ return {
   enabled = true,
   keys = {
     { "<M-i>" },
-    { "<M-o>" }
+    { "<M-o>" },
+    { "<D-i>" },
+    { "<D-o>" },
   },
   -- event = "VeryLazy",
   -- event = { "BufReadPost", "BufNewFile" },
   config = function()
+
+    local function is_inside_tmux()
+      return os.getenv("TMUX") ~= nil
+    end
+
+    local function get_mi_key()
+      if is_inside_tmux() then
+        return "<M-i>"
+      else
+        return "<D-i>"
+      end
+    end
+
+    local function get_mo_key()
+      if is_inside_tmux() then
+        return "<M-o>"
+      else
+        return "<D-o>"
+      end
+    end
+
     require("bufjump").setup({
-      forward_key = "<M-i>",
-      backward_key = "<M-o>",
+      forward_key = get_mi_key(),
+      backward_key = get_mo_key(),
       -- on_success = nil
       on_success = function()
         vim.cmd([[execute "normal! g`\"zz"]])

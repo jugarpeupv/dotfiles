@@ -3,7 +3,8 @@ return {
   -- { "mrjones2014/tldr.nvim", cmd = { "Tldr", "Telescope" } ,dependencies = { "nvim-telescope/telescope.nvim" } },
   {
     "tldr-pages/tldr-neovim-extension",
-    -- cmd = { "Tldr", "Telescope" },
+    -- enabled = false,
+    cmd = { "Tldr", "Telescope" },
     dependencies = {
       "nvim-telescope/telescope.nvim",
     },

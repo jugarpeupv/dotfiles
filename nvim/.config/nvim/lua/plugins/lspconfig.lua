@@ -129,7 +129,7 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    -- event = { "BufReadPost", "BufNewFile" },
+    event = { "BufReadPre", "BufNewFile" },
     enabled = function()
       local is_headless = #vim.api.nvim_list_uis() == 0
       if is_headless then
@@ -137,7 +137,7 @@ return {
       end
       return true
     end,
-    event = { "InsertEnter" },
+    -- event = { "InsertEnter" },
     dependencies = {
       {
         "j-hui/fidget.nvim",
@@ -471,7 +471,8 @@ return {
         on_new_config = function(new_config, _)
           new_config.cmd = angular_cmd
         end,
-        filetypes = { "typescript", "myangular", "html", "typescriptreact", "typescript.tsx" },
+        -- filetypes = { "typescript", "myangular", "html", "typescriptreact", "typescript.tsx" },
+        filetypes = { 'typescript', 'html', 'typescriptreact', 'typescript.tsx', 'htmlangular' },
         root_dir = root_pattern("angular.json", "project.json", "nx.json"),
         -- root_dir = angular_root_path
         -- root_dir = root_pattern("angular.json", "nx.json"),
