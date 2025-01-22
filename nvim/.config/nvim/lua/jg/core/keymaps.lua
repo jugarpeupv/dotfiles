@@ -654,3 +654,4 @@ end, opts)
 
 vim.keymap.set({"n"}, "<leader>bn","<cmd>bn<cr>", opts)
 vim.keymap.set({"n"}, "<leader>bp","<cmd>bp<cr>", opts)
+

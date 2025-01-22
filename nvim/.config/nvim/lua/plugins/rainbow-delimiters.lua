@@ -36,6 +36,10 @@ return {
 
           -- Use local for HTML
           -- Pick the strategy for LaTeX dynamically based on the buffer size
+          ["javascript"] = function()
+            return nil
+          end,
+
           ["json"] = function(bufnr)
             -- Disabled for very large files, global strategy for large files,
             -- local strategy otherwise

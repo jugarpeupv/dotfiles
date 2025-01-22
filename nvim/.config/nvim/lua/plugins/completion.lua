@@ -138,7 +138,8 @@ return {
       luasnip.add_snippets("html", {
         luasnip.parser.parse_snippet("testtest", "worksworks"),
       })
-      luasnip.filetype_extend("myangular", { "html" })
+      -- luasnip.filetype_extend("myangular", { "html" })
+      luasnip.filetype_extend("htmlangular", { "html" })
       -- load vs-code like snippets from plugins (e.g. friendly-snippets)
       require("luasnip.loaders.from_vscode").lazy_load()
 
@@ -437,6 +438,7 @@ return {
           -- format = require("tailwindcss-colorizer-cmp").formatter
 
           format = lspkind.cmp_format({
+            before = require("tailwind-tools.cmp").lspkind_format,
             maxwidth = 80,
             mode = "symbol_text",
             menu = {

@@ -21,7 +21,21 @@ return {
     keys = {
       { mode = { "n" }, "<leader>ou", "<cmd>Oil /Users/jgarcia<cr>" },
       { mode = { "n" }, "<leader>oa", "<cmd>Oil<cr>" },
-      { mode = { "n" }, "-",          "<cmd>Oil<cr>" },
+      {
+        mode = { "n" },
+        "<leader>ob",
+        function()
+          local current_dir = vim.fn.expand("%:p:h")
+          if current_dir:find("oil://") then
+            current_dir = current_dir:gsub("oil://", "")
+          end
+
+          local cmd = ":Oil " .. current_dir .. "/"
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd, true, false, true), "n", true)
+        end,
+        { noremap = true, silent = false },
+      },
+      { mode = { "n" }, "-", "<cmd>Oil<cr>" },
     },
     opts = {},
     -- Optional dependencies
@@ -91,7 +105,8 @@ return {
         },
         -- Window-local options to use for oil buffers
         win_options = {
-          winbar = "%#@attribute.builtin#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+          winbar =
+          "%#@attribute.builtin#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
           -- winbar = "%#@attribute.builtin#%{v:lua.get_winbar()} %#ModeMsg#%{%&modified ? '⏺' : ''%}",
           wrap = false,
           signcolumn = "no",
@@ -270,9 +285,9 @@ return {
           sort = {
             -- sort order can be "asc" or "desc"
             -- see :help oil-columns to see which columns are sortable
-            { "type", "asc" },
+            { "type",      "asc" },
             { "birthtime", "desc" },
-            { "name", "asc" },
+            { "name",      "asc" },
           },
         },
         -- Extra arguments to pass to SCP when moving/copying files over SSH

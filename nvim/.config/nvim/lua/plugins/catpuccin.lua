@@ -257,6 +257,8 @@ return {
       vim.cmd([[highlight @ibl.scope.char.1 guifg=#737aa2]])
       vim.cmd([[highlight @ibl.scope.underline.1 guisp=#737aa2]])
       vim.cmd([[hi @markup.strong gui=bold guifg=#F5C2E7]])
+
+      vim.cmd([[hi @markup.heading gui=none guifg=#89B4FA]])
       vim.cmd([[hi @markup.heading.gitcommit gui=none guifg=#89B4FA]])
       vim.cmd([[hi gitcommitSummary cterm=none gui=none guifg=#f5e0dd]])
 

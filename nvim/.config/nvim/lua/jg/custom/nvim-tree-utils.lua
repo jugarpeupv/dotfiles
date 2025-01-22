@@ -14,6 +14,9 @@ local function get_formatted_lines(node)
   end
 
   local file_name = vim.fn.expand(node.absolute_path)
+  if file_name == "" or file_name == nil then
+    file_name = node.absolute_path
+  end
   local file_permissions = vim.fn.getfperm(file_name)
 
   local improved_size = vim.system({"du", "-sh", file_name }):wait().stdout:match("^[^\t]+")
