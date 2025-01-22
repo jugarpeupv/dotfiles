@@ -24,7 +24,7 @@ return {
       ]])
       -- vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle)
       vim.g.undotree_WindowLayout = 3
-      vim.g.undotree_SetFocusWhenToggle = 0
+      vim.g.undotree_SetFocusWhenToggle = 1
       vim.keymap.set("n", "<leader>uu", vim.cmd.UndotreeToggle)
       vim.keymap.set("n", "<leader>us", vim.cmd.UndotreeShow)
     end,

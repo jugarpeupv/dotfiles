@@ -16,7 +16,7 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     -- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
     dependencies = {
-      -- "RRethy/nvim-treesitter-endwise",
+      "RRethy/nvim-treesitter-endwise",
       "nvim-treesitter/nvim-treesitter-refactor",
       {
         "nvim-treesitter/nvim-treesitter-context",
@@ -57,9 +57,9 @@ return {
 
       -- configure treesitter
       treesitter.setup({
-        -- endwise = {
-        --   enable = true,
-        -- },
+        endwise = {
+          enable = true,
+        },
         refactor = {
           highlight_definitions = {
             enable = true,
