@@ -93,7 +93,13 @@ return {
         -- Id is automatically added at the beginning, and name at the end
         -- See :help oil-columns
         columns = {
-          "icon",
+          -- "icon",
+          { 'icon', directory = '', default_file = '' },
+          -- icon = {
+          --   -- default_file = "",
+          --   directory = "",
+          --   add_padding = true,
+          -- },
           "permissions",
           "size",
           "mtime",
@@ -106,7 +112,7 @@ return {
         -- Window-local options to use for oil buffers
         win_options = {
           winbar =
-          "%#@attribute.builtin#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+          "%#NvimTreeRootFolder#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
           -- winbar = "%#@attribute.builtin#%{v:lua.get_winbar()} %#ModeMsg#%{%&modified ? '⏺' : ''%}",
           wrap = false,
           signcolumn = "no",

@@ -7,6 +7,31 @@ return {
     -- priority = 800,
     opts = {
       override = {
+        mov = {
+          icon = "",
+          name = "mov",
+          color = "#94E2D5",
+        },
+        gz = {
+          icon = "",
+          name = "zip",
+          color = "#F5C2E7"
+        },
+        zip = {
+          icon = "",
+          name = "zip",
+          color = "#F2CDCD"
+        },
+        mp3 = {
+          icon = "",
+          name = "mp3",
+          color = "#F5C2E7",
+        },
+        docx = {
+          icon = "󰈬",
+          name = "docx",
+          color = "#9CDCFE",
+        },
         sql = {
           icon = "",
           name = "sql",
@@ -102,9 +127,9 @@ return {
         },
         ["md"] = {
           -- icon = "",
-          -- icon = "",
+          icon = "",
           -- icon = "",
-          icon = "",
+          -- icon = "",
           -- icon = "",
           color = "#9CDCFE",
           name = "Markdown2",
@@ -160,11 +185,6 @@ return {
           icon = "",
           name = "toml",
           color = "#737aa2",
-        },
-        zip = {
-          icon = "",
-          name = "zipp",
-          color = "#F5E0DC",
         },
         ["CODEOWNERS"] = { icon = "󱖨", color = "#73daca", name = "codeownersfile1" },
         ["d.ts"] = {
@@ -224,6 +244,8 @@ return {
         [".gitignore"] = { icon = "󰊢", color = "#7C7F93", name = "gitignore" },
         [".git"] = { icon = "󰊢", color = "#CA9EE6", name = "giticonworktree" },
         ["readme.md"] = { icon = "", color = "#9CDCFE", name = "readmemd1" },
+        -- ["readme.md"] = { icon = "", color = "#9CDCFE", name = "readmemd1" },
+        -- ["readme.md"] = { icon = "", color = "#9CDCFE", name = "readmemd1" },
         ["webpack.prod.config.js"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfigProd" },
         ["webpack.config.ts"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfigTS" },
         ["webpack.prod.config.ts"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfigProdTS" },

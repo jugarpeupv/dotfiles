@@ -65,7 +65,7 @@ return {
           -- Show space characters without changes
           space = " ",
           -- Show a special character for tabs
-          tab = "·",
+          tab = ">",
           -- The character to show when a register will be applied in a char-wise fashion
           register_type_charwise = "ᶜ",
           -- The character to show when a register will be applied in a line-wise fashion

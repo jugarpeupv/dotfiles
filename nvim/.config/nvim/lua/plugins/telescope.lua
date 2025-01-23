@@ -540,6 +540,11 @@ return {
         telescope.load_extension("yank_history")
       end
 
+      local ecolog_status = pcall(require, "ecolog")
+      if ecolog_status then
+        telescope.load_extension("ecolog")
+      end
+
       telescope.load_extension("dap")
       telescope.load_extension("zf-native")
       telescope.load_extension("ui-select")
@@ -548,7 +553,6 @@ return {
       telescope.load_extension("yaml_schema")
       telescope.load_extension("grapple")
       telescope.load_extension("heading")
-      telescope.load_extension("ecolog")
       telescope.load_extension("file_browser")
       -- telescope.load_extension("jsonfly")
       -- telescope.load_extension('media_files')

@@ -1,2 +1,4 @@
 # Conditionally Load env variables if file exists
-[[ -f $HOME/.config/zshrc/.env ]] && source $HOME/.config/zshrc/.env 2>/dev/null
+if [ -f $HOME/.config/zshrc/.env ]; then
+  export $(cat $HOME/.config/zshrc/.env | xargs)
+fi
