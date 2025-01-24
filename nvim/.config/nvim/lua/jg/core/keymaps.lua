@@ -498,14 +498,6 @@ end)
 --   end
 -- end, { silent = true })
 
-vim.keymap.set("n", "<leader>ti", function()
-  local image = require("image")
-  if image.is_enabled() then
-    image.disable()
-  else
-    image.enable()
-  end
-end, opts)
 
 -- using 0 register
 -- vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                              -- copy to 0 register

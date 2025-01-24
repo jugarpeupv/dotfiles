@@ -528,6 +528,7 @@ M.oil_fzf_dir = function(path)
               return {
                 value = entry,
                 display = "  " .. entry_substituted,
+              -- { { {1, 3}, hl_group } }
                 ordinal = entry,
               }
             end,

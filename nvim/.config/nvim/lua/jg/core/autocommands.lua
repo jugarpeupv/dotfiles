@@ -144,3 +144,11 @@ vim.api.nvim_create_autocmd({"BufEnter"}, {
     vim.o.wrap = false
   end,
 })
+
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.cmd([[set nowrap]])
+  end,
+})

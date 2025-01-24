@@ -32,7 +32,8 @@ return {
     ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
     -- branch = "feat/toggle-rendering",
     config = function()
-      require("image").setup({
+      local image = require("image")
+      image.setup({
         backend = "kitty",
         integrations = {
           markdown = {
@@ -52,9 +53,9 @@ return {
                 image_path = string.gsub(image_path, " ", "%%20")
               end
 
-              print("image_path_before", image_path)
+              -- print("image_path_before", image_path)
               image_path = image_path.gsub(image_path, "|.*", "")
-              print("image_path_after", image_path)
+              -- print("image_path_after", image_path)
               local cwd = vim.loop.cwd()
               local image_cwd_path = cwd .. "/" .. image_path
               if vim.fn.filereadable(image_cwd_path) == 1 then
@@ -79,12 +80,12 @@ return {
             filetypes = { "norg" },
           },
         },
-        max_width = 1500,
-        max_height = 1500,
+        max_width = 2000,
+        max_height = 2000,
         max_width_window_percentage = 80,
         max_height_window_percentage = 80,
         window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
-        scale_factor = 2,                   -- scales the window size up or down
+        scale_factor = 3,                   -- scales the window size up or down
         window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
         editor_only_render_when_focused = true, -- auto show/hide images when the editor gains/looses focus
         tmux_show_only_in_active_window = true, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
@@ -93,15 +94,73 @@ return {
         hijack_file_patterns = {}, -- render image files as images when opened
       })
 
-      local image = require("image")
+      local image_rendered = false
+      local my_image = nil
 
       vim.keymap.set({ "n", "v" }, "<leader>it", function()
-        if image.is_enabled() then
-          image.disable()
+        local api = require("image")
+        local current_window = vim.api.nvim_get_current_win()
+        local current_buffer = vim.api.nvim_get_current_buf()
+        local cursor_pos = vim.api.nvim_win_get_cursor(current_window)
+        local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
+        local cursor_col = cursor_pos[2]
+
+        -- Get the file path under the cursor
+        local line = vim.api.nvim_buf_get_lines(current_buffer, cursor_row, cursor_row + 1, false)[1]
+        local file_path = line:match("%((.-)%)")
+
+        if not file_path then
+          print("No image found under the cursor")
+          return
+        end
+
+        if image_rendered and my_image then
+          my_image:clear() -- remove the image if it is already rendered
+          image_rendered = false
+          my_image = nil
         else
-          image.enable()
+          -- from a file (absolute path)
+          my_image = api.from_file(file_path, {
+            id = "my_image_id",    -- optional, defaults to a random string
+            window = current_window, -- binds image to the current window
+            buffer = current_buffer, -- binds image to the current buffer
+            with_virtual_padding = true, -- optional, pads vertically with extmarks, defaults to false
+            inline = true,         -- binds image to an extmark which it follows
+            -- geometry (optional)
+            x = cursor_col,
+            y = cursor_row,
+            -- width = 1000,
+            -- height = 1000,
+          })
+
+          if not my_image then
+            return
+          end
+
+          my_image:render() -- render image
+          image_rendered = true
+
+          -- local map = vim.keymap.set
+          -- map("n", "+", function()
+          --   my_image.image_width = my_image.image_width * 1.25
+          --   my_image.image_height = my_image.image_height * 1.25
+          --   my_image:render()
+          -- end, {
+          --     buffer = current_buffer,
+          --     desc = "Zoom in image",
+          --   })
+          --
+          -- map("n", "_", function()
+          --   my_image.image_width = my_image.image_width / 1.25
+          --   my_image.image_height = my_image.image_height / 1.25
+          --   my_image:render()
+          -- end, {
+          --     buffer = current_buffer,
+          --     desc = "Zoom out image",
+          --   })
         end
       end, {})
+
     end,
   },
 }

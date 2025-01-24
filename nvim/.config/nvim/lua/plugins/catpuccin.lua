@@ -242,7 +242,7 @@ return {
       -- vim.cmd([[hi RenderMarkdownCode guibg=#16485A]])
       -- vim.cmd([[hi RenderMarkdownCode guibg=#0f3846]])
       vim.cmd([[hi RenderMarkdownCode guibg=#23233d]])
-
+      vim.cmd([[hi RenderMarkdownCodeInline guibg=#0F2745 guifg=none]])
 
       -- vim.cmd([[hi RenderMarkdownCode guibg=none]])
       -- vim.cmd([[hi RenderMarkdownCode guibg=#00122e]])

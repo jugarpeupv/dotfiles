@@ -13,7 +13,7 @@ return {
   },
   {
     "stevearc/oil.nvim",
-    dependencies = { "nvim-lualine/lualine.nvim" },
+    dependencies = { "nvim-lualine/lualine.nvim", "HakonHarnes/img-clip.nvim" },
     -- commit = "ba858b662599eab8ef1cba9ab745afded99cb180",
     cmd = { "Oil" },
     -- event = { "BufReadPost", "BufNewFile" },
@@ -94,7 +94,7 @@ return {
         -- See :help oil-columns
         columns = {
           -- "icon",
-          { 'icon', directory = '', default_file = '' },
+          { "icon", directory = "", default_file = "" },
           -- icon = {
           --   -- default_file = "",
           --   directory = "",
@@ -159,6 +159,14 @@ return {
         -- See :help oil-actions for a list of all available actions
         keymaps = {
           ["g?"] = { "actions.show_help", mode = "n" },
+          -- ["<leader>pi"] = function()
+          --   local oil = require("oil")
+          --   local filename = oil.get_cursor_entry().name
+          --   local dir = oil.get_current_dir()
+          --   print("Pasting image: ", dir .. filename)
+          --   local img_clip = require("img-clip")
+          --   img_clip.paste_image({}, dir .. filename)
+          -- end,
           ["<CR>"] = "actions.select",
           -- ["<C-v>"] = { "actions.select", opts = { vertical = true } },
           ["<C-s>"] = { "actions.select", opts = { horizontal = true } },
