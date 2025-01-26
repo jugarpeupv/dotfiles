@@ -172,7 +172,7 @@ return {
             LspInlayHint = { fg = "#737aa2" },
             -- Comment = { fg = "#737aa2" },
             NvimDapVirtualText = { fg = "#737aa2" },
-            DapUIDecoration = { fg="#89B4FA" },
+            DapUIDecoration = { fg = "#89B4FA" },
             NvimTreeBookmark = { fg = "#f2cdcd" },
             HlSearchNear = { fg = "#181826", bg = "#F38BA8" },
             HlSearchLensNear = { fg = "#181826", bg = "#F38BA8" },
@@ -237,10 +237,18 @@ return {
       -- vim.cmd([[hi RenderMarkdownCode guibg=#00122e]])
       -- vim.cmd([[hi RenderMarkdownH3Bg guibg=#4a716b]])
       -- vim.cmd([[hi RenderMarkdownH4Bg guibg=#6c7298]])
-      -- vim.cmd([[hi RenderMarkdownH2Bg guibg=#456f80]])
+      -- vim.cmd([[hi RenderMarkdownH2Bg guibg=#3A6477]])
       -- vim.cmd([[hi RenderMarkdownCode guibg=#03162f]])
       -- vim.cmd([[hi RenderMarkdownCode guibg=#16485A]])
       -- vim.cmd([[hi RenderMarkdownCode guibg=#0f3846]])
+
+      vim.cmd([[hi RenderMarkdownH1Bg guibg=#492a33]])
+      vim.cmd([[hi RenderMarkdownH2Bg guibg=#294653]])
+      vim.cmd([[hi RenderMarkdownH3Bg guibg=#675161]])
+      vim.cmd([[hi RenderMarkdownH4Bg guibg=#526c96]])
+      vim.cmd([[hi RenderMarkdownH5Bg guibg=#6c7298]])
+      vim.cmd([[hi RenderMarkdownH6Bg guibg=#36394d]])
+
       vim.cmd([[hi RenderMarkdownCode guibg=#23233d]])
       vim.cmd([[hi RenderMarkdownCodeInline guibg=#0F2745 guifg=none]])
 
@@ -248,8 +256,8 @@ return {
       -- vim.cmd([[hi RenderMarkdownCode guibg=#00122e]])
       -- vim.cmd([[hi RenderMarkdownCodeInline]])
       vim.cmd([[hi RenderMarkdown_Inverse_RenderMarkdownCode guifg=#394b70]])
-      vim.cmd[[hi RenderMarkdown_DevIconBash_RenderMarkdownSign guifg=#94E2D5 gui=none]]
-      vim.cmd[[hi DevIconBash guifg=#94E2D5 gui=none]]
+      vim.cmd([[hi RenderMarkdown_DevIconBash_RenderMarkdownSign guifg=#94E2D5 gui=none]])
+      vim.cmd([[hi DevIconBash guifg=#94E2D5 gui=none]])
 
       -- vim.cmd([[@ibl           xxx cleared]])
       vim.cmd([[highlight @ibl.indent.char.1  guifg=#3b4251]])
@@ -448,7 +456,6 @@ return {
       vim.cmd([[hi barbecue_modified guifg=#737aa2]])
       -- vim.cmd([[hi barbecue_modified guifg=red]])
 
-
       vim.cmd([[hi NvimTreeFolderIcon guifg=#89B4FA]])
       vim.cmd([[hi NvimTreeRootFolder gui=none]])
       vim.cmd([[highlight NvimTreeGitDirty guifg=#F5E0DC]])
@@ -458,7 +465,7 @@ return {
       -- vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#737aa2]])
       -- vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#c0caf5]])
 
-      vim.cmd [[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]]
+      vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]])
       vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
       vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
       vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])

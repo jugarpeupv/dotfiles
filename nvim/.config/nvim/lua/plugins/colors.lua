@@ -2,20 +2,25 @@ return {
   {
     "luckasRanarison/tailwind-tools.nvim",
     name = "tailwind-tools",
-    event = "InsertEnter",
+    ft = { "html", "htmlangular" },
+    -- event = "InsertEnter",
     build = ":UpdateRemotePlugins",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-telescope/telescope.nvim", -- optional
       "neovim/nvim-lspconfig",      -- optional
     },
-    ---@type TailwindTools.Option
     opts = {
       -- server = {
       --   override = true,                     -- setup the server from the plugin if true
       --   settings = {},                       -- shortcut for `settings.tailwindCSS`
       --   on_attach = function(client, bufnr) end, -- callback triggered when the server attaches to a buffer
       -- },
+      server = {
+        override = false, -- setup the server from the plugin if true
+        -- settings = {}, -- shortcut for `settings.tailwindCSS`
+        -- on_attach = function(client, bufnr) end, -- callback triggered when the server attaches to a buffer
+      },
       document_color = {
         enabled = true, -- can be toggled by commands
         kind = "inline", -- "inline" | "foreground" | "background"
@@ -158,7 +163,7 @@ return {
       ccc.setup({
         highlighter = {
           auto_enable = true,
-          lsp = true,
+          lsp = false,
         },
         inputs = {
           RgbHslCmykInput,

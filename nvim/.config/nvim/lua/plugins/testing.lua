@@ -132,7 +132,7 @@ return {
         },
       })
 
-      vim.keymap.set({ "n" }, "<leader>oo", function()
+      vim.keymap.set({ "n" }, "<leader>no", function()
         require("neotest").output_panel.toggle()
         local win = vim.fn.bufwinid("Neotest Output Panel")
         if win > -1 then

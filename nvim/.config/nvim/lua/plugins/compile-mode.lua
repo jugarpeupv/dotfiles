@@ -1,13 +1,19 @@
 local function jump_to_compilation_buffer()
-  local buffers = vim.api.nvim_list_bufs()
-  for _, buf in ipairs(buffers) do
-    local buf_name = vim.api.nvim_buf_get_name(buf)
-    if string.match(buf_name, "compilation") then
-      vim.api.nvim_set_current_buf(buf)
-      return
+  local buf_name = vim.api.nvim_buf_get_name(0)
+  if buf_name:match("*compilation*") then
+    vim.cmd('close')
+  else
+    local buffers = vim.api.nvim_list_bufs()
+    for _, buf in ipairs(buffers) do
+      local buf_name = vim.api.nvim_buf_get_name(buf)
+      if string.match(buf_name, "compilation") then
+        vim.cmd('split')
+        vim.api.nvim_set_current_buf(buf)
+        return
+      end
     end
+    print("No compilation buffer found")
   end
-  print("No compilation buffer found")
 end
 
 return {

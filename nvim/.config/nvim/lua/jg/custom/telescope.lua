@@ -527,8 +527,12 @@ M.oil_fzf_dir = function(path)
               local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
               return {
                 value = entry,
-                display = "  " .. entry_substituted,
-              -- { { {1, 3}, hl_group } }
+                -- display = "  ~/" .. entry_substituted,
+                display = function()
+                  local display_string = "  ~/" .. entry_substituted
+                  return display_string, { { { 0, 1 }, "Directory" } }
+                end,
+                -- { { {1, 3}, hl_group } }
                 ordinal = entry,
               }
             end,

@@ -123,16 +123,16 @@ return {
             buffer_previewer_maker = image_preview.buffer_previewer_maker,
             -- layout_strategy = 'bottom_pane',
             -- layout_config = {
-            --   height = 0.4,
+            --   height = 0.53,
             -- },
 
             -- layout_strategy = "horizontal",
             sorting_strategy = "ascending",
             layout_config = {
-              horizontal = { width = 0.98, height = 0.9, preview_width = 0.45, prompt_position = "top" },
-              vertical = { width = 0.90, height = 0.99, preview_height = 0.35 },
-              center = { width = 0.99, height = 0.99 },
-              bottom_pane = { width = 1, height = 0.6 },
+              horizontal = { width = 0.98, height = 0.53, preview_width = 0.53, prompt_position = "top" },
+              vertical = { width = 0.90, height = 0.53, preview_height = 0.35 },
+              center = { width = 0.99, height = 0.53 },
+              bottom_pane = { width = 1, height = 0.53 },
               prompt_position = "top",
             },
             preview = {
@@ -273,15 +273,18 @@ return {
           }
         ),
         pickers = {
-          live_grep = { theme = "ivy" },
+          live_grep = { theme = "ivy", layout_config = { height = 0.53 } },
           buffers = {
             theme = "ivy",
+            layout_config = { height = 0.53 },
           },
           oldfiles = {
             theme = "ivy",
+            layout_config = { height = 0.53 },
           },
           find_files = {
             theme = "ivy",
+            layout_config = { height = 0.53 },
           },
           -- live_grep = {
           --   theme = "ivy"
@@ -292,6 +295,7 @@ return {
           -- create_git_worktree = { theme = "ivy" },
           git_branches = {
             theme = "ivy",
+            layout_config = { height = 0.53 },
             -- layout_strategy = "vertical",
             mappings = {
               i = { ["<C-b>"] = require("jg.custom.telescope").set_upstream },

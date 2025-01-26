@@ -1,27 +1,4 @@
 return {
-  -- { "rstacruz/vim-closer", event = { "InsertEnter" } },
-  -- { "tpope/vim-endwise", event = { "InsertEnter" } },
-  -- { "jiangmiao/auto-pairs", event = { "InsertEnter" } },
-  {
-    "m4xshen/autoclose.nvim",
-    event = "InsertEnter",
-    enabled = false,
-    config = function()
-      require("autoclose").setup()
-    end,
-  },
-  { "cohama/lexima.vim", event = { "InsertEnter" }, enabled = false },
-
-  {
-    "altermo/ultimate-autopair.nvim",
-    enabled = false,
-    event = { "InsertEnter" },
-    branch = "v0.6", --recommended as each new version will have breaking changes
-    opts = {
-      --Config goes here
-    },
-  },
-  { 'tmsvg/pear-tree',   event = { "InsertEnter" }, enabled = false },
   {
     "windwp/nvim-autopairs",
     enabled = true,
@@ -38,7 +15,8 @@ return {
         -- enable_check_bracket_line = false,
         check_ts = true, -- enable treesitter
         disable_filetype = { "TelescopePrompt", "vim" },
-        ignored_next_char = "[%w%.]",
+        -- ignored_next_char = "[%w%.]",
+        ignored_next_char = "[%w%.%[%]%'%\"%`%$%{%}%(%)]", -- Add any characters you want to ignore
         fast_wrap = {},
         ts_config = {
           lua = { "string" },                 -- don't add pairs in lua string treesitter nodes
@@ -213,4 +191,28 @@ return {
       --   end))
     end,
   },
+
+  {
+    "m4xshen/autoclose.nvim",
+    event = "InsertEnter",
+    enabled = false,
+    config = function()
+      require("autoclose").setup()
+    end,
+  },
+  { "cohama/lexima.vim", event = { "InsertEnter" }, enabled = false },
+
+  {
+    "altermo/ultimate-autopair.nvim",
+    enabled = false,
+    event = { "InsertEnter" },
+    branch = "v0.6", --recommended as each new version will have breaking changes
+    opts = {
+      --Config goes here
+    },
+  },
+  { 'tmsvg/pear-tree',   event = { "InsertEnter" }, enabled = false },
+  -- { "rstacruz/vim-closer", event = { "InsertEnter" } },
+  -- { "tpope/vim-endwise", event = { "InsertEnter" } },
+  -- { "jiangmiao/auto-pairs", event = { "InsertEnter" } },
 }

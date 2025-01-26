@@ -433,6 +433,7 @@ return {
       lspconfig["tailwindcss"].setup({
         capabilities = capabilities,
         on_attach = on_attach,
+        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "htmlangular" },
         root_dir = root_pattern(
           "tailwind.config.js",
           "tailwind.config.ts",

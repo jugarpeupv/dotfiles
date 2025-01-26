@@ -1,4 +1,16 @@
 return {
+  {
+    "vzze/calculator.nvim",
+    -- cmd = { "Calculate" },
+    event = { "BufReadPost" },
+    config = function()
+      vim.api.nvim_create_user_command(
+        "Calculate",
+        'lua require("calculator").calculate()',
+        { ["range"] = 1, ["nargs"] = 0 }
+      )
+    end,
+  },
   { "sam4llis/nvim-lua-gf", keys = { "gf" } },
   -- { "mrjones2014/tldr.nvim", cmd = { "Tldr", "Telescope" } ,dependencies = { "nvim-telescope/telescope.nvim" } },
   {
@@ -506,9 +518,25 @@ return {
   { "tpope/vim-repeat",        keys = { "." } },
   { "nvim-lua/plenary.nvim",   lazy = true },
   { "tpope/vim-surround",      event = { "BufReadPost", "BufNewFile" } },
-  { "windwp/nvim-ts-autotag",  ft = "html" },
-  { "tpope/vim-dispatch",      lazy = true },
-  { "kkharji/sqlite.lua",      lazy = true },
+  {
+    "windwp/nvim-ts-autotag",
+    ft = { "html", "htmlangular" },
+    -- opts = {
+    --   aliases = {
+    --     ["htmlangular"] = "html",
+    --   },
+    -- },
+    config = function()
+      require("nvim-ts-autotag").setup({
+        aliases = {
+          ["html"] = "html",
+          ["htmlangular"] = "html",
+        },
+      })
+    end,
+  },
+  { "tpope/vim-dispatch", lazy = true },
+  { "kkharji/sqlite.lua", lazy = true },
   {
     "ckipp01/nvim-jenkinsfile-linter",
     keys = {

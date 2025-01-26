@@ -105,9 +105,23 @@ return {
         local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
         local cursor_col = cursor_pos[2]
 
+
+        local function get_full_path(relative_path)
+          -- Get the current buffer's full path
+          local current_buffer_dos = vim.api.nvim_buf_get_name(0)
+          -- Get the directory of the current buffer
+          local current_dir = vim.fn.fnamemodify(current_buffer_dos, ":p:h")
+          -- Combine the directory with the relative path
+          local full_path = vim.fn.fnamemodify(current_dir .. '/' .. relative_path, ":p")
+          return full_path
+        end
+
         -- Get the file path under the cursor
         local line = vim.api.nvim_buf_get_lines(current_buffer, cursor_row, cursor_row + 1, false)[1]
         local file_path = line:match("%((.-)%)")
+
+        file_path = get_full_path(file_path)
+        print("file_path", file_path)
 
         if not file_path then
           print("No image found under the cursor")

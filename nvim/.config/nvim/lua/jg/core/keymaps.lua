@@ -171,6 +171,7 @@ keymap("n", "<Leader>ce", "<cmd>lua require('telescope.builtin').colorscheme()<c
 keymap("n", "<Leader>ht", "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
 keymap("n", "<Leader>mp", "<cmd>lua require('telescope.builtin').man_pages()<cr>", opts)
 keymap("n", "<Leader>of", "<cmd>lua require('telescope.builtin').oldfiles({ only_cwd = true })<cr>", opts)
+keymap("n", "<Leader>oo", "<cmd>lua require('telescope.builtin').oldfiles()<cr>", opts)
 keymap("n", "<Leader>rg", "<cmd>lua require('telescope.builtin').registers()<cr>", opts)
 keymap("n", "<Leader>ke", "<cmd>lua require('telescope.builtin').keymaps()<cr>", opts)
 keymap("n", "<Leader>cm", "<cmd>lua require('telescope.builtin').commands()<cr>", opts)
@@ -285,12 +286,17 @@ keymap(
   opts
 )
 
-vim.keymap.set({ "n", "v" }, "<Leader>fr", "<cmd>lua require('telescope.builtin').egrepify<cr>", opts)
+vim.keymap.set({ "n", "v" }, "<leader>fr", "<cmd>lua require('telescope.builtin').egrepify<cr>", opts)
 
-vim.keymap.set({ "n", "v" }, "<Leader>ff", function()
+vim.keymap.set({ "n", "v" }, "<leader>ff", function()
   require("telescope").extensions.live_grep_args.live_grep_raw({
     disable_coordinates = true,
     path_display = { "absolute" },
+    theme = "ivy",
+    layout_config = { height = 0.53 },
+    preview = {
+      hide_on_startup = true,
+    },
     -- group_by = "filename",
     -- disable_devicons = true,
     vimgrep_arguments = {
@@ -312,11 +318,14 @@ vim.keymap.set({ "n", "v" }, "<Leader>ff", function()
   })
 end)
 
-vim.keymap.set({ "n", "v" }, "<Leader>f.", function()
+vim.keymap.set({ "n", "v" }, "<leader>f.", function()
+  local cwd = "~/dotfiles/nvim/.config/nvim"
   require("telescope").extensions.live_grep_args.live_grep_raw({
     disable_coordinates = true,
-    cwd = "~/dotfiles/nvim/.config/nvim",
+    cwd = cwd,
+    prompt_title = "Find files in " .. cwd,
     theme = "ivy",
+    layout_config = { height = 0.53 },
     -- group_by = "filename",
     -- disable_devicons = true,
     vimgrep_arguments = {
@@ -357,9 +366,9 @@ keymap("n", "<Leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>"
 
 -- Telescope
 keymap("n", "<Leader>gs", "<cmd>lua require('telescope.builtin').git_stash()<cr>", opts)
-keymap("n", "<Leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<cr>", opts)
+keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<cr>", opts)
 
-keymap("n", "<Leader>gB", "<cmd>G branch -vv<cr>", opts)
+keymap("n", "<leader>gB", "<cmd>Git branch -vv<cr>", opts)
 
 -- Sniprun
 keymap("n", "<Leader>sr", "<cmd>%SnipRun<cr>", opts)
@@ -414,7 +423,7 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 -- vim.keymap.set('n', "n", "nzzzv")
 -- vim.keymap.set('n', "N", "Nzzzv")
 
-vim.keymap.set("n", "<leader>rs", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+vim.keymap.set("n", "<leader>rc", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 
 -- Trouble
 -- vim.keymap.set("n", "<leader>xx", "<cmd>TroubleToggle<cr>", { silent = true, noremap = true })
@@ -497,7 +506,6 @@ end)
 --     ls.expand_or_jump()
 --   end
 -- end, { silent = true })
-
 
 -- using 0 register
 -- vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                              -- copy to 0 register
@@ -588,19 +596,32 @@ local function find_directory_and_focus()
 
       actions.close(prompt_bufnr)
       local selection = action_state.get_selected_entry()
+      print("selection", vim.inspect(selection))
       api.tree.open()
-      api.tree.find_file(selection.cwd .. "/" .. selection.value)
+      -- api.tree.find_file(selection.cwd .. "/" .. selection.value)
+      api.tree.find_file(selection.value)
     end)
     return true
   end
 
   require("telescope.builtin").find_files({
+    prompt_title = "Open directory in nvim tree",
     find_command = { "fd", "--type", "directory", "--hidden", "--exclude", ".git/*" },
     attach_mappings = open_nvim_tree,
+    entry_maker = function(entry)
+      return {
+        value = entry,
+        display = function()
+          local display_string = " " .. entry
+          return display_string, { { { 0, 1 }, "Directory" } }
+        end,
+        ordinal = entry,
+      }
+    end,
   })
 end
 
-vim.keymap.set("n", "fd", find_directory_and_focus)
+vim.keymap.set("n", "<leader>fd", find_directory_and_focus, opts)
 
 local function find_in_node_modules()
   local actions = require("telescope.actions")
@@ -640,10 +661,9 @@ vim.keymap.set("n", "<leader>fn", find_in_node_modules, opts)
 
 -- fd . "node_modules" --no-ignore --exclude .git/* --exclude **/node_modules/**
 
-vim.keymap.set({ "n" }, "<leader>co", function()
+vim.keymap.set({ "n" }, "<leader>rs", function()
   require("jg.custom.telescope").run_npm_scripts()
 end, opts)
 
-vim.keymap.set({"n"}, "<leader>bn","<cmd>bn<cr>", opts)
-vim.keymap.set({"n"}, "<leader>bp","<cmd>bp<cr>", opts)
-
+vim.keymap.set({ "n" }, "<leader>bn", "<cmd>bn<cr>", opts)
+vim.keymap.set({ "n" }, "<leader>bp", "<cmd>bp<cr>", opts)

@@ -31,7 +31,7 @@ return {
     },
   },
 
-  { "tpope/vim-fugitive", cmd = { "G" } },
+  { "tpope/vim-fugitive", cmd = { "G", "Git" } },
   {
     "rbong/vim-flog",
     lazy = true,
