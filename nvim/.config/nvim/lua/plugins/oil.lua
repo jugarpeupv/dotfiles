@@ -3,6 +3,7 @@ return {
     "elihunter173/dirbuf.nvim",
     -- event = { "BufReadPost", "BufNewFile" },
     keys = { "<leader>op" },
+
     -- cmd = { "DirBuf" },
     -- priority = 10000,
     opts = { update_to_buf_dir = { enable = false } },
@@ -13,7 +14,17 @@ return {
   },
   {
     "stevearc/oil.nvim",
-    dependencies = { "nvim-lualine/lualine.nvim", "HakonHarnes/img-clip.nvim" },
+    dependencies = {
+      { "nvim-lualine/lualine.nvim" },
+      { "HakonHarnes/img-clip.nvim" },
+      -- {
+      --   "adelarsq/image_preview.nvim",
+      --   ft = { "png", "jpeg", "gif", "webp", "bmp", "ico", "svg", "pdf" },
+      --   config = function()
+      --     require("image_preview").setup()
+      --   end,
+      -- },
+    },
     -- commit = "ba858b662599eab8ef1cba9ab745afded99cb180",
     cmd = { "Oil" },
     -- event = { "BufReadPost", "BufNewFile" },
@@ -159,6 +170,12 @@ return {
         -- See :help oil-actions for a list of all available actions
         keymaps = {
           ["g?"] = { "actions.show_help", mode = "n" },
+          -- ["gp"] = {
+          --   callback = function()
+          --     require("image_preview").PreviewImageOil()
+          --   end,
+          --   mode = "n",
+          -- },
           -- ["<leader>pi"] = function()
           --   local oil = require("oil")
           --   local filename = oil.get_cursor_entry().name

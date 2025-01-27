@@ -94,16 +94,16 @@ return {
           --   mode = { "n", "x" },
           --   desc = "Put yanked text before selection",
           -- },
-          {
-            "<C-p>",
-            "<Plug>(YankyPreviousEntry)",
-            desc = "Select previous entry through yank history",
-          },
-          {
-            "<C-n>",
-            "<Plug>(YankyNextEntry)",
-            desc = "Select next entry through yank history",
-          },
+          -- {
+          --   "<C-p>",
+          --   "<Plug>(YankyPreviousEntry)",
+          --   desc = "Select previous entry through yank history",
+          -- },
+          -- {
+          --   "<C-n>",
+          --   "<Plug>(YankyNextEntry)",
+          --   desc = "Select next entry through yank history",
+          -- },
           {
             "]p",
             "<Plug>(YankyPutIndentAfterLinewise)",

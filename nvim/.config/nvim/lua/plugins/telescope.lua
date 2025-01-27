@@ -8,6 +8,32 @@ return {
     -- branch = "0.1.x",
     tag = "0.1.8",
     dependencies = {
+      {
+        "axieax/urlview.nvim",
+        cmd = { "UrlView" },
+        config = function()
+          require("urlview").setup({
+            default_picker = "native",
+            default_action = "system",
+          })
+        end,
+      },
+      {
+        "piersolenski/telescope-import.nvim",
+        dependencies = "nvim-telescope/telescope.nvim",
+        keys = {
+          {
+            mode = { "n" },
+            "<leader>ti",
+            function()
+              require("telescope").extensions.import.import()
+            end,
+          },
+        },
+        config = function()
+          require("telescope").load_extension("import")
+        end,
+      },
       { "nvim-lualine/lualine.nvim" },
       {
         "nvim-telescope/telescope-file-browser.nvim",
@@ -211,7 +237,6 @@ return {
 
                 ["<PageUp>"] = actions.preview_scrolling_up,
                 ["<PageDown>"] = actions.preview_scrolling_down,
-
 
                 ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
                 ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,

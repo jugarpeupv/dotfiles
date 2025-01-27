@@ -16,7 +16,7 @@ M.attach_lsp_config = function(client, bufnr)
   local keymap = vim.keymap                                              -- for conciseness
   -- keymap.set("n", "gI", "<cmd>Lspsaga finder<CR>", opts)                  -- show definition, references
   keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)  -- got to declaration
-  keymap.set("n", "<leader>gD", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
+  -- keymap.set("n", "<leader>gD", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
   keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)    -- see definition and make edits in window
 
   -- vim.keymap.set({ "n" }, "gd", function()

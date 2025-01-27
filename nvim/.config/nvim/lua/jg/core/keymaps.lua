@@ -141,17 +141,105 @@ vim.keymap.set({ "n" }, "su", function()
 end, opts)
 
 vim.keymap.set({ "n" }, "sf", function()
-  require("telescope").extensions.file_browser.file_browser({
-    grouped = true,
-    depth = false,
-    use_ui_input = false,
-    follow_links = true,
-    respect_gitignore = true,
-    git_status = false,
-    prompt_path = true,
-    path = vim.fn.expand("%:p:h"),
-    select_buffer = true,
-  })
+  local function pick_dir_and_explore_files(cb)
+    local path = vim.fn.expand("~/")
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local conf = require("telescope.config").values
+    local actions = require("telescope.actions")
+    local action_state = require("telescope.actions.state")
+
+    local find_command = {
+      "fd",
+      ".",
+      path,
+      "--type",
+      "d",
+      "--exclude",
+      ".git",
+      "--exclude",
+      "node_modules",
+      -- "--one-file-system",
+      "--max-depth",
+      "4",
+      "--hidden",
+    }
+
+    -- Function to escape special characters in a string for use in a pattern
+    local function escape_pattern(text)
+      return text:gsub("([^%w])", "%%%1")
+    end
+
+    local escaped_path = escape_pattern(path)
+
+    pickers
+        .new(opts, {
+          prompt_title = "Select a directory",
+          finder = finders.new_oneshot_job(find_command, {
+            entry_maker = function(entry)
+              local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
+              return {
+                value = entry,
+                -- display = "  ~/" .. entry_substituted,
+                display = function()
+                  local display_string = "  ~/" .. entry_substituted
+                  return display_string, { { { 0, 1 }, "Directory" } }
+                end,
+                -- { { {1, 3}, hl_group } }
+                ordinal = entry,
+              }
+            end,
+          }),
+          sorter = conf.generic_sorter(opts),
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              local selection = action_state.get_selected_entry()
+              actions.close(prompt_bufnr)
+              cb(selection.value)
+            end)
+
+            -- actions.select_vertical:replace(function()
+            --   local selection = action_state.get_selected_entry()
+            --   require("telescope.actions").close(prompt_bufnr)
+            --   vim.cmd("vsplit")
+            --   print('hi')
+            --   print(selection.value)
+            --   require("oil").open(selection.value)
+            -- end)
+
+            return true
+          end,
+        })
+        :find()
+  end
+
+  local function my_cb(path)
+    require("telescope").extensions.file_browser.file_browser({
+      grouped = true,
+      depth = false,
+      use_ui_input = false,
+      follow_links = true,
+      respect_gitignore = true,
+      git_status = false,
+      prompt_path = true,
+      path = vim.fn.expand(path),
+      select_buffer = true,
+    })
+  end
+
+  pick_dir_and_explore_files(my_cb)
+
+  -- require("telescope").extensions.file_browser.file_browser({
+  --   grouped = true,
+  --   depth = false,
+  --   use_ui_input = false,
+  --   follow_links = true,
+  --   respect_gitignore = true,
+  --   git_status = false,
+  --   prompt_path = true,
+  --   path = vim.fn.expand("%:p:h"),
+  --   select_buffer = true,
+  -- })
 end, opts)
 
 vim.keymap.set({ "n" }, "sd", function()
@@ -418,8 +506,8 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 vim.keymap.set("n", "J", "mzJ`z")
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
+-- vim.keymap.set("n", "<C-d>", "<C-d>zz")
+-- vim.keymap.set("n", "<C-u>", "<C-u>zz")
 -- vim.keymap.set('n', "n", "nzzzv")
 -- vim.keymap.set('n', "N", "Nzzzv")
 
@@ -432,7 +520,7 @@ vim.keymap.set("n", "<leader>xd", "<cmd>Trouble diagnostics toggle filter.buf=0<
 -- vim.keymap.set("n", "<leader>tl", "<cmd>Trouble loclist toggle<cr>", { silent = true, noremap = true })
 vim.keymap.set("n", "<leader>xq", "<cmd>Trouble qflist toggle<cr>", { silent = true, noremap = true })
 
-vim.keymap.set("n", "<leader>xs", "<cmd>Trouble symbols toggle<cr>", { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>xo", "<cmd>Trouble symbols toggle<cr>", { silent = true, noremap = true })
 -- vim.keymap.set("n", "gR", "<cmd>TroubleToggle lsp_references<cr>",
 --   { silent = true, noremap = true }
 -- )
@@ -570,8 +658,8 @@ vim.api.nvim_set_keymap("n", "<leader>vf", "<cmd>Vifm .<cr>", { noremap = true, 
 -- clear scrollback buffer in terminal buffer
 -- vim.keymap.set({ "t", "n" }, "<leader>CL", "<C-\\><C-n><cmd>lua vim.bo.scrollback=1<cr>", opts)
 
-vim.keymap.set("n", "<leader>xf", "<cmd>source %<CR>")
-vim.keymap.set({ "n", "v" }, "<leader>xx", ":.lua<CR>")
+vim.keymap.set("n", "<leader>xx", "<cmd>source %<CR>")
+vim.keymap.set({ "n", "v" }, "<leader>xs", ":.lua<CR>")
 
 vim.keymap.set({ "n" }, "<leader>sn", function()
   -- run this command on modifiable windows
@@ -637,7 +725,7 @@ local function find_in_node_modules()
       actions.close(prompt_bufnr)
       local selection = action_state.get_selected_entry()
       api.tree.open()
-      api.tree.find_file(selection.value)
+      api.tree.find_file(selection.value .. "/package.json")
     end)
     return true
   end
@@ -649,11 +737,27 @@ local function find_in_node_modules()
       ".",
       node_modules_path,
       "--no-ignore",
+      "--type",
+      "dir",
+      "--max-depth",
+      "2",
       "--exclude",
       "node_modules/*/node_modules",
-      "--prune",
+      -- "--prune",
     },
     attach_mappings = open_nvim_tree,
+    entry_maker = function(entry)
+      return {
+        value = entry,
+        display = function()
+          local cwd_dos = vim.loop.cwd():gsub("%-", "%%%-")
+          local modified_entry = entry:gsub(cwd_dos .. "/", "")
+          local display_string = "  " .. modified_entry
+          return display_string, { { { 0, 1 }, "Directory" } }
+        end,
+        ordinal = entry,
+      }
+    end,
   })
 end
 

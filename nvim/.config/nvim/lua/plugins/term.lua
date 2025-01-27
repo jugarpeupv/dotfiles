@@ -64,7 +64,7 @@ return {
         end,
       },
       {
-        "<leader>ti",
+        "<leader>tI",
         function()
           local term = require("terminal")
           local index = term.current_term_index()

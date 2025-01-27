@@ -539,17 +539,27 @@ M.oil_fzf_dir = function(path)
           }),
           sorter = conf.generic_sorter(opts),
           attach_mappings = function(prompt_bufnr)
+
             actions.select_default:replace(function()
-              actions.close(prompt_bufnr)
               local selection = action_state.get_selected_entry()
+              actions.close(prompt_bufnr)
               require("oil").open(selection.value)
             end)
 
             actions.select_vertical:replace(function()
-              vim.cmd("vsplit")
               local selection = action_state.get_selected_entry()
+              require("telescope.actions").close(prompt_bufnr)
+              vim.cmd("vsplit")
+              print('hi')
+              print(selection.value)
               require("oil").open(selection.value)
             end)
+
+            -- map("i", "<C-v>", function()
+            --   require("telescope.actions").close(prompt_bufnr)
+            --   vim.cmd("vsplit")
+            --   require("oil").open(selection.value)
+            -- end)
 
             return true
           end,

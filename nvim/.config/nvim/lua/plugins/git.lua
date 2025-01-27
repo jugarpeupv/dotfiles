@@ -114,8 +114,8 @@ return {
           end
 
           -- Navigation
-          map('n', '<leader>nj', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
-          map('n', '<leader>nk', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+          map('n', '<leader>sj', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
+          map('n', '<leader>sk', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
 
           -- Actions
           map('n', '<leader>gT', '<cmd>Gitsigns toggle_current_line_blame<CR>')

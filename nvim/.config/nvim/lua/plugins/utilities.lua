@@ -1,5 +1,9 @@
 return {
   {
+    "ragnarok22/whereami.nvim",
+    cmd = "Whereami",
+  },
+  {
     "vzze/calculator.nvim",
     -- cmd = { "Calculate" },
     event = { "BufReadPost" },

@@ -306,6 +306,8 @@ return {
 
       vim.cmd([[highlight DiffText gui=none guifg=none guibg=#456f80]])
       vim.cmd([[highlight DiffDelete gui=none guifg=none guibg=#3F2D3D]])
+      -- vim.cmd([[highlight DiffDelete guifg=#011528]])
+
       vim.cmd([[highlight DiffviewDiffAddAsDelete guibg=#3f2d3d gui=none guifg=none]])
       vim.cmd([[highlight DiffviewDiffDelete gui=none guifg=#3B4252 guibg=none]])
 
@@ -334,7 +336,6 @@ return {
       -- "DiffChange:DiffAdd",
       -- "DiffText:DiffAddText",
       vim.cmd([[highlight DiffAddText gui=none guifg=none guibg=#456f80]])
-      vim.cmd([[highlight DiffDelete guifg=#011528]])
 
       vim.cmd([[highlight BufferLineTabSeparator gui=none guifg=#13182e]])
       vim.cmd([[highlight BufferLineTabSeparatorSelected gui=none guifg=#13182e]])

@@ -43,6 +43,19 @@
 ; [mergetool "vimdiff"]
 ;   path = nvim
 
+[diff]
+  algorithm = patience
+  compactionHeuristic = true
+  tool = nvimdiff
+
+[difftool "nvimdiff"]
+  cmd = nvim -d \"$LOCAL\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd L\"
+
+[merge]
+  tool = nvimdiff4
+
+[mergetool "nvimdiff4"]
+  cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 
 ; [credential "https://github.com"]
 ; 	helper = 

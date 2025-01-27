@@ -272,7 +272,12 @@ return {
         vim.keymap.set("n", ".", api_nvimtree.node.run.cmd, opts("Run Command"))
         vim.keymap.set("n", "H", api_nvimtree.tree.change_root_to_parent, opts("Up"))
         -- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
-        vim.keymap.set("n", "O", api_nvimtree.node.open.preview, opts("Open Preview"))
+        vim.keymap.set("n", "W", api_nvimtree.node.open.preview, opts("Open Preview"))
+        vim.keymap.set("n", "O", function()
+          vim.cmd("vsplit");
+          require("oil").open(vim.loop.cwd())
+        end, opts("Open Oil"))
+
         -- vim.keymap.set('n', "O", api_nvimtree.node.open.replace_tree_buffer, opts('Open: In Place'))
         vim.keymap.set("n", "-", function()
           vim.cmd("vsplit");
