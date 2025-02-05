@@ -9,6 +9,18 @@ return {
     tag = "0.1.8",
     dependencies = {
       {
+        "nvim-telescope/telescope-frecency.nvim",
+        -- install the latest stable version
+        version = "*",
+      },
+      {
+        "isak102/telescope-git-file-history.nvim",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "tpope/vim-fugitive",
+        },
+      },
+      {
         "axieax/urlview.nvim",
         cmd = { "UrlView" },
         config = function()
@@ -113,6 +125,186 @@ return {
       local image_preview = require("jg.custom.telescope").telescope_image_preview()
 
       telescope.setup({
+        -- defaults = {
+        --     -- prompt_prefix = " ",
+        --     prompt_prefix = "> ",
+        --     history = {
+        --       path = "~/.local/share/nvim/databases/telescope_history.sqlite3",
+        --       limit = 50,
+        --     },
+        --     selection_caret = " ",
+        --     initial_mode = "insert",
+        --     cache_picker = { limit_entries = 100 },
+        --     scroll_strategy = "limit",
+        --     -- file_ignore_patterns = { "node_modules" },
+        --     -- file_ignore_patterns = { "%__template__" },
+        --     -- path_display = { "smart" },
+        --     -- path_display = { "tail" },
+        --     -- path_display = { shorten = { len = 5, exclude = { -1 } } },
+        --     -- path_display = { shorten = { len = 3, exclude = { -1 } } },
+        --     -- path_display = { "hidden" },
+        --     path_display = { truncate = 5 },
+        --     wrap_results = false,
+        --     vimgrep_arguments = {
+        --       "rg",
+        --       -- "--color=never",
+        --       "--no-heading",
+        --       "--with-filename",
+        --       "--line-number",
+        --       "--column",
+        --       "--smart-case",
+        --     },
+        --     file_previewer = image_preview.file_previewer,
+        --     buffer_previewer_maker = image_preview.buffer_previewer_maker,
+        --     -- layout_strategy = 'bottom_pane',
+        --     -- layout_config = {
+        --     --   height = 0.53,
+        --     -- },
+        --
+        --     -- layout_strategy = "horizontal",
+        --     sorting_strategy = "ascending",
+        --     layout_config = {
+        --       horizontal = { width = 0.98, height = 0.85, preview_width = 0.35, prompt_position = "top" },
+        --       vertical = { width = 0.90, height = 0.85, preview_height = 0.35 },
+        --       center = { width = 0.99, height = 0.85 },
+        --       bottom_pane = { width = 0.90, height = 0.85 },
+        --       prompt_position = "top",
+        --     },
+        --     preview = {
+        --       filesize_limit = 1, -- MB
+        --       hide_on_startup = false,
+        --       -- 1) Do not show previewer for certain files
+        --       filetype_hook = function(filepath, bufnr, opts)
+        --         -- you could analogously check opts.ft for filetypes
+        --         local putils = require("telescope.previewers.utils")
+        --         local excluded = vim.tbl_filter(function(ending)
+        --           return filepath:match(ending)
+        --         end, {
+        --             ".*%.pdf",
+        --             ".*%.docx",
+        --             ".*%.csv",
+        --             ".*%.toml",
+        --           })
+        --         if not vim.tbl_isempty(excluded) then
+        --           putils.set_preview_message(
+        --             bufnr,
+        --             opts.winid,
+        --             string.format("I don't like %s files!", excluded[1]:sub(5, -1))
+        --           )
+        --           return false
+        --         end
+        --         return true
+        --       end,
+        --       -- 2) Truncate lines to preview window for too large files
+        --       filesize_hook = function(filepath, bufnr, opts)
+        --         local path = require("plenary.path"):new(filepath)
+        --         -- opts exposes winid
+        --         local height = vim.api.nvim_win_get_height(opts.winid)
+        --         local lines = vim.split(path:head(height), "[\r]?\n")
+        --         vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+        --       end,
+        --     },
+        --     mappings = {
+        --       i = {
+        --         ["<C-space>"] = actions.to_fuzzy_refine,
+        --         ["<C-n>"] = actions.cycle_history_next,
+        --         ["<C-p>"] = actions.cycle_history_prev,
+        --
+        --         ["<C-j>"] = actions.move_selection_next,
+        --         ["<C-k>"] = actions.move_selection_previous,
+        --
+        --         ["<C-c>"] = actions.close,
+        --
+        --         ["<Down>"] = actions.move_selection_next,
+        --         ["<Up>"] = actions.move_selection_previous,
+        --
+        --         ["<CR>"] = actions.select_default,
+        --         ["<C-s>"] = actions.select_horizontal,
+        --         ["<C-v>"] = actions.select_vertical,
+        --         -- ["<C-Enter>"] = actions.select_vertical,
+        --         ["<C-t>"] = actions.select_tab,
+        --         -- ["<C-t>"] = trouble.open_with_trouble,
+        --         ["<C-e>"] = open_with_trouble,
+        --         ["<C-w>"] = require("telescope.actions.layout").toggle_preview,
+        --         -- ["<C-t>"] = trouble.open_with_trouble,
+        --
+        --         -- ["<C-u>"] = actions.preview_scrolling_up,
+        --         -- ["<C-d>"] = actions.preview_scrolling_down,
+        --
+        --         -- ["<C-u>"] = actions.results_scrolling_up,
+        --         -- ["<C-d>"] = actions.results_scrolling_down,
+        --         ["<C-u>"] = function(prompt_bufnr)
+        --           for _ = 1, 5 do
+        --             actions.move_selection_previous(prompt_bufnr)
+        --           end
+        --         end,
+        --         ["<C-d>"] = function(prompt_bufnr)
+        --           for _ = 1, 5 do
+        --             actions.move_selection_next(prompt_bufnr)
+        --           end
+        --         end,
+        --
+        --         ["<PageUp>"] = actions.preview_scrolling_up,
+        --         ["<PageDown>"] = actions.preview_scrolling_down,
+        --
+        --         ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        --         ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        --
+        --         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        --         ["<C-y>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        --         ["<C-x>"] = "delete_buffer",
+        --         -- ["<C-l>"] = actions.complete_tag,
+        --         ["<C-h>"] = actions.which_key, -- keys from pressing <C-/>
+        --         ["<C-a>"] = actions.git_create_branch,
+        --       },
+        --
+        --       n = {
+        --         ["<esc>"] = actions.close,
+        --         ["<CR>"] = actions.select_default,
+        --         ["<C-s>"] = actions.select_horizontal,
+        --         ["<C-v>"] = actions.select_vertical,
+        --         -- ["<C-Enter>"] = actions.select_vertical,
+        --         ["<C-t>"] = actions.select_tab,
+        --         -- ["<C-t>"] = trouble.open_with_trouble,
+        --         ["<C-e>"] = open_with_trouble,
+        --
+        --         ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
+        --         ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
+        --         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        --         ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+        --
+        --         ["j"] = actions.move_selection_next,
+        --         ["k"] = actions.move_selection_previous,
+        --         ["H"] = actions.move_to_top,
+        --         ["M"] = actions.move_to_middle,
+        --         ["L"] = actions.move_to_bottom,
+        --         ["<BS>"] = "delete_buffer",
+        --         ["<C-x>"] = "delete_buffer",
+        --
+        --         ["<C-j>"] = actions.move_selection_next,
+        --         ["<C-k>"] = actions.move_selection_previous,
+        --
+        --         ["<Down>"] = actions.move_selection_next,
+        --         ["<Up>"] = actions.move_selection_previous,
+        --         ["gg"] = actions.move_to_top,
+        --         ["G"] = actions.move_to_bottom,
+        --
+        --         -- ["<C-u>"] = actions.preview_scrolling_up,
+        --         -- ["<C-d>"] = actions.preview_scrolling_down,
+        --
+        --         -- ["<PageUp>"] = actions.results_scrolling_up,
+        --         -- ["<PageDown>"] = actions.results_scrolling_down,
+        --
+        --         ["<C-u>"] = actions.results_scrolling_up,
+        --         ["<C-d>"] = actions.results_scrolling_down,
+        --
+        --         ["<PageUp>"] = actions.preview_scrolling_up,
+        --         ["<PageDown>"] = actions.preview_scrolling_down,
+        --
+        --         ["?"] = actions.which_key,
+        --       },
+        --     },
+        --   },
         defaults = vim.tbl_extend(
           "force",
           require("telescope.themes").get_ivy(), -- or get_cursor, get_ivy
@@ -157,8 +349,8 @@ return {
             layout_config = {
               horizontal = { width = 0.98, height = 0.53, preview_width = 0.53, prompt_position = "top" },
               vertical = { width = 0.90, height = 0.53, preview_height = 0.35 },
-              center = { width = 0.99, height = 0.53 },
-              bottom_pane = { width = 1, height = 0.53 },
+              center = { width = 0.99, height = 0.45 },
+              bottom_pane = { width = 1, height = 0.45, preview_width = 0.40 },
               prompt_position = "top",
             },
             preview = {
@@ -297,37 +489,43 @@ return {
             },
           }
         ),
-        pickers = {
-          live_grep = { theme = "ivy", layout_config = { height = 0.53 } },
-          buffers = {
-            theme = "ivy",
-            layout_config = { height = 0.53 },
-          },
-          oldfiles = {
-            theme = "ivy",
-            layout_config = { height = 0.53 },
-          },
-          find_files = {
-            theme = "ivy",
-            layout_config = { height = 0.53 },
-          },
-          -- live_grep = {
-          --   theme = "ivy"
-          --   -- layout_strategy = "vertical",
-          --   -- path_display = { 'hidden' }
-          -- },
-          -- git_worktree = { theme = "ivy" },
-          -- create_git_worktree = { theme = "ivy" },
-          git_branches = {
-            theme = "ivy",
-            layout_config = { height = 0.53 },
-            -- layout_strategy = "vertical",
-            mappings = {
-              i = { ["<C-b>"] = require("jg.custom.telescope").set_upstream },
-            },
-          },
-        },
+        -- pickers = {
+        --   live_grep = { theme = "ivy", layout_config = { height = 0.53 } },
+        --   buffers = {
+        --     theme = "ivy",
+        --     layout_config = { height = 0.53 },
+        --   },
+        --   oldfiles = {
+        --     theme = "ivy",
+        --     layout_config = { height = 0.53 },
+        --   },
+        --   find_files = {
+        --     theme = "ivy",
+        --     layout_config = { height = 0.53 },
+        --   },
+        --   -- live_grep = {
+        --   --   theme = "ivy"
+        --   --   -- layout_strategy = "vertical",
+        --   --   -- path_display = { 'hidden' }
+        --   -- },
+        --   -- git_worktree = { theme = "ivy" },
+        --   -- create_git_worktree = { theme = "ivy" },
+        --   git_branches = {
+        --     theme = "ivy",
+        --     layout_config = { height = 0.53 },
+        --     -- layout_strategy = "vertical",
+        --     mappings = {
+        --       i = { ["<C-b>"] = require("jg.custom.telescope").set_upstream },
+        --     },
+        --   },
+        -- },
         extensions = {
+          frecency = {
+            auto_validate = true,
+            matcher = "fuzzy",
+            show_scores = true,
+            -- path_display = { "filename_first" },
+          },
           file_browser = {
             theme = "ivy",
             hidden = true,
@@ -518,12 +716,12 @@ return {
             --   prompt_position = "bottom",
             --   -- results_height = 40,
             -- }),
-            -- theme = require("telescope.themes").get_dropdown({
-            --   layout_config = { width = 0.90, height = 0.40 },
-            --   prompt_prefix = "> ",
-            --   prompt_position = "bottom"
-            -- }),
-            theme = "ivy",
+            theme = require("telescope.themes").get_ivy({
+              layout_config = { height = 0.45 },
+              prompt_prefix = "> ",
+              -- prompt_position = "bottom"
+            }),
+            -- theme = "ivy",
             auto_quoting = false,
             mappings = {
               i = {
@@ -532,7 +730,7 @@ return {
                 ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
                 ["<C-l>"] = actions_live_grep_args.quote_prompt(),
                 ["<C-k>"] = actions.move_selection_previous,
-                ["<C-i>"] = actions_live_grep_args.quote_prompt({ postfix = " --iglob " }),
+                ["<C-b>"] = actions_live_grep_args.quote_prompt({ postfix = " --iglob " }),
                 ["<C-f>"] = actions_live_grep_args.quote_prompt({ postfix = " -t" }),
               },
             },
@@ -583,6 +781,8 @@ return {
       telescope.load_extension("grapple")
       telescope.load_extension("heading")
       telescope.load_extension("file_browser")
+      telescope.load_extension("git_file_history")
+      telescope.load_extension("frecency")
       -- telescope.load_extension("jsonfly")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")

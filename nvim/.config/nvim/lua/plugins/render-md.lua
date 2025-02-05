@@ -1,6 +1,7 @@
 return {
   "MeanderingProgrammer/render-markdown.nvim",
   ft = { "markdown" },
+  enabled = true,
   keys = {
     { "<leader>rm", "<cmd>RenderMarkdown toggle<CR>" },
   },
@@ -99,6 +100,7 @@ return {
     },
     render_modes = { 'n', 'c', 't', 'i', 'v', 'Vs', 'V', 'nt', 'ntT' },
     code = {
+      -- render_modes = { 'V' },
       -- Turn on / off code block & inline code rendering
       enabled = true,
       -- Turn on / off any sign column related rendering
@@ -122,8 +124,8 @@ return {
       -- Likely because that language has background highlights itself
       -- Or a boolean to make behavior apply to all languages
       -- Borders above & below blocks will continue to be rendered
-      -- disable_background = { 'diff' },
-      disable_background = false,
+      disable_background = { 'diff' },
+      -- disable_background = false,
       -- Width of the code block background:
       --  block: width of the code block
       --  full:  full width of the window
@@ -139,12 +141,12 @@ return {
       -- If a floating point value < 1 is provided it is treated as a percentage of the available window space
       right_pad = 0,
       -- Minimum width to use for code blocks when width is 'block'
-      min_width = 0,
+      min_width = 100,
       -- Determines how the top / bottom of code block are rendered:
       --  none:  do not render a border
       --  thick: use the same highlight as the code body
       --  thin:  when lines are empty overlay the above & below icons
-      border = 'thick',
+      border = 'thin',
       -- Used above code blocks for thin border
       above = '▄',
       -- Used below code blocks for thin border

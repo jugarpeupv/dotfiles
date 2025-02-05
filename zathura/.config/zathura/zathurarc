@@ -76,7 +76,7 @@ set index-fg                   "#d8dee9"    # nord4
 set index-active-bg            "#434c5e"    # nord2
 set index-active-fg            "#d8dee9"    # nord4
 set recolor-darkcolor          "#d8dee9"    # nord4
-set recolor-lightcolor         "#2e3440"    # nord0
+set recolor-lightcolor         "#1f2335"    # nord0
 
 set render-loading-bg          "#2e3440"    # nord0
 set render-loading-fg          "#d8dee9"    # nord4
@@ -85,14 +85,14 @@ set render-loading-fg          "#d8dee9"    # nord4
 # set highlight-transparency 0.8
 
 # Light
-set recolor-lightcolor        "#fbfbfc"    # markdown body background
-set recolor-darkcolor         "#2e3440"    # nord0
-set default-bg                "#fbfbfc"    # markdown body background
-
-# Dark
-set recolor-lightcolor        "#2e3440"    # markdown body background
-set recolor-darkcolor         "#fbfbfc"    # nord0
-set default-bg                "#2e3440"    # markdown body background
+# set recolor-lightcolor        "#fbfbfc"    # markdown body background
+# set recolor-darkcolor         "#2e3440"    # nord0
+# set default-bg                "#fbfbfc"    # markdown body background
+#
+# # Dark
+# set recolor-lightcolor        "#2e3440"    # markdown body background
+# set recolor-darkcolor         "#fbfbfc"    # nord0
+# set default-bg                "#2e3440"    # markdown body background
 
 # Switch to light recolored mode
 # map L feedkeys ':set recolor-lightcolor "#fbfbfc"<Return>:set recolor-darkcolor "#2e3440"<Return>:set default-bg "#fbfbfc"<Return>:set recolor true<Return>'

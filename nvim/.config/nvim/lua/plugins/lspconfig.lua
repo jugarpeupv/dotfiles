@@ -130,6 +130,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
+    -- commit = "1f941b36",
     enabled = function()
       local is_headless = #vim.api.nvim_list_uis() == 0
       if is_headless then
@@ -450,6 +451,32 @@ return {
 
       local angularls_path = mason_registry.get_package("angular-language-server"):get_install_path()
 
+      -- local function get_angular_core_version(root_dir)
+      --   local project_root = vim.fs.dirname(vim.fs.find('node_modules', { path = root_dir, upward = true })[1])
+      --   local default_version = '17.3.9'
+      --
+      --   if not project_root then
+      --     return default_version
+      --   end
+      --
+      --   local package_json = project_root .. '/package.json'
+      --   if not vim.loop.fs_stat(package_json) then
+      --     return default_version
+      --   end
+      --
+      --   local contents = io.open(package_json):read '*a'
+      --   local json = vim.json.decode(contents)
+      --   if not json.dependencies then
+      --     return default_version
+      --   end
+      --
+      --   local angular_core_version = json.dependencies['@angular/core']
+      --
+      --   return angular_core_version
+      -- end
+
+      -- local default_angular_core_version = get_angular_core_version(vim.fn.getcwd())
+
       local angular_cmd = {
         "ngserver",
         "--stdio",
@@ -463,6 +490,8 @@ return {
           angularls_path .. "/node_modules/@angular/language-server",
           vim.uv.cwd(),
         }, ","),
+        -- '--angularCoreVersion',
+        -- default_angular_core_version,
       }
 
       lspconfig["angularls"].setup({

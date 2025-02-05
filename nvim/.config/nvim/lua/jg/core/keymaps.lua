@@ -266,6 +266,8 @@ keymap("n", "<Leader>cm", "<cmd>lua require('telescope.builtin').commands()<cr>"
 keymap("n", "<Leader>mm", "<cmd>lua require('telescope.builtin').marks()<cr>", opts)
 keymap("n", "<Leader>td", "<cmd>lua require('telescope.builtin').diagnostics()<cr>", opts)
 
+keymap("n", "<leader>Th", "<cmd>lua require('telescope').extensions.git_file_history.git_file_history()<cr>", opts)
+
 keymap("n", "<Leader>Cd", "<cmd>lua vim.diagnostic.reset()<cr>", opts)
 
 keymap("n", "<Leader>bo", "<cmd>lua require('telescope').extensions.bookmarks.bookmarks()<cr>", opts)
@@ -374,14 +376,14 @@ keymap(
   opts
 )
 
-vim.keymap.set({ "n", "v" }, "<leader>fr", "<cmd>lua require('telescope.builtin').egrepify<cr>", opts)
+vim.keymap.set({ "n", "v" }, "<leader>fR", "<cmd>lua require('telescope.builtin').egrepify<cr>", opts)
 
 vim.keymap.set({ "n", "v" }, "<leader>ff", function()
   require("telescope").extensions.live_grep_args.live_grep_raw({
     disable_coordinates = true,
     path_display = { "absolute" },
     theme = "ivy",
-    layout_config = { height = 0.53 },
+    layout_config = { height = 0.45 },
     preview = {
       hide_on_startup = true,
     },
@@ -458,6 +460,20 @@ keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<
 
 keymap("n", "<leader>gB", "<cmd>Git branch -vv<cr>", opts)
 
+-- vim.keymap.set({ "n" }, "<leader>gB", function()
+--   local handle = io.popen("git rev-parse --abbrev-ref HEAD")
+--   if not handle then
+--     local cmd = "!git branch -vv"
+--     vim.cmd(cmd)
+--     return
+--   end
+--   local current_branch = handle:read("*a"):gsub("%s+", "")
+--   handle:close()
+--   -- Run the Git branch -vv command and filter the output
+--   local cmd = "!git branch -vv | grep ' " .. current_branch .. " '"
+--   vim.cmd(cmd)
+-- end, opts)
+
 -- Sniprun
 keymap("n", "<Leader>sr", "<cmd>%SnipRun<cr>", opts)
 
@@ -483,7 +499,7 @@ vim.cmd(
 -- Vim Fugitive
 -- keymap("n", "<Leader>gu", ":diffget<cr>", opts)
 -- keymap("n", "<Leader>gs", ":diffput<cr>", opts)
-keymap("n", "<Leader>sU", ":G branch --set-upstream-to=origin/", opts)
+keymap("n", "<Leader>sU", ":Git branch --set-upstream-to=origin/", opts)
 keymap("n", "<Leader>go", "<cmd>:!git-open<cr>", opts)
 keymap("n", "<Leader>np", "<cmd>:e ~/.npmrc<cr>", opts)
 keymap("n", "<Leader>aw", "<cmd>:e ~/.aws/config<cr>", opts)
@@ -635,14 +651,25 @@ local function show_documentation()
   elseif vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
     require("crates").show_popup()
   else
-    local params = vim.lsp.util.make_position_params()
-    vim.lsp.buf_request(0, "textDocument/hover", params, function(err, result, ctx, config)
-      if err or not result or not result.contents then
-        vim.cmd("h " .. cword)
-      else
-        vim.lsp.handlers.hover(err, result, ctx, config)
+    local params = vim.lsp.util.make_position_params(0, 'utf-8')
+
+    local response = vim.lsp.buf_request_sync(0, "textDocument/hover", params)
+    local has_lsp_info = false
+
+    for _, value in pairs(response) do
+      if value and value.result and value.result.contents then
+        has_lsp_info = true
       end
-    end)
+    end
+
+    if has_lsp_info then
+      vim.lsp.buf.hover()
+    else
+      local _, err = pcall(vim.cmd, "h " .. cword)
+      if err then
+        return
+      end
+    end
   end
 end
 
@@ -771,3 +798,20 @@ end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bn", "<cmd>bn<cr>", opts)
 vim.keymap.set({ "n" }, "<leader>bp", "<cmd>bp<cr>", opts)
+
+vim.keymap.set({ "n" }, "<leader>fr", "<cmd>Telescope frecency workspace=CWD<cr>", opts)
+
+vim.keymap.set({ "n" }, "<M-y>", function()
+  local current_buf_name = vim.fn.expand("%:t")
+  vim.api.nvim_feedkeys(
+    vim.api.nvim_replace_termcodes(":Compile bun " .. current_buf_name, true, false, true),
+    "n",
+    true
+  )
+
+  -- vim.api.nvim_feedkeys(
+  --   vim.api.nvim_replace_termcodes("<ESC>" .. current_buf_name, true, false, true),
+  --   "n",
+  --   true
+  -- )
+end, opts)

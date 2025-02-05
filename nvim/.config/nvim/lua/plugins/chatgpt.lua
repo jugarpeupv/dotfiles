@@ -41,6 +41,7 @@ return {
         },
         show_diff = {
           normal = "gF",
+          full_diff = true
         },
         show_info = {
           normal = "gi",
@@ -70,7 +71,7 @@ return {
         local cwd = vim.fn.getcwd()
         local wt_utils = require("jg.custom.worktree-utils")
         local wt_info = wt_utils.get_wt_info(cwd)
-        print("wt_info", vim.inspect(wt_info))
+        -- print("wt_info", vim.inspect(wt_info))
 
         if next(wt_info) == nil then
           vim.g.chat_title = vim.trim(cwd:gsub(vim.env.HOME, ""):gsub("/", "-"))
@@ -196,14 +197,41 @@ return {
       return true
     end,
     -- event = "BufReadPost",
-    -- version = "*",
-    version = false,
+    version = "*",
+    -- version = false,
     opts = {
       provider = "copilot",
+      windows = {
+        ---@type "right" | "left" | "top" | "bottom"
+        position = "right", -- the position of the sidebar
+        wrap = true,    -- similar to vim.o.wrap
+        width = 45,     -- default % based on available width
+        sidebar_header = {
+          enabled = false, -- true, false to enable/disable the header
+          align = "center", -- left, center, right for title
+          rounded = true,
+        },
+        input = {
+          prefix = "> ",
+          height = 8, -- Height of the input window in vertical layout
+        },
+        edit = {
+          border = "rounded",
+          start_insert = false, -- Start insert mode when opening the edit window
+        },
+        ask = {
+          floating = false, -- Open the 'AvanteAsk' prompt in a floating window
+          start_insert = false, -- Start insert mode when opening the ask window
+          border = "rounded",
+          ---@type "ours" | "theirs"
+          focus_on_apply = "ours", -- which diff to focus after applying
+        },
+      },
       mappings = {
         ask = "<leader>aa", -- ask
         edit = "<leader>ae", -- edit
         refresh = "<leader>ar", -- refresh
+
         diff = {
           ours = "cc",
           theirs = "ci",

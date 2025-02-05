@@ -130,7 +130,7 @@ return {
   },
   {
     "philosofonusus/ecolog.nvim",
-    -- enabled = false,
+    enabled = false,
     -- dependencies = {
     --   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
     --   "nvim-tree/nvim-tree.lua"
@@ -470,50 +470,50 @@ return {
       {
         mode = { "n" },
         "<leader>ga",
-        "<cmd>G add .<cr>",
+        "<cmd>Git add .<cr>",
         { silent = true, noremap = true },
       },
       {
         mode = { "n" },
         "<Leader>gS",
-        "<cmd>G stash<cr>",
+        "<cmd>Git stash<cr>",
         { silent = true, noremap = true },
       },
       {
         mode = { "n" },
         "<Leader>gO",
-        "<cmd>G stash pop<cr>",
+        "<cmd>Git! stash pop<cr>",
         { silent = true, noremap = true },
       },
 
       {
         mode = { "n" },
         "<Leader>gP",
-        "<cmd>G! push<cr>",
+        "<cmd>Git! push<cr>",
         { silent = true, noremap = true },
       },
       {
         mode = { "n" },
         "<leader>gf",
-        "<cmd>G! fetch --all -v<cr>",
+        "<cmd>Git! fetch --all -v<cr>",
         { silent = true, noremap = true },
       },
       {
         mode = { "n" },
         "<Leader>gp",
-        "<cmd>G! pull<cr>",
+        "<cmd>Git! pull<cr>",
         { silent = true, noremap = true },
       },
       {
         mode = { "n" },
         "<Leader>gC",
-        "<cmd>G checkout . | G clean -fd<cr>",
+        "<cmd>Git checkout . | Git clean -fd<cr>",
         { silent = true, noremap = true },
       },
       {
         mode = { "n" },
         "<Leader>gl",
-        "<cmd>G log -20<cr>",
+        "<cmd>Git log -20<cr>",
         { silent = true, noremap = true },
       },
     },

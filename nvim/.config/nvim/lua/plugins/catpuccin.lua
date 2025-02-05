@@ -23,8 +23,8 @@ return {
             -- yellow = "#36C0D8",
             -- yellow = "#89dcec"
             yellow = "#89ddff",
-            green = "#F2CDCD",
-            -- green = "#94E2D5",
+            -- green = "#F2CDCD",
+            green = "#94E2D5",
             maroon = "#FAB387",
             -- maroon = "#94E2D5",
 
@@ -158,6 +158,11 @@ return {
         },
         custom_highlights = function()
           return {
+            NormalFloat = { fg = "none", bg = "none" },
+            GitHeader = { bg = "none" },
+            GitFooter = { bg = "none" },
+            GitAppBar = { bg = "none" },
+            String = { fg = "#F2CDCD" },
             StatusLine = { fg = "#cdd6f5", bg = "#292e42" },
             MatchParen = { bg = "#394b70", fg = "none" },
             IlluminatedWordText = { bg = "#394b70" },
@@ -471,6 +476,11 @@ return {
       vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
       vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
       vim.cmd([[hi @markup.raw guifg=#F5E0DC]])
+
+      vim.cmd([[hi GitHeader guibg=none]])
+      vim.cmd([[hi GitFooter guibg=none]])
+      vim.cmd([[hi GitAppBar guibg=none]])
+      vim.cmd([[hi NormalFloat guibg=none]])
       -- vim.cmd([[hi @none guifg=#7384a4]])
 
       vim.api.nvim_set_hl(0, "SubstituteSubstituted", { link = "Visual" })

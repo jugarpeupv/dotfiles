@@ -1,7 +1,7 @@
 return {
--- {
---     'mrloop/telescope-git-branch.nvim'
--- },
+  -- {
+  --     'mrloop/telescope-git-branch.nvim'
+  -- },
   {
     "isakbm/gitgraph.nvim",
     dependencies = { "sindrets/diffview.nvim" },
@@ -31,7 +31,13 @@ return {
     },
   },
 
-  { "tpope/vim-fugitive", cmd = { "G", "Git" } },
+  {
+    "tpope/vim-fugitive",
+    cmd = { "Git", "G" },
+    config = function()
+      vim.cmd("command! -nargs=* G Git <args>")
+    end,
+  },
   {
     "rbong/vim-flog",
     lazy = true,
@@ -109,20 +115,18 @@ return {
         -- },
         on_attach = function(bufnr)
           local function map(mode, lhs, rhs, opts)
-            opts = vim.tbl_extend('force', {noremap = true, silent = true}, opts or {})
+            opts = vim.tbl_extend("force", { noremap = true, silent = true }, opts or {})
             vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
           end
 
           -- Navigation
-          map('n', '<leader>sj', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
-          map('n', '<leader>sk', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+          map("n", "<leader>sj", "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true })
+          map("n", "<leader>sk", "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true })
 
           -- Actions
-          map('n', '<leader>gT', '<cmd>Gitsigns toggle_current_line_blame<CR>')
-        end
-
+          map("n", "<leader>gT", "<cmd>Gitsigns toggle_current_line_blame<CR>")
+        end,
       })
-
     end,
   },
 }

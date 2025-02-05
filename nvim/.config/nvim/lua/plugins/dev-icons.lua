@@ -12,15 +12,20 @@ return {
           name = "mov",
           color = "#94E2D5",
         },
+        lock = {
+          icon = "󰈡",
+          name = "lock",
+          color = "#7C7F93",
+        },
         gz = {
           icon = "",
           name = "zip",
-          color = "#F5C2E7"
+          color = "#F5C2E7",
         },
         zip = {
           icon = "",
           name = "zip",
-          color = "#F2CDCD"
+          color = "#F2CDCD",
         },
         mp3 = {
           icon = "",
@@ -267,7 +272,7 @@ return {
         ["*.package.json"] = { icon = "", color = "#73daca", name = "PackageJson2" },
         ["*package.json"] = { icon = "", color = "#73daca", name = "PackageJson3" },
         ["package-lock.json"] = { icon = "", color = "#73daca", name = "PackageLockJson" },
-        
+
         ["pnpm-lock.yaml"] = { icon = "", color = "#F5E0DC", name = "pnpmLockYaml" },
         ["favicon.ico"] = { icon = "", color = "#F5E0DC", name = "faviconico" },
         ["codeowners"] = { icon = "󱖨", color = "#73daca", name = "codeownersfile2" },
@@ -305,6 +310,7 @@ return {
           name = "gradlew",
           color = "#89B4FA",
         },
+        ["Gemfile"] = { icon = "", color = "#f38ba8", name = "gemfile" },
         ["application.properties"] = { icon = "", color = "#CBA6F7", name = "application_properties" },
         ["tsconfig.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile2" },
         ["tsconfig.editor.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile2" },

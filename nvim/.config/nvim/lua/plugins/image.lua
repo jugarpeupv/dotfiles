@@ -103,36 +103,55 @@ return {
         local current_buffer = vim.api.nvim_get_current_buf()
         local cursor_pos = vim.api.nvim_win_get_cursor(current_window)
         local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
-        local cursor_col = cursor_pos[2]
+        -- local cursor_col = cursor_pos[2]
 
+        local function get_full_path(path)
+          -- Get the user's home directory
+          local home_dir = os.getenv("HOME")
 
-        local function get_full_path(relative_path)
+          -- Check if the path starts with the home directory
+          if string.sub(path, 1, #home_dir) == home_dir then
+            return path
+          end
+
           -- Get the current buffer's full path
           local current_buffer_dos = vim.api.nvim_buf_get_name(0)
           -- Get the directory of the current buffer
           local current_dir = vim.fn.fnamemodify(current_buffer_dos, ":p:h")
           -- Combine the directory with the relative path
-          local full_path = vim.fn.fnamemodify(current_dir .. '/' .. relative_path, ":p")
+          local full_path = vim.fn.fnamemodify(current_dir .. "/" .. path, ":p")
+
+          if vim.fn.filereadable(full_path) == 1 then
+            return full_path
+          else
+            full_path = vim.fn.fnamemodify(vim.loop.cwd() .. "/" .. path, ":p")
+          end
+
           return full_path
         end
 
         -- Get the file path under the cursor
         local line = vim.api.nvim_buf_get_lines(current_buffer, cursor_row, cursor_row + 1, false)[1]
         local file_path = line:match("%((.-)%)")
-
-        file_path = get_full_path(file_path)
-        print("file_path", file_path)
-
         if not file_path then
           print("No image found under the cursor")
           return
         end
+
+        file_path = get_full_path(file_path)
+        -- print("file_path", file_path)
+
 
         if image_rendered and my_image then
           my_image:clear() -- remove the image if it is already rendered
           image_rendered = false
           my_image = nil
         else
+
+          if vim.fn.filereadable(file_path) == 0 then
+            print("Image file does not exist: " .. file_path)
+            return
+          end
           -- from a file (absolute path)
           my_image = api.from_file(file_path, {
             id = "my_image_id",    -- optional, defaults to a random string
@@ -141,11 +160,14 @@ return {
             with_virtual_padding = true, -- optional, pads vertically with extmarks, defaults to false
             inline = true,         -- binds image to an extmark which it follows
             -- geometry (optional)
-            x = cursor_col,
+            -- x = cursor_col,
+            x = 0,
             y = cursor_row,
             -- width = 1000,
             -- height = 1000,
           })
+
+          -- print("my_image", vim.inspect(my_image))
 
           if not my_image then
             return
@@ -174,7 +196,6 @@ return {
           --   })
         end
       end, {})
-
     end,
   },
 }

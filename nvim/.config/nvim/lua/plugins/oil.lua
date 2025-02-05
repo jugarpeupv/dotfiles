@@ -131,7 +131,7 @@ return {
           foldcolumn = "0",
           spell = false,
           list = false,
-          conceallevel = 3,
+          conceallevel = 0,
           concealcursor = "nvic",
         },
         -- Send deleted files to the trash instead of permanently deleting them (:help oil-trash)
@@ -255,6 +255,27 @@ return {
               require("jg.custom.telescope").oil_fzf_files_builtin(root_dir)
             end,
             mode = "n",
+          },
+          ["go"] = {
+            callback = function()
+              local oil = require("oil")
+              local entry = oil.get_cursor_entry()
+              local dir = oil.get_current_dir()
+
+              if not entry or not dir then
+                return
+              end
+
+              entry.name = entry.name:gsub(" ", "\\ ")
+              local path = dir .. entry.name
+
+              local zaread = require("terminal").terminal:new({
+                layout = { open_cmd = "botright new" },
+                cwd = dir,
+                cmd = "zaread " .. path,
+              })
+              zaread:open()
+            end,
           },
           ["gt"] = {
             callback = function()

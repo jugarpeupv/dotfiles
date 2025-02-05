@@ -115,6 +115,7 @@ return {
                 and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json")
             then
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
+              -- vim.api.nvim_buf_set_option(bufnr, "syntax", "off")
               return true
             end
 
@@ -138,6 +139,12 @@ return {
                 and char_count > 1500
             then
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
+              return true
+            end
+
+            local max_filesize = 500 * 1024 -- 100 KB
+            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+            if ok and stats and stats.size > max_filesize and (lang == "json" or lang == "jsonc") then
               return true
             end
 
@@ -237,6 +244,12 @@ return {
 
             keymaps = {
               -- You can use the capture groups defined in textobjects.scm
+              ["ih"] = "@assignment.lhs",
+              ["il"] = "@assignment.rhs",
+
+              ["ia"] = "@parameter.inner",
+              ["aa"] = "@parameter.outer",
+
               ["af"] = "@function.outer",
               ["if"] = "@function.inner",
               ["ac"] = "@class.outer",

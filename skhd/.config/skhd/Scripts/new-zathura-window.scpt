@@ -1,3 +1,13 @@
+tell application "System Events"
+    set zathuraProcList to (every process whose name is "zathura")
+    if (count of zathuraProcList) = 0 then
+        tell application "Terminal"
+            do script "nohup zathura '/Users/jgarcia/Documents/ebook angular.pdf' &"
+            delay 1 -- wait for the process to start
+        end tell
+    end if
+end tell
+
 on activate_open_instance()
   tell application "System Events"
     set zathuraProcList to a reference to (every process whose name is "zathura")
@@ -24,3 +34,12 @@ end activate_open_instance
 
 activate_open_instance()
 
+
+tell application "System Events" to tell process "Terminal"
+    set frontmost to false
+    delay 1 -- wait for the focus to change
+end tell
+
+tell application "Terminal"
+    quit
+end tell
