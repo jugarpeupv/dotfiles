@@ -163,6 +163,7 @@ return {
             GitFooter = { bg = "none" },
             GitAppBar = { bg = "none" },
             String = { fg = "#F2CDCD" },
+            ["@string.special.url"] = { fg = "#F38BA8", bg = "none", style = {} },
             StatusLine = { fg = "#cdd6f5", bg = "#292e42" },
             MatchParen = { bg = "#394b70", fg = "none" },
             IlluminatedWordText = { bg = "#394b70" },
