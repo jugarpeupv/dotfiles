@@ -56,11 +56,11 @@ return {
       { "gbprod/yanky.nvim" },
       -- { "Myzel394/jsonfly.nvim" },
       { "jugarpeupv/git-worktree.nvim" },
-      -- {
-      --   "nvim-telescope/telescope-fzf-native.nvim",
-      --   build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
-      --   cmd = { "Telescope" },
-      -- },
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+        cmd = { "Telescope" },
+      },
       { "natecraddock/telescope-zf-native.nvim", cmd = { "Telescope" } },
       {
         "someone-stole-my-name/yaml-companion.nvim",
@@ -349,8 +349,8 @@ return {
             layout_config = {
               horizontal = { width = 0.98, height = 0.53, preview_width = 0.53, prompt_position = "top" },
               vertical = { width = 0.90, height = 0.53, preview_height = 0.35 },
-              center = { width = 0.99, height = 0.45 },
-              bottom_pane = { width = 1, height = 0.45, preview_width = 0.40 },
+              center = { width = 0.99, height = 0.47 },
+              bottom_pane = { width = 1, height = 0.47, preview_width = 0.40 },
               prompt_position = "top",
             },
             preview = {
@@ -783,6 +783,7 @@ return {
       telescope.load_extension("file_browser")
       telescope.load_extension("git_file_history")
       telescope.load_extension("frecency")
+      telescope.load_extension("fzf")
       -- telescope.load_extension("jsonfly")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")

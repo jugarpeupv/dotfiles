@@ -7,6 +7,8 @@ return {
   },
   opts = {
     enabled = true,
+    max_file_size = 100.0,
+    file_types = { 'markdown' },
     anti_conceal = {
       -- This enables hiding any added text on the line the cursor is on
       enabled = true,

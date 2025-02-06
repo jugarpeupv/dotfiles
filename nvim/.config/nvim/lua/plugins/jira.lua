@@ -8,11 +8,11 @@ return {
     "n0v1c3/vira",
     build = "./install.sh",
     keys = {
-      { "<leader>vb", ":ViraBrowse<cr>",    silent = true },
-      { "<leader>vr", ":ViraReport<cr>",    silent = true },
-      { "<leader>vi", ":ViraIssues<cr>",    silent = true },
-      { "<leader>vc", ":ViraComment<cr>",    silent = true },
-      { "<leader>vs", ":ViraSetStatus<cr>", silent = true },
+      { "<leader>vB", ":ViraBrowse<cr>",    silent = true },
+      { "<leader>vR", ":ViraReport<cr>",    silent = true },
+      { "<leader>vI", ":ViraIssues<cr>",    silent = true },
+      { "<leader>vC", ":ViraComment<cr>",    silent = true },
+      { "<leader>vS", ":ViraSetStatus<cr>", silent = true },
       {
         "<leader>va",
         function()

@@ -65,6 +65,16 @@ return {
     event = "InsertEnter",
     "hrsh7th/nvim-cmp",
     dependencies = {
+      {
+        "petertriho/cmp-git",
+        dependencies = { "hrsh7th/nvim-cmp" },
+        opts = {
+          -- options go here
+        },
+        init = function()
+          table.insert(require("cmp").get_config().sources, { name = "git" })
+        end,
+      },
       { "neovim/nvim-lspconfig" },
       { "davidsierradz/cmp-conventionalcommits" },
       {
@@ -213,23 +223,23 @@ return {
           ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
           ["<C-e>"] = cmp.mapping.abort(),   -- close completion window
           -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
-            -- ["<CR>"] = cmp.mapping(function(fallback)
-            --   -- local copilot = require("copilot.suggestion")
-            --   -- if copilot.is_visible() then
-            --   --   copilot.accept()
-            --   -- elseif cmp.visible() then
-            --   local filetype = vim.bo.filetype
-            --   if filetype == "" then
-            --     vim.api.nvim_feedkeys(t("<CR>"), "n", true)
-            --     return
-            --   elseif cmp.visible() then
-            --     cmp.confirm({ select = true })
-            --     return
-            --   else
-            --     fallback()
-            --     return
-            --   end
-            -- end, { "i", "s" }),
+          -- ["<CR>"] = cmp.mapping(function(fallback)
+          --   -- local copilot = require("copilot.suggestion")
+          --   -- if copilot.is_visible() then
+          --   --   copilot.accept()
+          --   -- elseif cmp.visible() then
+          --   local filetype = vim.bo.filetype
+          --   if filetype == "" then
+          --     vim.api.nvim_feedkeys(t("<CR>"), "n", true)
+          --     return
+          --   elseif cmp.visible() then
+          --     cmp.confirm({ select = true })
+          --     return
+          --   else
+          --     fallback()
+          --     return
+          --   end
+          -- end, { "i", "s" }),
           ["<CR>"] = cmp.mapping(function()
             local selected_entry = cmp.get_selected_entry()
             local filetype = vim.bo.filetype
@@ -316,8 +326,8 @@ return {
         },
         -- sources for autocompletion
         sources = cmp.config.sources({
-          { name = "lazydev",         group_index = 0 },
-          { name = "nvim_lua",        priority = 1100 },
+          { name = "lazydev",  group_index = 0 },
+          { name = "nvim_lua", priority = 1100 },
           {
             name = "nvim_lsp",
             priority = 1000,
@@ -340,7 +350,7 @@ return {
           { name = "luasnip",         priority = 700 }, -- snippets
           -- { name = "nvim_lsp:marksman", priority = 600 },
           { name = "crates",          priority = 300 },
-          { name = "buffer",          priority = 5, keyword_length = 3 },
+          { name = "buffer",          priority = 5,  keyword_length = 3 },
         }),
         sorting = {
           -- comparators = {
@@ -479,6 +489,29 @@ return {
           -- }),
         },
       })
+
+      cmp.setup.cmdline("?", {
+        -- mapping = cmp.mapping.preset.cmdline({
+        --   ["<C-j>"] = { c = cmp.mapping.select_next_item() },
+        --   ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
+        --   -- ["<Tab>"] = cmp.config.disable,
+        --   ["<Tab>"] = cmp.mapping(function(fallback)
+        --     -- local copilot = require("copilot.suggestion")
+        --     -- if copilot.is_visible() then
+        --     --   copilot.accept()
+        --     -- elseif cmp.visible() then
+        --     fallback()
+        --   end),
+        -- }),
+        mapping = {
+          ["<C-j>"] = { c = cmp.mapping.select_next_item() },
+          ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
+        },
+        sources = {
+          { name = "buffer" },
+        },
+      })
+
       -- `/` cmdline setup.
       cmp.setup.cmdline("/", {
         -- mapping = cmp.mapping.preset.cmdline({
@@ -511,7 +544,8 @@ return {
       --       -- if copilot.is_visible() then
       --       --   copilot.accept()
       --       -- elseif cmp.visible() then
-      --       fallback()
+      --       -- fallback()
+      --       cmp.mapping.complete()
       --     end),
       --   }),
       --   sources = cmp.config.sources({

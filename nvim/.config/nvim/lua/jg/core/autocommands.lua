@@ -94,6 +94,18 @@ augroup END ]])
 
 -- vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 
+
+vim.api.nvim_create_autocmd({ "OptionSet" }, {
+  pattern = "diff",
+  callback = function()
+    if vim.wo.diff then
+      require("barbecue.ui").toggle(false)
+    else
+      require("barbecue.ui").toggle(true)
+    end
+  end,
+})
+
 -- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
 
 -- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 1]])
@@ -151,4 +163,11 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.cmd([[set nowrap]])
   end,
+})
+
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = 'copilot-*',
+  callback = function()
+    vim.opt_local.conceallevel = 0
+  end
 })

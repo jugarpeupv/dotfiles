@@ -336,6 +336,24 @@ M.get_npm_scripts = function()
   return scripts
 end
 
+
+M.get_project_json_targets = function()
+  local project_json_path = "project.json"
+  local status, project_json_content = pcall(M.read_file, project_json_path)
+  if not status then
+    return
+  end
+
+  local status_decode, project_data = pcall(vim.json.decode, project_json_content)
+  if not status_decode then
+    print("Impossible to parse package.json")
+    return {}
+  end
+
+  local targets = project_data.targets
+  return targets
+end
+
 M.compile_mode_on_npm_scripts = function()
   local pickers = require("telescope.pickers")
   local finders = require("telescope.finders")
@@ -632,6 +650,75 @@ M.nvimtree_fzf_dir = function(path)
 
   commands()
 end
+
+
+M.run_nx_scripts = function()
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  local targets = M.get_project_json_targets() or {}
+
+  local target_list = {}
+  for key, _ in pairs(targets) do
+    table.insert(target_list, { target_name = key, target_run = "npx nx run " .. key })
+  end
+
+  local commands = function(opts)
+    opts = opts or {}
+    pickers
+      .new(opts, {
+        prompt_title = "Select nx target to run",
+        finder = finders.new_table({
+          results = target_list,
+          entry_maker = function(entry)
+            return {
+              value = entry,
+              -- display = "npm run " .. entry.script_name .. "                      (" .. entry.script_value .. ")",
+              display = entry.target_name,
+              ordinal = entry.target_name,
+            }
+          end,
+        }),
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(prompt_bufnr)
+          actions.select_default:replace(function()
+            actions.close(prompt_bufnr)
+            local selection = action_state.get_selected_entry()
+
+            -- local function toggle_terminal_with_command(command)
+            --   -- Create a new terminal or get the existing one
+            --   local Terminal = require('terminal')
+            --   local term = Terminal:new({
+            --     layout = 'horizontal',
+            --     cmd = command,
+            --     hidden = true,
+            --   })
+            --
+            --   -- Toggle the terminal
+            --   term:toggle()
+            -- end
+            --
+            -- toggle_terminal_with_command(selection.value.script_name)
+            local myterm = require("terminal").terminal:new({
+              layout = { open_cmd = "botright new" },
+              -- cmd = { selection.value.script_name },
+              autoclose = false,
+            })
+            myterm:open()
+            myterm:send(selection.value.target_run)
+          end)
+          return true
+        end,
+      })
+      :find()
+  end
+
+  commands()
+end
+
 
 M.run_npm_scripts = function()
   local pickers = require("telescope.pickers")

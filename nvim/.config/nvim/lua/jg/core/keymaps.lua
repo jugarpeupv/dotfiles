@@ -59,7 +59,7 @@ vim.cmd([[map <M-g> gcc]])
 vim.keymap.set({ "n", "t" }, "<D-p>", function()
   require("telescope.builtin").find_files({
     hidden = true,
-    find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
+    find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__", "--glob=!*DS_Store" },
   })
   -- local builtin = require("telescope.builtin")
   --
@@ -75,7 +75,7 @@ end, opts)
 vim.keymap.set({ "n", "t" }, "<M-p>", function()
   require("telescope.builtin").find_files({
     hidden = true,
-    find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
+    find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__", "--glob=!*DS_Store" },
   })
   -- local builtin = require("telescope.builtin")
   --
@@ -383,7 +383,7 @@ vim.keymap.set({ "n", "v" }, "<leader>ff", function()
     disable_coordinates = true,
     path_display = { "absolute" },
     theme = "ivy",
-    layout_config = { height = 0.45 },
+    layout_config = { height = 0.47 },
     preview = {
       hide_on_startup = true,
     },
@@ -794,6 +794,10 @@ vim.keymap.set("n", "<leader>fn", find_in_node_modules, opts)
 
 vim.keymap.set({ "n" }, "<leader>rs", function()
   require("jg.custom.telescope").run_npm_scripts()
+end, opts)
+
+vim.keymap.set({ "n" }, "<leader>rt", function()
+  require("jg.custom.telescope").run_nx_scripts()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bn", "<cmd>bn<cr>", opts)

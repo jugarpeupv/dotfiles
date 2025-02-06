@@ -6,7 +6,7 @@ return {
     keys = {
       {
         mode = { "n" },
-        "<leader>Gd",
+        "<leader>vd",
         function()
           require("vgit").project_diff_preview()
         end,
@@ -25,37 +25,37 @@ return {
           ["n <C-n>"] = function()
             require("vgit").hunk_down()
           end,
-          ["n <leader>Gs"] = function()
+          ["n <leader>vs"] = function()
             -- require("vgit").buffer_hunk_stage()
             require("vgit").project_stash_preview()
           end,
-          ["n <leader>Gc"] = function()
+          ["n <leader>vc"] = function()
             require("vgit").project_commit_preview()
           end,
-          ["n <leader>Gr"] = function()
-            require("vgit").buffer_hunk_reset()
-          end,
-          ["n <leader>Ge"] = function()
-            require("vgit").buffer_hunk_preview()
-          end,
-          ["n <leader>Gb"] = function()
-            require("vgit").buffer_blame_preview()
-          end,
-          ["n <leader>Gf"] = function()
+          -- ["n <leader>vr"] = function()
+          --   require("vgit").buffer_hunk_reset()
+          -- end,
+          -- ["n <leader>Ge"] = function()
+          --   require("vgit").buffer_hunk_preview()
+          -- end,
+          -- ["n <leader>Gb"] = function()
+          --   require("vgit").buffer_blame_preview()
+          -- end,
+          ["n <leader>vb"] = function()
             require("vgit").buffer_diff_preview()
           end,
-          ["n <leader>Gh"] = function()
+          ["n <leader>vh"] = function()
             require("vgit").buffer_history_preview()
           end,
-          ["n <leader>Gu"] = function()
-            require("vgit").buffer_reset()
-          end,
-          ["n <leader>Gd"] = function()
+          -- ["n <leader>Gu"] = function()
+          --   require("vgit").buffer_reset()
+          -- end,
+          ["n <leader>vd"] = function()
             require("vgit").project_diff_preview()
           end,
-          ["n <leader>Gx"] = function()
-            require("vgit").toggle_diff_preference()
-          end,
+          -- ["n <leader>Gx"] = function()
+          --   require("vgit").toggle_diff_preference()
+          -- end,
         },
         settings = {
           -- You can either allow corresponding mapping for existing hl, or re-define them yourself entirely.

@@ -40,7 +40,7 @@ return {
           register = '"',
         },
         show_diff = {
-          normal = "gF",
+          normal = "gh",
           full_diff = true
         },
         show_info = {
@@ -50,7 +50,7 @@ return {
           normal = "gc",
         },
         show_help = {
-          normal = "gh",
+          normal = "g?",
         },
       },
       -- window = {

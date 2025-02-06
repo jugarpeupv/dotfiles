@@ -118,6 +118,9 @@ return {
         exclude_filetypes = {
           -- "netrw",
           "toggleterm",
+          "copilot-chat",
+          "copilot-diff",
+          "copilot-overlay",
           "NvimTree",
           "Diff",
           "dirvish",

@@ -9,6 +9,14 @@ return {
       "nvim-tree/nvim-web-devicons",
     },
     cmd = { "Octo" },
+    keys = {
+      {
+        mode = { "n" },
+        "<leader>is",
+        "<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open<cr>",
+        { noremap = true, silent = true },
+      },
+    },
     opts = {
       -- github_hostname = "github.com", -- Change to your own ghe host
       ssh_aliases = {
@@ -17,7 +25,7 @@ return {
         ["github.com-izertis"] = "github.com",
         ["github.com-personal"] = "github.com",
       }, -- SSH aliases. e.g. `ssh_aliases = {["github.com-work"] = "github.com"}`
-    }
+    },
     -- config = function()
     --   require("octo").setup({
     --     -- github_hostname = "github.com", -- Change to your own ghe host
