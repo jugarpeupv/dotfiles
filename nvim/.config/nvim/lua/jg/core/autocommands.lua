@@ -95,16 +95,16 @@ augroup END ]])
 -- vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
 
 
-vim.api.nvim_create_autocmd({ "OptionSet" }, {
-  pattern = "diff",
-  callback = function()
-    if vim.wo.diff then
-      require("barbecue.ui").toggle(false)
-    else
-      require("barbecue.ui").toggle(true)
-    end
-  end,
-})
+-- vim.api.nvim_create_autocmd({ "OptionSet" }, {
+--   pattern = "diff",
+--   callback = function()
+--     if vim.wo.diff then
+--       require("barbecue.ui").toggle(false)
+--     else
+--       require("barbecue.ui").toggle(true)
+--     end
+--   end,
+-- })
 
 -- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
 
@@ -132,33 +132,34 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
-vim.api.nvim_create_autocmd("User", {
-  pattern = "TelescopePreviewerLoaded",
-  callback = function(args)
-    -- if args.data.filetype ~= "help" then
-    --   vim.wo.number = true
-    --   return
-    -- end
-    -- -- elseif args.data.bufname:match("*.csv") then
-    -- --   vim.wo.wrap = false
-    -- -- end
-    vim.wo.wrap = true
-  end,
-})
-
-
-local group = vim.api.nvim_create_augroup("__env", {clear=true})
-vim.api.nvim_create_autocmd({"BufEnter"}, {
-  pattern = ".env",
-  group = group,
-  callback = function()
-    print("env file")
-    vim.o.wrap = false
-  end,
-})
-
-
+-- vim.api.nvim_create_autocmd("User", {
+--   pattern = "TelescopePreviewerLoaded",
+--   callback = function(args)
+--     -- if args.data.filetype ~= "help" then
+--     --   vim.wo.number = true
+--     --   return
+--     -- end
+--     -- -- elseif args.data.bufname:match("*.csv") then
+--     -- --   vim.wo.wrap = false
+--     -- -- end
+--     vim.wo.wrap = true
+--   end,
+-- })
+--
+--
+-- local group = vim.api.nvim_create_augroup("__env", {clear=true})
+-- vim.api.nvim_create_autocmd({"BufEnter"}, {
+--   pattern = ".env",
+--   group = group,
+--   callback = function()
+--     print("env file")
+--     vim.o.wrap = false
+--   end,
+-- })
+--
+--
 vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("wrap-markdown", { clear = true }),
   pattern = "markdown",
   callback = function()
     vim.cmd([[set nowrap]])
@@ -166,6 +167,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd('BufEnter', {
+  group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
   pattern = 'copilot-*',
   callback = function()
     vim.opt_local.conceallevel = 0

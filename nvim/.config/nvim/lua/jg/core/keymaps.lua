@@ -836,6 +836,8 @@ vim.api.nvim_set_keymap('i', '<C-a>', '<C-o>^', { noremap = true, silent = true 
 
 
 vim.cmd([[set wildcharm=<C-z>]])
-vim.cmd([[cnoremap <Right> <Space><BS><Right><C-z>]])
+vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
+vim.cmd([[cnoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"]])
+vim.cmd([[cnoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"]])
 vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])

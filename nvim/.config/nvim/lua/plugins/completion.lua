@@ -68,12 +68,7 @@ return {
       {
         "petertriho/cmp-git",
         dependencies = { "hrsh7th/nvim-cmp" },
-        opts = {
-          -- options go here
-        },
-        init = function()
-          table.insert(require("cmp").get_config().sources, { name = "git" })
-        end,
+        opts = {},
       },
       { "neovim/nvim-lspconfig" },
       { "davidsierradz/cmp-conventionalcommits" },
@@ -342,6 +337,7 @@ return {
           -- { name = 'nvim_lsp_signature_help', priority = 998 },
           { name = "ecolog",          priority = 901 },
           { name = "path",            priority = 900 }, -- file system paths
+          { name = "git",          priority = 890 },
           -- { name = "nvim_lsp_signature_help" },
           { name = "render-markdown", priority = 850 },
           { name = "obsidian",        priority = 800 },
