@@ -9,6 +9,27 @@ return {
     tag = "0.1.8",
     dependencies = {
       {
+        "Equilibris/nx.nvim",
+        dependencies = {
+          "nvim-telescope/telescope.nvim",
+        },
+
+        -- opts = {
+        --   nx_cmd_root = "npx nx",
+        -- },
+
+        -- Plugin will load when you use these keys
+        keys = {
+          { "<leader>nx", "<cmd>Telescope nx actions<CR>", desc = "nx actions" },
+        },
+
+        config = function()
+          require("nx").setup({
+            nx_cmd_root = "npx nx",
+          })
+        end
+      },
+      {
         "nvim-telescope/telescope-frecency.nvim",
         -- install the latest stable version
         version = "*",

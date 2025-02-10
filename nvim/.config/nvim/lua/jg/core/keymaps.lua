@@ -805,6 +805,8 @@ vim.keymap.set({ "n" }, "<leader>bp", "<cmd>bp<cr>", opts)
 
 vim.keymap.set({ "n" }, "<leader>fr", "<cmd>Telescope frecency workspace=CWD<cr>", opts)
 
+vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
+
 vim.keymap.set({ "n" }, "<M-y>", function()
   local current_buf_name = vim.fn.expand("%:t")
   vim.api.nvim_feedkeys(
@@ -819,3 +821,21 @@ vim.keymap.set({ "n" }, "<M-y>", function()
   --   true
   -- )
 end, opts)
+
+
+vim.api.nvim_set_keymap('i', '<C-e>', '<C-o>$', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<C-a>', '<C-o>^', { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("c", "<c-k>", [[ wildmenumode() ? "c-k>" : "<up>" ]], { noremap = true, expr = true }) -- expr mapping
+-- vim.api.nvim_set_keymap("c", "<c-j>", [[ wildmenumode() ? "c-j>" : "<down>" ]], { noremap = true, expr = true }) -- expr mapping
+-- vim.cmd("cnoremap <expr> <C-K> wildmenumode() ? '<C-P>' : '<Up>'")
+-- vim.cmd("cnoremap <expr> <C-J> wildmenumode() ? '<C-N>' : '<Down>'")
+
+-- vim.keymap.set('c', '<C-j>', '<Tab>', { noremap = true, silent = true })
+-- vim.keymap.set('c', '<C-k>', '<S-Tab>', { noremap = true, silent = true })
+
+
+
+vim.cmd([[set wildcharm=<C-z>]])
+vim.cmd([[cnoremap <Right> <Space><BS><Right><C-z>]])
+vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])
+vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])

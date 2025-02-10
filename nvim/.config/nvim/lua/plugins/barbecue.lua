@@ -231,6 +231,7 @@ return {
         },
         dir_levels = 4,
         filetype_exclude = {
+          "DiffviewFiles",
           "terminal",
           "help",
           "startify",

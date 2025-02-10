@@ -1,3 +1,32 @@
+-- Declare a global function to retrieve the current directory
+function _G.get_oil_winbar()
+  local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+  local dir = require("oil").get_current_dir(bufnr)
+  if dir then
+    return vim.fn.fnamemodify(dir, ":~")
+  else
+    -- If there is no current directory (e.g. over ssh), just show the buffer name
+    return vim.api.nvim_buf_get_name(0)
+  end
+end
+
+-- Function to get the current directory
+function _G.get_current_dir()
+  local dir = vim.fn.substitute(vim.fn.getcwd(), "^" .. vim.fn.expand("$HOME"), "~", "")
+
+  if dir == "" then
+    return ""
+  end
+  return dir
+end
+
+-- Function to combine SSH information and current directory for the winbar
+function _G.get_winbar()
+  -- local ssh_info = get_ssh_info()
+  local current_dir = get_current_dir()
+  return current_dir
+end
+
 return {
   {
     "elihunter173/dirbuf.nvim",
@@ -40,7 +69,6 @@ return {
           if current_dir:find("oil://") then
             current_dir = current_dir:gsub("oil://", "")
           end
-
           local cmd = ":Oil " .. current_dir .. "/"
           vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd, true, false, true), "n", true)
         end,
@@ -49,68 +77,15 @@ return {
       { mode = { "n" }, "-", "<cmd>Oil<cr>" },
     },
     opts = {},
-    -- Optional dependencies
-    -- dependencies = { "echasnovski/mini.icons" },
-    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
     config = function()
-      -- Declare a global function to retrieve the current directory
-      function _G.get_oil_winbar()
-        local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
-        local dir = require("oil").get_current_dir(bufnr)
-        if dir then
-          return vim.fn.fnamemodify(dir, ":~")
-        else
-          -- If there is no current directory (e.g. over ssh), just show the buffer name
-          return vim.api.nvim_buf_get_name(0)
-        end
-      end
-
-      -- Function to get SSH information
-      -- function _G.get_ssh_info()
-      --   local user = os.getenv("USER") or ""
-      --   local host = os.getenv("HOST") or ""
-      --   local ssh_tty = os.getenv("SSH_TTY")
-      --   print("USER: ", user)
-      --   print("HOST: ", host)
-      --   print("SSH_TTY: ", ssh_tty)
-      --
-      --   if os.getenv("SSH_TTY") == nil then
-      --     return ""
-      --   end
-      --   return user .. "@" .. host
-      -- end
-
-      -- Function to get the current directory
-      function _G.get_current_dir()
-        local dir = vim.fn.substitute(vim.fn.getcwd(), "^" .. vim.fn.expand("$HOME"), "~", "")
-
-        if dir == "" then
-          return ""
-        end
-        return dir
-      end
-
-      -- Function to combine SSH information and current directory for the winbar
-      function _G.get_winbar()
-        -- local ssh_info = get_ssh_info()
-        local current_dir = get_current_dir()
-        return current_dir
-      end
-
       require("oil").setup({
         -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
         -- Set to false if you want some other plugin (e.g. netrw) to open when you edit directories.
-        default_file_explorer = false,
+        default_file_explorer = true,
         -- Id is automatically added at the beginning, and name at the end
         -- See :help oil-columns
         columns = {
-          -- "icon",
           { "icon", directory = "", default_file = "" },
-          -- icon = {
-          --   -- default_file = "",
-          --   directory = "",
-          --   add_padding = true,
-          -- },
           "permissions",
           "size",
           "mtime",
@@ -125,14 +100,14 @@ return {
           winbar =
           "%#NvimTreeRootFolder#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
           -- winbar = "%#@attribute.builtin#%{v:lua.get_winbar()} %#ModeMsg#%{%&modified ? '⏺' : ''%}",
-          wrap = false,
-          signcolumn = "no",
-          cursorcolumn = false,
-          foldcolumn = "0",
-          spell = false,
-          list = false,
-          conceallevel = 0,
-          concealcursor = "nvic",
+          -- wrap = false,
+          -- signcolumn = "no",
+          -- cursorcolumn = false,
+          -- foldcolumn = "0",
+          -- spell = false,
+          -- list = false,
+          -- conceallevel = 0,
+          -- concealcursor = "nvic",
         },
         -- Send deleted files to the trash instead of permanently deleting them (:help oil-trash)
         delete_to_trash = false,
@@ -161,7 +136,7 @@ return {
         -- constrain_cursor = "editable",
         constrain_cursor = "editable",
         -- Set to true to watch the filesystem for changes and reload oil
-        watch_for_changes = false,
+        watch_for_changes = true,
         -- Keymaps in oil buffer. Can be any value that `vim.keymap.set` accepts OR a table of keymap
         -- options with a `callback` (e.g. { callback = function() ... end, desc = "", mode = "n" })
         -- Additionally, if it is a string that matches "actions.<name>",
@@ -322,13 +297,13 @@ return {
           -- Show files and directories that start with "."
           show_hidden = true,
           -- This function defines what is considered a "hidden" file
-          is_hidden_file = function(name, bufnr)
-            return vim.startswith(name, ".")
-          end,
-          -- This function defines what will never be shown, even when `show_hidden` is set
-          is_always_hidden = function(name, bufnr)
-            return false
-          end,
+          -- is_hidden_file = function(name, bufnr)
+          --   return vim.startswith(name, ".")
+          -- end,
+          -- -- This function defines what will never be shown, even when `show_hidden` is set
+          -- is_always_hidden = function(name, bufnr)
+          --   return false
+          -- end,
           -- Sort file names in a more intuitive order for humans. Is less performant,
           -- so you may want to set to false if you work with large directories.
           natural_order = true,

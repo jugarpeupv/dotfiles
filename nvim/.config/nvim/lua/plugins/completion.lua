@@ -539,15 +539,16 @@ return {
       --   mapping = cmp.mapping.preset.cmdline({
       --     ["<C-j>"] = { c = cmp.mapping.select_next_item() },
       --     ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-      --     ["<Tab>"] = cmp.mapping(function(fallback)
-      --       -- local copilot = require("copilot.suggestion")
-      --       -- if copilot.is_visible() then
-      --       --   copilot.accept()
-      --       -- elseif cmp.visible() then
-      --       -- fallback()
-      --       cmp.mapping.complete()
-      --     end),
+      --     -- ["<Tab>"] = cmp.mapping(function(fallback)
+      --     --   -- local copilot = require("copilot.suggestion")
+      --     --   -- if copilot.is_visible() then
+      --     --   --   copilot.accept()
+      --     --   -- elseif cmp.visible() then
+      --     --   -- fallback()
+      --     --   cmp.mapping.complete()
+      --     -- end),
       --   }),
+      --   -- matching = { disallow_symbol_nonprefix_matching = false },
       --   sources = cmp.config.sources({
       --     { name = "path" },
       --   }, {
