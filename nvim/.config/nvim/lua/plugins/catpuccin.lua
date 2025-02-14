@@ -163,7 +163,7 @@ return {
             GitFooter = { bg = "none" },
             GitAppBar = { bg = "none" },
             String = { fg = "#F2CDCD" },
-            ["@string.special.url"] = { fg = "#F38BA8", bg = "none", style = {} },
+            -- ["@string.special.url"] = { fg = "#F38BA8", bg = "none", style = {} },
             StatusLine = { fg = "#cdd6f5", bg = "#292e42" },
             MatchParen = { bg = "#394b70", fg = "none" },
             IlluminatedWordText = { bg = "#394b70" },
@@ -249,7 +249,7 @@ return {
       -- vim.cmd([[hi RenderMarkdownCode guibg=#0f3846]])
 
       vim.cmd([[hi RenderMarkdownH1Bg guibg=#492a33]])
-      vim.cmd([[hi RenderMarkdownH2Bg guibg=#294653]])
+      vim.cmd([[hi RenderMarkdownH2Bg guibg=#528599]])
       vim.cmd([[hi RenderMarkdownH3Bg guibg=#675161]])
       vim.cmd([[hi RenderMarkdownH4Bg guibg=#526c96]])
       vim.cmd([[hi RenderMarkdownH5Bg guibg=#6c7298]])
@@ -302,6 +302,8 @@ return {
       vim.cmd([[highlight TelescopePreviewLine guibg=#394b70 gui=none]])
       vim.cmd([[highlight! CmpPmenu guibg=none]])
       vim.cmd([[highlight! CmpPmenuBorder guifg=#394b70]])
+
+      vim.cmd([[hi CmpItemKindField guifg=#f38ba9]])
       vim.cmd([[highlight! PmenuSel guibg=#394b70]])
 
       --- -------------------- COMMON
@@ -343,6 +345,16 @@ return {
       -- "DiffText:DiffAddText",
       vim.cmd([[highlight DiffAddText gui=none guifg=none guibg=#456f80]])
 
+
+      vim.cmd([[highlight GitSignsAddPreview gui=none guifg=none guibg=#103235]])
+      vim.cmd([[highlight GitSignsDeletePreview gui=none guifg=none guibg=#3F2D3D]])
+      -- vim.cmd([[highlight GitSignsAdd guifg=#2ac3de]])
+      vim.cmd([[highlight GitSignsAdd guifg=#94E2D5]])
+      vim.cmd([[highlight GitSignsChange guifg=#F2CDCD]])
+      vim.cmd([[highlight GitSignsChangeInLine guifg=#F2CDCD]])
+      vim.cmd([[highlight GitSignsDelete guifg=#F38BA8]])
+      vim.cmd([[highlight GitSignsDeleteVirtLn guibg=#3F2D3D guifg=none]])
+
       vim.cmd([[highlight BufferLineTabSeparator gui=none guifg=#13182e]])
       vim.cmd([[highlight BufferLineTabSeparatorSelected gui=none guifg=#13182e]])
       vim.cmd([[highlight BufferLineTabSelected gui=none guibg=#394b70]])
@@ -369,11 +381,6 @@ return {
       vim.cmd([[hi DiagnosticError guifg=#F38BA8]])
       vim.cmd([[hi DiagnosticSignError guifg=#F38BA8]])
 
-      vim.cmd([[highlight GitSignsAdd guifg=#2ac3de]])
-      -- vim.cmd([[highlight GitSignsAdd guifg=#94E2D5]])
-      vim.cmd([[highlight GitSignsChange guifg=#F2CDCD]])
-      vim.cmd([[highlight GitSignsChangeInLine guifg=#F2CDCD]])
-      vim.cmd([[highlight GitSignsDelete guifg=#F38BA8]])
       vim.cmd([[hi TroublePreview guibg=#264F78 guifg=none]])
       -- vim.cmd([[hi TroubleFileName guibg=#394b70 guifg=#0c0c0c]])
       vim.cmd([[hi TroubleFileName guifg=#F5C2E7 guibg=none]])

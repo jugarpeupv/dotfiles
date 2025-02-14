@@ -123,6 +123,12 @@ return {
           map("n", "<leader>sj", "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true })
           map("n", "<leader>sk", "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true })
 
+          map("n", "<leader>ph", "<cmd>Gitsigns preview_hunk_inline<cr>", { silent = true })
+
+          map("n", "<leader>gD", "<cmd>Gitsigns toggle_deleted<cr>", { silent = true })
+
+          -- vim.keymap.set({'o', 'x'}, 'ih', '<Cmd>Gitsigns select_hunk<CR>')
+
           -- Actions
           map("n", "<leader>gT", "<cmd>Gitsigns toggle_current_line_blame<CR>")
         end,

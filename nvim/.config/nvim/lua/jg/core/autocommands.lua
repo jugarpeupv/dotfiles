@@ -158,13 +158,13 @@ vim.api.nvim_create_autocmd("User", {
 -- })
 --
 --
-vim.api.nvim_create_autocmd("FileType", {
-  group = vim.api.nvim_create_augroup("wrap-markdown", { clear = true }),
-  pattern = "markdown",
-  callback = function()
-    vim.cmd([[set nowrap]])
-  end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+--   group = vim.api.nvim_create_augroup("wrap-markdown", { clear = true }),
+--   pattern = "markdown",
+--   callback = function()
+--     vim.cmd([[set nowrap]])
+--   end,
+-- })
 
 vim.api.nvim_create_autocmd('BufEnter', {
   group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
@@ -172,4 +172,14 @@ vim.api.nvim_create_autocmd('BufEnter', {
   callback = function()
     vim.opt_local.conceallevel = 0
   end
+})
+
+
+vim.api.nvim_create_autocmd({"OptionSet"}, {
+  pattern = "diff",
+  callback = function()
+    if vim.opt.diff:get() then
+      require("barbecue.ui").toggle(false)
+    end
+  end,
 })

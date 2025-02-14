@@ -39,6 +39,6 @@ shift + alt - 4 : osascript ~/.config/skhd/Scripts/new-simulator-window.scpt
 
 
 
-## shift + alt - m : osascript ~/.config/skhd/Scripts/new-slack-window.scpt
+shift + alt - m : osascript ~/.config/skhd/Scripts/new-slack-window.scpt
 ## shift + alt - 9 : osascript ~/.config/skhd/Scripts/new-outlook.scpt
 

@@ -8,27 +8,31 @@ return {
     -- branch = "0.1.x",
     tag = "0.1.8",
     dependencies = {
-      {
-        "Equilibris/nx.nvim",
-        dependencies = {
-          "nvim-telescope/telescope.nvim",
-        },
-
-        -- opts = {
-        --   nx_cmd_root = "npx nx",
-        -- },
-
-        -- Plugin will load when you use these keys
-        keys = {
-          { "<leader>nx", "<cmd>Telescope nx actions<CR>", desc = "nx actions" },
-        },
-
-        config = function()
-          require("nx").setup({
-            nx_cmd_root = "npx nx",
-          })
-        end
-      },
+      -- {
+      --   "nvim-telescope/telescope-arecibo.nvim",
+      --   rocks = { openssl = true, ["lua-http-parser"] = true },
+      -- },
+      -- {
+      --   "Equilibris/nx.nvim",
+      --   dependencies = {
+      --     "nvim-telescope/telescope.nvim",
+      --   },
+      --
+      --   -- opts = {
+      --   --   nx_cmd_root = "npx nx",
+      --   -- },
+      --
+      --   -- Plugin will load when you use these keys
+      --   keys = {
+      --     { "<leader>nx", "<cmd>Telescope nx actions<CR>", desc = "nx actions" },
+      --   },
+      --
+      --   config = function()
+      --     require("nx").setup({
+      --       nx_cmd_root = "npx nx",
+      --     })
+      --   end
+      -- },
       {
         "nvim-telescope/telescope-frecency.nvim",
         -- install the latest stable version
@@ -811,7 +815,7 @@ return {
       -- telescope.load_extension('node_modules')
       -- telescope.load_extension('projects')
       -- telescope.load_extension('node_modules')
-      -- telescope.load_extension('arecibo')
+      -- telescope.load_extension("arecibo")
       -- require('telescope').load_extension('vim_bookmarks')
       -- require('telescope').load_extension('fzy_native')
       -- require('telescope').load_extension('gh')

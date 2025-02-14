@@ -64,6 +64,7 @@ return {
   {
     event = "InsertEnter",
     "hrsh7th/nvim-cmp",
+    enabled = true,
     dependencies = {
       {
         "petertriho/cmp-git",
