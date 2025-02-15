@@ -484,6 +484,7 @@ return {
       vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
       vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
       vim.cmd([[hi @markup.raw guifg=#F5E0DC]])
+      vim.cmd([[hi ContextVt guifg=#747ebd]])
 
       vim.cmd([[hi GitHeader guibg=none]])
       vim.cmd([[hi GitFooter guibg=none]])

@@ -1,4 +1,5 @@
 return {
+  { "andersevenrud/nvim_context_vt", event = { "BufReadPre", "BufNewFile" } },
   -- {
   --   "yuratomo/w3m.vim",
   -- },
@@ -102,12 +103,12 @@ return {
 
       -- Show dependency versions
       -- vim.keymap.set({ "n" }, "<leader>ns", require("package-info").show, { silent = true, noremap = true })
-      vim.api.nvim_set_keymap(
-        "n",
-        "<leader>nr",
-        "<cmd>lua require('package-info').show({ force = true })<cr>",
-        { silent = true, noremap = true }
-      )
+      -- vim.api.nvim_set_keymap(
+      --   "n",
+      --   "<leader>nr",
+      --   "<cmd>lua require('package-info').show({ force = true })<cr>",
+      --   { silent = true, noremap = true }
+      -- )
 
       -- -- Hide dependency versions
       -- vim.keymap.set({ "n" }, "<leader>nh", require("package-info").hide, { silent = true, noremap = true })
@@ -129,7 +130,7 @@ return {
       vim.keymap.set({ "n" }, "<leader>nd", require("package-info").delete, { silent = true, noremap = true })
 
       -- Install a new dependency
-      vim.keymap.set({ "n" }, "<leader>ni", require("package-info").install, { silent = true, noremap = true })
+      -- vim.keymap.set({ "n" }, "<leader>ni", require("package-info").install, { silent = true, noremap = true })
 
       -- Install a different dependency version
       vim.keymap.set(

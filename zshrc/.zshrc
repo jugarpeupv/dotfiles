@@ -12,3 +12,5 @@ source $HOME/.config/zshrc/fzf.zsh
 source $HOME/.config/zshrc/ssh.zsh
 source $HOME/.config/zshrc/sdkman.zsh
 source $HOME/.config/zshrc/evalcache.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

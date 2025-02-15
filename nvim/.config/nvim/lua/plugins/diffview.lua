@@ -343,7 +343,7 @@ return {
     cmd = { "Neogit" },
     keys = {
       {
-        "<leader>ng",
+        "<leader>ni",
         "<cmd>Neogit<cr>",
       },
     },
