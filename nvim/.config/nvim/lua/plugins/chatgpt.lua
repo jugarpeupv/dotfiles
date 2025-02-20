@@ -1,6 +1,7 @@
 return {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
+    -- commit = "7e6583c75f1231ea1eac70e06995dd3f97a58478",
     enabled = function()
       local is_headless = #vim.api.nvim_list_uis() == 0
       if is_headless then
@@ -15,6 +16,11 @@ return {
     },
     build = "make tiktoken",    -- Only on MacOS or Linux
     opts = {
+      providers = {
+        copilot = {
+          -- see config.lua for implementation
+        },
+      },
       log_level = "fatal",
       mappings = {
         toggle_sticky = {
@@ -273,7 +279,7 @@ return {
 
       local mappings = {
         {
-          "<leader>ip",
+          "<leader>pa",
           function()
             return vim.bo.filetype == "AvanteInput" and require("avante.clipboard").paste_image()
                 or require("img-clip").paste_image()

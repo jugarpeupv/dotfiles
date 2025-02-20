@@ -1,5 +1,16 @@
 return {
-  { "andersevenrud/nvim_context_vt", event = { "BufReadPre", "BufNewFile" } },
+  {
+    "OXY2DEV/patterns.nvim",
+    cmd = { "Patterns" }
+  },
+  {
+    "andersevenrud/nvim_context_vt",
+    -- event = { "BufReadPre", "BufNewFile" },
+    opts = {
+      enabled = false,
+    },
+    keys = { { "<leader>co", "<cmd>NvimContextVtToggle<cr>" } },
+  },
   -- {
   --   "yuratomo/w3m.vim",
   -- },
@@ -173,13 +184,13 @@ return {
           partial_mode = false,
         },
         modules = {
-          cmp = true,       -- Mask values in completion
-          peek = true,      -- Mask values in peek view
-          telescope = true, -- Mask values in telescope
+          cmp = true,            -- Mask values in completion
+          peek = true,           -- Mask values in peek view
+          telescope = true,      -- Mask values in telescope
           telescope_previewer = true, -- Mask values in telescope preview buffers
           files = {
             shelter_on_leave = true, -- Control automatic re-enabling of shelter when leaving buffer
-            disable_cmp = true, -- Disable completion in sheltered buffers (default: true)
+            disable_cmp = true,  -- Disable completion in sheltered buffers (default: true)
             skip_comments = true, -- Skip masking comment lines in environment files (default: false)
           },
         },
@@ -250,7 +261,11 @@ return {
   {
     "barrett-ruth/live-server.nvim",
     build = "pnpm add -g live-server",
-    cmd = { "LiveServerStart", "LiveServerStop" },
+    keys = { {
+      "<leader>le",
+      "<cmd>LiveServerToggle<CR>",
+    } },
+    cmd = { "LiveServerStart", "LiveServerStop", "LiveServerToggle" },
     config = true,
   },
   -- {

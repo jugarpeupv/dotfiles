@@ -656,9 +656,11 @@ local function show_documentation()
     local response = vim.lsp.buf_request_sync(0, "textDocument/hover", params)
     local has_lsp_info = false
 
-    for _, value in pairs(response) do
-      if value and value.result and value.result.contents then
-        has_lsp_info = true
+    if response then
+      for _, value in pairs(response) do
+        if value and value.result and value.result.contents then
+          has_lsp_info = true
+        end
       end
     end
 
@@ -808,7 +810,7 @@ vim.keymap.set({ "n" }, "<leader>fr", "<cmd>Telescope frecency workspace=CWD<cr>
 vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
 
 vim.keymap.set({ "n" }, "<M-y>", function()
-  local current_buf_name = vim.fn.expand("%:t")
+  local current_buf_name = vim.fn.expand("%")
   vim.api.nvim_feedkeys(
     vim.api.nvim_replace_termcodes(":Compile bun " .. current_buf_name, true, false, true),
     "n",
@@ -835,8 +837,9 @@ vim.api.nvim_set_keymap('i', '<C-a>', '<C-o>^', { noremap = true, silent = true 
 
 
 
-vim.cmd([[set wildcharm=<C-z>]])
-vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
+vim.cmd([[set wildcharm=<C-v>]])
+vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
+-- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
 vim.cmd([[cnoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"]])
 vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])

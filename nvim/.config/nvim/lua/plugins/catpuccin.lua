@@ -346,6 +346,7 @@ return {
       vim.cmd([[highlight DiffAddText gui=none guifg=none guibg=#456f80]])
 
 
+      -- start Gitsigns
       vim.cmd([[highlight GitSignsAddPreview gui=none guifg=none guibg=#103235]])
       vim.cmd([[highlight GitSignsDeletePreview gui=none guifg=none guibg=#3F2D3D]])
       -- vim.cmd([[highlight GitSignsAdd guifg=#2ac3de]])
@@ -354,6 +355,34 @@ return {
       vim.cmd([[highlight GitSignsChangeInLine guifg=#F2CDCD]])
       vim.cmd([[highlight GitSignsDelete guifg=#F38BA8]])
       vim.cmd([[highlight GitSignsDeleteVirtLn guibg=#3F2D3D guifg=none]])
+
+      vim.cmd([[hi GitSignsStagedAddLn  guibg=#103235]])
+      vim.cmd([[hi GitSignsStagedUntrackedLn  guibg=#103235]])
+      vim.cmd([[hi GitSignsStagedAddCul  guifg=#94E2D5]])
+      vim.cmd([[hi GitSignsStagedUntracked  guifg=#94E2D5]])
+      vim.cmd([[hi GitSignsStagedAdd  guifg=#94E2D5]])
+      vim.cmd([[hi GitSignsStagedUntrackedNr  guifg=#94E2D5]])
+      vim.cmd([[hi GitSignsStagedUntrackedCul  guifg=#94E2D5]])
+      vim.cmd([[hi GitSignsStagedAddNr  guifg=#94E2D5]])
+      vim.cmd([[hi GitSignsStagedDelete  guifg=#F38BA8]])
+      vim.cmd([[hi GitSignsStagedTopdelete  guifg=#F38BA8]])
+      vim.cmd([[hi GitSignsStagedDeleteNr  guifg=#F38BA8]])
+      vim.cmd([[hi GitSignsStagedTopdeleteNr  guifg=#F38BA8]])
+      vim.cmd([[hi GitSignsStagedDeleteCul  guifg=#F38BA8]])
+      vim.cmd([[hi GitSignsStagedTopdeleteCul  guifg=#F38BA8]])
+      vim.cmd([[hi GitSignsStagedChangeLn  guibg=#272d43]])
+      vim.cmd([[hi GitSignsStagedChangedeleteLn  guibg=#272d43]])
+      vim.cmd([[hi GitSignsStagedTopdeleteLn  guibg=#3f2d3d]])
+      vim.cmd([[hi GitSignsStagedChangeNr  guifg=#F2CDCD]])
+      vim.cmd([[hi GitSignsStagedChangedeleteNr  guifg=#F2CDCD]])
+      vim.cmd([[hi GitSignsStagedChangeCul  guifg=#F2CDCD]])
+      vim.cmd([[hi GitSignsStagedChangedeleteCul  guifg=#F2CDCD]])
+      vim.cmd([[hi GitSignsStagedChange  guifg=#F2CDCD]])
+      vim.cmd([[hi GitSignsStagedChangedelete  guifg=#F2CDCD]])
+
+
+      -- end Gitsigns
+
 
       vim.cmd([[highlight BufferLineTabSeparator gui=none guifg=#13182e]])
       vim.cmd([[highlight BufferLineTabSeparatorSelected gui=none guifg=#13182e]])
@@ -424,6 +453,7 @@ return {
       vim.cmd([[highlight @keyword.return  gui=bold]])
       vim.cmd([[highlight @keyword.operator  gui=bold]])
       vim.cmd([[highlight @keyword.exception  gui=bold guifg=#F5C2E7]])
+      vim.cmd([[highlight @keyword.jsdoc  gui=none guifg=#CBA6F7]])
 
       vim.cmd([[highlight Constant gui=none cterm=none guibg=none blend=0]])
       vim.cmd([[highlight Title gui=none cterm=none guibg=none blend=0]])

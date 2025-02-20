@@ -10,6 +10,13 @@ original_window=$(tmux display-message -p -F "#{window_id}")
 current_pane=$(tmux display-message -p -F "#{pane_id}")
 
 dir_name=$(basename $current_dir)
+
+# Check if dir_name starts with "wt"
+if [[ $dir_name == wt* ]]; then
+  # Get the previous element from basename
+  dir_name=$(basename $(dirname $current_dir))
+fi
+
 # Check if a tmux session with the current directory name already exists
 if tmux has-session -t "$dir_name" 2>/dev/null; then
   echo "A tmux session with the name '$dir_name' already exists."

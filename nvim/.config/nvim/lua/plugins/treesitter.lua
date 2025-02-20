@@ -91,9 +91,9 @@ return {
           --   return false
           -- end,
           disable = function(lang, bufnr) -- Disable in large .json files like in package-lock.json
-             if lang == "nvimtree" then
-               return true
-             end
+            if lang == "nvimtree" then
+              return true
+            end
             -- if lang == "yaml" or lang == "yml" then
             --   return true
             -- end
@@ -284,6 +284,16 @@ return {
           },
         },
       })
+
+      local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+
+      parser_configs.lua_patterns = {
+        install_info = {
+          url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns",
+          files = { "src/parser.c" },
+          branch = "main",
+        },
+      }
     end,
   },
   {
