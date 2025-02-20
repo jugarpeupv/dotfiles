@@ -11,6 +11,7 @@ return {
   event = { "TermOpen" ,"BufReadPost" },
   config = function()
     local colors = {
+      green = "#94E2D5",
       blue = "#9CDCFE",
       -- blue = "#bb9af7",
       -- cyan = "#4EC9B0",
@@ -174,6 +175,17 @@ return {
       -- end,
     }
 
+    local diff_mode = {
+        function()
+          if vim.wo.diff then
+            return "[DIFF]"
+          else
+            return ""
+          end
+        end,
+        color = { fg = colors.green }, -- Customize the colors as needed
+    }
+
     local diff = {
       "diff",
       colored = true, -- Displays a colored diff status if set to true
@@ -245,7 +257,7 @@ return {
           -- { "mode", separator = { left = "", right = "" } },
         },
         lualine_b = { branch },
-        lualine_c = {},
+        lualine_c = { diff_mode },
         lualine_x = { dirname, "filetype" },
         -- lualine_x = {},
         -- lualine_y = {},

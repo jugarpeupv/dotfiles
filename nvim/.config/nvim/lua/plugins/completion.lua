@@ -164,6 +164,7 @@ return {
       end
 
       cmp.setup({
+        performance = { fetching_timeout = 10000 },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)

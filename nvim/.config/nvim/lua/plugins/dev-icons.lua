@@ -299,6 +299,8 @@ return {
         [".actrc"] = { icon = "", color = "#CBA6F7", name = "actrc" },
         ["commitlint.config.ts"] = { icon = "󰜘", color = "#CBA6F7", name = "commitlintconfig12" },
         [".prettierignore"] = { icon = "", color = "#7C7F93", name = "prettierignore" },
+        ["prettier.config.js"] = { icon = "", color = "#73daca", name = "prettierconfigjs" },
+        ["prettier.config.ts"] = { icon = "", color = "#73daca", name = "prettierconfigts" },
         [".prettierrc"] = { icon = "", color = "#73daca", name = "prettierrc" },
         [".prettierrc.json"] = { icon = "", color = "#73daca", name = "prettierrcjson" },
         ["project.json"] = { icon = "", color = "#9CDCFE", name = "ProjectJson" },

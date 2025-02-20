@@ -59,7 +59,15 @@ vim.cmd([[map <M-g> gcc]])
 vim.keymap.set({ "n", "t" }, "<D-p>", function()
   require("telescope.builtin").find_files({
     hidden = true,
-    find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__", "--glob=!*DS_Store" },
+    find_command = {
+      "rg",
+      "--files",
+      "--color",
+      "never",
+      "--glob=!.git",
+      "--glob=!*__template__",
+      "--glob=!*DS_Store",
+    },
   })
   -- local builtin = require("telescope.builtin")
   --
@@ -75,7 +83,15 @@ end, opts)
 vim.keymap.set({ "n", "t" }, "<M-p>", function()
   require("telescope.builtin").find_files({
     hidden = true,
-    find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__", "--glob=!*DS_Store" },
+    find_command = {
+      "rg",
+      "--files",
+      "--color",
+      "never",
+      "--glob=!.git",
+      "--glob=!*__template__",
+      "--glob=!*DS_Store",
+    },
   })
   -- local builtin = require("telescope.builtin")
   --
@@ -651,7 +667,7 @@ local function show_documentation()
   elseif vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
     require("crates").show_popup()
   else
-    local params = vim.lsp.util.make_position_params(0, 'utf-8')
+    local params = vim.lsp.util.make_position_params(0, "utf-8")
 
     local response = vim.lsp.buf_request_sync(0, "textDocument/hover", params)
     local has_lsp_info = false
@@ -677,8 +693,20 @@ end
 
 vim.keymap.set("n", "K", show_documentation, { silent = true })
 
-vim.keymap.set({ "n" }, "<leader>wd", "<cmd>windo diffthis<cr>", opts) -- copy to 0 register
-vim.keymap.set({ "n" }, "<leader>wo", "<cmd>windo diffoff<cr>", opts)  -- copy to 0 register
+-- vim.keymap.set({ "n" }, "<leader>wd", "<cmd>windo diffthis<cr>", opts) -- copy to 0 register
+vim.keymap.set({ "n" }, "<leader>wd", function()
+  vim.cmd([[highlight DiffDelete guifg=#011528]])
+  vim.cmd("NvimTreeClose")
+  vim.cmd("windo diffthis")
+  require("barbecue.ui").toggle(false)
+end, opts) -- copy to 0 register
+
+-- vim.keymap.set({ "n" }, "<leader>wo", "<cmd>windo diffoff<cr>", opts)  -- copy to 0 register
+vim.keymap.set({ "n" }, "<leader>wo", function()
+  vim.cmd([[highlight DiffDelete guifg=none]])
+  vim.cmd("windo diffoff")
+  require("barbecue.ui").toggle(true)
+end, opts) -- copy to 0 register
 
 vim.api.nvim_set_keymap("n", "<F5>", [[:lua require"osv".launch({port = 8086})<CR>]], { noremap = true })
 
@@ -824,9 +852,8 @@ vim.keymap.set({ "n" }, "<M-y>", function()
   -- )
 end, opts)
 
-
-vim.api.nvim_set_keymap('i', '<C-e>', '<C-o>$', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('i', '<C-a>', '<C-o>^', { noremap = true, silent = true })
+vim.api.nvim_set_keymap("i", "<C-e>", "<C-o>$", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("i", "<C-a>", "<C-o>^", { noremap = true, silent = true })
 -- vim.api.nvim_set_keymap("c", "<c-k>", [[ wildmenumode() ? "c-k>" : "<up>" ]], { noremap = true, expr = true }) -- expr mapping
 -- vim.api.nvim_set_keymap("c", "<c-j>", [[ wildmenumode() ? "c-j>" : "<down>" ]], { noremap = true, expr = true }) -- expr mapping
 -- vim.cmd("cnoremap <expr> <C-K> wildmenumode() ? '<C-P>' : '<Up>'")
@@ -835,8 +862,6 @@ vim.api.nvim_set_keymap('i', '<C-a>', '<C-o>^', { noremap = true, silent = true 
 -- vim.keymap.set('c', '<C-j>', '<Tab>', { noremap = true, silent = true })
 -- vim.keymap.set('c', '<C-k>', '<S-Tab>', { noremap = true, silent = true })
 
-
-
 vim.cmd([[set wildcharm=<C-v>]])
 vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
 -- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
@@ -844,3 +869,10 @@ vim.cmd([[cnoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"]])
 vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
+
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+  pattern = "windo diffoff",
+  callback = function()
+    print("windo diffoff command executed")
+  end,
+})

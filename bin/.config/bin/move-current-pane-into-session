@@ -3,6 +3,7 @@
 # Get the name of the current working directory
 # current_dir=$(basename "$PWD")
 current_dir=$(tmux display-message -p -F "#{pane_current_path}")
+# echo current_dir: $current_dir
 
 original_window=$(tmux display-message -p -F "#{window_id}")
 
@@ -17,11 +18,13 @@ if [[ $dir_name == wt* ]]; then
   dir_name=$(basename $(dirname $current_dir))
 fi
 
+# echo dir_name: $dir_name
+
 # Check if a tmux session with the current directory name already exists
-if tmux has-session -t "$dir_name" 2>/dev/null; then
-  echo "A tmux session with the name '$dir_name' already exists."
-  exit 1
-fi
+# if tmux has-session -t "$dir_name" 2>/dev/null; then
+#   echo "A tmux session with the name '$dir_name' already exists."
+#   exit 1
+# fi
 
 
 # tmux new-session -ds "$dir_name"

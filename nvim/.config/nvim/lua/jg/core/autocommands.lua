@@ -175,11 +175,29 @@ vim.api.nvim_create_autocmd('BufEnter', {
 })
 
 
-vim.api.nvim_create_autocmd({"OptionSet"}, {
-  pattern = "diff",
-  callback = function()
-    if vim.opt.diff:get() then
-      require("barbecue.ui").toggle(false)
-    end
-  end,
-})
+-- vim.api.nvim_create_autocmd({"OptionSet"}, {
+--   pattern = "diff",
+--   callback = function()
+--     if vim.opt.diff:get() then
+--       require("barbecue.ui").toggle(false)
+--     end
+--   end,
+-- })
+
+
+-- vim.api.nvim_create_autocmd("CmdlineLeave", {
+--   pattern = "windo diffthis",
+--   callback = function()
+--     print("windo diffthis executed")
+--     require("barbecue.ui").toggle(false)
+--   end,
+-- })
+--
+--
+-- vim.api.nvim_create_autocmd("CmdlineLeave", {
+--   pattern = "windo diffoff",
+--   callback = function()
+--     print("windo diffoff executed")
+--     require("barbecue.ui").toggle(true)
+--   end,
+-- })
