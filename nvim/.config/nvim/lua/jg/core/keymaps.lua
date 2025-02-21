@@ -273,7 +273,7 @@ end, opts)
 
 keymap("n", "<Leader>ce", "<cmd>lua require('telescope.builtin').colorscheme()<cr>", opts)
 keymap("n", "<Leader>ht", "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
-keymap("n", "<Leader>mp", "<cmd>lua require('telescope.builtin').man_pages()<cr>", opts)
+keymap("n", "<Leader>mP", "<cmd>lua require('telescope.builtin').man_pages()<cr>", opts)
 keymap("n", "<Leader>of", "<cmd>lua require('telescope.builtin').oldfiles({ only_cwd = true })<cr>", opts)
 keymap("n", "<Leader>oo", "<cmd>lua require('telescope.builtin').oldfiles()<cr>", opts)
 keymap("n", "<Leader>rg", "<cmd>lua require('telescope.builtin').registers()<cr>", opts)

@@ -809,6 +809,7 @@ return {
       telescope.load_extension("git_file_history")
       telescope.load_extension("frecency")
       telescope.load_extension("fzf")
+      telescope.load_extension("markit")
       -- telescope.load_extension("jsonfly")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")

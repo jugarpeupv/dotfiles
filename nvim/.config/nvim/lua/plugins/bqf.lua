@@ -1,5 +1,42 @@
 return {
   {
+    "stevearc/quicker.nvim",
+    event = "FileType qf",
+    enabled = true,
+    ---@module "quicker"
+    ---@type quicker.SetupOptions
+    opts = {
+      opts = {
+        buflisted = false,
+        number = true,
+        relativenumber = true,
+        signcolumn = "auto",
+        winfixheight = true,
+        wrap = false,
+      },
+      constrain_cursor = false,
+      max_filename_width = function()
+        return math.floor(math.min(55, vim.o.columns / 2))
+      end,
+      keys = {
+        {
+          ">",
+          function()
+            require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+          end,
+          desc = "Expand quickfix context",
+        },
+        {
+          "<",
+          function()
+            require("quicker").collapse()
+          end,
+          desc = "Collapse quickfix context",
+        },
+      },
+    },
+  },
+  {
     "kevinhwang91/nvim-bqf",
     dependencies = {
       { "junegunn/fzf", build = "./install --all" },

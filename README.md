@@ -1,6 +1,6 @@
 # Dotfiles
 
-![](./docs/.config/desktop_setup.png)
+![Setup](./docs/.config/desktop_setup.png)
 
 ## Dependencies
 
