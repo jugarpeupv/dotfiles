@@ -154,7 +154,6 @@ return {
   },
   {
     "philosofonusus/ecolog.nvim",
-    enabled = true,
     -- dependencies = {
     --   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
     --   "nvim-tree/nvim-tree.lua"
@@ -187,7 +186,7 @@ return {
           cmp = true,            -- Mask values in completion
           peek = true,           -- Mask values in peek view
           telescope = true,      -- Mask values in telescope
-          telescope_previewer = true, -- Mask values in telescope preview buffers
+          telescope_previewer = false, -- Mask values in telescope preview buffers
           files = {
             shelter_on_leave = true, -- Control automatic re-enabling of shelter when leaving buffer
             disable_cmp = true,  -- Disable completion in sheltered buffers (default: true)
