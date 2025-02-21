@@ -18,6 +18,40 @@ return {
     dependencies = {
       "RRethy/nvim-treesitter-endwise",
       "nvim-treesitter/nvim-treesitter-refactor",
+      -- {
+      --   "RRethy/nvim-treesitter-textsubjects",
+      --   config = function()
+      --     require("nvim-treesitter-textsubjects").configure({
+      --       prev_selection = ",",
+      --       keymaps = {
+      --         ["."] = "textsubjects-smart",
+      --         [";"] = "textsubjects-container-outer",
+      --         ["i;"] = "textsubjects-container-inner",
+      --       },
+      --     })
+      --   end,
+      -- },
+      {
+        "chrisgrieser/nvim-various-textobjs",
+        -- event = "VeryLazy",
+        event = { "BufReadPost", "BufNewFile" },
+        keys = {
+          { mode = { "o", "x" }, "as", "<cmd>lua require('various-textobjs').subword('outer')<CR>" },
+          { mode = { "o", "x" }, "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>" },
+        },
+        opts = {
+          keymaps = {
+            useDefaults = true,
+          },
+        },
+        -- config = function(_, opts)
+        --   require("various-textobjs").setup(opts)
+        --   -- example: `as` for outer subword, `is` for inner subword
+        --   vim.keymap.set({ "o", "x" }, "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>')
+        --   vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
+        -- end,
+      },
+
       {
         "nvim-treesitter/nvim-treesitter-context",
         lazy = true,

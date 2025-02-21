@@ -319,8 +319,10 @@ M.read_file = function(file_path)
   return content
 end
 
-M.get_npm_scripts = function()
-  local package_json_path = "package.json"
+M.get_npm_scripts = function(package_json_path)
+  if not package_json_path then
+    package_json_path = "package.json"
+  end
   local status, package_json_content = pcall(M.read_file, package_json_path)
   if not status then
     return
@@ -335,7 +337,6 @@ M.get_npm_scripts = function()
   local scripts = package_data.scripts
   return scripts
 end
-
 
 M.get_project_json_targets = function()
   local project_json_path = "project.json"
@@ -557,7 +558,6 @@ M.oil_fzf_dir = function(path)
           }),
           sorter = conf.generic_sorter(opts),
           attach_mappings = function(prompt_bufnr)
-
             actions.select_default:replace(function()
               local selection = action_state.get_selected_entry()
               actions.close(prompt_bufnr)
@@ -568,7 +568,6 @@ M.oil_fzf_dir = function(path)
               local selection = action_state.get_selected_entry()
               require("telescope.actions").close(prompt_bufnr)
               vim.cmd("vsplit")
-              print('hi')
               print(selection.value)
               require("oil").open(selection.value)
             end)
@@ -651,7 +650,6 @@ M.nvimtree_fzf_dir = function(path)
   commands()
 end
 
-
 M.run_nx_scripts = function()
   local pickers = require("telescope.pickers")
   local finders = require("telescope.finders")
@@ -669,56 +667,55 @@ M.run_nx_scripts = function()
   local commands = function(opts)
     opts = opts or {}
     pickers
-      .new(opts, {
-        prompt_title = "Select nx target to run",
-        finder = finders.new_table({
-          results = target_list,
-          entry_maker = function(entry)
-            return {
-              value = entry,
-              -- display = "npm run " .. entry.script_name .. "                      (" .. entry.script_value .. ")",
-              display = entry.target_name,
-              ordinal = entry.target_name,
-            }
-          end,
-        }),
-        sorter = conf.generic_sorter(opts),
-        attach_mappings = function(prompt_bufnr)
-          actions.select_default:replace(function()
-            actions.close(prompt_bufnr)
-            local selection = action_state.get_selected_entry()
+        .new(opts, {
+          prompt_title = "Select nx target to run",
+          finder = finders.new_table({
+            results = target_list,
+            entry_maker = function(entry)
+              return {
+                value = entry,
+                -- display = "npm run " .. entry.script_name .. "                      (" .. entry.script_value .. ")",
+                display = entry.target_name,
+                ordinal = entry.target_name,
+              }
+            end,
+          }),
+          sorter = conf.generic_sorter(opts),
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local selection = action_state.get_selected_entry()
 
-            -- local function toggle_terminal_with_command(command)
-            --   -- Create a new terminal or get the existing one
-            --   local Terminal = require('terminal')
-            --   local term = Terminal:new({
-            --     layout = 'horizontal',
-            --     cmd = command,
-            --     hidden = true,
-            --   })
-            --
-            --   -- Toggle the terminal
-            --   term:toggle()
-            -- end
-            --
-            -- toggle_terminal_with_command(selection.value.script_name)
-            local myterm = require("terminal").terminal:new({
-              layout = { open_cmd = "botright new" },
-              -- cmd = { selection.value.script_name },
-              autoclose = false,
-            })
-            myterm:open()
-            myterm:send(selection.value.target_run)
-          end)
-          return true
-        end,
-      })
-      :find()
+              -- local function toggle_terminal_with_command(command)
+              --   -- Create a new terminal or get the existing one
+              --   local Terminal = require('terminal')
+              --   local term = Terminal:new({
+              --     layout = 'horizontal',
+              --     cmd = command,
+              --     hidden = true,
+              --   })
+              --
+              --   -- Toggle the terminal
+              --   term:toggle()
+              -- end
+              --
+              -- toggle_terminal_with_command(selection.value.script_name)
+              local myterm = require("terminal").terminal:new({
+                layout = { open_cmd = "botright new" },
+                -- cmd = { selection.value.script_name },
+                autoclose = false,
+              })
+              myterm:open()
+              myterm:send(selection.value.target_run)
+            end)
+            return true
+          end,
+        })
+        :find()
   end
 
   commands()
 end
-
 
 M.run_npm_scripts = function()
   local pickers = require("telescope.pickers")
@@ -726,7 +723,6 @@ M.run_npm_scripts = function()
   local conf = require("telescope.config").values
   local actions = require("telescope.actions")
   local action_state = require("telescope.actions.state")
-  local compile_mode = require("compile-mode")
 
   local scripts = M.get_npm_scripts() or {}
 
@@ -783,6 +779,122 @@ M.run_npm_scripts = function()
           end,
         })
         :find()
+  end
+
+  commands()
+end
+
+M.run_npm_scripts_improved = function()
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  local find_command = {
+    "fd",
+    "--exclude",
+    ".git",
+    "--exclude",
+    "node_modules",
+    "--max-depth",
+    "4",
+    "--hidden",
+    "--glob",
+    "package.json",
+  }
+
+  local function count_package_json_files()
+    local handle = io.popen(
+      "fd --exclude .git --exclude node_modules --max-depth 4 --hidden --glob package.json | wc -l"
+    )
+    if not handle then
+      return 0
+    end
+    local result = handle:read("*a")
+    handle:close()
+    return tonumber(result)
+  end
+
+  local commands = function(opts)
+    opts = opts or {}
+    local package_json_count = count_package_json_files()
+    print(package_json_count)
+
+    if package_json_count == 0 then
+      print("No package.json files found")
+      return
+    end
+
+    if package_json_count == 1 then
+      M.run_npm_scripts()
+    else
+    pickers
+        .new(opts, {
+          prompt_title = "Select package.json",
+          finder = finders.new_oneshot_job(find_command, {
+            entry_maker = function(entry)
+              local entry_substituted = entry:gsub("^/", ""):gsub("^./", "")
+              return {
+                value = entry,
+                display = function()
+                  local display_string = "  " .. entry_substituted
+                  return display_string, { { { 0, 1 }, "DiagnosticOk" } }
+                end,
+                ordinal = entry,
+              }
+            end,
+          }),
+          sorter = conf.generic_sorter(opts),
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local selection = action_state.get_selected_entry()
+              local scripts = M.get_npm_scripts(selection.value) or {}
+
+              local script_list = {}
+              for key, value in pairs(scripts) do
+                table.insert(script_list, { script_name = "npm run " .. key, script_value = value })
+              end
+
+              pickers
+                  .new(opts, {
+                    prompt_title = "Select npm script to run",
+                    finder = finders.new_table({
+                      results = script_list,
+                      entry_maker = function(entry)
+                        return {
+                          value = entry,
+                          -- display = "npm run " .. entry.script_name .. "                      (" .. entry.script_value .. ")",
+                          display = entry.script_name,
+                          ordinal = entry.script_name,
+                        }
+                      end,
+                    }),
+                    sorter = conf.generic_sorter(opts),
+                    attach_mappings = function(prompt_bufnr2)
+                      actions.select_default:replace(function()
+                        actions.close(prompt_bufnr2)
+                        local selection2 = action_state.get_selected_entry()
+
+                        local myterm = require("terminal").terminal:new({
+                          layout = { open_cmd = "botright new" },
+                          -- cmd = { selection.value.script_name },
+                          autoclose = false,
+                        })
+                        myterm:open()
+                        myterm:send(selection2.value.script_name)
+                      end)
+                      return true
+                    end,
+                  })
+                  :find()
+            end)
+            return true
+          end,
+        })
+        :find()
+    end
   end
 
   commands()

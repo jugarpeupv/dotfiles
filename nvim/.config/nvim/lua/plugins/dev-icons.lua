@@ -6,7 +6,18 @@ return {
     -- lazy = true,
     -- priority = 800,
     opts = {
+
       override = {
+        tsx = {
+          icon = "",
+          name = "tsx",
+          color = "#9CDCFE",
+        },
+        jsx = {
+          icon = "",
+          name = "jsx",
+          color = "#9CDCFE",
+        },
         mov = {
           icon = "",
           name = "mov",

@@ -5,7 +5,7 @@
 # shift + alt - return : osascript ~/.config/skhd/Scripts/new-onepassword-window.scpt
 shift + alt - return : osascript ~/.config/skhd/Scripts/new-space.scpt
 
-# shift + alt - space : osascript ~/.config/skhd/Scripts/kitty-original.scpt
+shift + cmd - n : osascript ~/.config/skhd/Scripts/kitty-original.scpt
 shift + alt - n : osascript ~/.config/skhd/Scripts/kitty.scpt
 shift + alt - j : osascript ~/.config/skhd/Scripts/new-capcut-window.scpt
 shift + alt - p : osascript ~/.config/skhd/Scripts/new-brave-window.scpt

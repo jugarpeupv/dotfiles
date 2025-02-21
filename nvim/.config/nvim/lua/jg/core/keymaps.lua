@@ -681,6 +681,8 @@ local function show_documentation()
     end
 
     if has_lsp_info then
+      require('render-markdown').buf_disable()
+      vim.cmd("RenderMarkdown disable")
       vim.lsp.buf.hover()
     else
       local _, err = pcall(vim.cmd, "h " .. cword)
@@ -823,7 +825,7 @@ vim.keymap.set("n", "<leader>fn", find_in_node_modules, opts)
 -- fd . "node_modules" --no-ignore --exclude .git/* --exclude **/node_modules/**
 
 vim.keymap.set({ "n" }, "<leader>rs", function()
-  require("jg.custom.telescope").run_npm_scripts()
+  require("jg.custom.telescope").run_npm_scripts_improved()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>rt", function()

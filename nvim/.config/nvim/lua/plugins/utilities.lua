@@ -331,6 +331,7 @@ return {
   --   end,
   -- },
   {
+    enabled = false,
     "jugarpeupv/recall.nvim",
     -- dir = "~/projects/recall.nvim",
     -- dev = true,
@@ -488,26 +489,6 @@ return {
     "b0o/schemastore.nvim",
     -- event = "VeryLazy",
     lazy = true,
-  },
-  {
-    "chrisgrieser/nvim-various-textobjs",
-    -- event = "VeryLazy",
-    event = { "BufReadPost", "BufNewFile" },
-    keys = {
-      { mode = { "o", "x" }, "as", "<cmd>lua require('various-textobjs').subword('outer')<CR>" },
-      { mode = { "o", "x" }, "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>" },
-    },
-    opts = {
-      keymaps = {
-        useDefaults = true,
-      },
-    },
-    -- config = function(_, opts)
-    --   require("various-textobjs").setup(opts)
-    --   -- example: `as` for outer subword, `is` for inner subword
-    --   vim.keymap.set({ "o", "x" }, "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>')
-    --   vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
-    -- end,
   },
   {
     "christoomey/vim-tmux-navigator",
