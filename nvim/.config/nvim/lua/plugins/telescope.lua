@@ -792,6 +792,16 @@ return {
         telescope.load_extension("yank_history")
       end
 
+      local markit_status = pcall(require, "markit")
+      if markit_status then
+        telescope.load_extension("markit")
+      end
+
+      local bookmark_status = pcall(require, "bookmarks")
+      if bookmark_status then
+        telescope.load_extension("bookmarks")
+      end
+
       local ecolog_status = pcall(require, "ecolog")
       if ecolog_status then
         telescope.load_extension("ecolog")
@@ -809,7 +819,6 @@ return {
       telescope.load_extension("git_file_history")
       telescope.load_extension("frecency")
       telescope.load_extension("fzf")
-      telescope.load_extension("markit")
       -- telescope.load_extension("jsonfly")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")

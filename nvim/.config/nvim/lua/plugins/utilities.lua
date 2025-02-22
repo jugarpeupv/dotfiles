@@ -1,6 +1,51 @@
 return {
+  -- with lazy.nvim
+  {
+    enabled = false,
+    "LintaoAmons/bookmarks.nvim",
+    -- pin the plugin at specific version for stability
+    -- backup your bookmark sqlite db when there are breaking changes
+    -- tag = "v2.3.0",
+    dependencies = {
+      {"kkharji/sqlite.lua"},
+      {"nvim-telescope/telescope.nvim"},
+      {"stevearc/dressing.nvim"} -- optional: better UI
+    },
+    config = function()
+      local opts = {} -- go to the following link to see all the options in the deafult config file
+      require("bookmarks").setup(opts) -- you must call setup to init sqlite db
+    end,
+  },
+    -- run :BookmarksInfo to see the running status of the plugin
+  {
+    "tomasky/bookmarks.nvim",
+    enabled = false,
+    -- after = "telescope.nvim",
+    -- event = "VimEnter",
+    config = function()
+      require("bookmarks").setup({
+        save_file = vim.fn.expand("$HOME/.bookmarks"), -- bookmarks save file path
+        keywords = {},
+        on_attach = function(bufnr)
+          local bm = require("bookmarks")
+          local map = vim.keymap.set
+          map("n", "mm", bm.bookmark_toggle) -- add or remove bookmark at current line
+          map("n", "mi", bm.bookmark_ann)  -- add or edit mark annotation at current line
+          map("n", "mc", bm.bookmark_clean) -- clean all marks in local buffer
+          map("n", "mn", bm.bookmark_next) -- jump to next mark in local buffer
+          map("n", "mp", bm.bookmark_prev) -- jump to previous mark in local buffer
+          map("n", "ml", bm.bookmark_list) -- show marked file list in quickfix window
+          map("n", "mx", bm.bookmark_clear_all) -- removes all bookmarks
+          map("n", "mL", function()
+            require("telescope").extensions.bookmarks.list()
+          end)
+        end,
+      })
+    end,
+  },
   {
     "2kabhishek/markit.nvim",
+    enabled = false,
     event = { "BufReadPre", "BufNewFile" },
     keys = {
       {
@@ -17,16 +62,14 @@ return {
         mode = { "n" },
         -- "<leader>mm",
         "<leader>ml",
-        function()
-          require("telescope").extensions.markit.marks_list_all()
-        end,
+        "<cmd>MarksQFListGlobal<cr>",
         { noremap = true, silent = true },
       },
       {
         mode = { "n" },
         "<leader>mp",
         function()
-          require('telescope').extensions.markit.bookmarks_list_all({project_only = true})
+          require("telescope").extensions.markit.bookmarks_list_all({ project_only = true })
         end,
         { noremap = true, silent = true },
       },
@@ -36,7 +79,7 @@ return {
         -- whether to map keybinds or not. default true
         default_mappings = true,
         -- which builtin marks to show. default {}
-        builtin_marks = { ".", "<", ">", "^" },
+        -- builtin_marks = { ".", "<", ">", "^" },
         -- whether movements cycle back to the beginning/end of buffer. default true
         cyclic = true,
         -- whether the shada file is updated after modifying uppercase marks. default false
@@ -52,7 +95,7 @@ return {
         -- default 10.
         sign_priority = { lower = 10, upper = 15, builtin = 8, bookmark = 20 },
         -- disables mark tracking for specific filetypes. default {}
-        excluded_filetypes = {},
+        excluded_filetypes = { "qf", "NvimTree" },
         -- disables mark tracking for specific buftypes. default {}
         excluded_buftypes = {},
         -- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
@@ -401,12 +444,12 @@ return {
   --   end,
   -- },
   {
-    enabled = false,
+    enabled = true,
     "jugarpeupv/recall.nvim",
     -- dir = "~/projects/recall.nvim",
     -- dev = true,
     version = "*",
-    event = { "BufReadPost" },
+    event = { "VeryLazy" },
     keys = {
       {
         mode = { "n" },

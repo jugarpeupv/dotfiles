@@ -9,7 +9,7 @@ return {
       opts = {
         buflisted = false,
         number = true,
-        relativenumber = true,
+        relativenumber = false,
         signcolumn = "auto",
         winfixheight = true,
         wrap = false,
