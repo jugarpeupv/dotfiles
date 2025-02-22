@@ -1,22 +1,32 @@
 return {
   -- with lazy.nvim
   {
-    enabled = false,
+    "Yilin-Yang/vim-markbar",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      vim.g.markbar_marks_to_display = "QPOMLKJIHGFEDCBA"
+      vim.g.markbar_width = 50
+      vim.g.markbar_context_indent_block = "  "
+      vim.g.markbar_num_lines_context = 0
+    end,
+  },
+  {
     "LintaoAmons/bookmarks.nvim",
+    enabled = false,
     -- pin the plugin at specific version for stability
     -- backup your bookmark sqlite db when there are breaking changes
     -- tag = "v2.3.0",
     dependencies = {
-      {"kkharji/sqlite.lua"},
-      {"nvim-telescope/telescope.nvim"},
-      {"stevearc/dressing.nvim"} -- optional: better UI
+      { "kkharji/sqlite.lua" },
+      { "nvim-telescope/telescope.nvim" },
+      { "stevearc/dressing.nvim" }, -- optional: better UI
     },
     config = function()
-      local opts = {} -- go to the following link to see all the options in the deafult config file
+      local opts = {}               -- go to the following link to see all the options in the deafult config file
       require("bookmarks").setup(opts) -- you must call setup to init sqlite db
     end,
   },
-    -- run :BookmarksInfo to see the running status of the plugin
+  -- run :BookmarksInfo to see the running status of the plugin
   {
     "tomasky/bookmarks.nvim",
     enabled = false,
@@ -449,7 +459,7 @@ return {
     -- dir = "~/projects/recall.nvim",
     -- dev = true,
     version = "*",
-    event = { "VeryLazy" },
+    event = { "BufReadPre", "BufNewFile" },
     keys = {
       {
         mode = { "n" },

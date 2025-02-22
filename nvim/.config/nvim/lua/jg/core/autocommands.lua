@@ -1,7 +1,7 @@
 local get_option = vim.filetype.get_option
 vim.filetype.get_option = function(filetype, option)
   return option == "commentstring" and require("ts_context_commentstring.internal").calculate_commentstring()
-    or get_option(filetype, option)
+      or get_option(filetype, option)
 end
 
 vim.api.nvim_create_autocmd("BufRead", {
@@ -74,7 +74,6 @@ vim.filetype.add({
   },
 })
 
-
 vim.cmd([[ augroup JsonToJsonc
     autocmd! FileType json set filetype=jsonc
 augroup END ]])
@@ -86,14 +85,11 @@ augroup END ]])
 --   end,
 -- })
 
-
 -- vim.cmd([[autocmd BufReadPost * if &filetype == 'json' | execute 'set filetype jsonc' | endif]])
 
 -- vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wrap' | endif]])
 
-
 -- vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
-
 
 -- vim.api.nvim_create_autocmd({ "OptionSet" }, {
 --   pattern = "diff",
@@ -166,14 +162,13 @@ vim.api.nvim_create_autocmd("User", {
 --   end,
 -- })
 
-vim.api.nvim_create_autocmd('BufEnter', {
+vim.api.nvim_create_autocmd("BufEnter", {
   group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
-  pattern = 'copilot-*',
+  pattern = "copilot-*",
   callback = function()
     vim.opt_local.conceallevel = 0
-  end
+  end,
 })
-
 
 -- vim.api.nvim_create_autocmd({"OptionSet"}, {
 --   pattern = "diff",
@@ -183,7 +178,6 @@ vim.api.nvim_create_autocmd('BufEnter', {
 --     end
 --   end,
 -- })
-
 
 -- vim.api.nvim_create_autocmd("CmdlineLeave", {
 --   pattern = "windo diffthis",
@@ -201,3 +195,15 @@ vim.api.nvim_create_autocmd('BufEnter', {
 --     require("barbecue.ui").toggle(true)
 --   end,
 -- })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markbar",
+  callback = function()
+    vim.schedule(function()
+      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "j")
+      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "k")
+      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "g")
+      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "<leader>q")
+    end)
+  end,
+})

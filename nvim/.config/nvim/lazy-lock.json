@@ -174,6 +174,7 @@
   "vim-http-client": { "branch": "master", "commit": "777c9a44872d14ae8d1d13f13c13a61da4aed852" },
   "vim-jsdoc": { "branch": "master", "commit": "6e5bc2a1f98a69e4902081c9f5969b228a7a5fd6" },
   "vim-jsonpath": { "branch": "master", "commit": "af9c07b87765fc5aee176a894bc91fb04a5e3c47" },
+  "vim-markbar": { "branch": "master", "commit": "9f5a948d44652074bf2b90d3da6a400d8a369ba5" },
   "vim-matchup": { "branch": "master", "commit": "aca23ce53ebfe34e02c4fe07e29e9133a2026481" },
   "vim-repeat": { "branch": "master", "commit": "65846025c15494983dafe5e3b46c8f88ab2e9635" },
   "vim-rfc": { "branch": "master", "commit": "964a3d8ee3f6f97439c46a4dc4f462427f8a4965" },
