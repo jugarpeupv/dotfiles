@@ -6,8 +6,12 @@ return {
     -- lazy = true,
     -- priority = 800,
     opts = {
-
       override = {
+        scpt = {
+          icon = "",
+          name = "applescript2",
+          color = "#9CDCFE",
+        },
         tsx = {
           icon = "",
           name = "tsx",

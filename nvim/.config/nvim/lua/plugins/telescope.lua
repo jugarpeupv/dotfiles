@@ -12,27 +12,98 @@ return {
       --   "nvim-telescope/telescope-arecibo.nvim",
       --   rocks = { openssl = true, ["lua-http-parser"] = true },
       -- },
-      -- {
-      --   "Equilibris/nx.nvim",
-      --   dependencies = {
-      --     "nvim-telescope/telescope.nvim",
-      --   },
-      --
-      --   -- opts = {
-      --   --   nx_cmd_root = "npx nx",
-      --   -- },
-      --
-      --   -- Plugin will load when you use these keys
-      --   keys = {
-      --     { "<leader>nx", "<cmd>Telescope nx actions<CR>", desc = "nx actions" },
-      --   },
-      --
-      --   config = function()
-      --     require("nx").setup({
-      --       nx_cmd_root = "npx nx",
-      --     })
-      --   end
-      -- },
+
+      {
+        enabled = true,
+        "jugarpeupv/recall.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim" },
+        -- dir = "~/projects/recall.nvim",
+        -- dev = true,
+        version = "*",
+        event = { "BufReadPre", "BufNewFile" },
+        keys = {
+          {
+            mode = { "n" },
+            -- "<leader>mm",
+            "mm",
+            "<cmd>lua require('recall').toggle()<CR>",
+            { noremap = true, silent = true },
+          },
+          {
+            mode = { "n" },
+            -- "<leader>mn",
+            "mn",
+            "<cmd>lua require('recall').goto_next()<CR>",
+            { noremap = true, silent = true },
+          },
+          {
+            mode = { "n" },
+            -- "<leader>mp",
+            "mp",
+            "<cmd>lua require('recall').goto_prev()<CR>",
+            { noremap = true, silent = true },
+          },
+          {
+            mode = { "n" },
+            -- "<leader>mc",
+            "<leader>mc",
+            "<cmd>lua require('recall').clear()<CR>",
+            { noremap = true, silent = true },
+          },
+          {
+            mode = { "n" },
+            -- "<leader>ml",
+            "<leader>ml",
+            "<cmd>Telescope recall<CR>",
+            { noremap = true, silent = true },
+          },
+        },
+        config = function()
+          local recall = require("recall")
+          recall.setup({
+            sign = "",
+            sign_highlight = "Function",
+
+            telescope = {
+              autoload = true,
+              mappings = {
+                unmark_selected_entry = {
+                  normal = "dd",
+                  -- insert = "<M-d>",
+                  insert = "<C-x>",
+                },
+              },
+            },
+
+            wshada = vim.fn.has("nvim-0.10") == 0,
+          })
+        end,
+      },
+      {
+        "Equilibris/nx.nvim",
+        dependencies = {
+          "nvim-telescope/telescope.nvim",
+        },
+        keys = {
+          { "<leader>nx", "<cmd>Telescope nx actions<CR>", desc = "nx actions" },
+        },
+        config = function()
+          require("nx").setup({
+            nx_cmd_root = "npx nx",
+            command_runner = function(command)
+              -- vim.cmd('terminal ' .. command)
+
+              local myterm = require("terminal").terminal:new({
+                layout = { open_cmd = "botright new" },
+                -- cmd = { command },
+                autoclose = false,
+              })
+              myterm:open()
+              myterm:send(command)
+            end,
+          })
+        end,
+      },
       {
         "nvim-telescope/telescope-frecency.nvim",
         -- install the latest stable version

@@ -1,5 +1,6 @@
 return {
   -- with lazy.nvim
+  { "vim-scripts/applescript.vim", event = { "BufNewFile", "BufReadPre" } },
   {
     "Yilin-Yang/vim-markbar",
     event = { "BufReadPre", "BufNewFile" },
@@ -163,7 +164,7 @@ return {
       )
     end,
   },
-  { "sam4llis/nvim-lua-gf", keys = { "gf" } },
+  { "sam4llis/nvim-lua-gf",        keys = { "gf" } },
   -- { "mrjones2014/tldr.nvim", cmd = { "Tldr", "Telescope" } ,dependencies = { "nvim-telescope/telescope.nvim" } },
   {
     "tldr-pages/tldr-neovim-extension",
@@ -184,7 +185,7 @@ return {
   --     "nvim-lua/plenary.nvim",
   --   },
   -- },
-  { "benelori/vim-rfc",     cmd = { "RFC" } },
+  { "benelori/vim-rfc",      cmd = { "RFC" } },
   {
     "troydm/zoomwintab.vim",
     keys = { { mode = { "n" }, "<c-w>m", "<cmd>ZoomWinTabToggle<CR>" } },
@@ -454,71 +455,6 @@ return {
   --   end,
   -- },
   {
-    enabled = true,
-    "jugarpeupv/recall.nvim",
-    -- dir = "~/projects/recall.nvim",
-    -- dev = true,
-    version = "*",
-    event = { "BufReadPre", "BufNewFile" },
-    keys = {
-      {
-        mode = { "n" },
-        -- "<leader>mm",
-        "mm",
-        "<cmd>lua require('recall').toggle()<CR>",
-        { noremap = true, silent = true },
-      },
-      {
-        mode = { "n" },
-        -- "<leader>mn",
-        "mn",
-        "<cmd>lua require('recall').goto_next()<CR>",
-        { noremap = true, silent = true },
-      },
-      {
-        mode = { "n" },
-        -- "<leader>mp",
-        "mp",
-        "<cmd>lua require('recall').goto_prev()<CR>",
-        { noremap = true, silent = true },
-      },
-      {
-        mode = { "n" },
-        -- "<leader>mc",
-        "<leader>mc",
-        "<cmd>lua require('recall').clear()<CR>",
-        { noremap = true, silent = true },
-      },
-      {
-        mode = { "n" },
-        -- "<leader>ml",
-        "<leader>ml",
-        "<cmd>Telescope recall<CR>",
-        { noremap = true, silent = true },
-      },
-    },
-    config = function()
-      local recall = require("recall")
-      recall.setup({
-        sign = "",
-        sign_highlight = "Function",
-
-        telescope = {
-          autoload = true,
-          mappings = {
-            unmark_selected_entry = {
-              normal = "dd",
-              -- insert = "<M-d>",
-              insert = "<C-x>",
-            },
-          },
-        },
-
-        wshada = vim.fn.has("nvim-0.10") == 0,
-      })
-    end,
-  },
-  {
     "hedyhli/outline.nvim",
     lazy = true,
     cmd = { "Outline", "OutlineOpen" },
@@ -572,7 +508,7 @@ return {
   -- { "nvim-spider" }
   -- { "airblade/vim-matchquote" },
   -- { "ton/vim-bufsurf" },
-  { "taybart/b64.nvim",      cmd = { "B64Encode", "B64Decode" } },
+  { "taybart/b64.nvim",         cmd = { "B64Encode", "B64Decode" } },
   {
     "lambdalisue/vim-suda",
     cmd = { "SudaWrite", "SudaRead" },
@@ -623,7 +559,7 @@ return {
     end,
   },
 
-  { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
+  { "wellle/targets.vim",      event = { "BufReadPost", "BufNewFile" } },
   -- {
   --   "ibhagwan/fzf-lua",
   --   -- optional for icon support

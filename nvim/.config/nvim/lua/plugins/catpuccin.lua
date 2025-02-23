@@ -350,7 +350,7 @@ return {
       vim.cmd([[highlight GitSignsAddPreview gui=none guifg=none guibg=#103235]])
       vim.cmd([[highlight GitSignsDeletePreview gui=none guifg=none guibg=#3F2D3D]])
       -- vim.cmd([[highlight GitSignsAdd guifg=#2ac3de]])
-      vim.cmd([[highlight GitSignsAdd guifg=#94E2D5]])
+      vim.cmd([[highlight GitSignsAdd guifg=#30969f]])
       vim.cmd([[highlight GitSignsChange guifg=#F2CDCD]])
       vim.cmd([[highlight GitSignsChangeInLine guifg=#F2CDCD]])
       vim.cmd([[highlight GitSignsDelete guifg=#F38BA8]])

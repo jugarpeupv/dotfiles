@@ -207,3 +207,11 @@ vim.api.nvim_create_autocmd("FileType", {
     end)
   end,
 })
+
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "applescript",
+  callback = function()
+    vim.cmd([[setlocal commentstring=--\ %s]])
+  end,
+})
