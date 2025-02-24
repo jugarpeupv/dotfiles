@@ -12,7 +12,7 @@ return {
     keys = {
       {
         mode = { "n" },
-        "<leader>is",
+        "<leader>os",
         "<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open<cr>",
         { noremap = true, silent = true },
       },

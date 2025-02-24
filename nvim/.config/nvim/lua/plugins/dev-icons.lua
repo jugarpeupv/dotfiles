@@ -319,6 +319,7 @@ return {
         [".prettierrc"] = { icon = "", color = "#73daca", name = "prettierrc" },
         [".prettierrc.json"] = { icon = "", color = "#73daca", name = "prettierrcjson" },
         ["project.json"] = { icon = "", color = "#9CDCFE", name = "ProjectJson" },
+        [".babelrc"] = { icon = "", color = "#F5E0DC", name = "babelrc" },
         ["tsconfig.federation.json"] = {
           icon = "󰛦",
           color = "#9CDCFE",

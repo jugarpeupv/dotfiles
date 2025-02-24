@@ -325,16 +325,27 @@ return {
       preferred_environment = "development", -- Optional: prioritize specific env files
       env_file_pattern = {
         ".env",
-        "^%.env%.%w+$",    -- Matches .env.development, .env.production, etc.
-        "^config/env%.%w+$", -- Matches config/env.development, config/env.production, etc.
-        "^%.env%.local%.%w+$", -- Matches .env.local.development, .env.local.production, etc.
-        ".+%.zsh$",
-        ".+%.zshrc$",
-        "^.config/zshrc/.+%.zshrc$",
+        ".env.*",
+        "config/env.*",
+        ".env.local.*",
+        "*.zshrc",
+        ".config/zshrc/*.zshrc",
         "/Users/jgarcia/.config/zshrc/.zshrc",
-        "^%.config/zshrc/%.zshrc$", -- Matches .config/zshrc/.zshrc
-        "^.config/zshrc/^%.env%.%w+$", -- Matches config/env.development, config/env.production, etc.
+        ".config/zshrc/.zshrc",
+        ".config/zshrc/.env.*",
       },
+      -- env_file_pattern = {
+      --   ".env",
+      --   "^%.env%.%w+$",    -- Matches .env.development, .env.production, etc.
+      --   "^config/env%.%w+$", -- Matches config/env.development, config/env.production, etc.
+      --   "^%.env%.local%.%w+$", -- Matches .env.local.development, .env.local.production, etc.
+      --   ".+%.zsh$",
+      --   ".+%.zshrc$",
+      --   "^.config/zshrc/.+%.zshrc$",
+      --   "/Users/jgarcia/.config/zshrc/.zshrc",
+      --   "^%.config/zshrc/%.zshrc$", -- Matches .config/zshrc/.zshrc
+      --   "^.config/zshrc/^%.env%.%w+$", -- Matches config/env.development, config/env.production, etc.
+      -- },
       -- Controls how environment variables are extracted from code and how cmp works
       provider_patterns = true, -- true by default, when false will not check provider patterns
     },
