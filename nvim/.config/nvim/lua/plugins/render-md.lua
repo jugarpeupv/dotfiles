@@ -6,7 +6,7 @@ return {
     { "<leader>rm", "<cmd>RenderMarkdown toggle<CR>" },
   },
   opts = {
-    enabled = true,
+    enabled = false,
     max_file_size = 100.0,
     file_types = { 'markdown' },
     anti_conceal = {

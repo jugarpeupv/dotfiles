@@ -106,12 +106,14 @@ end, opts)
 
 -- cd into dir of the current buffer
 vim.keymap.set({ "n" }, "<leader>cd", function()
-  vim.cmd("lcd " .. vim.fn.expand("%:p:h"))
+  local cwd = vim.fn.expand("%:p:h")
+  -- vim.cmd("lcd " .. cwd)
+  require("nvim-tree.api").tree.change_root(cwd)
 end, opts)
 
 keymap(
   "n",
-  "<Leader>.",
+  "<leader>.",
   "<cmd> lua require('telescope.builtin').find_files({ prompt_title = '< VimRC >', cwd = '~/dotfiles/nvim/.config/nvim',hidden = false })<cr>",
   opts
 )
@@ -271,24 +273,24 @@ vim.keymap.set({ "n" }, "sd", function()
   })
 end, opts)
 
-keymap("n", "<Leader>ce", "<cmd>lua require('telescope.builtin').colorscheme()<cr>", opts)
-keymap("n", "<Leader>ht", "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
-keymap("n", "<Leader>mP", "<cmd>lua require('telescope.builtin').man_pages()<cr>", opts)
-keymap("n", "<Leader>of", "<cmd>lua require('telescope.builtin').oldfiles({ only_cwd = true })<cr>", opts)
-keymap("n", "<Leader>oo", "<cmd>lua require('telescope.builtin').oldfiles()<cr>", opts)
-keymap("n", "<Leader>rg", "<cmd>lua require('telescope.builtin').registers()<cr>", opts)
-keymap("n", "<Leader>ke", "<cmd>lua require('telescope.builtin').keymaps()<cr>", opts)
-keymap("n", "<Leader>cm", "<cmd>lua require('telescope.builtin').commands()<cr>", opts)
-keymap("n", "<Leader>mm", "<cmd>lua require('telescope.builtin').marks()<cr>", opts)
-keymap("n", "<Leader>td", "<cmd>lua require('telescope.builtin').diagnostics()<cr>", opts)
+keymap("n", "<leader>ce", "<cmd>lua require('telescope.builtin').colorscheme()<cr>", opts)
+keymap("n", "<leader>ht", "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
+keymap("n", "<leader>mp", "<cmd>lua require('telescope.builtin').man_pages()<cr>", opts)
+keymap("n", "<leader>of", "<cmd>lua require('telescope.builtin').oldfiles({ only_cwd = true })<cr>", opts)
+keymap("n", "<leader>oo", "<cmd>lua require('telescope.builtin').oldfiles()<cr>", opts)
+keymap("n", "<leader>rg", "<cmd>lua require('telescope.builtin').registers()<cr>", opts)
+keymap("n", "<leader>ke", "<cmd>lua require('telescope.builtin').keymaps()<cr>", opts)
+keymap("n", "<leader>cm", "<cmd>lua require('telescope.builtin').commands()<cr>", opts)
+keymap("n", "<leader>mm", "<cmd>lua require('telescope.builtin').marks()<cr>", opts)
+keymap("n", "<leader>td", "<cmd>lua require('telescope.builtin').diagnostics()<cr>", opts)
 
 keymap("n", "<leader>Th", "<cmd>lua require('telescope').extensions.git_file_history.git_file_history()<cr>", opts)
 
-keymap("n", "<Leader>Cd", "<cmd>lua vim.diagnostic.reset()<cr>", opts)
+keymap("n", "<leader>Cd", "<cmd>lua vim.diagnostic.reset()<cr>", opts)
 
-keymap("n", "<Leader>bo", "<cmd>lua require('telescope').extensions.bookmarks.bookmarks()<cr>", opts)
-keymap("n", "<Leader>sy", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", opts)
-keymap("n", "<Leader>lr", "<cmd>LspRestart<cr>", opts)
+keymap("n", "<leader>bo", "<cmd>lua require('telescope').extensions.bookmarks.bookmarks()<cr>", opts)
+keymap("n", "<leader>sy", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", opts)
+keymap("n", "<leader>lr", "<cmd>LspRestart<cr>", opts)
 
 keymap("n", "<D-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 keymap("i", "<D-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
@@ -317,8 +319,8 @@ keymap("t", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 --   end
 -- end, { noremap = true, silent = true })
 
-keymap("n", "<Leader>d", "<Nop>", opts)
--- keymap("n", "<Leader>d", ":NvimTreeFindFile<cr>", opts)
+keymap("n", "<leader>d", "<Nop>", opts)
+-- keymap("n", "<leader>d", ":NvimTreeFindFile<cr>", opts)
 keymap("n", "<D-k>", "<cmd>keepjumps NvimTreeFindFile<cr>", opts)
 keymap("t", "<D-k>", "<C-\\><C-n><cmd>keepjumps NvimTreeFindFile<cr>", opts)
 
@@ -351,8 +353,8 @@ keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
 keymap("n", "<BS>", "<C-^>", opts)
 keymap("o", "<BS>", "^", opts)
 keymap("n", "<leader><BS>", "<cmd>qa!<CR>", opts)
--- keymap("n", "<Leader>q", "<cmd>q!<CR>", opts)
--- keymap("n", "<Leader>q", "<C-w>c", opts)
+-- keymap("n", "<leader>q", "<cmd>q!<CR>", opts)
+-- keymap("n", "<leader>q", "<C-w>c", opts)
 vim.keymap.set({ "n" }, "<leader>q", function()
   local function is_last_window()
     return vim.fn.winnr("$") == 1
@@ -366,11 +368,11 @@ vim.keymap.set({ "n" }, "<leader>q", function()
   end
 end, opts)
 
--- keymap("t", "<Leader>q", "<cmd>q!<CR>", opts)
+-- keymap("t", "<leader>q", "<cmd>q!<CR>", opts)
 keymap("n", "<leader>nn", "<cmd>nohlsearch<CR>", opts)
 keymap(
   "n",
-  "<Leader>fi",
+  "<leader>fi",
   "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true })<cr>",
   opts
 )
@@ -387,7 +389,7 @@ keymap("n", "<leader>tr", "<cmd>lua require('telescope.builtin').resume()<cr>", 
 keymap("n", "<leader>tm", "<cmd>lua require('telescope.builtin').node_modules list<cr>", opts)
 keymap(
   "n",
-  "<Leader>fs",
+  "<leader>fs",
   "<cmd>lua require('telescope.builtin').grep_string({ search = vim.fn.input('Grep For > ')})<CR>",
   opts
 )
@@ -455,23 +457,23 @@ end)
 
 -- keymap(
 --   "n",
---   "<Leader>ss",
+--   "<leader>ss",
 --   "<cmd>lua require('telescope.builtin').live_grep({ search_dirs={'%:p'}, vimgrep_arguments='rg,--color=never,--no-heading,--with-filename,--line-number,--column,--smart-case,--fixed-strings'})<cr>",
 --   opts
 -- )
 
 keymap(
   "n",
-  "<Leader>ss",
+  "<leader>ss",
   "<cmd>lua require('telescope.builtin').live_grep({ search_dirs={'%:p'}, vimgrep_arguments={ 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case' }})<cr>",
   opts
 )
 
-keymap("n", "<Leader>sl", "<cmd>BLines<cr>", opts)
-keymap("n", "<Leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>", opts)
+keymap("n", "<leader>sl", "<cmd>BLines<cr>", opts)
+keymap("n", "<leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>", opts)
 
 -- Telescope
-keymap("n", "<Leader>gs", "<cmd>lua require('telescope.builtin').git_stash()<cr>", opts)
+keymap("n", "<leader>gs", "<cmd>lua require('telescope.builtin').git_stash()<cr>", opts)
 keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<cr>", opts)
 
 keymap("n", "<leader>gB", "<cmd>Git branch -vv<cr>", opts)
@@ -491,36 +493,36 @@ keymap("n", "<leader>gB", "<cmd>Git branch -vv<cr>", opts)
 -- end, opts)
 
 -- Sniprun
-keymap("n", "<Leader>sr", "<cmd>%SnipRun<cr>", opts)
+keymap("n", "<leader>sr", "<cmd>%SnipRun<cr>", opts)
 
 -- Git blame
-keymap("n", "<Leader>bl", "<cmd>lua require 'gitsigns'.blame_line()<cr>", opts)
--- keymap("n", "<Leader>bh", "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", opts)
-keymap("n", "<Leader>bt", "<cmd>Gitsigns toggle_current_line_blame<cr>", opts)
-keymap("n", "<Leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
+keymap("n", "<leader>bl", "<cmd>lua require 'gitsigns'.blame_line()<cr>", opts)
+-- keymap("n", "<leader>bh", "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", opts)
+keymap("n", "<leader>bt", "<cmd>Gitsigns toggle_current_line_blame<cr>", opts)
+keymap("n", "<leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 
 -- Replace
-vim.cmd([[nnoremap <Leader>rr :%s///gc<Left><Left><Left><Left>]])
-vim.cmd([[xnoremap <Leader>rr :s///gc<Left><Left><Left><Left>]])
-vim.cmd([[nnoremap <Leader>sw /\<\><Left><Left>]])
+vim.cmd([[nnoremap <leader>rr :%s///gc<Left><Left><Left><Left>]])
+vim.cmd([[xnoremap <leader>rr :s///gc<Left><Left><Left><Left>]])
+vim.cmd([[nnoremap <leader>sw /\<\><Left><Left>]])
 
 vim.cmd(
-  [[nnoremap <Leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]
+  [[nnoremap <leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]
 )
 
 vim.cmd(
-  [[xnoremap <Leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]
+  [[xnoremap <leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]
 )
 
 -- Vim Fugitive
--- keymap("n", "<Leader>gu", ":diffget<cr>", opts)
--- keymap("n", "<Leader>gs", ":diffput<cr>", opts)
-keymap("n", "<Leader>sU", ":Git branch --set-upstream-to=origin/", opts)
-keymap("n", "<Leader>go", "<cmd>:!git-open<cr>", opts)
-keymap("n", "<Leader>np", "<cmd>:e ~/.npmrc<cr>", opts)
-keymap("n", "<Leader>aw", "<cmd>:e ~/.aws/config<cr>", opts)
-keymap("n", "<Leader>zh", "<cmd>:e ~/.zshrc<cr>", opts)
-keymap("n", "<Leader>gc", "<cmd>lua require('telescope.builtin').git_commits()<cr>", opts)
+-- keymap("n", "<leader>gu", ":diffget<cr>", opts)
+-- keymap("n", "<leader>gs", ":diffput<cr>", opts)
+keymap("n", "<leader>sU", ":Git branch --set-upstream-to=origin/", opts)
+keymap("n", "<leader>go", "<cmd>:!git-open<cr>", opts)
+keymap("n", "<leader>np", "<cmd>:e ~/.npmrc<cr>", opts)
+keymap("n", "<leader>aw", "<cmd>:e ~/.aws/config<cr>", opts)
+keymap("n", "<leader>zh", "<cmd>:e ~/.zshrc<cr>", opts)
+keymap("n", "<leader>gc", "<cmd>lua require('telescope.builtin').git_commits()<cr>", opts)
 
 -- Hop
 -- vim.api.nvim_set_keymap("n", "<leader>ww", "<cmd>lua require'hop'.hint_words()<cr>", opts)
@@ -743,7 +745,6 @@ local function find_directory_and_focus()
 
       actions.close(prompt_bufnr)
       local selection = action_state.get_selected_entry()
-      print("selection", vim.inspect(selection))
       api.tree.open()
       -- api.tree.find_file(selection.cwd .. "/" .. selection.value)
       api.tree.find_file(selection.value)
@@ -856,6 +857,7 @@ end, opts)
 
 vim.api.nvim_set_keymap("i", "<C-e>", "<C-o>$", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<C-a>", "<C-o>^", { noremap = true, silent = true })
+vim.cmd([[cnoremap <C-a> <C-b>]])
 -- vim.api.nvim_set_keymap("c", "<c-k>", [[ wildmenumode() ? "c-k>" : "<up>" ]], { noremap = true, expr = true }) -- expr mapping
 -- vim.api.nvim_set_keymap("c", "<c-j>", [[ wildmenumode() ? "c-j>" : "<down>" ]], { noremap = true, expr = true }) -- expr mapping
 -- vim.cmd("cnoremap <expr> <C-K> wildmenumode() ? '<C-P>' : '<Up>'")
@@ -872,9 +874,11 @@ vim.cmd([[cnoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"]])
 vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
 
-vim.api.nvim_create_autocmd("CmdlineLeave", {
-  pattern = "windo diffoff",
-  callback = function()
-    print("windo diffoff command executed")
-  end,
-})
+
+-- -- vim.cmd([[nnoremap <nowait> gr gr]])
+-- --
+-- -- vim.api.nvim_del_keymap('n', 'gr')
+vim.api.nvim_del_keymap('n', 'gri')
+vim.api.nvim_del_keymap('n', 'gra')
+vim.api.nvim_del_keymap('n', 'grn')
+vim.api.nvim_del_keymap('n', 'grr')

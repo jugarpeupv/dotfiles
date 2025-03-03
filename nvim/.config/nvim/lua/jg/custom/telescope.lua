@@ -797,8 +797,6 @@ M.run_npm_scripts_improved = function()
     ".git",
     "--exclude",
     "node_modules",
-    "--max-depth",
-    "4",
     "--hidden",
     "--glob",
     "package.json",
@@ -806,7 +804,7 @@ M.run_npm_scripts_improved = function()
 
   local function count_package_json_files()
     local handle = io.popen(
-      "fd --exclude .git --exclude node_modules --max-depth 4 --hidden --glob package.json | wc -l"
+      "fd --exclude .git --exclude node_modules --hidden --glob package.json | wc -l"
     )
     if not handle then
       return 0
@@ -857,6 +855,9 @@ M.run_npm_scripts_improved = function()
                 table.insert(script_list, { script_name = "npm run " .. key, script_value = value })
               end
 
+
+              local directory = vim.fn.fnamemodify(selection.value, ":h")
+
               pickers
                   .new(opts, {
                     prompt_title = "Select npm script to run",
@@ -880,6 +881,7 @@ M.run_npm_scripts_improved = function()
                         local myterm = require("terminal").terminal:new({
                           layout = { open_cmd = "botright new" },
                           -- cmd = { selection.value.script_name },
+                          cwd = directory,
                           autoclose = false,
                         })
                         myterm:open()

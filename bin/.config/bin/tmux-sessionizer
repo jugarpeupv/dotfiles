@@ -14,18 +14,22 @@ if [[ -z $selected ]]; then
   exit 0
 fi
 
-selected_name=$(basename "$selected" | tr . _)
+selected_name=$(basename "$selected" | tr . _ | sed 's/ //g' | tr '[:upper:]' '[:lower:]')
+selected_with_final_slash="${selected}/"
+# echo "selected: $selected"
+# echo "selected_name: $selected_name"
+# echo "selected_with_final_slash: $selected_with_final_slash"
 tmux_running=$(pgrep tmux 2> /dev/null)
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-  tmux new-session -s $selected_name -c $selected
+  tmux new-session -s $selected_name -c $selected_with_final_slash
   exit 0
 fi
 
 if ! tmux has-session -t=$selected_name 2> /dev/null; then
-  tmux new-session -ds $selected_name -c $selected
+  tmux new-session -d -s "$selected_name" -c "$selected_with_final_slash"
 fi
 
-tmux switch-client -t $selected_name
+tmux switch-client -t "$selected_name"
 
 tmux run-shell "/Users/jgarcia/.local/share/nvim/site/pack/packer/start/harpoon/scripts/tmux/switch-back-to-nvim >/dev/null || true" 

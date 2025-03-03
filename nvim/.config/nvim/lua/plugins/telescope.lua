@@ -160,9 +160,10 @@ return {
       { "natecraddock/telescope-zf-native.nvim", cmd = { "Telescope" } },
       {
         "someone-stole-my-name/yaml-companion.nvim",
+        enabled = false,
         ft = { "yaml", "yml" },
       },
-      { "crispgm/telescope-heading.nvim" },
+      { "crispgm/telescope-heading.nvim", enabled = false },
       {
         "nvim-treesitter/nvim-treesitter",
       },
@@ -778,6 +779,7 @@ return {
           },
           ["ui-select"] = {
             require("telescope.themes").get_dropdown({
+              layout_config = { width = 0.70 },
               prompt_prefix = "> ",
               initial_mode = "normal",
             }),
@@ -878,14 +880,22 @@ return {
         telescope.load_extension("ecolog")
       end
 
+      local yaml_schema = pcall(require, "yaml_schema")
+      if yaml_schema then
+        telescope.load_extension("yaml_schema")
+      end
+
+      local heading = pcall(require, "heading")
+      if heading then
+        telescope.load_extension("heading")
+      end
+
       telescope.load_extension("dap")
       telescope.load_extension("zf-native")
       telescope.load_extension("ui-select")
       telescope.load_extension("bookmarks")
       telescope.load_extension("git_worktree")
-      telescope.load_extension("yaml_schema")
       telescope.load_extension("grapple")
-      telescope.load_extension("heading")
       telescope.load_extension("file_browser")
       telescope.load_extension("git_file_history")
       telescope.load_extension("frecency")

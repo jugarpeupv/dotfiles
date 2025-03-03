@@ -295,8 +295,6 @@ return {
           require("oil").open(modified_path)
         end, opts("Open Oil"))
 
-
-
         vim.keymap.set("n", "T", function()
           local path = api_nvimtree.tree.get_node_under_cursor().absolute_path
           local function check_and_modify_path(path_to)
@@ -311,6 +309,49 @@ return {
           end
           local modified_path = check_and_modify_path(path)
 
+          local function get_all_terminals()
+            local terminal_chans = {}
+            for _, chan in pairs(vim.api.nvim_list_chans()) do
+              if chan["mode"] == "terminal" and chan["pty"] ~= "" then
+                table.insert(terminal_chans, chan)
+              end
+            end
+            table.sort(terminal_chans, function(left, right)
+              return left["buffer"] < right["buffer"]
+            end)
+            if #terminal_chans == 0 then
+              return nil
+            end
+            return terminal_chans
+          end
+
+          local all_terms = get_all_terminals()
+          for _, term in pairs(all_terms or {}) do
+            local term_title = vim.api.nvim_buf_get_var(term.buffer, "term_title")
+            term.title = term_title
+          end
+          -- print("all_terms: ", vim.inspect(all_terms))
+
+          local term_found
+
+          modified_path = modified_path:gsub("^/Users/jgarcia", "~")
+          print(modified_path)
+
+          for _, term in pairs(all_terms or {}) do
+            if term.title and string.find(term.title, modified_path, 1, true) then
+              -- vim.api.nvim_set_current_buf(term.buffer)
+              term_found = term
+            end
+          end
+
+          if term_found then
+            -- print("Found terminal: ", vim.inspect(term_found))
+            vim.api.nvim_set_current_win(vim.api.nvim_open_win(term_found.buffer, true, {
+              split = 'below'
+            }))
+            return
+          end
+
           local myterm = require("terminal").terminal:new({
             layout = { open_cmd = "botright new" },
             autoclose = false,
@@ -318,9 +359,15 @@ return {
           myterm:open()
           myterm:send("cd " .. modified_path)
 
+          -- all_terms:  { {
+          --   argv = { "/bin/zsh" },
+          --   buffer = 3,
+          --   id = 3,
+          --   mode = "terminal",
+          --   pty = "/dev/ttys002",
+          --   stream = "job"
+          -- } }
         end, opts("Open Terminal in node"))
-
-
 
         -- vim.keymap.set("n", "O", api_nvimtree.tree.change_root_to_parent, opts("Up"))
 
@@ -457,6 +504,7 @@ return {
           -- height = 30,
           -- hide_root_folder = false,
           side = "left",
+          -- side = "right",
           preserve_window_proportions = true,
           number = false,
           relativenumber = false,

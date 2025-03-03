@@ -17,6 +17,17 @@ return {
     -- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
     dependencies = {
       -- "RRethy/nvim-treesitter-endwise",
+      {
+        -- cmd = { "TSPlaygroundToggle" },
+        "nvim-treesitter/playground",
+      },
+      {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        -- event = { "BufReadPre", "BufNewFile" },
+        -- cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+        -- event = "VeryLazy",
+        -- dependencies = "nvim-treesitter/nvim-treesitter",
+      },
       "nvim-treesitter/nvim-treesitter-refactor",
       -- {
       --   "RRethy/nvim-treesitter-textsubjects",
@@ -34,7 +45,7 @@ return {
       {
         "chrisgrieser/nvim-various-textobjs",
         -- event = "VeryLazy",
-        event = { "BufReadPost", "BufNewFile" },
+        -- event = { "BufReadPost", "BufNewFile" },
         keys = {
           { mode = { "o", "x" }, "as", "<cmd>lua require('various-textobjs').subword('outer')<CR>" },
           { mode = { "o", "x" }, "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>" },
@@ -51,7 +62,6 @@ return {
         --   vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
         -- end,
       },
-
       {
         "nvim-treesitter/nvim-treesitter-context",
         lazy = true,
@@ -70,7 +80,8 @@ return {
             mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
             -- Separator between context and content. Should be a single character string, like '-'.
             -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
-            separator = nil,
+            -- separator = nil,
+            separator = "-",
             -- on_attach = function(bufnr)
             --   return true
             --   -- return vim.bo[bufnr].filetype ~= 'DiffviewFiles'
@@ -119,6 +130,15 @@ return {
         -- 		clear_on_cursor_move = false,
         -- 	},
         -- },
+        -- incremental_selection = {
+        --   enable = true,
+        --   keymaps = {
+        --     init_selection = "gnn", -- set to `false` to disable one of the mappings
+        --     node_incremental = "grn",
+        --     scope_incremental = "grc",
+        --     node_decremental = "grm",
+        --   },
+        -- },
         highlight = {
           enable = true,
           -- disable = function(lang, bufnr)
@@ -148,6 +168,7 @@ return {
                 (lang == "json" or lang == "jsonc")
                 and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json")
             then
+              print("package-lock.json, disabling treesitter")
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
               -- vim.api.nvim_buf_set_option(bufnr, "syntax", "off")
               return true
@@ -155,6 +176,8 @@ return {
 
             if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 5000 then
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
+
+              print("buf_line_count > 5000, disabling treesitter")
               return true
             end
 
@@ -164,34 +187,37 @@ return {
 
             if char_count > 1500 then
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
+              print("char_count > 1500, disabling treesitter")
               return true
             end
 
-            if
-                (lang == "json" or lang == "jsonc")
-                and vim.api.nvim_buf_line_count(bufnr) > 10000
-                and char_count > 1500
-            then
+            if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 10000 then
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
+              print("buf_line_count > 10000, disabling treesitter")
               return true
             end
 
             local max_filesize = 500 * 1024 -- 100 KB
             local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
             if ok and stats and stats.size > max_filesize and (lang == "json" or lang == "jsonc") then
+              print("buf_filesize > 100 KB, disabling treesitter")
               return true
             end
 
             return false
           end,
-          additional_vim_regex_highlighting = true,
+          additional_vim_regex_highlighting = false,
         },
         sync_install = true,
         -- ignore_install = { "yaml" },
         ignore_install = {},
         modules = {},
         -- enable indentation
-        indent = { enable = true },
+        -- indent = { enable = true },
+        indent = {
+          enable = true,
+          disable = { "yaml" },
+        },
         -- enable autotagging (w/ nvim-ts-autotag plugin)
         -- autotag = { enable = true },
         -- ensure these language parsers are installed
@@ -329,16 +355,5 @@ return {
         },
       }
     end,
-  },
-  {
-    cmd = { "TSPlaygroundToggle" },
-    "nvim-treesitter/playground",
-  },
-  {
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    event = { "BufReadPost", "BufNewFile" },
-    cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
-    -- event = "VeryLazy",
-    -- dependencies = "nvim-treesitter/nvim-treesitter",
   },
 }

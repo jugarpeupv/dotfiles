@@ -126,34 +126,6 @@ M.attach_lsp_config = function(client, bufnr)
       end,
       { desc = "Organize Imports" }
     )
-
-    keymap.set({ "n" }, "<leader>jr", function()
-      require("java").runner.built_in.run_app({})
-    end, opts)
-
-    keymap.set({ "n" }, "<leader>js", function()
-      require("java").runner.built_in.stop_app()
-    end, opts)
-
-    keymap.set({ "n" }, "<leader>jt", function()
-      require("java").test.run_current_class()
-    end, opts)
-
-    keymap.set({ "n" }, "<leader>jd", function()
-      require("java").test.debug_current_class()
-    end, opts)
-
-    keymap.set({ "n" }, "<leader>jo", function()
-      require("java").test.view_last_report()
-    end, opts)
-
-    keymap.set({ "n" }, "<leader>jp", function()
-      require("java").profile.ui()
-    end, opts)
-
-    keymap.set({ "n" }, "<leader>jR", function()
-      require("java").settings.change_runtime()
-    end, opts)
   end
 
   if client.name == "pyright" then

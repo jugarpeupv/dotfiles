@@ -548,7 +548,7 @@ return {
         },
         settings = {
           yaml = {
-            validate = true,
+            validate = false,
             hover = false,
             -- schemaStore = {
             --   enable = true,
@@ -563,6 +563,9 @@ return {
         filetypes = { "jsonc", "json", "json5" },
         on_attach = on_attach,
         capabilities = capabilities_json_ls,
+        -- init_options = {
+        --   provideFormatter = true,
+        -- },
         settings = {
           json = {
             schemas = require("schemastore").json.schemas({}),

@@ -12,11 +12,20 @@ vim.api.nvim_create_autocmd("BufRead", {
   end,
 })
 
+vim.api.nvim_create_autocmd('TextYankPost', {
+  group = vim.api.nvim_create_augroup('highlight_yank', { clear = true }),
+  desc = 'Hightlight selection on yank',
+  pattern = '*',
+  callback = function()
+    vim.hl.on_yank { higroup = 'Visual', timeout = 200 }
+  end,
+})
+
 vim.cmd([[
   augroup _general_settings
   autocmd!
   " autocmd FileType qf,help,man,lspinfo nnoremap <silent> <buffer> q :close<CR>
-  autocmd TextYankPost * silent!lua require('vim.highlight').on_yank({higroup = 'Visual', timeout = 200})
+  " autocmd TextYankPost * silent!lua require('vim.highlight').on_yank({higroup = 'Visual', timeout = 200})
   autocmd BufWinEnter * :set formatoptions-=cro
   " autocmd FileType qf set nobuflisted
   augroup end
@@ -74,9 +83,19 @@ vim.filetype.add({
   },
 })
 
-vim.cmd([[ augroup JsonToJsonc
-    autocmd! FileType json set filetype=jsonc
-augroup END ]])
+-- vim.cmd([[ augroup JsonToJsonc
+--     autocmd! FileType json set filetype=jsonc
+-- augroup END ]])
+
+vim.api.nvim_create_augroup("JsonToJsonc", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "json",
+  group = "JsonToJsonc",
+  callback = function ()
+    vim.cmd("set filetype=jsonc")
+    vim.cmd("set conceallevel=0")
+  end
+})
 
 -- vim.api.nvim_create_autocmd("FileType", {
 --   pattern = "json",
@@ -106,13 +125,14 @@ augroup END ]])
 
 -- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 1]])
 
--- vim.api.nvim_create_autocmd("TermOpen", {
---   group = vim.api.nvim_create_augroup("term-open-buflisted", { clear = true }),
---   callback = function()
---     vim.cmd("setlocal wrap")
---     -- vim.bo.buflisted = false
---   end,
--- })
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = vim.api.nvim_create_augroup("term-open-buflisted", { clear = true }),
+  callback = function()
+    vim.cmd("setlocal relativenumber")
+    -- vim.cmd("setlocal wrap")
+    -- vim.bo.buflisted = false
+  end,
+})
 
 vim.api.nvim_create_autocmd("User", {
   pattern = "GitConflictDetected",
@@ -143,15 +163,14 @@ vim.api.nvim_create_autocmd("User", {
 -- })
 --
 --
--- local group = vim.api.nvim_create_augroup("__env", {clear=true})
--- vim.api.nvim_create_autocmd({"BufEnter"}, {
---   pattern = ".env",
---   group = group,
---   callback = function()
---     print("env file")
---     vim.o.wrap = false
---   end,
--- })
+local group = vim.api.nvim_create_augroup("__env", { clear = true })
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  pattern = ".env",
+  group = group,
+  callback = function()
+    vim.o.wrap = false
+  end,
+})
 --
 --
 -- vim.api.nvim_create_autocmd("FileType", {
@@ -207,7 +226,6 @@ vim.api.nvim_create_autocmd("FileType", {
     end)
   end,
 })
-
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "applescript",

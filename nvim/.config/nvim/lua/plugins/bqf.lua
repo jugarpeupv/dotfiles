@@ -16,7 +16,9 @@ return {
       },
       constrain_cursor = false,
       max_filename_width = function()
-        return math.floor(math.min(55, vim.o.columns / 2))
+        -- return nil
+        return 500
+        -- return math.floor(math.min(200, vim.o.columns / 2))
       end,
       keys = {
         {

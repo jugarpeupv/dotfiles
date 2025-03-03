@@ -1,6 +1,7 @@
 return {
   -- with lazy.nvim
   { "vim-scripts/applescript.vim", event = { "BufNewFile", "BufReadPre" } },
+  -- { 'ii14/neorepl.nvim', cmd = { "Repl" }},
   {
     "Yilin-Yang/vim-markbar",
     event = { "BufReadPre", "BufNewFile" },
@@ -76,14 +77,14 @@ return {
         "<cmd>MarksQFListGlobal<cr>",
         { noremap = true, silent = true },
       },
-      {
-        mode = { "n" },
-        "<leader>mp",
-        function()
-          require("telescope").extensions.markit.bookmarks_list_all({ project_only = true })
-        end,
-        { noremap = true, silent = true },
-      },
+      -- {
+      --   mode = { "n" },
+      --   "<leader>mp",
+      --   function()
+      --     require("telescope").extensions.markit.bookmarks_list_all({ project_only = true })
+      --   end,
+      --   { noremap = true, silent = true },
+      -- },
     },
     config = function()
       require("markit").setup({
@@ -135,6 +136,10 @@ return {
       enabled = false,
     },
     keys = { { "<leader>co", "<cmd>NvimContextVtToggle<cr>" } },
+  },
+  {
+    'girishji/devdocs.vim',
+    cmd = { "DevdocsFind", "DevdocsInstall" },
   },
   -- {
   --   "yuratomo/w3m.vim",
@@ -279,6 +284,8 @@ return {
   },
   {
     "philosofonusus/ecolog.nvim",
+    enabled = true,
+    commit = "d92107c88febabc2f51190339cabf0bc5e072bd9",
     -- dependencies = {
     --   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
     --   "nvim-tree/nvim-tree.lua"
@@ -323,7 +330,7 @@ return {
       types = true,
       path = vim.fn.getcwd(),             -- Path to search for .env files
       preferred_environment = "development", -- Optional: prioritize specific env files
-      env_file_pattern = {
+      env_file_patterns = {
         ".env",
         ".env.*",
         "config/env.*",
@@ -479,6 +486,7 @@ return {
   {
     "gennaro-tedesco/nvim-jqx",
     event = { "BufReadPost" },
+    enabled = false,
     ft = { "json", "yaml" },
   },
   {
@@ -563,6 +571,7 @@ return {
   {
     "christoomey/vim-tmux-navigator",
     -- event = "VeryLazy",
+    commit = "d847ea942a5bb4d4fab6efebc9f30d787fd96e65",
     keys = { "<C-h>", "<C-j>", "<C-k>", "<C-l>" },
     config = function()
       vim.g.tmux_navigator_disable_when_zoomed = 1
@@ -590,7 +599,6 @@ return {
     keys = {
 
       { "<leader>jl", "<cmd>Jumps<CR>" },
-      { "<leader>gt", "<cmd>GTags<CR>" },
       {
         mode = { "n" },
         "<leader>ga",
@@ -667,6 +675,7 @@ return {
   { "kkharji/sqlite.lua", lazy = true },
   {
     "ckipp01/nvim-jenkinsfile-linter",
+    enabled = false,
     keys = {
       {
         "<leader>va",

@@ -11,10 +11,11 @@ return {
       type = "split",
     },
     offline_mode = {
-      enabled = true,
+      enabled = false,
       no_github = true,
       -- Add this only if you want to change the path where the Neovim releases are downloaded/located.
       -- Default location is the output of :lua= vim.fn.stdpath("cache") .. "/remote-nvim.nvim/version_cache"
+      cache_dir = vim.fn.stdpath("cache") .. "/remote-nvim.nvim/version_cache"
       -- cache_dir = <custom-path>,
     },
     remote = {

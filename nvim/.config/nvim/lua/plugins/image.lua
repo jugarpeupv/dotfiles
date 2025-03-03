@@ -132,22 +132,33 @@ return {
 
         -- Get the file path under the cursor
         local line = vim.api.nvim_buf_get_lines(current_buffer, cursor_row, cursor_row + 1, false)[1]
-        local file_path = line:match("%((.-)%)")
-        if not file_path then
-          print("No image found under the cursor")
-          return
+        -- print("line", line)
+
+        local file_path
+        local extracted_content = string.match(line, "%[%[(.-)%]%]")
+        -- print("extracted_content", extracted_content)
+
+        if extracted_content then
+          file_path = extracted_content.gsub(extracted_content, "|.*", "")
+          file_path = vim.loop.cwd() .. "/zadjuntos/" .. file_path
+        else
+          file_path = line:match("%((.-)%)")
+          if not file_path then
+            print("No image found under the cursor")
+            return
+          end
+          file_path = get_full_path(file_path)
         end
 
-        file_path = get_full_path(file_path)
         -- print("file_path", file_path)
 
+        -- print("file_path", file_path)
 
         if image_rendered and my_image then
           my_image:clear() -- remove the image if it is already rendered
           image_rendered = false
           my_image = nil
         else
-
           if vim.fn.filereadable(file_path) == 0 then
             print("Image file does not exist: " .. file_path)
             return
