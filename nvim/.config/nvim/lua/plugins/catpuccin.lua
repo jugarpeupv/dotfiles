@@ -165,7 +165,7 @@ return {
             String = { fg = "#F2CDCD" },
             -- ["@string.special.url"] = { fg = "#F38BA8", bg = "none", style = {} },
             StatusLine = { fg = "#cdd6f5", bg = "#292e42" },
-            MatchParen = { bg = "#394b70", fg = "none" },
+            MatchParen = { bg = "#394b70", fg = "#F5E0DC" },
             IlluminatedWordText = { bg = "#394b70" },
             IlluminatedWordRead = { bg = "#394b70" },
             IlluminatedWordWrite = { bg = "#394b70" },

@@ -4,6 +4,7 @@ return {
   -- config = true,
   -- event = "VeryLazy",
   event = { "BufReadPost", "BufNewFile" },
+  enabled = true,
   config = function()
     require("early-retirement").setup({
       -- If a buffer has been inactive for this many minutes, close it.
@@ -37,7 +38,7 @@ return {
       ignoreUnloadedBufs = true,
 
       -- Show notification on closing. Works with plugins like nvim-notify.
-      notificationOnAutoClose = true,
+      notificationOnAutoClose = false,
 
       -- When a file is deleted, for example via an external program, delete the
       -- associated buffer as well.

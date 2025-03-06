@@ -391,7 +391,8 @@ return {
       end
 
       -- vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#D20F39", bg = "none" })
-      vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#af0a27", bg = "none" })
+      -- vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#af0a27", bg = "none" })
+      vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#F38BA8", bg = "none" })
       vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
       vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
 

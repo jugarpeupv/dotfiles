@@ -16,7 +16,7 @@ return {
         check_ts = true, -- enable treesitter
         disable_filetype = { "TelescopePrompt", "vim" },
         -- ignored_next_char = "[%w%.]",
-        ignored_next_char = "[%w%.%[%]%'%\"%`%$%{%}%(%)]", -- Add any characters you want to ignore
+        -- ignored_next_char = "[%w%.%[%]%'%\"%`%$%{%}%(%)]", -- Add any characters you want to ignore
         fast_wrap = {},
         -- ts_config = {
         --   lua = { "string" },                 -- don't add pairs in lua string treesitter nodes

@@ -7,6 +7,11 @@ return {
     -- priority = 800,
     opts = {
       override = {
+      ruby = {
+        icon = "",
+        name = "ruby",
+        color = '#f38bad'
+      },
         scpt = {
           icon = "",
           name = "applescript2",
@@ -278,6 +283,8 @@ return {
         [".zshenv"] = { icon = "", color = "#73daca", name = "zshenv" },
         [".vimrc"] = { icon = "", color = "#73daca", name = "vimrc2323" },
 
+        ["Fastfile"] = { icon = "", color = "#f38bad", name = "fastfile" },
+        ["Gymfile"] = { icon = "", color = "#f38bad", name = "fastfile" },
         -- ["package.json"] = { icon = "", color = "#73daca", name = "PackageJson" },
         -- [".package.json"] = { icon = "", color = "#73daca", name = "PackageJson1" },
         -- ["*.package.json"] = { icon = "", color = "#73daca", name = "PackageJson2" },
@@ -330,7 +337,9 @@ return {
           name = "gradlew",
           color = "#89B4FA",
         },
+        ["Pluginfile"] = { icon = "", color = "#f38bad", name = "fastfile" },
         ["Gemfile"] = { icon = "", color = "#f38ba8", name = "gemfile" },
+        ["Gemfile.lock"] = { icon = "", color = "#f38ba8", name = "gemfile" },
         ["application.properties"] = { icon = "", color = "#CBA6F7", name = "application_properties" },
         ["tsconfig.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile2" },
         ["tsconfig.editor.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile2" },

@@ -195,6 +195,37 @@ return {
           api_nvimtree.tree.reload()
         end
 
+        vim.keymap.set("n", "F", function()
+          local node = api_nvimtree.tree.get_node_under_cursor()
+          if node then
+            -- get directory of current file if it's a file
+            local path
+            if node.type == "directory" then
+              -- Keep the full path for directories
+              path = node.absolute_path
+            else
+              -- Get the directory of the file
+              path = vim.fn.fnamemodify(node.absolute_path, ":h")
+            end
+
+            require("telescope.builtin").find_files({
+              cwd = path,
+              hidden = true,
+              find_command = {
+                "rg",
+                "--files",
+                "--color",
+                "never",
+                "--glob=!.git",
+                "--glob=!*__template__",
+                "--glob=!*DS_Store",
+              },
+            })
+
+          end
+
+        end, opts("Search in directory"))
+
         -- add custom key mapping to search in directory with grug-far
         vim.keymap.set("n", "S", function()
           local node = api_nvimtree.tree.get_node_under_cursor()

@@ -12,12 +12,12 @@ vim.api.nvim_create_autocmd("BufRead", {
   end,
 })
 
-vim.api.nvim_create_autocmd('TextYankPost', {
-  group = vim.api.nvim_create_augroup('highlight_yank', { clear = true }),
-  desc = 'Hightlight selection on yank',
-  pattern = '*',
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+  desc = "Hightlight selection on yank",
+  pattern = "*",
   callback = function()
-    vim.hl.on_yank { higroup = 'Visual', timeout = 200 }
+    vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
   end,
 })
 
@@ -87,15 +87,15 @@ vim.filetype.add({
 --     autocmd! FileType json set filetype=jsonc
 -- augroup END ]])
 
-vim.api.nvim_create_augroup("JsonToJsonc", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "json",
-  group = "JsonToJsonc",
-  callback = function ()
-    vim.cmd("set filetype=jsonc")
-    vim.cmd("set conceallevel=0")
-  end
-})
+-- vim.api.nvim_create_augroup("JsonToJsonc", { clear = true })
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "json",
+--   group = "JsonToJsonc",
+--   callback = function ()
+--     vim.cmd("set filetype=jsonc")
+--     vim.cmd("set conceallevel=0")
+--   end
+-- })
 
 -- vim.api.nvim_create_autocmd("FileType", {
 --   pattern = "json",
@@ -232,4 +232,18 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.cmd([[setlocal commentstring=--\ %s]])
   end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  group = vim.api.nvim_create_augroup("filetypedetect2", { clear = true }),
+  pattern = { "Gymfile", "Fastfile" },
+  callback = function()
+    vim.bo.filetype = "ruby"
+  end,
+})
+
+vim.filetype.add({
+  extension = {
+    json = "jsonc", -- Treat .json files as jsonc
+  },
 })

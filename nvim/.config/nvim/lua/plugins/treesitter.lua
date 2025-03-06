@@ -65,6 +65,8 @@ return {
       {
         "nvim-treesitter/nvim-treesitter-context",
         lazy = true,
+        dir='~/private/nvim-treesitter-context',
+        dev = true,
         -- event = { "BufReadPost", "BufNewFile" },
         -- cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
         -- affects = "nvim-treesitter",
@@ -80,8 +82,8 @@ return {
             mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
             -- Separator between context and content. Should be a single character string, like '-'.
             -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
-            -- separator = nil,
-            separator = "-",
+            separator = nil,
+            -- separator = "─",
             -- on_attach = function(bufnr)
             --   return true
             --   -- return vim.bo[bufnr].filetype ~= 'DiffviewFiles'
@@ -145,6 +147,7 @@ return {
           --   return false
           -- end,
           disable = function(lang, bufnr) -- Disable in large .json files like in package-lock.json
+            -- print("lang: ", lang)
             if lang == "nvimtree" then
               return true
             end
@@ -168,18 +171,19 @@ return {
                 (lang == "json" or lang == "jsonc")
                 and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json")
             then
-              print("package-lock.json, disabling treesitter")
+              -- print("package-lock.json, disabling treesitter")
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
               -- vim.api.nvim_buf_set_option(bufnr, "syntax", "off")
               return true
             end
 
-            if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 5000 then
+            if (lang == "json" or lang == "jsonc" or lang == "javascript") and vim.api.nvim_buf_line_count(bufnr) > 5000 then
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
 
               print("buf_line_count > 5000, disabling treesitter")
               return true
             end
+
 
             local line_number = 1
             local line = vim.fn.getline(line_number)

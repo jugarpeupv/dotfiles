@@ -18,7 +18,9 @@ return {
       null_ls.builtins.formatting.prettier,
       null_ls.builtins.formatting.black,
       null_ls.builtins.formatting.yamlfmt,
-      null_ls.builtins.formatting.shfmt
+      null_ls.builtins.formatting.shfmt,
+      -- null_ls.builtins.formatting.rubyfmt
+      null_ls.builtins.formatting.rubocop
       -- null_ls.builtins.diagnostics.eslint,
       -- null_ls.builtins.diagnostics.eslint.with({
       --   condition = function(utils)

@@ -135,12 +135,15 @@ opt.list = true
 
 local space = "·"
 opt.listchars:append({
-  -- tab = "» ",
-  tab = "  ",
+  tab = "» ",
+  -- tab = "  ",
+  -- multispace = "␣",
   -- multispace = space,
   -- lead = space,
   -- trail = "󱁐",
+  -- trail = "␣",
   trail = space,
+  -- trail = "»",
   nbsp = "&",
 })
 -- opt.listchars:append("trail:.")

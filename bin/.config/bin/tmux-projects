@@ -5,13 +5,15 @@
 if [[ $# -eq 1 ]]; then
   selected=$1
 else
-  selected=$(find ~/work ~/work/mar ~/private ~/tmp ~/tmp/poc ~/tmp/prod ~/work/Okode ~/dotfiles ~/.local/share/nvim/lazy ~/projects ~ -mindepth 1 -maxdepth 1 -type d | fzf --bind=ctrl-k:up,ctrl-j:down)
+  selected=$(find ~/work ~/work/tmp ~/private ~/work/Okode ~/dotfiles ~/.local/share/nvim/lazy ~ -mindepth 1 -maxdepth 1 -type d | fzf --bind=ctrl-k:up,ctrl-j:down)
 fi
+
+selected_name=$(echo "$selected" | sed 's/ /\\ /g')
 
 if [[ -z $selected ]]; then
   exit 0
 fi
-tmux send-keys -t ! "cd $selected" C-m C-l
+tmux send-keys -t ! "cd $selected_name" C-m C-l
 
 # tmux previous-window
 # tmux split-pane -h

@@ -644,6 +644,11 @@ return {
         on_attach = on_attach,
       })
 
+      require'lspconfig'.ruby_lsp.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+
       -- Set global defaults for all servers
       lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {
         capabilities = vim.tbl_deep_extend(

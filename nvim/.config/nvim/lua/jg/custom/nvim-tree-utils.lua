@@ -1,5 +1,5 @@
 
-local utils = require("nvim-tree.utils")
+-- local utils = require("nvim-tree.utils")
 
 local current_popup = nil
 

@@ -502,8 +502,8 @@ keymap("n", "<leader>bt", "<cmd>Gitsigns toggle_current_line_blame<cr>", opts)
 keymap("n", "<leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 
 -- Replace
-vim.cmd([[nnoremap <leader>rr :%s///gc<Left><Left><Left><Left>]])
-vim.cmd([[xnoremap <leader>rr :s///gc<Left><Left><Left><Left>]])
+vim.cmd([[nnoremap <leader>rr :%s///g<Left><Left><Left><Left>]])
+vim.cmd([[xnoremap <leader>rr :s///g<Left><Left><Left><Left>]])
 vim.cmd([[nnoremap <leader>sw /\<\><Left><Left>]])
 
 vim.cmd(
@@ -785,7 +785,14 @@ local function find_in_node_modules()
       actions.close(prompt_bufnr)
       local selection = action_state.get_selected_entry()
       api.tree.open()
-      api.tree.find_file(selection.value .. "/package.json")
+
+      local uv = vim.loop
+
+      if uv.fs_stat(selection.value .. "/package.json") then
+        api.tree.find_file(selection.value .. "/package.json")
+      else
+        api.tree.find_file(selection.value)
+      end
     end)
     return true
   end
@@ -878,7 +885,10 @@ vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
 -- -- vim.cmd([[nnoremap <nowait> gr gr]])
 -- --
 -- -- vim.api.nvim_del_keymap('n', 'gr')
-vim.api.nvim_del_keymap('n', 'gri')
-vim.api.nvim_del_keymap('n', 'gra')
-vim.api.nvim_del_keymap('n', 'grn')
-vim.api.nvim_del_keymap('n', 'grr')
+if vim.fn.has('nvim-0.11') == 1 then
+    vim.api.nvim_del_keymap('n', 'gri')
+    vim.api.nvim_del_keymap('n', 'grn')
+    vim.api.nvim_del_keymap('n', 'grr')
+    vim.api.nvim_del_keymap('n', 'gra')
+    vim.api.nvim_del_keymap('x', 'gra')
+end
