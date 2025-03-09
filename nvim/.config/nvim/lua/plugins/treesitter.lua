@@ -28,7 +28,7 @@ return {
         -- event = "VeryLazy",
         -- dependencies = "nvim-treesitter/nvim-treesitter",
       },
-      "nvim-treesitter/nvim-treesitter-refactor",
+      -- "nvim-treesitter/nvim-treesitter-refactor",
       -- {
       --   "RRethy/nvim-treesitter-textsubjects",
       --   config = function()
@@ -107,13 +107,13 @@ return {
         -- endwise = {
         --   enable = true,
         -- },
-        refactor = {
-          highlight_definitions = {
-            enable = false,
-            -- Set to false if you have an `updatetime` of ~100.
-            clear_on_cursor_move = true,
-          },
-        },
+        -- refactor = {
+        --   highlight_definitions = {
+        --     enable = false,
+        --     -- Set to false if you have an `updatetime` of ~100.
+        --     clear_on_cursor_move = true,
+        --   },
+        -- },
 
         -- enable syntax highlighting
         -- refactor = {
@@ -127,20 +127,20 @@ return {
         -- 		},
         -- 	},
         -- 	highlight_definitions = {
-        -- 		enable = true,
+        -- 		enable = false,
         -- 		-- Set to false if you have an `updatetime` of ~100.
         -- 		clear_on_cursor_move = false,
         -- 	},
         -- },
-        -- incremental_selection = {
-        --   enable = true,
-        --   keymaps = {
-        --     init_selection = "gnn", -- set to `false` to disable one of the mappings
-        --     node_incremental = "grn",
-        --     scope_incremental = "grc",
-        --     node_decremental = "grm",
-        --   },
-        -- },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "<CR>",
+            node_incremental = "<CR>",
+            scope_incremental = "<Tab>",
+            node_decremental = "<S-Tab>",
+          },
+        },
         highlight = {
           enable = true,
           -- disable = function(lang, bufnr)
@@ -177,13 +177,15 @@ return {
               return true
             end
 
-            if (lang == "json" or lang == "jsonc" or lang == "javascript") and vim.api.nvim_buf_line_count(bufnr) > 5000 then
+            if
+                (lang == "json" or lang == "jsonc" or lang == "javascript")
+                and vim.api.nvim_buf_line_count(bufnr) > 5000
+            then
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
 
               print("buf_line_count > 5000, disabling treesitter")
               return true
             end
-
 
             local line_number = 1
             local line = vim.fn.getline(line_number)
