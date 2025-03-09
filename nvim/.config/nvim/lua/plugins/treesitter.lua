@@ -63,10 +63,10 @@ return {
         -- end,
       },
       {
-        "nvim-treesitter/nvim-treesitter-context",
+        "jugarpeupv/nvim-treesitter-context",
         lazy = true,
-        dir='~/private/nvim-treesitter-context',
-        dev = true,
+        -- dir='~/private/nvim-treesitter-context',
+        -- dev = true,
         -- event = { "BufReadPost", "BufNewFile" },
         -- cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
         -- affects = "nvim-treesitter",
@@ -109,7 +109,7 @@ return {
         -- },
         refactor = {
           highlight_definitions = {
-            enable = true,
+            enable = false,
             -- Set to false if you have an `updatetime` of ~100.
             clear_on_cursor_move = true,
           },

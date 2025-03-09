@@ -342,8 +342,6 @@ keymap("t", "<M-k>", "<C-\\><C-n><cmd>keepjumps NvimTreeFindFile<cr>", opts)
 keymap("n", "<M-u>", "<cmd> lua require('trouble').next({skip_groups = true, jump = true})<cr>", opts)
 keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jump = true})<cr>", opts)
 
-keymap("t", "<M-o>", "<C-\\><C-n><M-o>", opts)
-keymap("t", "<M-i>", "<C-\\><C-n><M-i>", opts)
 -- vim.keymap.set({ "n" }, "<M-o>", "<cmd>bp<cr>", opts)
 -- vim.keymap.set({ "n" }, "<M-i>", "<cmd>bn<cr>", opts)
 
@@ -356,6 +354,7 @@ keymap("n", "<leader><BS>", "<cmd>qa!<CR>", opts)
 -- keymap("n", "<leader>q", "<cmd>q!<CR>", opts)
 -- keymap("n", "<leader>q", "<C-w>c", opts)
 vim.keymap.set({ "n" }, "<leader>q", function()
+  -- vim.cmd("q!")
   local function is_last_window()
     return vim.fn.winnr("$") == 1
   end
@@ -502,8 +501,8 @@ keymap("n", "<leader>bt", "<cmd>Gitsigns toggle_current_line_blame<cr>", opts)
 keymap("n", "<leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 
 -- Replace
-vim.cmd([[nnoremap <leader>rr :%s///g<Left><Left><Left><Left>]])
-vim.cmd([[xnoremap <leader>rr :s///g<Left><Left><Left><Left>]])
+vim.cmd([[nnoremap <leader>rr :%s///g<Left><Left><Left>]])
+vim.cmd([[xnoremap <leader>rr :s///g<Left><Left><Left>]])
 vim.cmd([[nnoremap <leader>sw /\<\><Left><Left>]])
 
 vim.cmd(
@@ -683,7 +682,7 @@ local function show_documentation()
     end
 
     if has_lsp_info then
-      require('render-markdown').buf_disable()
+      require("render-markdown").buf_disable()
       vim.cmd("RenderMarkdown disable")
       vim.lsp.buf.hover()
     else
@@ -881,14 +880,92 @@ vim.cmd([[cnoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"]])
 vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
 
-
 -- -- vim.cmd([[nnoremap <nowait> gr gr]])
 -- --
 -- -- vim.api.nvim_del_keymap('n', 'gr')
-if vim.fn.has('nvim-0.11') == 1 then
-    vim.api.nvim_del_keymap('n', 'gri')
-    vim.api.nvim_del_keymap('n', 'grn')
-    vim.api.nvim_del_keymap('n', 'grr')
-    vim.api.nvim_del_keymap('n', 'gra')
-    vim.api.nvim_del_keymap('x', 'gra')
+if vim.fn.has("nvim-0.11") == 1 then
+  vim.api.nvim_del_keymap("n", "gri")
+  vim.api.nvim_del_keymap("n", "grn")
+  vim.api.nvim_del_keymap("n", "grr")
+  vim.api.nvim_del_keymap("n", "gra")
+  vim.api.nvim_del_keymap("x", "gra")
 end
+
+vim.api.nvim_create_user_command("NpmReadme", function(opts)
+  local package_name = opts.args
+  local package_url = "https://registry.npmjs.org/" .. package_name .. "/latest"
+
+  -- Fetch the package metadata
+  local handle = io.popen("curl -s " .. package_url)
+  if not handle then
+    return
+  end
+  local package_metadata = handle:read("*a")
+  handle:close()
+
+  -- Parse the repository URL from the package metadata
+  local repo_url = package_metadata:match('"repository":{[^}]*"url":"(.-)"')
+  if not repo_url then
+    print("Repository URL not found for package: " .. package_name)
+    return
+  end
+
+  -- Convert the repository URL to the raw README URL
+  local readme_url = repo_url:gsub("github%.com", "raw.githubusercontent.com"):gsub("%.git$", ""):gsub("git%+", "")
+      .. "/master/README.md"
+
+  -- Fetch the README content
+  handle = io.popen("curl -s " .. readme_url)
+  if not handle then
+    return
+  end
+  local readme_content = handle:read("*a")
+  handle:close()
+
+  -- Create a new scratch buffer and set its content
+  vim.cmd("enew")
+  vim.api.nvim_buf_set_name(0, "npm_info_" .. package_name .. ".md")
+  -- vim.api.nvim_buf_set_option(0, "buftype", "nofile")
+  -- vim.api.nvim_buf_set_option(0, "bufhidden", "wipe")
+  vim.api.nvim_buf_set_option(0, "filetype", "markdown")
+  vim.api.nvim_buf_set_option(0, "swapfile", false)
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(readme_content, "\n"))
+end, { nargs = 1 })
+
+vim.keymap.set({ "n" }, "<leader>nr", function()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":NpmReadme ", true, false, true), "n", true)
+end, opts)
+
+local function clear_lsp_signs()
+  local bufnr = vim.api.nvim_get_current_buf()
+  vim.diagnostic.reset(nil, bufnr)
+end
+
+-- Create a command to clear only LSP diagnostic signs
+vim.api.nvim_create_user_command("ClearLspSigns", clear_lsp_signs, {})
+
+vim.keymap.set("t", "<M-o>", function()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
+  vim.schedule(function()
+    require("bufjump").backward()
+  end)
+end, opts)
+
+vim.keymap.set("t", "<M-i>", function()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
+  vim.schedule(function()
+    require("bufjump").forward()
+  end)
+end, opts)
+vim.keymap.set("t", "<D-o>", function()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
+  vim.schedule(function()
+    require("bufjump").backward()
+  end)
+end, opts)
+vim.keymap.set("t", "<D-i>", function()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
+  vim.schedule(function()
+    require("bufjump").forward()
+  end)
+end, opts)

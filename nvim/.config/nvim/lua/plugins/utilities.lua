@@ -1,10 +1,106 @@
+-- return {}
 return {
   -- with lazy.nvim
-  { "vim-scripts/applescript.vim", event = { "BufNewFile", "BufReadPre" } },
+  {
+    "vim-scripts/applescript.vim",
+    event = { "BufNewFile", "BufReadPre" },
+  },
+  {
+    "RRethy/vim-illuminate",
+    event = { "BufNewFile", "BufReadPost" },
+    opts = {
+      -- providers: provider used to get references in the buffer, ordered by priority
+      providers = {
+        "lsp",
+        "treesitter",
+        -- "regex",
+      },
+      -- delay: delay in milliseconds
+      delay = 300,
+      -- filetype_overrides: filetype specific overrides.
+      -- The keys are strings to represent the filetype while the values are tables that
+      -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
+      -- filetype_overrides = {},
+      -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
+      filetypes_denylist = {
+        "oil",
+        "dirvish",
+        "fugitive",
+        "alpha",
+        "NvimTree",
+        "lazy",
+        "neogitstatus",
+        "Trouble",
+        "lir",
+        "Outline",
+        "spectre_panel",
+        "toggleterm",
+        "DressingSelect",
+        "TelescopePrompt",
+        "NvimTree",
+      },
+      -- filetypes_denylist = {
+      --   "TelescopePrompt",
+      --   "NvimTree",
+      --   "dirbuf",
+      --   "dirvish",
+      --   "fugitive",
+      -- },
+      -- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
+      -- You must set filetypes_denylist = {} to override the defaults to allow filetypes_allowlist to take effect
+      -- filetypes_allowlist = {},
+      -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
+      -- See `:help mode()` for possible values
+      -- modes_denylist = { "i" },
+      -- modes_allowlist: modes to illuminate, this is overridden by modes_denylist
+      -- See `:help mode()` for possible values
+      -- modes_allowlist = {},
+      -- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
+      -- Only applies to the 'regex' provider
+      -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+      -- providers_regex_syntax_denylist = {},
+      -- -- providers_regex_syntax_allowlist: syntax to illuminate, this is overridden by providers_regex_syntax_denylist
+      -- -- Only applies to the 'regex' provider
+      -- -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+      -- providers_regex_syntax_allowlist = {},
+      -- under_cursor: whether or not to illuminate under the cursor
+      under_cursor = true,
+      -- large_file_cutoff: number of lines at which to use large_file_config
+      -- The `under_cursor` option is disabled when this cutoff is hit
+      large_file_cutoff = 10000,
+      -- large_file_config: config to use for large files (based on large_file_cutoff).
+      -- Supports the same keys passed to .configure
+      -- If nil, vim-illuminate will be disabled for large files.
+      -- large_file_overrides = nil,
+      -- -- min_count_to_highlight: minimum number of matches required to perform highlighting
+      -- min_count_to_highlight = 1,
+      -- should_enable: a callback that overrides all other settings to
+      -- enable/disable illumination. This will be called a lot so don't do
+      -- anything expensive in it.
+      -- should_enable = function(bufnr)
+      --   return true
+      -- end,
+      -- case_insensitive_regex: sets regex case sensitivity
+      case_insensitive_regex = false,
+      -- disable_keymaps: disable default keymaps
+      disable_keymaps = true,
+    },
+    config = function(_, opts)
+      require('illuminate').configure(opts)
+      vim.keymap.set({ "n" }, "<leader>ij", function()
+        require("illuminate").goto_next_reference(true)
+      end, { noremap = true, silent = true })
+
+      vim.keymap.set({ "n" }, "<leader>ik", function()
+        require("illuminate").goto_prev_reference(true)
+      end, { noremap = true, silent = true })
+    end,
+  },
   -- { 'ii14/neorepl.nvim', cmd = { "Repl" }},
   {
     "Yilin-Yang/vim-markbar",
     event = { "BufReadPre", "BufNewFile" },
+    enabled = false,
     config = function()
       vim.g.markbar_marks_to_display = "QPOMLKJIHGFEDCBA"
       vim.g.markbar_width = 50
@@ -138,9 +234,63 @@ return {
     keys = { { "<leader>co", "<cmd>NvimContextVtToggle<cr>" } },
   },
   {
-    'girishji/devdocs.vim',
-    cmd = { "DevdocsFind", "DevdocsInstall" },
+    "maskudo/devdocs.nvim",
+    enabled = false,
+    lazy = false,
+    dependencies = {
+      "folke/snacks.nvim",
+    },
+    keys = {
+      {
+        "<leader>ho",
+        mode = "n",
+        "<cmd>DevDocs get<cr>",
+        desc = "Get Devdocs",
+      },
+      {
+        "<leader>hi",
+        mode = "n",
+        "<cmd>DevDocs install<cr>",
+        desc = "Install Devdocs",
+      },
+      {
+        "<leader>hv",
+        mode = "n",
+        function()
+          local devdocs = require("devdocs")
+          local installedDocs = devdocs.GetInstalledDocs()
+          vim.ui.select(installedDocs, {}, function(selected)
+            if not selected then
+              return
+            end
+            local docDir = devdocs.GetDocDir(selected)
+            -- prettify the filename as you wish
+            Snacks.picker.files({ cwd = docDir })
+          end)
+        end,
+        desc = "View Devdocs",
+      },
+    },
+    opts = {
+      ensure_installed = {
+        "go",
+        "html",
+        -- "dom",
+        "http",
+        -- "css",
+        -- "javascript",
+        -- "rust",
+        -- some docs such as lua require version number along with the language name
+        -- check `DevDocs install` to view the actual names of the docs
+        "lua~5.1",
+        -- "openjdk~21"
+      },
+    },
   },
+  -- {
+  --   'girishji/devdocs.vim',
+  --   cmd = { "DevdocsFind", "DevdocsInstall" },
+  -- },
   -- {
   --   "yuratomo/w3m.vim",
   -- },
@@ -169,7 +319,7 @@ return {
       )
     end,
   },
-  { "sam4llis/nvim-lua-gf",        keys = { "gf" } },
+  { "sam4llis/nvim-lua-gf", keys = { "gf" } },
   -- { "mrjones2014/tldr.nvim", cmd = { "Tldr", "Telescope" } ,dependencies = { "nvim-telescope/telescope.nvim" } },
   {
     "tldr-pages/tldr-neovim-extension",
@@ -190,7 +340,7 @@ return {
   --     "nvim-lua/plenary.nvim",
   --   },
   -- },
-  { "benelori/vim-rfc",      cmd = { "RFC" } },
+  { "benelori/vim-rfc",     cmd = { "RFC" } },
   {
     "troydm/zoomwintab.vim",
     keys = { { mode = { "n" }, "<c-w>m", "<cmd>ZoomWinTabToggle<CR>" } },
@@ -207,7 +357,7 @@ return {
   {
     "vuki656/package-info.nvim",
     dependencies = { "MunifTanjim/nui.nvim" },
-    ft = { "json" },
+    ft = { "json", "jsonc" },
     -- config = function (_, opts)
     --   require("package-info").setup(opts)
     -- end,
@@ -527,7 +677,7 @@ return {
   -- { "nvim-spider" }
   -- { "airblade/vim-matchquote" },
   -- { "ton/vim-bufsurf" },
-  { "taybart/b64.nvim",         cmd = { "B64Encode", "B64Decode" } },
+  { "taybart/b64.nvim",      cmd = { "B64Encode", "B64Decode" } },
   {
     "lambdalisue/vim-suda",
     cmd = { "SudaWrite", "SudaRead" },
@@ -564,11 +714,6 @@ return {
   { "dstein64/vim-startuptime", cmd = { "StartupTime" } },
   -- { "dstein64/vim-startuptime", event = "VeryLazy" },
   {
-    "b0o/schemastore.nvim",
-    -- event = "VeryLazy",
-    lazy = true,
-  },
-  {
     "christoomey/vim-tmux-navigator",
     -- event = "VeryLazy",
     commit = "d847ea942a5bb4d4fab6efebc9f30d787fd96e65",
@@ -579,7 +724,7 @@ return {
     end,
   },
 
-  { "wellle/targets.vim",      event = { "BufReadPost", "BufNewFile" } },
+  { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
   -- {
   --   "ibhagwan/fzf-lua",
   --   -- optional for icon support

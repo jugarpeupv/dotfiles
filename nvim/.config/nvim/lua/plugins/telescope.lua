@@ -80,7 +80,9 @@ return {
         end,
       },
       {
-        "Equilibris/nx.nvim",
+        "jugarpeupv/nx.nvim",
+        -- dir='~/private/nx.nvim/wt-main/',
+        -- dev = true,
         dependencies = {
           "nvim-telescope/telescope.nvim",
         },

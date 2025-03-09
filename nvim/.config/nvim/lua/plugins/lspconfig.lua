@@ -141,6 +141,10 @@ return {
     -- event = { "InsertEnter" },
     dependencies = {
       {
+        "b0o/schemastore.nvim",
+        lazy = true,
+      },
+      {
         "j-hui/fidget.nvim",
         opts = {
           progress = {
@@ -534,6 +538,19 @@ return {
       lspconfig["eslint"].setup({
         cmd = { home .. "/.local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
         on_attach = on_attach,
+        filetypes = {
+          'javascript',
+          'javascriptreact',
+          'javascript.jsx',
+          'typescript',
+          'typescriptreact',
+          'typescript.tsx',
+          'vue',
+          'svelte',
+          'astro',
+          'json',
+          'jsonc'
+        },
         capabilities = capabilities,
       })
 

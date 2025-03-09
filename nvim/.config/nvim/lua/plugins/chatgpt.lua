@@ -94,6 +94,16 @@ return {
             local actions = require("telescope.actions")
             local action_state = require("telescope.actions.state")
             telescope.find_files({
+              hidden = true,
+              find_command = {
+                "rg",
+                "--files",
+                "--color",
+                "never",
+                "--glob=!.git",
+                "--glob=!*__template__",
+                "--glob=!*DS_Store",
+              },
               attach_mappings = function(prompt_bufnr)
                 actions.select_default:replace(function()
                   actions.close(prompt_bufnr)

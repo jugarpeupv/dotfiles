@@ -4,22 +4,27 @@ vim.filetype.get_option = function(filetype, option)
       or get_option(filetype, option)
 end
 
-vim.api.nvim_create_autocmd("BufRead", {
-  group = vim.api.nvim_create_augroup("CmpSourceCargo", { clear = true }),
-  pattern = "Cargo.toml",
-  callback = function()
-    require("cmp").setup.buffer({ sources = { { name = "crates" } } })
-  end,
-})
-
-vim.api.nvim_create_autocmd("TextYankPost", {
-  group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
-  desc = "Hightlight selection on yank",
-  pattern = "*",
-  callback = function()
-    vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
-  end,
-})
+if vim.fn.has("nvim-0.11") == 1 then
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+    desc = "Hightlight selection on yank",
+    pattern = "*",
+    callback = function()
+      vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
+    end,
+  })
+else
+  vim.api.nvim_create_autocmd("TextYankPost", {
+    group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+    desc = "Highlight selection on yank",
+    pattern = "*",
+    callback = function()
+      if vim.fn.has("nvim-0.11") == 0 then
+        require("vim.highlight").on_yank({ higroup = "Visual", timeout = 200 })
+      end
+    end,
+  })
+end
 
 vim.cmd([[
   augroup _general_settings

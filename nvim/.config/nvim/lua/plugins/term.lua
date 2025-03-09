@@ -2,14 +2,15 @@
 return {
   {
     "rebelot/terminal.nvim",
+    enabled = true,
     keys = {
       {
         "<M-ñ>",
         mode = { "n", "t" },
         function()
           -- vim.cmd("TermToggle enew")
-          local term_map = require("terminal.mappings")
-          term_map.toggle({ layout = {} })
+          -- local term_map = require("terminal.mappings")
+          -- term_map.toggle({ layout = {} })
           local get_terminal_bufs = function()
             return vim.tbl_filter(function(bufnr)
               return vim.fn.getbufvar(bufnr, "&buftype") == "terminal"
@@ -24,17 +25,33 @@ return {
             vim.cmd("term")
             return
           else -- there are terminal buffers
+
+            local function get_opened_buffers_count()
+              local buffers = vim.api.nvim_list_bufs()
+              local opened_buffers = vim.tbl_filter(function(bufnr)
+                return vim.api.nvim_buf_is_loaded(bufnr)
+              end, buffers)
+              return #opened_buffers
+            end
+
+            local opened_buffers_count = get_opened_buffers_count()
+
             local current_buf = vim.api.nvim_get_current_buf()
             local buftype = vim.fn.getbufvar(current_buf, "&buftype")
-            if buftype == "terminal" then
-              vim.cmd("bp")
-            end
-
-            local current_buf2 = vim.api.nvim_get_current_buf()
-
-            if current_buf == current_buf2 then
+            if buftype == "terminal" and opened_buffers_count > 2 then
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
+              vim.schedule(function()
+                require('bufjump').backward()
+              end)
+            else
               vim.cmd("TermToggle enew")
             end
+
+            -- local current_buf2 = vim.api.nvim_get_current_buf()
+            --
+            -- if current_buf == current_buf2 then
+            --   vim.cmd("TermToggle enew")
+            -- end
           end
         end,
         { silent = true, noremap = true },
@@ -64,7 +81,7 @@ return {
         end,
       },
       {
-        "<leader>tI",
+        "<leader>ii",
         function()
           local term = require("terminal")
           local index = term.current_term_index()
@@ -128,7 +145,7 @@ return {
 
       vim.keymap.set("n", "<leader>t1", term_map.toggle({ open_cmd = "tabnew" }))
 
-      local opts = { noremap = true, silent = true }
+      -- local opts = { noremap = true, silent = true }
       -- vim.keymap.set({ "n", "t" }, "<M-ñ>", term_map.toggle({ open_cmd = "enew" }), opts)
 
       -- vim.keymap.set("n", "<M-ñ>", function()
