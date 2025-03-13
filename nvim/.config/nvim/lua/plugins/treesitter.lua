@@ -183,7 +183,7 @@ return {
             then
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
 
-              print("buf_line_count > 5000, disabling treesitter")
+              -- print("buf_line_count > 5000, disabling treesitter")
               return true
             end
 
@@ -193,20 +193,20 @@ return {
 
             if char_count > 1500 then
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
-              print("char_count > 1500, disabling treesitter")
+              -- print("char_count > 1500, disabling treesitter")
               return true
             end
 
             if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 10000 then
               vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
-              print("buf_line_count > 10000, disabling treesitter")
+              -- print("buf_line_count > 10000, disabling treesitter")
               return true
             end
 
             local max_filesize = 500 * 1024 -- 100 KB
             local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
             if ok and stats and stats.size > max_filesize and (lang == "json" or lang == "jsonc") then
-              print("buf_filesize > 100 KB, disabling treesitter")
+              -- print("buf_filesize > 100 KB, disabling treesitter")
               return true
             end
 

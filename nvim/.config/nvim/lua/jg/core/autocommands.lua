@@ -241,7 +241,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   group = vim.api.nvim_create_augroup("filetypedetect2", { clear = true }),
-  pattern = { "Gymfile", "Fastfile" },
+  pattern = { "Gymfile", "Fastfile", "Podfile" },
   callback = function()
     vim.bo.filetype = "ruby"
   end,

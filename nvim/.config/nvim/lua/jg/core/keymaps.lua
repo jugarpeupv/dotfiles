@@ -969,3 +969,6 @@ vim.keymap.set("t", "<D-i>", function()
     require("bufjump").forward()
   end)
 end, opts)
+
+-- https://vim.fandom.com/wiki/Searching_for_expressions_which_include_slashes
+vim.cmd([[command! -nargs=1 SS let @/ = '\V'.escape(<q-args>, '\')|set hlsearch]])

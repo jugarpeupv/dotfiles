@@ -7,11 +7,26 @@ return {
     -- priority = 800,
     opts = {
       override = {
-      ruby = {
-        icon = "",
-        name = "ruby",
-        color = '#f38bad'
-      },
+        rake = {
+          icon = "",
+          name = "rake",
+          color = "#f38bad",
+        },
+        gemspec = {
+          icon = "",
+          name = "gemspec",
+          color = "#f38bad",
+        },
+        rb = {
+          icon = "",
+          name = "rb",
+          color = "#f38bad",
+        },
+        ruby = {
+          icon = "",
+          name = "ruby",
+          color = "#f38bad",
+        },
         scpt = {
           icon = "",
           name = "applescript2",
@@ -338,8 +353,10 @@ return {
           color = "#89B4FA",
         },
         ["Pluginfile"] = { icon = "", color = "#f38bad", name = "fastfile" },
+        ["Rakefile"] = { icon = "", color = "#f38ba8", name = "rakefile" },
+        ["Podfile"] = { icon = "", color = "#f38ba8", name = "podfile" },
         ["Gemfile"] = { icon = "", color = "#f38ba8", name = "gemfile" },
-        ["Gemfile.lock"] = { icon = "", color = "#f38ba8", name = "gemfile" },
+        -- ["Gemfile.lock"] = { icon = "", color = "#f38ba8", name = "gemfile" },
         ["application.properties"] = { icon = "", color = "#CBA6F7", name = "application_properties" },
         ["tsconfig.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile2" },
         ["tsconfig.editor.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile2" },

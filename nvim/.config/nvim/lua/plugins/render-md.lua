@@ -6,7 +6,7 @@ return {
     { "<leader>rm", "<cmd>RenderMarkdown toggle<CR>" },
   },
   opts = {
-    enabled = true,
+    enabled = false,
     max_file_size = 100.0,
     win_options = {
       -- @see :h 'conceallevel'

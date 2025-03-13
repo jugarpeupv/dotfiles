@@ -221,15 +221,11 @@ return {
                 "--glob=!*DS_Store",
               },
             })
-
           end
-
         end, opts("Search in directory"))
 
-        -- add custom key mapping to search in directory with grug-far
         vim.keymap.set("n", "S", function()
           local node = api_nvimtree.tree.get_node_under_cursor()
-          local grugFar = require("grug-far")
           if node then
             -- get directory of current file if it's a file
             local path
@@ -241,23 +237,75 @@ return {
               path = vim.fn.fnamemodify(node.absolute_path, ":h")
             end
 
-            local prefills = {
-              paths = path,
-            }
-
-            if not grugFar.has_instance("tree") then
-              grugFar.grug_far({
-                instanceName = "tree",
-                prefills = prefills,
-                staticTitle = "Find and Replace from Tree",
-              })
-            else
-              grugFar.open_instance("tree")
-              -- updating the prefills without clearing the search
-              grugFar.update_instance_prefills("tree", prefills, false)
+            local home = os.getenv("HOME")
+            if home then
+              path = path:gsub("^" .. home, "~")
             end
+
+            require("telescope").extensions.live_grep_args.live_grep_raw({
+              cwd = path,
+              disable_coordinates = true,
+              path_display = { "absolute" },
+              theme = "ivy",
+              prompt_title = "Live grep in path: " .. path,
+              layout_config = { height = 0.47 },
+              preview = {
+                hide_on_startup = true,
+              },
+              -- group_by = "filename",
+              -- disable_devicons = true,
+              vimgrep_arguments = {
+                "rg",
+                "--color=never",
+                "--no-heading",
+                "--with-filename",
+                "--line-number",
+                "--column",
+                "--hidden",
+                "--smart-case",
+                "--glob=!icarSDK.js",
+                "--glob=!package-lock.json",
+                "--glob=!**/.git/**",
+                -- "--ignore-case",
+                -- "--smart-case",
+                -- "--word-regexp"
+              },
+            })
           end
         end, opts("Search in directory"))
+
+        -- add custom key mapping to search in directory with grug-far
+        -- vim.keymap.set("n", "S", function()
+        --   local node = api_nvimtree.tree.get_node_under_cursor()
+        --   local grugFar = require("grug-far")
+        --   if node then
+        --     -- get directory of current file if it's a file
+        --     local path
+        --     if node.type == "directory" then
+        --       -- Keep the full path for directories
+        --       path = node.absolute_path
+        --     else
+        --       -- Get the directory of the file
+        --       path = vim.fn.fnamemodify(node.absolute_path, ":h")
+        --     end
+        --
+        --     local prefills = {
+        --       paths = path,
+        --     }
+        --
+        --     if not grugFar.has_instance("tree") then
+        --       grugFar.grug_far({
+        --         instanceName = "tree",
+        --         prefills = prefills,
+        --         staticTitle = "Find and Replace from Tree",
+        --       })
+        --     else
+        --       grugFar.open_instance("tree")
+        --       -- updating the prefills without clearing the search
+        --       grugFar.update_instance_prefills("tree", prefills, false)
+        --     end
+        --   end
+        -- end, opts("Search in directory"))
 
         vim.keymap.set("n", "p", api_nvimtree.fs.paste, opts("Paste"))
 
@@ -378,7 +426,7 @@ return {
           if term_found then
             -- print("Found terminal: ", vim.inspect(term_found))
             vim.api.nvim_set_current_win(vim.api.nvim_open_win(term_found.buffer, true, {
-              split = 'below'
+              split = "below",
             }))
             return
           end
