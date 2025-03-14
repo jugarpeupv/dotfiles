@@ -195,7 +195,7 @@ return {
             NvimTreeGitStagedIcon = { fg = "#8ee2cf" },
             -- MatchupVirtualText = { fg = "#6C7086" }
             MatchupVirtualText = { fg = "#747ebd" },
-            GitSignsCurrentLineBlame = { fg = "black" },
+            GitSignsCurrentLineBlame = { fg = "#747ebd" },
             FloatBorder = { fg = "#394b70" },
 
             -- VIRA

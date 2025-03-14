@@ -252,3 +252,9 @@ vim.filetype.add({
     json = "jsonc", -- Treat .json files as jsonc
   },
 })
+
+vim.filetype.add({
+  extension = {
+    zsh = "bash", -- Treat .json files as jsonc
+  },
+})

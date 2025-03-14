@@ -11,6 +11,5 @@ source $HOME/.config/zshrc/package-managers.zsh
 source $HOME/.config/zshrc/fzf.zsh
 source $HOME/.config/zshrc/ssh.zsh
 source $HOME/.config/zshrc/sdkman.zsh
+source $HOME/.config/zshrc/atuin.zsh
 source $HOME/.config/zshrc/evalcache.zsh
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

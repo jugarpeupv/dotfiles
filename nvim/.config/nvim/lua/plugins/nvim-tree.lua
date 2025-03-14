@@ -448,6 +448,38 @@ return {
           -- } }
         end, opts("Open Terminal in node"))
 
+
+        vim.keymap.set("n", "L", function()
+          local path = api_nvimtree.tree.get_node_under_cursor().absolute_path
+          local function check_and_modify_path(path_to)
+            if vim.fn.isdirectory(path_to) == 1 then
+              -- Path is a directory, do nothing
+              return path_to
+            else
+              -- Path is a file, remove the last part
+              local last_part = vim.fn.fnamemodify(path_to, ":h")
+              return last_part
+            end
+          end
+          local modified_path = check_and_modify_path(path)
+
+          local myterm = require("terminal").terminal:new({
+            layout = { open_cmd = "botright new" },
+            autoclose = false,
+          })
+          myterm:open()
+          myterm:send("cd " .. modified_path .. " && npx --yes live-server .")
+
+          -- all_terms:  { {
+          --   argv = { "/bin/zsh" },
+          --   buffer = 3,
+          --   id = 3,
+          --   mode = "terminal",
+          --   pty = "/dev/ttys002",
+          --   stream = "job"
+          -- } }
+        end, opts("Live server in folder"))
+
         -- vim.keymap.set("n", "O", api_nvimtree.tree.change_root_to_parent, opts("Up"))
 
         -- vim.keymap.set("n", "-", function()
