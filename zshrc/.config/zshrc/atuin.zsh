@@ -5,14 +5,13 @@ atuin-setup() {
   fi
 
   export ATUIN_NOBIND="true"
-  # eval "$(atuin init zsh)"
   fzf-atuin-history-widget() {
     local selected num
     setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2>/dev/null
-    # local atuin_opts="--cmd-only --limit ${ATUIN_LIMIT:-5000}"
-    local atuin_opts="--cmd-only"
+    local atuin_cmd='atuin history list'
+    # local atuin_opts='--print0 --format="[{time}] ({relativetime}) {command}"'
+    local atuin_opts='--print0 --cmd-only'
 
-    # --height=${FZF_TMUX_HEIGHT:-80%}
     local fzf_opts=(
       --info=right
       --height=50%
@@ -25,12 +24,13 @@ atuin-setup() {
       "--preview-window=up:2:hidden:wrap"
       "--bind=?:toggle-preview"
       "--bind=ctrl-d:half-page-down,ctrl-u:half-page-up"
-      "--bind=ctrl-s:reload(atuin search $atuin_opts -c $PWD),ctrl-r:reload(atuin search $atuin_opts)"
+      "--bind=ctrl-w:reload($atuin_cmd $atuin_opts --cwd),ctrl-r:reload($atuin_cmd $atuin_opts)"
+      "--bind=ctrl-s:reload($atuin_cmd $atuin_opts --session)"
     )
 
     selected=$(
-      eval "atuin search ${atuin_opts}" |
-        fzf "${fzf_opts[@]}"
+      # eval "${atuin_cmd} ${atuin_opts}" | fzf "${fzf_opts[@]}" --ansi --read0 | awk '{for (i=4; i<NF; i++) printf $i " "; print $NF}'
+      eval "${atuin_cmd} ${atuin_opts}" | fzf "${fzf_opts[@]}" --ansi --read0
     )
     local ret=$?
     if [ -n "$selected" ]; then
@@ -41,7 +41,6 @@ atuin-setup() {
     return $ret
   }
   zle -N fzf-atuin-history-widget
-  # bindkey '^R' fzf-atuin-history-widget
 
   function my_keybindings() {
     bindkey '^R' fzf-atuin-history-widget
@@ -49,12 +48,6 @@ atuin-setup() {
   }
 
   zvm_after_init_commands+=(my_keybindings)
-
-  # autoload -Uz add-zsh-hook
-  # add-zsh-hook precmd fzf-atuin-setup
-  # fzf-atuin-setup() {
-  #   bindkey '^R' fzf-atuin-history-widget
-  # }
 }
 
 atuin-setup
