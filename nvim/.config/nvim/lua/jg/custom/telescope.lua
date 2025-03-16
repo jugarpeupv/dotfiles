@@ -423,7 +423,9 @@ M.oil_fzf_files_builtin = function(path)
 
   require("telescope.builtin").find_files({
     find_command,
-    prompt_title = "Open the directory of the selected file in Oil",
+    prompt_title = 'Open the directory of the selected file in Oil from "'
+        .. path:gsub(os.getenv("HOME"), "~")
+        .. '"',
     sorter = conf.generic_sorter(),
     attach_mappings = function(prompt_bufnr)
       actions.select_default:replace(function()
@@ -473,7 +475,7 @@ M.oil_fzf_files = function(path)
     opts = opts or {}
     pickers
         .new(opts, {
-          prompt_title = "Oil fzf files",
+          prompt_title = 'Oil fzf files from "' .. path:gsub(os.getenv("HOME"), "~") .. '"',
           finder = finders.new_oneshot_job(find_command, {
             entry_maker = function(entry)
               local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
@@ -540,15 +542,22 @@ M.oil_fzf_dir = function(path)
     opts = opts or {}
     pickers
         .new(opts, {
-          prompt_title = "Open directory in Oil",
+          prompt_title = 'Open a directory from "' .. path:gsub(os.getenv("HOME"), "~") .. '" in Oil',
           finder = finders.new_oneshot_job(find_command, {
             entry_maker = function(entry)
               local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
               return {
                 value = entry,
                 -- display = "  ~/" .. entry_substituted,
+
                 display = function()
-                  local display_string = "  ~/" .. entry_substituted
+                  local display_string
+                  print('path2: ', path)
+                  if string.find(path, os.getenv("HOME")) then
+                    display_string = "  ~/" .. entry_substituted
+                  else
+                    display_string = "  " .. entry_substituted
+                  end
                   return display_string, { { { 0, 1 }, "Directory" } }
                 end,
                 -- { { {1, 3}, hl_group } }
@@ -608,6 +617,7 @@ M.nvimtree_fzf_dir = function(path)
     "4",
     "--hidden",
   }
+  print("path: ", path)
 
   -- Function to escape special characters in a string for use in a pattern
   local function escape_pattern(text)
@@ -615,6 +625,8 @@ M.nvimtree_fzf_dir = function(path)
   end
 
   local escaped_path = escape_pattern(path)
+
+  print("escaped_path: ", escaped_path)
 
   local commands = function(opts)
     opts = opts or {}
@@ -626,7 +638,12 @@ M.nvimtree_fzf_dir = function(path)
               local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
               return {
                 value = entry,
-                display = "  " .. entry_substituted,
+                display = function()
+                  local display_string
+                  display_string = "  ~/" .. entry_substituted
+                  return display_string, { { { 0, 1 }, "Directory" } }
+                end,
+
                 ordinal = entry,
               }
             end,
@@ -803,9 +820,7 @@ M.run_npm_scripts_improved = function()
   }
 
   local function count_package_json_files()
-    local handle = io.popen(
-      "fd --exclude .git --exclude node_modules --hidden --glob package.json | wc -l"
-    )
+    local handle = io.popen("fd --exclude .git --exclude node_modules --hidden --glob package.json | wc -l")
     if not handle then
       return 0
     end
@@ -827,75 +842,74 @@ M.run_npm_scripts_improved = function()
     if package_json_count == 1 then
       M.run_npm_scripts()
     else
-    pickers
-        .new(opts, {
-          prompt_title = "Select package.json",
-          finder = finders.new_oneshot_job(find_command, {
-            entry_maker = function(entry)
-              local entry_substituted = entry:gsub("^/", ""):gsub("^./", "")
-              return {
-                value = entry,
-                display = function()
-                  local display_string = "  " .. entry_substituted
-                  return display_string, { { { 0, 1 }, "DiagnosticOk" } }
-                end,
-                ordinal = entry,
-              }
-            end,
-          }),
-          sorter = conf.generic_sorter(opts),
-          attach_mappings = function(prompt_bufnr)
-            actions.select_default:replace(function()
-              actions.close(prompt_bufnr)
-              local selection = action_state.get_selected_entry()
-              local scripts = M.get_npm_scripts(selection.value) or {}
+      pickers
+          .new(opts, {
+            prompt_title = "Select package.json",
+            finder = finders.new_oneshot_job(find_command, {
+              entry_maker = function(entry)
+                local entry_substituted = entry:gsub("^/", ""):gsub("^./", "")
+                return {
+                  value = entry,
+                  display = function()
+                    local display_string = "  " .. entry_substituted
+                    return display_string, { { { 0, 1 }, "DiagnosticOk" } }
+                  end,
+                  ordinal = entry,
+                }
+              end,
+            }),
+            sorter = conf.generic_sorter(opts),
+            attach_mappings = function(prompt_bufnr)
+              actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+                local selection = action_state.get_selected_entry()
+                local scripts = M.get_npm_scripts(selection.value) or {}
 
-              local script_list = {}
-              for key, value in pairs(scripts) do
-                table.insert(script_list, { script_name = "npm run " .. key, script_value = value })
-              end
+                local script_list = {}
+                for key, value in pairs(scripts) do
+                  table.insert(script_list, { script_name = "npm run " .. key, script_value = value })
+                end
 
+                local directory = vim.fn.fnamemodify(selection.value, ":h")
 
-              local directory = vim.fn.fnamemodify(selection.value, ":h")
+                pickers
+                    .new(opts, {
+                      prompt_title = "Select npm script to run",
+                      finder = finders.new_table({
+                        results = script_list,
+                        entry_maker = function(entry)
+                          return {
+                            value = entry,
+                            -- display = "npm run " .. entry.script_name .. "                      (" .. entry.script_value .. ")",
+                            display = entry.script_name,
+                            ordinal = entry.script_name,
+                          }
+                        end,
+                      }),
+                      sorter = conf.generic_sorter(opts),
+                      attach_mappings = function(prompt_bufnr2)
+                        actions.select_default:replace(function()
+                          actions.close(prompt_bufnr2)
+                          local selection2 = action_state.get_selected_entry()
 
-              pickers
-                  .new(opts, {
-                    prompt_title = "Select npm script to run",
-                    finder = finders.new_table({
-                      results = script_list,
-                      entry_maker = function(entry)
-                        return {
-                          value = entry,
-                          -- display = "npm run " .. entry.script_name .. "                      (" .. entry.script_value .. ")",
-                          display = entry.script_name,
-                          ordinal = entry.script_name,
-                        }
+                          local myterm = require("terminal").terminal:new({
+                            layout = { open_cmd = "botright new" },
+                            -- cmd = { selection.value.script_name },
+                            cwd = directory,
+                            autoclose = false,
+                          })
+                          myterm:open()
+                          myterm:send(selection2.value.script_name)
+                        end)
+                        return true
                       end,
-                    }),
-                    sorter = conf.generic_sorter(opts),
-                    attach_mappings = function(prompt_bufnr2)
-                      actions.select_default:replace(function()
-                        actions.close(prompt_bufnr2)
-                        local selection2 = action_state.get_selected_entry()
-
-                        local myterm = require("terminal").terminal:new({
-                          layout = { open_cmd = "botright new" },
-                          -- cmd = { selection.value.script_name },
-                          cwd = directory,
-                          autoclose = false,
-                        })
-                        myterm:open()
-                        myterm:send(selection2.value.script_name)
-                      end)
-                      return true
-                    end,
-                  })
-                  :find()
-            end)
-            return true
-          end,
-        })
-        :find()
+                    })
+                    :find()
+              end)
+              return true
+            end,
+          })
+          :find()
     end
   end
 

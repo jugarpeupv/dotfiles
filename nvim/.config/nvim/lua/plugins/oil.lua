@@ -201,13 +201,13 @@ return {
               if not entry or not dir then
                 return
               end
-              local root_dir = vim.fs.dirname(vim.fs.find({ ".git" })[1])
+              -- local root_dir = vim.fs.dirname(vim.fs.find({ ".git" })[1])
+              --
+              -- if not root_dir then
+              --   root_dir = dir
+              -- end
 
-              if not root_dir then
-                root_dir = dir
-              end
-
-              require("jg.custom.telescope").oil_fzf_dir(root_dir)
+              require("jg.custom.telescope").oil_fzf_dir(dir)
             end,
             mode = "n",
           },
@@ -220,14 +220,14 @@ return {
               if not entry or not dir then
                 return
               end
-              local root_dir = vim.fs.dirname(vim.fs.find({ ".git" })[1])
-
-              if not root_dir then
-                root_dir = dir
-              end
+              -- local root_dir = vim.fs.dirname(vim.fs.find({ ".git" })[1])
+              --
+              -- if not root_dir then
+              --   root_dir = dir
+              -- end
 
               -- require("jg.custom.telescope").oil_fzf_dir(root_dir)
-              require("jg.custom.telescope").oil_fzf_files_builtin(root_dir)
+              require("jg.custom.telescope").oil_fzf_files_builtin(dir)
             end,
             mode = "n",
           },

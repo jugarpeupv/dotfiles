@@ -17,12 +17,17 @@ return {
     },
     build = "make tiktoken",    -- Only on MacOS or Linux
     opts = {
+      highlight_selection = false, -- Highlight selection
+      highlight_headers = true, --
       providers = {
         copilot = {
           -- see config.lua for implementation
         },
       },
       log_level = "fatal",
+      -- question_header = '# User ', -- Header to use for user questions
+      -- answer_header = '#  ', -- Header to use for AI answers
+      -- error_header = '# Error ', -- Header to use for errors
       mappings = {
         toggle_sticky = {
           detail = "Makes line under cursor sticky or deletes sticky line.",

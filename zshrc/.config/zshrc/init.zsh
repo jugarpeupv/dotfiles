@@ -5,6 +5,9 @@ source $HOME/.config/zshrc/oh-my-zsh/nvm.zsh
 source $HOME/.config/zshrc/oh-my-zsh/zsh-syntax-highlighting.zsh
 plugins=(nvm evalcache git-open fzf-tab zsh-syntax-highlighting zsh-vi-mode zsh-autosuggestions ohmyzsh-full-autoupdate)
 
+# This line is needed for fzf-tab to pick right colors
+source $HOME/.config/zshrc/ls-colors.zsh
+
 source $ZSH/oh-my-zsh.sh
 _comp_options+=(globdots)
 source $HOME/.config/zshrc/oh-my-zsh/fzf-tab.zsh

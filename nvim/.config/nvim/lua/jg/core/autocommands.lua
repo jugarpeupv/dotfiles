@@ -188,9 +188,31 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 
 vim.api.nvim_create_autocmd("BufEnter", {
   group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
-  pattern = "copilot-*",
+  pattern = "copilot-chat",
   callback = function()
     vim.opt_local.conceallevel = 0
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = vim.api.nvim_create_augroup("copilot-barbecue-ui-enter", { clear = true }),
+  pattern = "copilot-overlay",
+  callback = function()
+    require("barbecue.ui").toggle(false)
+    vim.cmd([[highlight DiffDelete guifg=#011528]])
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufLeave", {
+  group = vim.api.nvim_create_augroup("copilot-barbecue-ui-leave", { clear = true }),
+  pattern = "copilot-overlay",
+  callback = function()
+    if vim.opt.diff:get() then
+      require("barbecue.ui").toggle(false)
+    else
+      require("barbecue.ui").toggle(true)
+    end
+    vim.cmd([[highlight DiffDelete guifg=none]])
   end,
 })
 
