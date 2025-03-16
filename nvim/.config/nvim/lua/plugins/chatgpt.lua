@@ -172,6 +172,12 @@ return {
         desc = "Toggle Copilot",
       },
       {
+        "<leader>ci",
+        mode = { "n", "v" },
+        "<cmd>CopilotChatCommit<CR>",
+        desc = "Toggle Copilot",
+      },
+      {
         "<leader>ca",
         function()
           local actions = require("CopilotChat.actions")
