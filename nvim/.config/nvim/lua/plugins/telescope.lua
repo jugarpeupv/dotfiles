@@ -12,7 +12,21 @@ return {
       --   "nvim-telescope/telescope-arecibo.nvim",
       --   rocks = { openssl = true, ["lua-http-parser"] = true },
       -- },
+      {
+        "smartpde/telescope-recent-files",
+      },
+      {
+        "bloznelis/before.nvim",
+        config = function()
+          local before = require("before")
+          before.setup()
+          -- Look for previous edits in quickfix list
+          vim.keymap.set("n", "<leader>oq", before.show_edits_in_quickfix, {})
 
+          -- Look for previous edits in telescope (needs telescope, obviously)
+          vim.keymap.set("n", "<leader>oe", before.show_edits_in_telescope, {})
+        end,
+      },
       {
         enabled = true,
         "jugarpeupv/recall.nvim",
@@ -165,7 +179,7 @@ return {
         enabled = false,
         ft = { "yaml", "yml" },
       },
-      { "crispgm/telescope-heading.nvim", enabled = false },
+      { "crispgm/telescope-heading.nvim",        enabled = false },
       {
         "nvim-treesitter/nvim-treesitter",
       },
@@ -902,6 +916,8 @@ return {
       telescope.load_extension("git_file_history")
       telescope.load_extension("frecency")
       telescope.load_extension("fzf")
+      telescope.load_extension("before")
+      telescope.load_extension("recent_files")
       -- telescope.load_extension("jsonfly")
       -- telescope.load_extension('media_files')
       -- telescope.load_extension("egrepify")

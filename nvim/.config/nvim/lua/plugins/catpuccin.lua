@@ -97,6 +97,7 @@ return {
         },
         -- integrations = {},
         integrations = {
+          gitgraph = true,
           neotest = true,
           render_markdown = true,
           markdown = true,
@@ -195,7 +196,8 @@ return {
             NvimTreeGitStagedIcon = { fg = "#8ee2cf" },
             -- MatchupVirtualText = { fg = "#6C7086" }
             MatchupVirtualText = { fg = "#747ebd" },
-            GitSignsCurrentLineBlame = { fg = "#747ebd" },
+            -- GitSignsCurrentLineBlame = { fg = "#747ebd" },
+            GitSignsCurrentLineBlame = { fg = "#0f1219" },
             FloatBorder = { fg = "#394b70" },
 
             -- VIRA

@@ -170,10 +170,11 @@ vim.api.nvim_create_autocmd("User", {
 --
 local group = vim.api.nvim_create_augroup("__env", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  pattern = ".env",
+  pattern = "*.env*",
   group = group,
   callback = function()
     vim.o.wrap = false
+    vim.bo.filetype = "sh"
   end,
 })
 --
@@ -190,7 +191,35 @@ vim.api.nvim_create_autocmd("BufEnter", {
   group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
   pattern = "copilot-chat",
   callback = function()
-    vim.opt_local.conceallevel = 0
+    vim.o.conceallevel = 0
+  end,
+})
+
+
+vim.api.nvim_create_autocmd("BufLeave", {
+  group = vim.api.nvim_create_augroup("copilot-chat", { clear = true }),
+  pattern = "copilot-chat",
+  callback = function()
+    local chat = require("CopilotChat")
+    if vim.g.chat_title then
+      chat.save(vim.g.chat_title)
+      return
+    end
+
+    local cwd = vim.fn.getcwd()
+    local wt_utils = require("jg.custom.worktree-utils")
+    local wt_info = wt_utils.get_wt_info(cwd)
+    -- print("wt_info", vim.inspect(wt_info))
+
+
+    if next(wt_info) == nil then
+      vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+    else
+      -- print("wt_root_dir", wt_info["wt_root_dir"])
+      vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
+    end
+    -- print("vim.g.chat_title", vim.g.chat_title)
+    chat.save(vim.g.chat_title)
   end,
 })
 

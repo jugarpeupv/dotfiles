@@ -72,26 +72,44 @@ return {
       --   height = 0.4,
       --   row = 1
       -- },
+      window = {
+        layout = 'vertical', -- 'vertical', 'horizontal', 'float', 'replace'
+        width = 0.40, -- fractional width of parent, or absolute width in columns when > 1
+        height = 1, -- fractional height of parent, or absolute height in rows when > 1
+        -- Options below only apply to floating windows
+        relative = 'editor', -- 'editor', 'win', 'cursor', 'mouse'
+        border = 'single', -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
+        row = nil, -- row position of the window, default is centered
+        col = nil, -- column position of the window, default is centered
+        title = 'Copilot Chat', -- title of chat window
+        footer = 'footer', -- footer of chat window
+        zindex = 1, -- determines if window is on top or below other floating windows
+      },
+
       -- See Configuration section for options
-      callback = function()
-        local chat = require("CopilotChat")
-        -- if vim.g.chat_title then
-        --   chat.save(vim.g.chat_title)
-        --   return
-        -- end
-
-        local cwd = vim.fn.getcwd()
-        local wt_utils = require("jg.custom.worktree-utils")
-        local wt_info = wt_utils.get_wt_info(cwd)
-        -- print("wt_info", vim.inspect(wt_info))
-
-        if next(wt_info) == nil then
-          vim.g.chat_title = vim.trim(cwd:gsub(vim.env.HOME, ""):gsub("/", "-"))
-        else
-          vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub(vim.env.HOME, ""):gsub("/", "-"))
-        end
-        chat.save(vim.g.chat_title)
-      end,
+      -- callback = function()
+      --   local chat = require("CopilotChat")
+      --   if vim.g.chat_title then
+      --     print('saving chat quickly')
+      --     chat.save(vim.g.chat_title)
+      --     return
+      --   end
+      --
+      --   local cwd = vim.fn.getcwd()
+      --   local wt_utils = require("jg.custom.worktree-utils")
+      --   local wt_info = wt_utils.get_wt_info(cwd)
+      --   -- print("wt_info", vim.inspect(wt_info))
+      --
+      --
+      --   if next(wt_info) == nil then
+      --     vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+      --   else
+      --     -- print("wt_root_dir", wt_info["wt_root_dir"])
+      --     vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
+      --   end
+      --   -- print("vim.g.chat_title", vim.g.chat_title)
+      --   chat.save(vim.g.chat_title)
+      -- end,
       contexts = {
         file = {
           input = function(callback)
@@ -147,18 +165,18 @@ return {
           local wt_info = wt_utils.get_wt_info(cwd)
 
           if next(wt_info) == nil then
-            vim.g.chat_title = vim.trim(cwd:gsub(vim.env.HOME, ""):gsub("/", "-"))
+            vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
           else
-            vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub(vim.env.HOME, ""):gsub("/", "-"))
+            vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
           end
 
-          print("vim.g.chat_title", vim.g.chat_title)
+          -- print("<leader>ct vim.g.chat_title: ", vim.g.chat_title)
 
           local existing_chat_path = vim.fn.stdpath("data")
               .. "/copilotchat_history/"
               .. vim.g.chat_title
               .. ".json"
-          print("existing_chat_path", existing_chat_path)
+          -- print("existing_chat_path: ", existing_chat_path)
 
           local chat_exits = wt_utils.file_exists(existing_chat_path)
 

@@ -7,6 +7,51 @@ return {
     -- priority = 800,
     opts = {
       override = {
+        css = {
+          icon = "",
+          name = "css",
+          color = "#9CDCFE",
+        },
+        ipa = {
+          icon = "",
+          name = "ipa",
+          color = "#94E2D5",
+        },
+        apk = {
+          icon = "",
+          name = "Apk",
+          color = "#94E2D5",
+        },
+        swift = {
+          icon = "",
+          name = "swift",
+          color = "#FAB387"
+        },
+        xml = {
+          icon = "󰗀",
+          name = "xml",
+          color = "#f38bad"
+        },
+        storyboard = {
+          icon = "",
+          name = "storyboard",
+          color = "#9CDCFE",
+        },
+        plist = {
+          icon = "",
+          name = "plist",
+          color = "#9CDCFE",
+        },
+        xcworkspacedata = {
+          icon = "",
+          name = "xcworkspacedata",
+          color = "#9CDCFE",
+        },
+        pbxproj = {
+          icon = "",
+          name = "pbxproj",
+          color = "#9CDCFE",
+        },
         rake = {
           icon = "",
           name = "rake",
@@ -260,6 +305,16 @@ return {
       default = false,
       strict = false,
       override_by_filename = {
+        [".env.default"] = {
+          icon = "",
+          color = "#F2CDCD",
+          name = "EnvFile2",
+        },
+        [".env.release"] = {
+          icon = "",
+          color = "#F2CDCD",
+          name = "EnvFile3",
+        },
         [".zshrc"] = {
           icon = "",
           color = "#7C7F93",
@@ -305,7 +360,8 @@ return {
         -- ["*.package.json"] = { icon = "", color = "#73daca", name = "PackageJson2" },
         -- ["*package.json"] = { icon = "", color = "#73daca", name = "PackageJson3" },
         -- ["package-lock.json"] = { icon = "", color = "#73daca", name = "PackageLockJson" },
-
+        
+        ["capacitor.config.json"] = { icon = "", color = "#9CDCFE", name = "capacitorconfig" },
         ["package.json"] = { icon = "", color = "#73daca", name = "PackageJson" },
         [".package.json"] = { icon = "", color = "#73daca", name = "PackageJson1" },
         ["*.package.json"] = { icon = "", color = "#73daca", name = "PackageJson2" },
@@ -355,8 +411,9 @@ return {
         ["Pluginfile"] = { icon = "", color = "#f38bad", name = "fastfile" },
         ["Rakefile"] = { icon = "", color = "#f38ba8", name = "rakefile" },
         ["Podfile"] = { icon = "", color = "#f38ba8", name = "podfile" },
+        ["Podfile.lock"] = { icon = "", color = "#7C7F93", name = "podfilelock2" },
         ["Gemfile"] = { icon = "", color = "#f38ba8", name = "gemfile" },
-        -- ["Gemfile.lock"] = { icon = "", color = "#f38ba8", name = "gemfile" },
+        ["Gemfile.lock"] = { icon = "", color = "#7C7F93", name = "gemfilelock" },
         ["application.properties"] = { icon = "", color = "#CBA6F7", name = "application_properties" },
         ["tsconfig.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile2" },
         ["tsconfig.editor.json"] = { icon = "󰛦", color = "#9CDCFE", name = "TSDeclarationfile2" },

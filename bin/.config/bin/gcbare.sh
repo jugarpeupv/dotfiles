@@ -5,7 +5,7 @@ trap cleanup SIGINT SIGTERM ERR EXIT
 
 usage() {
   cat << EOF # remove the space between << and EOF, this is due to web plugin issue
-Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-l] repository
+Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-l location] repository [directory]
 
 Clone a bare git repo and set up environment for working comfortably and exclusively from worktrees.
 
@@ -63,7 +63,8 @@ parse_params() {
 
   # check required params and arguments
   # [[ -z "${param-}" ]] && die "Missing required parameter: param"
-  [[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
+  # [[ ${#args[@]} -eq 0 ]] && die "Missing script arguments"
+  [[ ${#args[@]} -lt 1 ]] && die "Missing script arguments"
 
   return 0
 }
@@ -71,10 +72,11 @@ parse_params() {
 parse_params "$@"
 setup_colors
 
-repository_name=$(echo "${args[@]}" | sed 's/^.*\/\([^\/]*\)\.git$/\1/')
+repository="${args[0]}"
+directory="${args[1]:-$(basename "$repository" .git)}"
 
-git clone --bare "${args[@]}" "$repository_name"
-pushd "$repository_name" > /dev/null
+git clone --bare "$repository" "$directory"
+pushd "$directory" > /dev/null
 # mkdir -p "$location"
 # mv * "$location"
 msg "${BLUE}Adjusting origin fetch locations...${NOFORMAT}"

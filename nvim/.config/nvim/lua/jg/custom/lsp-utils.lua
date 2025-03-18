@@ -13,11 +13,11 @@ M.attach_lsp_config = function(client, bufnr)
 
   -- navbuddy.attach(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
-  local keymap = vim.keymap                                              -- for conciseness
+  local keymap = vim.keymap                                            -- for conciseness
   -- keymap.set("n", "gI", "<cmd>Lspsaga finder<CR>", opts)                  -- show definition, references
-  keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)  -- got to declaration
+  keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts) -- got to declaration
   -- keymap.set("n", "<leader>gD", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
-  keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)    -- see definition and make edits in window
+  keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts) -- see definition and make edits in window
 
   -- vim.keymap.set({ "n" }, "gd", function()
   --   require("telescope.builtin").lsp_definitions()
@@ -27,8 +27,7 @@ M.attach_lsp_config = function(client, bufnr)
   --   -- end)
   -- end, { noremap = true, silent = true })
 
-
-  vim.keymap.set({"n"}, "gv", "<cmd>vsp | lua vim.lsp.buf.definition()<cr>", opts)
+  vim.keymap.set({ "n" }, "gv", "<cmd>vsp | lua vim.lsp.buf.definition()<cr>", opts)
 
   -- vim.keymap.set({ "n" }, "gv", function()
   --   require("telescope.builtin").lsp_definitions({ jump_type = "vsplit" })
@@ -99,9 +98,6 @@ M.attach_lsp_config = function(client, bufnr)
   -- keymap.set("n", "<leader>gk", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to previous diagnostic in buffer
   -- keymap.set("n", "<leader>gj", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer
   -- keymap.set("n", "gh", "<cmd>Lspsaga hover_doc<CR>", opts)                    -- show documentation for what is under cursor
-  keymap.set({ "n" }, "gh", function()
-    require("lsp_signature").toggle_float_win()
-  end, opts)
 
   -- keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts) -- show documentation for what is under cursor
   -- keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)      -- show documentation for what is under cursor
@@ -117,15 +113,23 @@ M.attach_lsp_config = function(client, bufnr)
 
   -- typescript specific keymaps (e.g. rename file and update imports)
 
+  require("lsp_signature").on_attach({
+    floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
+    toggle_key = "<M-lt>", -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
+    hint_enable = false,   -- virtual hint enable
+  }, bufnr)
+
+  keymap.set({ "n" }, "gh", function()
+    vim.lsp.buf.signature_help()
+  end, opts)
+  -- keymap.set({ "n" }, "gh", function()
+  --   require("lsp_signature").toggle_float_win()
+  -- end, opts)
+
   if client.name == "jdtls" then
-    vim.keymap.set(
-      "n",
-      "<leader>oi",
-      function ()
-        require'jdtls'.organize_imports()
-      end,
-      { desc = "Organize Imports" }
-    )
+    vim.keymap.set("n", "<leader>oi", function()
+      require("jdtls").organize_imports()
+    end, { desc = "Organize Imports" })
   end
 
   if client.name == "pyright" then

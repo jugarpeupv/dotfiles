@@ -81,7 +81,7 @@ return {
       require("oil").setup({
         -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
         -- Set to false if you want some other plugin (e.g. netrw) to open when you edit directories.
-        default_file_explorer = true,
+        default_file_explorer = false,
         -- Id is automatically added at the beginning, and name at the end
         -- See :help oil-columns
         columns = {
@@ -93,7 +93,7 @@ return {
         -- Buffer-local options to use for oil buffers
         buf_options = {
           buflisted = true,
-          -- bufhidden = "hide",
+          bufhidden = "hide",
         },
         -- Window-local options to use for oil buffers
         win_options = {
@@ -120,8 +120,8 @@ return {
         -- Oil will automatically delete hidden buffers after this delay
         -- You can set the delay to false to disable cleanup entirely
         -- Note that the cleanup process only starts when none of the oil buffers are currently displayed
-        cleanup_delay_ms = 2000,
-        -- cleanup_delay_ms = false,
+        -- cleanup_delay_ms = 2000,
+        cleanup_delay_ms = false,
         lsp_file_methods = {
           enabled = true,
           -- Time to wait for LSP file operations to complete before skipping

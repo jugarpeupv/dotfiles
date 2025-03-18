@@ -5,6 +5,11 @@ return {
     "vim-scripts/applescript.vim",
     event = { "BufNewFile", "BufReadPre" },
   },
+  { "tpope/vim-bundler",    event = { "BufNewFile", "BufReadPre" } },
+  -- {
+  --   'vim-ruby/vim-ruby',
+  --   event = { "BufNewFile", "BufReadPre" },
+  -- },
   {
     "RRethy/vim-illuminate",
     event = { "BufNewFile", "BufReadPost" },
@@ -86,7 +91,7 @@ return {
       disable_keymaps = true,
     },
     config = function(_, opts)
-      require('illuminate').configure(opts)
+      require("illuminate").configure(opts)
       vim.keymap.set({ "n" }, "<leader>ij", function()
         require("illuminate").goto_next_reference(true)
       end, { noremap = true, silent = true })
@@ -120,7 +125,7 @@ return {
       { "stevearc/dressing.nvim" }, -- optional: better UI
     },
     config = function()
-      local opts = {}               -- go to the following link to see all the options in the deafult config file
+      local opts = {}                  -- go to the following link to see all the options in the deafult config file
       require("bookmarks").setup(opts) -- you must call setup to init sqlite db
     end,
   },
@@ -137,12 +142,12 @@ return {
         on_attach = function(bufnr)
           local bm = require("bookmarks")
           local map = vim.keymap.set
-          map("n", "mm", bm.bookmark_toggle) -- add or remove bookmark at current line
-          map("n", "mi", bm.bookmark_ann)  -- add or edit mark annotation at current line
-          map("n", "mc", bm.bookmark_clean) -- clean all marks in local buffer
-          map("n", "mn", bm.bookmark_next) -- jump to next mark in local buffer
-          map("n", "mp", bm.bookmark_prev) -- jump to previous mark in local buffer
-          map("n", "ml", bm.bookmark_list) -- show marked file list in quickfix window
+          map("n", "mm", bm.bookmark_toggle)    -- add or remove bookmark at current line
+          map("n", "mi", bm.bookmark_ann)       -- add or edit mark annotation at current line
+          map("n", "mc", bm.bookmark_clean)     -- clean all marks in local buffer
+          map("n", "mn", bm.bookmark_next)      -- jump to next mark in local buffer
+          map("n", "mp", bm.bookmark_prev)      -- jump to previous mark in local buffer
+          map("n", "ml", bm.bookmark_list)      -- show marked file list in quickfix window
           map("n", "mx", bm.bookmark_clear_all) -- removes all bookmarks
           map("n", "mL", function()
             require("telescope").extensions.bookmarks.list()
@@ -340,7 +345,7 @@ return {
   --     "nvim-lua/plenary.nvim",
   --   },
   -- },
-  { "benelori/vim-rfc",     cmd = { "RFC" } },
+  { "benelori/vim-rfc",      cmd = { "RFC" } },
   {
     "troydm/zoomwintab.vim",
     keys = { { mode = { "n" }, "<c-w>m", "<cmd>ZoomWinTabToggle<CR>" } },
@@ -376,8 +381,8 @@ return {
           invalid = "|  ", -- Icon for invalid dependencies
         },
       },
-      autostart = false,          -- Whether to autostart when `package.json` is opened
-      hide_up_to_date = false,    -- It hides up to date versions when displaying virtual text
+      autostart = false,             -- Whether to autostart when `package.json` is opened
+      hide_up_to_date = false,       -- It hides up to date versions when displaying virtual text
       hide_unstable_versions = true, -- It hides unstable versions from version list e.g next-11.1.3-canary3
       -- Can be `npm`, `yarn`, or `pnpm`. Used for `delete`, `install` etc...
       -- The plugin will try to auto-detect the package manager based on
@@ -465,20 +470,20 @@ return {
           partial_mode = false,
         },
         modules = {
-          cmp = true,             -- Mask values in completion
-          peek = true,            -- Mask values in peek view
-          telescope = true,       -- Mask values in telescope
+          cmp = true,                  -- Mask values in completion
+          peek = true,                 -- Mask values in peek view
+          telescope = true,            -- Mask values in telescope
           telescope_previewer = false, -- Mask values in telescope preview buffers
           files = {
-            shelter_on_leave = true, -- Control automatic re-enabling of shelter when leaving buffer
-            disable_cmp = true,   -- Disable completion in sheltered buffers (default: true)
-            skip_comments = true, -- Skip masking comment lines in environment files (default: false)
+            shelter_on_leave = true,   -- Control automatic re-enabling of shelter when leaving buffer
+            disable_cmp = true,        -- Disable completion in sheltered buffers (default: true)
+            skip_comments = true,      -- Skip masking comment lines in environment files (default: false)
           },
         },
       },
       -- true by default, enables built-in types (database_url, url, etc.)
       types = true,
-      path = vim.fn.getcwd(),             -- Path to search for .env files
+      path = vim.fn.getcwd(),                -- Path to search for .env files
       preferred_environment = "development", -- Optional: prioritize specific env files
       env_file_patterns = {
         ".env",
@@ -655,14 +660,14 @@ return {
             enabled = false,
             fg = "#21d5ff", -- "text" or "#rrggbb"
             -- fg = "text", -- text will set underline same color with text
-            bg = nil, -- nil or "#rrggbb"
+            bg = nil,       -- nil or "#rrggbb"
             underline = true,
           },
           cursor_move = {
             enabled = false,
             fg = "#199eff", -- "text" or "#rrggbb"
             -- fg = "text", -- text will set underline same color with text
-            bg = nil, -- nil or "#rrggbb"
+            bg = nil,       -- nil or "#rrggbb"
             underline = true,
           },
         },
@@ -677,7 +682,7 @@ return {
   -- { "nvim-spider" }
   -- { "airblade/vim-matchquote" },
   -- { "ton/vim-bufsurf" },
-  { "taybart/b64.nvim",      cmd = { "B64Encode", "B64Decode" } },
+  { "taybart/b64.nvim",         cmd = { "B64Encode", "B64Decode" } },
   {
     "lambdalisue/vim-suda",
     cmd = { "SudaWrite", "SudaRead" },
@@ -707,7 +712,7 @@ return {
       skipInsignificantPunctuation = true,
       consistentOperatorPending = true, -- see "Consistent Operator-pending Mode" in the README
       subwordMovement = true,
-      customPatterns = {},           -- check "Custom Movement Patterns" in the README for details
+      customPatterns = {},              -- check "Custom Movement Patterns" in the README for details
     },
   },
   -- { https://github.com/axieax/urlview.nvim }
@@ -724,7 +729,7 @@ return {
     end,
   },
 
-  { "wellle/targets.vim",       event = { "BufReadPost", "BufNewFile" } },
+  { "wellle/targets.vim",      event = { "BufReadPost", "BufNewFile" } },
   -- {
   --   "ibhagwan/fzf-lua",
   --   -- optional for icon support

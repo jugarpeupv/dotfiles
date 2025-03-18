@@ -17,6 +17,7 @@ return {
     -- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
     dependencies = {
       -- "RRethy/nvim-treesitter-endwise",
+      { "cfdrake/vim-pbxproj" },
       {
         -- cmd = { "TSPlaygroundToggle" },
         "nvim-treesitter/playground",
@@ -228,6 +229,9 @@ return {
         -- autotag = { enable = true },
         -- ensure these language parsers are installed
         ensure_installed = {
+          "toml",
+          "ruby",
+          "swift",
           "json",
           "jsonc",
           "json5",

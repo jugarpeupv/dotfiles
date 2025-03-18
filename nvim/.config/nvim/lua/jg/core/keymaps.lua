@@ -261,6 +261,10 @@ vim.keymap.set({ "n" }, "sf", function()
 end, opts)
 
 vim.keymap.set({ "n" }, "sd", function()
+  require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("%:p:h"), true)
+end, opts)
+
+vim.keymap.set({ "n" }, "se", function()
   require("telescope").extensions.file_browser.file_browser({
     grouped = true,
     depth = 1,
@@ -376,13 +380,21 @@ keymap(
   opts
 )
 vim.keymap.set({ "n" }, "<leader>bu", function()
-  require("telescope.builtin").buffers({
-    -- ignore_current_buffer = true,
+  require("jg.custom.telescope").normal_buffers({
+    ignore_current_buffer = true,
     show_all_buffers = false,
     sort_mru = true,
-    sort_lastused = true,
+    -- sort_lastused = true,
     -- initial_mode = "normal",
   })
+
+  -- require("telescope.builtin").buffers({
+  --   -- ignore_current_buffer = true,
+  --   show_all_buffers = false,
+  --   sort_mru = true,
+  --   sort_lastused = true,
+  --   -- initial_mode = "normal",
+  -- })
 end, opts)
 keymap("n", "<leader>tr", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
 keymap("n", "<leader>tm", "<cmd>lua require('telescope.builtin').node_modules list<cr>", opts)
@@ -474,6 +486,7 @@ keymap("n", "<leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>"
 -- Telescope
 keymap("n", "<leader>gs", "<cmd>lua require('telescope.builtin').git_stash()<cr>", opts)
 keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<cr>", opts)
+-- keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches({layout_config={height=0.8}})<cr>", opts)
 
 keymap("n", "<leader>gB", "<cmd>Git branch -vv<cr>", opts)
 
@@ -957,12 +970,14 @@ vim.keymap.set("t", "<M-i>", function()
     require("bufjump").forward()
   end)
 end, opts)
+
 vim.keymap.set("t", "<D-o>", function()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
   vim.schedule(function()
     require("bufjump").backward()
   end)
 end, opts)
+
 vim.keymap.set("t", "<D-i>", function()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
   vim.schedule(function()
@@ -972,3 +987,10 @@ end, opts)
 
 -- https://vim.fandom.com/wiki/Searching_for_expressions_which_include_slashes
 vim.cmd([[command! -nargs=1 SS let @/ = '\V'.escape(<q-args>, '\')|set hlsearch]])
+
+vim.keymap.set("n", "<leader>ch", "<cmd>Changes<cr>", opts)
+
+-- Map a shortcut to open the picker.
+vim.keymap.set("n", "<leader>ri", function()
+  require("telescope").extensions.recent_files.pick()
+end, { noremap = true, silent = true })
