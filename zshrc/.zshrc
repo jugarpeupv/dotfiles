@@ -15,3 +15,5 @@ source $HOME/.config/zshrc/atuin.zsh
 source $HOME/.config/zshrc/evalcache.zsh
 
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

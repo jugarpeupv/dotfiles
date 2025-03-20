@@ -73,9 +73,9 @@ return {
       --   row = 1
       -- },
       window = {
-        layout = 'vertical', -- 'vertical', 'horizontal', 'float', 'replace'
+        layout = 'horizontal', -- 'vertical', 'horizontal', 'float', 'replace'
         width = 0.40, -- fractional width of parent, or absolute width in columns when > 1
-        height = 1, -- fractional height of parent, or absolute height in rows when > 1
+        height = 0.45, -- fractional height of parent, or absolute height in rows when > 1
         -- Options below only apply to floating windows
         relative = 'editor', -- 'editor', 'win', 'cursor', 'mouse'
         border = 'single', -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
@@ -153,7 +153,7 @@ return {
 
       -- { "<leader>ct", mode = { "n", "v" }, "<cmd>CopilotChatToggle<CR>", desc = "Toggle Copilot" },
       {
-        "<leader>ct",
+        "<M-b>",
         mode = { "n", "v" },
         function()
           -- local chat = require("CopilotChat")

@@ -440,7 +440,7 @@ return {
   {
     "philosofonusus/ecolog.nvim",
     enabled = true,
-    commit = "d92107c88febabc2f51190339cabf0bc5e072bd9",
+    -- commit = "d92107c88febabc2f51190339cabf0bc5e072bd9",
     -- dependencies = {
     --   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
     --   "nvim-tree/nvim-tree.lua"
@@ -475,8 +475,8 @@ return {
           telescope = true,            -- Mask values in telescope
           telescope_previewer = false, -- Mask values in telescope preview buffers
           files = {
-            shelter_on_leave = true,   -- Control automatic re-enabling of shelter when leaving buffer
-            disable_cmp = true,        -- Disable completion in sheltered buffers (default: true)
+            shelter_on_leave = false,   -- Control automatic re-enabling of shelter when leaving buffer
+            disable_cmp = false,        -- Disable completion in sheltered buffers (default: true)
             skip_comments = true,      -- Skip masking comment lines in environment files (default: false)
           },
         },
@@ -486,6 +486,7 @@ return {
       path = vim.fn.getcwd(),                -- Path to search for .env files
       preferred_environment = "development", -- Optional: prioritize specific env files
       env_file_patterns = {
+        "*.env*",
         ".env",
         ".env.*",
         "config/env.*",

@@ -9,13 +9,58 @@ return {
       {
         "<leader>gL",
         function()
-          require("gitgraph").draw({}, { all = true, max_count = 5000 })
+          local cmd = 'lua require("gitgraph").draw({}, { all = true, max_count = 5000 })'
+          -- require("gitgraph").draw({}, { all = true, max_count = 5000 })
+          vim.api.nvim_feedkeys(":" .. cmd, "n", false)
+        end,
+        desc = "GitGraph - Draw",
+      },
+      {
+        "<leader>gg",
+        function()
+          local current_branch = vim.fn.system("git rev-parse --abbrev-ref HEAD"):gsub("%s+", "")
+          local default_branch = vim.fn
+              .system("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
+              :gsub("%s+", "")
+          local revision_range = current_branch .. "..." .. default_branch
+          local cmd = 'lua require("gitgraph").draw({}, { revision_range = "'
+              .. revision_range
+              .. '", max_count = 5000 })'
+          vim.api.nvim_feedkeys(":" .. cmd, "n", false)
         end,
         desc = "GitGraph - Draw",
       },
     },
     ---@type I.GGConfig
     opts = {
+      symbols = {
+        merge_commit = '',
+        commit = '',
+        merge_commit_end = '',
+        commit_end = '',
+
+        -- Advanced symbols
+        GVER = '',
+        GHOR = '',
+        GCLD = '',
+        GCRD = '╭',
+        GCLU = '',
+        GCRU = '',
+        GLRU = '',
+        GLRD = '',
+        GLUD = '',
+        GRUD = '',
+        GFORKU = '',
+        GFORKD = '',
+        GRUDCD = '',
+        GRUDCU = '',
+        GLUDCD = '',
+        GLUDCU = '',
+        GLRDCL = '',
+        GLRDCR = '',
+        GLRUCL = '',
+        GLRUCR = '',
+      },
       hooks = {
         -- Check diff of a commit
         on_select_commit = function(commit)

@@ -8,7 +8,7 @@ return {
   -- dependencies = { "catppuccin/nvim" },
   -- priority = 10,
   -- event = { "TermOpen" ,"BufReadPre", "BufNewFile" },
-  event = { "TermOpen" ,"BufReadPost" },
+  event = { "TermOpen", "BufReadPost" },
   config = function()
     local colors = {
       green = "#94E2D5",
@@ -60,15 +60,16 @@ return {
     local dirnameFormatFn = function()
       local dir_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
       local cwd = vim.fn.getcwd()
-      local parent_bare_lualine_path = cwd .. "/../.bare"
-      local exists_bare_dir = vim.fn.isdirectory(parent_bare_lualine_path)
-      local parent_dir = vim.fn.fnamemodify(cwd .. "/..", ":p")
+      local wt_utils = require("jg.custom.worktree-utils")
+      local wt_info = wt_utils.get_wt_info(cwd)
+      -- local parent_dir = vim.fn.fnamemodify(cwd .. "/..", ":p")
+      local parent_dir = vim.fn.fnamemodify(cwd, ":h:t")
 
-      if exists_bare_dir ~= 0 then
+      if next(wt_info) == nil then
+        return "  " .. dir_name .. " "
+      else
         return "  " .. parent_dir .. " "
       end
-
-      return "  " .. dir_name .. " "
     end
 
     local dirname = {
@@ -176,14 +177,40 @@ return {
     }
 
     local diff_mode = {
-        function()
-          if vim.wo.diff then
-            return "[DIFF]"
-          else
-            return ""
-          end
-        end,
-        color = { fg = colors.green }, -- Customize the colors as needed
+      function()
+        if vim.wo.diff then
+          return "[DIFF]"
+        else
+          return ""
+        end
+      end,
+      color = { fg = colors.green }, -- Customize the colors as needed
+    }
+
+    local ahead_behind_indicator = {
+      function()
+        -- local handle = io.popen("git rev-parse --abbrev-ref origin/HEAD")
+        -- if not handle then
+        --   return ""
+        -- end
+        -- handle:close()
+        -- local main_branch = handle:read("*a"):gsub("%s+", "")
+        local main_branch = vim.fn
+          .system("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
+          :gsub("%s+", "")
+
+        local handle = io.popen("git rev-list --left-right --count HEAD..." .. main_branch)
+        if not handle then
+          return ""
+        end
+        local result = handle:read("*a")
+        handle:close()
+
+        local ahead, behind = result:match("(%d+)%s+(%d+)")
+        -- return ahead .. "⇡⇣" .. behind
+        return " " .. ahead .. "  " .. behind
+      end,
+      -- color = { fg = colors.green }, -- Customize the colors as needed
     }
 
     local diff = {
@@ -269,7 +296,7 @@ return {
           -- { 'location', separator = { left = '', right = '' }, left_padding = 2 },
           -- { 'location', left_padding = 2 },
           -- { 'progress', 'location' }
-          'location'
+          "location",
         },
       },
       inactive_sections = {

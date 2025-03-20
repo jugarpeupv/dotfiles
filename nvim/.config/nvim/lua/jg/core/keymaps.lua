@@ -621,7 +621,7 @@ vim.cmd([[nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>]])
 vim.cmd([[nnoremap <F6> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_DIR<CR>]])
 
 -- vim.keymap.set("n", "<M-i>", "<cmd>split term://%:p:h//zsh<cr>", opts)
-vim.keymap.set("n", "<M-b>", function()
+vim.keymap.set("n", "<leader>ct", function()
   require("terminal").run("", {
     cwd = vim.fn.expand("%:p:h"),
   })
@@ -897,11 +897,19 @@ vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
 -- --
 -- -- vim.api.nvim_del_keymap('n', 'gr')
 if vim.fn.has("nvim-0.11") == 1 then
-  vim.api.nvim_del_keymap("n", "gri")
-  vim.api.nvim_del_keymap("n", "grn")
-  vim.api.nvim_del_keymap("n", "grr")
-  vim.api.nvim_del_keymap("n", "gra")
-  vim.api.nvim_del_keymap("x", "gra")
+  local keymaps = {
+    { mode = "n", lhs = "gri" },
+    { mode = "n", lhs = "grn" },
+    { mode = "n", lhs = "grr" },
+    { mode = "n", lhs = "gra" },
+    { mode = "x", lhs = "gra" },
+  }
+
+  for _, keymapping in ipairs(keymaps) do
+    if vim.fn.maparg(keymapping.lhs, keymapping.mode) ~= "" then
+      vim.api.nvim_del_keymap(keymapping.mode, keymapping.lhs)
+    end
+  end
 end
 
 vim.api.nvim_create_user_command("NpmReadme", function(opts)
