@@ -473,11 +473,11 @@ return {
           cmp = true,                  -- Mask values in completion
           peek = true,                 -- Mask values in peek view
           telescope = true,            -- Mask values in telescope
-          telescope_previewer = false, -- Mask values in telescope preview buffers
+          telescope_previewer = true, -- Mask values in telescope preview buffers
           files = {
             shelter_on_leave = false,   -- Control automatic re-enabling of shelter when leaving buffer
             disable_cmp = false,        -- Disable completion in sheltered buffers (default: true)
-            skip_comments = true,      -- Skip masking comment lines in environment files (default: false)
+            skip_comments = false,      -- Skip masking comment lines in environment files (default: false)
           },
         },
       },

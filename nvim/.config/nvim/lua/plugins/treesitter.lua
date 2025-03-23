@@ -54,6 +54,7 @@ return {
         opts = {
           keymaps = {
             useDefaults = true,
+            disabledDefaults = { 'L' },
           },
         },
         -- config = function(_, opts)

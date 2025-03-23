@@ -373,12 +373,15 @@ end, opts)
 
 -- keymap("t", "<leader>q", "<cmd>q!<CR>", opts)
 keymap("n", "<leader>nn", "<cmd>nohlsearch<CR>", opts)
-keymap(
-  "n",
-  "<leader>fi",
-  "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true })<cr>",
-  opts
-)
+
+vim.keymap.set({ "n" }, "<leader>fi", function()
+  require("telescope.builtin").find_files({
+    hidden = true,
+    no_ignore = true,
+    find_command = { "fd", ".", "--type", "f", "--exclude", ".git/*", "--exclude", "node_modules/*" },
+  })
+end, opts)
+
 vim.keymap.set({ "n" }, "<leader>bu", function()
   require("jg.custom.telescope").normal_buffers({
     ignore_current_buffer = true,
@@ -397,7 +400,7 @@ vim.keymap.set({ "n" }, "<leader>bu", function()
   -- })
 end, opts)
 keymap("n", "<leader>tr", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
-keymap("n", "<leader>tm", "<cmd>lua require('telescope.builtin').node_modules list<cr>", opts)
+-- keymap("n", "<leader>tm", "<cmd>lua require('telescope.builtin').node_modules list<cr>", opts)
 keymap(
   "n",
   "<leader>fs",
@@ -859,7 +862,7 @@ vim.keymap.set({ "n" }, "<leader>fr", "<cmd>Telescope frecency workspace=CWD<cr>
 
 vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
 
-vim.keymap.set({ "n" }, "<M-y>", function()
+vim.keymap.set({ "n" }, "<M-b>", function()
   local current_buf_name = vim.fn.expand("%")
   vim.api.nvim_feedkeys(
     vim.api.nvim_replace_termcodes(":Compile bun " .. current_buf_name, true, false, true),
@@ -993,6 +996,8 @@ vim.keymap.set("t", "<D-i>", function()
   end)
 end, opts)
 
+keymap("n", "<leader>tm", "<cmd>:e ~/.config/tmux/tmux.conf<cr>", opts)
+
 -- https://vim.fandom.com/wiki/Searching_for_expressions_which_include_slashes
 vim.cmd([[command! -nargs=1 SS let @/ = '\V'.escape(<q-args>, '\')|set hlsearch]])
 
@@ -1002,3 +1007,10 @@ vim.keymap.set("n", "<leader>ch", "<cmd>Changes<cr>", opts)
 vim.keymap.set("n", "<leader>ri", function()
   require("telescope").extensions.recent_files.pick()
 end, { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('o', 'L', '$', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', 'L', '$h', { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('o', 'H', '^', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', 'H', '^', { noremap = true, silent = true })
+

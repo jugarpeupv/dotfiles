@@ -8,6 +8,7 @@
 # italic_font      on
 # bold_italic_font on
 
+# enable_hardware_accel no
 
 ## Roboto Mono
 # font_family      family="RobotoMono Nerd Font"
@@ -513,7 +514,7 @@ text_composition_strategy 0.5 15
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 16
+font_size 18
 
 #: Font size (in pts)
 
@@ -591,6 +592,7 @@ symbol_map U+E0a0 Symbols Nerd Font
 symbol_map U+2717 nonicon
 
 
+
 # aws 󰸏
 # symbol_map U+DB83-UDE0F Symbols Nerd Font
 symbol_map U+DB83 Symbols Nerd Font
@@ -626,6 +628,9 @@ symbol_map U+DB83 Symbols Nerd Font
   # iconmoon
   symbol_map U+1f300 icomoon
 
+
+# []
+  symbol_map U+E718 Symbols Nerd Font
 
 # symbol_map U+23FB-U+23FE,U+2665,U+26A1,U+2B58,U+E000-U+E00A,U+E0A0-U+E0A3,U+E0B0-U+E0D4,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E6AA,U+E700-U+E7C5,U+EA60-U+EBEB,U+F000-U+F2E0,U+F300-U+F32F,U+F400-U+F4A9,U+F500-U+F8FF,U+F0001-U+F1AF0 Symbols Nerd Font Mono
 
@@ -862,6 +867,7 @@ cursor_shape block
 # scrollback_pager less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER
 # scrollback_pager nvim -u NONE -R -M -c 'lua require("kitty+page")(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)' -  
 scrollback_pager $SHELL -c 'nvim -c "lua local baleia = require(\"baleia\").setup({}); baleia.once(0)" -c "map <silent> q :qa!<CR>"'
+# scrollback_pager bash -c "exec nvim 63<&0 0</dev/null -u NONE -c 'map <silent> q :qa!<CR>' -c 'set shell=bash scrollback=100000 termguicolors laststatus=0 clipboard+=unnamedplus' -c 'autocmd TermEnter * stopinsert' -c 'autocmd TermClose * call cursor(max([0,INPUT_LINE_NUMBER-1])+CURSOR_LINE, CURSOR_COLUMN)' -c 'terminal sed </dev/fd/63 -e \"s/'$'\x1b'']8;;file:[^\]*[\]//g\" && sleep 0.01 && printf \"'$'\x1b'']2;\"'"
 
 # nvim --headless +'KittyScrollbackGenerateKittens' +'set nonumber' +'set norelativenumber' +'%print' +'quit!' 2>&1
 
@@ -1598,7 +1604,7 @@ confirm_os_window_close 0
 
 #: The foreground and background colors.
 
-background_opacity 0.80
+background_opacity 0.70
 # background_opacity 1
 # background_opacity 1
 
@@ -1785,7 +1791,10 @@ background_tint 0.92
 #: because their stdout/stderr/stdin no longer work.
 
 # allow_remote_control no
+allow_remote_control yes
+
 # allow_remote_control yes
+# forward_remote_control yes
 
 #: Allow other programs to control kitty. If you turn this on, other
 #: programs can control all aspects of kitty, including sending text
@@ -2128,6 +2137,7 @@ macos_option_as_alt no
 #: that is assigned in the default configuration::
 
 map cmd+k no_op
+map cmd+m no_op
 
 #:     map kitty_mod+space no_op
 
@@ -2367,6 +2377,12 @@ map kitty_mod+h show_scrollback
 #::  control kitty. For example::
 
 #::      map ctrl+enter launch --allow-remote-control some_program
+
+
+# map ctrl+enter send_text normal,application \x1b[13;5u
+# map shift+enter send_text normal,application \x1b[13;2u
+# map ctrl+tab send_text normal,application \x1b[9;5u
+# map ctrl+shift+tab send_text normal,application \x1b[9;6u
 
 #::  You can open a new window next to the currently active window or
 #::  as the first window, with::
@@ -2820,6 +2836,21 @@ map cmd+minus             change_font_size current -2.0
 
 # map shift+cmd+/ open_url https://sw.kovidgoyal.net/kitty/
 
+# Shift + Enter
+map shift+enter send_text all \x1b[13;2u
+
+# Ctrl + I & Ctrl + M Remaps
+
+# Currently there is no distinction in ctrl+i and tab in tmux
+# https://github.com/tmux/tmux/issues/3907#issuecomment-2020022822
+
+# map ctrl+i send_text all \x1b[105;5u
+# map ctrl+m send_text all \x1b[109;5u
+# map ctrl+i send_text all \x1b[105;6u
+# map ctrl+m send_text all \x1b[109;6u
+
+map ctrl+i send_text all \u001b[105;5u
+
 map shift+cmd+7 no_op
 
 map shift+cmd+o no_op
@@ -2953,12 +2984,12 @@ map ctrl+shift+minus set_background_opacity -0.1
 # background #112131
 # background #091624
 # background #0b1b2c
-background #0d1629
+# background #0d1629
 # background #192837
 # background #13293e
 # background #192632
 # background #1c2835
-# background #03142a
+background #03142a
 # background #00122e
 # background #000E23
 # background #000d23
@@ -2970,99 +3001,12 @@ background #0d1629
 # background #03162f
 # background #061930
 # background #06182a
-# # #
-# # #
-# #
-# # Tabs
-# active_tab_background #4EC9B0
-# active_tab_foreground #1f2335
-# inactive_tab_background #292e42
-# inactive_tab_foreground #545c7e
-# tab_bar_background #1D202F
-# foreground #f8f8f2
-# cursor #bbbbbb
-# selection_background #44475a
-# color0 #000000
-# color8 #545454
-# color1 #ff5555
-# color9 #ff5454
-# color2 #50fa7b
-# color10 #50fa7b
-# color3 #f0fa8b
-# color11 #f0fa8b
-# color4 #bd92f8
-# color12 #bd92f8
-# color5 #ff78c5
-# color13 #ff78c5
-# color6 #8ae9fc
-# color14 #8ae9fc
-# color7 #bbbbbb
-# color15 #ffffff
-# selection_foreground #1e1f28
 
 
 
 
 # vim:ft=kitty
-
-## name: YsDark
-## author: Ya-suke
-## license: MIT
-## blurb: A dracula inspired colorscheme for kitty.
-
-# basic colors
-# foreground            #bbc5ff
-# selection_foreground  #ffffff
-# selection_background  #44475a
-
-# Cursor colors
-# cursor            #bbc5ff
-# cursor_text_color background
-
-# URL
 url_color #8be9fd
-
-# Colors for marks
-# mark1_foreground #1B1E35
-# mark1_background #f07178
-
-# Tab bar colors
-# active_tab_foreground   #1B1E35
-# active_tab_background   #bbc5ff
-# inactive_tab_foreground #1B1E35
-# inactive_tab_background #6272a4
-
-# # black
-# color0  #101010
-# color8  #434758
-#
-# # red
-# color1  #f07178
-# color9  #ff8b92
-#
-# # green
-# color2  #c3e88d
-# color10 #ddffa7
-#
-# # yellow
-# color3  #ffcb6b
-# color11 #ffe585
-#
-# # blue
-# color4  #82aaff
-# color12 #9cc4ff
-#
-# # magenta
-# color5  #e1acff
-# color13 #c792ea
-#
-# # cyan
-# color6  #89ddff
-# color14 #a3f7ff
-#
-# # white
-# color7  #d0d0d0
-# color15 #ffffff
 
 
 
@@ -3115,54 +3059,35 @@ tab_bar_background      #03142a
 
 # The 16 terminal colors
 
+# LS_COLORS
+
 # black
 color0 #45475A
 color8 #585B70
 # # color0 #7C7F93
 # # color8 #7C7F93
-# color0 #F38BA8
-# color8 #F38BA8
 
 # red
 color1 #F38BA8
-# color9 #F2CDCD
 color9 #F5C2E7
 
-# #F2CDCD",
-# "#FAB387",
-
 # green
-# color2  #A6E3A1
-# color10 #A6E3A1
 color2  #94E2D5
 color10 #94E2D5
-# color10 #F5C2E7
-
-# color2  #7cf0cc
-# color10 #7cf0cc
 
 # yellow
 color3  #F9E2AF
 color11 #F9E2AF
 
 # blue
-# color4  #89B4FA
-# color12 #89B4FA
 color4 #B4BEFE
-# color12 #B4BEFE
-# color12 #F2CDCD
 color12  #89B4FA
-# color12 #2ac3de
 
 # magenta
-# color5  #F5C2E7
-# color13 #F5C2E7
 color5  #CBA6F7
 color13 #CBA6F7
 
 # cyan
-# color6  #94E2D5
-# color14 #94E2D5
 color6  #99ecfd
 color14 #99ecfd
 
@@ -3246,7 +3171,7 @@ font_family      family="Liga DejaVu Sans Mono"
 bold_font        auto
 italic_font      auto
 bold_italic_font auto
-adjust_line_height  10
+adjust_line_height  8
 adjust_column_width 0
 # # END_KITTY_FONTS
 
@@ -3274,17 +3199,14 @@ adjust_column_width 0
 # # END_KITTY_FONTS
 
 
-# BEGIN_KITTY_FONTS
-# font_family      family="FiraCode+ DejaVu Sans Mono"
-# bold_font        auto
-# italic_font      auto
-# bold_italic_font auto
-# END_KITTY_FONTS
-
 ## SF Mono
 # font_family      family="SF Mono"
 # bold_font        auto
 # italic_font      auto
 # bold_italic_font auto
-# adjust_line_height  8
+# adjust_line_height  4
 # adjust_column_width 0
+
+# map kitty_mod+k scroll_page_up
+# map kitty_mod+j scroll_page_down
+shell .
