@@ -100,9 +100,9 @@ return {
         dependencies = {
           "nvim-telescope/telescope.nvim",
         },
-        keys = {
-          { "<leader>nx", "<cmd>Telescope nx actions<CR>", desc = "nx actions" },
-        },
+        -- keys = {
+        --   { "<leader>nx", "<cmd>Telescope nx actions<CR>", desc = "nx actions" },
+        -- },
         config = function()
           require("nx").setup({
             nx_cmd_root = "npx nx",
@@ -219,6 +219,7 @@ return {
       { "nvim-telescope/telescope-ui-select.nvim",      cmd = { "Telescope" } },
     },
     cmd = { "Telescope" },
+    -- event = { "BufReadPre", "BufNewFile" },
     lazy = true,
     -- keys = { "<M-.>" },
     -- event = "VeryLazy",

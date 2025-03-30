@@ -187,8 +187,11 @@ disabled = true
 
 
 [python]
-format = "[$symbol$version]($style) "
-style = "bold green"
+# format = "[$symbol$version]($style) "
+format = 'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+pyenv_version_name = true
+symbol = ' '
+style = "#F5E0DC"
 
 [dotnet]
 disabled = true
@@ -216,3 +219,6 @@ symbol = " "
 [ruby]
 style = "#F5C2E7"
 symbol = " "
+
+[gcloud]
+detect_env_vars = [ "GOOGLE_CLOUD_PROJECT", "GCLOUD_PROJECT" ]

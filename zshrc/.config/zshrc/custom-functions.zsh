@@ -15,3 +15,8 @@ function gu() {
 function mcd () {
   mkdir "$1" && cd "$1"
 }
+
+timezsh() {
+  shell=${1-$SHELL}
+  for i in $(seq 1 10); do /usr/bin/time $shell -i -c exit; done
+}

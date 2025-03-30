@@ -698,8 +698,6 @@ local function show_documentation()
     end
 
     if has_lsp_info then
-      require("render-markdown").buf_disable()
-      vim.cmd("RenderMarkdown disable")
       vim.lsp.buf.hover()
     else
       local _, err = pcall(vim.cmd, "h " .. cword)
@@ -1014,3 +1012,10 @@ vim.api.nvim_set_keymap('v', 'L', '$h', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('o', 'H', '^', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', 'H', '^', { noremap = true, silent = true })
 
+
+vim.keymap.set("n", "<leader>bk", "<cmd>bwipeout!<cr>", opts)
+
+
+vim.keymap.set("n", "<leader>nx", function()
+  require('telescope').extensions.nx.actions()
+end, opts)

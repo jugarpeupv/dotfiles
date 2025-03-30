@@ -189,26 +189,39 @@ return {
 
     local ahead_behind_indicator = {
       function()
-        -- local handle = io.popen("git rev-parse --abbrev-ref origin/HEAD")
-        -- if not handle then
-        --   return ""
-        -- end
-        -- handle:close()
-        -- local main_branch = handle:read("*a"):gsub("%s+", "")
-        local main_branch = vim.fn
-          .system("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
-          :gsub("%s+", "")
+        -- Cache the result to avoid executing the logic repeatedly
+        if vim.g.ahead_behind_status then
+          return vim.g.ahead_behind_status
+        end
 
-        local handle = io.popen("git rev-list --left-right --count HEAD..." .. main_branch)
-        if not handle then
+        -- Check if the current directory is a Git repository
+        local is_git_repo = vim.fn.system("git rev-parse --is-inside-work-tree 2>/dev/null"):gsub("%s+", "")
+        if is_git_repo ~= "true" then
+          vim.g.ahead_behind_status = "" -- Set empty status if not a Git repo
           return ""
         end
-        local result = handle:read("*a")
-        handle:close()
 
+        -- Get the main branch name
+        local main_branch = vim.fn
+            .system("git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'")
+            :gsub("%s+", "")
+        if main_branch == "" then
+          vim.g.ahead_behind_status = "" -- Set empty status if main branch is not found
+          return ""
+        end
+
+        -- Get ahead/behind counts
+        local result =
+            vim.fn.system("git rev-list --left-right --count HEAD..." .. main_branch .. " 2>/dev/null")
         local ahead, behind = result:match("(%d+)%s+(%d+)")
-        -- return ahead .. "⇡⇣" .. behind
-        return " " .. ahead .. "  " .. behind
+        if not ahead or not behind then
+          vim.g.ahead_behind_status = "" -- Set empty status if parsing fails
+          return ""
+        end
+
+        -- Format the status and cache it
+        vim.g.ahead_behind_status = " " .. ahead .. "  " .. behind
+        return vim.g.ahead_behind_status
       end,
       -- color = { fg = colors.green }, -- Customize the colors as needed
     }
@@ -283,7 +296,7 @@ return {
           -- { 'mode', separator = { left = '', right = '' } },
           -- { "mode", separator = { left = "", right = "" } },
         },
-        lualine_b = { branch },
+        lualine_b = { branch, ahead_behind_indicator },
         lualine_c = { diff_mode },
         lualine_x = { dirname, "filetype" },
         -- lualine_x = {},

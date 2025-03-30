@@ -16,6 +16,7 @@ return {
     --   html = { tagnameonly = 1 },
     -- }
 
+    vim.g.matchup_matchparen_enabled = 0
     vim.g.matchup_matchpref = {
       svelte = { tagnameonly = 1 },
       vue = { tagnameonly = 1 },
@@ -31,5 +32,6 @@ return {
     vim.g.matchup_matchparen_offscreen = { method = "status_manual" }
     -- vim.g.matchup_matchparen_offscreen = { method = "popup" }
     vim.g.matchup_matchparen_end_sign = "󱐋"
+    vim.cmd("DoMatchParen")
   end,
 }

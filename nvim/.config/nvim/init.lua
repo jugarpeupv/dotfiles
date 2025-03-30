@@ -2,6 +2,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.g.loaded_matchit = 1
+vim.g.python3_host_prog = vim.fn.expand('~/.nvim-venv/bin/python3')
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrwPlugin = 1
 

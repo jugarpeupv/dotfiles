@@ -141,6 +141,20 @@ return {
     -- event = { "InsertEnter" },
     dependencies = {
       {
+        'VidocqH/lsp-lens.nvim',
+        enabled = false,
+        config = function()
+          require('lsp-lens').setup({})
+        end,
+      },
+      {
+        "zeioth/garbage-day.nvim",
+        dependencies = "neovim/nvim-lspconfig",
+        opts = {
+          -- your options here
+        }
+      },
+      {
         "b0o/schemastore.nvim",
         lazy = true,
       },
@@ -159,6 +173,7 @@ return {
             window = {
               -- border = "single",
               winblend = 0, -- Background color opacity in the notification window
+              zindex = 1,
             },
           },
         },
@@ -331,22 +346,38 @@ return {
 
       -- Change the Diagnostic symbols in the sign column (gutter)
       -- (not in youtube nvim video)
-      local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+      -- local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+      --
+      -- -- local signs = { Error = "", Warn = " ", Hint = "󰠠 ", Info = " " }
+      -- for type, icon in pairs(signs) do
+      --   local hl = "DiagnosticSign" .. type
+      --   -- vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+      --   vim.diagnostic.config({
+      --     signs = {
+      --       { name = hl, text = icon },
+      --     },
+      --   })
+      -- end
 
-      -- local signs = { Error = "", Warn = " ", Hint = "󰠠 ", Info = " " }
-      for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-      end
+      -- vim.diagnostic.config({
+      --   signs = {
+      --     text = {
+      --       [vim.diagnostic.severity.ERROR] = ' ',
+      --       [vim.diagnostic.severity.WARN] = ' ',
+      --       [vim.diagnostic.severity.INFO] = ' ',
+      --       [vim.diagnostic.severity.HINT] = '󰠠 ',
+      --     }
+      --   }
+      -- })
 
-      local signs_diag = {
-        { name = "DiagnosticSignError", text = "" },
-        { name = "DiagnosticSignWarn", text = "" },
-        -- { name = "DiagnosticSignHint", text = "" },
-        { name = "DiagnosticSignHint", text = "󰠠" },
-        -- { name = "DiagnosticSignInfo", text = "" },
-        { name = "DiagnosticSignInfo", text = "" },
-      }
+      -- local signs_diag = {
+      --   { name = "DiagnosticSignError", text = "" },
+      --   { name = "DiagnosticSignWarn", text = "" },
+      --   -- { name = "DiagnosticSignHint", text = "" },
+      --   { name = "DiagnosticSignHint", text = "󰠠" },
+      --   -- { name = "DiagnosticSignInfo", text = "" },
+      --   { name = "DiagnosticSignInfo", text = "" },
+      -- }
 
       local config = {
         virtual_text = false,
@@ -355,7 +386,13 @@ return {
         -- virtual_text = { spacing = 4, prefix = " " },
 
         signs = {
-          active = signs_diag,
+          -- active = signs_diag,
+          text = {
+            [vim.diagnostic.severity.ERROR] = ' ',
+            [vim.diagnostic.severity.WARN] = ' ',
+            [vim.diagnostic.severity.INFO] = ' ',
+            [vim.diagnostic.severity.HINT] = '󰠠 ',
+          }
         },
         update_in_insert = true,
         -- update_in_insert = false,

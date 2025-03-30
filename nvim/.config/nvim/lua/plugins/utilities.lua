@@ -2,6 +2,10 @@
 return {
   -- with lazy.nvim
   {
+    'farmergreg/vim-lastplace',
+    event = { "BufNewFile", "BufReadPost" },
+  },
+  {
     "vim-scripts/applescript.vim",
     event = { "BufNewFile", "BufReadPre" },
   },

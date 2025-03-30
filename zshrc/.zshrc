@@ -1,3 +1,4 @@
+zmodload zsh/zprof
 source $HOME/.config/zshrc/env-variables.zsh
 source $HOME/.config/zshrc/init.zsh
 source $HOME/.config/zshrc/ls-colors.zsh
@@ -8,12 +9,11 @@ source $HOME/.config/zshrc/aliases.zsh
 source $HOME/.config/zshrc/android.zsh
 source $HOME/.config/zshrc/node-options.zsh
 source $HOME/.config/zshrc/package-managers.zsh
+source $HOME/.config/zshrc/gcloud.zsh
 source $HOME/.config/zshrc/fzf.zsh
 source $HOME/.config/zshrc/ssh.zsh
 source $HOME/.config/zshrc/sdkman.zsh
 source $HOME/.config/zshrc/atuin.zsh
 source $HOME/.config/zshrc/evalcache.zsh
-
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

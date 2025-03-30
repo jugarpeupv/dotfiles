@@ -6,15 +6,15 @@ return {
     { "<leader>rm", "<cmd>RenderMarkdown toggle<CR>" },
   },
   opts = {
-    enabled = false,
+    enabled = true,
     max_file_size = 100.0,
     win_options = {
       -- @see :h 'conceallevel'
       conceallevel = {
         -- Used when not being rendered, get user setting.
-        default = vim.api.nvim_get_option_value('conceallevel', {}),
+        default = vim.api.nvim_get_option_value("conceallevel", {}),
         -- Used when being rendered, concealed text is completely hidden.
-        rendered = 1,
+        rendered = 2,
       },
       -- @see :h 'concealcursor'
       -- concealcursor = {
@@ -24,7 +24,7 @@ return {
       --   rendered = '',
       -- },
     },
-    file_types = { 'markdown' },
+    file_types = { "markdown" },
     anti_conceal = {
       -- This enables hiding any added text on the line the cursor is on
       enabled = true,
@@ -45,29 +45,29 @@ return {
     },
     heading = {
       -- Turn on / off heading icon & background rendering
-      enabled = true,
+      enabled = false,
       -- Turn on / off any sign column related rendering
       sign = true,
       -- Determines how icons fill the available space:
       --  right:   '#'s are concealed and icon is appended to right side
       --  inline:  '#'s are concealed and icon is inlined on left side
       --  overlay: icon is left padded with spaces and inserted on left hiding any additional '#'
-      position = 'inline',
+      position = "overlay",
       -- Replaces '#+' of 'atx_h._marker'
       -- The number of '#' in the heading determines the 'level'
       -- The 'level' is used to index into the list using a cycle
       -- icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
       -- icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
-      icons = { '#', '##', '###', '####', '#####', '#######' },
+      icons = { "# ", "## ", "### ", "#### ", "##### ", "####### " },
       -- Added to the sign column if enabled
       -- The 'level' is used to index into the list using a cycle
-      signs = { '󰫎 ' },
+      signs = { "󰫎 " },
       -- Width of the heading background:
       --  block: width of the heading text
       --  full:  full width of the window
       -- Can also be a list of the above values in which case the 'level' is used
       -- to index into the list using a clamp
-      width = 'full',
+      width = "full",
       -- Amount of margin to add to the left of headings
       -- If a floating point value < 1 is provided it is treated as a percentage of the available window space
       -- Margin available space is computed after accounting for padding
@@ -88,35 +88,35 @@ return {
       -- Can also be a list of booleans in which case the 'level' is used to index into the list using a clamp
       border = false,
       -- Always use virtual lines for heading borders instead of attempting to use empty lines
-      border_virtual = false,
+      border_virtual = true,
       -- Highlight the start of the border using the foreground highlight
-      border_prefix = false,
+      border_prefix = true,
       -- Used above heading for border
-      above = '▄',
+      above = "▄",
       -- Used below heading for border
-      below = '▀',
+      below = "▀",
       -- The 'level' is used to index into the list using a clamp
       -- Highlight for the heading icon and extends through the entire line
       backgrounds = {
-        'RenderMarkdownH1Bg',
-        'RenderMarkdownH2Bg',
-        'RenderMarkdownH3Bg',
-        'RenderMarkdownH4Bg',
-        'RenderMarkdownH5Bg',
-        'RenderMarkdownH6Bg',
+        "RenderMarkdownH1Bg",
+        "RenderMarkdownH2Bg",
+        "RenderMarkdownH3Bg",
+        "RenderMarkdownH4Bg",
+        "RenderMarkdownH5Bg",
+        "RenderMarkdownH6Bg",
       },
       -- The 'level' is used to index into the list using a clamp
       -- Highlight for the heading and sign icons
       foregrounds = {
-        'RenderMarkdownH1',
-        'RenderMarkdownH2',
-        'RenderMarkdownH3',
-        'RenderMarkdownH4',
-        'RenderMarkdownH5',
-        'RenderMarkdownH6',
+        "RenderMarkdownH1",
+        "RenderMarkdownH2",
+        "RenderMarkdownH3",
+        "RenderMarkdownH4",
+        "RenderMarkdownH5",
+        "RenderMarkdownH6",
       },
     },
-    render_modes = { 'n', 'c', 't', 'i', 'v', 'Vs', 'V', 'nt', 'ntT' },
+    render_modes = { "n", "c", "t", "i", "v", "Vs", "V", "nt", "ntT" },
     code = {
       -- render_modes = { 'V' },
       -- Turn on / off code block & inline code rendering
@@ -128,11 +128,11 @@ return {
       --  normal:   adds highlight group to code blocks & inline code, adds padding to code blocks
       --  language: adds language icon to sign column if enabled and icon + name above code blocks
       --  full:     normal + language
-      style = 'full',
+      style = "full",
       -- Determines where language icon is rendered:
       --  right: right side of code block
       --  left:  left side of code block
-      position = 'left',
+      position = "left",
       -- Amount of padding to add around the language
       -- If a floating point value < 1 is provided it is treated as a percentage of the available window space
       language_pad = 0,
@@ -142,12 +142,12 @@ return {
       -- Likely because that language has background highlights itself
       -- Or a boolean to make behavior apply to all languages
       -- Borders above & below blocks will continue to be rendered
-      disable_background = { 'diff' },
+      disable_background = { "diff" },
       -- disable_background = false,
       -- Width of the code block background:
       --  block: width of the code block
       --  full:  full width of the window
-      width = 'block',
+      width = "block",
       -- Amount of margin to add to the left of code blocks
       -- If a floating point value < 1 is provided it is treated as a percentage of the available window space
       -- Margin available space is computed after accounting for padding
@@ -164,17 +164,45 @@ return {
       --  none:  do not render a border
       --  thick: use the same highlight as the code body
       --  thin:  when lines are empty overlay the above & below icons
-      border = 'thin',
+      border = "thin",
       -- Used above code blocks for thin border
-      above = '▄',
+      above = "▄",
       -- Used below code blocks for thin border
-      below = '▀',
+      below = "▀",
       -- Highlight for code blocks
-      highlight = 'RenderMarkdownCode',
+      highlight = "RenderMarkdownCode",
       -- Highlight for inline code
-      highlight_inline = 'RenderMarkdownCodeInline',
+      highlight_inline = "RenderMarkdownCodeInline",
       -- Highlight for language, overrides icon provider value
       highlight_language = nil,
+    },
+    overrides = {
+      -- Override for different buflisted values, @see :h 'buflisted'.
+      buflisted = {},
+      -- Override for different buftype values, @see :h 'buftype'.
+      buftype = {
+        nofile = {
+          -- enabled = false,
+          -- render_modes = {},
+          heading = {
+            enabled = false,
+          },
+          code = {
+            enabled = false,
+          },
+          win_options = {
+            -- @see :h 'conceallevel'
+            conceallevel = {
+              -- Used when not being rendered, get user setting.
+              default = vim.api.nvim_get_option_value("conceallevel", {}),
+              -- Used when being rendered, concealed text is completely hidden.
+              rendered = 0,
+            },
+          },
+        },
+      },
+      -- Override for different filetype values, @see :h 'filetype'.
+      filetype = {},
     },
   },
   dependencies = { "nvim-treesitter/nvim-treesitter" }, -- if you use the mini.nvim suite

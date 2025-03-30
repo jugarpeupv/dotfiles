@@ -113,11 +113,21 @@ M.attach_lsp_config = function(client, bufnr)
 
   -- typescript specific keymaps (e.g. rename file and update imports)
 
-  require("lsp_signature").on_attach({
-    floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
-    toggle_key = "<M-lt>", -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
-    hint_enable = false,   -- virtual hint enable
-  }, bufnr)
+  -- require("lsp_signature").on_attach({
+  --   floating_window = false, -- show hint in a floating window, set to false for virtual text only mode
+  --   toggle_key = "<M-lt>", -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
+  --   hint_enable = false,    -- virtual hint enable
+  --   wrap = true, -- allow doc/signature text wrap inside floating_window, useful if your lsp return doc/sig is too long
+  --   -- floating_window_above_cur_line = true,
+  --   hint_prefix = {
+  --     above = "↙ ", -- when the hint is on the line above the current line
+  --     current = "← ", -- when the hint is on the same line
+  --     below = "↖ ", -- when the hint is on the line below the current line
+  --   },
+  --   hint_inline = function()
+  --     return 'eol'
+  --   end, -- show hint inline in current line
+  -- }, bufnr)
 
   keymap.set({ "n" }, "gh", function()
     vim.lsp.buf.signature_help()

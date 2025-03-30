@@ -23,6 +23,21 @@ return {
         "nvim-treesitter/playground",
       },
       {
+        'axelvc/template-string.nvim',
+        config = function()
+          require('template-string').setup({
+            filetypes = { 'html', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact', 'vue', 'svelte', 'python', 'cs' }, -- filetypes where the plugin is active
+            jsx_brackets = true, -- must add brackets to JSX attributes
+            remove_template_string = true, -- remove backticks when there are no template strings
+            restore_quotes = {
+              -- quotes used when "remove_template_string" option is enabled
+              normal = [[']],
+              jsx = [["]],
+            },
+          })
+        end,
+      },
+      {
         "nvim-treesitter/nvim-treesitter-textobjects",
         -- event = { "BufReadPre", "BufNewFile" },
         -- cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
@@ -77,7 +92,7 @@ return {
           require("treesitter-context").setup({
             enable = true,   -- Enable this plugin (Can be enabled/disabled later via commands)
             multiwindow = true, -- Enable multiple floating windows
-            max_lines = 4,   -- How many lines the window should span. Values <= 0 mean no limit.
+            max_lines = 0,   -- How many lines the window should span. Values <= 0 mean no limit.
             trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
             min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
             zindex = 20,     -- The Z-index of the context window

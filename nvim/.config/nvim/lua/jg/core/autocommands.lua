@@ -130,11 +130,19 @@ vim.filetype.add({
 
 -- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 1]])
 
+vim.api.nvim_create_autocmd("TermEnter", {
+  pattern = "*",
+  callback = function()
+    vim.wo.cursorline = true
+  end,
+  desc = "Enable cursorline in terminal buffers",
+})
+
 vim.api.nvim_create_autocmd("TermOpen", {
   group = vim.api.nvim_create_augroup("term-open-buflisted", { clear = true }),
   callback = function()
     vim.cmd("setlocal relativenumber")
-    -- vim.cmd("setlocal wrap")
+    vim.cmd("setlocal wrap")
     -- vim.bo.buflisted = false
   end,
 })
@@ -271,17 +279,17 @@ vim.api.nvim_create_autocmd("BufLeave", {
 --   end,
 -- })
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markbar",
-  callback = function()
-    vim.schedule(function()
-      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "j")
-      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "k")
-      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "g")
-      pcall(vim.api.nvim_buf_del_keymap, 0, "n", "<leader>q")
-    end)
-  end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "markbar",
+--   callback = function()
+--     vim.schedule(function()
+--       pcall(vim.api.nvim_buf_del_keymap, 0, "n", "j")
+--       pcall(vim.api.nvim_buf_del_keymap, 0, "n", "k")
+--       pcall(vim.api.nvim_buf_del_keymap, 0, "n", "g")
+--       pcall(vim.api.nvim_buf_del_keymap, 0, "n", "<leader>q")
+--     end)
+--   end,
+-- })
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "applescript",

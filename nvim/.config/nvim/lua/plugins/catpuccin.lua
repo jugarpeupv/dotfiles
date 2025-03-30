@@ -250,6 +250,12 @@ return {
       -- vim.cmd([[hi RenderMarkdownCode guibg=#16485A]])
       -- vim.cmd([[hi RenderMarkdownCode guibg=#0f3846]])
 
+      vim.cmd([[hi RenderMarkdownH2 guifg=#89ddff]])
+      vim.cmd([[hi RenderMarkdownH3 guifg=#675161]])
+      vim.cmd([[hi RenderMarkdownH4 guifg=#526c96]])
+      vim.cmd([[hi RenderMarkdownH5 guifg=#6c7298]])
+      vim.cmd([[hi RenderMarkdownH6 guifg=#36394d]])
+
       vim.cmd([[hi RenderMarkdownH1Bg guibg=#492a33]])
       vim.cmd([[hi RenderMarkdownH2Bg guibg=#528599]])
       vim.cmd([[hi RenderMarkdownH3Bg guibg=#675161]])
@@ -395,7 +401,8 @@ return {
       vim.cmd([[highlight Winbar guifg=#bbc2e0]])
       vim.cmd([[highlight WinbarNC guifg=#7C7F93]])
 
-      vim.cmd([[highlight TreesitterContextLineNumber guibg=#0F2745 guifg=#737aa2]])
+      -- vim.cmd([[highlight TreesitterContextLineNumber guibg=#0F2745 guifg=#737aa2]])
+      vim.cmd([[highlight TreesitterContextLineNumber guibg=#00122e guifg=#737aa2]])
       vim.cmd([[highlight TreesitterContext guifg=none guibg=none]])
       vim.cmd([[ hi WinSeparator guifg=#292e42 ]])
       vim.cmd([[hi NvimTreeFolderIcon guifg=#89B4FA]])
@@ -605,7 +612,7 @@ return {
       vim.g.terminal_color_6 = "#89DCEB"
       vim.g.terminal_color_7 = "#a3a7bc"
       vim.g.terminal_color_8 = "#a3a7bc"
-      vim.g.terminal_color_9 = "#F38BA8"
+      vim.g.terminal_color_9 = "#F5C2E7"
       vim.g.terminal_color_10 = "#94E2D5"
       vim.g.terminal_color_11 = "#F5E0DC"
       vim.g.terminal_color_12 = "#89DCEB"
