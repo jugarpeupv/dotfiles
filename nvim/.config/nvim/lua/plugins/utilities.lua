@@ -472,6 +472,7 @@ return {
       shelter = {
         configuration = {
           partial_mode = false,
+          skip_comments = false
         },
         modules = {
           cmp = true,                  -- Mask values in completion
@@ -481,7 +482,6 @@ return {
           files = {
             shelter_on_leave = false,   -- Control automatic re-enabling of shelter when leaving buffer
             disable_cmp = false,        -- Disable completion in sheltered buffers (default: true)
-            skip_comments = false,      -- Skip masking comment lines in environment files (default: false)
           },
         },
       },

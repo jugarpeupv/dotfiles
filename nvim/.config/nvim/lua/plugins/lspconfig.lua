@@ -13,8 +13,21 @@ return {
   --   },
   -- },
   {
+    "mfussenegger/nvim-jdtls",
+    ft = { "java" },
+    enabled = function()
+      local is_headless = #vim.api.nvim_list_uis() == 0
+      if is_headless then
+        return false
+      end
+      return true
+    end,
+    dependencies = { "JavaHello/spring-boot.nvim", "mfussenegger/nvim-dap" },
+  },
+  {
     "andreluisos/nvim-javagenie",
     enabled = false,
+    ft = { "java" },
     dependencies = {
       "grapp-dev/nui-components.nvim",
       "MunifTanjim/nui.nvim",
@@ -24,7 +37,7 @@ return {
     "jugarpeupv/springboot-nvim",
     -- dir = "~/projects/springboot-nvim",
     -- dev = true,
-    ft = "java",
+    ft = { "java" },
     enabled = function()
       local is_headless = #vim.api.nvim_list_uis() == 0
       if is_headless then
@@ -70,8 +83,8 @@ return {
   },
   {
     "JavaHello/java-deps.nvim",
+    ft = { "java" },
     lazy = true,
-    ft = "java",
     enabled = function()
       local is_headless = #vim.api.nvim_list_uis() == 0
       if is_headless then
@@ -187,6 +200,7 @@ return {
       -- },
       {
         "rmagatti/goto-preview",
+        enabled = false,
         lazy = true,
         config = true, -- necessary as per https://github.com/rmagatti/goto-preview/issues/88
         keys = {
@@ -204,17 +218,6 @@ return {
             end,
           },
         },
-      },
-      {
-        "mfussenegger/nvim-jdtls",
-        enabled = function()
-          local is_headless = #vim.api.nvim_list_uis() == 0
-          if is_headless then
-            return false
-          end
-          return true
-        end,
-        dependencies = { "JavaHello/spring-boot.nvim", "mfussenegger/nvim-dap" },
       },
       -- { "folke/neodev.nvim", opts = {} },
       {
