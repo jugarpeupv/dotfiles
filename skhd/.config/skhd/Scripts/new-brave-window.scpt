@@ -1,7 +1,7 @@
--- do shell script "bash ~/.config/skhd/Scripts/brave.sh"
 
 if application "Brave" is not running then
-  activate application "Brave"
+  -- activate application "Brave"
+  do shell script "bash ~/.config/skhd/Scripts/brave.sh"
 else
     delay 0.09
     tell application "Brave"
