@@ -153,6 +153,7 @@ return {
     end,
     -- event = { "InsertEnter" },
     dependencies = {
+      -- { "saghen/blink.cmp" },
       {
         'VidocqH/lsp-lens.nvim',
         enabled = false,
@@ -281,7 +282,7 @@ return {
       local cmp_nvim_lsp_status, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
       if not cmp_nvim_lsp_status then
         print("cmp_nvim_lsp could not be loaded")
-        return
+        -- return
       end
 
       -- import typescript plugin safely
@@ -341,6 +342,7 @@ return {
 
       -- used to enable autocompletion (assign to every lsp server config)
       local capabilities = cmp_nvim_lsp.default_capabilities()
+      -- local capabilities = require('blink.cmp').get_lsp_capabilities()
       -- local capabilities = require('blink.cmp').get_lsp_capabilities()
       -- capabilities.textDocument.foldingRange = {
       --   dynamicRegistration = false,
@@ -694,7 +696,7 @@ return {
 
       require("lspconfig").clangd.setup({
         on_attach = on_attach,
-        capabilities = cmp_nvim_lsp.default_capabilities(),
+        capabilities = capabilities,
         cmd = {
           "clangd",
           "--offset-encoding=utf-16",

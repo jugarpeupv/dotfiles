@@ -886,13 +886,6 @@ vim.cmd([[cnoremap <C-a> <C-b>]])
 -- vim.keymap.set('c', '<C-j>', '<Tab>', { noremap = true, silent = true })
 -- vim.keymap.set('c', '<C-k>', '<S-Tab>', { noremap = true, silent = true })
 
-vim.cmd([[set wildcharm=<C-v>]])
-vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
--- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
-vim.cmd([[cnoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"]])
-vim.cmd([[cnoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"]])
-vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])
-vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
 
 -- -- vim.cmd([[nnoremap <nowait> gr gr]])
 -- --
@@ -1019,3 +1012,12 @@ vim.keymap.set("n", "<leader>bk", "<cmd>bwipeout!<cr>", opts)
 vim.keymap.set("n", "<leader>nx", function()
   require('telescope').extensions.nx.actions()
 end, opts)
+
+
+vim.cmd([[set wildcharm=<C-v>]])
+vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
+-- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
+vim.cmd([[cnoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"]])
+vim.cmd([[cnoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"]])
+vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])
+vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])

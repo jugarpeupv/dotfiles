@@ -200,6 +200,12 @@ return {
             GitSignsCurrentLineBlame = { fg = "#0f1219" },
             FloatBorder = { fg = "#394b70" },
 
+            BlinkCmpMenuBorder = { fg = "#394b70" },
+            -- remove bold from gui, use style = {}
+            BlinkCmpMenuSelection = { style = {} },
+            BlinkCmpDocBorder = { fg = "#394b70" },
+            BlinkCmpSignatureHelpBorder = { fg = "#394b70" },
+
             -- VIRA
             viraTitles = { fg = "#F5E0DC" },
             viraDetailsStatusInProgress = { fg = "#F38BA8" },
@@ -312,7 +318,7 @@ return {
       vim.cmd([[highlight! CmpPmenuBorder guifg=#394b70]])
 
       vim.cmd([[hi CmpItemKindField guifg=#f38ba9]])
-      vim.cmd([[highlight! PmenuSel guibg=#394b70]])
+      vim.cmd([[highlight! PmenuSel guibg=#394b70 gui=none]])
 
       --- -------------------- COMMON
 
@@ -353,7 +359,6 @@ return {
       -- "DiffText:DiffAddText",
       vim.cmd([[highlight DiffAddText gui=none guifg=none guibg=#456f80]])
 
-
       -- start Gitsigns
       vim.cmd([[highlight GitSignsAddPreview gui=none guifg=none guibg=#103235]])
       vim.cmd([[highlight GitSignsDeletePreview gui=none guifg=none guibg=#3F2D3D]])
@@ -388,9 +393,7 @@ return {
       vim.cmd([[hi GitSignsStagedChange  guifg=#F2CDCD]])
       vim.cmd([[hi GitSignsStagedChangedelete  guifg=#F2CDCD]])
 
-
       -- end Gitsigns
-
 
       vim.cmd([[highlight BufferLineTabSeparator gui=none guifg=#13182e]])
       vim.cmd([[highlight BufferLineTabSeparatorSelected gui=none guifg=#13182e]])
