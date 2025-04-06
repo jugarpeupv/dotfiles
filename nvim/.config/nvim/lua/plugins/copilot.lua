@@ -61,7 +61,7 @@ return {
         type = "nodejs",
         custom_server_filepath = os.getenv("HOME") .. "/.local/share/nvim/mason/packages/copilot-language-server/node_modules/@github/copilot-language-server/dist/language-server.js"
       },
-      copilot_model = "gtp-4o-copilot",
+      copilot_model = "gpt-4o-copilot",
       copilot_node_command = os.getenv("HOME") .. "/.nvm/versions/node/v22.11.0/bin/node", -- Node.js version must be > 18.x
       server_opts_overrides = {},
     })
