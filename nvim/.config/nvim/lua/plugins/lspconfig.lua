@@ -165,6 +165,7 @@ return {
         "zeioth/garbage-day.nvim",
         dependencies = "neovim/nvim-lspconfig",
         opts = {
+          excluded_lsp_clients = { "copilot" }
           -- your options here
         }
       },

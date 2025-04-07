@@ -120,11 +120,11 @@ return {
           })
         end,
       },
-      {
-        "nvim-telescope/telescope-frecency.nvim",
-        -- install the latest stable version
-        version = "*",
-      },
+      -- {
+      --   "nvim-telescope/telescope-frecency.nvim",
+      --   -- install the latest stable version
+      --   version = "*",
+      -- },
       {
         "isak102/telescope-git-file-history.nvim",
         dependencies = {
@@ -634,12 +634,12 @@ return {
         --   },
         -- },
         extensions = {
-          frecency = {
-            auto_validate = true,
-            matcher = "fuzzy",
-            show_scores = true,
-            -- path_display = { "filename_first" },
-          },
+          -- frecency = {
+          --   auto_validate = true,
+          --   matcher = "fuzzy",
+          --   show_scores = true,
+          --   -- path_display = { "filename_first" },
+          -- },
           file_browser = {
             theme = "ivy",
             hidden = true,
@@ -915,7 +915,7 @@ return {
       telescope.load_extension("grapple")
       telescope.load_extension("file_browser")
       telescope.load_extension("git_file_history")
-      telescope.load_extension("frecency")
+      -- telescope.load_extension("frecency")
       telescope.load_extension("fzf")
       telescope.load_extension("before")
       telescope.load_extension("recent_files")
