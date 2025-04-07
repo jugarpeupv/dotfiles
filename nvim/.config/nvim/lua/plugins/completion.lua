@@ -39,6 +39,7 @@ return {
       -- See :h blink-cmp-config-keymap for defining your own keymap
       keymap = {
         preset = "default",
+        ["<C-w>"] = { "show_signature", "hide_signature", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
         ["<Right>"] = {
@@ -111,7 +112,7 @@ return {
           },
         },
       },
-      signature = { enabled = true, window = { border = "rounded", direction_priority = { "s", "e", "w" } } },
+      signature = { enabled = false, window = { border = "rounded" } },
       appearance = {
         -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
@@ -122,7 +123,11 @@ return {
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
         default = { "lsp", "path", "snippets", "buffer", "emoji", "nerdfont", "conventional_commits" },
+        per_filetype = { ["copilot-chat"] = { 'lsp', 'path' } },
         providers = {
+          buffer = {
+            min_keyword_length = 2,
+          },
           conventional_commits = {
             name = "Conventional Commits",
             module = "blink-cmp-conventional-commits",
@@ -138,6 +143,7 @@ return {
             module = "blink-nerdfont",
             name = "Nerd Fonts",
             score_offset = 10,  -- Tune by preference
+            min_keyword_length = 3,
             opts = { insert = true }, -- Insert nerdfont icon (default) or complete its name
           },
           emoji = {

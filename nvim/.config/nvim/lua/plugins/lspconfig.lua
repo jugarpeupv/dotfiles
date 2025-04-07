@@ -164,7 +164,11 @@ return {
       {
         "zeioth/garbage-day.nvim",
         dependencies = "neovim/nvim-lspconfig",
+        enabled = false,
         opts = {
+          excluded_lsp_clients = {
+            "copilot"
+          }
           -- your options here
         }
       },
@@ -279,11 +283,11 @@ return {
       end
 
       -- import cmp-nvim-lsp plugin safely
-      local cmp_nvim_lsp_status, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-      if not cmp_nvim_lsp_status then
-        print("cmp_nvim_lsp could not be loaded")
-        -- return
-      end
+      -- local cmp_nvim_lsp_status, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+      -- if not cmp_nvim_lsp_status then
+      --   print("cmp_nvim_lsp could not be loaded")
+      --   -- return
+      -- end
 
       -- import typescript plugin safely
       -- local typescript_setup, typescript = pcall(require, "typescript")
