@@ -45,6 +45,8 @@ atuin-setup() {
 
   function my_keybindings() {
     bindkey '^R' fzf-atuin-history-widget
+    # bindkey '^p' history-search-backward
+    # bindkey '^n' history-search-forward
     # bindkey '^E' _atuin_search_widget
   }
 

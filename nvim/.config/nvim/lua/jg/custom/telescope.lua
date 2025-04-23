@@ -58,19 +58,22 @@ M.set_upstream = function(prompt_bufnr)
   end
 end
 
-M.curr_buf = function()
-  local opts = {}
-  opts.tiebreak = function(entry1, entry2, prompt)
-    local start_pos1, _ = entry1.ordinal:find(prompt)
-    if start_pos1 then
-      local start_pos2, _ = entry2.ordinal:find(prompt)
-      if start_pos2 then
-        return start_pos1 < start_pos2
+M.curr_buf = function(user_opts)
+  local opts = {
+    tiebreak = function(entry1, entry2, prompt)
+      local start_pos1, _ = entry1.ordinal:find(prompt)
+      if start_pos1 then
+        local start_pos2, _ = entry2.ordinal:find(prompt)
+        if start_pos2 then
+          return start_pos1 < start_pos2
+        end
       end
-    end
-    return false
-  end
-  opts.additional_args = { "--ignore-case", "--pcre2" }
+      return false
+    end,
+    additional_args = { "--ignore-case", "--pcre2" },
+  }
+
+  opts = vim.tbl_deep_extend("force", opts, user_opts or {})
   require("telescope.builtin").current_buffer_fuzzy_find(opts)
 end
 

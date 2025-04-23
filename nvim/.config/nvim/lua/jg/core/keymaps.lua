@@ -480,7 +480,11 @@ end)
 -- )
 
 vim.keymap.set("n", "<leader>ss", function()
-  require('jg.custom.telescope').curr_buf()
+	require("jg.custom.telescope").curr_buf({
+		preview = {
+			hide_on_startup = true,
+		},
+	})
 	-- require("telescope.builtin").live_grep({
 	-- 	search_dirs = { "%:p" },
 	-- 	vimgrep_arguments = {
