@@ -270,6 +270,17 @@ return {
     -- config = true,
     config = function()
       require("codecompanion").setup({
+        strategies = {
+          chat = {
+            tools = {
+              ["mcp"] = {
+                -- calling it in a function would prevent mcphub from being loaded before it's needed
+                callback = function() return require("mcphub.extensions.codecompanion") end,
+                description = "Call tools and resources from the MCP Servers",
+              }
+            }
+          }
+        },
         display = {
           chat = {
             diff = {
@@ -284,7 +295,7 @@ return {
                 "followwrap",
                 "linematch:120",
               },
-              provider = "mini_diff", -- default|mini_diff
+              provider = "default", -- default|mini_diff
             },
           },
         },
@@ -313,9 +324,9 @@ return {
         ---@type "right" | "left" | "top" | "bottom"
         position = "right", -- the position of the sidebar
         wrap = true,    -- similar to vim.o.wrap
-        width = 45,     -- default % based on available width
+        width = 50,     -- default % based on available width
         sidebar_header = {
-          enabled = false, -- true, false to enable/disable the header
+          enabled = true, -- true, false to enable/disable the header
           align = "center", -- left, center, right for title
           rounded = true,
         },

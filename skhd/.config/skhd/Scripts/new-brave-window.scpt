@@ -3,7 +3,7 @@ if application "Brave" is not running then
   -- activate application "Brave"
   do shell script "bash ~/.config/skhd/Scripts/brave.sh"
 else
-    delay 0.09
+    delay 0.03
     tell application "Brave"
         activate
         tell application "System Events"

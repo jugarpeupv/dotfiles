@@ -97,7 +97,7 @@ local config = {
   flags = {
     allow_incremental_sync = true,
   },
-  capabilities = require("cmp_nvim_lsp").default_capabilities(),
+  capabilities = require('blink.cmp').get_lsp_capabilities(),
   on_attach = function(client, bufnr)
     require("jdtls").setup_dap({ hotcodereplace = "auto" })
     require("jg.custom.lsp-utils").attach_lsp_config(client, bufnr)

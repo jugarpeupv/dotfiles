@@ -1,8 +1,8 @@
 # Source fzf after zvm is loaded
-# function zvm_after_init() {
-#   source <(fzf --zsh)
-#   bindkey "ç" fzf-cd-widget
-# }
+function zvm_after_init() {
+  # source <(fzf --zsh)
+  bindkey "ç" fzf-cd-widget
+}
 
 
 function zvm_vi_yank() {

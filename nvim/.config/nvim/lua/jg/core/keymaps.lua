@@ -57,65 +57,65 @@ keymap("n", "<leader>pu", "<cmd>pu<cr>", opts)
 vim.cmd([[map <M-g> gcc]])
 
 vim.keymap.set({ "n", "t" }, "<D-p>", function()
-  require("telescope.builtin").find_files({
-    hidden = true,
-    find_command = {
-      "rg",
-      "--files",
-      "--color",
-      "never",
-      "--glob=!.git",
-      "--glob=!*__template__",
-      "--glob=!*DS_Store",
-    },
-  })
-  -- local builtin = require("telescope.builtin")
-  --
-  -- local themes = require("telescope.themes")
-  -- local opts_ivy = {
-  --   layout_config = { height = 0.5 },
-  --   hidden = true,
-  --   find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
-  -- }
-  -- builtin.find_files(themes.get_ivy(opts_ivy))
+	require("telescope.builtin").find_files({
+		hidden = true,
+		find_command = {
+			"rg",
+			"--files",
+			"--color",
+			"never",
+			"--glob=!.git",
+			"--glob=!*__template__",
+			"--glob=!*DS_Store",
+		},
+	})
+	-- local builtin = require("telescope.builtin")
+	--
+	-- local themes = require("telescope.themes")
+	-- local opts_ivy = {
+	--   layout_config = { height = 0.5 },
+	--   hidden = true,
+	--   find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
+	-- }
+	-- builtin.find_files(themes.get_ivy(opts_ivy))
 end, opts)
 
 vim.keymap.set({ "n", "t" }, "<M-p>", function()
-  require("telescope.builtin").find_files({
-    hidden = true,
-    find_command = {
-      "rg",
-      "--files",
-      "--color",
-      "never",
-      "--glob=!.git",
-      "--glob=!*__template__",
-      "--glob=!*DS_Store",
-    },
-  })
-  -- local builtin = require("telescope.builtin")
-  --
-  -- local themes = require("telescope.themes")
-  -- local opts_ivy = {
-  --   layout_config = { height = 0.4 },
-  --   hidden = true,
-  --   find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
-  -- }
-  -- builtin.find_files(themes.get_ivy(opts_ivy))
+	require("telescope.builtin").find_files({
+		hidden = true,
+		find_command = {
+			"rg",
+			"--files",
+			"--color",
+			"never",
+			"--glob=!.git",
+			"--glob=!*__template__",
+			"--glob=!*DS_Store",
+		},
+	})
+	-- local builtin = require("telescope.builtin")
+	--
+	-- local themes = require("telescope.themes")
+	-- local opts_ivy = {
+	--   layout_config = { height = 0.4 },
+	--   hidden = true,
+	--   find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
+	-- }
+	-- builtin.find_files(themes.get_ivy(opts_ivy))
 end, opts)
 
 -- cd into dir of the current buffer
 vim.keymap.set({ "n" }, "<leader>cd", function()
-  local cwd = vim.fn.expand("%:p:h")
-  -- vim.cmd("lcd " .. cwd)
-  require("nvim-tree.api").tree.change_root(cwd)
+	local cwd = vim.fn.expand("%:p:h")
+	-- vim.cmd("lcd " .. cwd)
+	require("nvim-tree.api").tree.change_root(cwd)
 end, opts)
 
 keymap(
-  "n",
-  "<leader>.",
-  "<cmd> lua require('telescope.builtin').find_files({ prompt_title = '< VimRC >', cwd = '~/dotfiles/nvim/.config/nvim',hidden = false })<cr>",
-  opts
+	"n",
+	"<leader>.",
+	"<cmd> lua require('telescope.builtin').find_files({ prompt_title = '< VimRC >', cwd = '~/dotfiles/nvim/.config/nvim',hidden = false })<cr>",
+	opts
 )
 
 -- keymap("n", "su", "<cmd>Telescope file_browser path=/Users/jgarcia<cr>", opts)
@@ -123,158 +123,158 @@ keymap(
 -- keymap("n", "sb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", opts)
 
 vim.keymap.set({ "n" }, "so", function()
-  require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
+	require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
 end, opts)
 
 vim.keymap.set({ "n" }, "su", function()
-  local find_command = {
-    "fd",
-    ".",
-    vim.fn.expand("~/"),
-    "--type",
-    "d",
-    "--exclude",
-    ".git",
-    "--exclude",
-    "node_modules",
-    -- "--one-file-system",
-    "--max-depth",
-    "4",
-    "--hidden",
-  }
-  -- local f_browser_finder = require "telescope".extensions.file_browser.finder
+	local find_command = {
+		"fd",
+		".",
+		vim.fn.expand("~/"),
+		"--type",
+		"d",
+		"--exclude",
+		".git",
+		"--exclude",
+		"node_modules",
+		-- "--one-file-system",
+		"--max-depth",
+		"4",
+		"--hidden",
+	}
+	-- local f_browser_finder = require "telescope".extensions.file_browser.finder
 
-  require("telescope").extensions.file_browser.file_browser({
-    grouped = true,
-    -- path = vim.fn.expand("~/"),
-    cwd = vim.fn.expand("~/"),
-    -- picker = f_browser_finder.browse_folders,
-    depth = 1,
-    -- use_ui_input = false,
-    find_command,
-    git_status = false,
-    respect_gitignore = true,
-    prompt_path = true,
-  })
+	require("telescope").extensions.file_browser.file_browser({
+		grouped = true,
+		-- path = vim.fn.expand("~/"),
+		cwd = vim.fn.expand("~/"),
+		-- picker = f_browser_finder.browse_folders,
+		depth = 1,
+		-- use_ui_input = false,
+		find_command,
+		git_status = false,
+		respect_gitignore = true,
+		prompt_path = true,
+	})
 end, opts)
 
 vim.keymap.set({ "n" }, "sf", function()
-  local function pick_dir_and_explore_files(cb)
-    local path = vim.fn.expand("~/")
-    local pickers = require("telescope.pickers")
-    local finders = require("telescope.finders")
-    local conf = require("telescope.config").values
-    local actions = require("telescope.actions")
-    local action_state = require("telescope.actions.state")
+	local function pick_dir_and_explore_files(cb)
+		local path = vim.fn.expand("~/")
+		local pickers = require("telescope.pickers")
+		local finders = require("telescope.finders")
+		local conf = require("telescope.config").values
+		local actions = require("telescope.actions")
+		local action_state = require("telescope.actions.state")
 
-    local find_command = {
-      "fd",
-      ".",
-      path,
-      "--type",
-      "d",
-      "--exclude",
-      ".git",
-      "--exclude",
-      "node_modules",
-      -- "--one-file-system",
-      "--max-depth",
-      "4",
-      "--hidden",
-    }
+		local find_command = {
+			"fd",
+			".",
+			path,
+			"--type",
+			"d",
+			"--exclude",
+			".git",
+			"--exclude",
+			"node_modules",
+			-- "--one-file-system",
+			"--max-depth",
+			"4",
+			"--hidden",
+		}
 
-    -- Function to escape special characters in a string for use in a pattern
-    local function escape_pattern(text)
-      return text:gsub("([^%w])", "%%%1")
-    end
+		-- Function to escape special characters in a string for use in a pattern
+		local function escape_pattern(text)
+			return text:gsub("([^%w])", "%%%1")
+		end
 
-    local escaped_path = escape_pattern(path)
+		local escaped_path = escape_pattern(path)
 
-    pickers
-        .new(opts, {
-          prompt_title = "Select a directory",
-          finder = finders.new_oneshot_job(find_command, {
-            entry_maker = function(entry)
-              local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
-              return {
-                value = entry,
-                -- display = "  ~/" .. entry_substituted,
-                display = function()
-                  local display_string = "  ~/" .. entry_substituted
-                  return display_string, { { { 0, 1 }, "Directory" } }
-                end,
-                -- { { {1, 3}, hl_group } }
-                ordinal = entry,
-              }
-            end,
-          }),
-          sorter = conf.generic_sorter(opts),
-          attach_mappings = function(prompt_bufnr)
-            actions.select_default:replace(function()
-              local selection = action_state.get_selected_entry()
-              actions.close(prompt_bufnr)
-              cb(selection.value)
-            end)
+		pickers
+			.new(opts, {
+				prompt_title = "Select a directory",
+				finder = finders.new_oneshot_job(find_command, {
+					entry_maker = function(entry)
+						local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
+						return {
+							value = entry,
+							-- display = "  ~/" .. entry_substituted,
+							display = function()
+								local display_string = "  ~/" .. entry_substituted
+								return display_string, { { { 0, 1 }, "Directory" } }
+							end,
+							-- { { {1, 3}, hl_group } }
+							ordinal = entry,
+						}
+					end,
+				}),
+				sorter = conf.generic_sorter(opts),
+				attach_mappings = function(prompt_bufnr)
+					actions.select_default:replace(function()
+						local selection = action_state.get_selected_entry()
+						actions.close(prompt_bufnr)
+						cb(selection.value)
+					end)
 
-            -- actions.select_vertical:replace(function()
-            --   local selection = action_state.get_selected_entry()
-            --   require("telescope.actions").close(prompt_bufnr)
-            --   vim.cmd("vsplit")
-            --   print('hi')
-            --   print(selection.value)
-            --   require("oil").open(selection.value)
-            -- end)
+					-- actions.select_vertical:replace(function()
+					--   local selection = action_state.get_selected_entry()
+					--   require("telescope.actions").close(prompt_bufnr)
+					--   vim.cmd("vsplit")
+					--   print('hi')
+					--   print(selection.value)
+					--   require("oil").open(selection.value)
+					-- end)
 
-            return true
-          end,
-        })
-        :find()
-  end
+					return true
+				end,
+			})
+			:find()
+	end
 
-  local function my_cb(path)
-    require("telescope").extensions.file_browser.file_browser({
-      grouped = true,
-      depth = false,
-      use_ui_input = false,
-      follow_links = true,
-      respect_gitignore = true,
-      git_status = false,
-      prompt_path = true,
-      path = vim.fn.expand(path),
-      select_buffer = true,
-    })
-  end
+	local function my_cb(path)
+		require("telescope").extensions.file_browser.file_browser({
+			grouped = true,
+			depth = false,
+			use_ui_input = false,
+			follow_links = true,
+			respect_gitignore = true,
+			git_status = false,
+			prompt_path = true,
+			path = vim.fn.expand(path),
+			select_buffer = true,
+		})
+	end
 
-  pick_dir_and_explore_files(my_cb)
+	pick_dir_and_explore_files(my_cb)
 
-  -- require("telescope").extensions.file_browser.file_browser({
-  --   grouped = true,
-  --   depth = false,
-  --   use_ui_input = false,
-  --   follow_links = true,
-  --   respect_gitignore = true,
-  --   git_status = false,
-  --   prompt_path = true,
-  --   path = vim.fn.expand("%:p:h"),
-  --   select_buffer = true,
-  -- })
+	-- require("telescope").extensions.file_browser.file_browser({
+	--   grouped = true,
+	--   depth = false,
+	--   use_ui_input = false,
+	--   follow_links = true,
+	--   respect_gitignore = true,
+	--   git_status = false,
+	--   prompt_path = true,
+	--   path = vim.fn.expand("%:p:h"),
+	--   select_buffer = true,
+	-- })
 end, opts)
 
 vim.keymap.set({ "n" }, "sd", function()
-  require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("%:p:h"), true)
+	require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("%:p:h"), true)
 end, opts)
 
 vim.keymap.set({ "n" }, "se", function()
-  require("telescope").extensions.file_browser.file_browser({
-    grouped = true,
-    depth = 1,
-    use_ui_input = false,
-    path = vim.fn.expand("%:p:h"),
-    git_status = false,
-    select_buffer = true,
-    respect_gitignore = true,
-    prompt_path = true,
-  })
+	require("telescope").extensions.file_browser.file_browser({
+		grouped = true,
+		depth = 1,
+		use_ui_input = false,
+		path = vim.fn.expand("%:p:h"),
+		git_status = false,
+		select_buffer = true,
+		respect_gitignore = true,
+		prompt_path = true,
+	})
 end, opts)
 
 keymap("n", "<leader>ce", "<cmd>lua require('telescope.builtin').colorscheme()<cr>", opts)
@@ -358,115 +358,118 @@ keymap("n", "<leader><BS>", "<cmd>qa!<CR>", opts)
 -- keymap("n", "<leader>q", "<cmd>q!<CR>", opts)
 -- keymap("n", "<leader>q", "<C-w>c", opts)
 vim.keymap.set({ "n" }, "<leader>q", function()
-  -- vim.cmd("q!")
-  local function is_last_window()
-    return vim.fn.winnr("$") == 1
-  end
+	-- vim.cmd("q!")
+	local function is_last_window()
+		return vim.fn.winnr("$") == 1
+	end
 
-  -- Example usage
-  if is_last_window() then
-    vim.cmd("q!")
-  else
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>c", true, false, true), "n", true)
-  end
+	-- Example usage
+	if is_last_window() then
+		vim.cmd("q!")
+	else
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>c", true, false, true), "n", true)
+	end
 end, opts)
 
 -- keymap("t", "<leader>q", "<cmd>q!<CR>", opts)
 keymap("n", "<leader>nn", "<cmd>nohlsearch<CR>", opts)
 
 vim.keymap.set({ "n" }, "<leader>fi", function()
-  require("telescope.builtin").find_files({
-    hidden = true,
-    no_ignore = true,
-    find_command = { "fd", ".", "--type", "f", "--exclude", ".git/*", "--exclude", "node_modules/*" },
-  })
+	require("telescope.builtin").find_files({
+		hidden = true,
+		no_ignore = true,
+		find_command = { "fd", ".", "--type", "f", "--exclude", ".git/*", "--exclude", "node_modules/*" },
+		preview = {
+			hide_on_startup = true,
+		},
+	})
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bu", function()
-  require("jg.custom.telescope").normal_buffers({
-    ignore_current_buffer = true,
-    show_all_buffers = false,
-    sort_mru = true,
-    -- sort_lastused = true,
-    -- initial_mode = "normal",
-  })
+	require("jg.custom.telescope").normal_buffers({
+		ignore_current_buffer = true,
+		show_all_buffers = false,
+		sort_mru = true,
+		-- sort_lastused = true,
+		-- initial_mode = "normal",
+	})
 
-  -- require("telescope.builtin").buffers({
-  --   -- ignore_current_buffer = true,
-  --   show_all_buffers = false,
-  --   sort_mru = true,
-  --   sort_lastused = true,
-  --   -- initial_mode = "normal",
-  -- })
+	-- require("telescope.builtin").buffers({
+	--   -- ignore_current_buffer = true,
+	--   show_all_buffers = false,
+	--   sort_mru = true,
+	--   sort_lastused = true,
+	--   -- initial_mode = "normal",
+	-- })
 end, opts)
 keymap("n", "<leader>tr", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
 -- keymap("n", "<leader>tm", "<cmd>lua require('telescope.builtin').node_modules list<cr>", opts)
 keymap(
-  "n",
-  "<leader>fs",
-  "<cmd>lua require('telescope.builtin').grep_string({ search = vim.fn.input('Grep For > ')})<CR>",
-  opts
+	"n",
+	"<leader>fs",
+	"<cmd>lua require('telescope.builtin').grep_string({ search = vim.fn.input('Grep For > ')})<CR>",
+	opts
 )
 
 vim.keymap.set({ "n", "v" }, "<leader>fR", "<cmd>lua require('telescope.builtin').egrepify<cr>", opts)
 
 vim.keymap.set({ "n", "v" }, "<leader>ff", function()
-  require("telescope").extensions.live_grep_args.live_grep_raw({
-    disable_coordinates = true,
-    path_display = { "absolute" },
-    theme = "ivy",
-    layout_config = { height = 0.47 },
-    preview = {
-      hide_on_startup = true,
-    },
-    -- group_by = "filename",
-    -- disable_devicons = true,
-    vimgrep_arguments = {
-      "rg",
-      "--color=never",
-      "--no-heading",
-      "--with-filename",
-      "--line-number",
-      "--column",
-      "--hidden",
-      "--smart-case",
-      "--glob=!icarSDK.js",
-      "--glob=!package-lock.json",
-      "--glob=!**/.git/**",
-      -- "--ignore-case",
-      -- "--smart-case",
-      -- "--word-regexp"
-    },
-  })
+	require("telescope").extensions.live_grep_args.live_grep_raw({
+		disable_coordinates = true,
+		path_display = { "absolute" },
+		theme = "ivy",
+		layout_config = { height = 0.47 },
+		preview = {
+			hide_on_startup = true,
+		},
+		-- group_by = "filename",
+		-- disable_devicons = true,
+		vimgrep_arguments = {
+			"rg",
+			"--color=never",
+			"--no-heading",
+			"--with-filename",
+			"--line-number",
+			"--column",
+			"--hidden",
+			"--smart-case",
+			"--glob=!icarSDK.js",
+			"--glob=!package-lock.json",
+			"--glob=!**/.git/**",
+			-- "--ignore-case",
+			-- "--smart-case",
+			-- "--word-regexp"
+		},
+	})
 end)
 
 vim.keymap.set({ "n", "v" }, "<leader>f.", function()
-  local cwd = "~/dotfiles/nvim/.config/nvim"
-  require("telescope").extensions.live_grep_args.live_grep_raw({
-    disable_coordinates = true,
-    cwd = cwd,
-    prompt_title = "Find files in " .. cwd,
-    theme = "ivy",
-    layout_config = { height = 0.53 },
-    -- group_by = "filename",
-    -- disable_devicons = true,
-    vimgrep_arguments = {
-      "rg",
-      "--color=never",
-      "--no-heading",
-      "--with-filename",
-      "--line-number",
-      "--column",
-      "--hidden",
-      "--smart-case",
-      "--glob=!icarSDK.js",
-      "--glob=!package-lock.json",
-      "--glob=!**/.git/**",
-      -- "--ignore-case",
-      -- "--smart-case",
-      -- "--word-regexp"
-    },
-  })
+	local cwd = "~/dotfiles/nvim/.config/nvim"
+	require("telescope").extensions.live_grep_args.live_grep_raw({
+		disable_coordinates = true,
+		cwd = cwd,
+		prompt_title = "Find files in " .. cwd,
+		theme = "ivy",
+		layout_config = { height = 0.53 },
+		-- group_by = "filename",
+		-- disable_devicons = true,
+		vimgrep_arguments = {
+			"rg",
+			"--color=never",
+			"--no-heading",
+			"--with-filename",
+			"--line-number",
+			"--column",
+			"--hidden",
+			"--smart-case",
+			"--glob=!icarSDK.js",
+			"--glob=!package-lock.json",
+			"--glob=!**/.git/**",
+			-- "--ignore-case",
+			-- "--smart-case",
+			-- "--word-regexp"
+		},
+	})
 end)
 
 -- keymap(
@@ -476,12 +479,27 @@ end)
 --   opts
 -- )
 
-keymap(
-  "n",
-  "<leader>ss",
-  "<cmd>lua require('telescope.builtin').live_grep({ search_dirs={'%:p'}, vimgrep_arguments={ 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case' }})<cr>",
-  opts
-)
+vim.keymap.set("n", "<leader>ss", function()
+  require('jg.custom.telescope').curr_buf()
+	-- require("telescope.builtin").live_grep({
+	-- 	search_dirs = { "%:p" },
+	-- 	vimgrep_arguments = {
+	-- 		"rg",
+	-- 		"--color=never",
+	-- 		"--no-heading",
+	-- 		"--with-filename",
+	-- 		"--line-number",
+	-- 		"--column",
+	-- 		"--smart-case",
+	-- 	},
+	-- })
+end, opts)
+-- keymap(
+-- 	"n",
+-- 	"<leader>ss",
+-- 	"<cmd>lua require('telescope.builtin').live_grep({ search_dirs={'%:p'}, vimgrep_arguments={ 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case' }})<cr>",
+-- 	opts
+-- )
 
 keymap("n", "<leader>sl", "<cmd>BLines<cr>", opts)
 keymap("n", "<leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>", opts)
@@ -522,11 +540,11 @@ vim.cmd([[xnoremap <leader>rr :s///g<Left><Left><Left>]])
 vim.cmd([[nnoremap <leader>sw /\<\><Left><Left>]])
 
 vim.cmd(
-  [[nnoremap <leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]
+	[[nnoremap <leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]
 )
 
 vim.cmd(
-  [[xnoremap <leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]
+	[[xnoremap <leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]
 )
 
 -- Vim Fugitive
@@ -585,12 +603,12 @@ vim.cmd([[:tnoremap <C-Right> <C-\><C-N>:vertical resize +5<cr>]])
 vim.cmd([[:tnoremap <C-o> <C-\><C-N><C-o>]])
 
 vim.keymap.set("n", "<leader>ih", function()
-  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end)
 
 -- Ctrlsf.nvim
--- vim.keymap.set("n", "<leader>sf", "<Plug>CtrlSFCwordPath")
--- vim.keymap.set("n", "<leader>st", "<CMD>CtrlSFToggle<CR>")
+vim.keymap.set("n", "<leader>sf", "<Plug>CtrlSFCwordPath")
+vim.keymap.set("n", "<leader>st", "<CMD>CtrlSFToggle<CR>")
 
 vim.cmd([[nmap <leader>tN :tabnew %<CR>]])
 vim.cmd([[nmap <leader>tC :tabclose<CR>]])
@@ -598,12 +616,12 @@ vim.cmd([[nmap <leader>tC :tabclose<CR>]])
 vim.keymap.set("n", "<leader>ta", require("jg.custom.telescope").curr_buf, {})
 
 vim.keymap.set("n", "<leader>te", function()
-  require("jg.custom.telescope").term_buffers({
-    show_all_buffers = true,
-    ignore_current_buffer = false,
-    only_cwd = false,
-    cwd_only = false,
-  })
+	require("jg.custom.telescope").term_buffers({
+		show_all_buffers = true,
+		ignore_current_buffer = false,
+		only_cwd = false,
+		cwd_only = false,
+	})
 end, { silent = true })
 
 -- vim.api.nvim_set_keymap("n", "gn", "<cmd> lua require('illuminate').goto_next_reference()<cr>", opts)
@@ -625,9 +643,9 @@ vim.cmd([[nnoremap <F6> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_D
 
 -- vim.keymap.set("n", "<M-i>", "<cmd>split term://%:p:h//zsh<cr>", opts)
 vim.keymap.set("n", "<leader>ct", function()
-  require("terminal").run("", {
-    cwd = vim.fn.expand("%:p:h"),
-  })
+	require("terminal").run("", {
+		cwd = vim.fn.expand("%:p:h"),
+	})
 end)
 
 -- vim.keymap.set({ "i", "s" }, "<C-e>", function()
@@ -648,11 +666,11 @@ end)
 -- vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                              -- copy to 0 register
 -- vim.keymap.set({ "x" }, "<leader><leader>y", [["0y]])                               -- copy to 0 register
 
-vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true })       -- paste from 0 register
+vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true }) -- paste from 0 register
 
 vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
 
-vim.keymap.set({ "n" }, "<leader>bi", ":Bufferize Inspect<cr>", { silent = true })  -- paste from 0 register
+vim.keymap.set({ "n" }, "<leader>bi", ":Bufferize Inspect<cr>", { silent = true }) -- paste from 0 register
 
 -- local function show_documentation()
 --   local filetype = vim.bo.filetype
@@ -671,58 +689,58 @@ vim.keymap.set({ "n" }, "<leader>bi", ":Bufferize Inspect<cr>", { silent = true 
 -- end
 
 local function show_documentation()
-  local filetype = vim.bo.filetype
-  local cword = vim.fn.expand("<cword>")
+	local filetype = vim.bo.filetype
+	local cword = vim.fn.expand("<cword>")
 
-  if filetype == "vim" or filetype == "help" then
-    local status, _ = pcall(vim.cmd, "h " .. cword)
-    if not status then
-      print("No help for " .. cword)
-    end
-  elseif filetype == "man" then
-    vim.cmd("Man " .. cword)
-  elseif vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
-    require("crates").show_popup()
-  else
-    local params = vim.lsp.util.make_position_params(0, "utf-8")
+	if filetype == "vim" or filetype == "help" then
+		local status, _ = pcall(vim.cmd, "h " .. cword)
+		if not status then
+			print("No help for " .. cword)
+		end
+	elseif filetype == "man" then
+		vim.cmd("Man " .. cword)
+	elseif vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
+		require("crates").show_popup()
+	else
+		local params = vim.lsp.util.make_position_params(0, "utf-8")
 
-    local response = vim.lsp.buf_request_sync(0, "textDocument/hover", params)
-    local has_lsp_info = false
+		local response = vim.lsp.buf_request_sync(0, "textDocument/hover", params)
+		local has_lsp_info = false
 
-    if response then
-      for _, value in pairs(response) do
-        if value and value.result and value.result.contents then
-          has_lsp_info = true
-        end
-      end
-    end
+		if response then
+			for _, value in pairs(response) do
+				if value and value.result and value.result.contents then
+					has_lsp_info = true
+				end
+			end
+		end
 
-    if has_lsp_info then
-      vim.lsp.buf.hover()
-    else
-      local _, err = pcall(vim.cmd, "h " .. cword)
-      if err then
-        return
-      end
-    end
-  end
+		if has_lsp_info then
+			vim.lsp.buf.hover()
+		else
+			local _, err = pcall(vim.cmd, "h " .. cword)
+			if err then
+				return
+			end
+		end
+	end
 end
 
 vim.keymap.set("n", "K", show_documentation, { silent = true })
 
 -- vim.keymap.set({ "n" }, "<leader>wd", "<cmd>windo diffthis<cr>", opts) -- copy to 0 register
 vim.keymap.set({ "n" }, "<leader>wd", function()
-  vim.cmd([[highlight DiffDelete guifg=#011528]])
-  vim.cmd("NvimTreeClose")
-  vim.cmd("windo diffthis")
-  require("barbecue.ui").toggle(false)
+	vim.cmd([[highlight DiffDelete guifg=#011528]])
+	vim.cmd("NvimTreeClose")
+	vim.cmd("windo diffthis")
+	require("barbecue.ui").toggle(false)
 end, opts) -- copy to 0 register
 
 -- vim.keymap.set({ "n" }, "<leader>wo", "<cmd>windo diffoff<cr>", opts)  -- copy to 0 register
 vim.keymap.set({ "n" }, "<leader>wo", function()
-  vim.cmd([[highlight DiffDelete guifg=none]])
-  vim.cmd("windo diffoff")
-  require("barbecue.ui").toggle(true)
+	vim.cmd([[highlight DiffDelete guifg=none]])
+	vim.cmd("windo diffoff")
+	require("barbecue.ui").toggle(true)
 end, opts) -- copy to 0 register
 
 vim.api.nvim_set_keymap("n", "<F5>", [[:lua require"osv".launch({port = 8086})<CR>]], { noremap = true })
@@ -736,109 +754,109 @@ vim.keymap.set("n", "<leader>xx", "<cmd>source %<CR>")
 vim.keymap.set({ "n", "v" }, "<leader>xs", ":.lua<CR>")
 
 vim.keymap.set({ "n" }, "<leader>sn", function()
-  -- run this command on modifiable windows
-  --   -- vim.wo.wrap = not vim.wo.wrap
-  vim.cmd([[windo if &ma | set wrap! | endif]])
+	-- run this command on modifiable windows
+	--   -- vim.wo.wrap = not vim.wo.wrap
+	vim.cmd([[windo if &ma | set wrap! | endif]])
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>se", function()
-  local status, _ = pcall(vim.cmd, "vert h " .. vim.fn.expand("<cword>"))
-  if not status then
-    print("No help for " .. vim.fn.expand("<cword>"))
-  end
+	local status, _ = pcall(vim.cmd, "vert h " .. vim.fn.expand("<cword>"))
+	if not status then
+		print("No help for " .. vim.fn.expand("<cword>"))
+	end
 end, opts)
 
 local function find_directory_and_focus()
-  local actions = require("telescope.actions")
-  local action_state = require("telescope.actions.state")
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
 
-  local function open_nvim_tree(prompt_bufnr, _)
-    actions.select_default:replace(function()
-      local api = require("nvim-tree.api")
+	local function open_nvim_tree(prompt_bufnr, _)
+		actions.select_default:replace(function()
+			local api = require("nvim-tree.api")
 
-      actions.close(prompt_bufnr)
-      local selection = action_state.get_selected_entry()
-      api.tree.open()
-      -- api.tree.find_file(selection.cwd .. "/" .. selection.value)
-      api.tree.find_file(selection.value)
-    end)
-    return true
-  end
+			actions.close(prompt_bufnr)
+			local selection = action_state.get_selected_entry()
+			api.tree.open()
+			-- api.tree.find_file(selection.cwd .. "/" .. selection.value)
+			api.tree.find_file(selection.value)
+		end)
+		return true
+	end
 
-  require("telescope.builtin").find_files({
-    prompt_title = "Open directory in nvim tree",
-    find_command = { "fd", "--type", "directory", "--hidden", "--exclude", ".git/*" },
-    attach_mappings = open_nvim_tree,
-    entry_maker = function(entry)
-      return {
-        value = entry,
-        display = function()
-          local display_string = " " .. entry
-          return display_string, { { { 0, 1 }, "Directory" } }
-        end,
-        ordinal = entry,
-      }
-    end,
-  })
+	require("telescope.builtin").find_files({
+		prompt_title = "Open directory in nvim tree",
+		find_command = { "fd", "--type", "directory", "--hidden", "--exclude", ".git/*" },
+		attach_mappings = open_nvim_tree,
+		entry_maker = function(entry)
+			return {
+				value = entry,
+				display = function()
+					local display_string = " " .. entry
+					return display_string, { { { 0, 1 }, "Directory" } }
+				end,
+				ordinal = entry,
+			}
+		end,
+	})
 end
 
 vim.keymap.set("n", "<leader>fd", find_directory_and_focus, opts)
 
 local function find_in_node_modules()
-  local actions = require("telescope.actions")
-  local action_state = require("telescope.actions.state")
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
 
-  local cwd = vim.loop.cwd()
-  local node_modules_path = cwd .. "/node_modules"
+	local cwd = vim.loop.cwd()
+	local node_modules_path = cwd .. "/node_modules"
 
-  local function open_nvim_tree(prompt_bufnr, _)
-    actions.select_default:replace(function()
-      local api = require("nvim-tree.api")
+	local function open_nvim_tree(prompt_bufnr, _)
+		actions.select_default:replace(function()
+			local api = require("nvim-tree.api")
 
-      actions.close(prompt_bufnr)
-      local selection = action_state.get_selected_entry()
-      api.tree.open()
+			actions.close(prompt_bufnr)
+			local selection = action_state.get_selected_entry()
+			api.tree.open()
 
-      local uv = vim.loop
+			local uv = vim.loop
 
-      if uv.fs_stat(selection.value .. "/package.json") then
-        api.tree.find_file(selection.value .. "/package.json")
-      else
-        api.tree.find_file(selection.value)
-      end
-    end)
-    return true
-  end
+			if uv.fs_stat(selection.value .. "/package.json") then
+				api.tree.find_file(selection.value .. "/package.json")
+			else
+				api.tree.find_file(selection.value)
+			end
+		end)
+		return true
+	end
 
-  require("telescope.builtin").find_files({
-    prompt_title = 'Find dependency in "node_modules"',
-    find_command = {
-      "fd",
-      ".",
-      node_modules_path,
-      "--no-ignore",
-      "--type",
-      "dir",
-      "--max-depth",
-      "2",
-      "--exclude",
-      "node_modules/*/node_modules",
-      -- "--prune",
-    },
-    attach_mappings = open_nvim_tree,
-    entry_maker = function(entry)
-      return {
-        value = entry,
-        display = function()
-          local cwd_dos = vim.loop.cwd():gsub("%-", "%%%-")
-          local modified_entry = entry:gsub(cwd_dos .. "/", "")
-          local display_string = "  " .. modified_entry
-          return display_string, { { { 0, 1 }, "Directory" } }
-        end,
-        ordinal = entry,
-      }
-    end,
-  })
+	require("telescope.builtin").find_files({
+		prompt_title = 'Find dependency in "node_modules"',
+		find_command = {
+			"fd",
+			".",
+			node_modules_path,
+			"--no-ignore",
+			"--type",
+			"dir",
+			"--max-depth",
+			"2",
+			"--exclude",
+			"node_modules/*/node_modules",
+			-- "--prune",
+		},
+		attach_mappings = open_nvim_tree,
+		entry_maker = function(entry)
+			return {
+				value = entry,
+				display = function()
+					local cwd_dos = vim.loop.cwd():gsub("%-", "%%%-")
+					local modified_entry = entry:gsub(cwd_dos .. "/", "")
+					local display_string = "  " .. modified_entry
+					return display_string, { { { 0, 1 }, "Directory" } }
+				end,
+				ordinal = entry,
+			}
+		end,
+	})
 end
 
 vim.keymap.set("n", "<leader>fn", find_in_node_modules, opts)
@@ -846,11 +864,11 @@ vim.keymap.set("n", "<leader>fn", find_in_node_modules, opts)
 -- fd . "node_modules" --no-ignore --exclude .git/* --exclude **/node_modules/**
 
 vim.keymap.set({ "n" }, "<leader>rs", function()
-  require("jg.custom.telescope").run_npm_scripts_improved()
+	require("jg.custom.telescope").run_npm_scripts_improved()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>rt", function()
-  require("jg.custom.telescope").run_nx_scripts()
+	require("jg.custom.telescope").run_nx_scripts()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bn", "<cmd>bn<cr>", opts)
@@ -861,18 +879,18 @@ vim.keymap.set({ "n" }, "<leader>fr", "<cmd>Telescope frecency workspace=CWD<cr>
 vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
 
 vim.keymap.set({ "n" }, "<M-b>", function()
-  local current_buf_name = vim.fn.expand("%")
-  vim.api.nvim_feedkeys(
-    vim.api.nvim_replace_termcodes(":Compile bun " .. current_buf_name, true, false, true),
-    "n",
-    true
-  )
+	local current_buf_name = vim.fn.expand("%")
+	vim.api.nvim_feedkeys(
+		vim.api.nvim_replace_termcodes(":Compile bun " .. current_buf_name, true, false, true),
+		"n",
+		true
+	)
 
-  -- vim.api.nvim_feedkeys(
-  --   vim.api.nvim_replace_termcodes("<ESC>" .. current_buf_name, true, false, true),
-  --   "n",
-  --   true
-  -- )
+	-- vim.api.nvim_feedkeys(
+	--   vim.api.nvim_replace_termcodes("<ESC>" .. current_buf_name, true, false, true),
+	--   "n",
+	--   true
+	-- )
 end, opts)
 
 vim.api.nvim_set_keymap("i", "<C-e>", "<C-o>$", { noremap = true, silent = true })
@@ -886,105 +904,104 @@ vim.cmd([[cnoremap <C-a> <C-b>]])
 -- vim.keymap.set('c', '<C-j>', '<Tab>', { noremap = true, silent = true })
 -- vim.keymap.set('c', '<C-k>', '<S-Tab>', { noremap = true, silent = true })
 
-
 -- -- vim.cmd([[nnoremap <nowait> gr gr]])
 -- --
 -- -- vim.api.nvim_del_keymap('n', 'gr')
 if vim.fn.has("nvim-0.11") == 1 then
-  local keymaps = {
-    { mode = "n", lhs = "gri" },
-    { mode = "n", lhs = "grn" },
-    { mode = "n", lhs = "grr" },
-    { mode = "n", lhs = "gra" },
-    { mode = "x", lhs = "gra" },
-  }
+	local keymaps = {
+		{ mode = "n", lhs = "gri" },
+		{ mode = "n", lhs = "grn" },
+		{ mode = "n", lhs = "grr" },
+		{ mode = "n", lhs = "gra" },
+		{ mode = "x", lhs = "gra" },
+	}
 
-  for _, keymapping in ipairs(keymaps) do
-    if vim.fn.maparg(keymapping.lhs, keymapping.mode) ~= "" then
-      vim.api.nvim_del_keymap(keymapping.mode, keymapping.lhs)
-    end
-  end
+	for _, keymapping in ipairs(keymaps) do
+		if vim.fn.maparg(keymapping.lhs, keymapping.mode) ~= "" then
+			vim.api.nvim_del_keymap(keymapping.mode, keymapping.lhs)
+		end
+	end
 end
 
 vim.api.nvim_create_user_command("NpmReadme", function(opts)
-  local package_name = opts.args
-  local package_url = "https://registry.npmjs.org/" .. package_name .. "/latest"
+	local package_name = opts.args
+	local package_url = "https://registry.npmjs.org/" .. package_name .. "/latest"
 
-  -- Fetch the package metadata
-  local handle = io.popen("curl -s " .. package_url)
-  if not handle then
-    return
-  end
-  local package_metadata = handle:read("*a")
-  handle:close()
+	-- Fetch the package metadata
+	local handle = io.popen("curl -s " .. package_url)
+	if not handle then
+		return
+	end
+	local package_metadata = handle:read("*a")
+	handle:close()
 
-  -- Parse the repository URL from the package metadata
-  local repo_url = package_metadata:match('"repository":{[^}]*"url":"(.-)"')
-  if not repo_url then
-    print("Repository URL not found for package: " .. package_name)
-    return
-  end
+	-- Parse the repository URL from the package metadata
+	local repo_url = package_metadata:match('"repository":{[^}]*"url":"(.-)"')
+	if not repo_url then
+		print("Repository URL not found for package: " .. package_name)
+		return
+	end
 
-  -- Convert the repository URL to the raw README URL
-  local readme_url = repo_url:gsub("github%.com", "raw.githubusercontent.com"):gsub("%.git$", ""):gsub("git%+", "")
-      .. "/master/README.md"
+	-- Convert the repository URL to the raw README URL
+	local readme_url = repo_url:gsub("github%.com", "raw.githubusercontent.com"):gsub("%.git$", ""):gsub("git%+", "")
+		.. "/master/README.md"
 
-  -- Fetch the README content
-  handle = io.popen("curl -s " .. readme_url)
-  if not handle then
-    return
-  end
-  local readme_content = handle:read("*a")
-  handle:close()
+	-- Fetch the README content
+	handle = io.popen("curl -s " .. readme_url)
+	if not handle then
+		return
+	end
+	local readme_content = handle:read("*a")
+	handle:close()
 
-  -- Create a new scratch buffer and set its content
-  vim.cmd("enew")
-  vim.api.nvim_buf_set_name(0, "npm_info_" .. package_name .. ".md")
-  -- vim.api.nvim_buf_set_option(0, "buftype", "nofile")
-  -- vim.api.nvim_buf_set_option(0, "bufhidden", "wipe")
-  vim.api.nvim_buf_set_option(0, "filetype", "markdown")
-  vim.api.nvim_buf_set_option(0, "swapfile", false)
-  vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(readme_content, "\n"))
+	-- Create a new scratch buffer and set its content
+	vim.cmd("enew")
+	vim.api.nvim_buf_set_name(0, "npm_info_" .. package_name .. ".md")
+	-- vim.api.nvim_buf_set_option(0, "buftype", "nofile")
+	-- vim.api.nvim_buf_set_option(0, "bufhidden", "wipe")
+	vim.api.nvim_buf_set_option(0, "filetype", "markdown")
+	vim.api.nvim_buf_set_option(0, "swapfile", false)
+	vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(readme_content, "\n"))
 end, { nargs = 1 })
 
-vim.keymap.set({ "n" }, "<leader>nr", function()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":NpmReadme ", true, false, true), "n", true)
+vim.keymap.set({ "n" }, "<leader>nR", function()
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":NpmReadme ", true, false, true), "n", true)
 end, opts)
 
 local function clear_lsp_signs()
-  local bufnr = vim.api.nvim_get_current_buf()
-  vim.diagnostic.reset(nil, bufnr)
+	local bufnr = vim.api.nvim_get_current_buf()
+	vim.diagnostic.reset(nil, bufnr)
 end
 
 -- Create a command to clear only LSP diagnostic signs
 vim.api.nvim_create_user_command("ClearLspSigns", clear_lsp_signs, {})
 
 vim.keymap.set("t", "<M-o>", function()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
-  vim.schedule(function()
-    require("bufjump").backward()
-  end)
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
+	vim.schedule(function()
+		require("bufjump").backward()
+	end)
 end, opts)
 
 vim.keymap.set("t", "<M-i>", function()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
-  vim.schedule(function()
-    require("bufjump").forward()
-  end)
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
+	vim.schedule(function()
+		require("bufjump").forward()
+	end)
 end, opts)
 
 vim.keymap.set("t", "<D-o>", function()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
-  vim.schedule(function()
-    require("bufjump").backward()
-  end)
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
+	vim.schedule(function()
+		require("bufjump").backward()
+	end)
 end, opts)
 
 vim.keymap.set("t", "<D-i>", function()
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
-  vim.schedule(function()
-    require("bufjump").forward()
-  end)
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", true)
+	vim.schedule(function()
+		require("bufjump").forward()
+	end)
 end, opts)
 
 keymap("n", "<leader>tm", "<cmd>:e ~/.config/tmux/tmux.conf<cr>", opts)
@@ -996,28 +1013,87 @@ vim.keymap.set("n", "<leader>ch", "<cmd>Changes<cr>", opts)
 
 -- Map a shortcut to open the picker.
 vim.keymap.set("n", "<leader>ri", function()
-  require("telescope").extensions.recent_files.pick()
+	require("telescope").extensions.recent_files.pick()
 end, { noremap = true, silent = true })
 
-vim.api.nvim_set_keymap('o', 'L', '$', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', 'L', '$h', { noremap = true, silent = true })
+vim.api.nvim_set_keymap("o", "L", "$", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("v", "L", "$h", { noremap = true, silent = true })
 
-vim.api.nvim_set_keymap('o', 'H', '^', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', 'H', '^', { noremap = true, silent = true })
-
+vim.api.nvim_set_keymap("o", "H", "^", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("v", "H", "^", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>bk", "<cmd>bwipeout!<cr>", opts)
 
-
 vim.keymap.set("n", "<leader>nx", function()
-  require('telescope').extensions.nx.actions()
+	require("telescope").extensions.nx.actions()
 end, opts)
 
-
 vim.cmd([[set wildcharm=<C-v>]])
-vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
+-- vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
+vim.cmd([[cnoremap <C-l> <C-y><C-v>]])
 -- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
 vim.cmd([[cnoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"]])
 vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
+
+vim.keymap.set("n", "<leader>nr", function()
+	-- Get the current buffer content
+	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+
+	-- Parse the project name from the "name" property
+	local project_name
+	for _, line in ipairs(lines) do
+		project_name = line:match('"name"%s*:%s*"([^"]+)"')
+		if project_name then
+			break
+		end
+	end
+
+	if not project_name then
+		print("Could not find project name in project.json.")
+		return
+	end
+
+	-- Get the current line under the cursor
+	local current_line = vim.api.nvim_get_current_line()
+
+	-- Parse the target name from the current line
+	local target_name = current_line:match('"([^"]+)"%s*:%s*{')
+	if not target_name then
+		print("Could not find target name under the cursor.")
+		return
+	end
+
+	local command = string.format("npx nx %s %s", target_name, project_name)
+
+	local function get_all_terminals()
+		local terminal_chans = {}
+		for _, chan in pairs(vim.api.nvim_list_chans()) do
+			if chan["mode"] == "terminal" and chan["pty"] ~= "" then
+				table.insert(terminal_chans, chan)
+			end
+		end
+		table.sort(terminal_chans, function(left, right)
+			return left["buffer"] < right["buffer"]
+		end)
+		if #terminal_chans == 0 then
+			return nil
+		end
+		return terminal_chans
+	end
+	local terminals = get_all_terminals()
+
+	if terminals and next(terminals) ~= nil and #terminals > 0 then
+		-- Send the command to the first terminal
+		vim.fn.chansend(terminals[1]["id"], command)
+	else
+		-- Open a new terminal and send the command
+		vim.cmd("split | terminal")
+		vim.fn.chansend(vim.b.terminal_job_id, command)
+	end
+
+	-- -- Open a terminal and send the command
+	-- vim.cmd("split | terminal")
+	-- vim.fn.chansend(vim.b.terminal_job_id, command)
+end, opts)
