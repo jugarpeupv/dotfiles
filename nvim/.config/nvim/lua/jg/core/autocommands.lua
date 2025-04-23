@@ -200,6 +200,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "copilot-chat",
   callback = function()
     vim.o.conceallevel = 0
+    vim.o.signcolumn = "no"
   end,
 })
 
@@ -317,3 +318,20 @@ vim.filetype.add({
     zsh = "bash", -- Treat .json files as jsonc
   },
 })
+
+
+-- vim.api.nvim_create_autocmd('User', {
+--   pattern = 'BlinkCmpShow',
+--   callback = function(ev)
+--     local all_buffer = true
+--     for _, item in ipairs(ev.data.items) do
+--       if item.source_name ~= "Buffer" then
+--         all_buffer = false
+--         break
+--       end
+--     end
+--     if #ev.data.items == 1 or all_buffer then
+--       require('blink.cmp.completion.windows.menu').close()
+--     end
+--   end
+-- })

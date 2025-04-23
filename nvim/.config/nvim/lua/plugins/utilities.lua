@@ -1,843 +1,855 @@
 -- return {}
 return {
-  -- with lazy.nvim
-  {
-    'farmergreg/vim-lastplace',
-    event = { "BufNewFile", "BufReadPost" },
-  },
-  {
-    "vim-scripts/applescript.vim",
-    event = { "BufNewFile", "BufReadPre" },
-  },
-  { "tpope/vim-bundler",    event = { "BufNewFile", "BufReadPre" } },
-  -- {
-  --   'vim-ruby/vim-ruby',
-  --   event = { "BufNewFile", "BufReadPre" },
-  -- },
-  {
-    "RRethy/vim-illuminate",
-    event = { "BufNewFile", "BufReadPost" },
-    opts = {
-      -- providers: provider used to get references in the buffer, ordered by priority
-      providers = {
-        "lsp",
-        "treesitter",
-        -- "regex",
-      },
-      -- delay: delay in milliseconds
-      delay = 300,
-      -- filetype_overrides: filetype specific overrides.
-      -- The keys are strings to represent the filetype while the values are tables that
-      -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
-      -- filetype_overrides = {},
-      -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
-      filetypes_denylist = {
-        "oil",
-        "dirvish",
-        "fugitive",
-        "alpha",
-        "NvimTree",
-        "lazy",
-        "neogitstatus",
-        "Trouble",
-        "lir",
-        "Outline",
-        "spectre_panel",
-        "toggleterm",
-        "DressingSelect",
-        "TelescopePrompt",
-        "NvimTree",
-      },
-      -- filetypes_denylist = {
-      --   "TelescopePrompt",
-      --   "NvimTree",
-      --   "dirbuf",
-      --   "dirvish",
-      --   "fugitive",
-      -- },
-      -- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
-      -- You must set filetypes_denylist = {} to override the defaults to allow filetypes_allowlist to take effect
-      -- filetypes_allowlist = {},
-      -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
-      -- See `:help mode()` for possible values
-      -- modes_denylist = { "i" },
-      -- modes_allowlist: modes to illuminate, this is overridden by modes_denylist
-      -- See `:help mode()` for possible values
-      -- modes_allowlist = {},
-      -- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
-      -- Only applies to the 'regex' provider
-      -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
-      -- providers_regex_syntax_denylist = {},
-      -- -- providers_regex_syntax_allowlist: syntax to illuminate, this is overridden by providers_regex_syntax_denylist
-      -- -- Only applies to the 'regex' provider
-      -- -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
-      -- providers_regex_syntax_allowlist = {},
-      -- under_cursor: whether or not to illuminate under the cursor
-      under_cursor = true,
-      -- large_file_cutoff: number of lines at which to use large_file_config
-      -- The `under_cursor` option is disabled when this cutoff is hit
-      large_file_cutoff = 10000,
-      -- large_file_config: config to use for large files (based on large_file_cutoff).
-      -- Supports the same keys passed to .configure
-      -- If nil, vim-illuminate will be disabled for large files.
-      -- large_file_overrides = nil,
-      -- -- min_count_to_highlight: minimum number of matches required to perform highlighting
-      -- min_count_to_highlight = 1,
-      -- should_enable: a callback that overrides all other settings to
-      -- enable/disable illumination. This will be called a lot so don't do
-      -- anything expensive in it.
-      -- should_enable = function(bufnr)
-      --   return true
-      -- end,
-      -- case_insensitive_regex: sets regex case sensitivity
-      case_insensitive_regex = false,
-      -- disable_keymaps: disable default keymaps
-      disable_keymaps = true,
-    },
-    config = function(_, opts)
-      require("illuminate").configure(opts)
-      vim.keymap.set({ "n" }, "<leader>ij", function()
-        require("illuminate").goto_next_reference(true)
-      end, { noremap = true, silent = true })
-
-      vim.keymap.set({ "n" }, "<leader>ik", function()
-        require("illuminate").goto_prev_reference(true)
-      end, { noremap = true, silent = true })
-    end,
-  },
-  -- { 'ii14/neorepl.nvim', cmd = { "Repl" }},
-  {
-    "Yilin-Yang/vim-markbar",
-    event = { "BufReadPre", "BufNewFile" },
+	-- with lazy.nvim
+	{
+		"topaxi/pipeline.nvim",
+		keys = {
+			{ "<leader>cI", "<cmd>Pipeline<cr>", desc = "Open pipeline.nvim" },
+		},
+		-- optional, you can also install and use `yq` instead.
+		build = "make",
+		---@type pipeline.Config
+		opts = {},
+	},
+	{
+		"farmergreg/vim-lastplace",
+		event = { "BufNewFile", "BufReadPost" },
+	},
+	{
+		"vim-scripts/applescript.vim",
+		event = { "BufNewFile", "BufReadPre" },
+	},
+	{ "tpope/vim-bundler", event = { "BufNewFile", "BufReadPre" } },
+	-- {
+	--   'vim-ruby/vim-ruby',
+	--   event = { "BufNewFile", "BufReadPre" },
+	-- },
+	{
+		"RRethy/vim-illuminate",
     enabled = false,
-    config = function()
-      vim.g.markbar_marks_to_display = "QPOMLKJIHGFEDCBA"
-      vim.g.markbar_width = 50
-      vim.g.markbar_context_indent_block = "  "
-      vim.g.markbar_num_lines_context = 0
-    end,
-  },
-  {
-    "LintaoAmons/bookmarks.nvim",
-    enabled = false,
-    -- pin the plugin at specific version for stability
-    -- backup your bookmark sqlite db when there are breaking changes
-    -- tag = "v2.3.0",
-    dependencies = {
-      { "kkharji/sqlite.lua" },
-      { "nvim-telescope/telescope.nvim" },
-      { "stevearc/dressing.nvim" }, -- optional: better UI
-    },
-    config = function()
-      local opts = {}                  -- go to the following link to see all the options in the deafult config file
-      require("bookmarks").setup(opts) -- you must call setup to init sqlite db
-    end,
-  },
-  -- run :BookmarksInfo to see the running status of the plugin
-  {
-    "tomasky/bookmarks.nvim",
-    enabled = false,
-    -- after = "telescope.nvim",
-    -- event = "VimEnter",
-    config = function()
-      require("bookmarks").setup({
-        save_file = vim.fn.expand("$HOME/.bookmarks"), -- bookmarks save file path
-        keywords = {},
-        on_attach = function(bufnr)
-          local bm = require("bookmarks")
-          local map = vim.keymap.set
-          map("n", "mm", bm.bookmark_toggle)    -- add or remove bookmark at current line
-          map("n", "mi", bm.bookmark_ann)       -- add or edit mark annotation at current line
-          map("n", "mc", bm.bookmark_clean)     -- clean all marks in local buffer
-          map("n", "mn", bm.bookmark_next)      -- jump to next mark in local buffer
-          map("n", "mp", bm.bookmark_prev)      -- jump to previous mark in local buffer
-          map("n", "ml", bm.bookmark_list)      -- show marked file list in quickfix window
-          map("n", "mx", bm.bookmark_clear_all) -- removes all bookmarks
-          map("n", "mL", function()
-            require("telescope").extensions.bookmarks.list()
-          end)
-        end,
-      })
-    end,
-  },
-  {
-    "2kabhishek/markit.nvim",
-    enabled = false,
-    event = { "BufReadPre", "BufNewFile" },
-    keys = {
-      {
-        mode = { "n" },
-        -- "<leader>mm",
-        "<leader>mL",
-        function()
-          require("telescope").extensions.markit.bookmarks_list_all()
-        end,
-        { noremap = true, silent = true },
-      },
+		event = { "BufNewFile", "BufReadPost" },
+		opts = {
+			-- providers: provider used to get references in the buffer, ordered by priority
+			providers = {
+				"lsp",
+				"treesitter",
+				-- "regex",
+			},
+			-- delay: delay in milliseconds
+			delay = 300,
+			-- filetype_overrides: filetype specific overrides.
+			-- The keys are strings to represent the filetype while the values are tables that
+			-- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
+			-- filetype_overrides = {},
+			-- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
+			filetypes_denylist = {
+				"grug-far",
+				"oil",
+				"dirvish",
+				"fugitive",
+				"alpha",
+				"NvimTree",
+				"lazy",
+				"neogitstatus",
+				"Trouble",
+				"lir",
+				"Outline",
+				"spectre_panel",
+				"toggleterm",
+				"DressingSelect",
+				"TelescopePrompt",
+				"NvimTree",
+			},
+			-- filetypes_denylist = {
+			--   "TelescopePrompt",
+			--   "NvimTree",
+			--   "dirbuf",
+			--   "dirvish",
+			--   "fugitive",
+			-- },
+			-- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
+			-- You must set filetypes_denylist = {} to override the defaults to allow filetypes_allowlist to take effect
+			-- filetypes_allowlist = {},
+			-- modes_denylist: modes to not illuminate, this overrides modes_allowlist
+			-- See `:help mode()` for possible values
+			-- modes_denylist = { "i" },
+			-- modes_allowlist: modes to illuminate, this is overridden by modes_denylist
+			-- See `:help mode()` for possible values
+			-- modes_allowlist = {},
+			-- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
+			-- Only applies to the 'regex' provider
+			-- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+			-- providers_regex_syntax_denylist = {},
+			-- -- providers_regex_syntax_allowlist: syntax to illuminate, this is overridden by providers_regex_syntax_denylist
+			-- -- Only applies to the 'regex' provider
+			-- -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+			-- providers_regex_syntax_allowlist = {},
+			-- under_cursor: whether or not to illuminate under the cursor
+			under_cursor = true,
+			-- large_file_cutoff: number of lines at which to use large_file_config
+			-- The `under_cursor` option is disabled when this cutoff is hit
+			large_file_cutoff = 10000,
+			-- large_file_config: config to use for large files (based on large_file_cutoff).
+			-- Supports the same keys passed to .configure
+			-- If nil, vim-illuminate will be disabled for large files.
+			-- large_file_overrides = nil,
+			-- -- min_count_to_highlight: minimum number of matches required to perform highlighting
+			-- min_count_to_highlight = 1,
+			-- should_enable: a callback that overrides all other settings to
+			-- enable/disable illumination. This will be called a lot so don't do
+			-- anything expensive in it.
+			-- should_enable = function(bufnr)
+			--   return true
+			-- end,
+			-- case_insensitive_regex: sets regex case sensitivity
+			case_insensitive_regex = false,
+			-- disable_keymaps: disable default keymaps
+			disable_keymaps = true,
+		},
+		config = function(_, opts)
+			require("illuminate").configure(opts)
+			vim.keymap.set({ "n" }, "<leader>ij", function()
+				require("illuminate").goto_next_reference(true)
+			end, { noremap = true, silent = true })
 
-      {
-        mode = { "n" },
-        -- "<leader>mm",
-        "<leader>ml",
-        "<cmd>MarksQFListGlobal<cr>",
-        { noremap = true, silent = true },
-      },
-      -- {
-      --   mode = { "n" },
-      --   "<leader>mp",
-      --   function()
-      --     require("telescope").extensions.markit.bookmarks_list_all({ project_only = true })
-      --   end,
-      --   { noremap = true, silent = true },
-      -- },
-    },
-    config = function()
-      require("markit").setup({
-        -- whether to map keybinds or not. default true
-        default_mappings = true,
-        -- which builtin marks to show. default {}
-        -- builtin_marks = { ".", "<", ">", "^" },
-        -- whether movements cycle back to the beginning/end of buffer. default true
-        cyclic = true,
-        -- whether the shada file is updated after modifying uppercase marks. default false
-        force_write_shada = false,
-        -- how often (in ms) to redraw signs/recompute mark positions.
-        -- higher value means better performance but may cause visual lag,
-        -- while lower value may cause performance penalties. default 150.
-        refresh_interval = 150,
-        -- sign priorities for each type of mark - builtin marks, uppercase marks, lowercase
-        -- marks, and bookmarks.
-        -- can be either a table with all/none of the keys, or a single number, in which case
-        -- the priority applies to all marks.
-        -- default 10.
-        sign_priority = { lower = 10, upper = 15, builtin = 8, bookmark = 20 },
-        -- disables mark tracking for specific filetypes. default {}
-        excluded_filetypes = { "qf", "NvimTree" },
-        -- disables mark tracking for specific buftypes. default {}
-        excluded_buftypes = {},
-        -- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
-        -- sign/virttext. Bookmarks can be used to group together positions and quickly move
-        -- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
-        -- default virt_text is "".
-        bookmark_0 = {
-          sign = "⚑",
-          virt_text = "hello world",
-          -- explicitly prompt for a virtual line annotation when setting a bookmark from this group.
-          -- defaults to false.
-          annotate = false,
-        },
-        mappings = {},
-      })
-    end,
-  },
-  {
-    "OXY2DEV/patterns.nvim",
-    cmd = { "Patterns" },
-  },
-  {
-    "andersevenrud/nvim_context_vt",
-    -- event = { "BufReadPre", "BufNewFile" },
-    opts = {
-      enabled = false,
-    },
-    keys = { { "<leader>co", "<cmd>NvimContextVtToggle<cr>" } },
-  },
-  {
-    "maskudo/devdocs.nvim",
-    enabled = false,
-    lazy = false,
-    dependencies = {
-      "folke/snacks.nvim",
-    },
-    keys = {
-      {
-        "<leader>ho",
-        mode = "n",
-        "<cmd>DevDocs get<cr>",
-        desc = "Get Devdocs",
-      },
-      {
-        "<leader>hi",
-        mode = "n",
-        "<cmd>DevDocs install<cr>",
-        desc = "Install Devdocs",
-      },
-      {
-        "<leader>hv",
-        mode = "n",
-        function()
-          local devdocs = require("devdocs")
-          local installedDocs = devdocs.GetInstalledDocs()
-          vim.ui.select(installedDocs, {}, function(selected)
-            if not selected then
-              return
-            end
-            local docDir = devdocs.GetDocDir(selected)
-            -- prettify the filename as you wish
-            Snacks.picker.files({ cwd = docDir })
-          end)
-        end,
-        desc = "View Devdocs",
-      },
-    },
-    opts = {
-      ensure_installed = {
-        "go",
-        "html",
-        -- "dom",
-        "http",
-        -- "css",
-        -- "javascript",
-        -- "rust",
-        -- some docs such as lua require version number along with the language name
-        -- check `DevDocs install` to view the actual names of the docs
-        "lua~5.1",
-        -- "openjdk~21"
-      },
-    },
-  },
-  -- {
-  --   'girishji/devdocs.vim',
-  --   cmd = { "DevdocsFind", "DevdocsInstall" },
-  -- },
-  -- {
-  --   "yuratomo/w3m.vim",
-  -- },
-  -- {
-  --   "luckasRanarison/nvim-devdocs",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "nvim-telescope/telescope.nvim",
-  --     "nvim-treesitter/nvim-treesitter",
-  --   },
-  --   opts = {},
-  -- },
-  {
-    "ragnarok22/whereami.nvim",
-    cmd = "Whereami",
-  },
-  {
-    "vzze/calculator.nvim",
-    -- cmd = { "Calculate" },
-    event = { "BufReadPost" },
-    config = function()
-      vim.api.nvim_create_user_command(
-        "Calculate",
-        'lua require("calculator").calculate()',
-        { ["range"] = 1, ["nargs"] = 0 }
-      )
-    end,
-  },
-  { "sam4llis/nvim-lua-gf", keys = { "gf" } },
-  -- { "mrjones2014/tldr.nvim", cmd = { "Tldr", "Telescope" } ,dependencies = { "nvim-telescope/telescope.nvim" } },
-  {
-    "tldr-pages/tldr-neovim-extension",
-    -- enabled = false,
-    cmd = { "Tldr", "Telescope" },
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-    },
-    config = function()
-      require("tldr").setup()
-    end,
-  },
-  -- {
-  --   "matthewmturner/rfsee",
-  --   opts = {},
-  --   cmd = { "RFSeeIndex", "RFSee" },
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --   },
-  -- },
-  { "benelori/vim-rfc",      cmd = { "RFC" } },
-  {
-    "troydm/zoomwintab.vim",
-    keys = { { mode = { "n" }, "<c-w>m", "<cmd>ZoomWinTabToggle<CR>" } },
-  },
-  -- { "dhruvasagar/vim-zoom" },
-  {
-    "fasterius/simple-zoom.nvim",
-    enabled = false,
-    config = true,
-    opts = {
-      hide_tabline = false,
-    },
-  },
-  {
-    "vuki656/package-info.nvim",
-    dependencies = { "MunifTanjim/nui.nvim" },
-    ft = { "json", "jsonc" },
-    -- config = function (_, opts)
-    --   require("package-info").setup(opts)
-    -- end,
+			vim.keymap.set({ "n" }, "<leader>ik", function()
+				require("illuminate").goto_prev_reference(true)
+			end, { noremap = true, silent = true })
+		end,
+	},
+	-- { 'ii14/neorepl.nvim', cmd = { "Repl" }},
+	{
+		"Yilin-Yang/vim-markbar",
+		event = { "BufReadPre", "BufNewFile" },
+		enabled = false,
+		config = function()
+			vim.g.markbar_marks_to_display = "QPOMLKJIHGFEDCBA"
+			vim.g.markbar_width = 50
+			vim.g.markbar_context_indent_block = "  "
+			vim.g.markbar_num_lines_context = 0
+		end,
+	},
+	{
+		"LintaoAmons/bookmarks.nvim",
+		enabled = false,
+		-- pin the plugin at specific version for stability
+		-- backup your bookmark sqlite db when there are breaking changes
+		-- tag = "v2.3.0",
+		dependencies = {
+			{ "kkharji/sqlite.lua" },
+			{ "nvim-telescope/telescope.nvim" },
+			{ "stevearc/dressing.nvim" }, -- optional: better UI
+		},
+		config = function()
+			local opts = {} -- go to the following link to see all the options in the deafult config file
+			require("bookmarks").setup(opts) -- you must call setup to init sqlite db
+		end,
+	},
+	-- run :BookmarksInfo to see the running status of the plugin
+	{
+		"tomasky/bookmarks.nvim",
+		enabled = false,
+		-- after = "telescope.nvim",
+		-- event = "VimEnter",
+		config = function()
+			require("bookmarks").setup({
+				save_file = vim.fn.expand("$HOME/.bookmarks"), -- bookmarks save file path
+				keywords = {},
+				on_attach = function(bufnr)
+					local bm = require("bookmarks")
+					local map = vim.keymap.set
+					map("n", "mm", bm.bookmark_toggle) -- add or remove bookmark at current line
+					map("n", "mi", bm.bookmark_ann) -- add or edit mark annotation at current line
+					map("n", "mc", bm.bookmark_clean) -- clean all marks in local buffer
+					map("n", "mn", bm.bookmark_next) -- jump to next mark in local buffer
+					map("n", "mp", bm.bookmark_prev) -- jump to previous mark in local buffer
+					map("n", "ml", bm.bookmark_list) -- show marked file list in quickfix window
+					map("n", "mx", bm.bookmark_clear_all) -- removes all bookmarks
+					map("n", "mL", function()
+						require("telescope").extensions.bookmarks.list()
+					end)
+				end,
+			})
+		end,
+	},
+	{
+		"2kabhishek/markit.nvim",
+		enabled = false,
+		event = { "BufReadPre", "BufNewFile" },
+		keys = {
+			{
+				mode = { "n" },
+				-- "<leader>mm",
+				"<leader>mL",
+				function()
+					require("telescope").extensions.markit.bookmarks_list_all()
+				end,
+				{ noremap = true, silent = true },
+			},
 
-    opts = {
-      -- colors = {
-      --   up_to_date = "#94E2D5", -- Text color for up to date dependency virtual text
-      --   outdated = "#313244", -- Text color for outdated dependency virtual text
-      --   invalid = "#F38BA8", -- Text color for invalid dependency virtual text
-      -- },
-      icons = {
-        enable = true, -- Whether to display icons
-        style = {
-          up_to_date = "|  ", -- Icon for up to date dependencies
-          outdated = "| 󰃰 ", -- Icon for outdated dependencies
-          invalid = "|  ", -- Icon for invalid dependencies
-        },
-      },
-      autostart = false,             -- Whether to autostart when `package.json` is opened
-      hide_up_to_date = false,       -- It hides up to date versions when displaying virtual text
-      hide_unstable_versions = true, -- It hides unstable versions from version list e.g next-11.1.3-canary3
-      -- Can be `npm`, `yarn`, or `pnpm`. Used for `delete`, `install` etc...
-      -- The plugin will try to auto-detect the package manager based on
-      -- `yarn.lock` or `package-lock.json`. If none are found it will use the
-      -- provided one, if nothing is provided it will use `yarn`
-      package_manager = "npm",
-    },
-    config = function(_, opts)
-      require("package-info").setup(opts)
-      -- manually register them
-      vim.cmd("highlight PackageInfoUpToDateVersion guifg=#94E2D5 guibg=#394b70")
-      vim.cmd("highlight PackageInfoOutdatedVersion guifg=#747ebd guibg=#394b70")
-      vim.cmd("highlight PackageInfoInvalidVersion guifg=#F38BA8 guibg=#394b70")
+			{
+				mode = { "n" },
+				-- "<leader>mm",
+				"<leader>ml",
+				"<cmd>MarksQFListGlobal<cr>",
+				{ noremap = true, silent = true },
+			},
+			-- {
+			--   mode = { "n" },
+			--   "<leader>mp",
+			--   function()
+			--     require("telescope").extensions.markit.bookmarks_list_all({ project_only = true })
+			--   end,
+			--   { noremap = true, silent = true },
+			-- },
+		},
+		config = function()
+			require("markit").setup({
+				-- whether to map keybinds or not. default true
+				default_mappings = true,
+				-- which builtin marks to show. default {}
+				-- builtin_marks = { ".", "<", ">", "^" },
+				-- whether movements cycle back to the beginning/end of buffer. default true
+				cyclic = true,
+				-- whether the shada file is updated after modifying uppercase marks. default false
+				force_write_shada = false,
+				-- how often (in ms) to redraw signs/recompute mark positions.
+				-- higher value means better performance but may cause visual lag,
+				-- while lower value may cause performance penalties. default 150.
+				refresh_interval = 150,
+				-- sign priorities for each type of mark - builtin marks, uppercase marks, lowercase
+				-- marks, and bookmarks.
+				-- can be either a table with all/none of the keys, or a single number, in which case
+				-- the priority applies to all marks.
+				-- default 10.
+				sign_priority = { lower = 10, upper = 15, builtin = 8, bookmark = 20 },
+				-- disables mark tracking for specific filetypes. default {}
+				excluded_filetypes = { "qf", "NvimTree" },
+				-- disables mark tracking for specific buftypes. default {}
+				excluded_buftypes = {},
+				-- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
+				-- sign/virttext. Bookmarks can be used to group together positions and quickly move
+				-- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
+				-- default virt_text is "".
+				bookmark_0 = {
+					sign = "⚑",
+					virt_text = "hello world",
+					-- explicitly prompt for a virtual line annotation when setting a bookmark from this group.
+					-- defaults to false.
+					annotate = false,
+				},
+				mappings = {},
+			})
+		end,
+	},
+	{
+		"OXY2DEV/patterns.nvim",
+		cmd = { "Patterns" },
+	},
+	{
+		"andersevenrud/nvim_context_vt",
+		-- event = { "BufReadPre", "BufNewFile" },
+		opts = {
+			enabled = false,
+		},
+		keys = { { "<leader>co", "<cmd>NvimContextVtToggle<cr>" } },
+	},
+	{
+		"maskudo/devdocs.nvim",
+		enabled = false,
+		lazy = false,
+		dependencies = {
+			"folke/snacks.nvim",
+		},
+		keys = {
+			{
+				"<leader>ho",
+				mode = "n",
+				"<cmd>DevDocs get<cr>",
+				desc = "Get Devdocs",
+			},
+			{
+				"<leader>hi",
+				mode = "n",
+				"<cmd>DevDocs install<cr>",
+				desc = "Install Devdocs",
+			},
+			{
+				"<leader>hv",
+				mode = "n",
+				function()
+					local devdocs = require("devdocs")
+					local installedDocs = devdocs.GetInstalledDocs()
+					vim.ui.select(installedDocs, {}, function(selected)
+						if not selected then
+							return
+						end
+						local docDir = devdocs.GetDocDir(selected)
+						-- prettify the filename as you wish
+						Snacks.picker.files({ cwd = docDir })
+					end)
+				end,
+				desc = "View Devdocs",
+			},
+		},
+		opts = {
+			ensure_installed = {
+				"go",
+				"html",
+				-- "dom",
+				"http",
+				-- "css",
+				-- "javascript",
+				-- "rust",
+				-- some docs such as lua require version number along with the language name
+				-- check `DevDocs install` to view the actual names of the docs
+				"lua~5.1",
+				-- "openjdk~21"
+			},
+		},
+	},
+	-- {
+	--   'girishji/devdocs.vim',
+	--   cmd = { "DevdocsFind", "DevdocsInstall" },
+	-- },
+	-- {
+	--   "yuratomo/w3m.vim",
+	-- },
+	-- {
+	--   "luckasRanarison/nvim-devdocs",
+	--   dependencies = {
+	--     "nvim-lua/plenary.nvim",
+	--     "nvim-telescope/telescope.nvim",
+	--     "nvim-treesitter/nvim-treesitter",
+	--   },
+	--   opts = {},
+	-- },
+	{
+		"ragnarok22/whereami.nvim",
+		cmd = "Whereami",
+	},
+	{
+		"vzze/calculator.nvim",
+		-- cmd = { "Calculate" },
+		event = { "BufReadPost" },
+		config = function()
+			vim.api.nvim_create_user_command(
+				"Calculate",
+				'lua require("calculator").calculate()',
+				{ ["range"] = 1, ["nargs"] = 0 }
+			)
+		end,
+	},
+	{ "sam4llis/nvim-lua-gf", keys = { "gf" } },
+	-- { "mrjones2014/tldr.nvim", cmd = { "Tldr", "Telescope" } ,dependencies = { "nvim-telescope/telescope.nvim" } },
+	{
+		"tldr-pages/tldr-neovim-extension",
+		-- enabled = false,
+		cmd = { "Tldr", "Telescope" },
+		dependencies = {
+			"nvim-telescope/telescope.nvim",
+		},
+		config = function()
+			require("tldr").setup()
+		end,
+	},
+	-- {
+	--   "matthewmturner/rfsee",
+	--   opts = {},
+	--   cmd = { "RFSeeIndex", "RFSee" },
+	--   dependencies = {
+	--     "nvim-lua/plenary.nvim",
+	--   },
+	-- },
+	{ "benelori/vim-rfc", cmd = { "RFC" } },
+	{
+		"troydm/zoomwintab.vim",
+		keys = { { mode = { "n" }, "<c-w>m", "<cmd>ZoomWinTabToggle<CR>" } },
+	},
+	-- { "dhruvasagar/vim-zoom" },
+	{
+		"fasterius/simple-zoom.nvim",
+		enabled = false,
+		config = true,
+		opts = {
+			hide_tabline = false,
+		},
+	},
+	{
+		"vuki656/package-info.nvim",
+		dependencies = { "MunifTanjim/nui.nvim" },
+		ft = { "json", "jsonc" },
+		-- config = function (_, opts)
+		--   require("package-info").setup(opts)
+		-- end,
 
-      -- Show dependency versions
-      -- vim.keymap.set({ "n" }, "<leader>ns", require("package-info").show, { silent = true, noremap = true })
-      -- vim.api.nvim_set_keymap(
-      --   "n",
-      --   "<leader>nr",
-      --   "<cmd>lua require('package-info').show({ force = true })<cr>",
-      --   { silent = true, noremap = true }
-      -- )
+		opts = {
+			-- colors = {
+			--   up_to_date = "#94E2D5", -- Text color for up to date dependency virtual text
+			--   outdated = "#313244", -- Text color for outdated dependency virtual text
+			--   invalid = "#F38BA8", -- Text color for invalid dependency virtual text
+			-- },
+			icons = {
+				enable = true, -- Whether to display icons
+				style = {
+					up_to_date = "|  ", -- Icon for up to date dependencies
+					outdated = "| 󰃰 ", -- Icon for outdated dependencies
+					invalid = "|  ", -- Icon for invalid dependencies
+				},
+			},
+			autostart = false, -- Whether to autostart when `package.json` is opened
+			hide_up_to_date = false, -- It hides up to date versions when displaying virtual text
+			hide_unstable_versions = true, -- It hides unstable versions from version list e.g next-11.1.3-canary3
+			-- Can be `npm`, `yarn`, or `pnpm`. Used for `delete`, `install` etc...
+			-- The plugin will try to auto-detect the package manager based on
+			-- `yarn.lock` or `package-lock.json`. If none are found it will use the
+			-- provided one, if nothing is provided it will use `yarn`
+			package_manager = "npm",
+		},
+		config = function(_, opts)
+			require("package-info").setup(opts)
+			-- manually register them
+			vim.cmd("highlight PackageInfoUpToDateVersion guifg=#94E2D5 guibg=#394b70")
+			vim.cmd("highlight PackageInfoOutdatedVersion guifg=#747ebd guibg=#394b70")
+			vim.cmd("highlight PackageInfoInvalidVersion guifg=#F38BA8 guibg=#394b70")
 
-      -- -- Hide dependency versions
-      -- vim.keymap.set({ "n" }, "<leader>nh", require("package-info").hide, { silent = true, noremap = true })
+			-- Show dependency versions
+			-- vim.keymap.set({ "n" }, "<leader>ns", require("package-info").show, { silent = true, noremap = true })
+			-- vim.api.nvim_set_keymap(
+			--   "n",
+			--   "<leader>nr",
+			--   "<cmd>lua require('package-info').show({ force = true })<cr>",
+			--   { silent = true, noremap = true }
+			-- )
 
-      -- Toggle dependency versions
-      vim.keymap.set({ "n" }, "<leader>nt", require("package-info").toggle, { silent = true, noremap = true })
+			-- -- Hide dependency versions
+			-- vim.keymap.set({ "n" }, "<leader>nh", require("package-info").hide, { silent = true, noremap = true })
 
-      -- vim.api.nvim_set_keymap(
-      --   "n",
-      --   "<leader>nt",
-      --   "<cmd>lua require('package-info').toggle({ force = true })<cr>",
-      --   { silent = true, noremap = true }
-      -- )
+			-- Toggle dependency versions
+			vim.keymap.set({ "n" }, "<leader>nt", require("package-info").toggle, { silent = true, noremap = true })
 
-      -- Update dependency on the line
-      vim.keymap.set({ "n" }, "<leader>nu", require("package-info").update, { silent = true, noremap = true })
+			-- vim.api.nvim_set_keymap(
+			--   "n",
+			--   "<leader>nt",
+			--   "<cmd>lua require('package-info').toggle({ force = true })<cr>",
+			--   { silent = true, noremap = true }
+			-- )
 
-      -- Delete dependency on the line
-      vim.keymap.set({ "n" }, "<leader>nd", require("package-info").delete, { silent = true, noremap = true })
+			-- Update dependency on the line
+			vim.keymap.set({ "n" }, "<leader>nu", require("package-info").update, { silent = true, noremap = true })
 
-      -- Install a new dependency
-      -- vim.keymap.set({ "n" }, "<leader>ni", require("package-info").install, { silent = true, noremap = true })
+			-- Delete dependency on the line
+			vim.keymap.set({ "n" }, "<leader>nd", require("package-info").delete, { silent = true, noremap = true })
 
-      -- Install a different dependency version
-      vim.keymap.set(
-        { "n" },
-        "<leader>nc",
-        require("package-info").change_version,
-        { silent = true, noremap = true }
-      )
-    end,
-  },
-  {
-    "philosofonusus/ecolog.nvim",
-    enabled = true,
-    -- commit = "d92107c88febabc2f51190339cabf0bc5e072bd9",
-    -- dependencies = {
-    --   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
-    --   "nvim-tree/nvim-tree.lua"
-    -- },
-    event = { "BufReadPre", "BufNewFile" },
-    -- Optional: you can add some keybindings
-    -- (I personally use lspsaga so check out lspsaga integration or lsp integration for a smoother experience without separate keybindings)
-    keys = {
-      { "<leader>eg", "<cmd>EcologGoto<cr>",            desc = "Go to env file" },
-      { "<leader>ep", "<cmd>EcologPeek<cr>",            desc = "Ecolog peek variable" },
-      { "<leader>es", "<cmd>EcologSelect<cr>",          desc = "Switch env file" },
-      { "<leader>el", "<cmd>EcologShelterLinePeek<cr>", desc = "Ecolog Shelter Line Peek" },
-      { "<leader>et", "<cmd>EcologShelterToggle<cr>",   desc = "Ecolog Shelter Line Peek" },
-    },
-    lazy = true,
-    opts = {
-      integrations = {
-        -- WARNING: for both cmp integrations see readme section below
-        files = true,
-        nvim_cmp = true, -- If you dont plan to use nvim_cmp set to false, enabled by default
-        -- If you are planning to use blink cmp uncomment this line
-        -- blink_cmp = true,
-      },
-      -- Enables shelter mode for sensitive values
-      shelter = {
-        configuration = {
-          partial_mode = false,
-          skip_comments = false
-        },
-        modules = {
-          cmp = true,                  -- Mask values in completion
-          peek = true,                 -- Mask values in peek view
-          telescope = true,            -- Mask values in telescope
-          telescope_previewer = true, -- Mask values in telescope preview buffers
-          files = {
-            shelter_on_leave = false,   -- Control automatic re-enabling of shelter when leaving buffer
-            disable_cmp = false,        -- Disable completion in sheltered buffers (default: true)
-          },
-        },
-      },
-      -- true by default, enables built-in types (database_url, url, etc.)
-      types = true,
-      path = vim.fn.getcwd(),                -- Path to search for .env files
-      preferred_environment = "development", -- Optional: prioritize specific env files
-      env_file_patterns = {
-        "*.env*",
-        ".env",
-        ".env.*",
-        "config/env.*",
-        ".env.local.*",
-        -- "*.zshrc",
-        -- ".config/zshrc/*.zshrc",
-        -- "/Users/jgarcia/.config/zshrc/.zshrc",
-        -- ".config/zshrc/.zshrc",
-        ".config/zshrc/.env.*",
-      },
-      -- env_file_pattern = {
-      --   ".env",
-      --   "^%.env%.%w+$",    -- Matches .env.development, .env.production, etc.
-      --   "^config/env%.%w+$", -- Matches config/env.development, config/env.production, etc.
-      --   "^%.env%.local%.%w+$", -- Matches .env.local.development, .env.local.production, etc.
-      --   ".+%.zsh$",
-      --   ".+%.zshrc$",
-      --   "^.config/zshrc/.+%.zshrc$",
-      --   "/Users/jgarcia/.config/zshrc/.zshrc",
-      --   "^%.config/zshrc/%.zshrc$", -- Matches .config/zshrc/.zshrc
-      --   "^.config/zshrc/^%.env%.%w+$", -- Matches config/env.development, config/env.production, etc.
-      -- },
-      -- Controls how environment variables are extracted from code and how cmp works
-      provider_patterns = true, -- true by default, when false will not check provider patterns
-    },
+			-- Install a new dependency
+			-- vim.keymap.set({ "n" }, "<leader>ni", require("package-info").install, { silent = true, noremap = true })
 
-    -- opts = {
-    --   integrations = {
-    --     lsp = false,
-    --     fzf = true,
-    --   },
-    --   -- Enables shelter mode for sensitive values
-    --   shelter = {
-    --     configuration = {
-    --       partial_mode = false, -- false by default, disables partial mode, for more control check out shelter partial mode
-    --       mask_char = "*", -- Character used for masking
-    --       -- patterns = {
-    --       --   ["*_KEY"] = "full", -- Always fully mask API keys
-    --       --   ["*_TOKEN"] = "full", -- Always fully mask API keys
-    --       --   ["*_PAT"] = "full", -- Always fully mask API keys
-    --       --   ["*_KEY_*"] = "full", -- Always fully mask API keys
-    --       -- },
-    --     },
-    --     modules = {
-    --       cmp = true,  -- Mask values in completion
-    --       peek = false, -- Mask values in peek view
-    --       files = true, -- Mask values in files
-    --       telescope = true, -- Mask values in telescope
-    --     },
-    --   },
-    --   -- true by default, enables built-in types (database_url, url, etc.)
-    --   types = true,
-    --   path = vim.fn.getcwd(), -- Path to search for .env files
-    --   env_file_pattern = {
-    --     "^%.env%.%w+$",       -- Matches .env.development, .env.production, etc.
-    --     "^config/env%.%w+$",  -- Matches config/env.development, config/env.production, etc.
-    --     "^%.env%.local%.%w+$", -- Matches .env.local.development, .env.local.production, etc.
-    --     ".+%.zsh$",
-    --     ".+%.zshrc$",
-    --     "^.config/zshrc/.+%.zshrc$",
-    --     "/Users/jgarcia/.config/zshrc/.zshrc",
-    --     "^%.config/zshrc/%.zshrc$", -- Matches .config/zshrc/.zshrc
-    --     "^.config/zshrc/^%.env%.%w+$",  -- Matches config/env.development, config/env.production, etc.
-    --   },
-    --   preferred_environment = "development", -- Optional: prioritize specific env files
-    -- },
-  },
+			-- Install a different dependency version
+			vim.keymap.set(
+				{ "n" },
+				"<leader>nc",
+				require("package-info").change_version,
+				{ silent = true, noremap = true }
+			)
+		end,
+	},
+	{
+		"philosofonusus/ecolog.nvim",
+		enabled = true,
+		-- commit = "d92107c88febabc2f51190339cabf0bc5e072bd9",
+		-- dependencies = {
+		--   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
+		--   "nvim-tree/nvim-tree.lua"
+		-- },
+		event = { "BufReadPre", "BufNewFile" },
+		-- Optional: you can add some keybindings
+		-- (I personally use lspsaga so check out lspsaga integration or lsp integration for a smoother experience without separate keybindings)
+		keys = {
+			{ "<leader>eg", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
+			{ "<leader>ep", "<cmd>EcologPeek<cr>", desc = "Ecolog peek variable" },
+			{ "<leader>es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
+			{ "<leader>el", "<cmd>EcologShelterLinePeek<cr>", desc = "Ecolog Shelter Line Peek" },
+			{ "<leader>et", "<cmd>EcologShelterToggle<cr>", desc = "Ecolog Shelter Line Peek" },
+		},
+		lazy = true,
+		opts = {
+			integrations = {
+				-- WARNING: for both cmp integrations see readme section below
+				files = true,
+				nvim_cmp = true, -- If you dont plan to use nvim_cmp set to false, enabled by default
+				-- If you are planning to use blink cmp uncomment this line
+				-- blink_cmp = true,
+			},
+			-- Enables shelter mode for sensitive values
+			shelter = {
+				configuration = {
+					partial_mode = false,
+					skip_comments = false,
+				},
+				modules = {
+					cmp = true, -- Mask values in completion
+					peek = true, -- Mask values in peek view
+					telescope = true, -- Mask values in telescope
+					telescope_previewer = true, -- Mask values in telescope preview buffers
+					files = {
+						shelter_on_leave = false, -- Control automatic re-enabling of shelter when leaving buffer
+						disable_cmp = false, -- Disable completion in sheltered buffers (default: true)
+					},
+				},
+			},
+			-- true by default, enables built-in types (database_url, url, etc.)
+			types = true,
+			path = vim.fn.getcwd(), -- Path to search for .env files
+			preferred_environment = "development", -- Optional: prioritize specific env files
+			env_file_patterns = {
+				"*.env*",
+				".env",
+				".env.*",
+				"config/env.*",
+				".env.local.*",
+				-- "*.zshrc",
+				-- ".config/zshrc/*.zshrc",
+				-- "/Users/jgarcia/.config/zshrc/.zshrc",
+				-- ".config/zshrc/.zshrc",
+				".config/zshrc/.env.*",
+			},
+			-- env_file_pattern = {
+			--   ".env",
+			--   "^%.env%.%w+$",    -- Matches .env.development, .env.production, etc.
+			--   "^config/env%.%w+$", -- Matches config/env.development, config/env.production, etc.
+			--   "^%.env%.local%.%w+$", -- Matches .env.local.development, .env.local.production, etc.
+			--   ".+%.zsh$",
+			--   ".+%.zshrc$",
+			--   "^.config/zshrc/.+%.zshrc$",
+			--   "/Users/jgarcia/.config/zshrc/.zshrc",
+			--   "^%.config/zshrc/%.zshrc$", -- Matches .config/zshrc/.zshrc
+			--   "^.config/zshrc/^%.env%.%w+$", -- Matches config/env.development, config/env.production, etc.
+			-- },
+			-- Controls how environment variables are extracted from code and how cmp works
+			provider_patterns = true, -- true by default, when false will not check provider patterns
+		},
 
-  { "heavenshell/vim-jsdoc", cmd = { "JsDoc" } },
-  {
-    "barrett-ruth/live-server.nvim",
-    build = "pnpm add -g live-server",
-    keys = { {
-      "<leader>le",
-      "<cmd>LiveServerToggle<CR>",
-    } },
-    cmd = { "LiveServerStart", "LiveServerStop", "LiveServerToggle" },
-    config = true,
-  },
-  -- {
-  --   "alexxGmZ/Md2Pdf",
-  --   cmd = "Md2Pdf"
-  -- },
+		-- opts = {
+		--   integrations = {
+		--     lsp = false,
+		--     fzf = true,
+		--   },
+		--   -- Enables shelter mode for sensitive values
+		--   shelter = {
+		--     configuration = {
+		--       partial_mode = false, -- false by default, disables partial mode, for more control check out shelter partial mode
+		--       mask_char = "*", -- Character used for masking
+		--       -- patterns = {
+		--       --   ["*_KEY"] = "full", -- Always fully mask API keys
+		--       --   ["*_TOKEN"] = "full", -- Always fully mask API keys
+		--       --   ["*_PAT"] = "full", -- Always fully mask API keys
+		--       --   ["*_KEY_*"] = "full", -- Always fully mask API keys
+		--       -- },
+		--     },
+		--     modules = {
+		--       cmp = true,  -- Mask values in completion
+		--       peek = false, -- Mask values in peek view
+		--       files = true, -- Mask values in files
+		--       telescope = true, -- Mask values in telescope
+		--     },
+		--   },
+		--   -- true by default, enables built-in types (database_url, url, etc.)
+		--   types = true,
+		--   path = vim.fn.getcwd(), -- Path to search for .env files
+		--   env_file_pattern = {
+		--     "^%.env%.%w+$",       -- Matches .env.development, .env.production, etc.
+		--     "^config/env%.%w+$",  -- Matches config/env.development, config/env.production, etc.
+		--     "^%.env%.local%.%w+$", -- Matches .env.local.development, .env.local.production, etc.
+		--     ".+%.zsh$",
+		--     ".+%.zshrc$",
+		--     "^.config/zshrc/.+%.zshrc$",
+		--     "/Users/jgarcia/.config/zshrc/.zshrc",
+		--     "^%.config/zshrc/%.zshrc$", -- Matches .config/zshrc/.zshrc
+		--     "^.config/zshrc/^%.env%.%w+$",  -- Matches config/env.development, config/env.production, etc.
+		--   },
+		--   preferred_environment = "development", -- Optional: prioritize specific env files
+		-- },
+	},
 
-  -- {
-  --   "andrewferrier/wrapping.nvim",
-  --   config = function()
-  --     require("wrapping").setup()
-  --   end,
-  -- },
-  {
-    "danymat/neogen",
-    keys = {
+	{ "heavenshell/vim-jsdoc", cmd = { "JsDoc" } },
+	{
+		"barrett-ruth/live-server.nvim",
+		build = "pnpm add -g live-server",
+		keys = { {
+			"<leader>le",
+			"<cmd>LiveServerToggle<CR>",
+		} },
+		cmd = { "LiveServerStart", "LiveServerStop", "LiveServerToggle" },
+		config = true,
+	},
+	-- {
+	--   "alexxGmZ/Md2Pdf",
+	--   cmd = "Md2Pdf"
+	-- },
 
-      -- vim.keymap.set("n", "<leader>ns", vim.cmd.Neogen)
-      {
-        "<leader>nG",
-        function()
-          require("neogen").generate()
-        end,
-      },
-    },
-    config = function()
-      require("neogen").setup({ enabled = true, snippet_engine = "luasnip" })
-    end,
+	-- {
+	--   "andrewferrier/wrapping.nvim",
+	--   config = function()
+	--     require("wrapping").setup()
+	--   end,
+	-- },
+	{
+		"danymat/neogen",
+		keys = {
 
-    -- Uncomment next line if you want to follow only stable versions
-    -- version = "*"
-  },
-  -- {
-  --   "chentoast/marks.nvim",
-  --   event = "VeryLazy",
-  --   opts = {},
-  -- },
-  -- {
-  --   "MattesGroeger/vim-bookmarks",
-  --   config = function()
-  --     vim.g.bookmark_save_per_working_dir = 1
-  --     vim.g.bookmark_auto_save = 1
-  --     vim.g.bookmark_sign = ''
-  --     vim.cmd([[highlight BookmarkSign guifg=#89B4FA]])
-  --     vim.cmd([[" Finds the Git super-project directory.
-  --       function! g:BMWorkDirFileLocation()
-  --           let filename = 'bookmarks'
-  --           let location = ''
-  --           if isdirectory('.git')
-  --               " Current work dir is git's work tree
-  --               let location = getcwd().'/.git'
-  --           else
-  --               " Look upwards (at parents) for a directory named '.git'
-  --               let location = finddir('info', '.;')
-  --           endif
-  --           if len(location) > 0
-  --               return location.'/'.filename
-  --           else
-  --               return getcwd().'/.'.filename
-  --           endif
-  --       endfunction]])
-  --     vim.keymap.set("n", "<leader>mm", "<cmd>Telescope vim_bookmarks all<cr>", { noremap = true, silent = true })
-  --   end,
-  -- },
-  {
-    "hedyhli/outline.nvim",
-    lazy = true,
-    cmd = { "Outline", "OutlineOpen" },
-    keys = { -- Example mapping to toggle outline
-      { "<leader>ot", "<cmd>Outline<CR>", desc = "Toggle outline" },
-    },
-    opts = {
-      -- Your setup opts here
-    },
-  },
-  {
-    "gennaro-tedesco/nvim-jqx",
-    event = { "BufReadPost" },
-    enabled = false,
-    ft = { "json", "yaml" },
-  },
-  {
-    "sontungexpt/url-open",
-    -- event = "VeryLazy",
-    keys = { { "gx", "<esc>:URLOpenUnderCursor<cr>" } },
-    cmd = "URLOpenUnderCursor",
-    config = function()
-      local status_ok, url_open = pcall(require, "url-open")
-      if not status_ok then
-        return
-      end
-      url_open.setup({
-        highlight_url = {
-          all_urls = {
-            enabled = false,
-            fg = "#21d5ff", -- "text" or "#rrggbb"
-            -- fg = "text", -- text will set underline same color with text
-            bg = nil,       -- nil or "#rrggbb"
-            underline = true,
-          },
-          cursor_move = {
-            enabled = false,
-            fg = "#199eff", -- "text" or "#rrggbb"
-            -- fg = "text", -- text will set underline same color with text
-            bg = nil,       -- nil or "#rrggbb"
-            underline = true,
-          },
-        },
-      })
-    end,
-  },
-  -- https://github.com/johmsalas/text-case.nvim
-  -- { "VidocqH/data-viewer.nvim" },
-  -- { "Djancyp/regex.nvim" },
-  -- {"https://github.com/gabrielpoca/replacer.nvim"},
-  -- { "Wansmer/sibling-swap.nvim" },
-  -- { "nvim-spider" }
-  -- { "airblade/vim-matchquote" },
-  -- { "ton/vim-bufsurf" },
-  { "taybart/b64.nvim",         cmd = { "B64Encode", "B64Decode" } },
-  {
-    "lambdalisue/vim-suda",
-    cmd = { "SudaWrite", "SudaRead" },
-  },
-  {
-    "chrisgrieser/nvim-spider",
-    keys = {
-      {
-        "w",
-        "<cmd>lua require('spider').motion('w')<CR>",
-        mode = { "n", "o", "x" },
-      },
+			-- vim.keymap.set("n", "<leader>ns", vim.cmd.Neogen)
+			{
+				"<leader>nG",
+				function()
+					require("neogen").generate()
+				end,
+			},
+		},
+		config = function()
+			require("neogen").setup({ enabled = true, snippet_engine = "luasnip" })
+		end,
 
-      {
-        "b",
-        "<cmd>lua require('spider').motion('b')<CR>",
-        mode = { "n", "o", "x" },
-      },
+		-- Uncomment next line if you want to follow only stable versions
+		-- version = "*"
+	},
+	-- {
+	--   "chentoast/marks.nvim",
+	--   event = "VeryLazy",
+	--   opts = {},
+	-- },
+	-- {
+	--   "MattesGroeger/vim-bookmarks",
+	--   config = function()
+	--     vim.g.bookmark_save_per_working_dir = 1
+	--     vim.g.bookmark_auto_save = 1
+	--     vim.g.bookmark_sign = ''
+	--     vim.cmd([[highlight BookmarkSign guifg=#89B4FA]])
+	--     vim.cmd([[" Finds the Git super-project directory.
+	--       function! g:BMWorkDirFileLocation()
+	--           let filename = 'bookmarks'
+	--           let location = ''
+	--           if isdirectory('.git')
+	--               " Current work dir is git's work tree
+	--               let location = getcwd().'/.git'
+	--           else
+	--               " Look upwards (at parents) for a directory named '.git'
+	--               let location = finddir('info', '.;')
+	--           endif
+	--           if len(location) > 0
+	--               return location.'/'.filename
+	--           else
+	--               return getcwd().'/.'.filename
+	--           endif
+	--       endfunction]])
+	--     vim.keymap.set("n", "<leader>mm", "<cmd>Telescope vim_bookmarks all<cr>", { noremap = true, silent = true })
+	--   end,
+	-- },
+	{
+		"hedyhli/outline.nvim",
+		lazy = true,
+		cmd = { "Outline", "OutlineOpen" },
+		keys = { -- Example mapping to toggle outline
+			{ "<leader>ot", "<cmd>Outline<CR>", desc = "Toggle outline" },
+		},
+		opts = {
+			-- Your setup opts here
+		},
+	},
+	{
+		"gennaro-tedesco/nvim-jqx",
+		event = { "BufReadPost" },
+		enabled = false,
+		ft = { "json", "yaml" },
+	},
+	{
+		"sontungexpt/url-open",
+		-- event = "VeryLazy",
+		keys = { { "gx", "<esc>:URLOpenUnderCursor<cr>" } },
+		cmd = "URLOpenUnderCursor",
+		config = function()
+			local status_ok, url_open = pcall(require, "url-open")
+			if not status_ok then
+				return
+			end
+			url_open.setup({
+				highlight_url = {
+					all_urls = {
+						enabled = false,
+						fg = "#21d5ff", -- "text" or "#rrggbb"
+						-- fg = "text", -- text will set underline same color with text
+						bg = nil, -- nil or "#rrggbb"
+						underline = true,
+					},
+					cursor_move = {
+						enabled = false,
+						fg = "#199eff", -- "text" or "#rrggbb"
+						-- fg = "text", -- text will set underline same color with text
+						bg = nil, -- nil or "#rrggbb"
+						underline = true,
+					},
+				},
+			})
+		end,
+	},
+	-- https://github.com/johmsalas/text-case.nvim
+	-- { "VidocqH/data-viewer.nvim" },
+	-- { "Djancyp/regex.nvim" },
+	-- {"https://github.com/gabrielpoca/replacer.nvim"},
+	-- { "Wansmer/sibling-swap.nvim" },
+	-- { "nvim-spider" }
+	-- { "airblade/vim-matchquote" },
+	-- { "ton/vim-bufsurf" },
+	{ "taybart/b64.nvim", cmd = { "B64Encode", "B64Decode" } },
+	{
+		"lambdalisue/vim-suda",
+		cmd = { "SudaWrite", "SudaRead" },
+	},
+	{
+		"chrisgrieser/nvim-spider",
+		keys = {
+			{
+				"w",
+				"<cmd>lua require('spider').motion('w')<CR>",
+				mode = { "n", "o", "x" },
+			},
 
-      {
-        "e",
-        "<cmd>lua require('spider').motion('e')<CR>",
-        mode = { "n", "o", "x" },
-      },
-    },
-    opts = {
-      skipInsignificantPunctuation = true,
-      consistentOperatorPending = true, -- see "Consistent Operator-pending Mode" in the README
-      subwordMovement = true,
-      customPatterns = {},              -- check "Custom Movement Patterns" in the README for details
-    },
-  },
-  -- { https://github.com/axieax/urlview.nvim }
-  { "dstein64/vim-startuptime", cmd = { "StartupTime" } },
-  -- { "dstein64/vim-startuptime", event = "VeryLazy" },
-  {
-    "christoomey/vim-tmux-navigator",
-    -- event = "VeryLazy",
-    commit = "d847ea942a5bb4d4fab6efebc9f30d787fd96e65",
-    keys = { "<C-h>", "<C-j>", "<C-k>", "<C-l>" },
-    config = function()
-      vim.g.tmux_navigator_disable_when_zoomed = 1
-      vim.g.tmux_navigator_preserve_zoom = 1
-    end,
-  },
+			{
+				"b",
+				"<cmd>lua require('spider').motion('b')<CR>",
+				mode = { "n", "o", "x" },
+			},
 
-  { "wellle/targets.vim",      event = { "BufReadPost", "BufNewFile" } },
-  -- {
-  --   "ibhagwan/fzf-lua",
-  --   -- optional for icon support
-  --   dependencies = { "nvim-tree/nvim-web-devicons" },
-  --   event = { "BufReadPost" },
-  --   config = function()
-  --     -- calling `setup` is optional for customization
-  --     require("fzf-lua").setup({})
-  --   end,
-  -- },
-  {
-    "junegunn/fzf",
-    dependencies = { "junegunn/fzf.vim" },
-    build = "./install --all",
-    event = { "BufReadPost" },
-    cmd = { "G" },
-    keys = {
+			{
+				"e",
+				"<cmd>lua require('spider').motion('e')<CR>",
+				mode = { "n", "o", "x" },
+			},
+		},
+		opts = {
+			skipInsignificantPunctuation = true,
+			consistentOperatorPending = true, -- see "Consistent Operator-pending Mode" in the README
+			subwordMovement = true,
+			customPatterns = {}, -- check "Custom Movement Patterns" in the README for details
+		},
+	},
+	-- { https://github.com/axieax/urlview.nvim }
+	{ "dstein64/vim-startuptime", cmd = { "StartupTime" } },
+	-- { "dstein64/vim-startuptime", event = "VeryLazy" },
+	{
+		"christoomey/vim-tmux-navigator",
+		-- event = "VeryLazy",
+		commit = "d847ea942a5bb4d4fab6efebc9f30d787fd96e65",
+		keys = { "<C-h>", "<C-j>", "<C-k>", "<C-l>" },
+		config = function()
+			vim.g.tmux_navigator_disable_when_zoomed = 1
+			vim.g.tmux_navigator_preserve_zoom = 1
+		end,
+	},
 
-      { "<leader>jl", "<cmd>Jumps<CR>" },
-      {
-        mode = { "n" },
-        "<leader>ga",
-        "<cmd>Git add .<cr>",
-        { silent = true, noremap = true },
-      },
-      {
-        mode = { "n" },
-        "<Leader>gS",
-        "<cmd>Git stash<cr>",
-        { silent = true, noremap = true },
-      },
-      {
-        mode = { "n" },
-        "<Leader>gO",
-        "<cmd>Git! stash pop<cr>",
-        { silent = true, noremap = true },
-      },
+	{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
+	-- {
+	--   "ibhagwan/fzf-lua",
+	--   -- optional for icon support
+	--   dependencies = { "nvim-tree/nvim-web-devicons" },
+	--   event = { "BufReadPost" },
+	--   config = function()
+	--     -- calling `setup` is optional for customization
+	--     require("fzf-lua").setup({})
+	--   end,
+	-- },
+	{
+		"junegunn/fzf",
+		dependencies = { "junegunn/fzf.vim" },
+		build = "./install --all",
+		event = { "BufReadPost" },
+		cmd = { "G" },
+		keys = {
 
-      {
-        mode = { "n" },
-        "<Leader>gP",
-        "<cmd>Git! push<cr>",
-        { silent = true, noremap = true },
-      },
-      {
-        mode = { "n" },
-        "<leader>gf",
-        "<cmd>Git! fetch --all -v<cr>",
-        { silent = true, noremap = true },
-      },
-      {
-        mode = { "n" },
-        "<Leader>gp",
-        "<cmd>Git! pull<cr>",
-        { silent = true, noremap = true },
-      },
-      {
-        mode = { "n" },
-        "<Leader>gC",
-        "<cmd>Git checkout . | Git clean -fd<cr>",
-        { silent = true, noremap = true },
-      },
-      {
-        mode = { "n" },
-        "<Leader>gl",
-        "<cmd>Git log -20<cr>",
-        { silent = true, noremap = true },
-      },
-    },
-  },
-  { "stsewd/fzf-checkout.vim", keys = { { "<leader>gt", "<cmd>GTags<CR>" } } },
-  { "tpope/vim-repeat",        keys = { "." } },
-  { "nvim-lua/plenary.nvim",   lazy = true },
-  { "tpope/vim-surround",      event = { "BufReadPost", "BufNewFile" } },
-  {
-    "windwp/nvim-ts-autotag",
-    ft = { "html", "htmlangular" },
-    -- opts = {
-    --   aliases = {
-    --     ["htmlangular"] = "html",
-    --   },
-    -- },
-    config = function()
-      require("nvim-ts-autotag").setup({
-        aliases = {
-          ["html"] = "html",
-          ["htmlangular"] = "html",
-        },
-      })
-    end,
-  },
-  { "tpope/vim-dispatch", lazy = true },
-  { "kkharji/sqlite.lua", lazy = true },
-  {
-    "ckipp01/nvim-jenkinsfile-linter",
-    enabled = false,
-    keys = {
-      {
-        "<leader>va",
-        function()
-          require("jenkinsfile_linter").validate()
-        end,
-      },
-    },
-  },
+			{ "<leader>jl", "<cmd>Jumps<CR>" },
+			{
+				mode = { "n" },
+				"<leader>ga",
+				"<cmd>Git add .<cr>",
+				{ silent = true, noremap = true },
+			},
+			{
+				mode = { "n" },
+				"<Leader>gS",
+				"<cmd>Git stash<cr>",
+				{ silent = true, noremap = true },
+			},
+			{
+				mode = { "n" },
+				"<Leader>gO",
+				"<cmd>Git! stash pop<cr>",
+				{ silent = true, noremap = true },
+			},
+
+			{
+				mode = { "n" },
+				"<Leader>gP",
+				"<cmd>Git! push<cr>",
+				{ silent = true, noremap = true },
+			},
+			{
+				mode = { "n" },
+				"<leader>gf",
+				"<cmd>Git! fetch --all -v<cr>",
+				{ silent = true, noremap = true },
+			},
+			{
+				mode = { "n" },
+				"<Leader>gp",
+				"<cmd>Git! pull<cr>",
+				{ silent = true, noremap = true },
+			},
+			{
+				mode = { "n" },
+				"<Leader>gC",
+				"<cmd>Git checkout . | Git clean -fd<cr>",
+				{ silent = true, noremap = true },
+			},
+			{
+				mode = { "n" },
+				"<Leader>gl",
+				"<cmd>Git log -20<cr>",
+				{ silent = true, noremap = true },
+			},
+		},
+	},
+	{ "stsewd/fzf-checkout.vim", keys = { { "<leader>gt", "<cmd>GTags<CR>" } } },
+	{ "tpope/vim-repeat", keys = { "." } },
+	{ "nvim-lua/plenary.nvim", lazy = true },
+	{ "tpope/vim-surround", event = { "BufReadPost", "BufNewFile" } },
+	{
+		"windwp/nvim-ts-autotag",
+		ft = { "html", "htmlangular" },
+		-- opts = {
+		--   aliases = {
+		--     ["htmlangular"] = "html",
+		--   },
+		-- },
+		config = function()
+			require("nvim-ts-autotag").setup({
+				aliases = {
+					["html"] = "html",
+					["htmlangular"] = "html",
+				},
+			})
+		end,
+	},
+	{ "tpope/vim-dispatch", lazy = true },
+	{ "kkharji/sqlite.lua", lazy = true },
+	{
+		"ckipp01/nvim-jenkinsfile-linter",
+		enabled = false,
+		keys = {
+			{
+				"<leader>va",
+				function()
+					require("jenkinsfile_linter").validate()
+				end,
+			},
+		},
+	},
 }

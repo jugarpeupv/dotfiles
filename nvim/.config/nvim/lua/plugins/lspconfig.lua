@@ -153,7 +153,7 @@ return {
     end,
     -- event = { "InsertEnter" },
     dependencies = {
-      -- { "saghen/blink.cmp" },
+      { "saghen/blink.cmp" },
       {
         'VidocqH/lsp-lens.nvim',
         enabled = false,
@@ -164,8 +164,11 @@ return {
       {
         "zeioth/garbage-day.nvim",
         dependencies = "neovim/nvim-lspconfig",
+        enabled = false,
         opts = {
-          excluded_lsp_clients = { "copilot" }
+          excluded_lsp_clients = {
+            "copilot"
+          }
           -- your options here
         }
       },
@@ -280,11 +283,11 @@ return {
       end
 
       -- import cmp-nvim-lsp plugin safely
-      local cmp_nvim_lsp_status, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-      if not cmp_nvim_lsp_status then
-        print("cmp_nvim_lsp could not be loaded")
-        -- return
-      end
+      -- local cmp_nvim_lsp_status, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+      -- if not cmp_nvim_lsp_status then
+      --   print("cmp_nvim_lsp could not be loaded")
+      --   -- return
+      -- end
 
       -- import typescript plugin safely
       -- local typescript_setup, typescript = pcall(require, "typescript")
@@ -342,8 +345,8 @@ return {
       end
 
       -- used to enable autocompletion (assign to every lsp server config)
-      local capabilities = cmp_nvim_lsp.default_capabilities()
-      -- local capabilities = require('blink.cmp').get_lsp_capabilities()
+      -- local capabilities = cmp_nvim_lsp.default_capabilities()
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
       -- local capabilities = require('blink.cmp').get_lsp_capabilities()
       -- capabilities.textDocument.foldingRange = {
       --   dynamicRegistration = false,
@@ -570,9 +573,19 @@ return {
         },
       })
 
+      local on_publish_diagnostics = vim.lsp.diagnostic.on_publish_diagnostics
+
       lspconfig["bashls"].setup({
         on_attach = on_attach,
         capabilities = capabilities,
+        handlers = {
+          ["textDocument/publishDiagnostics"] = function(err, res, ...)
+            local file_name = vim.fn.fnamemodify(vim.uri_to_fname(res.uri), ":t")
+            if string.match(file_name, "^%.env") == nil then
+              return on_publish_diagnostics(err, res, ...)
+            end
+          end,
+        },
       })
 
       local capabilities_json_ls = vim.lsp.protocol.make_client_capabilities()
@@ -708,6 +721,12 @@ return {
         capabilities = capabilities,
         on_attach = on_attach,
       })
+
+      require'lspconfig'.gh_actions_ls.setup{
+        capabilities = capabilities,
+        on_attach = on_attach,
+        cmd = { home .. "/.local/share/nvim/mason/bin/gh-actions-language-server", "--stdio" },
+      }
 
       require'lspconfig'.ruby_lsp.setup({
         capabilities = capabilities,

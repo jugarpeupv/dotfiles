@@ -6,6 +6,7 @@ source $HOME/.config/zshrc/oh-my-zsh/zsh-syntax-highlighting.zsh
 # plugins=(nvm evalcache git-open fzf-tab zsh-syntax-highlighting zsh-vi-mode zsh-autosuggestions ohmyzsh-full-autoupdate)
 export NVM_LAZY_LOAD_EXTRA_COMMANDS=('nvim')
 export NVM_LAZY_LOAD=true
+
 plugins=(zsh-nvm evalcache git-open fzf-tab zsh-syntax-highlighting zsh-vi-mode zsh-autosuggestions ohmyzsh-full-autoupdate)
 
 # This line is needed for fzf-tab to pick right colors
@@ -15,8 +16,6 @@ source $ZSH/oh-my-zsh.sh
 _comp_options+=(globdots)
 source $HOME/.config/zshrc/oh-my-zsh/fzf-tab.zsh
 source $HOME/.config/zshrc/oh-my-zsh/zsh-vi-mode.zsh
-
-
 
 # HISTFILE="$HOME/.zsh_history"
 # HISTSIZE=70000
