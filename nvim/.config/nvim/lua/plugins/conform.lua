@@ -14,7 +14,6 @@ return {
 		priority = 600,
 		-- event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
-			"williamboman/mason-lspconfig.nvim",
 			"williamboman/mason.nvim",
 		},
     opts = {

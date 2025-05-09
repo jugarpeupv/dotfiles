@@ -131,10 +131,10 @@ return {
 			opts.ls_path = mason_registery.get_package("spring-boot-tools"):get_install_path()
 				.. "/extension/language-server"
 
-      opts.ls_path = os.getenv("MASON") .. "/packages/spring-boot-tools/extension/language-server"
-      print("jdtls opts.ls_path: ", opts.ls_path)
+			opts.ls_path = os.getenv("MASON") .. "/packages/spring-boot-tools/extension/language-server"
+			print("jdtls opts.ls_path: ", opts.ls_path)
 
-      -- jdtls opts.ls_path:  /Users/jgarcia/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server
+			-- jdtls opts.ls_path:  /Users/jgarcia/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server
 			-- opts.ls_path = "/home/sangram/.vscode/extensions/vmware.vscode-spring-boot-1.55.1"
 			-- vim.notify("spring boot ls path : " .. opts.ls_path, vim.log.levels.INFO, {title = "Spring boot"})
 			opts.java_cmd = "java"
@@ -168,7 +168,7 @@ return {
 			{
 				"zeioth/garbage-day.nvim",
 				dependencies = "neovim/nvim-lspconfig",
-				enabled = false,
+				enabled = true,
 				opts = {
 					excluded_lsp_clients = {
 						"copilot",
@@ -257,24 +257,15 @@ return {
 				end,
 			},
 			{
-				"williamboman/mason-lspconfig.nvim",
-				enabled = function()
-					local is_headless = #vim.api.nvim_list_uis() == 0
-					if is_headless then
-						return false
-					end
-					return true
-				end,
-			},
-			{
 				"jayp0521/mason-null-ls.nvim",
-				enabled = function()
-					local is_headless = #vim.api.nvim_list_uis() == 0
-					if is_headless then
-						return false
-					end
-					return true
-				end,
+				enabled = false,
+				-- enabled = function()
+				-- 	local is_headless = #vim.api.nvim_list_uis() == 0
+				-- 	if is_headless then
+				-- 		return false
+				-- 	end
+				-- 	return true
+				-- end,
 			},
 			-- { "nanotee/sqls.nvim" },
 			{
@@ -522,8 +513,7 @@ return {
 			end
 
 			-- local angularls_path = mason_registry.get_package("angular-language-server"):get_install_path()
-      local angularls_path = os.getenv("MASON") .. "/packages/angular-language-server"
-
+			local angularls_path = os.getenv("MASON") .. "/packages/angular-language-server"
 
 			-- local function get_angular_core_version(root_dir)
 			--   local project_root = vim.fs.dirname(vim.fs.find('node_modules', { path = root_dir, upward = true })[1])
@@ -634,8 +624,10 @@ return {
 				capabilities = capabilities,
 			})
 
-
+      -- defined in telescope yaml companion
 			-- require("lspconfig").yamlls.setup({
+			--      filetypes = { "yaml" }, -- Restrict to YAML files only
+			-- 	cmd = { home .. "/.local/share/nvim/mason/bin/yaml-language-server", "--stdio" },
 			-- 	on_attach = on_attach,
 			-- 	capabilities = capabilities,
 			-- 	editor = {
@@ -653,9 +645,11 @@ return {
 			-- 			--   url = "",
 			-- 			-- },
 			-- 			-- schemas = {}
-			--          schemas = {
-			--            ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*"
-			--          }
+			--
+			-- 			-- schemas = require("schemastore").json.schemas({}),
+			-- 			-- schemas = {
+			-- 			--   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*"
+			-- 			-- }
 			-- 		},
 			-- 	},
 			-- })
@@ -750,10 +744,31 @@ return {
 				on_attach = on_attach,
 			})
 
+      vim.filetype.add({
+        pattern = {
+          ['.*/%.github[%w/]+workflows[%w/]+.*%.ya?ml'] = 'yaml.github',
+        },
+      })
+
 			require("lspconfig").gh_actions_ls.setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
+        filetypes = { "yaml.github" }, -- Use a custom filetype for GitHub Actions
 				cmd = { home .. "/.local/share/nvim/mason/bin/gh-actions-language-server", "--stdio" },
+        -- init_options = {
+        --   sessionToken = os.getenv("GH_TOKEN"),
+        -- },
+				settings = {
+					yaml = {
+            -- schemas = require("schemastore").json.schemas({}),
+						format = {
+							enable = true,
+						},
+						validate = {
+							enable = true,
+						},
+					},
+				},
 			})
 
 			require("lspconfig").ruby_lsp.setup({

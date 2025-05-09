@@ -64,12 +64,26 @@ vim.keymap.set({ "n" }, "<leader>gt", function()
 	local options = {
 		git_command = { "git", "tag", "-l" },
 	}
+  local opts2 = {
+
+  }
 
 	pickers
 		.new(options, {
 			prompt_title = "Git Tags",
-			finder = finders.new_oneshot_job(options.git_command, opts),
-			sorter = conf.file_sorter(options),
+			finder = finders.new_oneshot_job(options.git_command, opts2),
+      sorter = conf.file_sorter(options),
+      -- sorter = require("telescope.config").values.generic_sorter,
+			-- sorter = require("telescope.sorters").Sorter:new({
+			-- 	scoring_function = function(_, prompt, line)
+			-- 		-- Custom sorting logic: Sort by descending order
+			-- 		if line:match("%d+%.%d+%.%d+") then
+			-- 			local major, minor, patch = line:match("(%d+)%.(%d+)%.(%d+)")
+			-- 			return -tonumber(major) * 10000 - tonumber(minor) * 100 - tonumber(patch)
+			-- 		end
+			-- 		return 0
+			-- 	end,
+			-- }),
 			attach_mappings = function(_, map)
 				actions.select_default:replace(actions.git_checkout)
 				return true
@@ -1135,27 +1149,33 @@ vim.cmd(
 )
 
 local function tables_equal(t1, t2)
-  if #t1 ~= #t2 then
-    return false
-  end
-  for i, v in ipairs(t1) do
-    if v ~= t2[i] then
-      return false
-    end
-  end
-  return true
+	if #t1 ~= #t2 then
+		return false
+	end
+	for i, v in ipairs(t1) do
+		if v ~= t2[i] then
+			return false
+		end
+	end
+	return true
 end
 
 local toggle_diffopt = function()
-  local current = vim.opt.diffopt:get()
-  local option1 = { "iwhiteall", "internal", "filler", "closeoff", "indent-heuristic", "linematch:60", "algorithm:histogram" }
-  local option2 = { "internal", "filler", "closeoff", "indent-heuristic", "linematch:60", "algorithm:histogram" }
+	local current = vim.opt.diffopt:get()
+	local option1 =
+		{ "iwhiteall", "internal", "filler", "closeoff", "indent-heuristic", "linematch:60", "algorithm:histogram" }
+	local option2 = { "internal", "filler", "closeoff", "indent-heuristic", "linematch:60", "algorithm:histogram" }
 
-  if tables_equal(current, option1) then
-    vim.opt.diffopt = option2
-  else
-    vim.opt.diffopt = option1
-  end
+	if tables_equal(current, option1) then
+		vim.opt.diffopt = option2
+	else
+		vim.opt.diffopt = option1
+	end
 end
 
 vim.keymap.set("n", "<leader>DD", toggle_diffopt, { desc = "Toggle diffopt settings" })
+
+
+vim.keymap.set({ "n" }, "<leader>sc", function()
+  require("telescope").extensions.yaml_schema.yaml_schema({})
+end, opts)

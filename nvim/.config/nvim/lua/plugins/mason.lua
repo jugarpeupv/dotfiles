@@ -17,13 +17,14 @@ return {
   {
     "williamboman/mason-lspconfig.nvim",
     -- commit =  "1a31f824b9cd5bc6f342fc29e9a53b60d74af245",
-    enabled = function()
-      local is_headless = #vim.api.nvim_list_uis() == 0
-      if is_headless then
-        return false
-      end
-      return true
-    end,
+    enabled = false,
+    -- enabled = function()
+    --   local is_headless = #vim.api.nvim_list_uis() == 0
+    --   if is_headless then
+    --     return false
+    --   end
+    --   return true
+    -- end,
     lazy = true,
     -- cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
   },
@@ -47,10 +48,10 @@ return {
       end
 
       -- import mason-lspconfig plugin safely
-      local mason_lspconfig_status, mason_lspconfig = pcall(require, "mason-lspconfig")
-      if not mason_lspconfig_status then
-        vim.notify("mason-lspconfig not found", vim.log.levels.WARN, { title = "Mason" })
-      end
+      -- local mason_lspconfig_status, mason_lspconfig = pcall(require, "mason-lspconfig")
+      -- if not mason_lspconfig_status then
+      --   vim.notify("mason-lspconfig not found", vim.log.levels.WARN, { title = "Mason" })
+      -- end
 
       -- import mason-null-ls plugin safely
       -- local mason_null_ls_status, mason_null_ls = pcall(require, "mason-null-ls")
@@ -68,22 +69,22 @@ return {
       -- enable mason
       mason.setup(conf)
 
-      mason_lspconfig.setup({
-        -- list of servers for mason to install
-        ensure_installed = {
-          "vtsls",
-          -- "tsserver",
-          "html",
-          "cssls",
-          "tailwindcss",
-          "lua_ls",
-          "angularls",
-          "cssmodules_ls",
-          "eslint",
-        },
-        -- auto-install configured servers (with lspconfig)
-        automatic_installation = false, -- not the same as ensure_installed
-      })
+      -- mason_lspconfig.setup({
+      --   -- list of servers for mason to install
+      --   ensure_installed = {
+      --     "vtsls",
+      --     -- "tsserver",
+      --     "html",
+      --     "cssls",
+      --     "tailwindcss",
+      --     "lua_ls",
+      --     "angularls",
+      --     "cssmodules_ls",
+      --     "eslint",
+      --   },
+      --   -- auto-install configured servers (with lspconfig)
+      --   automatic_installation = false, -- not the same as ensure_installed
+      -- })
 
       -- mason_null_ls.setup({
       --   -- list of formatters & linters for mason to install

@@ -232,6 +232,23 @@ return {
 					in_progress = "●",
 				},
 			},
+			split = {
+				relative = "editor",
+				position = "right",
+				size = 60,
+        buf_options = {
+          filetype = "pipeline",
+          buflisted = true,
+        },
+				win_options = {
+					wrap = true,
+					number = true,
+					foldlevel = nil,
+					foldcolumn = "0",
+					cursorcolumn = false,
+					signcolumn = "no"
+				},
+			},
 		},
 	},
 	{

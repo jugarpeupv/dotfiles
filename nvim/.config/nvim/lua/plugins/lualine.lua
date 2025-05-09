@@ -250,6 +250,14 @@ return {
 			-- or nil on failure. count <= 0 won't be displayed.
 		}
 
+		local function get_schema()
+			local schema = require("yaml-companion").get_buf_schema(0)
+			if schema.result[1].name == "none" then
+				return ""
+			end
+			return "[󱣃 " .. schema.result[1].name .."]"
+		end
+
 		require("lualine").setup({
 			options = {
 				theme = bubbles_theme,
@@ -320,9 +328,9 @@ return {
 					-- { "mode", separator = { left = "", right = "" } },
 				},
 				-- lualine_b = { branch, ahead_behind_indicator },
-        lualine_b = { branch },
+				lualine_b = { branch },
 				lualine_c = { diff_mode },
-				lualine_x = { dirname, "filetype" },
+				lualine_x = { dirname, "filetype", get_schema },
 				-- lualine_x = {},
 				-- lualine_y = {},
 				lualine_y = { "progress" },

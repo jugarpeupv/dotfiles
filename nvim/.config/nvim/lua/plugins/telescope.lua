@@ -175,18 +175,75 @@ return {
 			},
 			{ "natecraddock/telescope-zf-native.nvim", cmd = { "Telescope" } },
 			{
-				"someone-stole-my-name/yaml-companion.nvim",
-				enabled = false,
-				ft = { "yaml", "yml" },
+				"mosheavni/yaml-companion.nvim",
+        branch = "chore/remove-deprecated-apis",
+				enabled = true,
+				-- ft = { "yaml", "yml", "yaml.github" },
 				config = function()
+					local cfg = require("yaml-companion").setup({
+            filetypes = { "yaml", "yml" },
+            cmd = { os.getenv("HOME") .. "/.local/share/nvim/mason/bin/yaml-language-server", "--stdio" },
+            on_attach = require("jg.custom.lsp-utils").attach_lsp_config,
+            capabilities = require("blink.cmp").get_lsp_capabilities(),
+						-- detect k8s schemas based on file content
+						builtin_matchers = {
+							kubernetes = { enabled = true },
+						},
+
+						-- schemas available in Telescope picker
+						schemas = {
+							-- not loaded automatically, manually select with
+							-- :Telescope yaml_schema
+							{
+								name = "Argo CD Application",
+								uri = "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/argoproj.io/application_v1alpha1.json",
+							},
+							{
+								name = "SealedSecret",
+								uri = "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/bitnami.com/sealedsecret_v1alpha1.json",
+							},
+							-- schemas below are automatically loaded, but added
+							-- them here so that they show up in the statusline
+							{
+								name = "Kustomization",
+								uri = "https://json.schemastore.org/kustomization.json",
+							},
+							{
+								name = "GitHub Workflow",
+								uri = "https://json.schemastore.org/github-workflow.json",
+							},
+						},
+
+						lspconfig = {
+							settings = {
+								yaml = {
+									validate = true,
+									-- schemaStore = {
+									-- 	enable = false,
+									-- 	url = "",
+									-- },
+
+									-- schemas from store, matched by filename
+									-- loaded automatically
+									schemas = require("schemastore").yaml.schemas({
+										-- select = {
+										-- 	"kustomization.yaml",
+										-- 	"GitHub Workflow",
+										-- },
+                    extra = {
+                      url = 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/argoproj.io/application_v1alpha1.json',
+                      name = 'Argo CD Application',
+                      fileMatch = 'argocd-application.yaml'
+                    }
+									}),
+								},
+							},
+						},
+					})
+
+					require("lspconfig")["yamlls"].setup(cfg)
+
 					-- require("telescope").load_extension("yaml_schema")
-					--      local cfg = require("yaml-companion").setup({
-					--        -- Add any options here, or leave empty to use the default settings
-					--        -- lspconfig = {
-					--        --   cmd = {"yaml-language-server"}
-					--        -- },
-					--      })
-					--      require("lspconfig")["yamlls"].setup(cfg)
 				end,
 			},
 			{ "crispgm/telescope-heading.nvim", enabled = false },
