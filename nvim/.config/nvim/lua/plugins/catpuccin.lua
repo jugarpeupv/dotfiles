@@ -269,6 +269,8 @@ return {
 			vim.cmd([[hi RenderMarkdownH5 guifg=#6c7298]])
 			vim.cmd([[hi RenderMarkdownH6 guifg=#36394d]])
 
+			vim.cmd([[hi DiffviewFilePanelSelected guibg=#394b70 ]])
+
 			vim.cmd([[hi RenderMarkdownH1Bg guibg=#492a33]])
 			vim.cmd([[hi RenderMarkdownH2Bg guibg=#528599]])
 			vim.cmd([[hi RenderMarkdownH3Bg guibg=#675161]])
@@ -465,11 +467,6 @@ return {
 
 			vim.cmd([[highlight WarningMsg guifg=#F2CDCD]])
 
-
-      vim.cmd([[hi GitConflictCurrentLabel gui=none guibg=#394b70]])
-      vim.cmd([[hi GitConflictCurrent gui=none guibg=#394b70]])
-			vim.cmd([[highlight GitConflictAncestor guibg=#303446]])
-			vim.cmd([[highlight GitConflictAncestorLabel guibg=#45475A]])
 			vim.cmd([[highlight DiagnosticUnnecessary guifg=#747ebd]])
 			vim.cmd([[highlight CopilotSuggestion gui=none]])
 
@@ -495,6 +492,7 @@ return {
 			vim.cmd([[highlight @text.uri gui=none]])
 
 			vim.cmd([[highlight QuickFixLine gui=none guibg=#264F78]])
+      vim.cmd([[highlight QuickFixLineNr gui=none guifg=#747ebd]])
 
 			vim.cmd([[highlight TabLine guibg=none]])
 			vim.cmd([[highlight TabLineSel guibg=none]])
@@ -539,6 +537,14 @@ return {
 			vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
 			vim.cmd([[hi @markup.raw guifg=#F5E0DC]])
 			vim.cmd([[hi ContextVt guifg=#747ebd]])
+
+      vim.cmd([[hi GitConflictIncoming gui=none guibg=#1a3754]])
+      vim.cmd([[hi GitConflictCurrent gui=none guibg=#103235]])
+      vim.cmd([[hi GitConflictMiddle guibg=none guifg=#c0caf5]])
+
+      vim.cmd([[hi GitConflictIncomingLabel guibg=#394b70]])
+      vim.cmd([[hi GitConflictIncomingMark guibg=#394b70]])
+      vim.cmd([[hi GitConflictCurrentMark guibg=#104235]])
 
 			vim.cmd([[hi GitHeader guibg=none]])
 			vim.cmd([[hi GitFooter guibg=none]])

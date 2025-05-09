@@ -1,15 +1,238 @@
 -- return {}
 return {
+	-- Lua
+	-- { "HawkinsT/pathfinder.nvim" },
+	{
+		"rmagatti/auto-session",
+		enabled = true,
+		-- event = "BufReadPost",
+		lazy = true,
+		keys = {
+			-- Will use Telescope if installed or a vim.ui.select picker otherwise
+			{ "<leader>ws", "<cmd>SessionSearch<CR>", desc = "Session search" },
+			{ "<leader>wa", "<cmd>SessionSave<CR>", desc = "Save session" },
+		},
+		---enables autocomplete for opts
+		---@module "auto-session"
+		---@type AutoSession.Config
+		opts = {
+			enabled = true, -- Enables/disables auto creating, saving and restoring
+			root_dir = vim.fn.stdpath("data") .. "/sessions/", -- Root dir where sessions will be stored
+			auto_save = true, -- Enables/disables auto saving session on exit
+			auto_restore = true, -- Enables/disables auto restoring session on start
+			auto_create = true, -- Enables/disables auto creating new session files. Can take a function that should return true/false if a new session file should be created or not
+			suppressed_dirs = nil, -- Suppress session restore/create in certain directories
+			allowed_dirs = nil, -- Allow session restore/create in certain directories
+			auto_restore_last_session = true, -- On startup, loads the last saved session if session for cwd does not exist
+			git_use_branch_name = true, -- Include git branch name in session name
+			git_auto_restore_on_branch_change = false, -- Should we auto-restore the session when the git branch changes. Requires git_use_branch_name
+			lazy_support = true, -- Automatically detect if Lazy.nvim is being used and wait until Lazy is done to make sure session is restored correctly. Does nothing if Lazy isn't being used. Can be disabled if a problem is suspected or for debugging
+			bypass_save_filetypes = nil, -- List of filetypes to bypass auto save when the only buffer open is one of the file types listed, useful to ignore dashboards
+			close_unsupported_windows = true, -- Close windows that aren't backed by normal file before autosaving a session
+			args_allow_single_directory = true, -- Follow normal sesion save/load logic if launched with a single directory as the only argument
+			args_allow_files_auto_save = false, -- Allow saving a session even when launched with a file argument (or multiple files/dirs). It does not load any existing session first. While you can just set this to true, you probably want to set it to a function that decides when to save a session when launched with file args. See documentation for more detail
+			continue_restore_on_error = true, -- Keep loading the session even if there's an error
+			show_auto_restore_notif = false, -- Whether to show a notification when auto-restoring
+			cwd_change_handling = true, -- Follow cwd changes, saving a session before change and restoring after
+			lsp_stop_on_restore = false, -- Should language servers be stopped when restoring a session. Can also be a function that will be called if set. Not called on autorestore from startup
+			restore_error_handler = nil, -- Called when there's an error restoring. By default, it ignores fold errors otherwise it displays the error and returns false to disable auto_save
+			purge_after_minutes = 14400, -- Sessions older than purge_after_minutes will be deleted asynchronously on startup, e.g. set to 14400 to delete sessions that haven't been accessed for more than 10 days, defaults to off (no purging), requires >= nvim 0.10
+			post_restore_cmds = {
+				function()
+					-- Restore nvim-tree after a session is restored
+					local nvim_tree_api = require("nvim-tree.api")
+					nvim_tree_api.tree.open()
+					nvim_tree_api.tree.change_root(vim.fn.getcwd())
+					nvim_tree_api.tree.reload()
+				end,
+			},
+
+			-- ⚠️ This will only work if Telescope.nvim is installed
+			-- The following are already the default values, no need to provide them if these are already the settings you want.
+
+			session_lens = {
+				-- If load_on_setup is false, make sure you use `:SessionSearch` to open the picker as it will initialize everything first
+				load_on_setup = true,
+				previewer = true,
+				mappings = {
+					-- Mode can be a string or a table, e.g. {"i", "n"} for both insert and normal mode
+					delete_session = { "i", "<C-D>" },
+					alternate_session = { "i", "<C-S>" },
+					copy_session = { "i", "<C-Y>" },
+				},
+				-- Can also set some Telescope picker options
+				-- For all options, see: https://github.com/nvim-telescope/telescope.nvim/blob/master/doc/telescope.txt#L112
+				theme_conf = {
+					border = true,
+					layout_config = {
+						width = 0.8, -- Can set width and height as percent of window
+						height = 0.5,
+					},
+				},
+			},
+		},
+	},
+	-- {
+	-- 	"eyalk11/speech-to-text.nvim",
+	-- 	build = "pip install -r requirements.txt", -- Optional: Install Python dependencies
+	--    config = function()
+	--      -- Plugin-specific configuration
+	--    end,
+	-- },
+
 	-- with lazy.nvim
+	-- {
+	-- 	"cd-4/git-needy.nvim",
+	-- 	keys = {
+	-- 		{ "<leader>wf", "<cmd>GitNeedyOpen<cr>", desc = "Git needy" },
+	-- 	},
+	-- 	config = function()
+	-- 		require("git-needy").setup({
+	-- 			repos = { "my-user-or-org/my-repo-i-watch", "my-user/another-repo" },
+	-- 		})
+	-- 	end,
+	-- 	dependencies = { "nvim-lua/plenary.nvim" },
+	-- },
+	{
+		"johnseth97/gh-dash.nvim",
+		lazy = true,
+		enabled = false,
+		keys = {
+			{
+				"<leader>cc",
+				function()
+					require("gh_dash").toggle()
+				end,
+				desc = "Toggle gh-dash popup",
+			},
+		},
+		opts = {
+			keymaps = {}, -- disable internal mapping
+			border = "rounded", -- or 'double'
+			width = 0.8,
+			height = 0.8,
+			autoinstall = true,
+		},
+	},
+	{
+		"mecattaf/murmur.nvim",
+		enabled = false,
+		event = "VeryLazy",
+		opts = {
+			-- Optional: Override default configuration
+			server = {
+				host = "127.0.0.1", -- whisper.cpp server host
+				port = 8009, -- whisper.cpp server port
+				model = "whisper-small", -- Model to use
+				timeout = 30,
+			},
+			recording = {
+				command = nil, -- Auto-detect (sox, arecord, or ffmpeg)
+			},
+			ui = {
+				border = "single", -- Popup border style
+				spinner = true, -- Show processing spinner
+			},
+		},
+	},
+	{
+		"kyza0d/vocal.nvim",
+		enabled = false,
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		cmd = { "Vocal" },
+		opts = {
+			-- API key (string, table with command, or nil to use OPENAI_API_KEY env var)
+			api_key = nil,
+
+			-- Directory to save recordings
+			recording_dir = os.getenv("HOME") .. "/recordings",
+
+			-- Delete recordings after transcription
+			delete_recordings = true,
+
+			-- Keybinding to trigger :Vocal (set to nil to disable)
+			keymap = nil,
+
+			-- Local model configuration (set this to use local model instead of API)
+			local_model = nil,
+			-- local_model = {
+			-- 	model = "base", -- Model size: tiny, base, small, medium, large
+			-- 	path = "~/whisper", -- Path to download and store models
+			-- },
+
+			-- API configuration (used only when local_model is not set)
+			api = {
+				model = "whisper-1",
+				language = nil, -- Auto-detect language
+				response_format = "json",
+				temperature = 0,
+				timeout = 60,
+			},
+		},
+	},
 	{
 		"topaxi/pipeline.nvim",
 		keys = {
-			{ "<leader>cI", "<cmd>Pipeline<cr>", desc = "Open pipeline.nvim" },
+			{ "<leader>cI", "<cmd>Pipeline toggle<cr>", desc = "Open pipeline.nvim" },
 		},
 		-- optional, you can also install and use `yq` instead.
 		build = "make",
 		---@type pipeline.Config
-		opts = {},
+		opts = {
+			--- The browser executable path to open workflow runs/jobs in
+			browser = nil,
+			--- Interval to refresh in seconds
+			refresh_interval = 10,
+			--- How much workflow runs and jobs should be indented
+			indent = 2,
+			providers = {
+				github = {
+					default_host = "github.com",
+					--- Mapping of names that should be renamed to resolvable hostnames
+					--- names are something that you've used as a repository url,
+					--- that can't be resolved by this plugin, like aliases from ssh config
+					--- for example to resolve "gh" to "github.com"
+					--- ```lua
+					--- resolve_host = function(host)
+					---   if host == "gh" then
+					---     return "github.com"
+					---   end
+					--- end
+					--- ```
+					--- Return nil to fallback to the default_host
+					---@param host string
+					---@return string|nil
+					resolve_host = function(host)
+						if host == "gh" or host:match("^github%.com%-") then
+							return "github.com"
+						end
+						return host
+					end,
+				},
+			},
+			--- Allowed hosts to fetch data from, github.com is always allowed
+			allowed_hosts = {},
+			icons = {
+				workflow_dispatch = "⚡️",
+				conclusion = {
+					success = "✓",
+					failure = "X",
+					startup_failure = "X",
+					cancelled = "⊘",
+					skipped = "◌",
+				},
+				status = {
+					unknown = "?",
+					pending = "○",
+					queued = "○",
+					requested = "○",
+					waiting = "○",
+					in_progress = "●",
+				},
+			},
+		},
 	},
 	{
 		"farmergreg/vim-lastplace",
@@ -26,7 +249,7 @@ return {
 	-- },
 	{
 		"RRethy/vim-illuminate",
-    enabled = false,
+		enabled = false,
 		event = { "BufNewFile", "BufReadPost" },
 		opts = {
 			-- providers: provider used to get references in the buffer, ordered by priority
@@ -256,8 +479,8 @@ return {
 	},
 	{
 		"maskudo/devdocs.nvim",
-		enabled = false,
-		lazy = false,
+		enabled = true,
+		lazy = true,
 		dependencies = {
 			"folke/snacks.nvim",
 		},
@@ -800,7 +1023,7 @@ return {
 			{
 				mode = { "n" },
 				"<Leader>gp",
-				"<cmd>Git! pull<cr>",
+				"<cmd>Git! fetch --all | Git! pull<cr>",
 				{ silent = true, noremap = true },
 			},
 			{
@@ -817,7 +1040,7 @@ return {
 			},
 		},
 	},
-	{ "stsewd/fzf-checkout.vim", keys = { { "<leader>gt", "<cmd>GTags<CR>" } } },
+	{ "stsewd/fzf-checkout.vim", keys = { { "<leader>GT", "<cmd>GTags<CR>" } } },
 	{ "tpope/vim-repeat", keys = { "." } },
 	{ "nvim-lua/plenary.nvim", lazy = true },
 	{ "tpope/vim-surround", event = { "BufReadPost", "BufNewFile" } },

@@ -153,7 +153,7 @@ opt.listchars:append({
 -- vim.cmd([[hi Container guifg=#BADA55 guibg=Black]])
 
 -- vim.cmd([[let g:TerminusInsertCursorShape=1]])
-vim.g.TerminusInsertCursorShape = 1
+-- vim.g.TerminusInsertCursorShape = 1
 
 vim.o.foldcolumn = "0"
 vim.foldlevel = 99
@@ -163,6 +163,8 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.o.foldtext = ""
 vim.o.foldopen = "search,tag,undo"
+
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"
 
 -- opt.updatetime = 1000
 

@@ -5,7 +5,12 @@ local bundles = {}
 ---
 -- Include java-test bundle if present
 ---
-local java_test_path = require("mason-registry").get_package("java-test"):get_install_path()
+-- local java_test_path = require("mason-registry").get_package("java-test"):get_install_path()
+local java_test_path = os.getenv("MASON") .. "/packages/java-test"
+
+-- java_test_path /Users/jgarcia/.local/share/nvim/mason/packages/java-test
+print("java_test_path", java_test_path)
+
 local java_test_bundle = vim.split(vim.fn.glob(java_test_path .. "/extension/server/*.jar"), "\n")
 if java_test_bundle[1] ~= "" then
   vim.list_extend(bundles, java_test_bundle)
@@ -14,7 +19,12 @@ end
 ---
 -- Include java-debug-adapter bundle if present
 ---
-local java_debug_path = require("mason-registry").get_package("java-debug-adapter"):get_install_path()
+-- local java_debug_path = require("mason-registry").get_package("java-debug-adapter"):get_install_path()
+
+local java_debug_path = os.getenv("MASON") .. "/packages/java-debug-adapter"
+print("java_debug_path", java_debug_path)
+-- java_debug_path /Users/jgarcia/.local/share/nvim/mason/packages/java-debug-adapter
+
 local java_debug_bundle =
     vim.split(vim.fn.glob(java_debug_path .. "/extension/server/com.microsoft.java.debug.plugin-*.jar"), "\n")
 if java_debug_bundle[1] ~= "" then

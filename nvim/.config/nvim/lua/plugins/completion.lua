@@ -13,6 +13,10 @@ return {
 		config = function()
 			local cmp = require("cmp")
 			cmp.setup({
+				enabled = function()
+					return (vim.api.nvim_get_option_value("filetype", { buf = 0 }) ~= "gitcommit")
+				end,
+				sources = {},
 				window = {
 					completion = {
 						-- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
@@ -27,46 +31,12 @@ return {
 				},
 			})
 
-			cmp.setup.cmdline("?", {
-				mapping = cmp.mapping.preset.cmdline({
-					["<C-j>"] = { c = cmp.mapping.select_next_item() },
-					["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-					["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
-					["<CR>"] = cmp.mapping(function(fallback)
-						local selected_entry = cmp.get_selected_entry()
-						local filetype = vim.bo.filetype
-						if filetype == "" then
-							vim.api.nvim_feedkeys(t("<CR>"), "n", true)
-						elseif cmp.visible() and selected_entry ~= nil then
-							cmp.confirm({ select = true })
-							return
-						else
-							fallback()
-							-- vim.api.nvim_feedkeys(t("<CR>"), "n", true)
-							return
-						end
-					end, { "i", "s" }),
-					["<C-y>"] = cmp.config.disable,
-					["<Tab>"] = cmp.config.disable,
-					-- ["<Tab>"] = cmp.mapping(function(fallback)
-					-- 	-- local copilot = require("copilot.suggestion")
-					-- 	-- if copilot.is_visible() then
-					-- 	--   copilot.accept()
-					-- 	-- elseif cmp.visible() then
-					-- 	fallback()
-					-- end),
-				}),
-				-- mapping = {
-				--   ["<C-j>"] = { c = cmp.mapping.select_next_item() },
-				--   ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-				-- },
-				sources = {
-					{ name = "buffer" },
-				},
-			})
+			-- cmp.setup.filetype({ "gitcommit" }, {
+			-- 	sources = {},
+			-- })
 
 			-- `/` cmdline setup.
-			cmp.setup.cmdline("/", {
+			cmp.setup.cmdline({ "/", "?" }, {
 				mapping = cmp.mapping.preset.cmdline({
 					["<C-j>"] = { c = cmp.mapping.select_next_item() },
 					["<C-k>"] = { c = cmp.mapping.select_prev_item() },
@@ -151,7 +121,7 @@ return {
 				["<C-k>"] = { "select_prev", "fallback" },
 				["<C-j>"] = { "select_next", "fallback" },
 				["<Right>"] = {
-					function(cmp)
+					function()
 						local copilot = require("copilot.suggestion")
 						if copilot.is_visible() then
 							copilot.accept()
@@ -169,7 +139,7 @@ return {
 							-- vim.api.nvim_feedkeys(t("<CR>"), "n", true)
 							vim.api.nvim_feedkeys(t("<CR>"), "n", true)
 							return
-						elseif cmp.is_menu_visible() then
+						elseif cmp.is_menu_visible() and cmp.get_selected_item() then
 							return cmp.select_and_accept()
 						end
 					end,
@@ -254,7 +224,7 @@ return {
 											icon = dev_icon
 										end
 									else
-										icon = require("lspkind").symbolic(ctx.kind, {
+										icon = lspkind.symbolic(ctx.kind, {
 											mode = "symbol",
 										})
 									end
@@ -291,11 +261,11 @@ return {
 			-- elsewhere in your config, without redefining it, due to `opts_extend`
 			sources = {
 				default = { "lsp", "path", "buffer", "omni", "snippets", "emoji", "nerdfont", "conventional_commits" },
-				per_filetype = { ["copilot-chat"] = { "path", "lsp" } },
+				per_filetype = { ["copilot-chat"] = { "path", "lsp", "buffer" } },
 				providers = {
 					-- ecolog = { name = 'ecolog', module = 'ecolog.integrations.cmp.blink_cmp' },
 					buffer = {
-						min_keyword_length = 3,
+						min_keyword_length = 2,
 					},
 					conventional_commits = {
 						name = "Conventional Commits",
@@ -345,16 +315,40 @@ return {
 							return 0
 						end,
 					},
-					-- snippets = {
-					--   enabled = true,
-					--   module = "blink.cmp.sources.snippets",
-					--   max_items = 7,
-					--   should_show_items = function()
-					--     local col = vim.api.nvim_win_get_cursor(0)[2]
-					--     local before_cursor = vim.api.nvim_get_current_line():sub(1, col)
-					--     return before_cursor:match(";" .. "%w*$") ~= nil
-					--   end,
-					-- }
+					snippets = {
+						enabled = true,
+						module = "blink.cmp.sources.snippets",
+						-- max_items = 5,
+						-- min_keyword_length = 2,
+            should_show_items = function()
+              local col = vim.api.nvim_win_get_cursor(0)[2]
+              local before_cursor = vim.api.nvim_get_current_line():sub(1, col)
+              -- NOTE: remember that `trigger_text` is modified at the top of the file
+              return before_cursor:match(";" .. "%w*$") ~= nil
+            end,
+						transform_items = function(_, items)
+							local line = vim.api.nvim_get_current_line()
+							local col = vim.api.nvim_win_get_cursor(0)[2]
+							local before_cursor = line:sub(1, col)
+							local start_pos, end_pos = before_cursor:find(";" .. "[^" .. ";" .. "]*$")
+							if start_pos then
+								for _, item in ipairs(items) do
+									if not item.trigger_text_modified then
+										---@diagnostic disable-next-line: inject-field
+										item.trigger_text_modified = true
+										item.textEdit = {
+											newText = item.insertText or item.label,
+											range = {
+												start = { line = vim.fn.line(".") - 1, character = start_pos - 1 },
+												["end"] = { line = vim.fn.line(".") - 1, character = end_pos },
+											},
+										}
+									end
+								end
+							end
+							return items
+						end,
+					},
 				},
 			},
 

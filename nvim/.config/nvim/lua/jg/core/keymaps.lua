@@ -56,6 +56,28 @@ keymap("n", "<leader>pu", "<cmd>pu<cr>", opts)
 -- Cmd modifiers cooresponds to cmd+shift+7
 vim.cmd([[map <M-g> gcc]])
 
+vim.keymap.set({ "n" }, "<leader>gt", function()
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local conf = require("telescope.config").values
+	local actions = require("telescope.actions")
+	local options = {
+		git_command = { "git", "tag", "-l" },
+	}
+
+	pickers
+		.new(options, {
+			prompt_title = "Git Tags",
+			finder = finders.new_oneshot_job(options.git_command, opts),
+			sorter = conf.file_sorter(options),
+			attach_mappings = function(_, map)
+				actions.select_default:replace(actions.git_checkout)
+				return true
+			end,
+		})
+		:find()
+end, opts)
+
 vim.keymap.set({ "n", "t" }, "<D-p>", function()
 	require("telescope.builtin").find_files({
 		hidden = true,
@@ -1101,3 +1123,39 @@ vim.keymap.set("n", "<leader>nr", function()
 	-- vim.cmd("split | terminal")
 	-- vim.fn.chansend(vim.b.terminal_job_id, command)
 end, opts)
+
+vim.cmd(
+	[[inoremap <C-G>  <C-O>:!whisper.nvim<CR><C-O>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^[[:space:\]\]*//'")<CR><C-R>an]]
+)
+vim.cmd(
+	[[nnoremap <C-G>       :!whisper.nvim<CR>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^\[\[:space:\]\]*//'")<CR>"ap]]
+)
+vim.cmd(
+	[[vnoremap <C-G> c<C-O>:!whisper.nvim<CR><C-O>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^[[:space:\]\]*//'")<CR><C-R>a]]
+)
+
+local function tables_equal(t1, t2)
+  if #t1 ~= #t2 then
+    return false
+  end
+  for i, v in ipairs(t1) do
+    if v ~= t2[i] then
+      return false
+    end
+  end
+  return true
+end
+
+local toggle_diffopt = function()
+  local current = vim.opt.diffopt:get()
+  local option1 = { "iwhiteall", "internal", "filler", "closeoff", "indent-heuristic", "linematch:60", "algorithm:histogram" }
+  local option2 = { "internal", "filler", "closeoff", "indent-heuristic", "linematch:60", "algorithm:histogram" }
+
+  if tables_equal(current, option1) then
+    vim.opt.diffopt = option2
+  else
+    vim.opt.diffopt = option1
+  end
+end
+
+vim.keymap.set("n", "<leader>DD", toggle_diffopt, { desc = "Toggle diffopt settings" })

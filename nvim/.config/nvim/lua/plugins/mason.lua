@@ -16,6 +16,7 @@ return {
   -- },
   {
     "williamboman/mason-lspconfig.nvim",
+    -- commit =  "1a31f824b9cd5bc6f342fc29e9a53b60d74af245",
     enabled = function()
       local is_headless = #vim.api.nvim_list_uis() == 0
       if is_headless then
@@ -29,6 +30,7 @@ return {
   {
     "williamboman/mason.nvim",
     -- cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
+    -- commit = "fc98833b6da5de5a9c5b1446ac541577059555be",
     lazy = true,
     enabled = function()
       local is_headless = #vim.api.nvim_list_uis() == 0

@@ -1,29 +1,29 @@
 local get_option = vim.filetype.get_option
 vim.filetype.get_option = function(filetype, option)
-  return option == "commentstring" and require("ts_context_commentstring.internal").calculate_commentstring()
-      or get_option(filetype, option)
+	return option == "commentstring" and require("ts_context_commentstring.internal").calculate_commentstring()
+		or get_option(filetype, option)
 end
 
 if vim.fn.has("nvim-0.11") == 1 then
-  vim.api.nvim_create_autocmd("TextYankPost", {
-    group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
-    desc = "Hightlight selection on yank",
-    pattern = "*",
-    callback = function()
-      vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
-    end,
-  })
+	vim.api.nvim_create_autocmd("TextYankPost", {
+		group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+		desc = "Hightlight selection on yank",
+		pattern = "*",
+		callback = function()
+			vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
+		end,
+	})
 else
-  vim.api.nvim_create_autocmd("TextYankPost", {
-    group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
-    desc = "Highlight selection on yank",
-    pattern = "*",
-    callback = function()
-      if vim.fn.has("nvim-0.11") == 0 then
-        require("vim.highlight").on_yank({ higroup = "Visual", timeout = 200 })
-      end
-    end,
-  })
+	vim.api.nvim_create_autocmd("TextYankPost", {
+		group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+		desc = "Highlight selection on yank",
+		pattern = "*",
+		callback = function()
+			if vim.fn.has("nvim-0.11") == 0 then
+				require("vim.highlight").on_yank({ higroup = "Visual", timeout = 200 })
+			end
+		end,
+	})
 end
 
 vim.cmd([[
@@ -64,11 +64,11 @@ vim.cmd([[
 -- ]])
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufEnter" }, {
-  group = vim.api.nvim_create_augroup("set-png-ft", { clear = true }),
-  pattern = "*.png",
-  callback = function()
-    vim.cmd([[set filetype=png]])
-  end,
+	group = vim.api.nvim_create_augroup("set-png-ft", { clear = true }),
+	pattern = "*.png",
+	callback = function()
+		vim.cmd([[set filetype=png]])
+	end,
 })
 
 -- vim.api.nvim_create_autocmd("CursorMoved", {
@@ -83,9 +83,9 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufEnter" }, {
 -- })
 
 vim.filetype.add({
-  extension = {
-    ["http"] = "http",
-  },
+	extension = {
+		["http"] = "http",
+	},
 })
 
 -- vim.cmd([[ augroup JsonToJsonc
@@ -130,35 +130,35 @@ vim.filetype.add({
 
 -- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 1]])
 
-vim.api.nvim_create_autocmd("TermEnter", {
-  pattern = "*",
-  callback = function()
-    vim.wo.cursorline = true
-  end,
-  desc = "Enable cursorline in terminal buffers",
-})
-
-vim.api.nvim_create_autocmd("TermOpen", {
-  group = vim.api.nvim_create_augroup("term-open-buflisted", { clear = true }),
-  callback = function()
-    vim.cmd("setlocal relativenumber")
-    vim.cmd("setlocal wrap")
-    -- vim.bo.buflisted = false
-  end,
-})
+-- vim.api.nvim_create_autocmd("TermEnter", {
+-- 	pattern = "*",
+-- 	callback = function()
+-- 		vim.wo.cursorline = true
+-- 	end,
+-- 	desc = "Enable cursorline in terminal buffers",
+-- })
+--
+-- vim.api.nvim_create_autocmd("TermOpen", {
+-- 	group = vim.api.nvim_create_augroup("term-open-buflisted", { clear = true }),
+-- 	callback = function()
+-- 		vim.cmd("setlocal relativenumber")
+-- 		vim.cmd("setlocal wrap")
+-- 		-- vim.bo.buflisted = false
+-- 	end,
+-- })
 
 vim.api.nvim_create_autocmd("User", {
-  pattern = "GitConflictDetected",
-  callback = function()
-    vim.notify("Conflict detected in " .. vim.fn.expand("<afile>"))
+	pattern = "GitConflictDetected",
+	callback = function()
+		vim.notify("Conflict detected in " .. vim.fn.expand("<afile>"))
 
-    vim.keymap.set({ "n", "v" }, "cc", "<Plug>(git-conflict-ours)")
-    vim.keymap.set({ "n", "v" }, "ci", "<Plug>(git-conflict-theirs)")
-    vim.keymap.set({ "n", "v" }, "cb", "<Plug>(git-conflict-both)")
-    vim.keymap.set({ "n", "v" }, "cn", "<Plug>(git-conflict-none)")
-    vim.keymap.set({ "n", "v" }, "ck", "<Plug>(git-conflict-prev-conflict)")
-    vim.keymap.set({ "n", "v" }, "cj", "<Plug>(git-conflict-next-conflict)")
-  end,
+		vim.keymap.set({ "n", "v" }, "cc", "<Plug>(git-conflict-ours)")
+		vim.keymap.set({ "n", "v" }, "ci", "<Plug>(git-conflict-theirs)")
+		vim.keymap.set({ "n", "v" }, "cb", "<Plug>(git-conflict-both)")
+		vim.keymap.set({ "n", "v" }, "cn", "<Plug>(git-conflict-none)")
+		vim.keymap.set({ "n", "v" }, "ck", "<Plug>(git-conflict-prev-conflict)")
+		vim.keymap.set({ "n", "v" }, "cj", "<Plug>(git-conflict-next-conflict)")
+	end,
 })
 
 -- vim.api.nvim_create_autocmd("User", {
@@ -178,80 +178,77 @@ vim.api.nvim_create_autocmd("User", {
 --
 local group = vim.api.nvim_create_augroup("__env", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  pattern = "*.env*",
-  group = group,
-  callback = function()
-    vim.o.wrap = false
-    vim.bo.filetype = "sh"
-  end,
-})
---
---
--- vim.api.nvim_create_autocmd("FileType", {
---   group = vim.api.nvim_create_augroup("wrap-markdown", { clear = true }),
---   pattern = "markdown",
---   callback = function()
---     vim.cmd([[set nowrap]])
---   end,
--- })
-
-vim.api.nvim_create_autocmd("BufEnter", {
-  group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
-  pattern = "copilot-chat",
-  callback = function()
-    vim.o.conceallevel = 0
-    vim.o.signcolumn = "no"
-  end,
+	pattern = "*.env*",
+	group = group,
+	callback = function()
+		vim.o.wrap = false
+		vim.bo.filetype = "sh"
+	end,
 })
 
-
-vim.api.nvim_create_autocmd("BufLeave", {
-  group = vim.api.nvim_create_augroup("copilot-chat", { clear = true }),
-  pattern = "copilot-chat",
-  callback = function()
-    local chat = require("CopilotChat")
-    if vim.g.chat_title then
-      chat.save(vim.g.chat_title)
-      return
-    end
-
-    local cwd = vim.fn.getcwd()
-    local wt_utils = require("jg.custom.worktree-utils")
-    local wt_info = wt_utils.get_wt_info(cwd)
-    -- print("wt_info", vim.inspect(wt_info))
-
-
-    if next(wt_info) == nil then
-      vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
-    else
-      -- print("wt_root_dir", wt_info["wt_root_dir"])
-      vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
-    end
-    -- print("vim.g.chat_title", vim.g.chat_title)
-    chat.save(vim.g.chat_title)
-  end,
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("wrap-markdown", { clear = true }),
+	pattern = "markdown",
+	callback = function()
+		vim.cmd([[set nowrap]])
+	end,
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
-  group = vim.api.nvim_create_augroup("copilot-barbecue-ui-enter", { clear = true }),
-  pattern = "copilot-overlay",
-  callback = function()
-    require("barbecue.ui").toggle(false)
-    vim.cmd([[highlight DiffDelete guifg=#011528]])
-  end,
+	group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
+	pattern = "copilot-chat",
+	callback = function()
+		vim.o.conceallevel = 0
+		vim.o.signcolumn = "no"
+	end,
 })
 
 vim.api.nvim_create_autocmd("BufLeave", {
-  group = vim.api.nvim_create_augroup("copilot-barbecue-ui-leave", { clear = true }),
-  pattern = "copilot-overlay",
-  callback = function()
-    if vim.opt.diff:get() then
-      require("barbecue.ui").toggle(false)
-    else
-      require("barbecue.ui").toggle(true)
-    end
-    vim.cmd([[highlight DiffDelete guifg=none]])
-  end,
+	group = vim.api.nvim_create_augroup("copilot-chat", { clear = true }),
+	pattern = "copilot-chat",
+	callback = function()
+		local chat = require("CopilotChat")
+		if vim.g.chat_title then
+			chat.save(vim.g.chat_title)
+			return
+		end
+
+		local cwd = vim.fn.getcwd()
+		local wt_utils = require("jg.custom.worktree-utils")
+		local wt_info = wt_utils.get_wt_info(cwd)
+		-- print("wt_info", vim.inspect(wt_info))
+
+		if next(wt_info) == nil then
+			vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+		else
+			-- print("wt_root_dir", wt_info["wt_root_dir"])
+			vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
+		end
+		-- print("vim.g.chat_title", vim.g.chat_title)
+		chat.save(vim.g.chat_title)
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+	group = vim.api.nvim_create_augroup("copilot-barbecue-ui-enter", { clear = true }),
+	pattern = "copilot-overlay",
+	callback = function()
+		require("barbecue.ui").toggle(false)
+		vim.cmd([[highlight DiffDelete guifg=#011528]])
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufLeave", {
+	group = vim.api.nvim_create_augroup("copilot-barbecue-ui-leave", { clear = true }),
+	pattern = "copilot-overlay",
+	callback = function()
+		if vim.opt.diff:get() then
+			require("barbecue.ui").toggle(false)
+		else
+			require("barbecue.ui").toggle(true)
+		end
+		vim.cmd([[highlight DiffDelete guifg=none]])
+	end,
 })
 
 -- vim.api.nvim_create_autocmd({"OptionSet"}, {
@@ -293,32 +290,31 @@ vim.api.nvim_create_autocmd("BufLeave", {
 -- })
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "applescript",
-  callback = function()
-    vim.cmd([[setlocal commentstring=--\ %s]])
-  end,
+	pattern = "applescript",
+	callback = function()
+		vim.cmd([[setlocal commentstring=--\ %s]])
+	end,
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  group = vim.api.nvim_create_augroup("filetypedetect2", { clear = true }),
-  pattern = { "Gymfile", "Fastfile", "Podfile" },
-  callback = function()
-    vim.bo.filetype = "ruby"
-  end,
+	group = vim.api.nvim_create_augroup("filetypedetect2", { clear = true }),
+	pattern = { "Gymfile", "Fastfile", "Podfile" },
+	callback = function()
+		vim.bo.filetype = "ruby"
+	end,
 })
 
 vim.filetype.add({
-  extension = {
-    json = "jsonc", -- Treat .json files as jsonc
-  },
+	extension = {
+		json = "jsonc", -- Treat .json files as jsonc
+	},
 })
 
 vim.filetype.add({
-  extension = {
-    zsh = "bash", -- Treat .json files as jsonc
-  },
+	extension = {
+		zsh = "bash", -- Treat .json files as jsonc
+	},
 })
-
 
 -- vim.api.nvim_create_autocmd('User', {
 --   pattern = 'BlinkCmpShow',
@@ -335,3 +331,73 @@ vim.filetype.add({
 --     end
 --   end
 -- })
+
+local history_file = vim.fn.stdpath("data") .. "/dir_history.txt"
+
+-- Normalize directory paths by removing "./" and trailing slashes
+local function normalize_path(path)
+	return path:gsub("%./", ""):gsub("/$", "")
+end
+
+-- Save directory changes to a file
+vim.api.nvim_create_autocmd({ "DirChangedPre" }, {
+	group = vim.api.nvim_create_augroup("DirChangedPreGroup", { clear = true }),
+	callback = function(event)
+		local dir = normalize_path(event.file)
+		local lines = {}
+		local file = io.open(history_file, "r")
+		if file then
+			for line in file:lines() do
+				lines[normalize_path(line)] = true
+			end
+			file:close()
+		end
+		if not lines[dir] then
+			file = io.open(history_file, "a")
+			if file then
+				file:write(dir .. "\n")
+				file:close()
+			end
+		end
+	end,
+})
+
+-- Telescope picker for directory history
+-- Telescope picker for directory history with default selection on the penultimate entry
+local function open_dir_history()
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+  local entry_manager = require("telescope.entry_manager")
+
+  local entries = {}
+  local file = io.open(history_file, "r")
+  if file then
+    for line in file:lines() do
+      table.insert(entries, 1, line) -- Insert each line at the beginning to reverse the order
+    end
+    file:close()
+  end
+
+  pickers.new({}, {
+    prompt_title = "Directory History",
+    finder = finders.new_table(entries),
+    sorter = require("telescope.config").values.generic_sorter({}),
+    attach_mappings = function(_, map)
+      actions.select_default:replace(function()
+        actions.close(_)
+        local selection = action_state.get_selected_entry()
+        if selection then
+          vim.cmd("e " .. selection[1])
+        end
+      end)
+      return true
+    end,
+  }):find()
+end
+
+-- Map the function to a key
+vim.keymap.set("n", "<leader>ee", function()
+	open_dir_history()
+end, { noremap = true, silent = true })
