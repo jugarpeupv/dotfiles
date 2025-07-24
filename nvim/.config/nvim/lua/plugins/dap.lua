@@ -141,7 +141,7 @@ return {
 				':lua require"dap".down()<CR>zz',
 			},
 			{
-				"<leader>dt",
+				"<leader>dT",
 				function()
 					require("dap").terminate()
 				end,
@@ -163,7 +163,7 @@ return {
 				':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l',
 			},
 			{
-				"<Leader>dv",
+				"<leader>dV",
 				function()
 					local widgets = require("dap.ui.widgets")
 					local my_sidebar = widgets.sidebar(widgets.scopes)
@@ -196,6 +196,8 @@ return {
 		dependencies = {
 			{
 				"igorlfs/nvim-dap-view",
+        ---@module 'dap-view'
+        ---@type dapview.Config
 				opts = {
 					winbar = {
 						show = true,
@@ -203,39 +205,39 @@ return {
 						sections = { "scopes", "watches", "exceptions", "breakpoints", "threads", "repl" },
 						-- Must be one of the sections declared above
 						default_section = "scopes",
-						headers = {
-							breakpoints = "[B]",
-							scopes = "[S]",
-							exceptions = "[E]",
-							watches = "[W]",
-							threads = "[T]",
-							repl = "[R]",
-							console = "[C]",
-						},
+						-- headers = {
+						-- 	breakpoints = "[B]",
+						-- 	scopes = "[S]",
+						-- 	exceptions = "[E]",
+						-- 	watches = "[W]",
+						-- 	threads = "[T]",
+						-- 	repl = "[R]",
+						-- 	console = "[C]",
+						-- },
 						controls = {
 							enabled = false,
 							position = "right",
-							buttons = {
-								"play",
-								"step_into",
-								"step_over",
-								"step_out",
-								"step_back",
-								"run_last",
-								"terminate",
-								"disconnect",
-							},
-							icons = {
-								pause = "",
-								play = "",
-								step_into = "",
-								step_over = "",
-								step_out = "",
-								step_back = "",
-								run_last = "",
-								terminate = "",
-								disconnect = "",
-							},
+							-- buttons = {
+							-- 	"play",
+							-- 	"step_into",
+							-- 	"step_over",
+							-- 	"step_out",
+							-- 	"step_back",
+							-- 	"run_last",
+							-- 	"terminate",
+							-- 	"disconnect",
+							-- },
+							-- icons = {
+							-- 	pause = "",
+							-- 	play = "",
+							-- 	step_into = "",
+							-- 	step_over = "",
+							-- 	step_out = "",
+							-- 	step_back = "",
+							-- 	run_last = "",
+							-- 	terminate = "",
+							-- 	disconnect = "",
+							-- },
 							custom_buttons = {},
 						},
 					},

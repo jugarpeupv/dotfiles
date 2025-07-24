@@ -184,6 +184,7 @@ return {
 					api_nvimtree.marks.clear()
 					api_nvimtree.tree.reload()
 				end
+
 				local mark_cut = function()
 					local marks = api_nvimtree.marks.list()
 					if #marks == 0 then
@@ -195,6 +196,21 @@ return {
 					api_nvimtree.marks.clear()
 					api_nvimtree.tree.reload()
 				end
+
+
+
+        local mark_paste = function()
+          local marks = api_nvimtree.marks.list()
+          if #marks == 0 then
+            table.insert(marks, api_nvimtree.tree.get_node_under_cursor())
+          end
+          for _, node in pairs(marks) do
+            api_nvimtree.fs.paste(node)
+          end
+          api_nvimtree.marks.clear()
+          api_nvimtree.tree.reload()
+        end
+
 
 				vim.keymap.set("n", "F", function()
 					local node = api_nvimtree.tree.get_node_under_cursor()
@@ -225,9 +241,9 @@ return {
 					end
 				end, opts("Search in directory"))
 
-				vim.keymap.set("n", "U", function()
-					api_nvimtree.marks.clear()
-				end, opts("Delete marks"))
+				-- vim.keymap.set("n", "U", function()
+				-- 	api_nvimtree.marks.clear()
+				-- end, opts("Delete marks"))
 
 				vim.keymap.set("n", "S", function()
 					local node = api_nvimtree.tree.get_node_under_cursor()
@@ -326,6 +342,7 @@ return {
 				vim.keymap.set("n", "bD", mark_trash, opts("Trash File(s)"))
 				vim.keymap.set("n", "bd", mark_remove, opts("Remove File(s)"))
 				vim.keymap.set("n", "by", mark_copy, opts("Copy File(s)"))
+        vim.keymap.set("n", "bp", mark_paste, opts("Paste File(s)"))
 
 				vim.keymap.set("n", "bm", api_nvimtree.marks.bulk.move, opts("Move Bookmarked"))
 

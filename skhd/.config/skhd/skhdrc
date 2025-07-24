@@ -14,7 +14,7 @@ shift + alt - o : osascript ~/.config/skhd/Scripts/new-vscode-window.scpt
 # shift + alt - e : osascript ~/.config/skhd/Scripts/new-excel-window.scpt
 shift + alt - e : osascript ~/.config/skhd/Scripts/new-deno-window.scpt
 shift + alt - v : osascript ~/.config/skhd/Scripts/new-zeplin-window.scpt
-shift + alt - b : osascript ~/.config/skhd/Scripts/new-notes-window.scpt
+# shift + alt - b : osascript ~/.config/skhd/Scripts/new-notes-window.scpt
 shift + alt - r : osascript ~/.config/skhd/Scripts/new-finder-window.scpt
 shift + alt - z : osascript ~/.config/skhd/Scripts/new-msword-window.scpt
 shift + alt - y : osascript ~/.config/skhd/Scripts/new-obs-window.scpt

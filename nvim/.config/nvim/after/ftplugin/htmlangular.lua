@@ -1,1 +1,2 @@
-vim.cmd('runtime! ftplugin/html.vim!')
+vim.cmd("runtime! ftplugin/html.vim!")
+

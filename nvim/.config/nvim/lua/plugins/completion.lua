@@ -6,87 +6,91 @@ return {
 	{
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
+		enabled = true,
 		dependencies = {
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-cmdline",
 		},
 		config = function()
-			local cmp = require("cmp")
-			cmp.setup({
-				enabled = function()
-					return (vim.api.nvim_get_option_value("filetype", { buf = 0 }) ~= "gitcommit")
-				end,
-				sources = {},
-				window = {
-					completion = {
-						-- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
-						border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-						winhighlight = "Normal:CmpPmenu,FloatBorder:CmpPmenuBorder,CursorLine:PmenuSel,Search:None",
-					},
-					documentation = {
-						border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-						-- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
-						winhighlight = "Normal:CmpPmenu,FloatBorder:CmpPmenuBorder,CursorLine:PmenuSel,Search:None",
-					},
-				},
-			})
-
-			-- cmp.setup.filetype({ "gitcommit" }, {
+			-- local cmp = require("cmp")
+			-- cmp.setup({
+			-- 	enabled = function()
+			-- 		return (vim.api.nvim_get_option_value("filetype", { buf = 0 }) ~= "gitcommit" or
+			--          vim.api.nvim_get_option_value("filetype", { buf = 0 }) ~= "copilot-chat") or
+			--          vim.api.nvim_get_option_value("filetype", { buf = 0 }) ~= "AvanteInput"
+			-- 	end,
 			-- 	sources = {},
+			-- 	window = {
+			-- 		completion = {
+			-- 			-- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+			-- 			border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+			-- 			winhighlight = "Normal:CmpPmenu,FloatBorder:CmpPmenuBorder,CursorLine:PmenuSel,Search:None",
+			-- 		},
+			-- 		documentation = {
+			-- 			border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+			-- 			-- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+			-- 			winhighlight = "Normal:CmpPmenu,FloatBorder:CmpPmenuBorder,CursorLine:PmenuSel,Search:None",
+			-- 		},
+			-- 	},
 			-- })
-
-			-- `/` cmdline setup.
-			cmp.setup.cmdline({ "/", "?" }, {
-				mapping = cmp.mapping.preset.cmdline({
-					["<C-j>"] = { c = cmp.mapping.select_next_item() },
-					["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-					["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
-					["<C-l>"] = cmp.config.disable,
-					["<Tab>"] = cmp.config.disable,
-					["<CR>"] = cmp.mapping(function(fallback)
-						local selected_entry = cmp.get_selected_entry()
-						local filetype = vim.bo.filetype
-						if filetype == "" then
-							vim.api.nvim_feedkeys(t("<CR>"), "n", true)
-							return
-						elseif cmp.visible() and selected_entry ~= nil then
-							cmp.confirm({ select = true })
-							return
-						else
-							fallback()
-							-- vim.api.nvim_feedkeys(t("<CR>"), "n", true)
-							return
-						end
-					end, { "i", "s" }),
-					-- ["<Tab>"] = cmp.config.disable,
-					-- ["<Tab>"] = cmp.mapping(function(fallback)
-					-- 	-- local copilot = require("copilot.suggestion")
-					-- 	-- if copilot.is_visible() then
-					-- 	--   copilot.accept()
-					-- 	-- elseif cmp.visible() then
-					-- 	fallback()
-					-- end),
-				}),
-				-- mapping = {
-				--   ["<C-j>"] = { c = cmp.mapping.select_next_item() },
-				--   ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-				-- },
-				sources = {
-					{ name = "buffer" },
-				},
-			})
+			--
+			-- -- cmp.setup.filetype({ "gitcommit" }, {
+			-- -- 	sources = {},
+			-- -- })
+			--
+			-- -- `/` cmdline setup.
+			-- cmp.setup.cmdline({ "/", "?" }, {
+			-- 	mapping = cmp.mapping.preset.cmdline({
+			-- 		["<C-j>"] = { c = cmp.mapping.select_next_item() },
+			-- 		["<C-k>"] = { c = cmp.mapping.select_prev_item() },
+			-- 		["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
+			-- 		["<C-l>"] = cmp.config.disable,
+			-- 		["<Tab>"] = cmp.config.disable,
+			-- 		["<CR>"] = cmp.mapping(function(fallback)
+			-- 			local selected_entry = cmp.get_selected_entry()
+			-- 			local filetype = vim.bo.filetype
+			-- 			if filetype == "" then
+			-- 				vim.api.nvim_feedkeys(t("<CR>"), "n", true)
+			-- 				return
+			-- 			elseif cmp.visible() and selected_entry ~= nil then
+			-- 				cmp.confirm({ select = true })
+			-- 				return
+			-- 			else
+			-- 				-- fallback()
+			-- 				vim.api.nvim_feedkeys(t("<CR>"), "n", true)
+			--            fallback()
+			-- 			end
+			-- 		end, { "i", "s" }),
+			-- 		-- ["<Tab>"] = cmp.config.disable,
+			-- 		-- ["<Tab>"] = cmp.mapping(function(fallback)
+			-- 		-- 	-- local copilot = require("copilot.suggestion")
+			-- 		-- 	-- if copilot.is_visible() then
+			-- 		-- 	--   copilot.accept()
+			-- 		-- 	-- elseif cmp.visible() then
+			-- 		-- 	fallback()
+			-- 		-- end),
+			-- 	}),
+			-- 	-- mapping = {
+			-- 	--   ["<C-j>"] = { c = cmp.mapping.select_next_item() },
+			-- 	--   ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
+			-- 	-- },
+			-- 	sources = {
+			-- 		{ name = "buffer" },
+			-- 	},
+			-- })
 		end,
 	},
 	{
 		"saghen/blink.cmp",
 		event = "InsertEnter",
-		-- keys = {
-		-- 	"?",
-		-- 	"/",
-		-- },
+		keys = {
+			"?",
+			"/",
+		},
 		-- optional: provides snippets for the snippet source
 		dependencies = {
 			"onsails/lspkind.nvim",
+			"Kaiser-Yang/blink-cmp-avante",
 			"rafamadriz/friendly-snippets",
 			"moyiz/blink-emoji.nvim",
 			"MahanRahmati/blink-nerdfont.nvim",
@@ -118,6 +122,15 @@ return {
 			keymap = {
 				preset = "default",
 				["<C-w>"] = { "show_signature", "hide_signature", "fallback" },
+				["<C-space>"] = {
+					function(cmp)
+						if cmp.is_menu_visible() then
+							cmp.close()
+						else
+							cmp.show()
+						end
+					end,
+				},
 				["<C-k>"] = { "select_prev", "fallback" },
 				["<C-j>"] = { "select_next", "fallback" },
 				["<Right>"] = {
@@ -151,7 +164,7 @@ return {
 				},
 			},
 			cmdline = {
-				enabled = false,
+				enabled = true,
 				-- use 'inherit' to inherit mappings from top level `keymap` config
 				keymap = {
 					preset = "cmdline",
@@ -188,7 +201,11 @@ return {
 						},
 					},
 					-- Whether to automatically show the window when new completion items are available
-					menu = { auto_show = true },
+					menu = {
+						auto_show = function()
+							return vim.fn.getcmdtype() == "?" or vim.fn.getcmdtype() == "/"
+						end,
+					},
 					-- Displays a preview of the selected item on the current line
 					ghost_text = { enabled = false },
 				},
@@ -212,7 +229,10 @@ return {
 						},
 						components = {
 							label = {
-								width = { fill = true, max = 30 },
+								width = { fill = true, max = 60 },
+							},
+							label_description = {
+								width = { max = 100 },
 							},
 							kind_icon = {
 								text = function(ctx)
@@ -260,12 +280,65 @@ return {
 			-- Default list of enabled providers defined so that you can extend it
 			-- elsewhere in your config, without redefining it, due to `opts_extend`
 			sources = {
-				default = { "lsp", "path", "buffer", "omni", "snippets", "emoji", "nerdfont", "conventional_commits" },
+				default = {
+					"avante",
+					"lsp",
+					"path",
+					"buffer",
+					"omni",
+					"snippets",
+					"lazydev",
+					"emoji",
+					"nerdfont",
+					"conventional_commits",
+				},
 				per_filetype = { ["copilot-chat"] = { "path", "lsp", "buffer" } },
 				providers = {
+					avante = {
+						module = "blink-cmp-avante",
+						name = "Avante",
+						opts = {
+							-- options for blink-cmp-avante
+						},
+					},
+					lazydev = {
+						name = "LazyDev",
+						module = "lazydev.integrations.blink",
+						-- make lazydev completions top priority (see `:h blink.cmp`)
+						score_offset = 100,
+					},
 					-- ecolog = { name = 'ecolog', module = 'ecolog.integrations.cmp.blink_cmp' },
 					buffer = {
 						min_keyword_length = 2,
+						max_items = 4,
+						-- should_show_items = function()
+						--   local col = vim.api.nvim_win_get_cursor(0)[2]
+						--   local before_cursor = vim.api.nvim_get_current_line():sub(1, col)
+						--   -- NOTE: remember that `trigger_text` is modified at the top of the file
+						--   return before_cursor:match("!" .. "%w*$") ~= nil
+						-- end,
+						-- transform_items = function(_, items)
+						--   local line = vim.api.nvim_get_current_line()
+						--   local col = vim.api.nvim_win_get_cursor(0)[2]
+						--   local before_cursor = line:sub(1, col)
+						--   local start_pos, end_pos = before_cursor:find("!" .. "[^" .. "!" .. "]*$")
+						--   if start_pos then
+						--     for _, item in ipairs(items) do
+						--       if not item.trigger_text_modified then
+						--         ---@diagnostic disable-next-line: inject-field
+						--         item.trigger_text_modified = true
+						--         item.textEdit = {
+						--           newText = item.insertText or item.label,
+						--           range = {
+						--             start = { line = vim.fn.line(".") - 1, character = start_pos - 1 },
+						--             ["end"] = { line = vim.fn.line(".") - 1, character = end_pos },
+						--           },
+						--         }
+						--       end
+						--     end
+						--   end
+						--   return items
+						-- end,
 					},
 					conventional_commits = {
 						name = "Conventional Commits",
@@ -301,16 +374,22 @@ return {
 					cmdline = {
 						-- ignores cmdline completions when executing shell commands
 						enabled = function()
-							return false
-							-- if (vim.fn.getcmdtype() == ":") then
-							--   return false
-							-- end
+							-- return vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!") and not vim.fn.getcmdline():match("^:w")
+							if vim.fn.getcmdline():match("^w") then
+								return false
+							end
+							return true
+							-- return true
+							--        print(vim.fn.getcmdline())
+							-- -- if (vim.fn.getcmdtype() == ":") then
+							-- --   return false
+							-- -- end
 							-- return vim.fn.getcmdtype() ~= ":" or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
 						end,
 						min_keyword_length = function(ctx)
 							-- when typing a command, only show when the keyword is 3 characters or longer
 							if ctx.mode == "cmdline" and string.find(ctx.line, " ") == nil then
-								return 3
+								return 1
 							end
 							return 0
 						end,
@@ -320,34 +399,34 @@ return {
 						module = "blink.cmp.sources.snippets",
 						-- max_items = 5,
 						-- min_keyword_length = 2,
-            should_show_items = function()
-              local col = vim.api.nvim_win_get_cursor(0)[2]
-              local before_cursor = vim.api.nvim_get_current_line():sub(1, col)
-              -- NOTE: remember that `trigger_text` is modified at the top of the file
-              return before_cursor:match(";" .. "%w*$") ~= nil
-            end,
-						transform_items = function(_, items)
-							local line = vim.api.nvim_get_current_line()
-							local col = vim.api.nvim_win_get_cursor(0)[2]
-							local before_cursor = line:sub(1, col)
-							local start_pos, end_pos = before_cursor:find(";" .. "[^" .. ";" .. "]*$")
-							if start_pos then
-								for _, item in ipairs(items) do
-									if not item.trigger_text_modified then
-										---@diagnostic disable-next-line: inject-field
-										item.trigger_text_modified = true
-										item.textEdit = {
-											newText = item.insertText or item.label,
-											range = {
-												start = { line = vim.fn.line(".") - 1, character = start_pos - 1 },
-												["end"] = { line = vim.fn.line(".") - 1, character = end_pos },
-											},
-										}
-									end
-								end
-							end
-							return items
-						end,
+						-- should_show_items = function()
+						-- 	local col = vim.api.nvim_win_get_cursor(0)[2]
+						-- 	local before_cursor = vim.api.nvim_get_current_line():sub(1, col)
+						-- 	-- NOTE: remember that `trigger_text` is modified at the top of the file
+						-- 	return before_cursor:match(";" .. "%w*$") ~= nil
+						-- end,
+						-- transform_items = function(_, items)
+						-- 	local line = vim.api.nvim_get_current_line()
+						-- 	local col = vim.api.nvim_win_get_cursor(0)[2]
+						-- 	local before_cursor = line:sub(1, col)
+						-- 	local start_pos, end_pos = before_cursor:find(";" .. "[^" .. ";" .. "]*$")
+						-- 	if start_pos then
+						-- 		for _, item in ipairs(items) do
+						-- 			if not item.trigger_text_modified then
+						-- 				---@diagnostic disable-next-line: inject-field
+						-- 				item.trigger_text_modified = true
+						-- 				item.textEdit = {
+						-- 					newText = item.insertText or item.label,
+						-- 					range = {
+						-- 						start = { line = vim.fn.line(".") - 1, character = start_pos - 1 },
+						-- 						["end"] = { line = vim.fn.line(".") - 1, character = end_pos },
+						-- 					},
+						-- 				}
+						-- 			end
+						-- 		end
+						-- 	end
+						-- 	return items
+						-- end,
 					},
 				},
 			},

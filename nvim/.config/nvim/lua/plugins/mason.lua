@@ -60,6 +60,9 @@ return {
       -- end
 
       local conf = vim.tbl_deep_extend("keep", opts, {
+        ui = {
+          border = 'rounded',
+        },
         registries = {
           "github:nvim-java/mason-registry",
           "github:mason-org/mason-registry",

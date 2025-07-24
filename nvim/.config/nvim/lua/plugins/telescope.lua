@@ -5,9 +5,23 @@
 return {
 	{
 		"nvim-telescope/telescope.nvim",
-		-- branch = "0.1.x",
-		tag = "0.1.8",
+		branch = "0.1.x",
+		-- tag = "0.1.8",
+		-- branch = "master",
 		dependencies = {
+			{
+				"Myzel394/jsonfly.nvim",
+				enabled = false,
+				keys = {
+					{
+						"<leader>jq",
+						"<cmd>Telescope jsonfly<cr>",
+						desc = "Open json(fly)",
+						ft = { "json", "xml", "yaml", "jsonc" },
+						mode = "n",
+					},
+				},
+			},
 			-- {
 			--   "nvim-telescope/telescope-arecibo.nvim",
 			--   rocks = { openssl = true, ["lua-http-parser"] = true },
@@ -95,6 +109,7 @@ return {
 			},
 			{
 				"jugarpeupv/nx.nvim",
+				enabled = false,
 				-- dir='~/private/nx.nvim/wt-main/',
 				-- dev = true,
 				dependencies = {
@@ -144,6 +159,7 @@ return {
 			},
 			{
 				"piersolenski/telescope-import.nvim",
+        enabled = false,
 				dependencies = "nvim-telescope/telescope.nvim",
 				keys = {
 					{
@@ -176,15 +192,15 @@ return {
 			{ "natecraddock/telescope-zf-native.nvim", cmd = { "Telescope" } },
 			{
 				"mosheavni/yaml-companion.nvim",
-        branch = "chore/remove-deprecated-apis",
-				enabled = true,
+				branch = "chore/remove-deprecated-apis",
+				enabled = false,
 				-- ft = { "yaml", "yml", "yaml.github" },
 				config = function()
 					local cfg = require("yaml-companion").setup({
-            filetypes = { "yaml", "yml" },
-            cmd = { os.getenv("HOME") .. "/.local/share/nvim/mason/bin/yaml-language-server", "--stdio" },
-            on_attach = require("jg.custom.lsp-utils").attach_lsp_config,
-            capabilities = require("blink.cmp").get_lsp_capabilities(),
+						filetypes = { "yaml", "yml" },
+						cmd = { os.getenv("HOME") .. "/.local/share/nvim/mason/bin/yaml-language-server", "--stdio" },
+						on_attach = require("jg.custom.lsp-utils").attach_lsp_config,
+						capabilities = require("blink.cmp").get_lsp_capabilities(),
 						-- detect k8s schemas based on file content
 						builtin_matchers = {
 							kubernetes = { enabled = true },
@@ -230,11 +246,11 @@ return {
 										-- 	"kustomization.yaml",
 										-- 	"GitHub Workflow",
 										-- },
-                    extra = {
-                      url = 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/argoproj.io/application_v1alpha1.json',
-                      name = 'Argo CD Application',
-                      fileMatch = 'argocd-application.yaml'
-                    }
+										extra = {
+											url = "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/argoproj.io/application_v1alpha1.json",
+											name = "Argo CD Application",
+											fileMatch = "argocd-application.yaml",
+										},
 									}),
 								},
 							},
@@ -250,7 +266,7 @@ return {
 			{
 				"nvim-treesitter/nvim-treesitter",
 			},
-			{ "3rd/image.nvim" },
+			-- { "3rd/image.nvim" },
 			{
 				"dhruvmanila/browser-bookmarks.nvim",
 				version = "*",
@@ -303,7 +319,36 @@ return {
 
 			local actions = require("telescope.actions")
 			local actions_live_grep_args = require("telescope-live-grep-args.actions")
-			local image_preview = require("jg.custom.telescope").telescope_image_preview()
+			-- local image_preview = require("jg.custom.telescope").telescope_image_preview()
+
+			-- local action_state = require("telescope.actions.state")
+			--
+			-- local append_to_history = function(prompt_bufnr)
+			-- 	action_state
+			-- 		.get_current_history()
+			-- 		:append(action_state.get_current_line(), action_state.get_current_picker(prompt_bufnr))
+			-- end
+			--
+			-- local action_set = require("telescope.actions.set")
+			--
+			-- local open_after_tree = {
+			-- 	pre = append_to_history,
+			-- 	action = function(prompt_bufnr)
+			-- 		vim.defer_fn(function()
+			-- 			return action_set.select(prompt_bufnr, "default")
+			-- 		end, 0)
+			-- 	end,
+			-- }
+
+			local open_after_tree = function(prompt_bufnr)
+        vim.defer_fn(function() actions.select_default(prompt_bufnr) end, 0)
+			  -- local entry = action_state.get_selected_entry()
+			  -- actions.close(prompt_bufnr)
+			  --
+			  -- vim.defer_fn(function()
+			  --   vim.cmd("edit " .. vim.fn.fnameescape(entry.path or entry.value))
+			  -- end, 0) -- Delay allows filetype and plugins to settle before opening
+			end
 
 			telescope.setup({
 				-- defaults = {
@@ -518,8 +563,8 @@ return {
 							"--column",
 							"--smart-case",
 						},
-						file_previewer = image_preview.file_previewer,
-						buffer_previewer_maker = image_preview.buffer_previewer_maker,
+						-- file_previewer = image_preview.file_previewer,
+						-- buffer_previewer_maker = image_preview.buffer_previewer_maker,
 						-- layout_strategy = 'bottom_pane',
 						-- layout_config = {
 						--   height = 0.53,
@@ -536,7 +581,13 @@ return {
 						},
 						preview = {
 							filesize_limit = 1, -- MB
+							-- highlight_limit = 0.5, -- MB
 							hide_on_startup = false,
+							timeout = 100,
+							-- treesitter = false,
+							-- treesitter = {
+							--   enable = false
+							-- },
 							-- 1) Do not show previewer for certain files
 							filetype_hook = function(filepath, bufnr, opts)
 								-- you could analogously check opts.ft for filetypes
@@ -582,7 +633,8 @@ return {
 								["<Down>"] = actions.move_selection_next,
 								["<Up>"] = actions.move_selection_previous,
 
-								["<CR>"] = actions.select_default,
+								-- ["<CR>"] = actions.select_default,
+								["<CR>"] = open_after_tree,
 								["<C-s>"] = actions.select_horizontal,
 								["<C-v>"] = actions.select_vertical,
 								-- ["<C-Enter>"] = actions.select_vertical,
@@ -619,12 +671,12 @@ return {
 								["<C-x>"] = "delete_buffer",
 								-- ["<C-l>"] = actions.complete_tag,
 								["<C-h>"] = actions.which_key, -- keys from pressing <C-/>
-								["<C-a>"] = actions.git_create_branch,
 							},
 
 							n = {
 								["<esc>"] = actions.close,
-								["<CR>"] = actions.select_default,
+								-- ["<CR>"] = actions.select_default,
+								["<CR>"] = open_after_tree,
 								["<C-s>"] = actions.select_horizontal,
 								["<C-v>"] = actions.select_vertical,
 								-- ["<C-Enter>"] = actions.select_vertical,
@@ -707,6 +759,9 @@ return {
 					--   show_scores = true,
 					--   -- path_display = { "filename_first" },
 					-- },
+					-- jsonfly = {
+					--   subkeys_display = "waterfall"
+					-- },
 					file_browser = {
 						theme = "ivy",
 						hidden = true,
@@ -725,7 +780,6 @@ return {
 								["<C-q>"] = fb_actions.sort_by_date,
 								["<C-b>"] = fb_actions.open,
 								["<C-o>"] = function(prompt_bufnr)
-									local action_state = require("telescope.actions.state")
 									actions.close(prompt_bufnr)
 									local selection = action_state.get_selected_entry()
 									if vim.fn.isdirectory(selection.value) == 1 then
@@ -772,9 +826,9 @@ return {
 							},
 						},
 					},
-					heading = {
-						treesitter = true,
-					},
+					-- heading = {
+					-- 	treesitter = true,
+					-- },
 					["zf-native"] = {
 						file = {
 							enable = true,
@@ -973,6 +1027,11 @@ return {
 			if heading then
 				telescope.load_extension("heading")
 			end
+
+			-- local jsonfly = pcall(require, "jsonfly")
+			-- if jsonfly then
+			--   telescope.load_extension("jsonfly")
+			-- end
 
 			telescope.load_extension("dap")
 			telescope.load_extension("zf-native")

@@ -1,5 +1,143 @@
 -- return {}
 return {
+	-- {
+	-- 	"wojciech-kulik/xcodebuild.nvim",
+	-- 	dependencies = {
+	-- 		"nvim-telescope/telescope.nvim",
+	-- 		"MunifTanjim/nui.nvim",
+	-- 		"folke/snacks.nvim", -- (optional) to show previews
+	-- 		"nvim-tree/nvim-tree.lua", -- (optional) to manage project files
+	-- 		"stevearc/oil.nvim", -- (optional) to manage project files
+	-- 		"nvim-treesitter/nvim-treesitter", -- (optional) for Quick tests support (required Swift parser)
+	-- 	},
+	-- 	config = function()
+	-- 		require("xcodebuild").setup({
+	-- 			-- put some options here or leave it empty to use default settings
+	-- 		})
+	-- 	end,
+	-- },
+	{
+		"axkirillov/unified.nvim",
+		cmd = { "Unified" },
+		opts = {
+			-- your configuration comes here
+		},
+	},
+	{
+		"almo7aya/openingh.nvim",
+		cmd = { "OpenInGHRepo", "OpenInGHFile", "OpenInGHFileLines" },
+	},
+	{
+		"uga-rosa/translate.nvim",
+		cmd = { "Translate", "TranslateW" },
+		config = function()
+			require("translate").setup({
+
+				default = {
+					output = "register",
+				},
+				preset = {
+					output = {
+						split = {
+							append = true,
+						},
+					},
+				},
+			})
+		end,
+	},
+	-- {
+	--   "echasnovski/mini.icons",
+	--   opts = {},
+	--   lazy = true,
+	--   specs = {
+	--     { "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
+	--   },
+	--   init = function()
+	--     package.preload["nvim-web-devicons"] = function()
+	--       require("mini.icons").mock_nvim_web_devicons()
+	--       return package.loaded["nvim-web-devicons"]
+	--     end
+	--   end,
+	-- },
+	{
+		"A7Lavinraj/fyler.nvim",
+		enabled = true,
+		cmd = { "Fyler" },
+    branch = "stable",
+		dependencies = { "echasnovski/mini.icons" },
+		opts = {
+      default_explorer = false,
+      close_on_select = false,
+			views = {
+				explorer = {
+					width = 0.4,
+					height = 1,
+					kind = "right",
+					border = "single",
+				},
+			},
+		},
+	},
+	{
+		"skanehira/denops-docker.vim",
+		dependencies = {
+			{ "vim-denops/denops.vim" },
+		},
+		cmd = { "Docker", "DockerContainers", "DockerImages" },
+		lazy = false,
+		-- config = function ()
+		--   vim.keymap.set("n", "<leader>dt", "<cmd>DockerContainers<cr>", { desc = "Docker Containers" })
+		-- end,
+		keys = {
+			{
+				"<leader>dt",
+				-- "<cmd>DockerContainers<cr>",
+				function()
+					vim.cmd(":e docker://containers")
+					-- Execute the DockerContainers command
+					-- vim.cmd("DockerContainers")
+				end,
+				desc = "Docker Containers",
+			},
+		},
+	},
+	{
+		"kkvh/vim-docker-tools",
+		cmd = { "DockerToolsToggle" },
+		enabled = false,
+		keys = {
+			{
+				"<leader>DT",
+				"<cmd>DockerToolsToggle<cr>",
+				desc = "Toggle Docker Tools",
+			},
+		},
+	},
+	{
+		"jfryy/keytrail.nvim",
+		enabled = false,
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-telescope/telescope.nvim",
+		},
+		config = function()
+			require("keytrail").setup({
+				-- The delimiter to use between path segments
+				delimiter = ".",
+				-- The delay in milliseconds before showing the hover popup
+				hover_delay = 100,
+				-- The key mapping to use for jumping to a path
+				key_mapping = "jq",
+				-- The file types to enable KeyTrail for
+				filetypes = {
+					yaml = true,
+					json = true,
+					jsonc = true,
+				},
+			})
+		end,
+	},
 	-- Lua
 	-- { "HawkinsT/pathfinder.nvim" },
 	{
@@ -236,17 +374,17 @@ return {
 				relative = "editor",
 				position = "right",
 				size = 60,
-        buf_options = {
-          filetype = "pipeline",
-          buflisted = true,
-        },
+				buf_options = {
+					filetype = "pipeline",
+					buflisted = true,
+				},
 				win_options = {
 					wrap = true,
 					number = true,
 					foldlevel = nil,
 					foldcolumn = "0",
 					cursorcolumn = false,
-					signcolumn = "no"
+					signcolumn = "no",
 				},
 			},
 		},
@@ -494,6 +632,98 @@ return {
 		},
 		keys = { { "<leader>co", "<cmd>NvimContextVtToggle<cr>" } },
 	},
+	-- lazy.nvim
+	{
+		"folke/snacks.nvim",
+		enabled = true,
+		opts = {
+			picker = {
+				ui_select = true,
+				layout = {
+					-- reverse = true,
+					preview = true,
+					layout = {
+						-- box = 'horizontal',
+						-- backdrop = false,
+						width = 0.9,
+						height = 0.9,
+						-- border = 'none',
+						-- {
+						--   box = 'vertical',
+						--   { win = 'list', title = ' Results ', title_pos = 'center', border = vim.g.borderStyle },
+						--   { win = 'input', height = 1, border = vim.g.borderStyle, title = '{title} {live} {flags}', title_pos = 'center' },
+						-- },
+						-- {
+						--   win = 'preview',
+						--   title = '{preview:Preview}',
+						--   width = 0.65,
+						--   border = vim.g.borderStyle,
+						--   title_pos = 'center',
+						-- },
+					},
+				},
+			},
+			explorer = {},
+		},
+		keys = {
+			-- Top Pickers & Explorer
+			{
+				"<leader><space>",
+				function()
+					Snacks.picker.smart()
+				end,
+				desc = "Smart Find Files",
+			},
+			{
+				"<leader>,",
+				function()
+					Snacks.picker.buffers()
+				end,
+				desc = "Buffers",
+			},
+			{
+				"<leader>/",
+				function()
+					Snacks.picker.grep()
+				end,
+				desc = "Grep",
+			},
+			-- -- find
+			-- { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
+			-- { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+			-- { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+			-- { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
+			-- { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
+			-- { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
+			-- -- git
+			-- { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
+			-- { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
+			-- { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
+			-- { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
+			-- { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
+			-- { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },
+			-- { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
+			-- -- Grep
+			-- { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
+			-- { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
+			{
+				"<leader>sg",
+				function()
+					Snacks.picker.grep({ preview = false })
+				end,
+				desc = "Grep",
+			},
+			{
+				"<leader>sw",
+				function()
+					Snacks.picker.grep_word()
+				end,
+				desc = "Visual selection or word",
+				mode = { "n", "x" },
+			},
+			-- search
+		},
+	},
 	{
 		"maskudo/devdocs.nvim",
 		enabled = true,
@@ -618,6 +848,7 @@ return {
 	{
 		"vuki656/package-info.nvim",
 		dependencies = { "MunifTanjim/nui.nvim" },
+		enabled = false,
 		ft = { "json", "jsonc" },
 		-- config = function (_, opts)
 		--   require("package-info").setup(opts)
@@ -701,7 +932,7 @@ return {
 		--   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
 		--   "nvim-tree/nvim-tree.lua"
 		-- },
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		-- Optional: you can add some keybindings
 		-- (I personally use lspsaga so check out lspsaga integration or lsp integration for a smoother experience without separate keybindings)
 		keys = {
@@ -814,6 +1045,7 @@ return {
 	{ "heavenshell/vim-jsdoc", cmd = { "JsDoc" } },
 	{
 		"barrett-ruth/live-server.nvim",
+		enabled = false,
 		build = "pnpm add -g live-server",
 		keys = { {
 			"<leader>le",
@@ -1034,7 +1266,7 @@ return {
 			{
 				mode = { "n" },
 				"<leader>gf",
-				"<cmd>Git! fetch --all -v<cr>",
+				"<cmd>Git! fetch --all --tags -v<cr>",
 				{ silent = true, noremap = true },
 			},
 			{

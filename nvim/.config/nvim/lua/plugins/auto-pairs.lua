@@ -3,11 +3,11 @@ return {
     "windwp/nvim-autopairs",
     enabled = true,
     event = "InsertEnter",
-    dependencies = {
-      {
-        "hrsh7th/nvim-cmp",
-      },
-    },
+    -- dependencies = {
+    --   {
+    --     "hrsh7th/nvim-cmp",
+    --   },
+    -- },
     config = function()
       ---------------- AUTOPAIRS config
       local autopairs_setup, autopairs = pcall(require, "nvim-autopairs")
@@ -52,8 +52,8 @@ return {
       -- })
 
       -- -- setup cmp for autopairs
-      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-      require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+      -- local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+      -- require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
       -- require("cmp").event:on('confirm_done', cmp_autopairs.on_confirm_done({
       --   map_char = {
       --     tex = '',

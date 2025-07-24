@@ -64,16 +64,14 @@ vim.keymap.set({ "n" }, "<leader>gt", function()
 	local options = {
 		git_command = { "git", "tag", "-l" },
 	}
-  local opts2 = {
-
-  }
+	local opts2 = {}
 
 	pickers
 		.new(options, {
 			prompt_title = "Git Tags",
 			finder = finders.new_oneshot_job(options.git_command, opts2),
-      sorter = conf.file_sorter(options),
-      -- sorter = require("telescope.config").values.generic_sorter,
+			sorter = conf.file_sorter(options),
+			-- sorter = require("telescope.config").values.generic_sorter,
 			-- sorter = require("telescope.sorters").Sorter:new({
 			-- 	scoring_function = function(_, prompt, line)
 			-- 		-- Custom sorting logic: Sort by descending order
@@ -147,12 +145,17 @@ vim.keymap.set({ "n" }, "<leader>cd", function()
 	require("nvim-tree.api").tree.change_root(cwd)
 end, opts)
 
-keymap(
-	"n",
-	"<leader>.",
-	"<cmd> lua require('telescope.builtin').find_files({ prompt_title = '< VimRC >', cwd = '~/dotfiles/nvim/.config/nvim',hidden = false })<cr>",
-	opts
-)
+vim.keymap.set({ "n" }, "<leader>.", function()
+  require("telescope.builtin").find_files({
+    prompt_title = '< NvimRC >',
+    cwd = '~/dotfiles/nvim/.config/nvim',
+    no_ignore = true,
+    hidden = false,
+    preview = {
+      hide_on_startup = true,
+    },
+  })
+end, opts)
 
 -- keymap("n", "su", "<cmd>Telescope file_browser path=/Users/jgarcia<cr>", opts)
 -- keymap("n", "sf", "<cmd>Telescope file_browser<cr>", opts)
@@ -160,6 +163,10 @@ keymap(
 
 vim.keymap.set({ "n" }, "so", function()
 	require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
+end, opts)
+
+vim.keymap.set({ "n" }, "<leader>fw", function()
+	require("jg.custom.telescope").telescope_file_picker_in_workspace(vim.fn.expand("~"))
 end, opts)
 
 vim.keymap.set({ "n" }, "su", function()
@@ -545,8 +552,57 @@ keymap("n", "<leader>sl", "<cmd>BLines<cr>", opts)
 keymap("n", "<leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>", opts)
 
 -- Telescope
-keymap("n", "<leader>gs", "<cmd>lua require('telescope.builtin').git_stash()<cr>", opts)
-keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<cr>", opts)
+-- keymap("n", "<leader>gs", "<cmd>lua require('telescope.builtin').git_stash()<cr>", opts)
+
+
+-- Keymap for git stash with extended functionality
+vim.keymap.set("n", "<leader>gs", function()
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+  local builtin = require("telescope.builtin")
+  builtin.git_stash({
+    attach_mappings = function(prompt_bufnr, map)
+      -- Custom action to discard a git stash
+      local function discard_stash()
+        local selection = action_state.get_selected_entry()
+        if not selection then
+          print("No stash selected!")
+          return
+        end
+
+        local stash_index = selection.value:match("^stash@{(%d+)}")
+        if stash_index then
+          vim.fn.system("git stash drop stash@{" .. stash_index .. "}")
+          print("Discarded stash: stash@{" .. stash_index .. "}")
+        else
+          print("Failed to parse stash index!")
+        end
+
+        actions.close(prompt_bufnr)
+      end
+
+      -- Map a key to discard the selected stash
+      map("i", "<C-d>", discard_stash)
+      map("n", "<C-d>", discard_stash)
+
+      return true
+    end,
+  })
+end, { desc = "Telescope Git Stash with Discard Option" })
+
+
+-- keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<cr>", opts)
+vim.keymap.set("n", "<leader>gb", function()
+	local actions = require("telescope.actions")
+	require("telescope.builtin").git_branches({
+		mappings = {
+			i = {
+				["<C-a>"] = actions.git_create_branch,
+			},
+		},
+	})
+end, opts)
+
 -- keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches({layout_config={height=0.8}})<cr>", opts)
 
 keymap("n", "<leader>gB", "<cmd>Git branch -vv<cr>", opts)
@@ -598,9 +654,8 @@ keymap("n", "<leader>zh", "<cmd>:e ~/.zshrc<cr>", opts)
 keymap("n", "<leader>gc", "<cmd>lua require('telescope.builtin').git_commits()<cr>", opts)
 
 -- Hop
+vim.api.nvim_set_keymap("n", "S", "<cmd>lua require'hop'.hint_words()<cr>", opts)
 -- vim.api.nvim_set_keymap("n", "<leader>ww", "<cmd>lua require'hop'.hint_words()<cr>", opts)
--- vim.api.nvim_set_keymap("n", "S", "<cmd>lua require'hop'.hint_words()<cr>", opts)
-vim.api.nvim_set_keymap("n", ";", "<cmd>lua require'hop'.hint_words()<cr>", opts)
 
 -- JsonPath
 keymap("n", "<leader>cp", "<cmd>JsonPath<CR>", opts)
@@ -920,8 +975,23 @@ vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
 
 vim.keymap.set({ "n" }, "<M-b>", function()
 	local current_buf_name = vim.fn.expand("%")
+
+  local function get_filetype_alias()
+    local filetype = vim.bo.filetype
+
+    if filetype == "sh" or filetype == "bash" then
+      return "sh"
+    elseif filetype == "typescript" or filetype == "javascript" then
+      return "bun"
+    else
+      return filetype
+    end
+  end
+
+  local executable = get_filetype_alias()
+
 	vim.api.nvim_feedkeys(
-		vim.api.nvim_replace_termcodes(":Compile bun " .. current_buf_name, true, false, true),
+		vim.api.nvim_replace_termcodes(":Compile " .. executable .. " " .. current_buf_name, true, false, true),
 		"n",
 		true
 	)
@@ -1175,7 +1245,82 @@ end
 
 vim.keymap.set("n", "<leader>DD", toggle_diffopt, { desc = "Toggle diffopt settings" })
 
-
 vim.keymap.set({ "n" }, "<leader>sc", function()
-  require("telescope").extensions.yaml_schema.yaml_schema({})
+	require("telescope").extensions.yaml_schema.yaml_schema({})
 end, opts)
+
+vim.keymap.set("n", "<leader>gm", function()
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local conf = require("telescope.config").values
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+
+	-- Helper to escape Lua patterns
+	local function pesc(str)
+		return str:gsub("([^%w])", "%%%1")
+	end
+
+	local function get_git_modified_files()
+		local cwd = vim.loop.cwd()
+		local handle = io.popen("git status --porcelain")
+		if not handle then
+			return {}
+		end
+		local result = handle:read("*a")
+		handle:close()
+		local files = {}
+		for line in result:gmatch("[^\r\n]+") do
+			local file = line:match("^..%s+(.+)$")
+			if file then
+				-- Remove cwd prefix for display if present
+				local display = file:gsub("^" .. pesc(cwd) .. "/", "")
+				table.insert(files, { value = file, display = display })
+			end
+		end
+		return files
+	end
+
+	local function git_modified_files_picker()
+		pickers
+			.new({}, {
+				prompt_title = "Git Modified Files",
+				finder = finders.new_table({
+					results = get_git_modified_files(),
+					entry_maker = function(entry)
+						return {
+							value = entry.value,
+							display = entry.display,
+							ordinal = entry.display,
+						}
+					end,
+				}),
+				sorter = conf.generic_sorter({}),
+				attach_mappings = function(prompt_bufnr, map)
+					actions.select_default:replace(function()
+						actions.close(prompt_bufnr)
+						local selection = action_state.get_selected_entry()
+						vim.cmd("edit " .. selection.value)
+					end)
+					return true
+				end,
+			})
+			:find()
+	end
+
+	git_modified_files_picker()
+end, opts)
+
+vim.keymap.set("n", "<leader>dv", function()
+	-- Get the current branch (faster method)
+	local current_branch = vim.fn.system("git symbolic-ref --short HEAD"):gsub("%s+", "")
+
+	-- Get the default branch (faster method)
+	local default_branch =
+		vim.fn.system("git symbolic-ref --short refs/remotes/origin/HEAD"):gsub("origin/", ""):gsub("%s+", "")
+
+	-- Construct the DiffviewOpen command
+	local diffview_command = string.format(":DiffviewOpen %s..%s", default_branch, current_branch)
+	-- Populate the command line using vim.api.nvim_feedkeys
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
+end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })

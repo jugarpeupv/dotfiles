@@ -8,7 +8,7 @@ return {
 				require("grug-far").toggle_instance({
 					instanceName = "far",
 					staticTitle = "Find and Replace",
-					prefills = { flags = "-i" },
+					prefills = { flags = "-i -w" },
 				})
 			end,
 		},
@@ -70,6 +70,12 @@ return {
         include_file_path = true,
       },
 			wrap = false,
+      helpLine = {
+        enabled = false,
+      },
+      showInputsTopPadding = false,
+      showInputsBottomPadding = true,
+      showCompactInputs = true,
 			resultsHighlight = true,
 			resultLocation = {
 				-- whether to show the result location number label

@@ -162,6 +162,7 @@ return {
       local ccc = require("ccc")
       ccc.setup({
         highlighter = {
+          excludes = { 'lazy' },
           auto_enable = true,
           lsp = false,
         },

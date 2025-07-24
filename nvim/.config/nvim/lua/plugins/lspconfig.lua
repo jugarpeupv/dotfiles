@@ -114,25 +114,26 @@ return {
 			end
 			return true
 		end,
-		ft = { "java" },
+    ft = {"java", "yaml", "jproperties"},
 		dependencies = {
 			"mfussenegger/nvim-jdtls",
 		},
 		opts = function()
 			local home = os.getenv("HOME")
 			-- mason for sonarlint-language path
-			local mason_registery_status, mason_registery = pcall(require, "mason-registry")
+			local mason_registery_status = pcall(require, "mason-registry")
 			if not mason_registery_status then
 				vim.notify("Mason registery not found", vim.log.levels.ERROR, { title = "Spring boot" })
 				return
 			end
 
 			local opts = {}
-			opts.ls_path = mason_registery.get_package("spring-boot-tools"):get_install_path()
-				.. "/extension/language-server"
+			-- opts.ls_path = mason_registery.get_package("spring-boot-tools"):get_install_path()
+			-- 	.. "/extension/language-server"
 
-			opts.ls_path = os.getenv("MASON") .. "/packages/spring-boot-tools/extension/language-server"
-			print("jdtls opts.ls_path: ", opts.ls_path)
+      -- /Users/jgarcia/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server/spring-boot-language-server-1.59.0-SNAPSHOT-exec.jar
+			opts.ls_path = os.getenv("MASON") .. "/packages/spring-boot-tools/extension/language-server/spring-boot-language-server-1.59.0-SNAPSHOT-exec.jar"
+			-- print("jdtls opts.ls_path: ", opts.ls_path)
 
 			-- jdtls opts.ls_path:  /Users/jgarcia/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server
 			-- opts.ls_path = "/home/sangram/.vscode/extensions/vmware.vscode-spring-boot-1.55.1"
@@ -158,6 +159,7 @@ return {
 		-- event = { "InsertEnter" },
 		dependencies = {
 			{ "saghen/blink.cmp" },
+      { "nvim-telescope/telescope.nvim" },
 			{
 				"VidocqH/lsp-lens.nvim",
 				enabled = false,
@@ -168,11 +170,12 @@ return {
 			{
 				"zeioth/garbage-day.nvim",
 				dependencies = "neovim/nvim-lspconfig",
-				enabled = true,
+				enabled = false,
 				opts = {
-					excluded_lsp_clients = {
-						"copilot",
-					},
+					notifications = true,
+					-- excluded_lsp_clients = {
+					-- 	"copilot",
+					-- },
 					-- your options here
 				},
 			},
@@ -185,8 +188,8 @@ return {
 				opts = {
 					progress = {
 						suppress_on_insert = true, -- Suppress new messages while in insert mode
-						ignore_done_already = false, -- Ignore new tasks that are already complete
-						ignore_empty_message = false,
+						ignore_done_already = true, -- Ignore new tasks that are already complete
+						ignore_empty_message = true,
 						display = {
 							-- done_style = "Operator",
 							done_style = "String",
@@ -244,7 +247,7 @@ return {
 					require("lsp-file-operations").setup()
 				end,
 			},
-			{ "hrsh7th/nvim-cmp" },
+			-- { "hrsh7th/nvim-cmp" },
 			{
 				"williamboman/mason.nvim",
 
@@ -301,52 +304,52 @@ return {
 
 			local root_pattern = require("lspconfig.util").root_pattern
 
-			local calculate_angularls_root_dir = function()
-				local function read_file(file_path)
-					local file = io.open(file_path, "r")
-					if not file then
-						return nil
-					end
-
-					local content = file:read("*a")
-					file:close()
-
-					return content
-				end
-
-				-- Function to check if a specific dependency is present in the package.json file
-				local function has_dependency(package_json_content, dependency_name)
-					local status_decode, package_data = pcall(vim.json.decode, package_json_content)
-					if not status_decode then
-						return false
-					end
-					local dependencies = package_data.dependencies
-
-					return dependencies and dependencies[dependency_name] ~= nil
-				end
-
-				-- Example usage
-				local package_json_path = "package.json"
-				if pcall(read_file, package_json_path) then
-					local package_json_content = read_file(package_json_path)
-
-					if package_json_content then
-						local dependency_name = "@angular/core"
-						local hasAngularCore = has_dependency(package_json_content, dependency_name)
-						print("hasAngularCore: ", hasAngularCore)
-
-						if hasAngularCore then
-							return root_pattern("angular.json", "nx.json", "project.json")
-						else
-							return root_pattern("inventado")
-						end
-					else
-						return root_pattern("inventado")
-					end
-				else
-					return root_pattern("inventado")
-				end
-			end
+			-- local calculate_angularls_root_dir = function()
+			-- 	local function read_file(file_path)
+			-- 		local file = io.open(file_path, "r")
+			-- 		if not file then
+			-- 			return nil
+			-- 		end
+			--
+			-- 		local content = file:read("*a")
+			-- 		file:close()
+			--
+			-- 		return content
+			-- 	end
+			--
+			-- 	-- Function to check if a specific dependency is present in the package.json file
+			-- 	local function has_dependency(package_json_content, dependency_name)
+			-- 		local status_decode, package_data = pcall(vim.json.decode, package_json_content)
+			-- 		if not status_decode then
+			-- 			return false
+			-- 		end
+			-- 		local dependencies = package_data.dependencies
+			--
+			-- 		return dependencies and dependencies[dependency_name] ~= nil
+			-- 	end
+			--
+			-- 	-- Example usage
+			-- 	local package_json_path = "package.json"
+			-- 	if pcall(read_file, package_json_path) then
+			-- 		local package_json_content = read_file(package_json_path)
+			--
+			-- 		if package_json_content then
+			-- 			local dependency_name = "@angular/core"
+			-- 			local hasAngularCore = has_dependency(package_json_content, dependency_name)
+			-- 			print("hasAngularCore: ", hasAngularCore)
+			--
+			-- 			if hasAngularCore then
+			-- 				return root_pattern("angular.json", "nx.json", "project.json")
+			-- 			else
+			-- 				return root_pattern("inventado")
+			-- 			end
+			-- 		else
+			-- 			return root_pattern("inventado")
+			-- 		end
+			-- 	else
+			-- 		return root_pattern("inventado")
+			-- 	end
+			-- end
 
 			-- used to enable autocompletion (assign to every lsp server config)
 			-- local capabilities = cmp_nvim_lsp.default_capabilities()
@@ -437,19 +440,30 @@ return {
 
 			-- To instead override globally
 			local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+			---@diagnostic disable-next-line: duplicate-set-field
 			function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
 				opts = opts or {}
 				opts.border = opts.border or border
 				return orig_util_open_floating_preview(contents, syntax, opts, ...)
 			end
 
+
 			-- ################### SERVER CONFIGURATIONS
+
+
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+        -- Enable text wrapping in the hover window
+        wrap = true,
+        -- max_width = 80, -- Optional: Set maximum width for wrapping
+        -- max_height = 20, -- Optional: Set maximum height for the hover window
+        border = "rounded", -- Optional: Add rounded borders to the hover window
+      })
 
 			-- configure html server
 			lspconfig["html"].setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
-				filetypes = { "myangular", "html", "templ" },
+				filetypes = { "myangular", "html", "templ", "htmlangular" },
 			})
 
 			require("lspconfig").vtsls.setup({
@@ -506,11 +520,11 @@ return {
 				),
 			})
 
-			local ok, mason_registry = pcall(require, "mason-registry")
-			if not ok then
-				vim.notify("mason-registry could not be loaded")
-				return
-			end
+			-- local ok, mason_registry = pcall(require, "mason-registry")
+			-- if not ok then
+			-- 	vim.notify("mason-registry could not be loaded")
+			-- 	return
+			-- end
 
 			-- local angularls_path = mason_registry.get_package("angular-language-server"):get_install_path()
 			local angularls_path = os.getenv("MASON") .. "/packages/angular-language-server"
@@ -624,35 +638,35 @@ return {
 				capabilities = capabilities,
 			})
 
-      -- defined in telescope yaml companion
-			-- require("lspconfig").yamlls.setup({
-			--      filetypes = { "yaml" }, -- Restrict to YAML files only
-			-- 	cmd = { home .. "/.local/share/nvim/mason/bin/yaml-language-server", "--stdio" },
-			-- 	on_attach = on_attach,
-			-- 	capabilities = capabilities,
-			-- 	editor = {
-			-- 		formatOnType = false,
-			-- 	},
-			-- 	format = {
-			-- 		enable = true,
-			-- 	},
-			-- 	settings = {
-			-- 		yaml = {
-			-- 			validate = true,
-			-- 			hover = true,
-			-- 			-- schemaStore = {
-			-- 			--   enable = true,
-			-- 			--   url = "",
-			-- 			-- },
-			-- 			-- schemas = {}
-			--
-			-- 			-- schemas = require("schemastore").json.schemas({}),
-			-- 			-- schemas = {
-			-- 			--   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*"
-			-- 			-- }
-			-- 		},
-			-- 	},
-			-- })
+			-- defined in telescope yaml companion
+			require("lspconfig").yamlls.setup({
+				filetypes = { "yaml", "yml" },
+				cmd = { home .. "/.local/share/nvim/mason/bin/yaml-language-server", "--stdio" },
+				on_attach = on_attach,
+				capabilities = capabilities,
+				editor = {
+					formatOnType = false,
+				},
+				format = {
+					enable = true,
+				},
+				settings = {
+					yaml = {
+						validate = true,
+						hover = true,
+						-- schemaStore = {
+						--   enable = true,
+						--   url = "",
+						-- },
+						-- schemas = {}
+
+						schemas = require("schemastore").json.schemas({}),
+						-- schemas = {
+						--   ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*"
+						-- }
+					},
+				},
+			})
 
 			lspconfig["jsonls"].setup({
 				filetypes = { "jsonc", "json", "json5" },
@@ -699,6 +713,15 @@ return {
 			lspconfig["marksman"].setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
+				root_markers = { ".marksman.toml", ".git", ".gitignore", ".obsidian.vimrc" },
+				root_dir = lspconfig.util.root_pattern(
+					".git",
+					".marksman.toml",
+					".obsidian",
+					"README.md",
+					".obsidian.vimrc",
+					".gitignore"
+				),
 			})
 
 			require("lspconfig").emmet_ls.setup({
@@ -744,23 +767,23 @@ return {
 				on_attach = on_attach,
 			})
 
-      vim.filetype.add({
-        pattern = {
-          ['.*/%.github[%w/]+workflows[%w/]+.*%.ya?ml'] = 'yaml.github',
-        },
-      })
+			vim.filetype.add({
+				pattern = {
+					[".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
+				},
+			})
 
 			require("lspconfig").gh_actions_ls.setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
-        filetypes = { "yaml.github" }, -- Use a custom filetype for GitHub Actions
+				filetypes = { "yaml.github" }, -- Use a custom filetype for GitHub Actions
 				cmd = { home .. "/.local/share/nvim/mason/bin/gh-actions-language-server", "--stdio" },
-        -- init_options = {
-        --   sessionToken = os.getenv("GH_TOKEN"),
-        -- },
+				-- init_options = {
+				--   sessionToken = os.getenv("GH_TOKEN"),
+				-- },
 				settings = {
 					yaml = {
-            -- schemas = require("schemastore").json.schemas({}),
+						-- schemas = require("schemastore").json.schemas({}),
 						format = {
 							enable = true,
 						},

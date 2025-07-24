@@ -8,8 +8,8 @@ return {
     -- event = { "BufReadPost", "BufNewFile" },
     -- cmd = { "Grapple", "Telescope" },
     keys = {
-      { "<leader>hh", "<cmd>Telescope grapple tags<cr>" },
-      { "<leader>hg", "<cmd>Grapple toggle_tags<cr>",     desc = "Grapple open tags window" },
+      { "<leader>hg", "<cmd>Telescope grapple tags<cr>" },
+      { "<leader>hh", "<cmd>Grapple toggle_tags<cr>",     desc = "Grapple open tags window" },
       { "<leader>ha", "<cmd>Grapple toggle<cr>",          desc = "Grapple toggle tag" },
       { "<leader>S",  "<cmd>Grapple toggle_scopes<cr>",   desc = "Grappel toggle scopes" },
       { "<leader>N",  "<cmd>Grapple cycle_tags next<cr>", desc = "Grapple cycle next tag" },

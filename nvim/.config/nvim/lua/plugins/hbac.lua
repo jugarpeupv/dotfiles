@@ -4,13 +4,13 @@ return {
   -- config = true,
   -- event = "VeryLazy",
   event = { "BufReadPost", "BufNewFile" },
-  enabled = true,
+  enabled = false,
   config = function()
     require("early-retirement").setup({
       -- If a buffer has been inactive for this many minutes, close it.
-      retirementAgeMins = 10,
+      retirementAgeMins = 20,
       -- Filetypes to ignore.
-      ignoredFiletypes = { "BufTerm", "term", "NvimTree" },
+      ignoredFiletypes = { "BufTerm", "term", "NvimTree", "DiffviewFiles" },
       -- Ignore files matching this lua pattern; empty string disables this setting.
       ignoreFilenamePattern = "*compilation*",
       -- Will not close the alternate file.
@@ -20,7 +20,7 @@ return {
       -- by setting this to 4, no auto-closing will take place when you have 3
       -- or fewer open buffers. Note that this plugin never closes the currently
       -- active buffer, so a number < 2 will effectively disable this setting.
-      minimumBufferNum = 4,
+      minimumBufferNum = 7,
 
       -- Ignore buffers with unsaved changes. If false, the buffers will
       -- automatically be written and then closed.
@@ -38,7 +38,7 @@ return {
       ignoreUnloadedBufs = true,
 
       -- Show notification on closing. Works with plugins like nvim-notify.
-      notificationOnAutoClose = false,
+      notificationOnAutoClose = true,
 
       -- When a file is deleted, for example via an external program, delete the
       -- associated buffer as well.

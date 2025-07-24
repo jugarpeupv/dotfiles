@@ -130,7 +130,7 @@ return {
       -- Copy over node_modules folder if it exists
       if prev_node_modules_exists ~= 0 then
         os.rename(prev_node_modules_path, path .. "/node_modules")
-        api_nvimtree.tree.reload()
+        -- api_nvimtree.tree.reload()
       end
 
       -- new code
@@ -144,13 +144,13 @@ return {
         local prev_file_exists = vim.fn.filereadable(prev_file_path)
         if prev_file_exists ~= 0 then
           os.rename(prev_file_path, path .. "/" .. file)
-          api_nvimtree.tree.reload()
         end
       end
       -- end new code
 
 
 
+      api_nvimtree.tree.reload()
       -- update .git/HEAD to the new branch so when you open a new terminal on root parent it shows the corrent branch
 
       -- TODO: The first time a branch is created on .git working dir, wt_switch_info is {}

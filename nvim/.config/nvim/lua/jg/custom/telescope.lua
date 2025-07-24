@@ -121,6 +121,9 @@ M.normal_buffers = function(opts)
 
     local bufname = vim.api.nvim_buf_get_name(bufnr)
 
+    -- local has_changes = require('gitsigns').get_hunks(bufname) ~= nil
+    -- print("bufname: haschanges: ", bufname, has_changes)
+
     if string.match(bufname, "term://") then
       return false
     end
@@ -176,12 +179,13 @@ M.normal_buffers = function(opts)
 
   pickers
     .new(opts, {
-      prompt_title = "Terminal Buffers",
+      prompt_title = "Buffers",
       finder = finders.new_table({
         results = buffers,
         entry_maker = opts.entry_maker or make_entry.gen_from_buffer(opts),
       }),
-      previewer = conf.grep_previewer(opts),
+      -- previewer = conf.grep_previewer(opts),
+      previewer = conf.qflist_previewer(opts),
       sorter = conf.generic_sorter(opts),
       default_selection_index = default_selection_idx,
     })
@@ -286,6 +290,7 @@ M.term_buffers = function(opts)
     opts.bufnr_width = #tostring(max_bufnr)
   end
 
+  local previewers = require("telescope.previewers")
   pickers
       .new(opts, {
         prompt_title = "Terminal Buffers",
@@ -293,6 +298,7 @@ M.term_buffers = function(opts)
           results = buffers,
           entry_maker = opts.entry_maker or make_entry.gen_from_buffer(opts),
         }),
+        -- previewer = previewers.qflist.new(opts),
         previewer = conf.grep_previewer(opts),
         sorter = conf.generic_sorter(opts),
         default_selection_index = default_selection_idx,
@@ -618,6 +624,97 @@ M.oil_fzf_files = function(path)
           end,
         })
         :find()
+  end
+
+  commands()
+end
+
+
+M.telescope_file_picker_in_workspace = function(path, no_ignore)
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  local find_command = {
+    "fd",
+    ".",
+    path,
+    "--type",
+    "d",
+    "--exclude",
+    ".git",
+    "--exclude",
+    "node_modules",
+    -- "--one-file-system",
+    "--max-depth",
+    "4",
+    "--hidden",
+  }
+
+  if no_ignore then
+    table.insert(find_command, "--no-ignore")
+  end
+
+  -- Function to escape special characters in a string for use in a pattern
+  local function escape_pattern(text)
+    return text:gsub("([^%w])", "%%%1")
+  end
+
+  local escaped_path = escape_pattern(path)
+
+  local commands = function(opts)
+    opts = opts or {}
+    pickers
+      .new(opts, {
+        prompt_title = 'Select a dir and open git files: "' .. path:gsub(os.getenv("HOME"), "~") .. '"',
+        finder = finders.new_oneshot_job(find_command, {
+          entry_maker = function(entry)
+            local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
+            return {
+              value = entry,
+              -- display = "  ~/" .. entry_substituted,
+
+              display = function()
+                local display_string
+                if string.find(path, os.getenv("HOME")) then
+                  display_string = "  ~/" .. entry_substituted
+                else
+                  display_string = "  " .. entry_substituted
+                end
+                return display_string, { { { 0, 1 }, "Directory" } }
+              end,
+              -- { { {1, 3}, hl_group } }
+              ordinal = entry,
+            }
+          end,
+        }),
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(prompt_bufnr)
+          actions.select_default:replace(function()
+            local selection = action_state.get_selected_entry()
+            actions.close(prompt_bufnr)
+            -- require("oil").open(selection.value)
+            require("telescope.builtin").find_files({
+              hidden = true,
+              cwd = selection.value,
+              find_command = {
+                "rg",
+                "--files",
+                "--color",
+                "never",
+                "--glob=!.git",
+                "--glob=!*__template__",
+                "--glob=!*DS_Store",
+              },
+            })
+          end)
+
+          return true
+        end,
+      })
+      :find()
   end
 
   commands()

@@ -13,7 +13,13 @@ return {
   -- },
   {
     "nvim-treesitter/nvim-treesitter",
-    event = { "BufReadPost", "BufNewFile" },
+    branch = "master",
+    -- branch = "main",
+    lazy = true,
+    -- lazy = true,
+    -- branch = 'main',
+    -- build = ':TSUpdate',
+    -- event = { "BufReadPost", "BufNewFile" },
     -- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
     dependencies = {
       -- "RRethy/nvim-treesitter-endwise",
@@ -92,7 +98,7 @@ return {
           require("treesitter-context").setup({
             enable = true,   -- Enable this plugin (Can be enabled/disabled later via commands)
             multiwindow = true, -- Enable multiple floating windows
-            max_lines = 0,   -- How many lines the window should span. Values <= 0 mean no limit.
+            max_lines = 6,   -- How many lines the window should span. Values <= 0 mean no limit.
             trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
             min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
             zindex = 20,     -- The Z-index of the context window
@@ -101,15 +107,17 @@ return {
             -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
             separator = nil,
             -- separator = '.',
-            on_attach = function(bufnr)
-              return true
-            end
+            -- on_attach = function(bufnr)
+            --   return true
+            -- end
             -- separator = "─",
             -- on_attach = function(bufnr)
             --   return true
             --   -- return vim.bo[bufnr].filetype ~= 'DiffviewFiles'
             -- end
           })
+
+          vim.cmd([[highlight TreesitterContext guifg=#B4BEFE]])
         end,
       },
     },
@@ -237,7 +245,7 @@ return {
         },
         sync_install = true,
         -- ignore_install = { "yaml" },
-        ignore_install = {},
+        -- ignore_install = {},
         modules = {},
         -- enable indentation
         -- indent = { enable = true },
@@ -249,6 +257,7 @@ return {
         -- autotag = { enable = true },
         -- ensure these language parsers are installed
         ensure_installed = {
+          "lua_patterns",
           "toml",
           "ruby",
           "swift",
@@ -290,9 +299,10 @@ return {
           "dockerfile",
           "rust",
           "cpp",
-          -- "dap_repl",
+          "dap_repl",
           "regex",
         },
+        -- ignore_install =  { "dockerfile" },
         -- auto install above language parsers
         auto_install = false,
         rainbow = {
@@ -375,15 +385,15 @@ return {
         },
       })
 
-      local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
-
-      parser_configs.lua_patterns = {
-        install_info = {
-          url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns",
-          files = { "src/parser.c" },
-          branch = "main",
-        },
-      }
+      -- local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+      --
+      -- parser_configs.lua_patterns = {
+      --   install_info = {
+      --     url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns",
+      --     files = { "src/parser.c" },
+      --     branch = "main",
+      --   },
+      -- }
     end,
   },
 }

@@ -6,7 +6,7 @@ return {
     dependencies = {
       "javiorfo/nvim-popcorn",
       "javiorfo/nvim-spinetta",
-      "hrsh7th/nvim-cmp",
+      -- "hrsh7th/nvim-cmp",
     },
     build = function()
       require("springtime.core").update()

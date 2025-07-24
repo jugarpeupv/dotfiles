@@ -1,6 +1,6 @@
 return {
   "MeanderingProgrammer/render-markdown.nvim",
-  ft = { "markdown" },
+  ft = { "markdown", "codecompanion" },
   enabled = true,
   keys = {
     { "<leader>rm", "<cmd>RenderMarkdown toggle<CR>" },
@@ -14,7 +14,7 @@ return {
         -- Used when not being rendered, get user setting.
         default = vim.api.nvim_get_option_value("conceallevel", {}),
         -- Used when being rendered, concealed text is completely hidden.
-        rendered = 2,
+        rendered = 0,
       },
       -- @see :h 'concealcursor'
       -- concealcursor = {
@@ -24,7 +24,7 @@ return {
       --   rendered = '',
       -- },
     },
-    file_types = { "markdown" },
+    file_types = { "markdown", "codecompanion" },
     anti_conceal = {
       -- This enables hiding any added text on the line the cursor is on
       enabled = true,
@@ -45,7 +45,7 @@ return {
     },
     heading = {
       -- Turn on / off heading icon & background rendering
-      enabled = false,
+      enabled = true,
       -- Turn on / off any sign column related rendering
       sign = true,
       -- Determines how icons fill the available space:
@@ -122,7 +122,7 @@ return {
       -- Turn on / off code block & inline code rendering
       enabled = true,
       -- Turn on / off any sign column related rendering
-      sign = true,
+      sign = false,
       -- Determines how code blocks & inline code are rendered:
       --  none:     disables all rendering
       --  normal:   adds highlight group to code blocks & inline code, adds padding to code blocks
@@ -137,7 +137,7 @@ return {
       -- If a floating point value < 1 is provided it is treated as a percentage of the available window space
       language_pad = 0,
       -- Whether to include the language name next to the icon
-      language_name = true,
+      language_name = false,
       -- A list of language names for which background highlighting will be disabled
       -- Likely because that language has background highlights itself
       -- Or a boolean to make behavior apply to all languages

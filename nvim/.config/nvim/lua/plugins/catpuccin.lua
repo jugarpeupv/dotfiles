@@ -185,6 +185,7 @@ return {
 						NvimTreeBookmark = { fg = "#f2cdcd" },
 						HlSearchNear = { fg = "#181826", bg = "#F38BA8" },
 						HlSearchLensNear = { fg = "#181826", bg = "#F38BA8" },
+            GrugFarResultsMatch = { bg="#394b70" },
 						["@markup.heading.1.marker"] = { fg = "#F5C2E7" },
 						["@markup.heading.1.markdown"] = { fg = "#F5C2E7" },
 						["@markup.heading.2.markdown"] = { fg = "#89ddff" },
@@ -194,7 +195,9 @@ return {
 						NeotestPassed = { fg = "#8ee2cf" },
 						EgrepifyFile = { fg = "#f2cdcd" },
 						EgrepifyLnum = { fg = "#737aa2" },
-						CursorLine = { bg = "#3b4261" },
+            CursorLine = { bg = "#3b4261" },
+						-- CursorLine = { bg = "#2c3148" },
+            NvimTreeCursorLine = { bg = "#3b4261" },
 						NvimTreeGitStagedIcon = { fg = "#8ee2cf" },
 						-- MatchupVirtualText = { fg = "#6C7086" }
 						MatchupVirtualText = { fg = "#747ebd" },
@@ -205,8 +208,9 @@ return {
 						-- BlinkCmpKindVariable = { fg = "#CDD6F4" },
 						BlinkCmpKindVariable = { fg = "#F5C2E7" },
 						BlinkCmpMenuBorder = { fg = "#394b70" },
+            AvanteSidebarWinSeparator = { fg = "#394b70" },
 						-- remove bold from gui, use style = {}
-						BlinkCmpMenuSelection = { style = {} },
+            BlinkCmpMenuSelection = { bg = "#394b70", style = {} },
 						LspReferenceText = { bg = "#264f78" },
 
 						BlinkCmpDocBorder = { fg = "#394b70" },
@@ -252,6 +256,9 @@ return {
 
 			vim.api.nvim_set_hl(0, "@lsp.typemod.method.defaultLibrary.typescript", { link = "Function" })
 
+      vim.api.nvim_set_hl(0, "TreesitterContext", { link = "Function" })
+
+
 			-- vim.cmd([[hi RenderMarkdownCode guibg=none guifg=none gui=none]])
 			-- vim.cmd([[hi RenderMarkdownCode guibg=#1f2335]])
 			-- vim.cmd([[hi RenderMarkdownCode guibg=none cterm=none gui=none ctermbg=none]])
@@ -263,11 +270,12 @@ return {
 			-- vim.cmd([[hi RenderMarkdownCode guibg=#16485A]])
 			-- vim.cmd([[hi RenderMarkdownCode guibg=#0f3846]])
 
+      vim.cmd([[hi RenderMarkdownH1 guifg=#F5C2E7]])
 			vim.cmd([[hi RenderMarkdownH2 guifg=#89ddff]])
-			vim.cmd([[hi RenderMarkdownH3 guifg=#675161]])
-			vim.cmd([[hi RenderMarkdownH4 guifg=#526c96]])
-			vim.cmd([[hi RenderMarkdownH5 guifg=#6c7298]])
-			vim.cmd([[hi RenderMarkdownH6 guifg=#36394d]])
+			vim.cmd([[hi RenderMarkdownH3 guifg=#94E2D5]])
+			vim.cmd([[hi RenderMarkdownH4 guifg=#B4BEFE]])
+			-- vim.cmd([[hi RenderMarkdownH5 guifg=#6c7298]])
+			-- vim.cmd([[hi RenderMarkdownH6 guifg=#36394d]])
 
 			vim.cmd([[hi DiffviewFilePanelSelected guibg=#394b70 ]])
 
@@ -467,7 +475,7 @@ return {
 
 			vim.cmd([[highlight WarningMsg guifg=#F2CDCD]])
 
-			vim.cmd([[highlight DiagnosticUnnecessary guifg=#747ebd]])
+			vim.cmd([[hi DiagnosticUnnecessary guibg=none guifg=none gui=italic,undercurl guisp=#949cbb]])
 			vim.cmd([[highlight CopilotSuggestion gui=none]])
 
 			vim.cmd([[highlight @keyword  gui=bold guifg=#CBA6F7]])
@@ -533,7 +541,6 @@ return {
 
 			vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]])
 			vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
-			vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
 			vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
 			vim.cmd([[hi @markup.raw guifg=#F5E0DC]])
 			vim.cmd([[hi ContextVt guifg=#747ebd]])

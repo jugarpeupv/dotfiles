@@ -18,7 +18,7 @@ atuin-setup() {
       --tac
       "-n2..,.."
       --tiebreak=index
-      "--query=${LBUFFER}"
+      "--query='${LBUFFER}"
       "+m"
       '--preview=echo {}'
       "--preview-window=up:2:hidden:wrap"
@@ -45,6 +45,9 @@ atuin-setup() {
 
   function my_keybindings() {
     bindkey '^R' fzf-atuin-history-widget
+    autoload -U edit-command-line
+    zle -N edit-command-line
+    bindkey '^X^E' edit-command-line
     # bindkey '^p' history-search-backward
     # bindkey '^n' history-search-forward
     # bindkey '^E' _atuin_search_widget

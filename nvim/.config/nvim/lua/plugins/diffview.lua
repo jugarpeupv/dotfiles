@@ -2,7 +2,7 @@ return {
   {
     "tanvirtin/vgit.nvim",
     branch = "v1.0.x",
-    enabled = true,
+    enabled = false,
     keys = {
       {
         mode = { "n" },
@@ -15,7 +15,7 @@ return {
     -- or               , tag = 'v1.0.2',
     dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons" },
     -- Lazy loading on 'VimEnter' event is necessary.
-    event = "BufReadPre",
+    -- event = "BufReadPre",
     config = function()
       require("vgit").setup({
         keymaps = {
@@ -710,7 +710,7 @@ return {
   {
     "sindrets/diffview.nvim",
     -- event = "VeryLazy",
-    -- cmd = { "DiffviewOpen" },
+    cmd = { "DiffviewOpen" },
     -- event = { "BufReadPost", "BufNewFile" },
     dependencies = {
       "junegunn/fzf",
