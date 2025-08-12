@@ -146,15 +146,15 @@ vim.keymap.set({ "n" }, "<leader>cd", function()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>.", function()
-  require("telescope.builtin").find_files({
-    prompt_title = '< NvimRC >',
-    cwd = '~/dotfiles/nvim/.config/nvim',
-    no_ignore = true,
-    hidden = false,
-    preview = {
-      hide_on_startup = true,
-    },
-  })
+	require("telescope.builtin").find_files({
+		prompt_title = "< NvimRC >",
+		cwd = "~/dotfiles/nvim/.config/nvim",
+		no_ignore = true,
+		hidden = false,
+		preview = {
+			hide_on_startup = true,
+		},
+	})
 end, opts)
 
 -- keymap("n", "su", "<cmd>Telescope file_browser path=/Users/jgarcia<cr>", opts)
@@ -554,42 +554,40 @@ keymap("n", "<leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>"
 -- Telescope
 -- keymap("n", "<leader>gs", "<cmd>lua require('telescope.builtin').git_stash()<cr>", opts)
 
-
 -- Keymap for git stash with extended functionality
 vim.keymap.set("n", "<leader>gs", function()
-  local actions = require("telescope.actions")
-  local action_state = require("telescope.actions.state")
-  local builtin = require("telescope.builtin")
-  builtin.git_stash({
-    attach_mappings = function(prompt_bufnr, map)
-      -- Custom action to discard a git stash
-      local function discard_stash()
-        local selection = action_state.get_selected_entry()
-        if not selection then
-          print("No stash selected!")
-          return
-        end
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+	local builtin = require("telescope.builtin")
+	builtin.git_stash({
+		attach_mappings = function(prompt_bufnr, map)
+			-- Custom action to discard a git stash
+			local function discard_stash()
+				local selection = action_state.get_selected_entry()
+				if not selection then
+					print("No stash selected!")
+					return
+				end
 
-        local stash_index = selection.value:match("^stash@{(%d+)}")
-        if stash_index then
-          vim.fn.system("git stash drop stash@{" .. stash_index .. "}")
-          print("Discarded stash: stash@{" .. stash_index .. "}")
-        else
-          print("Failed to parse stash index!")
-        end
+				local stash_index = selection.value:match("^stash@{(%d+)}")
+				if stash_index then
+					vim.fn.system("git stash drop stash@{" .. stash_index .. "}")
+					print("Discarded stash: stash@{" .. stash_index .. "}")
+				else
+					print("Failed to parse stash index!")
+				end
 
-        actions.close(prompt_bufnr)
-      end
+				actions.close(prompt_bufnr)
+			end
 
-      -- Map a key to discard the selected stash
-      map("i", "<C-d>", discard_stash)
-      map("n", "<C-d>", discard_stash)
+			-- Map a key to discard the selected stash
+			map("i", "<C-d>", discard_stash)
+			map("n", "<C-d>", discard_stash)
 
-      return true
-    end,
-  })
+			return true
+		end,
+	})
 end, { desc = "Telescope Git Stash with Discard Option" })
-
 
 -- keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<cr>", opts)
 vim.keymap.set("n", "<leader>gb", function()
@@ -976,19 +974,19 @@ vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
 vim.keymap.set({ "n" }, "<M-b>", function()
 	local current_buf_name = vim.fn.expand("%")
 
-  local function get_filetype_alias()
-    local filetype = vim.bo.filetype
+	local function get_filetype_alias()
+		local filetype = vim.bo.filetype
 
-    if filetype == "sh" or filetype == "bash" then
-      return "sh"
-    elseif filetype == "typescript" or filetype == "javascript" then
-      return "bun"
-    else
-      return filetype
-    end
-  end
+		if filetype == "sh" or filetype == "bash" then
+			return "sh"
+		elseif filetype == "typescript" or filetype == "javascript" then
+			return "bun"
+		else
+			return filetype
+		end
+	end
 
-  local executable = get_filetype_alias()
+	local executable = get_filetype_alias()
 
 	vim.api.nvim_feedkeys(
 		vim.api.nvim_replace_termcodes(":Compile " .. executable .. " " .. current_buf_name, true, false, true),
@@ -1140,6 +1138,7 @@ end, opts)
 
 vim.cmd([[set wildcharm=<C-v>]])
 -- vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
+vim.cmd([[inoremap <C-l> <C-y>]])
 vim.cmd([[cnoremap <C-l> <C-y><C-v>]])
 -- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
 vim.cmd([[cnoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"]])
@@ -1196,7 +1195,9 @@ vim.keymap.set("n", "<leader>nr", function()
 
 	if terminals and next(terminals) ~= nil and #terminals > 0 then
 		-- Send the command to the first terminal
-		vim.fn.chansend(terminals[1]["id"], command)
+		-- vim.fn.chansend(terminals[1]["id"], command)
+    vim.fn.chansend(terminals[#terminals]["id"], command)
+    -- require("terminal").send(nil, command)
 	else
 		-- Open a new terminal and send the command
 		vim.cmd("split | terminal")
@@ -1316,11 +1317,16 @@ vim.keymap.set("n", "<leader>dv", function()
 	local current_branch = vim.fn.system("git symbolic-ref --short HEAD"):gsub("%s+", "")
 
 	-- Get the default branch (faster method)
-	local default_branch =
-		vim.fn.system("git symbolic-ref --short refs/remotes/origin/HEAD"):gsub("origin/", ""):gsub("%s+", "")
+	-- local default_branch =
+	-- 	vim.fn.system("git symbolic-ref --short refs/remotes/origin/HEAD"):gsub("origin/", ""):gsub("%s+", "")
+	local default_branch = "develop"
 
 	-- Construct the DiffviewOpen command
 	local diffview_command = string.format(":DiffviewOpen %s..%s", default_branch, current_branch)
 	-- Populate the command line using vim.api.nvim_feedkeys
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
+
+
+vim.keymap.set("i", "<C-j>", "<C-n>", { noremap = true })
+vim.keymap.set("i", "<C-k>", "<C-p>", { noremap = true })

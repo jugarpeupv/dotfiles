@@ -10,6 +10,15 @@ return {
 		-- branch = "master",
 		dependencies = {
 			{
+				"nvim-telescope/telescope-frecency.nvim",
+				-- install the latest stable version
+				version = "*",
+				enabled = false,
+				config = function()
+					require("telescope").load_extension("frecency")
+				end,
+			},
+			{
 				"Myzel394/jsonfly.nvim",
 				enabled = false,
 				keys = {
@@ -159,7 +168,7 @@ return {
 			},
 			{
 				"piersolenski/telescope-import.nvim",
-        enabled = false,
+				enabled = false,
 				dependencies = "nvim-telescope/telescope.nvim",
 				keys = {
 					{
@@ -319,7 +328,7 @@ return {
 
 			local actions = require("telescope.actions")
 			local actions_live_grep_args = require("telescope-live-grep-args.actions")
-			-- local image_preview = require("jg.custom.telescope").telescope_image_preview()
+			local image_preview = require("jg.custom.telescope").telescope_image_preview()
 
 			-- local action_state = require("telescope.actions.state")
 			--
@@ -341,13 +350,15 @@ return {
 			-- }
 
 			local open_after_tree = function(prompt_bufnr)
-        vim.defer_fn(function() actions.select_default(prompt_bufnr) end, 0)
-			  -- local entry = action_state.get_selected_entry()
-			  -- actions.close(prompt_bufnr)
-			  --
-			  -- vim.defer_fn(function()
-			  --   vim.cmd("edit " .. vim.fn.fnameescape(entry.path or entry.value))
-			  -- end, 0) -- Delay allows filetype and plugins to settle before opening
+				vim.defer_fn(function()
+					actions.select_default(prompt_bufnr)
+				end, 0)
+				-- local entry = action_state.get_selected_entry()
+				-- actions.close(prompt_bufnr)
+				--
+				-- vim.defer_fn(function()
+				--   vim.cmd("edit " .. vim.fn.fnameescape(entry.path or entry.value))
+				-- end, 0) -- Delay allows filetype and plugins to settle before opening
 			end
 
 			telescope.setup({
@@ -563,8 +574,8 @@ return {
 							"--column",
 							"--smart-case",
 						},
-						-- file_previewer = image_preview.file_previewer,
-						-- buffer_previewer_maker = image_preview.buffer_previewer_maker,
+						file_previewer = image_preview.file_previewer,
+						buffer_previewer_maker = image_preview.buffer_previewer_maker,
 						-- layout_strategy = 'bottom_pane',
 						-- layout_config = {
 						--   height = 0.53,
@@ -589,6 +600,7 @@ return {
 							--   enable = false
 							-- },
 							-- 1) Do not show previewer for certain files
+
 							filetype_hook = function(filepath, bufnr, opts)
 								-- you could analogously check opts.ft for filetypes
 								local putils = require("telescope.previewers.utils")
@@ -1047,7 +1059,7 @@ return {
 			telescope.load_extension("recent_files")
 			-- require("telescope").load_extension("persisted")
 			-- telescope.load_extension("jsonfly")
-			-- telescope.load_extension('media_files')
+			-- telescope.load_extension("media_files")
 			-- telescope.load_extension("egrepify")
 			-- telescope.load_extension('node_modules')
 			-- telescope.load_extension('projects')

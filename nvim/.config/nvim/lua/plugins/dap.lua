@@ -516,6 +516,7 @@ return {
 			-- Use overseer for running preLaunchTask and postDebugTask
 			-- require("overseer").patch_dap(true)
 			require("dap.ext.vscode").json_decode = require("overseer.json").decode
+      -- require("dap.ext.vscode").json_decode = require("json5").parse
 
 			local dv = require("dap-view")
 			dap.listeners.before.attach["dap-view-config"] = function()

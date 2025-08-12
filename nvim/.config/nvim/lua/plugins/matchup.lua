@@ -2,6 +2,9 @@
 return {
 	-- enabled = false,
 	"andymass/vim-matchup",
+
+  dir='~/projects/vim-matchup/wt-feature-add_html_angular_filetype/',
+  dev = true,
 	-- event = { "CursorMoved" },
 	dependencies = { "nvim-treesitter/nvim-treesitter" },
 	-- event = { "VeryLazy" },
@@ -19,6 +22,7 @@ return {
 
 		vim.g.matchup_matchparen_enabled = 0
 		vim.g.matchup_matchpref = {
+      xml = { tagnameonly = 1 },
 			svelte = { tagnameonly = 1 },
 			vue = { tagnameonly = 1 },
 			typescriptreact = { tagnameonly = 1 },
@@ -81,7 +85,7 @@ return {
 		--
 		-- configureHtmlAngularMatchup()
 
-		-- vim.cmd("NoMatchParen")
+		vim.cmd("NoMatchParen")
 		vim.cmd("DoMatchParen")
 
 		-- vim.cmd("DoMatchParen")

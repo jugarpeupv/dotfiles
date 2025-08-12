@@ -15,84 +15,13 @@ return {
 				transparent_background = true,
 				color_overrides = {
 					all = {
-						surface0 = "#444444",
-						surface1 = "#666666",
-						surface2 = "#a3a7bc",
-						surface3 = "#a3a7bc",
-
-						-- yellow = "#36C0D8",
-						-- yellow = "#89dcec"
+						-- surface0 = "#444444",
+						-- surface1 = "#666666",
+						-- surface2 = "#a3a7bc",
+						-- surface3 = "#a3a7bc",
 						yellow = "#89ddff",
-						-- green = "#F2CDCD",
 						green = "#94E2D5",
 						maroon = "#FAB387",
-						-- maroon = "#94E2D5",
-
-						-- yellow = "#2ac3de",
-						-- green = "#F2CDCD",
-						-- maroon = "#FAB387",
-
-						-- yellow = "#74C7EC",
-						-- yellow = "#0db9d7",
-						-- yellow = "#90dcd1",
-						-- yellow = "#F5E0DC",
-						-- yellow = "#F38BA8",
-						-- yellow = "#F5C2E7",
-						-- yellow = "#A6E3A1",
-						-- yellow = "#74C7EC",
-						-- yellow = "#89ddff",
-						-- yellow = "#90dcd1",
-						-- yellow = "#94E2D5",
-						-- yellow = "#179299",
-						-- yellow = "#74C7EC",
-						-- yellow = "#37d3dc",
-
-						-- yellow = "#41a6b5",
-						-- yellow = "#8ee2cf",
-						-- green = "#8ee2cf",
-						-- red = "#ff007c",
-						-- maroon = "#F38BA8",
-						-- maroon = "#8ee2cf",
-						-- maroon = "#CA9EE6"
-						-- maroon = "#EBA0AC",
-						-- maroon = "#F5C2E7",
-						-- maroon = "#FD90E0"
-						-- maroon = "#B4BEFE",
-						-- maroon = "#ff007c",
-						-- maroon = "#BAC2DE",
-						-- maroon = "#89DCEB",
-						-- maroon = "#8ee2cf",
-						-- maroon = "#74C7EC"
-						-- maroon = "#CBA6F7",
-
-						--
-						-- yellow = "#F2CDCD",
-						-- green = "#a1dfcf",
-						-- red = "#89ddff",
-						-- maroon = "#CBA6F7",
-						--
-						--[[ green = "#a1dfcf", ]]
-						-- yellow = "#2ac3de",
-
-						-- yellow = "#89ddff",
-						-- yellow = "#0db9d7",
-						-- red = "#89ddff",
-						-- maroon = "#F38BA8",
-						--
-						--
-						-- yellow = "#0db9d7",
-						-- maroon = "#2ac3de",
-						-- maroon = "#7aa2f7",
-						-- maroon = "#F38BA8",
-						-- yellow = "#8ee2cf",
-						-- red = "#89B4FA",
-						-- teal = "#F5E0DC",
-						-- sky = "#F5C2E7"
-						-- maroon = "#89ddff",
-						-- maroon = "#9d7cd8",
-						-- maroon = "#c0caf5",
-						-- text = "#c0caf5",
-						-- text = "#bbc2e0"
 					},
 				},
 				-- integrations = {},
@@ -160,11 +89,14 @@ return {
 				},
 				custom_highlights = function()
 					return {
+            Boolean = { fg = "#F38BA8" },
+            Number = { fg = "#F38BA8" },
 						NormalFloat = { fg = "none", bg = "none" },
 						GitHeader = { bg = "none" },
 						GitFooter = { bg = "none" },
 						GitAppBar = { bg = "none" },
 						String = { fg = "#F2CDCD" },
+						["@function.call.bash"] = { fg = "#F38BA8" },
 						-- ["@string.special.url"] = { fg = "#F38BA8", bg = "none", style = {} },
 						StatusLine = { fg = "#cdd6f5", bg = "#292e42" },
 						MatchParen = { bg = "#394b70", fg = "#F5E0DC" },
@@ -185,32 +117,45 @@ return {
 						NvimTreeBookmark = { fg = "#f2cdcd" },
 						HlSearchNear = { fg = "#181826", bg = "#F38BA8" },
 						HlSearchLensNear = { fg = "#181826", bg = "#F38BA8" },
-            GrugFarResultsMatch = { bg="#394b70" },
+						GrugFarResultsMatch = { bg = "#394b70" },
 						["@markup.heading.1.marker"] = { fg = "#F5C2E7" },
 						["@markup.heading.1.markdown"] = { fg = "#F5C2E7" },
 						["@markup.heading.2.markdown"] = { fg = "#89ddff" },
 						["@markup.heading.3.markdown"] = { fg = "#94E2D5" },
+
+            ["@lsp.typemod.interface.defaultLibrary.typescript"] = { fg = "#F38BA8" },
+            ["@type.builtin.typescript"] = { fg = "#89ddfe" },
+            ["@string.special.url.html"] = { fg = "#F5C2E7", bg = "none", style = {} },
 						["@markup.heading.4.markdown"] = { fg = "#B4BEFE" },
 						Ignore = { fg = "#394b70" },
 						NeotestPassed = { fg = "#8ee2cf" },
+            ["@property.scss"] = { fg = "#B4BEFE" },
+            ["@lsp.typemod.class.declaration.typescript"] = { fg = "#B4BEFE" },
+            ["@lsp.typemod.method.declaration.typescript"]  = { fg = "#B4BEFE"},
+            ["@lsp.typemod.variable.readonly.typescript"] = { fg = "#CAD3F5" },
 						EgrepifyFile = { fg = "#f2cdcd" },
 						EgrepifyLnum = { fg = "#737aa2" },
-            CursorLine = { bg = "#3b4261" },
+						CursorLine = { bg = "#3b4261" },
+						["@property.yaml"] = { fg = "#B4BEFE" },
+						["@variable.parameter.bash"] = { fg = "#F5C2E7" },
 						-- CursorLine = { bg = "#2c3148" },
-            NvimTreeCursorLine = { bg = "#3b4261" },
+						NvimTreeCursorLine = { bg = "#3b4261" },
 						NvimTreeGitStagedIcon = { fg = "#8ee2cf" },
 						-- MatchupVirtualText = { fg = "#6C7086" }
 						MatchupVirtualText = { fg = "#747ebd" },
 						-- GitSignsCurrentLineBlame = { fg = "#747ebd" },
 						GitSignsCurrentLineBlame = { fg = "#0f1219" },
 						FloatBorder = { fg = "#394b70" },
+						FloatTitle = { fg = "#394b70", bg = "none" },
 						BlinkCmpKindSnippet = { fg = "#747ebd" },
 						-- BlinkCmpKindVariable = { fg = "#CDD6F4" },
 						BlinkCmpKindVariable = { fg = "#F5C2E7" },
 						BlinkCmpMenuBorder = { fg = "#394b70" },
-            AvanteSidebarWinSeparator = { fg = "#394b70" },
+						AvanteSidebarWinSeparator = { fg = "#394b70" },
+						AvanteTaskCompleted = { fg = "#8ee2cf" },
+						AvanteStateSpinnerSucceeded = { bg = "#8ee2cf", fg = "black" },
 						-- remove bold from gui, use style = {}
-            BlinkCmpMenuSelection = { bg = "#394b70", style = {} },
+						BlinkCmpMenuSelection = { bg = "#394b70", style = {} },
 						LspReferenceText = { bg = "#264f78" },
 
 						BlinkCmpDocBorder = { fg = "#394b70" },
@@ -256,8 +201,7 @@ return {
 
 			vim.api.nvim_set_hl(0, "@lsp.typemod.method.defaultLibrary.typescript", { link = "Function" })
 
-      vim.api.nvim_set_hl(0, "TreesitterContext", { link = "Function" })
-
+			vim.api.nvim_set_hl(0, "TreesitterContext", { link = "Function" })
 
 			-- vim.cmd([[hi RenderMarkdownCode guibg=none guifg=none gui=none]])
 			-- vim.cmd([[hi RenderMarkdownCode guibg=#1f2335]])
@@ -270,7 +214,7 @@ return {
 			-- vim.cmd([[hi RenderMarkdownCode guibg=#16485A]])
 			-- vim.cmd([[hi RenderMarkdownCode guibg=#0f3846]])
 
-      vim.cmd([[hi RenderMarkdownH1 guifg=#F5C2E7]])
+			vim.cmd([[hi RenderMarkdownH1 guifg=#F5C2E7]])
 			vim.cmd([[hi RenderMarkdownH2 guifg=#89ddff]])
 			vim.cmd([[hi RenderMarkdownH3 guifg=#94E2D5]])
 			vim.cmd([[hi RenderMarkdownH4 guifg=#B4BEFE]])
@@ -451,7 +395,13 @@ return {
 			vim.cmd([[highlight Visual gui=none cterm=none guibg=#264F78]])
 			-- vim.cmd([[hi DiffviewFilePanelFileName guifg=#B4BEFE]])
 			vim.cmd([[hi DiffviewFilePanelFileName guifg=#c0caf5]])
-			vim.cmd([[hi @tag guifg=#F5C2E7]])
+			vim.cmd([[hi @tag guifg=#74C7EC]])
+      vim.cmd([[hi @tag.delimiter.angular guifg=#74C7EC]])
+      vim.cmd([[hi @tag.delimiter guifg=#74C7EC]])
+      -- vim.cmd([[hi @tag guifg=#89ddfe]])
+      -- vim.cmd([[hi @tag.delimiter.angular guifg=#89ddfe]])
+      -- vim.cmd([[hi @tag.delimiter guifg=#89ddfe]])
+
 			vim.cmd([[hi @tag.attribute guifg=#B4BEFE]])
 			-- vim.cmd([[hi @tag guifg=#B4BEFE]])
 			-- vim.cmd([[hi @label guifg=#B4BEFE]])
@@ -468,6 +418,12 @@ return {
 			vim.cmd([[highlight @lsp.type.type guifg=#89ddff]])
 			vim.cmd([[highlight @lsp.type.interface guifg=#89ddff]])
 			vim.cmd([[highlight @attribute.typescript guifg=#89ddff]])
+
+			vim.cmd([[hi @variable.member.lua guifg=#B4BEFE]])
+			vim.cmd([[hi @variable.member guifg=#B4BEFE]])
+      vim.cmd([[hi @variable guifg=#CAD3F5]])
+      vim.cmd([[hi @variable.angular guifg=#B4BEFE]])
+
 			-- vim.cmd([[highlight @lsp.typemod.variable.defaultLibrary.typescript guifg=#89ddff]])
 			-- vim.cmd([[highlight @variable.builtin guifg=#89ddff]])
 			vim.cmd([[highlight LspSignatureActiveParameter gui=none guifg=none guibg=#264F78]])
@@ -489,18 +445,22 @@ return {
 			vim.cmd([[highlight NonText gui=none cterm=none guibg=none blend=0]])
 
 			vim.cmd([[highlight VertSplit  guifg=#292e42]])
-			vim.cmd([[highlight FloatBorder  guifg=#394b70]])
+			vim.cmd([[highlight FloatBorder  guifg=#394b70 guibg=none]])
 			vim.cmd([[highlight SagaBorder  guifg=#394b70]])
 			vim.cmd([[highlight SagaTitle  guifg=#394b70]])
 			vim.cmd([[highlight ctrlsfMatch guifg=#F2CDCD guibg=#394b70]])
 
 			vim.cmd([[highlight jsonKeyword guifg=#b4beff ]])
+
+      vim.cmd([[highlight @property.json guifg=#b4beff ]])
+			vim.cmd([[highlight @property.jsonc guifg=#b4beff ]])
+			vim.cmd([[highlight @property guifg=#b4beff ]])
 			-- @property      xxx guifg=#b4beff
 
 			vim.cmd([[highlight @text.uri gui=none]])
 
 			vim.cmd([[highlight QuickFixLine gui=none guibg=#264F78]])
-      vim.cmd([[highlight QuickFixLineNr gui=none guifg=#747ebd]])
+			vim.cmd([[highlight QuickFixLineNr gui=none guifg=#747ebd]])
 
 			vim.cmd([[highlight TabLine guibg=none]])
 			vim.cmd([[highlight TabLineSel guibg=none]])
@@ -542,16 +502,17 @@ return {
 			vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]])
 			vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
 			vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
-			vim.cmd([[hi @markup.raw guifg=#F5E0DC]])
+			-- vim.cmd([[hi @markup.raw guifg=#F5E0DC]])
+			vim.cmd([[hi @markup.raw guifg=#CDD6F4]])
 			vim.cmd([[hi ContextVt guifg=#747ebd]])
 
-      vim.cmd([[hi GitConflictIncoming gui=none guibg=#1a3754]])
-      vim.cmd([[hi GitConflictCurrent gui=none guibg=#103235]])
-      vim.cmd([[hi GitConflictMiddle guibg=none guifg=#c0caf5]])
+			vim.cmd([[hi GitConflictIncoming gui=none guibg=#1a3754]])
+			vim.cmd([[hi GitConflictCurrent gui=none guibg=#103235]])
+			vim.cmd([[hi GitConflictMiddle guibg=none guifg=#c0caf5]])
 
-      vim.cmd([[hi GitConflictIncomingLabel guibg=#394b70]])
-      vim.cmd([[hi GitConflictIncomingMark guibg=#394b70]])
-      vim.cmd([[hi GitConflictCurrentMark guibg=#104235]])
+			vim.cmd([[hi GitConflictIncomingLabel guibg=#394b70]])
+			vim.cmd([[hi GitConflictIncomingMark guibg=#394b70]])
+			vim.cmd([[hi GitConflictCurrentMark guibg=#104235]])
 
 			vim.cmd([[hi GitHeader guibg=none]])
 			vim.cmd([[hi GitFooter guibg=none]])

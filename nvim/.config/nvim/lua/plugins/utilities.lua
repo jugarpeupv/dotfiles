@@ -1,6 +1,10 @@
 -- return {}
 return {
 	-- {
+	-- 	"Joakker/lua-json5",
+	-- 	build = "./install.sh",
+	-- },
+	-- {
 	-- 	"wojciech-kulik/xcodebuild.nvim",
 	-- 	dependencies = {
 	-- 		"nvim-telescope/telescope.nvim",
@@ -64,11 +68,20 @@ return {
 		"A7Lavinraj/fyler.nvim",
 		enabled = true,
 		cmd = { "Fyler" },
-    branch = "stable",
+		branch = "stable",
 		dependencies = { "echasnovski/mini.icons" },
+		keys = {
+			{
+				"<leader>fe",
+				function()
+					vim.cmd("Fyler kind=split:right")
+				end,
+				desc = "Fyler",
+			},
+		},
 		opts = {
-      default_explorer = false,
-      close_on_select = false,
+			default_explorer = false,
+			close_on_select = false,
 			views = {
 				explorer = {
 					width = 0.4,
@@ -1277,7 +1290,7 @@ return {
 			},
 			{
 				mode = { "n" },
-				"<Leader>gC",
+				"<leader>gC",
 				"<cmd>Git checkout . | Git clean -fd<cr>",
 				{ silent = true, noremap = true },
 			},

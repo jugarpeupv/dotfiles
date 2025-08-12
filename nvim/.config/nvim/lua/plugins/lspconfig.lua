@@ -242,7 +242,8 @@ return {
 			},
 			-- { "folke/neodev.nvim", opts = {} },
 			{
-				"antosha417/nvim-lsp-file-operations",
+				-- "antosha417/nvim-lsp-file-operations",
+        "igorlfs/nvim-lsp-file-operations",
 				config = function()
 					require("lsp-file-operations").setup()
 				end,
@@ -767,16 +768,25 @@ return {
 				on_attach = on_attach,
 			})
 
-			vim.filetype.add({
-				pattern = {
-					[".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
-				},
-			})
+
+      vim.filetype.add({
+        pattern = {
+          [".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
+        },
+      })
 
 			require("lspconfig").gh_actions_ls.setup({
-				capabilities = capabilities,
+				-- capabilities = capabilities,
+        capabilities = {
+          workspace = {
+            didChangeWorkspaceFolders = {
+              dynamicRegistration = true,
+            },
+          },
+        },
 				on_attach = on_attach,
 				filetypes = { "yaml.github" }, -- Use a custom filetype for GitHub Actions
+        single_file_support = true,
 				cmd = { home .. "/.local/share/nvim/mason/bin/gh-actions-language-server", "--stdio" },
 				-- init_options = {
 				--   sessionToken = os.getenv("GH_TOKEN"),

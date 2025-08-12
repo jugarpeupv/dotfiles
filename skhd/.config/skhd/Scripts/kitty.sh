@@ -2,10 +2,8 @@
 # Get the list of application names on display 1
 # display1_apps=$(yabai -m query --windows | jq -r '.[] | select(.display == 1 and .app != "kitty") | .app' | sort -u | awk '{printf "\"%s\", ", $0}' | sed 's/, $//')
 
-display1_apps=$(yabai -m query --windows | jq -r '
-    [ .[] | select(.display == 1 and .app != "kitty") | .app ] 
-    | unique | map("\"" + . + "\"") | join(", ")
-')
+display1_apps=$(yabai -m query --windows | jq -r ' [ .[] | select(.display == 1 and .app != "kitty") | .app ] | unique | map("\"" + . + "\"") | join(", ")')
+
 
 display1_apps=${display1_apps//"Microsoft Teams"/"MSTeams"}
 
@@ -25,5 +23,4 @@ tell application "System Events"
 end tell
 EOF
 
-
-open "/Applications/kitty.app";
+open "/Applications/kitty.app"

@@ -63,13 +63,13 @@ vim.cmd([[
 --   augroup END
 -- ]])
 
-vim.api.nvim_create_autocmd({ "BufRead", "BufEnter" }, {
-	group = vim.api.nvim_create_augroup("set-png-ft", { clear = true }),
-	pattern = "*.png",
-	callback = function()
-		vim.cmd([[set filetype=png]])
-	end,
-})
+-- vim.api.nvim_create_autocmd({ "BufReadPre" }, {
+-- 	group = vim.api.nvim_create_augroup("set-png-ft", { clear = true }),
+-- 	pattern = "*.png",
+-- 	callback = function()
+-- 		vim.cmd([[set filetype=png]])
+-- 	end,
+-- })
 
 -- vim.api.nvim_create_autocmd("CursorMoved", {
 --   group = vim.api.nvim_create_augroup("auto-hlsearch", { clear = true }),
@@ -186,20 +186,20 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("wrap-markdown", { clear = true }),
-	pattern = "markdown",
-	callback = function()
-		-- vim.cmd([[set nowrap]])
-    local bufname = vim.api.nvim_buf_get_name(0)
-    if bufname == "" then
-      return
-    else
-      -- Disable wrapping for regular markdown buffers
-      vim.cmd([[set nowrap]])
-    end
-	end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	group = vim.api.nvim_create_augroup("wrap-markdown", { clear = true }),
+-- 	pattern = "markdown",
+-- 	callback = function()
+-- 		-- vim.cmd([[set nowrap]])
+--     local bufname = vim.api.nvim_buf_get_name(0)
+--     if bufname == "" then
+--       return
+--     else
+--       -- Disable wrapping for regular markdown buffers
+--       vim.cmd([[set nowrap]])
+--     end
+-- 	end,
+-- })
 
 vim.api.nvim_create_autocmd("BufEnter", {
 	group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
@@ -339,12 +339,12 @@ vim.filetype.add({
 --   end
 -- })
 
-local history_file = vim.fn.stdpath("data") .. "/dir_history.txt"
-
--- Normalize directory paths by removing "./" and trailing slashes
-local function normalize_path(path)
-	return path:gsub("%./", ""):gsub("/$", "")
-end
+-- local history_file = vim.fn.stdpath("data") .. "/dir_history.txt"
+--
+-- -- Normalize directory paths by removing "./" and trailing slashes
+-- local function normalize_path(path)
+-- 	return path:gsub("%./", ""):gsub("/$", "")
+-- end
 
 -- -- Save directory changes to a file
 -- vim.api.nvim_create_autocmd({ "DirChangedPre" }, {
@@ -369,90 +369,97 @@ end
 -- 	end,
 -- })
 
-
 local dir_history = {}
 
 -- Add the current working directory to dir_history at startup
 local function add_current_dir_to_history()
-  local current_dir = vim.fn.getcwd()
-  local worktree_dir = current_dir .. "/worktrees"
-  local home = os.getenv("HOME")
-  if current_dir:sub(1, #home) == home then
-    current_dir = "~" .. current_dir:sub(#home + 1)
-  end
-  -- Check if current directory is a git repo with worktrees
-  if vim.fn.isdirectory(worktree_dir) == 1 then
-    return
-  end
-  if not vim.tbl_contains(dir_history, current_dir) then
-    table.insert(dir_history, current_dir)
-  end
+	local current_dir = vim.fn.getcwd()
+	local worktree_dir = current_dir .. "/worktrees"
+	local home = os.getenv("HOME")
+	if current_dir:sub(1, #home) == home then
+		current_dir = "~" .. current_dir:sub(#home + 1)
+	end
+	-- Check if current directory is a git repo with worktrees
+	if vim.fn.isdirectory(worktree_dir) == 1 then
+		return
+	end
+	if not vim.tbl_contains(dir_history, current_dir) then
+		table.insert(dir_history, current_dir)
+	end
 end
 
 -- Call the function to populate dir_history at startup
 add_current_dir_to_history()
 
 -- Autocommand to track directory changes
--- vim.api.nvim_create_autocmd("DirChanged", {
---   callback = function(args)
---     local new_dir = args.file
---     local home = os.getenv("HOME")
---     if new_dir:sub(1, #home) == home then
---       new_dir = "~" .. new_dir:sub(#home + 1)
---     end
---     if not vim.tbl_contains(dir_history, new_dir) then
---       -- table.insert(dir_history, new_dir)
---       table.insert(dir_history, 1, new_dir)
---     end
---   end,
--- })
+vim.api.nvim_create_autocmd("DirChanged", {
+  callback = function(args)
+    local new_dir = args.file
+    local home = os.getenv("HOME")
+    if new_dir:sub(1, #home) == home then
+      new_dir = "~" .. new_dir:sub(#home + 1)
+    end
+    -- if not vim.tbl_contains(dir_history, new_dir) then
+    --   -- table.insert(dir_history, new_dir)
+    --   table.insert(dir_history, 1, new_dir)
+    -- end
+
+    if vim.tbl_contains(dir_history, new_dir) then
+      -- Remove the existing entry if it exists
+      for i, dir in ipairs(dir_history) do
+        if dir == new_dir then
+          table.remove(dir_history, i)
+          break
+        end
+      end
+    end
+
+    table.insert(dir_history, 1, new_dir)
+  end,
+})
 
 -- Telescope picker for directory history
 -- Telescope picker for directory history with default selection on the penultimate entry
 local function open_dir_history()
-  local pickers = require("telescope.pickers")
-  local finders = require("telescope.finders")
-  local actions = require("telescope.actions")
-  local action_state = require("telescope.actions.state")
-  local entry_manager = require("telescope.entry_manager")
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+	local entry_manager = require("telescope.entry_manager")
 
-  -- local entries = {}
-  -- local file = io.open(history_file, "r")
-  -- if file then
-  --   for line in file:lines() do
-  --     table.insert(entries, 1, line) -- Insert each line at the beginning to reverse the order
-  --   end
-  --   file:close()
-  -- end
+	-- local entries = {}
+	-- local file = io.open(history_file, "r")
+	-- if file then
+	--   for line in file:lines() do
+	--     table.insert(entries, 1, line) -- Insert each line at the beginning to reverse the order
+	--   end
+	--   file:close()
+	-- end
 
-  pickers.new({}, {
-    prompt_title = "Directory History",
-    -- finder = finders.new_table(entries),
-    finder = require("telescope.finders").new_table {
-      results = dir_history,
-    },
-    sorter = require("telescope.config").values.generic_sorter({}),
-    attach_mappings = function(_, map)
-      actions.select_default:replace(function()
-        actions.close(_)
-        local selection = action_state.get_selected_entry()
-        if selection then
-          vim.cmd("e " .. selection[1])
-        end
-      end)
-      return true
-    end,
-  }):find()
+	pickers
+		.new({}, {
+			prompt_title = "Directory History",
+			-- finder = finders.new_table(entries),
+			finder = require("telescope.finders").new_table({
+				results = dir_history,
+			}),
+			sorter = require("telescope.config").values.generic_sorter({}),
+			attach_mappings = function(_, map)
+				actions.select_default:replace(function()
+					actions.close(_)
+					local selection = action_state.get_selected_entry()
+					if selection then
+						vim.cmd("e " .. selection[1])
+					end
+				end)
+				return true
+			end,
+		})
+		:find()
 end
 
 -- Map the function to a key
 vim.keymap.set("n", "<leader>ee", function()
 	open_dir_history()
 end, { noremap = true, silent = true })
-
-
-
-
-
-
 

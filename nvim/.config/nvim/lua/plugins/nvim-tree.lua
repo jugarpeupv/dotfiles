@@ -11,15 +11,118 @@ return {
 	--     require("nvim-tree").setup({})
 	--   end,
 	-- },
+
+	{
+		"b0o/nvim-tree-preview.lua",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"3rd/image.nvim", -- Optional, for previewing images
+		},
+		lazy = true,
+		keys = {
+			{ "<Tab>", mode = "n" },
+			{ "P", mode = "n" },
+		},
+		config = function()
+			-- Default config:
+			require("nvim-tree-preview").setup({
+				-- Keymaps for the preview window (does not apply to the tree window).
+				-- Keymaps can be a string (vimscript command), a function, or a table.
+				--
+				-- If a function is provided:
+				--   When the keymap is invoked, the function is called.
+				--   It will be passed a single argument, which is a table of the following form:
+				--     {
+				--       node: NvimTreeNode|NvimTreeRootNode, -- The tree node under the cursor
+				--     }
+				--   See the type definitions in `lua/nvim-tree-preview/types.lua` for a description
+				--   of the fields in the table.
+				--
+				-- If a table, it must contain either an 'action' or 'open' key:
+				--   Actions:
+				--     { action = 'close', unwatch? = false, focus_tree? = true }
+				--     { action = 'toggle_focus' }
+				--     { action = 'select_node', target: 'next'|'prev' }
+				--
+				--   Open modes:
+				--     { open = 'edit' }
+				--     { open = 'tab' }
+				--     { open = 'vertical' }
+				--     { open = 'horizontal' }
+				--
+				-- To disable a default keymap, set it to false.
+				-- All keymaps are set in normal mode. Other modes are not currently supported.
+				keymaps = {
+					["<Esc>"] = { action = "close", unwatch = true },
+					["<Tab>"] = { action = "toggle_focus" },
+					["<CR>"] = { open = "edit" },
+					["<C-t>"] = { open = "tab" },
+					["<C-v>"] = { open = "vertical" },
+					["<C-x>"] = { open = "horizontal" },
+					["<C-n>"] = { action = "select_node", target = "next" },
+					["<C-p>"] = { action = "select_node", target = "prev" },
+				},
+				min_width = 10,
+				min_height = 5,
+				max_width = 85,
+				max_height = 25,
+				wrap = false, -- Whether to wrap lines in the preview window
+				border = "rounded", -- Border style for the preview window
+				zindex = 100, -- Stacking order. Increase if the preview window is shown below other windows.
+				show_title = true, -- Whether to show the file name as the title of the preview window
+				title_pos = "top-left", -- top-left|top-center|top-right|bottom-left|bottom-center|bottom-right
+				title_format = " %s ",
+				follow_links = true, -- Whether to follow symlinks when previewing files
+				-- win_position: { row?: number|function, col?: number|function }
+				-- Position of the preview window relative to the tree window.
+				-- If not specified, the position is automatically calculated.
+				-- Functions receive (tree_win, size) parameters and must return a number, where:
+				--   tree_win: number - tree window handle
+				--   size: {width: number, height: number} - dimensions of the preview window
+				-- Example:
+				--   win_position = {
+				--    col = function(tree_win, size)
+				--      local view_side = require('nvim-tree').config.view.side
+				--      return view_side == 'left' and vim.fn.winwidth(tree_win) + 1 or -size.width - 3
+				--    end,
+				--   },
+				win_position = {},
+				image_preview = {
+					enable = true, -- Whether to preview images (for more info see Previewing Images section in README)
+					patterns = { -- List of Lua patterns matching image file names
+						".*%.png$",
+						".*%.jpg$",
+						".*%.jpeg$",
+						".*%.gif$",
+						".*%.webp$",
+						".*%.avif$",
+						-- Additional patterns:
+						-- '.*%.svg$',
+						-- '.*%.bmp$',
+						-- '.*%.pdf$', (known to have issues)
+					},
+				},
+				on_open = nil, -- fun(win: number, buf: number) called when the preview window is opened
+				on_close = nil, -- fun() called when the preview window is closed
+				watch = {
+					event = "CursorMoved", -- 'CursorMoved'|'CursorHold'. Event to use to update the preview in watch mode
+				},
+			})
+		end,
+	},
 	{
 		"nvim-tree/nvim-tree.lua",
 		enabled = true,
+		-- commit = "543ed3cac212dc3993ef9f042f6c0812e34ddd43",
+		-- commit = "2a386fe567f9972632c3863105c986ee1366318f",
+		-- commit = "b0b49552c9462900a882fe772993b01d780445fe",
 		-- commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
 		-- enabled = false,
 		-- cmd = { "NvimTreeToggle", "NvimTreeFocus", "NvimTreeFindFile" },
 		-- lazy = true,
 		-- event = "VeryLazy",
 		priority = 500,
+		dependencies = {},
 		config = function()
 			local api_nvimtree = require("nvim-tree.api")
 			local nvim_tree_jg_utils = require("jg.custom.nvim-tree-utils")
@@ -197,20 +300,17 @@ return {
 					api_nvimtree.tree.reload()
 				end
 
-
-
-        local mark_paste = function()
-          local marks = api_nvimtree.marks.list()
-          if #marks == 0 then
-            table.insert(marks, api_nvimtree.tree.get_node_under_cursor())
-          end
-          for _, node in pairs(marks) do
-            api_nvimtree.fs.paste(node)
-          end
-          api_nvimtree.marks.clear()
-          api_nvimtree.tree.reload()
-        end
-
+				local mark_paste = function()
+					local marks = api_nvimtree.marks.list()
+					if #marks == 0 then
+						table.insert(marks, api_nvimtree.tree.get_node_under_cursor())
+					end
+					for _, node in pairs(marks) do
+						api_nvimtree.fs.paste(node)
+					end
+					api_nvimtree.marks.clear()
+					api_nvimtree.tree.reload()
+				end
 
 				vim.keymap.set("n", "F", function()
 					local node = api_nvimtree.tree.get_node_under_cursor()
@@ -330,6 +430,43 @@ return {
 
 				vim.keymap.set("n", "p", api_nvimtree.fs.paste, opts("Paste"))
 
+				-- START Preview functionality
+
+				vim.keymap.set("n", "P", function()
+					local preview = require("nvim-tree-preview")
+					preview.watch()
+				end, opts("Preview (Watch)"))
+				vim.keymap.set("n", "<Esc>", function()
+					local preview = require("nvim-tree-preview")
+					preview.unwatch()
+				end, opts("Close Preview/Unwatch"))
+				vim.keymap.set("n", "<C-f>", function()
+					local preview = require("nvim-tree-preview")
+					return preview.scroll(4)
+				end, opts("Scroll Down"))
+				vim.keymap.set("n", "<C-b>", function()
+					local preview = require("nvim-tree-preview")
+					return preview.scroll(-4)
+				end, opts("Scroll Up"))
+
+				-- Option A: Smart tab behavior: Only preview files, expand/collapse directories (recommended)
+				vim.keymap.set("n", "<Tab>", function()
+					local ok, node = pcall(api_nvimtree.tree.get_node_under_cursor)
+					if ok and node then
+						if node.type == "directory" then
+							api_nvimtree.node.open.edit()
+						else
+							local preview = require("nvim-tree-preview")
+							preview.node(node, { toggle_focus = true })
+						end
+					end
+				end, opts("Preview"))
+
+				-- Option B: Simple tab behavior: Always preview
+				-- vim.keymap.set('n', '<Tab>', preview.node_under_cursor, opts 'Preview')
+
+				-- END Preview functionality
+
 				vim.keymap.set("n", "su", function()
 					local jg_telescope = require("jg.custom.telescope")
 					jg_telescope.nvimtree_fzf_dir(vim.fn.expand("~/"))
@@ -342,7 +479,7 @@ return {
 				vim.keymap.set("n", "bD", mark_trash, opts("Trash File(s)"))
 				vim.keymap.set("n", "bd", mark_remove, opts("Remove File(s)"))
 				vim.keymap.set("n", "by", mark_copy, opts("Copy File(s)"))
-        vim.keymap.set("n", "bp", mark_paste, opts("Paste File(s)"))
+				vim.keymap.set("n", "bp", mark_paste, opts("Paste File(s)"))
 
 				vim.keymap.set("n", "bm", api_nvimtree.marks.bulk.move, opts("Move Bookmarked"))
 
@@ -546,7 +683,7 @@ return {
 				--   require("oil").open(path)
 				-- end, opts("Open Oil"))
 				vim.keymap.set("n", "p", api_nvimtree.fs.paste, opts("Paste"))
-				vim.keymap.set("n", "P", api_nvimtree.node.navigate.parent, opts("Parent Directory"))
+				vim.keymap.set("n", "A", api_nvimtree.node.navigate.parent, opts("Parent Directory"))
 				vim.keymap.set("n", "q", api_nvimtree.tree.close, opts("Close"))
 				vim.keymap.set("n", "r", api_nvimtree.fs.rename, opts("Rename"))
 				vim.keymap.set("n", "R", api_nvimtree.tree.reload, opts("Refresh"))
@@ -603,6 +740,7 @@ return {
 					confirm = {
 						trash = false,
 						remove = true,
+						default_yes = false,
 					},
 				},
 				-- BEGIN_DEFAULT_OPTS

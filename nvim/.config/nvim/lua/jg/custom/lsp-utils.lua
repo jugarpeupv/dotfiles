@@ -80,7 +80,6 @@ M.attach_lsp_config = function(client, bufnr)
   -- keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
   -- keymap.set("n", "<leader>rn", "<cmd>Lspsaga rename<CR>", opts) -- smart rename
   -- keymap.set("n", "<Leader>re", "<cmd>Lspsaga rename<CR>", opts) -- smart rename
-  -- keymap.set("n", "<leader>ot", "<cmd>Lspsaga outline<CR>", opts)
 
   -- keymap.set("n", "gL", "<cmd>Lspsaga show_line_diagnostics<CR>", opts) -- show  diagnostics for line
   keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts) -- show  diagnostics for line
@@ -102,7 +101,6 @@ M.attach_lsp_config = function(client, bufnr)
   -- keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts) -- show documentation for what is under cursor
   -- keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)      -- show documentation for what is under cursor
   -- keymap.set("n", "gH", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)              -- show documentation for what is under cursor
-  -- keymap.set("n", "<leader>oo", "<cmd>LSoutlineToggle<CR>", opts) -- see outline on right hand side
 
   -- version 10 of nvim
   -- if client.server_capabilities.inlayHintProvider then
