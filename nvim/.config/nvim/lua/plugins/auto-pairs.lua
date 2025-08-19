@@ -178,6 +178,9 @@ return {
 
       npairs.add_rules(require("nvim-autopairs.rules.endwise-lua"))
       npairs.add_rules(require("nvim-autopairs.rules.endwise-ruby"))
+
+
+      autopairs.remove_rule("\"")
     end,
   },
   -- { "rstacruz/vim-closer", event = { "InsertEnter" } },

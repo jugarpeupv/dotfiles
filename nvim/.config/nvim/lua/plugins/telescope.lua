@@ -13,10 +13,20 @@ return {
 				"nvim-telescope/telescope-frecency.nvim",
 				-- install the latest stable version
 				version = "*",
-				enabled = false,
-				config = function()
-					require("telescope").load_extension("frecency")
-				end,
+				enabled = true,
+				keys = {
+					{
+						"<leader>fr",
+						function()
+							require("telescope").extensions.frecency.frecency({})
+						end,
+						desc = "Open frecency",
+						mode = "n",
+					},
+				},
+				-- config = function()
+				-- 	require("telescope").load_extension("frecency")
+				-- end,
 			},
 			{
 				"Myzel394/jsonfly.nvim",
@@ -159,6 +169,27 @@ return {
 			{
 				"axieax/urlview.nvim",
 				cmd = { "UrlView" },
+				dependencies = {
+					"nvim-telescope/telescope.nvim",
+				},
+				keys = {
+					{
+						mode = { "n" },
+						"<leader>uo",
+						function()
+							vim.cmd("UrlView")
+						end,
+						desc = "Open URLView",
+					},
+					{
+						mode = { "n", "i", "t" },
+						"<C-x>u",
+						function()
+							vim.cmd("UrlView")
+						end,
+						desc = "Open URLView",
+					},
+				},
 				config = function()
 					require("urlview").setup({
 						default_picker = "native",
@@ -765,12 +796,30 @@ return {
 				--   },
 				-- },
 				extensions = {
-					-- frecency = {
-					--   auto_validate = true,
-					--   matcher = "fuzzy",
-					--   show_scores = true,
-					--   -- path_display = { "filename_first" },
-					-- },
+					frecency = {
+						db_safe_mode = false,
+						auto_validate = true,
+						initial_mode = "insert",
+						disable_devicons = false,
+						show_filter_column = false,
+						enable_prompt_mappings = true,
+						hide_current_buffer = true,
+						ignore_patterns = {
+							"*/.git",
+							"*/.git/*",
+							"*/.DS_Store",
+							"*.git/*",
+							"*/tmp/*",
+							"term*",
+							"term://*",
+							"*private*",
+							"*node_modules*",
+							"*/node_modules/*",
+						},
+						-- matcher = "fuzzy",
+						show_scores = true,
+						-- path_display = { "filename_first" },
+					},
 					-- jsonfly = {
 					--   subkeys_display = "waterfall"
 					-- },
@@ -1053,7 +1102,7 @@ return {
 			telescope.load_extension("grapple")
 			telescope.load_extension("file_browser")
 			telescope.load_extension("git_file_history")
-			-- telescope.load_extension("frecency")
+			telescope.load_extension("frecency")
 			telescope.load_extension("fzf")
 			telescope.load_extension("before")
 			telescope.load_extension("recent_files")

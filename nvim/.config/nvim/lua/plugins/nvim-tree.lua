@@ -113,7 +113,7 @@ return {
 	{
 		"nvim-tree/nvim-tree.lua",
 		enabled = true,
-		-- commit = "543ed3cac212dc3993ef9f042f6c0812e34ddd43",
+		commit = "543ed3cac212dc3993ef9f042f6c0812e34ddd43",
 		-- commit = "2a386fe567f9972632c3863105c986ee1366318f",
 		-- commit = "b0b49552c9462900a882fe772993b01d780445fe",
 		-- commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
@@ -147,7 +147,7 @@ return {
 
 			local should_attach_git = attach_git()
 
-			vim.keymap.set({ "n" }, "<leader>ur", function()
+			vim.keymap.set({ "n" }, "<leader>uR", function()
 				api_nvimtree.tree.open({ find_file = true, update_root = true })
 			end, { remap = true })
 
@@ -849,7 +849,8 @@ return {
 							-- default = "〣",
 							-- default = "",
 							-- default = "",
-							default = "",
+							-- default = "",
+							default = "",
 							-- modified = "[!]",
 							-- modified = "",
 							modified = "⏺",

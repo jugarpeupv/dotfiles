@@ -1,4 +1,5 @@
 local get_option = vim.filetype.get_option
+---@diagnostic disable-next-line: duplicate-set-field
 vim.filetype.get_option = function(filetype, option)
 	return option == "commentstring" and require("ts_context_commentstring.internal").calculate_commentstring()
 		or get_option(filetype, option)
@@ -49,6 +50,18 @@ vim.cmd([[
   augroup filetypedetect
   autocmd BufRead,BufNewFile *Jenkinsfile set filetype=groovy
   augroup END
+]])
+
+vim.cmd([[
+	augroup filetypedetect
+	autocmd BufRead,BufNewFile *Pluginfile set filetype=ruby
+	augroup END
+]])
+
+vim.cmd([[
+	augroup filetypedetect
+	autocmd BufRead,BufNewFile *proguard-rules.pro set filetype=proguard
+	augroup END
 ]])
 
 -- vim.cmd([[
@@ -393,39 +406,42 @@ add_current_dir_to_history()
 
 -- Autocommand to track directory changes
 vim.api.nvim_create_autocmd("DirChanged", {
-  callback = function(args)
-    local new_dir = args.file
-    local home = os.getenv("HOME")
-    if new_dir:sub(1, #home) == home then
-      new_dir = "~" .. new_dir:sub(#home + 1)
-    end
-    -- if not vim.tbl_contains(dir_history, new_dir) then
-    --   -- table.insert(dir_history, new_dir)
-    --   table.insert(dir_history, 1, new_dir)
-    -- end
+	group = vim.api.nvim_create_augroup("DirChanged_custom_jg", { clear = true }),
+	desc = "Track directory changes and update dir_history",
+	-- pattern = "*",
+	callback = function(args)
+		local new_dir = args.file
+		local home = os.getenv("HOME")
+		if new_dir:sub(1, #home) == home then
+			new_dir = "~" .. new_dir:sub(#home + 1)
+		end
+		-- if not vim.tbl_contains(dir_history, new_dir) then
+		--   -- table.insert(dir_history, new_dir)
+		--   table.insert(dir_history, 1, new_dir)
+		-- end
 
-    if vim.tbl_contains(dir_history, new_dir) then
-      -- Remove the existing entry if it exists
-      for i, dir in ipairs(dir_history) do
-        if dir == new_dir then
-          table.remove(dir_history, i)
-          break
-        end
-      end
-    end
+		if vim.tbl_contains(dir_history, new_dir) then
+			-- Remove the existing entry if it exists
+			for i, dir in ipairs(dir_history) do
+				if dir == new_dir then
+					table.remove(dir_history, i)
+					break
+				end
+			end
+		end
 
-    table.insert(dir_history, 1, new_dir)
-  end,
+		table.insert(dir_history, 1, new_dir)
+	end,
 })
 
 -- Telescope picker for directory history
 -- Telescope picker for directory history with default selection on the penultimate entry
 local function open_dir_history()
 	local pickers = require("telescope.pickers")
-	local finders = require("telescope.finders")
+	-- local finders = require("telescope.finders")
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
-	local entry_manager = require("telescope.entry_manager")
+	-- local entry_manager = require("telescope.entry_manager")
 
 	-- local entries = {}
 	-- local file = io.open(history_file, "r")
@@ -444,12 +460,15 @@ local function open_dir_history()
 				results = dir_history,
 			}),
 			sorter = require("telescope.config").values.generic_sorter({}),
-			attach_mappings = function(_, map)
+			attach_mappings = function(prompt_bufnr)
 				actions.select_default:replace(function()
-					actions.close(_)
+					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
 					if selection then
 						vim.cmd("e " .. selection[1])
+						-- local api_nvimtree = require("nvim-tree.api")
+						-- api_nvimtree.tree.change_root(selection[1])
+						-- api_nvimtree.tree.reload()
 					end
 				end)
 				return true
@@ -462,4 +481,3 @@ end
 vim.keymap.set("n", "<leader>ee", function()
 	open_dir_history()
 end, { noremap = true, silent = true })
-

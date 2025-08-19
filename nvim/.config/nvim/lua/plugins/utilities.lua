@@ -1,5 +1,10 @@
 -- return {}
 return {
+	{
+		"NMAC427/guess-indent.nvim",
+		event = "BufReadPost",
+		config = true,
+	},
 	-- {
 	-- 	"Joakker/lua-json5",
 	-- 	build = "./install.sh",
@@ -68,13 +73,13 @@ return {
 		"A7Lavinraj/fyler.nvim",
 		enabled = true,
 		cmd = { "Fyler" },
-		branch = "stable",
+		-- branch = "stable",
 		dependencies = { "echasnovski/mini.icons" },
 		keys = {
 			{
 				"<leader>fe",
 				function()
-					vim.cmd("Fyler kind=split:right")
+					vim.cmd("Fyler kind=split_right")
 				end,
 				desc = "Fyler",
 			},
@@ -82,6 +87,7 @@ return {
 		opts = {
 			default_explorer = false,
 			close_on_select = false,
+			git_status = true,
 			views = {
 				explorer = {
 					width = 0.4,
@@ -98,7 +104,7 @@ return {
 			{ "vim-denops/denops.vim" },
 		},
 		cmd = { "Docker", "DockerContainers", "DockerImages" },
-		lazy = false,
+		lazy = true,
 		-- config = function ()
 		--   vim.keymap.set("n", "<leader>dt", "<cmd>DockerContainers<cr>", { desc = "Docker Containers" })
 		-- end,
@@ -655,25 +661,25 @@ return {
 				layout = {
 					-- reverse = true,
 					preview = true,
-					layout = {
-						-- box = 'horizontal',
-						-- backdrop = false,
-						width = 0.9,
-						height = 0.9,
-						-- border = 'none',
-						-- {
-						--   box = 'vertical',
-						--   { win = 'list', title = ' Results ', title_pos = 'center', border = vim.g.borderStyle },
-						--   { win = 'input', height = 1, border = vim.g.borderStyle, title = '{title} {live} {flags}', title_pos = 'center' },
-						-- },
-						-- {
-						--   win = 'preview',
-						--   title = '{preview:Preview}',
-						--   width = 0.65,
-						--   border = vim.g.borderStyle,
-						--   title_pos = 'center',
-						-- },
-					},
+					-- layout = {
+					-- 	-- box = 'horizontal',
+					-- 	-- backdrop = false,
+					-- 	width = 0.9,
+					-- 	height = 0.9,
+					-- 	-- border = 'none',
+					-- 	-- {
+					-- 	--   box = 'vertical',
+					-- 	--   { win = 'list', title = ' Results ', title_pos = 'center', border = vim.g.borderStyle },
+					-- 	--   { win = 'input', height = 1, border = vim.g.borderStyle, title = '{title} {live} {flags}', title_pos = 'center' },
+					-- 	-- },
+					-- 	-- {
+					-- 	--   win = 'preview',
+					-- 	--   title = '{preview:Preview}',
+					-- 	--   width = 0.65,
+					-- 	--   border = vim.g.borderStyle,
+					-- 	--   title_pos = 'center',
+					-- 	-- },
+					-- },
 				},
 			},
 			explorer = {},
@@ -683,7 +689,11 @@ return {
 			{
 				"<leader><space>",
 				function()
-					Snacks.picker.smart()
+					Snacks.picker.smart({
+						-- layout = {
+						-- 	preset = "ivy_split",
+						-- },
+					})
 				end,
 				desc = "Smart Find Files",
 			},
@@ -697,7 +707,11 @@ return {
 			{
 				"<leader>/",
 				function()
-					Snacks.picker.grep()
+					Snacks.picker.grep({
+						layout = {
+							preset = "ivy",
+						},
+					})
 				end,
 				desc = "Grep",
 			},
@@ -1222,6 +1236,7 @@ return {
 	-- { "dstein64/vim-startuptime", event = "VeryLazy" },
 	{
 		"christoomey/vim-tmux-navigator",
+		enabled = false,
 		-- event = "VeryLazy",
 		commit = "d847ea942a5bb4d4fab6efebc9f30d787fd96e65",
 		keys = { "<C-h>", "<C-j>", "<C-k>", "<C-l>" },

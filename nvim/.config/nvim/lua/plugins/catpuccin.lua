@@ -89,15 +89,19 @@ return {
 				},
 				custom_highlights = function()
 					return {
-            Boolean = { fg = "#F38BA8" },
-            Number = { fg = "#F38BA8" },
+						Boolean = { fg = "#F38BA8" },
+						Number = { fg = "#F38BA8" },
 						NormalFloat = { fg = "none", bg = "none" },
 						GitHeader = { bg = "none" },
 						GitFooter = { bg = "none" },
 						GitAppBar = { bg = "none" },
 						String = { fg = "#F2CDCD" },
-						["@function.call.bash"] = { fg = "#F38BA8" },
-						-- ["@string.special.url"] = { fg = "#F38BA8", bg = "none", style = {} },
+						["@keyword.ghactions"] = { fg = "#89ddff" },
+						["@property.ghactions"] = { fg = "#cdd6f5" },
+						["@module.builtin.ghactions"] = { fg = "#89ddff" },
+						["@function.call.bash"] = { fg = "#C6A0F6", style = {} },
+						["@function.builtin.bash"] = { fg = "#C6A0F6", style = {} },
+						["@variable.parameter.bash"] = { fg = "#F5C2E7" },
 						StatusLine = { fg = "#cdd6f5", bg = "#292e42" },
 						MatchParen = { bg = "#394b70", fg = "#F5E0DC" },
 						IlluminatedWordText = { bg = "#394b70" },
@@ -118,33 +122,34 @@ return {
 						HlSearchNear = { fg = "#181826", bg = "#F38BA8" },
 						HlSearchLensNear = { fg = "#181826", bg = "#F38BA8" },
 						GrugFarResultsMatch = { bg = "#394b70" },
+						["@string.special.symbol.ruby"] = { fg = "#B4BEFE" },
 						["@markup.heading.1.marker"] = { fg = "#F5C2E7" },
 						["@markup.heading.1.markdown"] = { fg = "#F5C2E7" },
 						["@markup.heading.2.markdown"] = { fg = "#89ddff" },
 						["@markup.heading.3.markdown"] = { fg = "#94E2D5" },
 
-            ["@lsp.typemod.interface.defaultLibrary.typescript"] = { fg = "#F38BA8" },
-            ["@type.builtin.typescript"] = { fg = "#89ddfe" },
-            ["@string.special.url.html"] = { fg = "#F5C2E7", bg = "none", style = {} },
+						["@lsp.typemod.interface.defaultLibrary.typescript"] = { fg = "#F38BA8" },
+						["@type.builtin.typescript"] = { fg = "#89ddfe" },
+						["@string.special.url.html"] = { fg = "#F5C2E7", bg = "none", style = {} },
 						["@markup.heading.4.markdown"] = { fg = "#B4BEFE" },
 						Ignore = { fg = "#394b70" },
 						NeotestPassed = { fg = "#8ee2cf" },
-            ["@property.scss"] = { fg = "#B4BEFE" },
-            ["@lsp.typemod.class.declaration.typescript"] = { fg = "#B4BEFE" },
-            ["@lsp.typemod.method.declaration.typescript"]  = { fg = "#B4BEFE"},
-            ["@lsp.typemod.variable.readonly.typescript"] = { fg = "#CAD3F5" },
+						["@property.scss"] = { fg = "#B4BEFE" },
+						["@lsp.typemod.class.declaration.typescript"] = { fg = "#B4BEFE" },
+						["@lsp.typemod.method.declaration.typescript"] = { fg = "#B4BEFE" },
+						["@lsp.typemod.variable.readonly.typescript"] = { fg = "#CAD3F5" },
 						EgrepifyFile = { fg = "#f2cdcd" },
 						EgrepifyLnum = { fg = "#737aa2" },
 						CursorLine = { bg = "#3b4261" },
 						["@property.yaml"] = { fg = "#B4BEFE" },
-						["@variable.parameter.bash"] = { fg = "#F5C2E7" },
 						-- CursorLine = { bg = "#2c3148" },
 						NvimTreeCursorLine = { bg = "#3b4261" },
 						NvimTreeGitStagedIcon = { fg = "#8ee2cf" },
 						-- MatchupVirtualText = { fg = "#6C7086" }
 						MatchupVirtualText = { fg = "#747ebd" },
 						-- GitSignsCurrentLineBlame = { fg = "#747ebd" },
-						GitSignsCurrentLineBlame = { fg = "#0f1219" },
+						-- GitSignsCurrentLineBlame = { fg = "#0f1219" },
+						GitSignsCurrentLineBlame = { fg = "#B4BEFE" },
 						FloatBorder = { fg = "#394b70" },
 						FloatTitle = { fg = "#394b70", bg = "none" },
 						BlinkCmpKindSnippet = { fg = "#747ebd" },
@@ -163,6 +168,7 @@ return {
 
 						-- VIRA
 						viraTitles = { fg = "#F5E0DC" },
+						["@lsp.type.enumMember.typescript"] = { fg = "#F5C2E7" },
 						viraDetailsStatusInProgress = { fg = "#F38BA8" },
 						viraDetailsEpic = { fg = "#F5C2E7" },
 						viraDetailsTypeStory = { fg = "#8ee2cf" },
@@ -200,6 +206,8 @@ return {
 			vim.cmd([[highlight IndentBlanklineContextChar guifg=#737aa2]])
 
 			vim.api.nvim_set_hl(0, "@lsp.typemod.method.defaultLibrary.typescript", { link = "Function" })
+
+			vim.api.nvim_set_hl(0, "TelescopePathSeparator", { link = "TelescopeNormal" })
 
 			vim.api.nvim_set_hl(0, "TreesitterContext", { link = "Function" })
 
@@ -396,11 +404,11 @@ return {
 			-- vim.cmd([[hi DiffviewFilePanelFileName guifg=#B4BEFE]])
 			vim.cmd([[hi DiffviewFilePanelFileName guifg=#c0caf5]])
 			vim.cmd([[hi @tag guifg=#74C7EC]])
-      vim.cmd([[hi @tag.delimiter.angular guifg=#74C7EC]])
-      vim.cmd([[hi @tag.delimiter guifg=#74C7EC]])
-      -- vim.cmd([[hi @tag guifg=#89ddfe]])
-      -- vim.cmd([[hi @tag.delimiter.angular guifg=#89ddfe]])
-      -- vim.cmd([[hi @tag.delimiter guifg=#89ddfe]])
+			vim.cmd([[hi @tag.delimiter.angular guifg=#74C7EC]])
+			vim.cmd([[hi @tag.delimiter guifg=#74C7EC]])
+			-- vim.cmd([[hi @tag guifg=#89ddfe]])
+			-- vim.cmd([[hi @tag.delimiter.angular guifg=#89ddfe]])
+			-- vim.cmd([[hi @tag.delimiter guifg=#89ddfe]])
 
 			vim.cmd([[hi @tag.attribute guifg=#B4BEFE]])
 			-- vim.cmd([[hi @tag guifg=#B4BEFE]])
@@ -421,8 +429,8 @@ return {
 
 			vim.cmd([[hi @variable.member.lua guifg=#B4BEFE]])
 			vim.cmd([[hi @variable.member guifg=#B4BEFE]])
-      vim.cmd([[hi @variable guifg=#CAD3F5]])
-      vim.cmd([[hi @variable.angular guifg=#B4BEFE]])
+			vim.cmd([[hi @variable guifg=#CAD3F5]])
+			vim.cmd([[hi @variable.angular guifg=#B4BEFE]])
 
 			-- vim.cmd([[highlight @lsp.typemod.variable.defaultLibrary.typescript guifg=#89ddff]])
 			-- vim.cmd([[highlight @variable.builtin guifg=#89ddff]])
@@ -452,7 +460,7 @@ return {
 
 			vim.cmd([[highlight jsonKeyword guifg=#b4beff ]])
 
-      vim.cmd([[highlight @property.json guifg=#b4beff ]])
+			vim.cmd([[highlight @property.json guifg=#b4beff ]])
 			vim.cmd([[highlight @property.jsonc guifg=#b4beff ]])
 			vim.cmd([[highlight @property guifg=#b4beff ]])
 			-- @property      xxx guifg=#b4beff

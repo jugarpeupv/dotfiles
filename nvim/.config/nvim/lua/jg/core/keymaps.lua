@@ -324,6 +324,15 @@ keymap("n", "<leader>ce", "<cmd>lua require('telescope.builtin').colorscheme()<c
 keymap("n", "<leader>ht", "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
 keymap("n", "<leader>mp", "<cmd>lua require('telescope.builtin').man_pages()<cr>", opts)
 keymap("n", "<leader>of", "<cmd>lua require('telescope.builtin').oldfiles({ only_cwd = true })<cr>", opts)
+vim.keymap.set({ "n" }, "<leader>OF", function()
+	require("telescope").extensions.frecency.frecency({
+		workspace = "CWD",
+	})
+end, opts)
+
+vim.keymap.set({ "n" }, "<leader>OO", function()
+	require("telescope").extensions.frecency.frecency({})
+end, opts)
 keymap("n", "<leader>oo", "<cmd>lua require('telescope.builtin').oldfiles()<cr>", opts)
 keymap("n", "<leader>rg", "<cmd>lua require('telescope.builtin').registers()<cr>", opts)
 keymap("n", "<leader>ke", "<cmd>lua require('telescope.builtin').keymaps()<cr>", opts)
@@ -967,8 +976,6 @@ end, opts)
 vim.keymap.set({ "n" }, "<leader>bn", "<cmd>bn<cr>", opts)
 vim.keymap.set({ "n" }, "<leader>bp", "<cmd>bp<cr>", opts)
 
-vim.keymap.set({ "n" }, "<leader>fr", "<cmd>Telescope frecency workspace=CWD<cr>", opts)
-
 vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
 
 vim.keymap.set({ "n" }, "<M-b>", function()
@@ -1196,8 +1203,8 @@ vim.keymap.set("n", "<leader>nr", function()
 	if terminals and next(terminals) ~= nil and #terminals > 0 then
 		-- Send the command to the first terminal
 		-- vim.fn.chansend(terminals[1]["id"], command)
-    vim.fn.chansend(terminals[#terminals]["id"], command)
-    -- require("terminal").send(nil, command)
+		vim.fn.chansend(terminals[#terminals]["id"], command)
+	-- require("terminal").send(nil, command)
 	else
 		-- Open a new terminal and send the command
 		vim.cmd("split | terminal")
@@ -1327,6 +1334,28 @@ vim.keymap.set("n", "<leader>dv", function()
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
 
-
 vim.keymap.set("i", "<C-j>", "<C-n>", { noremap = true })
 vim.keymap.set("i", "<C-k>", "<C-p>", { noremap = true })
+
+vim.keymap.set({ "v", "i" }, "<C-x><C-f>", function()
+	print("Fuzzy complete path")
+	require("fzf-lua").complete_path()
+end, { silent = true, desc = "Fuzzy complete path" })
+
+vim.keymap.set("n", "<leader>tp", function()
+	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_pendientes.md")
+end, opts)
+
+
+local function smart_move(direction, tmux_cmd)
+	-- local curwin = vim.api.nvim_get_current_win()
+	vim.cmd('wincmd ' .. direction)
+	-- if curwin == vim.api.nvim_get_current_win() then
+	-- 	vim.fn.system('tmux select-pane ' .. tmux_cmd)
+	-- end
+end
+
+vim.keymap.set('n', '<C-h>', function() smart_move('h', '-L') end, {silent = true})
+vim.keymap.set('n', '<C-j>', function() smart_move('j', '-D') end, {silent = true})
+vim.keymap.set('n', '<C-k>', function() smart_move('k', '-U') end, {silent = true})
+vim.keymap.set('n', '<C-l>', function() smart_move('l', '-R') end, {silent = true})

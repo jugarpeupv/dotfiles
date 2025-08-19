@@ -60,7 +60,6 @@ return {
 	},
 	{
 		"mfussenegger/nvim-dap",
-		lazy = true,
 		keys = {
 			-- {
 			-- 	"<leader>dO",
@@ -327,6 +326,11 @@ return {
 				return
 			end
 
+			-- Use overseer for running preLaunchTask and postDebugTask
+			-- require("overseer").patch_dap(true)
+			require("dap.ext.vscode").json_decode = require("overseer.json").decode
+			-- require("dap.ext.vscode").json_decode = require("json5").parse
+
 			-- require("dap").defaults.fallback.switchbuf = "useopen" -- See :h dap-defaults to learn more
 
 			if not dap.adapters["pwa-node"] then
@@ -513,10 +517,6 @@ return {
 				callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
 			end
 
-			-- Use overseer for running preLaunchTask and postDebugTask
-			-- require("overseer").patch_dap(true)
-			require("dap.ext.vscode").json_decode = require("overseer.json").decode
-      -- require("dap.ext.vscode").json_decode = require("json5").parse
 
 			local dv = require("dap-view")
 			dap.listeners.before.attach["dap-view-config"] = function()
@@ -533,11 +533,11 @@ return {
 			end
 
 			-- local dapui = require("dapui")
-
+			--
 			-- dap.listeners.after.event_initialized["dapui_config"] = function()
 			-- 	dapui.open()
 			-- end
-
+			--
 			-- dap.listeners.before.attach["dapui_config"] = function()
 			--   dapui.open()
 			-- end
@@ -545,7 +545,7 @@ return {
 			-- dap.listeners.before.launch["dapui_config"] = function()
 			--   dapui.open()
 			-- end
-
+			--
 			-- dap.listeners.before.event_exited["dapui_config"] = function()
 			-- 	dapui.open()
 			-- end
@@ -562,15 +562,19 @@ return {
 			vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#89ddff", bg = "none" })
 			vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
 			vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
+			vim.api.nvim_set_hl(0, "DapStoppedText", { ctermbg = 0, fg = "#aa8430", bg = "none" })
+			vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#614b1b" })
 
 			-- vim.fn.sign_define("DapBreakpointRejected", { text = "⊚", texthl = "", linehl = "", numhl = "" })
 			-- vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint2", linehl = "", numhl = "" })
-			-- vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" })
+			
+			vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStoppedText", linehl = "DapDebug1", numhl = "" })
 
+			-- vim.fn.sign_define("DapStopped", { text = "⇒", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" })
 			local signs = {
 				DapBreakpointRejected = { text = "⊚", texthl = "", linehl = "", numhl = "" },
 				DapBreakpoint = { text = "", texthl = "DapBreakpoint2", linehl = "", numhl = "" },
-				DapStopped = { text = "", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" },
+				-- DapStopped = { text = "", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" },
 			}
 
 			for name, opts in pairs(signs) do

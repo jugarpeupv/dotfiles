@@ -718,7 +718,7 @@ return {
       "akinsho/git-conflict.nvim",
     },
     keys = {
-      { "<leader>gd", mode = "n",     "<cmd>DiffviewOpen<cr>" },
+      { "<leader>gd", mode = "n",     "<cmd>DiffviewOpen -- :!package-lock.json<cr>" },
       { "<leader>cc", mode = "n",     "<cmd>DiffviewClose<cr>" },
       { "<leader>gv", mode = { "v" }, "<cmd>'<,'>DiffviewFileHistory<cr>" },
       { "<leader>gv", mode = { "n" }, "<cmd>DiffviewFileHistory %<cr>" },
@@ -842,21 +842,29 @@ return {
           DiffviewFileHistory = {},
         },
         hooks = {
-          diff_buf_win_enter = function(bufnr, winid, ctx)
-            -- print("bufnr: ", bufnr)
-            -- print("ctx: ", vim.inspect(ctx))
-            -- print("winid: ", winid)
-            -- if winid == 1004 or ctx.symbol == 'b' then
-            --   vim.api.nvim_buf_set_option('wrap', true, { buf = bufnr})
-            -- end
-
-            vim.api.nvim_buf_set_option(bufnr, "wrap", false)
-
-            -- vim.keymap.set({ "n" }, "<leader>sn", function()
-            --   -- vim.wo.wrap = not vim.wo.wrap
-            --   vim.cmd("windo set wrap!")
-            -- end, { buffer = bufnr, noremap = true, silent = true })
-          end,
+          -- diff_buf_win_enter = function(bufnr, winid, ctx)
+          --   -- print("bufnr: ", bufnr)
+          --   -- print("ctx: ", vim.inspect(ctx))
+          --   -- print("winid: ", winid)
+          --   -- if winid == 1004 or ctx.symbol == 'b' then
+          --   --   vim.api.nvim_buf_set_option('wrap', true, { buf = bufnr})
+          --   -- end
+          --   local filename = vim.api.nvim_buf_get_name(bufnr)
+          --   vim.api.nvim_buf_set_option(bufnr, "wrap", false)
+          --   print('filename: ', filename)
+          --   local coincide = filename:match("package%-lock%.json")
+          --   print('coincide: ', coincide)
+          --   -- check if filename contains "package-lock.json"
+          --   if filename:match("package%-lock%.json") then
+          --     print('package-lock.json detected, disabling treesitter')
+          --     vim.treesitter.stop(bufnr)
+          --   end
+          --
+          --   -- vim.keymap.set({ "n" }, "<leader>sn", function()
+          --   --   -- vim.wo.wrap = not vim.wo.wrap
+          --   --   vim.cmd("windo set wrap!")
+          --   -- end, { buffer = bufnr, noremap = true, silent = true })
+          -- end,
           -- diff_buf_read = function(bufnr, win)
           --   print("win: ", vim.inspect(win))
           --   -- print('bufnr', bufnr)

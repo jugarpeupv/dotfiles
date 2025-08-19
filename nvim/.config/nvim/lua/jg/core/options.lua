@@ -25,7 +25,7 @@ opt.smartcase = true  -- if you include mixed case in your search, assumes you w
 -- cursor line
 opt.cursorline = true -- highlight the current cursor line
 opt.scrolloff = 2
-opt.scrollback = 6000
+opt.scrollback = 100000
 opt.sidescrolloff = 4
 opt.hlsearch = true
 opt.incsearch = true
