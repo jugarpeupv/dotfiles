@@ -5,10 +5,22 @@ return {
 		---@type opencode.Config
 		opts = {
 			-- Your configuration, if any
+			terminal = {
+				win = {
+					-- "right" seems like a better default than snacks.terminal's "float" default...
+					position = "right",
+					-- Stay in the editor after opening the terminal
+					enter = true,
+				},
+				env = {
+					-- Other themes have visual bugs in embedded terminals: https://github.com/sst/opencode/issues/445
+					OPENCODE_THEME = "system",
+				},
+			},
 		},
     -- stylua: ignore
     keys = {
-      { '<leader>oc', function() require('opencode').toggle() end, desc = 'Toggle embedded opencode', },
+      { mode = { "n", "t", "v" }, '<M-z>', function() require('opencode').toggle() end, desc = 'Toggle embedded opencode', },
       -- { '<leader>oa', function() require('opencode').ask() end, desc = 'Ask opencode', mode = 'n', },
       -- { '<leader>oa', function() require('opencode').ask('@selection: ') end, desc = 'Ask opencode about selection', mode = 'v', },
       -- { '<leader>op', function() require('opencode').select_prompt() end, desc = 'Select prompt', mode = { 'n', 'v', }, },

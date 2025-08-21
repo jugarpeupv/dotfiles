@@ -113,7 +113,7 @@ return {
 	{
 		"nvim-tree/nvim-tree.lua",
 		enabled = true,
-		commit = "543ed3cac212dc3993ef9f042f6c0812e34ddd43",
+		-- commit = "543ed3cac212dc3993ef9f042f6c0812e34ddd43",
 		-- commit = "2a386fe567f9972632c3863105c986ee1366318f",
 		-- commit = "b0b49552c9462900a882fe772993b01d780445fe",
 		-- commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
@@ -193,7 +193,7 @@ return {
 
 			api_nvimtree.events.subscribe(api_nvimtree.events.Event.Ready, function()
 				vim.wo.statusline = " "
-				vim.cmd("hi! NvimTreeStatusLine guifg=none guibg=none")
+				-- vim.cmd("hi! NvimTreeStatusLine guifg=none guibg=none")
 				vim.opt.laststatus = 3
 				local wt_utils = require("jg.custom.worktree-utils")
 				local cwd = vim.loop.cwd()
@@ -655,7 +655,10 @@ return {
 				vim.keymap.set("n", "]c", api_nvimtree.node.navigate.git.next, opts("Next Git"))
 				vim.keymap.set("n", "d", api_nvimtree.fs.remove, opts("Delete"))
 				-- vim.keymap.set("n", "D", api_nvimtree.fs.trash, opts("Trash"))
-				vim.keymap.set("n", "D", api_nvimtree.fs.trash, opts("Trash"))
+				vim.keymap.set("n", "D", function(node)
+					api_nvimtree.fs.trash(node)
+					api_nvimtree.tree.reload()
+				end, opts("Trash"))
 				vim.keymap.set("n", "E", api_nvimtree.tree.expand_all, opts("Expand All"))
 				vim.keymap.set("n", "e", api_nvimtree.fs.rename_basename, opts("Rename: Basename"))
 				vim.keymap.set("n", "]e", api_nvimtree.node.navigate.diagnostics.next, opts("Next Diagnostic"))
@@ -992,13 +995,14 @@ return {
 					cygwin_support = false,
 				},
 				filesystem_watchers = {
-					-- enable = true,
+					enable = true,
 					-- enable = false,
-					enable = should_attach_git,
-					-- debounce_delay = 30,
+					-- enable = should_attach_git,
+					-- enable = false
+					debounce_delay = 100,
 					-- debounce_delay = 1000,
 					-- ignore_dirs = { "/target", "/.ccls-cache" },
-					-- ignore_dirs = { "/node_modules", "node_modules", "/target", "node_modules", "/Users/jgarcia/", "/Users/jgarcia" },
+					ignore_dirs = { "/node_modules", "node_modules", "/target", "node_modules", "/Users/jgarcia/", "/Users/jgarcia" },
 				},
 				actions = {
 					use_system_clipboard = true,

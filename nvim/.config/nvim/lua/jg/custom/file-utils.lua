@@ -21,7 +21,8 @@ end
 
 M.get_bps_path = function(path)
   local path_sep = M.get_path_sep()
-  local base_filename = path or vim.fn.getcwd()
+  -- local base_filename = path or vim.fn.getcwd()
+  local base_filename = path or vim.loop.cwd()
 
   if jit and jit.os == "Windows" then
     base_filename = base_filename:gsub(":", "_")
@@ -36,7 +37,8 @@ M.load_bps = function(path)
   local bps = {}
   if fp ~= nil then
     local load_bps_raw = fp:read("*a")
-    bps = vim.fn.json_decode(load_bps_raw)
+    -- bps = vim.fn.json_decode(load_bps_raw)
+    bps = vim.json.decode(load_bps_raw)
     fp:close()
   end
   return bps
@@ -49,9 +51,15 @@ M.write_bps = function(path, bps)
     "Last worktree data should be stored in a table. Usually it is not the user's problem if you did not call the write_bps function explicitly."
   )
 
+  if vim.fn.isdirectory(cfg.save_dir) ~= 0 then
+    -- print('Creating save directory: ' .. cfg.save_dir)
+    M.create_path(cfg.save_dir)
+  end
+
+
   local fp = io.open(path, "w+")
   if fp == nil then
-    vim.notify("Failed to save last worktree. File: " .. vim.fn.expand("%"), "WARN")
+    vim.notify("Failed to save last worktree. File: " .. path, "WARN")
     return false
   else
     fp:write(vim.fn.json_encode(bps))

@@ -5,9 +5,9 @@
 return {
 	{
 		"nvim-telescope/telescope.nvim",
-		branch = "0.1.x",
+		-- branch = "0.1.x",
 		-- tag = "0.1.8",
-		-- branch = "master",
+		branch = "master",
 		dependencies = {
 			{
 				"nvim-telescope/telescope-frecency.nvim",
@@ -174,16 +174,8 @@ return {
 				},
 				keys = {
 					{
-						mode = { "n" },
-						"<leader>uo",
-						function()
-							vim.cmd("UrlView")
-						end,
-						desc = "Open URLView",
-					},
-					{
-						mode = { "n", "i", "t" },
-						"<C-x>u",
+						mode = { "i", "t", "n" },
+						"<M-i>",
 						function()
 							vim.cmd("UrlView")
 						end,
@@ -226,6 +218,7 @@ return {
 			{ "jugarpeupv/git-worktree.nvim" },
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
+				enabled = false,
 				build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
 				cmd = { "Telescope" },
 			},
@@ -359,7 +352,7 @@ return {
 
 			local actions = require("telescope.actions")
 			local actions_live_grep_args = require("telescope-live-grep-args.actions")
-			local image_preview = require("jg.custom.telescope").telescope_image_preview()
+			-- local image_preview = require("jg.custom.telescope").telescope_image_preview()
 
 			-- local action_state = require("telescope.actions.state")
 			--
@@ -605,8 +598,8 @@ return {
 							"--column",
 							"--smart-case",
 						},
-						file_previewer = image_preview.file_previewer,
-						buffer_previewer_maker = image_preview.buffer_previewer_maker,
+						-- file_previewer = image_preview.file_previewer,
+						-- buffer_previewer_maker = image_preview.buffer_previewer_maker,
 						-- layout_strategy = 'bottom_pane',
 						-- layout_config = {
 						--   height = 0.53,
@@ -842,6 +835,7 @@ return {
 								["<C-b>"] = fb_actions.open,
 								["<C-o>"] = function(prompt_bufnr)
 									actions.close(prompt_bufnr)
+									local action_state = require("telescope.actions.state")
 									local selection = action_state.get_selected_entry()
 									if vim.fn.isdirectory(selection.value) == 1 then
 										require("oil").open(selection.value)
@@ -1103,7 +1097,7 @@ return {
 			telescope.load_extension("file_browser")
 			telescope.load_extension("git_file_history")
 			telescope.load_extension("frecency")
-			telescope.load_extension("fzf")
+			-- telescope.load_extension("fzf")
 			telescope.load_extension("before")
 			telescope.load_extension("recent_files")
 			-- require("telescope").load_extension("persisted")

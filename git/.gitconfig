@@ -23,6 +23,8 @@
 [core]
   editor = nvim
 	pager = nvim -R
+	fsmonitor = true
+	untrackedcache = true
   ; pager = delta
 ; [interactive]
 ;   diffFilter = delta --color-only

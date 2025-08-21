@@ -47,7 +47,7 @@ opt.formatoptions = opt.formatoptions - "c" - "r" - "o"
 
 -- opt.diffopt = { "iwhiteall", "internal", "filler", "closeoff", "hiddenoff", "algorithm:minimal", "followwrap" }
 -- opt.diffopt="iwhiteall,internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram"
-opt.diffopt="iwhiteall,followwrap,internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram"
+opt.diffopt="iwhiteall,internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram"
 
 opt.pumblend = 0
 opt.pumheight = 10
@@ -163,6 +163,7 @@ vim.o.foldlevelstart = 99
 vim.o.foldenable = false
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 vim.o.foldtext = ""
 vim.o.foldopen = "search,tag,undo"
 -- vim.o.completeopt = "menu,popup,noselect,noinsert"

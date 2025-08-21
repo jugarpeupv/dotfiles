@@ -62,12 +62,17 @@ return {
         function()
           local get_terminal_bufs = function()
             return vim.tbl_filter(function(bufnr)
-              return vim.fn.getbufvar(bufnr, "&buftype") == "terminal"
-                  and vim.fn.getbufvar(bufnr, "&ft") == ""
+              local filetype = vim.fn.getbufvar(bufnr, "&ft")
+              -- print("filetype: ", filetype)
+              local buftype = vim.fn.getbufvar(bufnr, "&buftype")
+              -- print("buftype: ", buftype)
+              return buftype == "terminal"
+                  and filetype == ""
             end, vim.api.nvim_list_bufs())
           end
 
           local terminals = get_terminal_bufs()
+          -- print(vim.inspect(terminals))
 
           local there_are_no_terminal_buffers = next(terminals) == nil
 

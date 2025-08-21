@@ -126,7 +126,7 @@ return {
 				end,
 			},
 			{
-				"<leader>dc",
+				"<leader>dU",
 				function()
 					require("dap").run_to_cursor()
 				end,
@@ -140,7 +140,7 @@ return {
 				':lua require"dap".down()<CR>zz',
 			},
 			{
-				"<leader>dT",
+				"<leader>dt",
 				function()
 					require("dap").terminate()
 				end,
@@ -201,7 +201,7 @@ return {
 					winbar = {
 						show = true,
 						-- You can add a "console" section to merge the terminal with the other views
-						sections = { "scopes", "watches", "exceptions", "breakpoints", "threads", "repl" },
+						sections = { "console", "scopes", "watches", "exceptions", "breakpoints", "threads", "repl", "sessions" },
 						-- Must be one of the sections declared above
 						default_section = "scopes",
 						-- headers = {
@@ -332,6 +332,15 @@ return {
 			-- require("dap.ext.vscode").json_decode = require("json5").parse
 
 			-- require("dap").defaults.fallback.switchbuf = "useopen" -- See :h dap-defaults to learn more
+
+			-- dap.defaults.fallback.external_terminal = {
+			-- 	command = '/opt/homebrew/bin/kitty';
+			-- 	args = {'-e'};
+			-- }
+
+			dap.defaults.fallback.terminal_win_cmd = '50split new'
+
+			dap.defaults.fallback.focus_terminal = true
 
 			if not dap.adapters["pwa-node"] then
 				require("dap").adapters["pwa-node"] = {
@@ -519,28 +528,28 @@ return {
 
 
 			local dv = require("dap-view")
-			dap.listeners.before.attach["dap-view-config"] = function()
-				dv.open()
-			end
-			dap.listeners.before.launch["dap-view-config"] = function()
-				dv.open()
-			end
-			dap.listeners.before.event_terminated["dap-view-config"] = function()
-				dv.close()
-			end
-			dap.listeners.before.event_exited["dap-view-config"] = function()
-				dv.close()
+			-- dap.listeners.before.attach["dap-view-config"] = function()
+			-- 	dv.open()
+			-- end
+			-- dap.listeners.before.launch["dap-view-config"] = function()
+			-- 	dv.open()
+			-- end
+			-- dap.listeners.before.event_terminated["dap-view-config"] = function()
+			-- 	dv.close()
+			-- end
+			-- dap.listeners.before.event_exited["dap-view-config"] = function()
+			-- 	dv.close()
+			-- end
+
+			local dapui = require("dapui")
+
+			dap.listeners.after.event_initialized["dapui_config"] = function()
+				dapui.open()
 			end
 
-			-- local dapui = require("dapui")
-			--
-			-- dap.listeners.after.event_initialized["dapui_config"] = function()
-			-- 	dapui.open()
-			-- end
-			--
-			-- dap.listeners.before.attach["dapui_config"] = function()
-			--   dapui.open()
-			-- end
+			dap.listeners.before.attach["dapui_config"] = function()
+			  dapui.open()
+			end
 			--
 			-- dap.listeners.before.launch["dapui_config"] = function()
 			--   dapui.open()
@@ -563,7 +572,7 @@ return {
 			vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
 			vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
 			vim.api.nvim_set_hl(0, "DapStoppedText", { ctermbg = 0, fg = "#aa8430", bg = "none" })
-			vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#614b1b" })
+			vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#664f1d" })
 
 			-- vim.fn.sign_define("DapBreakpointRejected", { text = "⊚", texthl = "", linehl = "", numhl = "" })
 			-- vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint2", linehl = "", numhl = "" })

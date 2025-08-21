@@ -1,5 +1,18 @@
 -- return {}
 return {
+	-- Lazy
+	{
+		"2kabhishek/nerdy.nvim",
+		dependencies = {
+			"folke/snacks.nvim",
+		},
+		cmd = "Nerdy",
+		opts = {
+			max_recents = 30, -- Configure recent icons limit
+			add_default_keybindings = true, -- Add default keybindings
+			copy_to_clipboard = false, -- Copy glyph to clipboard instead of inserting
+		},
+	},
 	{
 		"NMAC427/guess-indent.nvim",
 		event = "BufReadPost",
@@ -110,7 +123,7 @@ return {
 		-- end,
 		keys = {
 			{
-				"<leader>dt",
+				"<leader>dc",
 				-- "<cmd>DockerContainers<cr>",
 				function()
 					vim.cmd(":e docker://containers")

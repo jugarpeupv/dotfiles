@@ -23,7 +23,11 @@ return {
 		highlight_headers = true, --
 		selection = function(source)
 			-- return require("CopilotChat.select").visual(source) or require("CopilotChat.select").line(source)
-			return require("CopilotChat.select").visual(source) or require('CopilotChat.select').buffer(source)
+			return require("CopilotChat.select").visual(source) or require("CopilotChat.select").buffer(source)
+
+			-- return require("CopilotChat.select").visual(source)
+			-- 	or require("CopilotChat.select").line(source)
+			-- 	or require("CopilotChat.select").buffer(source)
 		end,
 		providers = {
 			copilot = {
@@ -34,6 +38,7 @@ return {
 			},
 		},
 		log_level = "fatal",
+		-- sticky = { "@neovim", "@mcp", "@copilot" },
 		-- question_header = '# User ', -- Header to use for user questions
 		-- answer_header = '#  ', -- Header to use for AI answers
 		-- error_header = '# Error ', -- Header to use for errors
@@ -93,7 +98,7 @@ return {
 		callback = function()
 			local chat = require("CopilotChat")
 			if vim.g.chat_title then
-				print("saving chat quickly")
+				-- print("saving chat quickly")
 				chat.save(vim.g.chat_title)
 				return
 			end

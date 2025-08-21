@@ -102,7 +102,12 @@ return {
 						["@function.call.bash"] = { fg = "#C6A0F6", style = {} },
 						["@function.builtin.bash"] = { fg = "#C6A0F6", style = {} },
 						["@variable.parameter.bash"] = { fg = "#F5C2E7" },
-						StatusLine = { fg = "#cdd6f5", bg = "#292e42" },
+						-- StatusLine = { fg = "#737aa2", bg = "#292e42" },
+						StatusLine = { fg = "#737aa2", bg = "#292e42" },
+						-- NvimTreeStatusLine  = { fg = "#737aa2", bg = "#292e42" },
+						-- NvimTreeStatusLineNC  = { fg = "#737aa2", bg = "#292e42" },
+						NvimTreeStatusLine  = { fg = "#737aa2", bg = "none" },
+						NvimTreeStatusLineNC  = { fg = "#737aa2", bg = "none" },
 						MatchParen = { bg = "#394b70", fg = "#F5E0DC" },
 						IlluminatedWordText = { bg = "#394b70" },
 						IlluminatedWordRead = { bg = "#394b70" },
@@ -509,7 +514,6 @@ return {
 
 			vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]])
 			vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
-			vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
 			-- vim.cmd([[hi @markup.raw guifg=#F5E0DC]])
 			vim.cmd([[hi @markup.raw guifg=#CDD6F4]])
 			vim.cmd([[hi ContextVt guifg=#747ebd]])

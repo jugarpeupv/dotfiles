@@ -1,100 +1,24 @@
 -- return {}
 return {
-	-- {
-	-- 	'nvim-treesitter/nvim-treesitter-textobjects',
-	-- 	dependencies = 'nvim-treesitter/nvim-treesitter',
-	-- 	branch = 'main',
-	-- 	event = 'BufReadPost',
-	-- 	opts = {
-	-- 		select = {
-	-- 			enable = true,
-	-- 			lookahead = false,
-	-- 			keymaps = {},
-	-- 			selection_modes = {
-	-- 				['@parameter.outer'] = 'v',
-	-- 				['@function.outer'] = 'V',
-	-- 				['@class.outer'] = 'V',
-	-- 			},
-	-- 		},
-	-- 	},
-	-- 	config = function()
-	-- 		---@diagnostic disable-next-line: missing-fields
-	-- 		local select = require('nvim-treesitter-textobjects.select').select_textobject
-	-- 		vim.keymap.set({ 'x', 'o' }, 'af', function()
-	-- 			select('@function.outer', 'textobjects')
-	-- 		end, { desc = 'select Around Function' })
-	-- 		vim.keymap.set({ 'x', 'o' }, 'if', function()
-	-- 			select('@function.inner', 'textobjects')
-	-- 		end, { desc = 'select In Function' })
-	-- 		vim.keymap.set({ 'x', 'o' }, 'ac', function()
-	-- 			select('@class.outer', 'textobjects')
-	-- 		end, { desc = 'select Around Class' })
-	-- 		vim.keymap.set({ 'x', 'o' }, 'ic', function()
-	-- 			select('@class.inner', 'textobjects')
-	-- 		end, { desc = 'select In Class' })
-	-- 		vim.keymap.set({ 'x', 'o' }, 'ap', function()
-	-- 			select('@parameter.outer', 'textobjects')
-	-- 		end, { desc = 'select Around Parameter' })
-	-- 		vim.keymap.set({ 'x', 'o' }, 'as', function()
-	-- 			select('@statement.outer', 'textobjects')
-	-- 		end, { desc = 'select Around Statement' })
-	-- 		vim.keymap.set({ 'x', 'o' }, 'ad', function()
-	-- 			select('@string.documentation', 'highlights')
-	-- 		end, { desc = 'select Around Docstring' })
-	-- 	end,
-	-- },
-	-- {
-	-- 	'nvim-treesitter/nvim-treesitter',
-	-- 	lazy = false,
-	-- 	branch = 'main',
-	-- 	build = ':TSUpdate',
-	-- 	init = function()
-	-- 		-- custom parsers
-	-- 		vim.api.nvim_create_autocmd('User', {
-	-- 			pattern = { 'TSUpdate', 'TSInstall' },
-	-- 			callback = function()
-	-- 				require('nvim-treesitter.parsers').ghactions = {
-	-- 					install_info = {
-	-- 						url = 'https://github.com/rmuir/tree-sitter-ghactions',
-	-- 						queries = 'queries',
-	-- 					},
-	-- 				}
-	-- 			end,
-	-- 		})
-	--
-	-- 		-- stylua: ignore start
-	-- 		vim.api.nvim_create_autocmd('FileType', {
-	-- 			group = vim.api.nvim_create_augroup('TreesitterHighlighting', {}),
-	-- 			pattern = {
-	-- 				'bash', 'bibtex', 'c', 'cpp', 'css', 'diff', 'fish', 'gitcommit', 'gitignore', 'go', 'html', 'htmldjango',
-	-- 				'json', 'julia', 'just', 'lua', 'markdown', 'markdown_inline', 'norg', 'python', 'query', 'r', 'ron', 'rust',
-	-- 				'scss', 'sql', 'toml', 'typst', 'vim', 'yaml', 'yaml.github', 'typescript', 'javascript',
-	-- 			},
-	-- 			callback = function()
-	-- 				vim.treesitter.start()
-	-- 			end,
-	-- 		})
-	-- 	end,
-	-- 	-- stylua: ignore end
-	-- },
-
 	{
 		"nvim-treesitter/nvim-treesitter",
-		branch = "master",
-		-- branch = "main",
-		lazy = true,
+		-- branch = "master",
+		-- lazy = false,
+		branch = 'main',
+		build = ':TSUpdate',
+		-- lazy = true,
 		-- lazy = true,
 		-- branch = 'main',
 		-- build = ':TSUpdate',
-		-- event = { "BufReadPost", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		-- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
 		dependencies = {
 			-- "RRethy/nvim-treesitter-endwise",
 			{ "cfdrake/vim-pbxproj" },
-			{
-				-- cmd = { "TSPlaygroundToggle" },
-				"nvim-treesitter/playground",
-			},
+			-- {
+			-- 	-- cmd = { "TSPlaygroundToggle" },
+			-- 	"nvim-treesitter/playground",
+			-- },
 			{
 				"axelvc/template-string.nvim",
 				config = function()
@@ -122,6 +46,8 @@ return {
 			},
 			{
 				"nvim-treesitter/nvim-treesitter-textobjects",
+				branch = "main",
+				-- enabled = false,
 				-- event = { "BufReadPre", "BufNewFile" },
 				-- cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
 				-- event = "VeryLazy",
@@ -189,8 +115,17 @@ return {
 						-- end
 						-- separator = "─",
 						-- on_attach = function(bufnr)
-						--   return true
-						--   -- return vim.bo[bufnr].filetype ~= 'DiffviewFiles'
+						--   -- return true
+						-- 	if vim.wo.diff then
+						-- 		return false
+						-- 	end
+						--
+						-- 	if vim.opt.diff:get() then
+						-- 		return false
+						-- 	end
+						--
+						-- 	local current_filetype = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
+						-- 	return current_filetype ~= 'DiffviewFiles'
 						-- end
 					})
 
@@ -198,12 +133,13 @@ return {
 				end,
 			},
 		},
-		build = function()
-			require("nvim-treesitter.install").update({ with_sync = true })
-		end,
+		-- build = function()
+		-- 	require("nvim-treesitter.install").update({ with_sync = true })
+		-- end,
 		config = function()
 			-- import nvim-treesitter plugin safely
-			local status, treesitter = pcall(require, "nvim-treesitter.configs")
+			-- local status, treesitter = pcall(require, "nvim-treesitter.configs")
+			local status, treesitter = pcall(require, "nvim-treesitter")
 			if not status then
 				return
 			end
@@ -249,37 +185,16 @@ return {
 				},
 				highlight = {
 					enable = true,
-					-- disable = function(lang, bufnr)
-					--   return false
-					-- end,
 					disable = function(lang, bufnr) -- Disable in large .json files like in package-lock.json
-						-- print("lang: ", lang)
 						if lang == "nvimtree" then
 							return true
 						end
-						-- if lang == "yaml" or lang == "yml" then
-						--   return true
-						-- end
-
-						-- if
-						--   (lang == "json" or lang == "jsonc")
-						-- then
-						--   return true
-						-- end
-
-						-- disable only for package-lock.json file name
-
-						-- if lang == "yaml" or lang == "yml" then
-						--   return true
-						-- end
 
 						if
 							(lang == "json" or lang == "jsonc")
 							and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json")
 						then
-							-- print("package-lock.json, disabling treesitter")
 							vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
-							-- vim.api.nvim_buf_set_option(bufnr, "syntax", "off")
 							return true
 						end
 
@@ -288,8 +203,6 @@ return {
 							and vim.api.nvim_buf_line_count(bufnr) > 5000
 						then
 							vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
-
-							-- print("buf_line_count > 5000, disabling treesitter")
 							return true
 						end
 
@@ -334,7 +247,7 @@ return {
 				-- autotag = { enable = true },
 				-- ensure these language parsers are installed
 				ensure_installed = {
-					"lua_patterns",
+					-- "lua_patterns",
 					"toml",
 					"ruby",
 					"swift",
@@ -471,19 +384,36 @@ return {
 			--   },
 			-- }
 
-	     local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+	     -- local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
 			---@diagnostic disable-next-line: inject-field
-			parser_configs.ghactions = {
-				install_info = {
-					url = "https://github.com/rmuir/tree-sitter-ghactions",
-	        files = { "src/parser.c" },
-					-- queries = "queries",
-					branch = "main",
-					--      generate_requires_npm = true, -- if stand-alone parser without npm dependencies
-					--      requires_generate_from_grammar = true
-				},
-			}
+			-- parser_configs.ghactions = {
+			-- 	install_info = {
+			-- 		url = "https://github.com/rmuir/tree-sitter-ghactions",
+			--       files = { "src/parser.c" },
+			-- 		-- queries = "queries",
+			-- 		branch = "main",
+			-- 		--      generate_requires_npm = true, -- if stand-alone parser without npm dependencies
+			-- 		--      requires_generate_from_grammar = true
+			-- 	},
+			-- }
 	     -- vim.treesitter.language.register('ghactions', 'yaml')  -- the someft filetype will use the python parser and queries.
+			-- custom parsers
+			vim.api.nvim_create_autocmd('FileType', {
+				pattern = { 'yaml.github', 'jsonc', 'sh', 'dosini', 'editorconfig', 'typescript', 'javascript' },
+				callback = function() vim.treesitter.start() end,
+			})
+
+			vim.api.nvim_create_autocmd('User', {
+				pattern = 'TSUpdate',
+				callback = function()
+					require('nvim-treesitter.parsers').ghactions = {
+						install_info = {
+							url = 'https://github.com/rmuir/tree-sitter-ghactions',
+							queries = 'queries',
+						},
+					}
+				end,
+			})
 		end,
 	},
 }

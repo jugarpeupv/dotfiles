@@ -168,10 +168,26 @@ return {
   -- },
   {
     "ziontee113/icon-picker.nvim",
-    keys = { { "<leader>ip", "<cmd>IconPickerYank<cr>" } },
+    cmd = { "IconPickerNormal", "IconPickerYank" },
+    -- keys = { { "<leader>ip", "<cmd>IconPickerYank<cr>" } },
     -- dependencies = { "nvim-telescope/telescope-ui-select.nvim" },
     config = function()
       require("icon-picker").setup({ disable_legacy_commands = true })
     end,
+  },
+  {
+    "2kabhishek/nerdy.nvim",
+    dependencies = {
+      "folke/snacks.nvim",
+    },
+    keys = {
+      { "<leader>ip", "<cmd>Nerdy list<cr>", desc = "Icon Picker" },
+    },
+    cmd = "Nerdy",
+    opts = {
+      max_recents = 30, -- Configure recent icons limit
+      add_default_keybindings = true, -- Add default keybindings
+      copy_to_clipboard = true, -- Copy glyph to clipboard instead of inserting
+    },
   },
 }

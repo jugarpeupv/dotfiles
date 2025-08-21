@@ -884,7 +884,7 @@ return {
             -- require("diffview.actions").toggle_files()
             local utils = require("jg.core.utils")
             require("barbecue.ui").toggle(false)
-
+            require("treesitter-context").disable()
             -- vim.lsp.inlay_hint.enable(false)
             -- vim.cmd [[set nocursorline]]
             -- Highlight 'DiffChange' as 'DiffDelete' on the left, and 'DiffAdd' on
@@ -913,6 +913,7 @@ return {
           end,
           view_closed = function()
             require("barbecue.ui").toggle(true)
+            require("treesitter-context").enable()
           end,
         },                    -- See ':h diffview-config-hooks'
         keymaps = {

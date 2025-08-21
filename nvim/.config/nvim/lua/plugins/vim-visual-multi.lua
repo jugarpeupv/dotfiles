@@ -68,7 +68,7 @@ return {
 			},
 			{
 				mode = { "n", "x" },
-				"<c-q>",
+				"<M-d>",
 				function()
 					require("multicursor-nvim").toggleCursor()
 				end,

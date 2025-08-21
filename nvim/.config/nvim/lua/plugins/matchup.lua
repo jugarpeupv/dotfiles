@@ -3,8 +3,8 @@ return {
 	-- enabled = false,
 	"andymass/vim-matchup",
 
-  dir='~/projects/vim-matchup/wt-feature-add_html_angular_filetype/',
-  dev = true,
+  -- dir='~/projects/vim-matchup/wt-feature-add_html_angular_filetype/',
+  -- dev = true,
 	-- event = { "CursorMoved" },
 	dependencies = { "nvim-treesitter/nvim-treesitter" },
 	-- event = { "VeryLazy" },

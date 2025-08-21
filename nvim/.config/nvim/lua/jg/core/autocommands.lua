@@ -481,3 +481,12 @@ end
 vim.keymap.set("n", "<leader>ee", function()
 	open_dir_history()
 end, { noremap = true, silent = true })
+
+
+vim.api.nvim_create_autocmd("ModeChanged", {
+	desc = "Highlighting matched words when searching",
+	pattern = { "t:nt" },
+	callback = function(ev)
+		vim.wo.cursorline = true
+	end,
+})

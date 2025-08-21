@@ -75,7 +75,7 @@ return {
       },
       showInputsTopPadding = false,
       showInputsBottomPadding = true,
-      showCompactInputs = true,
+      showCompactInputs = false,
 			resultsHighlight = true,
 			resultLocation = {
 				-- whether to show the result location number label

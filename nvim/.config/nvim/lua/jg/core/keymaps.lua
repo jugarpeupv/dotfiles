@@ -440,7 +440,7 @@ end, opts)
 vim.keymap.set({ "n" }, "<leader>bu", function()
 	require("jg.custom.telescope").normal_buffers({
 		ignore_current_buffer = true,
-		show_all_buffers = false,
+		show_all_buffers = true,
 		sort_mru = true,
 		-- sort_lastused = true,
 		-- initial_mode = "normal",
@@ -1329,7 +1329,7 @@ vim.keymap.set("n", "<leader>dv", function()
 	local default_branch = "develop"
 
 	-- Construct the DiffviewOpen command
-	local diffview_command = string.format(":DiffviewOpen %s..%s", default_branch, current_branch)
+	local diffview_command = string.format(":DiffviewOpen %s..%s", current_branch, default_branch)
 	-- Populate the command line using vim.api.nvim_feedkeys
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
@@ -1337,7 +1337,7 @@ end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen com
 vim.keymap.set("i", "<C-j>", "<C-n>", { noremap = true })
 vim.keymap.set("i", "<C-k>", "<C-p>", { noremap = true })
 
-vim.keymap.set({ "v", "i" }, "<C-x><C-f>", function()
+vim.keymap.set({ "v" }, "<C-x><C-f>", function()
 	print("Fuzzy complete path")
 	require("fzf-lua").complete_path()
 end, { silent = true, desc = "Fuzzy complete path" })
@@ -1359,3 +1359,9 @@ vim.keymap.set('n', '<C-h>', function() smart_move('h', '-L') end, {silent = tru
 vim.keymap.set('n', '<C-j>', function() smart_move('j', '-D') end, {silent = true})
 vim.keymap.set('n', '<C-k>', function() smart_move('k', '-U') end, {silent = true})
 vim.keymap.set('n', '<C-l>', function() smart_move('l', '-R') end, {silent = true})
+
+-- vim.keymap.set("n", "<leader>fo", "<cmd>lua vim.lsp.buf.format({ async = true})<cr>", opts)
+vim.keymap.set({ "n" }, "<leader>gR", function()
+	require("nvim-tree.api").tree.reload()
+	require("nvim-tree.api").git.reload()
+end, opts)

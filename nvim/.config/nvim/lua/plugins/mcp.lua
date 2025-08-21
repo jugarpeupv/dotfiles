@@ -2,13 +2,17 @@ return {
 	"ravitemer/mcphub.nvim",
 	dependencies = {
 		{ "nvim-lua/plenary.nvim" }, -- Required for Job and HTTP requests
+		-- { "stevearc/overseer.nvim" }
 		-- {
 		-- 	"Joakker/lua-json5",
 		-- 	build = "./install.sh",
 		-- },
 	},
 	-- comment the following line to ensure hub will be ready at the earliest
+
+	ft = { "copilot-chat" },
 	cmd = "MCPHub", -- lazy load by default
+	event = { "BufReadPost", "BufNewFile" }, -- Load on buffer read or new file
 	build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
 
 	-- uncomment this if you don't want mcp-hub to be available globally or can't use -g
@@ -43,6 +47,9 @@ return {
 		end
 	end,
 	opts = {
+		global_env = {
+			"GITHUB_PERSONAL_ACCESS_TOKEN",
+		}, -- Global environment variables available to all MCP servers (can be a table or a function returning a table)
 		-- port = 2389,
 		-- json_decode = require("json5").parse,
 		-- json_decode = require("overseer.json").decode,
@@ -50,7 +57,7 @@ return {
 			level = vim.log.levels.DEBUG,
 			to_file = true,
 			file_path = vim.fn.expand("~/mcphub.log"),
-      prefix = "MCPHub",
+			prefix = "MCPHub",
 		},
 		extensions = {
 			copilotchat = {
@@ -59,9 +66,9 @@ return {
 				convert_resources_to_functions = true,
 				add_mcp_prefix = false,
 			},
-      avante = {
-        make_slash_commands = true, -- make /slash commands from MCP server prompts
-      }
+			avante = {
+				make_slash_commands = true, -- make /slash commands from MCP server prompts
+			},
 		},
 		-- config = vim.fn.expand("~/.config/mcpservers.json"),
 		-- log = {
@@ -72,8 +79,8 @@ return {
 		-- },
 	},
 	config = function(_, opts)
-	  require("mcphub").setup(opts)
-	end
+		require("mcphub").setup(opts)
+	end,
 	-- config = function()
 	-- 	-- require("mcphub").setup({
 	-- 	-- 	extensions = {
