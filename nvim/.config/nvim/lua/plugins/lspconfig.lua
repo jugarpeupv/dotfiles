@@ -114,7 +114,7 @@ return {
 			end
 			return true
 		end,
-    ft = {"java", "yaml", "jproperties"},
+		ft = { "java", "yaml", "jproperties" },
 		dependencies = {
 			"mfussenegger/nvim-jdtls",
 		},
@@ -131,8 +131,9 @@ return {
 			-- opts.ls_path = mason_registery.get_package("spring-boot-tools"):get_install_path()
 			-- 	.. "/extension/language-server"
 
-      -- /Users/jgarcia/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server/spring-boot-language-server-1.59.0-SNAPSHOT-exec.jar
-			opts.ls_path = os.getenv("MASON") .. "/packages/spring-boot-tools/extension/language-server/spring-boot-language-server-1.59.0-SNAPSHOT-exec.jar"
+			-- /Users/jgarcia/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server/spring-boot-language-server-1.59.0-SNAPSHOT-exec.jar
+			opts.ls_path = os.getenv("MASON")
+				.. "/packages/spring-boot-tools/extension/language-server/spring-boot-language-server-1.59.0-SNAPSHOT-exec.jar"
 			-- print("jdtls opts.ls_path: ", opts.ls_path)
 
 			-- jdtls opts.ls_path:  /Users/jgarcia/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server
@@ -159,7 +160,7 @@ return {
 		-- event = { "InsertEnter" },
 		dependencies = {
 			{ "saghen/blink.cmp" },
-      { "nvim-telescope/telescope.nvim" },
+			{ "nvim-telescope/telescope.nvim" },
 			{
 				"VidocqH/lsp-lens.nvim",
 				enabled = false,
@@ -168,11 +169,22 @@ return {
 				end,
 			},
 			{
+				"hinell/lsp-timeout.nvim",
+				enabled = false,
+				dependencies = { "neovim/nvim-lspconfig" },
+				-- init = function()
+				-- 	vim.g.lspTimeoutConfig = {
+				-- 		-- see config below
+				-- 	}
+				-- end,
+			},
+			{
 				"zeioth/garbage-day.nvim",
 				dependencies = "neovim/nvim-lspconfig",
 				enabled = false,
 				opts = {
-					notifications = true,
+					aggressive_mode = true,
+					notifications = false,
 					-- excluded_lsp_clients = {
 					-- 	"copilot",
 					-- },
@@ -243,7 +255,7 @@ return {
 			-- { "folke/neodev.nvim", opts = {} },
 			{
 				-- "antosha417/nvim-lsp-file-operations",
-        "igorlfs/nvim-lsp-file-operations",
+				"igorlfs/nvim-lsp-file-operations",
 				config = function()
 					require("lsp-file-operations").setup()
 				end,
@@ -448,17 +460,15 @@ return {
 				return orig_util_open_floating_preview(contents, syntax, opts, ...)
 			end
 
-
 			-- ################### SERVER CONFIGURATIONS
 
-
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-        -- Enable text wrapping in the hover window
-        wrap = true,
-        -- max_width = 80, -- Optional: Set maximum width for wrapping
-        -- max_height = 20, -- Optional: Set maximum height for the hover window
-        border = "rounded", -- Optional: Add rounded borders to the hover window
-      })
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+				-- Enable text wrapping in the hover window
+				wrap = true,
+				-- max_width = 80, -- Optional: Set maximum width for wrapping
+				-- max_height = 20, -- Optional: Set maximum height for the hover window
+				border = "rounded", -- Optional: Add rounded borders to the hover window
+			})
 
 			-- configure html server
 			lspconfig["html"].setup({
@@ -768,25 +778,24 @@ return {
 				on_attach = on_attach,
 			})
 
-
-      vim.filetype.add({
-        pattern = {
-          [".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
-        },
-      })
+			vim.filetype.add({
+				pattern = {
+					[".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
+				},
+			})
 
 			require("lspconfig").gh_actions_ls.setup({
 				-- capabilities = capabilities,
-        capabilities = {
-          workspace = {
-            didChangeWorkspaceFolders = {
-              dynamicRegistration = true,
-            },
-          },
-        },
+				capabilities = {
+					workspace = {
+						didChangeWorkspaceFolders = {
+							dynamicRegistration = true,
+						},
+					},
+				},
 				on_attach = on_attach,
 				filetypes = { "yaml.github" }, -- Use a custom filetype for GitHub Actions
-        single_file_support = true,
+				single_file_support = true,
 				cmd = { home .. "/.local/share/nvim/mason/bin/gh-actions-language-server", "--stdio" },
 				-- init_options = {
 				--   sessionToken = os.getenv("GH_TOKEN"),

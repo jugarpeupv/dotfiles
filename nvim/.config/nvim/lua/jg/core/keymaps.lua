@@ -2,7 +2,7 @@
 local opts = { noremap = true, silent = true }
 
 -- Shorten function name
-local keymap = vim.api.nvim_set_keymap
+local keymap = vim.keymap.set
 
 -- vim.cmd([[nnoremap q <Nop>]])
 -- q/ -- search history
@@ -29,7 +29,8 @@ keymap("v", ">", ">gv", opts)
 -- keymap("n", "<C-p>", "za", opts)
 -- keymap("n", ";", "za", opts)
 -- Paste
-keymap("n", "p", "p=`]", opts)
+-- keymap("n", "p", "p=`]", opts)
+keymap("n", "p", "gp", opts)
 -- keymap("n", "p", "p]", opts)
 -- keymap("v", "p", '"_dP', opts)
 -- keymap("n", "d", '"*d', opts)
@@ -320,10 +321,18 @@ vim.keymap.set({ "n" }, "se", function()
 	})
 end, opts)
 
-keymap("n", "<leader>ce", "<cmd>lua require('telescope.builtin').colorscheme()<cr>", opts)
-keymap("n", "<leader>ht", "<cmd>lua require('telescope.builtin').help_tags()<cr>", opts)
-keymap("n", "<leader>mp", "<cmd>lua require('telescope.builtin').man_pages()<cr>", opts)
-keymap("n", "<leader>of", "<cmd>lua require('telescope.builtin').oldfiles({ only_cwd = true })<cr>", opts)
+keymap("n", "<leader>ce", function()
+	require("telescope.builtin").colorscheme()
+end, opts)
+keymap("n", "<leader>ht", function()
+	require("telescope.builtin").help_tags()
+end, opts)
+keymap("n", "<leader>mp", function()
+	require("telescope.builtin").man_pages()
+end, opts)
+keymap("n", "<leader>of", function()
+	require("telescope.builtin").oldfiles({ only_cwd = true })
+end, opts)
 vim.keymap.set({ "n" }, "<leader>OF", function()
 	require("telescope").extensions.frecency.frecency({
 		workspace = "CWD",
@@ -333,19 +342,36 @@ end, opts)
 vim.keymap.set({ "n" }, "<leader>OO", function()
 	require("telescope").extensions.frecency.frecency({})
 end, opts)
-keymap("n", "<leader>oo", "<cmd>lua require('telescope.builtin').oldfiles()<cr>", opts)
-keymap("n", "<leader>rg", "<cmd>lua require('telescope.builtin').registers()<cr>", opts)
-keymap("n", "<leader>ke", "<cmd>lua require('telescope.builtin').keymaps()<cr>", opts)
-keymap("n", "<leader>cm", "<cmd>lua require('telescope.builtin').commands()<cr>", opts)
-keymap("n", "<leader>mm", "<cmd>lua require('telescope.builtin').marks()<cr>", opts)
-keymap("n", "<leader>td", "<cmd>lua require('telescope.builtin').diagnostics()<cr>", opts)
-
-keymap("n", "<leader>Th", "<cmd>lua require('telescope').extensions.git_file_history.git_file_history()<cr>", opts)
+keymap("n", "<leader>oo", function()
+	require("telescope.builtin").oldfiles()
+end, opts)
+keymap("n", "<leader>rg", function()
+	require("telescope.builtin").registers()
+end, opts)
+keymap("n", "<leader>ke", function()
+	require("telescope.builtin").keymaps()
+end, opts)
+keymap("n", "<leader>cm", function()
+	require("telescope.builtin").commands()
+end, opts)
+keymap("n", "<leader>mm", function()
+	require("telescope.builtin").marks()
+end, opts)
+keymap("n", "<leader>td", function()
+	require("telescope.builtin").diagnostics()
+end, opts)
+keymap("n", "<leader>Th", function()
+	require("telescope").extensions.git_file_history.git_file_history()
+end, opts)
 
 keymap("n", "<leader>Cd", "<cmd>lua vim.diagnostic.reset()<cr>", opts)
 
-keymap("n", "<leader>bo", "<cmd>lua require('telescope').extensions.bookmarks.bookmarks()<cr>", opts)
-keymap("n", "<leader>sy", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", opts)
+keymap("n", "<leader>bo", function()
+	require("telescope").extensions.bookmarks.bookmarks()
+end, opts)
+keymap("n", "<leader>sy", function()
+	require("telescope.builtin").lsp_document_symbols()
+end, opts)
 keymap("n", "<leader>lr", "<cmd>LspRestart<cr>", opts)
 
 keymap("n", "<D-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
@@ -454,16 +480,17 @@ vim.keymap.set({ "n" }, "<leader>bu", function()
 	--   -- initial_mode = "normal",
 	-- })
 end, opts)
-keymap("n", "<leader>tr", "<cmd>lua require('telescope.builtin').resume()<cr>", opts)
--- keymap("n", "<leader>tm", "<cmd>lua require('telescope.builtin').node_modules list<cr>", opts)
-keymap(
-	"n",
-	"<leader>fs",
-	"<cmd>lua require('telescope.builtin').grep_string({ search = vim.fn.input('Grep For > ')})<CR>",
-	opts
-)
+vim.keymap.set("n", "<leader>tr", function()
+	require("telescope.builtin").resume()
+end, opts)
+-- keymap("n", "<leader>tm", function() require('telescope.builtin').node_modules list end, opts)
+vim.keymap.set("n", "<leader>fs", function()
+	require("telescope.builtin").grep_string({ search = vim.fn.input("Grep For > ") })
+end, opts)
 
-vim.keymap.set({ "n", "v" }, "<leader>fR", "<cmd>lua require('telescope.builtin').egrepify<cr>", opts)
+vim.keymap.set({ "n", "v" }, "<leader>fR", function()
+	require("telescope.builtin").egrepify()
+end, opts)
 
 vim.keymap.set({ "n", "v" }, "<leader>ff", function()
 	require("telescope").extensions.live_grep_args.live_grep_raw({
@@ -527,7 +554,7 @@ end)
 -- keymap(
 --   "n",
 --   "<leader>ss",
---   "<cmd>lua require('telescope.builtin').live_grep({ search_dirs={'%:p'}, vimgrep_arguments='rg,--color=never,--no-heading,--with-filename,--line-number,--column,--smart-case,--fixed-strings'})<cr>",
+--   function() require('telescope.builtin').live_grep({ search_dirs={'%:p'}, vimgrep_arguments='rg,--color=never,--no-heading,--with-filename,--line-number,--column,--smart-case,--fixed-strings'}) end,
 --   opts
 -- )
 
@@ -553,15 +580,17 @@ end, opts)
 -- keymap(
 -- 	"n",
 -- 	"<leader>ss",
--- 	"<cmd>lua require('telescope.builtin').live_grep({ search_dirs={'%:p'}, vimgrep_arguments={ 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case' }})<cr>",
+-- 	function() require('telescope.builtin').live_grep({ search_dirs={'%:p'}, vimgrep_arguments={ 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case' }}) end,
 -- 	opts
 -- )
 
 keymap("n", "<leader>sl", "<cmd>BLines<cr>", opts)
-keymap("n", "<leader>pp", "<cmd>lua require('telescope.builtin').projects()<CR>", opts)
+keymap("n", "<leader>pp", function()
+	require("telescope.builtin").projects()
+end, opts)
 
 -- Telescope
--- keymap("n", "<leader>gs", "<cmd>lua require('telescope.builtin').git_stash()<cr>", opts)
+-- keymap("n", "<leader>gs", function() require('telescope.builtin').git_stash() end, opts)
 
 -- Keymap for git stash with extended functionality
 vim.keymap.set("n", "<leader>gs", function()
@@ -598,7 +627,6 @@ vim.keymap.set("n", "<leader>gs", function()
 	})
 end, { desc = "Telescope Git Stash with Discard Option" })
 
--- keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches()<cr>", opts)
 vim.keymap.set("n", "<leader>gb", function()
 	local actions = require("telescope.actions")
 	require("telescope.builtin").git_branches({
@@ -609,8 +637,6 @@ vim.keymap.set("n", "<leader>gb", function()
 		},
 	})
 end, opts)
-
--- keymap("n", "<leader>gb", "<cmd>lua require('telescope.builtin').git_branches({layout_config={height=0.8}})<cr>", opts)
 
 keymap("n", "<leader>gB", "<cmd>Git branch -vv<cr>", opts)
 
@@ -658,7 +684,9 @@ keymap("n", "<leader>go", "<cmd>:!git-open<cr>", opts)
 keymap("n", "<leader>np", "<cmd>:e ~/.npmrc<cr>", opts)
 keymap("n", "<leader>aw", "<cmd>:e ~/.aws/config<cr>", opts)
 keymap("n", "<leader>zh", "<cmd>:e ~/.zshrc<cr>", opts)
-keymap("n", "<leader>gc", "<cmd>lua require('telescope.builtin').git_commits()<cr>", opts)
+keymap("n", "<leader>gc", function()
+	require("telescope.builtin").git_commits()
+end, opts)
 
 -- Hop
 vim.api.nvim_set_keymap("n", "S", "<cmd>lua require'hop'.hint_words()<cr>", opts)
@@ -872,22 +900,62 @@ local function find_directory_and_focus()
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
 
-	local function open_nvim_tree(prompt_bufnr, _)
+	local remove_dir = function(prompt_bufnr)
+		local selection = action_state.get_selected_entry()
+		actions.close(prompt_bufnr)
+		if not selection then
+			print("No directory selected!")
+			return
+		end
+
+		local function trash_path(path)
+			vim.fn.jobstart("trash" .. " " .. vim.fn.shellescape(path), {
+				detach = true,
+				on_exit = function(_, exit_code)
+					if exit_code == 0 then
+						-- print("Moved to trash: " .. path)
+						require("nvim-tree.api").tree.reload()
+					else
+						print("Failed to move to trash: ", path)
+					end
+				end,
+			})
+		end
+		local full_path = vim.loop.cwd() .. "/" .. selection.value
+		trash_path(full_path)
+	end
+
+	local function open_nvim_tree(prompt_bufnr, map)
 		actions.select_default:replace(function()
 			local api = require("nvim-tree.api")
-
 			actions.close(prompt_bufnr)
 			local selection = action_state.get_selected_entry()
 			api.tree.open()
 			-- api.tree.find_file(selection.cwd .. "/" .. selection.value)
 			api.tree.find_file(selection.value)
 		end)
+
+		map("n", "<C-x>", remove_dir)
+		map("i", "<C-x>", remove_dir)
+
 		return true
 	end
 
 	require("telescope.builtin").find_files({
 		prompt_title = "Open directory in nvim tree",
-		find_command = { "fd", "--type", "directory", "--hidden", "--exclude", ".git/*" },
+		find_command = {
+			"fd",
+			"--type",
+			"directory",
+			"--hidden",
+			"--no-ignore",
+			"--exclude",
+			".git/*",
+			"--exclude",
+			"node_modules/*",
+			"--exclude",
+			"node_modules",
+		},
 		attach_mappings = open_nvim_tree,
 		entry_maker = function(entry)
 			return {
@@ -911,7 +979,20 @@ local function find_in_node_modules()
 	local cwd = vim.loop.cwd()
 	local node_modules_path = cwd .. "/node_modules"
 
-	local function open_nvim_tree(prompt_bufnr, _)
+	local function open_nvim_tree(prompt_bufnr, map)
+		function remove_dir()
+			local selection = action_state.get_selected_entry()
+			if not selection then
+				print("No directory selected!")
+				return
+			end
+			local dir_to_remove = selection.value
+
+			local api_nvimtree = require("nvim-tree.api")
+			api_nvimtree.fs.trash(node)
+			api_nvimtree.tree.reload()
+		end
+
 		actions.select_default:replace(function()
 			local api = require("nvim-tree.api")
 
@@ -927,6 +1008,9 @@ local function find_in_node_modules()
 				api.tree.find_file(selection.value)
 			end
 		end)
+
+		map("n", "<C-x>", remove_dir)
+		map("i", "<C-x>", remove_dir)
 		return true
 	end
 
@@ -1122,9 +1206,22 @@ end, opts)
 keymap("n", "<leader>tm", "<cmd>:e ~/.config/tmux/tmux.conf<cr>", opts)
 
 -- https://vim.fandom.com/wiki/Searching_for_expressions_which_include_slashes
-vim.cmd([[command! -nargs=1 SS let @/ = '\V'.escape(<q-args>, '\')|set hlsearch]])
+-- vim.cmd([[command! -nargs=1 S let @/ = '\V'.escape(<q-args>, '\')|set hlsearch]])
 
-vim.keymap.set("n", "<leader>ch", "<cmd>Changes<cr>", opts)
+vim.keymap.set("n", "<leader>cH", "<cmd>Changes<cr>", opts)
+
+vim.keymap.set("n", "<leader>hw", function()
+	local cword = vim.fn.expand("<cword>")
+	---@diagnostic disable-next-line: param-type-mismatch
+	local status, _ = pcall(vim.cmd, "h " .. cword)
+	if not status then
+		print("No help for " .. cword)
+	end
+end, opts)
+
+vim.keymap.set("n", "<leader>ch", function()
+	require("telescope.builtin").command_history()
+end, opts)
 
 -- Map a shortcut to open the picker.
 vim.keymap.set("n", "<leader>ri", function()
@@ -1346,22 +1443,320 @@ vim.keymap.set("n", "<leader>tp", function()
 	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_pendientes.md")
 end, opts)
 
-
 local function smart_move(direction, tmux_cmd)
 	-- local curwin = vim.api.nvim_get_current_win()
-	vim.cmd('wincmd ' .. direction)
+	vim.cmd("wincmd " .. direction)
 	-- if curwin == vim.api.nvim_get_current_win() then
 	-- 	vim.fn.system('tmux select-pane ' .. tmux_cmd)
 	-- end
 end
 
-vim.keymap.set('n', '<C-h>', function() smart_move('h', '-L') end, {silent = true})
-vim.keymap.set('n', '<C-j>', function() smart_move('j', '-D') end, {silent = true})
-vim.keymap.set('n', '<C-k>', function() smart_move('k', '-U') end, {silent = true})
-vim.keymap.set('n', '<C-l>', function() smart_move('l', '-R') end, {silent = true})
+vim.keymap.set("n", "<C-h>", function()
+	smart_move("h", "-L")
+end, { silent = true })
+vim.keymap.set("n", "<C-j>", function()
+	smart_move("j", "-D")
+end, { silent = true })
+vim.keymap.set("n", "<C-k>", function()
+	smart_move("k", "-U")
+end, { silent = true })
+vim.keymap.set("n", "<C-l>", function()
+	smart_move("l", "-R")
+end, { silent = true })
 
 -- vim.keymap.set("n", "<leader>fo", "<cmd>lua vim.lsp.buf.format({ async = true})<cr>", opts)
 vim.keymap.set({ "n" }, "<leader>gR", function()
 	require("nvim-tree.api").tree.reload()
 	require("nvim-tree.api").git.reload()
+end, opts)
+
+vim.keymap.set("n", "<leader>wf", function()
+	local strings = require("plenary.strings")
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local utils = require("telescope.utils")
+	local action_set = require("telescope.actions.set")
+	local conf = require("telescope.config").values
+  local actions = require('telescope.actions')
+  local action_state = require('telescope.actions.state')
+
+
+  local get_worktree_path = function(prompt_bufnr)
+    local selection = action_state.get_selected_entry(prompt_bufnr)
+    if selection == nil then
+      return
+    end
+    return selection.path
+  end
+
+  local select_worktree = function(prompt_bufnr)
+    local worktree_path = get_worktree_path(prompt_bufnr)
+    if worktree_path == nil then
+      vim.print('No worktree selected')
+      return
+    end
+    actions.close(prompt_bufnr)
+
+    require("telescope.builtin").find_files({
+      prompt_title = "Select file in worktree: " .. worktree_path:match("([^/]+)$"),
+      cwd = worktree_path,
+      no_ignore = false,
+      hidden = false,
+      preview = {
+        hide_on_startup = true,
+      },
+    })
+  end
+
+	local telescope_git_worktree = function(opts)
+		opts = opts or {}
+		local output = utils.get_os_command_output({ "git", "worktree", "list" })
+		local results = {}
+		local widths = {
+			path = 0,
+			sha = 0,
+			branch = 0,
+		}
+
+		local parse_line = function(line)
+			local fields = vim.split(string.gsub(line, "%s+", " "), " ")
+			local entry = {
+				path = fields[1],
+				sha = fields[2],
+				branch = fields[3],
+			}
+
+			if entry.sha ~= "(bare)" then
+				local index = #results + 1
+				for key, val in pairs(widths) do
+					if key == "path" then
+						local path_len = strings.strdisplaywidth(entry[key] or "")
+						widths[key] = math.max(val, path_len)
+					else
+						widths[key] = math.max(val, strings.strdisplaywidth(entry[key] or ""))
+					end
+				end
+
+				table.insert(results, index, entry)
+			end
+		end
+
+		for _, line in ipairs(output) do
+			parse_line(line)
+		end
+
+		-- if #results == 0 then
+		--     return
+		-- end
+
+		local displayer = require("telescope.pickers.entry_display").create({
+			separator = " ",
+			items = {
+				{ width = widths.branch },
+				{ width = widths.path },
+				{ width = widths.sha },
+			},
+		})
+
+		local make_display = function(entry)
+			local path, _ = utils.transform_path(opts, entry.path)
+			return displayer({
+				{ entry.branch, "TelescopeResultsIdentifier" },
+				{ path },
+				{ entry.sha },
+			})
+		end
+
+		pickers
+			.new(opts or {}, {
+				prompt_title = "Git Worktrees",
+				finder = finders.new_table({
+					results = results,
+					entry_maker = function(entry)
+						entry.value = entry.branch
+						entry.ordinal = entry.branch
+						entry.display = make_display
+						return entry
+					end,
+				}),
+				sorter = conf.generic_sorter(opts),
+				attach_mappings = function(_, map)
+					action_set.select:replace(select_worktree)
+					return true
+				end,
+			})
+			:find()
+	end
+
+	telescope_git_worktree()
+end, opts)
+
+
+
+
+
+vim.keymap.set("n", "<leader>we", function()
+  local strings = require("plenary.strings")
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local utils = require("telescope.utils")
+  local action_set = require("telescope.actions.set")
+  local conf = require("telescope.config").values
+  local actions = require('telescope.actions')
+  local action_state = require('telescope.actions.state')
+
+
+  local get_worktree_path = function(prompt_bufnr)
+    local selection = action_state.get_selected_entry(prompt_bufnr)
+    if selection == nil then
+      return
+    end
+    return selection.path
+  end
+
+  local open_in_split = function(prompt_bufnr)
+    local worktree_path = get_worktree_path(prompt_bufnr)
+    if worktree_path == nil then
+      vim.print('No worktree selected')
+      return
+    end
+    actions.close(prompt_bufnr)
+
+    local current_buf = vim.api.nvim_get_current_buf()
+    local current_buf_name = vim.api.nvim_buf_get_name(current_buf)
+    -- print("Current buffer: ", current_buf_name)
+    local relpath = current_buf_name:match("wt%-[^/]+/(.+)")
+    if not relpath then
+      print("Current file is not inside a worktree")
+      return
+    end
+
+    vim.cmd("sp | e " .. worktree_path .. "/" .. relpath)
+  end
+
+  local open_in_vsplit = function(prompt_bufnr)
+    local worktree_path = get_worktree_path(prompt_bufnr)
+    if worktree_path == nil then
+      vim.print('No worktree selected')
+      return
+    end
+    actions.close(prompt_bufnr)
+
+    local current_buf = vim.api.nvim_get_current_buf()
+    local current_buf_name = vim.api.nvim_buf_get_name(current_buf)
+    -- print("Current buffer: ", current_buf_name)
+    local relpath = current_buf_name:match("wt%-[^/]+/(.+)")
+    if not relpath then
+      print("Current file is not inside a worktree")
+      return
+    end
+
+    vim.cmd("vsp | e " .. worktree_path .. "/" .. relpath)
+  end
+
+  local select_worktree = function(prompt_bufnr)
+    local worktree_path = get_worktree_path(prompt_bufnr)
+    if worktree_path == nil then
+      vim.print('No worktree selected')
+      return
+    end
+    actions.close(prompt_bufnr)
+
+    local current_buf = vim.api.nvim_get_current_buf()
+    local current_buf_name = vim.api.nvim_buf_get_name(current_buf)
+    -- print("Current buffer: ", current_buf_name)
+    local relpath = current_buf_name:match("wt%-[^/]+/(.+)")
+    if not relpath then
+      print("Current file is not inside a worktree")
+      return
+    end
+
+    vim.cmd("e " .. worktree_path .. "/" .. relpath)
+  end
+
+  local telescope_git_worktree = function(opts)
+    opts = opts or {}
+    local output = utils.get_os_command_output({ "git", "worktree", "list" })
+    local results = {}
+    local widths = {
+      path = 0,
+      sha = 0,
+      branch = 0,
+    }
+
+    local parse_line = function(line)
+      local fields = vim.split(string.gsub(line, "%s+", " "), " ")
+      local entry = {
+        path = fields[1],
+        sha = fields[2],
+        branch = fields[3],
+      }
+
+      if entry.sha ~= "(bare)" then
+        local index = #results + 1
+        for key, val in pairs(widths) do
+          if key == "path" then
+            local path_len = strings.strdisplaywidth(entry[key] or "")
+            widths[key] = math.max(val, path_len)
+          else
+            widths[key] = math.max(val, strings.strdisplaywidth(entry[key] or ""))
+          end
+        end
+
+        table.insert(results, index, entry)
+      end
+    end
+
+    for _, line in ipairs(output) do
+      parse_line(line)
+    end
+
+    -- if #results == 0 then
+    --     return
+    -- end
+
+    local displayer = require("telescope.pickers.entry_display").create({
+      separator = " ",
+      items = {
+        { width = widths.branch },
+        { width = widths.path },
+        { width = widths.sha },
+      },
+    })
+
+    local make_display = function(entry)
+      local path, _ = utils.transform_path(opts, entry.path)
+      return displayer({
+        { entry.branch, "TelescopeResultsIdentifier" },
+        { path },
+        { entry.sha },
+      })
+    end
+
+    pickers
+    .new(opts or {}, {
+      prompt_title = "Git Worktrees",
+      finder = finders.new_table({
+        results = results,
+        entry_maker = function(entry)
+          entry.value = entry.branch
+          entry.ordinal = entry.branch
+          entry.display = make_display
+          return entry
+        end,
+      }),
+      sorter = conf.generic_sorter(opts),
+      attach_mappings = function(_, map)
+        action_set.select:replace(select_worktree)
+        map('i', '<C-v>', open_in_vsplit)
+        map('n', '<C-v>', open_in_vsplit)
+        map('i', '<C-s>', open_in_split)
+        map('n', '<C-s>', open_in_split)
+        return true
+      end,
+    })
+    :find()
+  end
+
+  telescope_git_worktree()
 end, opts)

@@ -37,7 +37,6 @@ return {
     -- priority = 10000,
     opts = { update_to_buf_dir = { enable = false } },
     config = function()
-      -- keymap("n", "<Leader>oa", "<cmd>Oil<cr>", opts)
       vim.keymap.set("n", "<Leader>op", "<cmd>Dirbuf<cr>", {})
     end,
   },
@@ -57,10 +56,8 @@ return {
     -- commit = "ba858b662599eab8ef1cba9ab745afded99cb180",
     cmd = { "Oil" },
     -- event = { "BufReadPost", "BufNewFile" },
-    -- keys = { "<leader>oa" },
     keys = {
       { mode = { "n" }, "<leader>ou", "<cmd>Oil /Users/jgarcia<cr>" },
-      { mode = { "n" }, "<leader>oa", "<cmd>Oil<cr>" },
       {
         mode = { "n" },
         "<leader>ob",

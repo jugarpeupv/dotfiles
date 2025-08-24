@@ -767,7 +767,7 @@ return {
 					always_show_folders = false,
 				},
 				modified = {
-					enable = true,
+					enable = false,
 					show_on_dirs = false,
 					show_on_open_dirs = false,
 				},

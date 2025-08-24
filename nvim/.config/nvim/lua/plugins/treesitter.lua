@@ -4,8 +4,8 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		-- branch = "master",
 		-- lazy = false,
-		branch = 'main',
-		build = ':TSUpdate',
+		branch = "main",
+		build = ":TSUpdate",
 		-- lazy = true,
 		-- lazy = true,
 		-- branch = 'main',
@@ -13,6 +13,7 @@ return {
 		event = { "BufReadPost", "BufNewFile" },
 		-- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
 		dependencies = {
+			{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
 			-- "RRethy/nvim-treesitter-endwise",
 			{ "cfdrake/vim-pbxproj" },
 			-- {
@@ -47,6 +48,76 @@ return {
 			{
 				"nvim-treesitter/nvim-treesitter-textobjects",
 				branch = "main",
+				config = function()
+					-- configuration
+					require("nvim-treesitter-textobjects").setup({
+						select = {
+							enable = true,
+
+							-- Automatically jump forward to textobj, similar to targets.vim
+							lookahead = true,
+
+							-- You can choose the select mode (default is charwise 'v')
+							--
+							-- Can also be a function which gets passed a table with the keys
+							-- * query_string: eg '@function.inner'
+							-- * method: eg 'v' or 'o'
+							-- and should return the mode ('v', 'V', or '<c-v>') or a table
+							-- mapping query_strings to modes.
+							selection_modes = {
+								["@parameter.outer"] = "v", -- charwise
+								["@function.outer"] = "V", -- linewise
+								["@class.outer"] = "<c-v>", -- blockwise
+							},
+							-- If you set this to `true` (default is `false`) then any textobject is
+							-- extended to include preceding or succeeding whitespace. Succeeding
+							-- whitespace has priority in order to act similarly to eg the built-in
+							-- `ap`.
+							--
+							-- Can also be a function which gets passed a table with the keys
+							-- * query_string: eg '@function.inner'
+							-- * selection_mode: eg 'v'
+							-- and should return true of false
+							include_surrounding_whitespace = false,
+						},
+					})
+
+					-- keymaps
+					-- You can use the capture groups defined in `textobjects.scm`
+					vim.keymap.set({ "x", "o" }, "af", function()
+						require("nvim-treesitter-textobjects.select").select_textobject(
+							"@function.outer",
+							"textobjects"
+						)
+					end)
+					vim.keymap.set({ "x", "o" }, "if", function()
+						require("nvim-treesitter-textobjects.select").select_textobject(
+							"@function.inner",
+							"textobjects"
+						)
+					end)
+
+					vim.keymap.set({ "x", "o" }, "ih", function()
+						require("nvim-treesitter-textobjects.select").select_textobject(
+							"@assignment.lhs",
+							"textobjects"
+						)
+					end)
+
+					vim.keymap.set({ "x", "o" }, "il", function()
+						require("nvim-treesitter-textobjects.select").select_textobject(
+							"@assignment.rhs",
+							"textobjects"
+						)
+					end)
+
+					vim.keymap.set({ "x", "o" }, "ac", function()
+						require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects")
+					end)
+					vim.keymap.set({ "x", "o" }, "ic", function()
+						require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects")
+					end)
+				end,
 				-- enabled = false,
 				-- event = { "BufReadPre", "BufNewFile" },
 				-- cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
@@ -325,54 +396,6 @@ return {
 					disable_virtual_text = false,
 					disable = { "javascript", "typescript" },
 				},
-				textobjects = {
-					select = {
-						enable = true,
-
-						-- Automatically jump forward to textobj, similar to targets.vim
-						lookahead = true,
-
-						keymaps = {
-							-- You can use the capture groups defined in textobjects.scm
-							["ih"] = "@assignment.lhs",
-							["il"] = "@assignment.rhs",
-
-							["ia"] = "@parameter.inner",
-							["aa"] = "@parameter.outer",
-
-							["af"] = "@function.outer",
-							["if"] = "@function.inner",
-							["ac"] = "@class.outer",
-							-- You can optionally set descriptions to the mappings (used in the desc parameter of
-							-- nvim_buf_set_keymap) which plugins like which-key display
-							["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
-							-- You can also use captures from other query groups like `locals.scm`
-							["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
-						},
-						-- You can choose the select mode (default is charwise 'v')
-						--
-						-- Can also be a function which gets passed a table with the keys
-						-- * query_string: eg '@function.inner'
-						-- * method: eg 'v' or 'o'
-						-- and should return the mode ('v', 'V', or '<c-v>') or a table
-						-- mapping query_strings to modes.
-						selection_modes = {
-							["@parameter.outer"] = "v", -- charwise
-							["@function.outer"] = "V", -- linewise
-							["@class.outer"] = "<c-v>", -- blockwise
-						},
-						-- If you set this to `true` (default is `false`) then any textobject is
-						-- extended to include preceding or succeeding whitespace. Succeeding
-						-- whitespace has priority in order to act similarly to eg the built-in
-						-- `ap`.
-						--
-						-- Can also be a function which gets passed a table with the keys
-						-- * query_string: eg '@function.inner'
-						-- * selection_mode: eg 'v'
-						-- and should return true of false
-						include_surrounding_whitespace = false,
-					},
-				},
 			})
 
 			--
@@ -384,7 +407,7 @@ return {
 			--   },
 			-- }
 
-	     -- local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+			-- local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
 			---@diagnostic disable-next-line: inject-field
 			-- parser_configs.ghactions = {
 			-- 	install_info = {
@@ -396,20 +419,31 @@ return {
 			-- 		--      requires_generate_from_grammar = true
 			-- 	},
 			-- }
-	     -- vim.treesitter.language.register('ghactions', 'yaml')  -- the someft filetype will use the python parser and queries.
+			-- vim.treesitter.language.register('ghactions', 'yaml')  -- the someft filetype will use the python parser and queries.
 			-- custom parsers
-			vim.api.nvim_create_autocmd('FileType', {
-				pattern = { 'yaml.github', 'jsonc', 'sh', 'dosini', 'editorconfig', 'typescript', 'javascript' },
-				callback = function() vim.treesitter.start() end,
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = {
+					"yaml.github",
+					"jsonc",
+					"sh",
+					"dosini",
+					"editorconfig",
+					"typescript",
+					"javascript",
+					"gitcommit",
+				},
+				callback = function()
+					vim.treesitter.start()
+				end,
 			})
 
-			vim.api.nvim_create_autocmd('User', {
-				pattern = 'TSUpdate',
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "TSUpdate",
 				callback = function()
-					require('nvim-treesitter.parsers').ghactions = {
+					require("nvim-treesitter.parsers").ghactions = {
 						install_info = {
-							url = 'https://github.com/rmuir/tree-sitter-ghactions',
-							queries = 'queries',
+							url = "https://github.com/rmuir/tree-sitter-ghactions",
+							queries = "queries",
 						},
 					}
 				end,

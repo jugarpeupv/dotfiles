@@ -572,7 +572,9 @@ return {
 			vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
 			vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
 			vim.api.nvim_set_hl(0, "DapStoppedText", { ctermbg = 0, fg = "#aa8430", bg = "none" })
-			vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#664f1d" })
+			-- vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#664f1d" })
+
+			vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#1a3754" })
 
 			-- vim.fn.sign_define("DapBreakpointRejected", { text = "⊚", texthl = "", linehl = "", numhl = "" })
 			-- vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint2", linehl = "", numhl = "" })

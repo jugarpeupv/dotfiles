@@ -15,6 +15,7 @@ return {
 	},
 	{
 		"NMAC427/guess-indent.nvim",
+		enabled = false,
 		event = "BufReadPost",
 		config = true,
 	},
@@ -40,6 +41,7 @@ return {
 	-- },
 	{
 		"axkirillov/unified.nvim",
+		enabled = false,
 		cmd = { "Unified" },
 		opts = {
 			-- your configuration comes here
@@ -47,6 +49,15 @@ return {
 	},
 	{
 		"almo7aya/openingh.nvim",
+		keys = {
+			{
+				"<leader>oF",
+				function()
+					vim.cmd("OpenInGHFileLines")
+				end,
+				desc = "Open in GitHub with lines",
+			},
+		},
 		cmd = { "OpenInGHRepo", "OpenInGHFile", "OpenInGHFileLines" },
 	},
 	{
@@ -127,6 +138,7 @@ return {
 				-- "<cmd>DockerContainers<cr>",
 				function()
 					vim.cmd(":e docker://containers")
+					-- vim.schedule(function() vim.cmd(":e docker://containers") end)
 					-- Execute the DockerContainers command
 					-- vim.cmd("DockerContainers")
 				end,
@@ -148,6 +160,7 @@ return {
 	},
 	{
 		"jfryy/keytrail.nvim",
+		ft = { "json", "jsonc", "yaml" },
 		enabled = false,
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
@@ -174,7 +187,7 @@ return {
 	-- { "HawkinsT/pathfinder.nvim" },
 	{
 		"rmagatti/auto-session",
-		enabled = true,
+		enabled = false,
 		-- event = "BufReadPost",
 		lazy = true,
 		keys = {
@@ -427,9 +440,11 @@ return {
 	},
 	{
 		"vim-scripts/applescript.vim",
-		event = { "BufNewFile", "BufReadPre" },
+		ft = { "applescript" },
+		-- event = { "BufNewFile", "BufReadPre" },
 	},
-	{ "tpope/vim-bundler", event = { "BufNewFile", "BufReadPre" } },
+	{ "tpope/vim-bundler", ft = { "ruby", "rake", "gemfile" } },
+	{ "tpope/vim-rails", ft = { "ruby", "rake", "gemfile" } },
 	-- {
 	--   'vim-ruby/vim-ruby',
 	--   event = { "BufNewFile", "BufReadPre" },
@@ -653,6 +668,7 @@ return {
 		end,
 	},
 	{
+		-- regex plugin
 		"OXY2DEV/patterns.nvim",
 		cmd = { "Patterns" },
 	},
@@ -806,10 +822,11 @@ return {
 			ensure_installed = {
 				"go",
 				"html",
+				"angular",
 				-- "dom",
 				"http",
 				-- "css",
-				-- "javascript",
+				"javascript",
 				-- "rust",
 				-- some docs such as lua require version number along with the language name
 				-- check `DevDocs install` to view the actual names of the docs
@@ -840,21 +857,28 @@ return {
 	},
 	{
 		"vzze/calculator.nvim",
-		-- cmd = { "Calculate" },
-		event = { "BufReadPost" },
-		config = function()
-			vim.api.nvim_create_user_command(
-				"Calculate",
-				'lua require("calculator").calculate()',
-				{ ["range"] = 1, ["nargs"] = 0 }
-			)
-		end,
+		cmd = { "Calculate" },
+		-- event = { "BufReadPost" },
+		keys = {
+			{
+				"<leader>c=",
+				function()
+					require("calculator").calculate()
+				end,
+				desc = "Calculate",
+			},
+		},
+		-- config = function()
+		-- 	vim.api.nvim_create_user_command(
+		-- 		"Calculate",
+		-- 		'lua require("calculator").calculate()',
+		-- 		{ ["range"] = 1, ["nargs"] = 0 }
+		-- 	)
+		-- end,
 	},
 	{ "sam4llis/nvim-lua-gf", keys = { "gf" } },
-	-- { "mrjones2014/tldr.nvim", cmd = { "Tldr", "Telescope" } ,dependencies = { "nvim-telescope/telescope.nvim" } },
 	{
 		"tldr-pages/tldr-neovim-extension",
-		-- enabled = false,
 		cmd = { "Tldr", "Telescope" },
 		dependencies = {
 			"nvim-telescope/telescope.nvim",
@@ -1259,7 +1283,6 @@ return {
 		end,
 	},
 
-	{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
 	-- {
 	--   "ibhagwan/fzf-lua",
 	--   -- optional for icon support

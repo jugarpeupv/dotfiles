@@ -10,10 +10,65 @@ return {
 		branch = "master",
 		dependencies = {
 			{
+				"prochri/telescope-all-recent.nvim",
+				dependencies = {
+					"nvim-telescope/telescope.nvim",
+					"kkharji/sqlite.lua",
+					-- -- optional, if using telescope for vim.ui.select
+					-- "stevearc/dressing.nvim",
+				},
+				opts = {
+					vim_ui_select = {
+						kinds = {},
+						prompts = {},
+					},
+
+					pickers = { -- allows you to overwrite the default settings for each picker
+						["dap#configurations"] = { -- enable man_pages picker. Disable cwd and use frecency sorting.
+							disable = false,
+							use_cwd = true,
+							sorting = "frecency",
+						},
+						["git_worktree#create_git_worktree"] = { -- enable man_pages picker. Disable cwd and use frecency sorting.
+							disable = false,
+							use_cwd = true,
+							sorting = "frecency",
+						},
+
+						-- ["git_worktree#git_worktree"] = { -- enable man_pages picker. Disable cwd and use frecency sorting.
+						-- 	disable = false,
+						-- 	use_cwd = true,
+						-- 	sorting = "recent",
+						-- },
+
+						man_pages = { -- enable man_pages picker. Disable cwd and use frecency sorting.
+							disable = false,
+							use_cwd = false,
+							sorting = "frecency",
+						},
+						builtin = {
+							disable = false,
+							use_cwd = true,
+							sorting = "recent",
+						},
+						git_files = {
+							disable = false,
+							use_cwd = true,
+							sorting = "frecency",
+						},
+						find_files = {
+							disable = false,
+							use_cwd = true,
+							sorting = "frecency",
+						},
+					},
+				},
+			},
+			{
 				"nvim-telescope/telescope-frecency.nvim",
 				-- install the latest stable version
 				version = "*",
-				enabled = true,
+				enabled = false,
 				keys = {
 					{
 						"<leader>fr",
@@ -218,8 +273,9 @@ return {
 			{ "jugarpeupv/git-worktree.nvim" },
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
-				enabled = false,
-				build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+				enabled = true,
+				build = "make",
+				-- build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
 				cmd = { "Telescope" },
 			},
 			{ "natecraddock/telescope-zf-native.nvim", cmd = { "Telescope" } },
@@ -332,7 +388,11 @@ return {
 			},
 			{ "nvim-telescope/telescope-smart-history.nvim", cmd = { "Telescope" } },
 			{ "nvim-telescope/telescope-live-grep-args.nvim", cmd = { "Telescope" } },
-			{ "nvim-telescope/telescope-ui-select.nvim", cmd = { "Telescope" } },
+			{
+				"nvim-telescope/telescope-ui-select.nvim",
+				dependencies = { "prochri/telescope-all-recent.nvim" },
+				cmd = { "Telescope" },
+			},
 		},
 		cmd = { "Telescope" },
 		-- event = { "BufReadPre", "BufNewFile" },
@@ -789,30 +849,30 @@ return {
 				--   },
 				-- },
 				extensions = {
-					frecency = {
-						db_safe_mode = false,
-						auto_validate = true,
-						initial_mode = "insert",
-						disable_devicons = false,
-						show_filter_column = false,
-						enable_prompt_mappings = true,
-						hide_current_buffer = true,
-						ignore_patterns = {
-							"*/.git",
-							"*/.git/*",
-							"*/.DS_Store",
-							"*.git/*",
-							"*/tmp/*",
-							"term*",
-							"term://*",
-							"*private*",
-							"*node_modules*",
-							"*/node_modules/*",
-						},
-						-- matcher = "fuzzy",
-						show_scores = true,
-						-- path_display = { "filename_first" },
-					},
+					-- frecency = {
+					-- 	db_safe_mode = false,
+					-- 	auto_validate = true,
+					-- 	initial_mode = "insert",
+					-- 	disable_devicons = false,
+					-- 	show_filter_column = false,
+					-- 	enable_prompt_mappings = true,
+					-- 	hide_current_buffer = true,
+					-- 	ignore_patterns = {
+					-- 		"*/.git",
+					-- 		"*/.git/*",
+					-- 		"*/.DS_Store",
+					-- 		"*.git/*",
+					-- 		"*/tmp/*",
+					-- 		"term*",
+					-- 		"term://*",
+					-- 		"*private*",
+					-- 		"*node_modules*",
+					-- 		"*/node_modules/*",
+					-- 	},
+					-- 	-- matcher = "fuzzy",
+					-- 	show_scores = true,
+					-- 	-- path_display = { "filename_first" },
+					-- },
 					-- jsonfly = {
 					--   subkeys_display = "waterfall"
 					-- },
@@ -1096,8 +1156,8 @@ return {
 			telescope.load_extension("grapple")
 			telescope.load_extension("file_browser")
 			telescope.load_extension("git_file_history")
-			telescope.load_extension("frecency")
-			-- telescope.load_extension("fzf")
+			-- telescope.load_extension("frecency")
+			telescope.load_extension("fzf")
 			telescope.load_extension("before")
 			telescope.load_extension("recent_files")
 			-- require("telescope").load_extension("persisted")

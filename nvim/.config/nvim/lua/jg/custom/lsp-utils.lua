@@ -29,6 +29,8 @@ M.attach_lsp_config = function(client, bufnr)
 
   vim.keymap.set({ "n" }, "gv", "<cmd>vsp | lua vim.lsp.buf.definition()<cr>", opts)
 
+  vim.keymap.set({ "n" }, "gs", "<cmd>sp | lua vim.lsp.buf.definition()<cr>", opts)
+
   -- vim.keymap.set({ "n" }, "gv", function()
   --   require("telescope.builtin").lsp_definitions({ jump_type = "vsplit" })
   --   -- vim.schedule(function()

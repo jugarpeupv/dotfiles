@@ -15,6 +15,7 @@ return {
   {
     -- "0x100101/lab.nvim",
     "jugarpeupv/lab.nvim",
+    enabled = false,
     build = "cd js && npm ci",
     keys = {
       { mode = { "n" }, "<leader>la", "<CMD>Lab code run<CR>" },

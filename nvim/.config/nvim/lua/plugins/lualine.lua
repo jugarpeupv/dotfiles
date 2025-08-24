@@ -331,6 +331,7 @@ return {
 				-- lualine_b = { branch, ahead_behind_indicator },
 				lualine_b = { branch },
 				lualine_c = { diff_mode },
+				-- lualine_x = { dirname, "filetype", get_schema },
 				lualine_x = { dirname, "filetype", get_schema },
 				-- lualine_x = {},
 				-- lualine_y = {},
