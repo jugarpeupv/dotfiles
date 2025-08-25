@@ -1,7 +1,8 @@
 return {
   {
     "tanvirtin/vgit.nvim",
-    branch = "v1.0.x",
+    -- branch = "v1.0.x",
+    branch = "main",
     enabled = false,
     keys = {
       {
@@ -718,6 +719,7 @@ return {
       "akinsho/git-conflict.nvim",
     },
     keys = {
+      -- { "<leader>gd", mode = "n",     "<cmd>DiffviewOpen<cr>" },
       { "<leader>gd", mode = "n",     "<cmd>DiffviewOpen -- :!package-lock.json<cr>" },
       { "<leader>cc", mode = "n",     "<cmd>DiffviewClose<cr>" },
       { "<leader>gv", mode = { "v" }, "<cmd>'<,'>DiffviewFileHistory<cr>" },

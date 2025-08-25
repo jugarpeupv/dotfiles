@@ -29,8 +29,8 @@ keymap("v", ">", ">gv", opts)
 -- keymap("n", "<C-p>", "za", opts)
 -- keymap("n", ";", "za", opts)
 -- Paste
--- keymap("n", "p", "p=`]", opts)
-keymap("n", "p", "gp", opts)
+keymap("n", "p", "p=`]", opts)
+-- keymap("n", "p", "gp", opts)
 -- keymap("n", "p", "p]", opts)
 -- keymap("v", "p", '"_dP', opts)
 -- keymap("n", "d", '"*d', opts)
@@ -1759,4 +1759,9 @@ vim.keymap.set("n", "<leader>we", function()
   end
 
   telescope_git_worktree()
+end, opts)
+
+
+vim.keymap.set({ "n" }, "<leader>ge", function ()
+  vim.cmd("e ~/.gitconfig")
 end, opts)

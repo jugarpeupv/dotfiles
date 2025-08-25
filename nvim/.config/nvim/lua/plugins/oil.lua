@@ -30,6 +30,7 @@ end
 return {
   {
     "elihunter173/dirbuf.nvim",
+    enabled = false,
     -- event = { "BufReadPost", "BufNewFile" },
     keys = { "<leader>op" },
 

@@ -1,7 +1,7 @@
 -- return {}
 return {
 	"nvim-lualine/lualine.nvim",
-	enabled = false,
+	enabled = true,
 	-- event = "VeryLazy",
 	-- event = { "BufReadPost" },
 	ft = { "DiffviewFiles" },
@@ -329,10 +329,10 @@ return {
 					-- { "mode", separator = { left = "", right = "" } },
 				},
 				-- lualine_b = { branch, ahead_behind_indicator },
-				lualine_b = { branch },
+				lualine_b = {  },
 				lualine_c = { diff_mode },
 				-- lualine_x = { dirname, "filetype", get_schema },
-				lualine_x = { dirname, "filetype", get_schema },
+				lualine_x = { "filetype" },
 				-- lualine_x = {},
 				-- lualine_y = {},
 				lualine_y = { "progress" },

@@ -1,7 +1,7 @@
 return {
   "toppair/peek.nvim",
   -- event = "VeryLazy",
-  ft = { "md", "markdown" },
+  ft = { "md", "markdown", "conf" },
   build = "deno task --quiet build:fast",
   config = function()
     -- default config:

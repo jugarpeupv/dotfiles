@@ -6,6 +6,8 @@
   path = ~/.git-mar.conf
 [includeIf "gitdir:~/private/"]
   path = ~/.git-personal.conf
+[includeIf "gitdir:~/projects/"]
+  path = ~/.git-personal.conf
 
 [init]
 	defaultBranch = main
@@ -25,6 +27,7 @@
 	pager = nvim -R
 	fsmonitor = true
 	untrackedcache = true
+  attributesfile = ~/.config/git/.gitattributes
   ; pager = delta
 ; [interactive]
 ;   diffFilter = delta --color-only

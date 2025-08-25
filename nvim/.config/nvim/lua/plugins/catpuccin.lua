@@ -96,6 +96,7 @@ return {
 						GitFooter = { bg = "none" },
 						GitAppBar = { bg = "none" },
 						String = { fg = "#F2CDCD" },
+						["@module.hurl"] = { fg = "#89ddff", style = { } },
 						["@keyword.ghactions"] = { fg = "#89ddff" },
 						["@property.ghactions"] = { fg = "#cdd6f5" },
 						["@module.builtin.ghactions"] = { fg = "#89ddff" },

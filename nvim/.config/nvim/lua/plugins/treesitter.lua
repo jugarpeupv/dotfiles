@@ -117,6 +117,23 @@ return {
 					vim.keymap.set({ "x", "o" }, "ic", function()
 						require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects")
 					end)
+
+					local ts_repeat_move = require("nvim-treesitter-textobjects.repeatable_move")
+
+					-- Repeat movement with ; and ,
+					-- ensure ; goes forward and , goes backward regardless of the last direction
+					vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next, { expr = true })
+					vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous, { expr = true })
+
+					-- vim way: ; goes to the direction you were moving.
+					-- vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
+					-- vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
+
+					-- Optionally, make builtin f, F, t, T also repeatable with ; and ,
+					vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
+					vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
+					vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
+					vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
 				end,
 				-- enabled = false,
 				-- event = { "BufReadPre", "BufNewFile" },
@@ -145,18 +162,55 @@ return {
 				keys = {
 					{ mode = { "o", "x" }, "as", "<cmd>lua require('various-textobjs').subword('outer')<CR>" },
 					{ mode = { "o", "x" }, "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>" },
+					{
+						mode = { "n" },
+						"gx",
+						function()
+							require("various-textobjs").url() -- select URL
+
+							local foundURL = vim.fn.mode() == "v" -- only switches to visual mode when textobj found
+							if not foundURL then
+								return
+							end
+
+							local url = vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"), { type = "v" })[1]
+							vim.ui.open(url) -- requires nvim 0.10
+							vim.cmd.normal({ "v", bang = true })
+						end,
+					},
+					{
+						mode = { "n" },
+						"gf",
+						function()
+							require("various-textobjs").filepath("outer") -- select filepath
+
+							local foundPath = vim.fn.mode() == "v" -- only switches to visual mode when textobj found
+							if not foundPath then
+								return
+							end
+
+							local path = vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"), { type = "v" })[1]
+
+							local exists = vim.uv.fs_stat(vim.fs.normalize(path)) ~= nil
+							if exists then
+								vim.ui.open(path)
+							else
+								vim.notify("Path does not exist.", vim.log.levels.WARN)
+							end
+						end,
+					},
 				},
 				opts = {
 					keymaps = {
 						useDefaults = true,
-						disabledDefaults = { "L" },
+						disabledDefaults = { "L", "in", "an" },
 					},
 				},
 				-- config = function(_, opts)
-				--   require("various-textobjs").setup(opts)
-				--   -- example: `as` for outer subword, `is` for inner subword
-				--   vim.keymap.set({ "o", "x" }, "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>')
-				--   vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
+				-- 	require("various-textobjs").setup(opts)
+				-- 	-- example: `as` for outer subword, `is` for inner subword
+				-- 	-- vim.keymap.set({ "o", "x" }, "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>')
+				-- 	-- vim.keymap.set({ "o", "x" }, "is", '<cmd>lua require("various-textobjs").subword("inner")<CR>')
 				-- end,
 			},
 			{
@@ -253,56 +307,6 @@ return {
 						scope_incremental = "<Tab>",
 						node_decremental = "<S-Tab>",
 					},
-				},
-				highlight = {
-					enable = true,
-					disable = function(lang, bufnr) -- Disable in large .json files like in package-lock.json
-						if lang == "nvimtree" then
-							return true
-						end
-
-						if
-							(lang == "json" or lang == "jsonc")
-							and vim.api.nvim_buf_get_name(bufnr):match("package%-lock%.json")
-						then
-							vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
-							return true
-						end
-
-						if
-							(lang == "json" or lang == "jsonc" or lang == "javascript")
-							and vim.api.nvim_buf_line_count(bufnr) > 5000
-						then
-							vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
-							return true
-						end
-
-						local line_number = 1
-						local line = vim.fn.getline(line_number)
-						local char_count = #line
-
-						if char_count > 1500 then
-							vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
-							-- print("char_count > 1500, disabling treesitter")
-							return true
-						end
-
-						if (lang == "json" or lang == "jsonc") and vim.api.nvim_buf_line_count(bufnr) > 10000 then
-							vim.api.nvim_buf_set_option(bufnr, "foldmethod", "indent")
-							-- print("buf_line_count > 10000, disabling treesitter")
-							return true
-						end
-
-						local max_filesize = 500 * 1024 -- 100 KB
-						local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
-						if ok and stats and stats.size > max_filesize and (lang == "json" or lang == "jsonc") then
-							-- print("buf_filesize > 100 KB, disabling treesitter")
-							return true
-						end
-
-						return false
-					end,
-					additional_vim_regex_highlighting = false,
 				},
 				sync_install = true,
 				-- ignore_install = { "yaml" },
@@ -423,6 +427,7 @@ return {
 			-- custom parsers
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = {
+					"yaml",
 					"yaml.github",
 					"jsonc",
 					"sh",
@@ -431,8 +436,43 @@ return {
 					"typescript",
 					"javascript",
 					"gitcommit",
+					"hurl",
 				},
-				callback = function()
+				callback = function(ev)
+          -- event fired: {
+          --   buf = 10,
+          --   event = "FileType",
+          --   file = "package.json",
+          --   id = 132,
+          --   match = "jsonc"
+          -- }
+
+					if
+						(ev.match == "json" or ev.match == "jsonc")
+						-- and vim.api.nvim_buf_get_name(ev.buf):match("package%-lock%.json")
+            and ev.file:match("package%-lock%.json")
+					then
+						vim.api.nvim_buf_set_option(ev.buf, "foldmethod", "syntax")
+            return
+					end
+
+          local line_number = 1
+          local line = vim.fn.getline(line_number)
+          local char_count = #line
+
+          if char_count > 1500 then
+            vim.api.nvim_buf_set_option(ev.buf, "foldmethod", "syntax")
+            return
+            -- print("char_count > 1500, disabling treesitter")
+          end
+
+          local max_filesize = 500 * 1024 -- 100 KB
+          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(ev.buf))
+          if ok and stats and stats.size > max_filesize and (ev.match == "json" or ev.match == "jsonc") then
+            -- print("buf_filesize > 100 KB, disabling treesitter")
+            return
+          end
+
 					vim.treesitter.start()
 				end,
 			})

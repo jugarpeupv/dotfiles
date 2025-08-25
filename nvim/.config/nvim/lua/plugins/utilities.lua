@@ -51,7 +51,7 @@ return {
 		"almo7aya/openingh.nvim",
 		keys = {
 			{
-				"<leader>oF",
+				"<leader>op",
 				function()
 					vim.cmd("OpenInGHFileLines")
 				end,
@@ -1275,7 +1275,7 @@ return {
 		"christoomey/vim-tmux-navigator",
 		enabled = false,
 		-- event = "VeryLazy",
-		commit = "d847ea942a5bb4d4fab6efebc9f30d787fd96e65",
+		-- commit = "d847ea942a5bb4d4fab6efebc9f30d787fd96e65",
 		keys = { "<C-h>", "<C-j>", "<C-k>", "<C-l>" },
 		config = function()
 			vim.g.tmux_navigator_disable_when_zoomed = 1
