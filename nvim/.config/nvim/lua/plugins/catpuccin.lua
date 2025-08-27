@@ -103,6 +103,7 @@ return {
 						["@function.call.bash"] = { fg = "#C6A0F6", style = {} },
 						["@function.builtin.bash"] = { fg = "#C6A0F6", style = {} },
 						["@variable.parameter.bash"] = { fg = "#F5C2E7" },
+            ["@string.special.url.comment"] = { style = { "underline" } },
 						-- StatusLine = { fg = "#737aa2", bg = "#292e42" },
 						fzf1 = { fg = "#737aa2", bg = "#292e42" },
 						fzf2 = { fg = "#737aa2", bg = "#292e42" },

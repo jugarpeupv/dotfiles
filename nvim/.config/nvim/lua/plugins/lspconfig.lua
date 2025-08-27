@@ -617,6 +617,8 @@ return {
 			lspconfig["bashls"].setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
+        cmd = { 'bash-language-server', 'start' },
+        filetypes = { 'bash', 'sh' },
 				handlers = {
 					["textDocument/publishDiagnostics"] = function(err, res, ...)
 						local file_name = vim.fn.fnamemodify(vim.uri_to_fname(res.uri), ":t")

@@ -118,6 +118,8 @@ end, opts)
 vim.keymap.set({ "n", "t" }, "<M-p>", function()
 	require("telescope.builtin").find_files({
 		hidden = true,
+    shorten_path = false,
+    path_display = { "filename_first" },
 		find_command = {
 			"rg",
 			"--files",
@@ -170,7 +172,7 @@ vim.keymap.set({ "n" }, "<leader>fw", function()
 	require("jg.custom.telescope").telescope_file_picker_in_workspace(vim.fn.expand("~"))
 end, opts)
 
-vim.keymap.set({ "n" }, "su", function()
+vim.keymap.set({ "n" }, "sh", function()
 	local find_command = {
 		"fd",
 		".",
@@ -193,6 +195,9 @@ vim.keymap.set({ "n" }, "su", function()
 		-- path = vim.fn.expand("~/"),
 		cwd = vim.fn.expand("~/"),
 		-- picker = f_browser_finder.browse_folders,
+    layout_config = {
+      height = 0.47,
+    },
 		depth = 1,
 		-- use_ui_input = false,
 		find_command,
@@ -223,7 +228,7 @@ vim.keymap.set({ "n" }, "sf", function()
 			"node_modules",
 			-- "--one-file-system",
 			"--max-depth",
-			"4",
+			"3",
 			"--hidden",
 		}
 
@@ -278,7 +283,7 @@ vim.keymap.set({ "n" }, "sf", function()
 	local function my_cb(path)
 		require("telescope").extensions.file_browser.file_browser({
 			grouped = true,
-			depth = false,
+			depth = 3,
 			use_ui_input = false,
 			follow_links = true,
 			respect_gitignore = true,
@@ -286,6 +291,7 @@ vim.keymap.set({ "n" }, "sf", function()
 			prompt_path = true,
 			path = vim.fn.expand(path),
 			select_buffer = true,
+      no_ignore = true
 		})
 	end
 
@@ -302,6 +308,12 @@ vim.keymap.set({ "n" }, "sf", function()
 	--   path = vim.fn.expand("%:p:h"),
 	--   select_buffer = true,
 	-- })
+end, opts)
+
+
+vim.keymap.set("n", "sn", function()
+  local jg_telescope = require("jg.custom.telescope")
+  jg_telescope.nvimtree_fzf_dir(vim.fn.expand("~/"))
 end, opts)
 
 vim.keymap.set({ "n" }, "sd", function()
@@ -456,11 +468,23 @@ vim.keymap.set({ "n" }, "<leader>fi", function()
 	require("telescope.builtin").find_files({
 		hidden = true,
 		no_ignore = true,
-		find_command = { "fd", ".", "--type", "f", "--exclude", ".git/*", "--exclude", "node_modules/*" },
+		-- find_command = { "fd", ".", "--type", "f", "--exclude", ".git/*", "--exclude", "node_modules/*" },
+    find_command = { "fd", ".", "--type", "f", "--exclude", ".git/*", "--exclude", "node_modules/*", "--exclude", "node_modules", "--exclude", "**/node_modules/**" },
 		preview = {
 			hide_on_startup = true,
 		},
 	})
+end, opts)
+
+vim.keymap.set({ "n" }, "<leader>bi", function()
+  require("telescope.builtin").buffers({
+    ignore_current_buffer = false,
+    show_all_buffers = true,
+    sort_mru = true,
+    select_current = true
+    -- sort_lastused = true,
+    -- initial_mode = "normal",
+  })
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bu", function()
@@ -800,7 +824,7 @@ vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true }) --
 
 vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
 
-vim.keymap.set({ "n" }, "<leader>bi", ":Bufferize Inspect<cr>", { silent = true }) -- paste from 0 register
+vim.keymap.set({ "n" }, "<leader>bI", ":Bufferize Inspect<cr>", { silent = true }) -- paste from 0 register
 
 -- local function show_documentation()
 --   local filetype = vim.bo.filetype
@@ -1760,7 +1784,6 @@ vim.keymap.set("n", "<leader>we", function()
 
   telescope_git_worktree()
 end, opts)
-
 
 vim.keymap.set({ "n" }, "<leader>ge", function ()
   vim.cmd("e ~/.gitconfig")

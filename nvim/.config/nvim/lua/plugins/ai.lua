@@ -3,5 +3,5 @@ return {
   require("plugins.ai.copilotchat"),
   require("plugins.ai.codecompanion"),
   -- require("plugins.ai.gp"),
-  require("plugins.ai.opencode"),
+  -- require("plugins.ai.opencode"),
 }

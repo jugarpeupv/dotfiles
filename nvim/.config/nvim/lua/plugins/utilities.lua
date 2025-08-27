@@ -2,18 +2,6 @@
 return {
 	-- Lazy
 	{
-		"2kabhishek/nerdy.nvim",
-		dependencies = {
-			"folke/snacks.nvim",
-		},
-		cmd = "Nerdy",
-		opts = {
-			max_recents = 30, -- Configure recent icons limit
-			add_default_keybindings = true, -- Add default keybindings
-			copy_to_clipboard = false, -- Copy glyph to clipboard instead of inserting
-		},
-	},
-	{
 		"NMAC427/guess-indent.nvim",
 		enabled = false,
 		event = "BufReadPost",
@@ -443,8 +431,8 @@ return {
 		ft = { "applescript" },
 		-- event = { "BufNewFile", "BufReadPre" },
 	},
-	{ "tpope/vim-bundler", ft = { "ruby", "rake", "gemfile" } },
-	{ "tpope/vim-rails", ft = { "ruby", "rake", "gemfile" } },
+	{ "tpope/vim-bundler", ft = { "ruby", "rake", "gemfile", "gemfilelock" } },
+	{ "tpope/vim-rails", ft = { "ruby", "rake", "gemfile", "gemfilelock" } },
 	-- {
 	--   'vim-ruby/vim-ruby',
 	--   event = { "BufNewFile", "BufReadPre" },
@@ -676,7 +664,7 @@ return {
 		"andersevenrud/nvim_context_vt",
 		-- event = { "BufReadPre", "BufNewFile" },
 		opts = {
-			enabled = false,
+			enabled = true,
 		},
 		keys = { { "<leader>co", "<cmd>NvimContextVtToggle<cr>" } },
 	},
@@ -1298,7 +1286,7 @@ return {
 		dependencies = { "junegunn/fzf.vim" },
 		build = "./install --all",
 		event = { "BufReadPost" },
-		cmd = { "G" },
+		-- cmd = { "Git" },
 		keys = {
 
 			{ "<leader>jl", "<cmd>Jumps<CR>" },

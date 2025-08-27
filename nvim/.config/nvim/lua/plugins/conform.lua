@@ -101,6 +101,7 @@ return {
 		-- end,
 		keys = {
 			{
+        mode = { "n", "v" },
 				"<leader>fo",
 				function()
 					require("conform").format({
@@ -110,7 +111,6 @@ return {
 					})
 				end,
 				desc = "Format file or range (in visual mode)",
-				mode = { "n", "v" },
 			},
 		},
 	},

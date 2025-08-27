@@ -33,7 +33,7 @@
 ;   diffFilter = delta --color-only
 ; [delta]
 ;   navigate = true
-;   light = false
+;   dark = true
 
 [difftool]
   prompt = true
@@ -75,4 +75,4 @@
 	binary = true
 	textconv = bun
 [color]
-	pager = no
+	pager = yes

@@ -3,7 +3,7 @@ return {
     "tanvirtin/vgit.nvim",
     -- branch = "v1.0.x",
     branch = "main",
-    enabled = false,
+    enabled = true,
     keys = {
       {
         mode = { "n" },

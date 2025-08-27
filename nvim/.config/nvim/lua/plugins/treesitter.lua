@@ -10,7 +10,7 @@ return {
 		-- lazy = true,
 		-- branch = 'main',
 		-- build = ':TSUpdate',
-		event = { "BufReadPost", "BufNewFile" },
+		-- event = { "BufReadPost", "BufNewFile" },
 		-- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
 		dependencies = {
 			{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
@@ -162,43 +162,43 @@ return {
 				keys = {
 					{ mode = { "o", "x" }, "as", "<cmd>lua require('various-textobjs').subword('outer')<CR>" },
 					{ mode = { "o", "x" }, "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>" },
-					{
-						mode = { "n" },
-						"gx",
-						function()
-							require("various-textobjs").url() -- select URL
-
-							local foundURL = vim.fn.mode() == "v" -- only switches to visual mode when textobj found
-							if not foundURL then
-								return
-							end
-
-							local url = vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"), { type = "v" })[1]
-							vim.ui.open(url) -- requires nvim 0.10
-							vim.cmd.normal({ "v", bang = true })
-						end,
-					},
-					{
-						mode = { "n" },
-						"gf",
-						function()
-							require("various-textobjs").filepath("outer") -- select filepath
-
-							local foundPath = vim.fn.mode() == "v" -- only switches to visual mode when textobj found
-							if not foundPath then
-								return
-							end
-
-							local path = vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"), { type = "v" })[1]
-
-							local exists = vim.uv.fs_stat(vim.fs.normalize(path)) ~= nil
-							if exists then
-								vim.ui.open(path)
-							else
-								vim.notify("Path does not exist.", vim.log.levels.WARN)
-							end
-						end,
-					},
+					-- {
+					-- 	mode = { "n" },
+					-- 	"gx",
+					-- 	function()
+					-- 		require("various-textobjs").url() -- select URL
+					--
+					-- 		local foundURL = vim.fn.mode() == "v" -- only switches to visual mode when textobj found
+					-- 		if not foundURL then
+					-- 			return
+					-- 		end
+					--
+					-- 		local url = vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"), { type = "v" })[1]
+					-- 		vim.ui.open(url) -- requires nvim 0.10
+					-- 		vim.cmd.normal({ "v", bang = true })
+					-- 	end,
+					-- },
+					-- {
+					-- 	mode = { "n" },
+					-- 	"gf",
+					-- 	function()
+					-- 		require("various-textobjs").filepath("outer") -- select filepath
+					--
+					-- 		local foundPath = vim.fn.mode() == "v" -- only switches to visual mode when textobj found
+					-- 		if not foundPath then
+					-- 			return
+					-- 		end
+					--
+					-- 		local path = vim.fn.getregion(vim.fn.getpos("."), vim.fn.getpos("v"), { type = "v" })[1]
+					--
+					-- 		local exists = vim.uv.fs_stat(vim.fs.normalize(path)) ~= nil
+					-- 		if exists then
+					-- 			vim.ui.open(path)
+					-- 		else
+					-- 			vim.notify("Path does not exist.", vim.log.levels.WARN)
+					-- 		end
+					-- 	end,
+					-- },
 				},
 				opts = {
 					keymaps = {
@@ -427,6 +427,7 @@ return {
 			-- custom parsers
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = {
+          "java",
 					"yaml",
 					"yaml.github",
 					"jsonc",
@@ -437,8 +438,12 @@ return {
 					"javascript",
 					"gitcommit",
 					"hurl",
+          "markdown",
+          "jproperties",
+          "properties"
 				},
-				callback = function(ev)
+				callback = function()
+          -- callback = function(ev)
           -- event fired: {
           --   buf = 10,
           --   event = "FileType",
@@ -447,32 +452,34 @@ return {
           --   match = "jsonc"
           -- }
 
-					if
-						(ev.match == "json" or ev.match == "jsonc")
-						-- and vim.api.nvim_buf_get_name(ev.buf):match("package%-lock%.json")
-            and ev.file:match("package%-lock%.json")
-					then
-						vim.api.nvim_buf_set_option(ev.buf, "foldmethod", "syntax")
-            return
-					end
+					-- if
+					-- 	(ev.match == "json" or ev.match == "jsonc")
+					-- 	-- and vim.api.nvim_buf_get_name(ev.buf):match("package%-lock%.json")
+					--        and ev.file:match("package%-lock%.json")
+					-- then
+					-- 	vim.api.nvim_buf_set_option(ev.buf, "foldmethod", "syntax")
+					--        return
+					-- end
+					--
+					--      local line_number = 1
+					--      local line = vim.fn.getline(line_number)
+					--      local char_count = #line
+					--
+					--      if char_count > 1500 then
+					--        vim.api.nvim_buf_set_option(ev.buf, "foldmethod", "syntax")
+					--        return
+					--        -- print("char_count > 1500, disabling treesitter")
+					--      end
+					--
+					--      local max_filesize = 500 * 1024 -- 100 KB
+					--      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(ev.buf))
+					--      if ok and stats and stats.size > max_filesize and (ev.match == "json" or ev.match == "jsonc") then
+					--        -- print("buf_filesize > 100 KB, disabling treesitter")
+					--        return
+					--      end
 
-          local line_number = 1
-          local line = vim.fn.getline(line_number)
-          local char_count = #line
-
-          if char_count > 1500 then
-            vim.api.nvim_buf_set_option(ev.buf, "foldmethod", "syntax")
-            return
-            -- print("char_count > 1500, disabling treesitter")
-          end
-
-          local max_filesize = 500 * 1024 -- 100 KB
-          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(ev.buf))
-          if ok and stats and stats.size > max_filesize and (ev.match == "json" or ev.match == "jsonc") then
-            -- print("buf_filesize > 100 KB, disabling treesitter")
-            return
-          end
-
+					vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 					vim.treesitter.start()
 				end,
 			})

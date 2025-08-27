@@ -438,7 +438,7 @@ return {
 				["Rakefile"] = { icon = "", color = "#f38ba8", name = "rakefile" },
 				["Podfile"] = { icon = "", color = "#f38ba8", name = "podfile" },
 				["Podfile.lock"] = { icon = "", color = "#7C7F93", name = "podfilelock2" },
-				["Gemfile"] = { icon = "", color = "#f38ba8", name = "gemfile" },
+				["Gemfile"] = { icon = "", color = "#f38ba8", name = "gemfilefile" },
 				["Gemfile.lock"] = { icon = "", color = "#7C7F93", name = "gemfilelock" },
 				["application.properties"] = { icon = "", color = "#CBA6F7", name = "application_properties" },
 				["tsconfig.json"] = {

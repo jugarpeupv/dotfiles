@@ -1,5 +1,6 @@
 return {
 	"ibhagwan/fzf-lua",
+  enabled = false,
 	dependencies = {
 		"folke/snacks.nvim",
 		{

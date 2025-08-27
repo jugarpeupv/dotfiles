@@ -29,7 +29,8 @@ return {
         disable_in_macro = true,   -- disable when recording or executing a macro
         disable_in_visualblock = true, -- disable when insert after visual block mode
         disable_in_replace_mode = true,
-        ignored_next_char = "[%w%.%'%\"%`]",
+        -- ignored_next_char = "[%w%.%'%\"%`]",
+        ignored_next_char = "[=[[%w%%%'%[%\"%.%`%$]]=]",
         -- ignored_next_char = [=[[%w%%%'%[%"%.%`%$]]=],
         enable_moveright = true,
         enable_afterquote = true,     -- add bracket pairs after quote
@@ -39,9 +40,9 @@ return {
         break_undo = true,            -- switch for basic rule break undo sequence
         -- check_ts = false,
         check_ts = true,              -- enable treesitter
-        map_cr = true,
-        map_bs = true,                -- map the <BS> key
-        map_c_h = false,              -- Map the <C-h> key to delete a pair
+        map_cr = false,
+        map_bs = false,                -- map the <BS> key
+        map_c_h = true,              -- Map the <C-h> key to delete a pair
         map_c_w = false,              -- map <c-w> to delete a pair if possible
       })
 
@@ -162,19 +163,19 @@ return {
         return clo
       end
 
-      autopairs.remove_rule("(")
-      autopairs.remove_rule("{")
-      autopairs.remove_rule("[")
+      -- autopairs.remove_rule("(")
+      -- autopairs.remove_rule("{")
+      -- autopairs.remove_rule("[")
 
-      autopairs.add_rule(Rule("[%(%{%[]", "")
-        :use_regex(true)
-        :replace_endpair(function(opts)
-          return get_closing_for_line(opts.line)
-        end)
-        :end_wise(function(opts)
-          -- Do not endwise if there is no closing
-          return get_closing_for_line(opts.line) ~= ""
-        end))
+      -- autopairs.add_rule(Rule("[%(%{%[]", "")
+      --   :use_regex(true)
+      --   :replace_endpair(function(opts)
+      --     return get_closing_for_line(opts.line)
+      --   end)
+      --   :end_wise(function(opts)
+      --     -- Do not endwise if there is no closing
+      --     return get_closing_for_line(opts.line) ~= ""
+      --   end))
 
       npairs.add_rules(require("nvim-autopairs.rules.endwise-lua"))
       npairs.add_rules(require("nvim-autopairs.rules.endwise-ruby"))

@@ -107,7 +107,7 @@ return {
       "BufEnter *.spec.[tj]s",
     },
     dependencies = {
-      "mortepau/codicons.nvim",
+      -- "mortepau/codicons.nvim",
       "nvim-neotest/neotest-jest",
       "nvim-neotest/nvim-nio",
       "nvim-lua/plenary.nvim",

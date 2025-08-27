@@ -859,11 +859,11 @@ M.nvimtree_fzf_dir = function(path)
 		".git",
 		"--exclude",
 		"node_modules",
+    "--no-ignore",
 		"--max-depth",
 		"4",
 		"--hidden",
 	}
-	print("path: ", path)
 
 	-- Function to escape special characters in a string for use in a pattern
 	local function escape_pattern(text)
@@ -871,8 +871,6 @@ M.nvimtree_fzf_dir = function(path)
 	end
 
 	local escaped_path = escape_pattern(path)
-
-	print("escaped_path: ", escaped_path)
 
 	local commands = function(opts)
 		opts = opts or {}

@@ -78,7 +78,7 @@ return {
 
   {
     "tpope/vim-fugitive",
-    cmd = { "Git", "G" },
+    -- cmd = { "Git", "G" },
     config = function()
       vim.cmd("command! -nargs=* G Git <args>")
     end,

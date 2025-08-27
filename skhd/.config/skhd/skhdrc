@@ -10,7 +10,8 @@ shift + alt - n : osascript ~/.config/skhd/Scripts/kitty-original.scpt
 shift + alt - j : osascript ~/.config/skhd/Scripts/new-capcut-window.scpt
 shift + alt - p : osascript ~/.config/skhd/Scripts/new-brave-window.scpt
 shift + alt - i : osascript ~/.config/skhd/Scripts/new-spotify2-window.scpt
-shift + alt - o : osascript ~/.config/skhd/Scripts/new-vscode-window.scpt
+# shift + alt - o : osascript ~/.config/skhd/Scripts/new-vscode-window.scpt
+shift + alt - o : osascript ~/.config/skhd/Scripts/new-emacs.scpt
 # shift + alt - e : osascript ~/.config/skhd/Scripts/new-excel-window.scpt
 shift + alt - e : osascript ~/.config/skhd/Scripts/new-deno-window.scpt
 shift + alt - v : osascript ~/.config/skhd/Scripts/new-zeplin-window.scpt

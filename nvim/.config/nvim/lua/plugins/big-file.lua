@@ -22,10 +22,10 @@ return {
           "illuminate",
           "lsp",
           "treesitter",
-          -- "syntax",
+          "syntax",
           "matchparen",
           "vimopts",
-          -- "filetype",
+          "filetype",
         },
       })
     end,

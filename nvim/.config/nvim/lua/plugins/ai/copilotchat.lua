@@ -21,14 +21,15 @@ return {
 		chat_autocomplete = true,
 		highlight_selection = true, -- Highlight selection
 		highlight_headers = true, --
-		selection = function(source)
-			-- return require("CopilotChat.select").visual(source) or require("CopilotChat.select").line(source)
-			return require("CopilotChat.select").visual(source) or require("CopilotChat.select").buffer(source)
-
-			-- return require("CopilotChat.select").visual(source)
-			-- 	or require("CopilotChat.select").line(source)
-			-- 	or require("CopilotChat.select").buffer(source)
-		end,
+    selection = 'visual',
+		-- selection = function(source)
+		-- 	-- return require("CopilotChat.select").visual(source) or require("CopilotChat.select").line(source)
+		-- 	return require("CopilotChat.select").visual(source) or require("CopilotChat.select").buffer(source)
+		--
+		-- 	-- return require("CopilotChat.select").visual(source)
+		-- 	-- 	or require("CopilotChat.select").line(source)
+		-- 	-- 	or require("CopilotChat.select").buffer(source)
+		-- end,
 		providers = {
 			copilot = {
 				-- see config.lua for implementation

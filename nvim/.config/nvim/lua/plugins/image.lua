@@ -1,5 +1,3 @@
--- return {}
--- return {}
 return {
 	{
 		"edluffy/hologram.nvim",
@@ -10,13 +8,6 @@ return {
 			})
 		end,
 	},
-	-- {
-	--   "vhyrro/luarocks.nvim",
-	--   priority = 10001, -- this plugin needs to run before anything else
-	--   opts = {
-	--     rocks = { "magick" },
-	--   },
-	-- },
 	{
 		"kjuq/sixelview.nvim",
 		enabled = false,
@@ -25,7 +16,7 @@ return {
 	{
 		"3rd/image.nvim",
 		enabled = true,
-    commit = "21909e3eb03bc738cce497f45602bf157b396672",
+    -- commit = "21909e3eb03bc738cce497f45602bf157b396672",
 		branch = "master",
 		-- branch = "main",
 		-- event = "VeryLazy",

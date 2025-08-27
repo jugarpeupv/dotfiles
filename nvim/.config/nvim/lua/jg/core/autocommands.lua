@@ -53,6 +53,12 @@ vim.cmd([[
 ]])
 
 vim.cmd([[
+  augroup filetypedetect
+  autocmd BufRead,BufNewFile Gemfile.lock set filetype=gemfilelock
+  augroup END
+]])
+
+vim.cmd([[
 	augroup filetypedetect
 	autocmd BufRead,BufNewFile *Pluginfile set filetype=ruby
 	augroup END

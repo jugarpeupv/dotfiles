@@ -467,11 +467,6 @@ return {
 
 				-- END Preview functionality
 
-				vim.keymap.set("n", "su", function()
-					local jg_telescope = require("jg.custom.telescope")
-					jg_telescope.nvimtree_fzf_dir(vim.fn.expand("~/"))
-				end, opts("Find dir in home"))
-
 				vim.keymap.set("n", "<down>", mark_move_j, opts("Toggle Bookmark Down"))
 				vim.keymap.set("n", "<up>", mark_move_k, opts("Toggle Bookmark Up"))
 
@@ -500,7 +495,29 @@ return {
 				-- vim.keymap.set("n", "<BS>", api_nvimtree.node.navigate.parent_close, opts("Close Directory"))
 				vim.keymap.set("n", "h", api_nvimtree.node.navigate.parent_close, opts("Close Directory"))
 				vim.keymap.set("n", "l", api_nvimtree.node.open.edit, opts("Open"))
-				vim.keymap.set("n", "<CR>", api_nvimtree.node.open.edit, opts("Open"))
+
+				vim.g.first_time_open = true
+				-- vim.keymap.set("n", "<CR>", api_nvimtree.node.open.edit, opts("Open"))
+				vim.keymap.set("n", "<CR>", function(node)
+					if vim.g.first_time_open == true then
+						local get_terminal_bufs = function()
+							return vim.tbl_filter(function(bufnr)
+								return vim.fn.getbufvar(bufnr, "&buftype") == "terminal"
+									and vim.fn.getbufvar(bufnr, "&ft") == ""
+							end, vim.api.nvim_list_bufs())
+						end
+						local terminals = get_terminal_bufs()
+						local there_are_no_terminal_buffers = next(terminals) == nil
+						if there_are_no_terminal_buffers then
+							api_nvimtree.node.open.edit(node)
+						else -- there are terminal buffers
+							api_nvimtree.node.open.vertical(node)
+              vim.g.first_time_open = false
+						end
+          else
+            api_nvimtree.node.open.edit(node)
+					end
+				end, opts("Open"))
 				-- vim.keymap.set('n', '<CR>', toggle_replace, opts('Open: In Place'))
 				-- vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
 				vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
@@ -657,7 +674,9 @@ return {
 				-- vim.keymap.set("n", "D", api_nvimtree.fs.trash, opts("Trash"))
 				vim.keymap.set("n", "D", function(node)
 					api_nvimtree.fs.trash(node)
-					api_nvimtree.tree.reload()
+          vim.defer_fn(function()
+            api_nvimtree.tree.reload()
+          end, 200)
 				end, opts("Trash"))
 				vim.keymap.set("n", "E", api_nvimtree.tree.expand_all, opts("Expand All"))
 				vim.keymap.set("n", "e", api_nvimtree.fs.rename_basename, opts("Rename: Basename"))
@@ -1002,7 +1021,14 @@ return {
 					debounce_delay = 100,
 					-- debounce_delay = 1000,
 					-- ignore_dirs = { "/target", "/.ccls-cache" },
-					ignore_dirs = { "/node_modules", "node_modules", "/target", "node_modules", "/Users/jgarcia/", "/Users/jgarcia" },
+					ignore_dirs = {
+						"/node_modules",
+						"node_modules",
+						"/target",
+						"node_modules",
+						"/Users/jgarcia/",
+						"/Users/jgarcia",
+					},
 				},
 				actions = {
 					use_system_clipboard = true,
