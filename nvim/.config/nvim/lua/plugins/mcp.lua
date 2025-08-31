@@ -22,34 +22,39 @@ return {
 	--   print("MCPHub: Setting workspace root to " .. workspace_root)
 	--   vim.fn.setenv("MCP_PROJECT_ROOT_PATH", workspace_root)
 	-- end,
-	init = function()
-		local wt_utils = require("jg.custom.worktree-utils")
-		local cwd = vim.loop.cwd()
-		local root_dir = cwd
-		local has_worktrees = wt_utils.has_worktrees(cwd)
-		if has_worktrees then
-			local file_utils = require("jg.custom.file-utils")
-			local key = vim.fn.fnamemodify(cwd or "", ":p")
-			local bps_path = file_utils.get_bps_path(key)
-			local data = file_utils.load_bps(bps_path)
-			if data == nil then
-				return
-			end
-			if next(data) == nil or data.last_active_wt == nil then
-				return
-			end
-			root_dir = data.last_active_wt
-		end
-		if root_dir ~= nil then
-			-- Set the environment variable before loading the config
-			-- Used by MCP servers that require project's root path as an argument
-			vim.fn.setenv("MCP_PROJECT_ROOT_PATH", root_dir)
-		end
-	end,
+	-- init = function()
+	-- 	local wt_utils = require("jg.custom.worktree-utils")
+	-- 	local cwd = vim.loop.cwd()
+	-- 	local root_dir = cwd
+	-- 	local has_worktrees = wt_utils.has_worktrees(cwd)
+	-- 	if has_worktrees then
+	-- 		local file_utils = require("jg.custom.file-utils")
+	-- 		local key = vim.fn.fnamemodify(cwd or "", ":p")
+	-- 		local bps_path = file_utils.get_bps_path(key)
+	-- 		local data = file_utils.load_bps(bps_path)
+	-- 		if data == nil then
+	-- 			return
+	-- 		end
+	-- 		if next(data) == nil or data.last_active_wt == nil then
+	-- 			return
+	-- 		end
+	-- 		root_dir = data.last_active_wt
+	-- 	end
+	-- 	if root_dir ~= nil then
+	-- 		-- Set the environment variable before loading the config
+	-- 		-- Used by MCP servers that require project's root path as an argument
+	-- 		vim.fn.setenv("MCP_PROJECT_ROOT_PATH", root_dir)
+	-- 	end
+	-- end,
 	opts = {
-		global_env = {
-			"GITHUB_PERSONAL_ACCESS_TOKEN",
-		}, -- Global environment variables available to all MCP servers (can be a table or a function returning a table)
+		-- global_env = {
+		-- 	"GITHUB_PERSONAL_ACCESS_TOKEN",
+		-- }, -- Global environment variables available to all MCP servers (can be a table or a function returning a table)
+    global_env = function(context)
+      return {
+        GH_ACTIONS_PAT = os.getenv("GH_ACTIONS_PAT") or "",
+      }
+    end,
 		-- port = 2389,
 		-- json_decode = require("json5").parse,
 		-- json_decode = require("overseer.json").decode,

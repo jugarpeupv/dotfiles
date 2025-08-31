@@ -356,7 +356,7 @@ return {
 			-- support for image pasting
 			"HakonHarnes/img-clip.nvim",
 		},
-		{ "ravitemer/mcphub.nvim" },
+		-- { "ravitemer/mcphub.nvim" },
 		{
 			-- Make sure to set this up properly if you have lazy=true
 			"MeanderingProgrammer/render-markdown.nvim",

@@ -10,7 +10,7 @@ return {
 		-- lazy = true,
 		-- branch = 'main',
 		-- build = ':TSUpdate',
-		-- event = { "BufReadPost", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		-- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
 		dependencies = {
 			{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
@@ -440,7 +440,9 @@ return {
 					"hurl",
           "markdown",
           "jproperties",
-          "properties"
+          "properties",
+          "codecompanion",
+          "bash"
 				},
 				callback = function()
           -- callback = function(ev)

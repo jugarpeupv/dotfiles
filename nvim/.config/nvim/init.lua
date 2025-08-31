@@ -102,4 +102,4 @@ require("jg.core.keymaps")
 -- })
 
 
-vim.cmd("source /Users/jgarcia/Downloads/proguard.vim")
+vim.cmd("source /Users/jgarcia/.config/nvim/lua/jg/custom/proguard.vim")

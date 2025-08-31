@@ -2,6 +2,12 @@ vim.g.ctrlsf_context = "-C 0"
 vim.g.ctrlsf_populate_qflist = 1
 vim.g.ctrlsf_auto_preview = 1
 vim.cmd([[let g:ctrlsf_auto_preview = 1]])
+
+vim.cmd([[let g:ctrlsf_extra_backend_args = {
+  \ 'rg': '--hidden'
+  \ }
+  ]])
+
 vim.g.ctrlsf_fold_result = 0
 -- vim.g.ctrlsf_preview_position = 'inside'
 vim.g.ctrlsf_auto_close = {
@@ -33,8 +39,10 @@ vim.g.ctrlsf_mapping = {
 return {
 	{
 		"dyng/ctrlsf.vim",
+    cmd = { "CtrlSFCwordPath", "CtrlSFToggle", "CtrlSF", "CtrlSFPrompt" },
 		keys = {
-			{ mode = { "n" }, "<leader>sf", "<Plug>CtrlSFCwordPath" },
+			{ mode = { "n" }, "<leader>sf", "<Plug>CtrlSFPrompt" },
+      -- { mode = { "n" }, "<leader>sf", "<Plug>CtrlSFCwordPath" },
 			{ mode = { "n" }, "<leader>st", "<cmd>CtrlSFToggle<cr>", desc = "CtrlSF Toggle" },
 		},
 		-- branch = "feature/add-devicon",

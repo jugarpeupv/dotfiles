@@ -62,17 +62,19 @@
 [mergetool "nvimdiff4"]
   cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 
-; [credential "https://github.com"]
-; 	helper = 
-; 	helper = !/opt/homebrew/bin/gh auth git-credential
-[credential "https://github.com"]
-	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
 [diff "lockb"]
 	binary = true
 	textconv = bun
 [color]
 	pager = yes
+
+
+; [credential "https://github.com"]
+; 	helper = 
+; 	helper = !/opt/homebrew/bin/gh auth git-credential
+; [credential "https://github.com"]
+; 	helper = 
+; 	helper = !/opt/homebrew/bin/gh auth git-credential
+; [credential "https://gist.github.com"]
+; 	helper = 
+; 	helper = !/opt/homebrew/bin/gh auth git-credential

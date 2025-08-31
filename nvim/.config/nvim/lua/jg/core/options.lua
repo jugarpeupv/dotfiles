@@ -5,6 +5,9 @@ opt.relativenumber = true -- show relative line numbers
 opt.number = true         -- shows absolute line number on cursor line (when relative number is on)
 -- opt.jumpoptions = 'clean'
 
+
+-- opt.guicursor="n-v-c-sm:block-Cursor,i-ci-ve:ver25,r-cr-o:hor20,t:block-blinkon500-blinkoff500-TermCursor"
+
 -- tabs & indentation
 opt.tabstop = 2      -- 2 spaces for tabs (prettier default)
 opt.shiftwidth = 2   -- 2 spaces for indent width

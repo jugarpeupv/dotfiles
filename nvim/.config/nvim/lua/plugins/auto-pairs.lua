@@ -30,10 +30,11 @@ return {
         disable_in_visualblock = true, -- disable when insert after visual block mode
         disable_in_replace_mode = true,
         -- ignored_next_char = "[%w%.%'%\"%`]",
-        ignored_next_char = "[=[[%w%%%'%[%\"%.%`%$]]=]",
+        -- ignored_next_char = "[=[[%w%%%'%[%\"%.%`%$]]=]",
+        ignored_next_char = "[%w%(%)%.%'%\"%[%]%$]",
         -- ignored_next_char = [=[[%w%%%'%[%"%.%`%$]]=],
         enable_moveright = true,
-        enable_afterquote = true,     -- add bracket pairs after quote
+        enable_afterquote = false,     -- add bracket pairs after quote
         enable_check_bracket_line = true, --- check bracket in same line
         enable_bracket_in_quote = true, --
         enable_abbr = false,          -- trigger abbreviation

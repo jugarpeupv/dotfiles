@@ -1,8 +1,8 @@
 -- return {}
 return {
   {
-
     "LunarVim/bigfile.nvim",
+    enabled = false,
     event = { "BufReadPre" },
     config = function()
       -- default config

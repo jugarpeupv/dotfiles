@@ -366,7 +366,12 @@ return {
 
 			-- used to enable autocompletion (assign to every lsp server config)
 			-- local capabilities = cmp_nvim_lsp.default_capabilities()
-			local capabilities = require("blink.cmp").get_lsp_capabilities()
+			-- local capabilities = require("blink.cmp").get_lsp_capabilities()
+			local blink_capabilities = require("blink.cmp").get_lsp_capabilities()
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			vim.tbl_deep_extend("force", capabilities, blink_capabilities)
+			capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false -- https://github.com/neovim/neovim/issues/23291
+
 			-- local capabilities = require('blink.cmp').get_lsp_capabilities()
 			-- capabilities.textDocument.foldingRange = {
 			--   dynamicRegistration = false,
@@ -477,9 +482,38 @@ return {
 				filetypes = { "myangular", "html", "templ", "htmlangular" },
 			})
 
+			-- require('lspconfig').npmls = {
+			--   default_config = {
+			--     cmd = { "npm-workspaces-language-server", "--stdio" },
+			--     filetypes = { "json", "packagejson" },
+			--     root_dir = require('lspconfig.util').root_pattern("package.json", ".git"),
+			--     -- single_file_support = false,
+			--   }
+			-- }
+			--
+			-- require('lspconfig').npmls.setup({})
+
 			require("lspconfig").vtsls.setup({
+				-- reuse_client = function() return true end,
 				settings = {
+					vtsls = {
+						enableMoveToFileCodeAction = true,
+						autoUseWorkspaceTsdk = true,
+						experimental = {
+							maxInlayHintLength = 30,
+							completion = {
+								enableServerSideFuzzyMatch = true,
+							},
+						},
+					},
 					typescript = {
+						updateImportsOnFileMove = { enabled = "always" },
+						suggest = {
+							completeFunctionCalls = true,
+						},
+						tsserver = {
+							maxTsServerMemory = 8192,
+						},
 						preferences = {
 							importModuleSpecifier = "relative",
 							importModuleSpecifierEnding = "minimal",
@@ -617,8 +651,8 @@ return {
 			lspconfig["bashls"].setup({
 				on_attach = on_attach,
 				capabilities = capabilities,
-        cmd = { 'bash-language-server', 'start' },
-        filetypes = { 'bash', 'sh' },
+				cmd = { "bash-language-server", "start" },
+				filetypes = { "bash", "sh", "yaml.github" },
 				handlers = {
 					["textDocument/publishDiagnostics"] = function(err, res, ...)
 						local file_name = vim.fn.fnamemodify(vim.uri_to_fname(res.uri), ":t")
@@ -786,25 +820,52 @@ return {
 				},
 			})
 
+			local function get_init_options()
+				local init_options = require("jg.custom.lsp-utils").get_gh_actions_init_options()
+				return init_options
+			end
+
 			require("lspconfig").gh_actions_ls.setup({
-				-- capabilities = capabilities,
-				capabilities = {
+				capabilities = vim.tbl_deep_extend("force", capabilities, {
 					workspace = {
 						didChangeWorkspaceFolders = {
 							dynamicRegistration = true,
 						},
 					},
+				}),
+				handlers = {
+					["actions/readFile"] = function(_, result)
+						if type(result.path) ~= "string" then
+							return nil, nil
+						end
+						local file_path = vim.uri_to_fname(result.path)
+						if vim.fn.filereadable(file_path) == 1 then
+							local content = vim.fn.readfile(file_path)
+							local text = table.concat(content, "\n")
+							return text, nil
+						end
+						return nil, nil
+					end,
 				},
 				on_attach = on_attach,
-				filetypes = { "yaml.github" }, -- Use a custom filetype for GitHub Actions
-				single_file_support = true,
-				cmd = { home .. "/.local/share/nvim/mason/bin/gh-actions-language-server", "--stdio" },
+				init_options = get_init_options(),
 				-- init_options = {
-				--   sessionToken = os.getenv("GH_TOKEN"),
+				-- 	sessionToken = session_token,
+				-- 	repos = {
+				-- 		{
+				-- 			id = 1008200293,
+				-- 			owner = "mapfre-tech",
+				-- 			name = "arch-ram-reusable-workflows-front",
+				-- 			workspaceUri = "file://" .. vim.fn.getcwd(),
+				-- 			organizationOwned = true,
+				-- 		},
+				-- 	},
 				-- },
+
+				filetypes = { "yaml.github" },
+				cmd = { home .. "/.local/share/nvim/mason/bin/gh-actions-language-server", "--stdio" },
 				settings = {
 					yaml = {
-						-- schemas = require("schemastore").json.schemas({}),
 						format = {
 							enable = true,
 						},

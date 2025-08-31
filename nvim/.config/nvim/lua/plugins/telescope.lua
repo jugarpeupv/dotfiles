@@ -29,18 +29,17 @@ return {
 							use_cwd = true,
 							sorting = "frecency",
 						},
-						["git_worktree#create_git_worktree"] = { -- enable man_pages picker. Disable cwd and use frecency sorting.
+						["git_worktree#create_git_worktree"] = {
 							disable = false,
 							use_cwd = true,
 							sorting = "frecency",
 						},
 
-						-- ["git_worktree#git_worktree"] = { -- enable man_pages picker. Disable cwd and use frecency sorting.
-						-- 	disable = false,
-						-- 	use_cwd = true,
-						-- 	sorting = "recent",
-						-- },
-
+						["git_worktree#git_worktree"] = {
+							disable = false,
+							use_cwd = true,
+							sorting = "recent",
+						},
 						man_pages = { -- enable man_pages picker. Disable cwd and use frecency sorting.
 							disable = false,
 							use_cwd = false,

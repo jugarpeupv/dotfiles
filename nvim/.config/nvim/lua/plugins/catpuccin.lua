@@ -118,6 +118,7 @@ return {
 						IlluminatedWordRead = { bg = "#394b70" },
 						IlluminatedWordWrite = { bg = "#394b70" },
 						illuminatedCurWord = { bg = "#394b70" },
+            Cursor  = { bg = "#a9b1d6" },
 						illuminatedWord = { bg = "#394b70" },
 						RenderMarkdownCode = { bg = "#1f2335" },
 						-- Folded = { bg = "#1f2335", fg = "#737aa2" },
