@@ -55,7 +55,13 @@ M.attach_lsp_config = function(client, bufnr)
 	keymap.set("n", "gH", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 
 	-- keymap.set("n", "gR", "<cmd>Trouble lsp_references<cr>", opts)
-	keymap.set("n", "gR", "<cmd>lua vim.lsp.buf.references({ context = { includeDeclaration = false } })<cr>", opts)
+	-- keymap.set("n", "gR", "<cmd>lua vim.lsp.buf.references({ context = { includeDeclaration = false } })<cr>", opts)
+	vim.keymap.set({ "n" }, "gR", function()
+		-- vim.lsp.buf.references({ context = {
+		-- 	includeDeclaration = false,
+		-- } })
+    vim.lsp.buf.references()
+	end, opts)
 	-- keymap.set("n", "<leader>fo", "<cmd>lua vim.lsp.buf.format({ async = true})<cr>", opts)
 	keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 	-- keymap.set("n", "<Leader>re", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
@@ -204,7 +210,7 @@ local function fetch_github_repo(repo_name, token, org, workspace_path)
 
 	local ok, data = pcall(vim.json.decode, raw_json)
 	if not ok or type(data) ~= "table" then
-		print("Failed to decode JSON from GitHub API")
+		-- print("Failed to decode JSON from GitHub API")
 		return {}
 	end
 
@@ -226,12 +232,12 @@ M.get_gh_actions_init_options = function(org, workspace_path, session_token)
 	local function get_repo_name()
 		local handle = io.popen("git remote get-url origin 2>/dev/null")
 		if not handle then
-			return nil
+			return vim.loop.cwd()
 		end
 		local result = handle:read("*a")
 		handle:close()
 		if not result or result == "" then
-			return nil
+			return vim.loop.cwd()
 		end
 		-- Remove trailing newline
 		result = result:gsub("%s+$", "")

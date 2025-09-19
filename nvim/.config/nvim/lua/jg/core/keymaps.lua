@@ -164,12 +164,12 @@ end, opts)
 -- keymap("n", "sf", "<cmd>Telescope file_browser<cr>", opts)
 -- keymap("n", "sb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", opts)
 
-vim.keymap.set({ "n" }, "so", function()
-	require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
-end, opts)
-
 vim.keymap.set({ "n" }, "<leader>fw", function()
 	require("jg.custom.telescope").telescope_file_picker_in_workspace(vim.fn.expand("~"))
+end, opts)
+
+vim.keymap.set({ "n" }, "so", function()
+	require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
 end, opts)
 
 vim.keymap.set({ "n" }, "sh", function()
@@ -490,6 +490,7 @@ end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bi", function()
 	require("telescope.builtin").buffers({
+		prompt_title = "< IBuffers >",
 		ignore_current_buffer = false,
 		show_all_buffers = true,
 		sort_mru = true,
@@ -673,7 +674,7 @@ vim.keymap.set("n", "<leader>gb", function()
 			map({ "i", "n" }, "<c-r>", actions.git_rebase_branch)
 			map({ "i", "n" }, "<c-a>", actions.git_create_branch)
 			map({ "i", "n" }, "<c-s>", actions.git_switch_branch)
-      map({ "i", "n" }, "<c-d>", false)
+			map({ "i", "n" }, "<c-d>", false)
 			map({ "i", "n" }, "<c-x>", actions.git_delete_branch)
 			map({ "i", "n" }, "<c-y>", actions.git_merge_branch)
 			return true
@@ -732,8 +733,10 @@ keymap("n", "<leader>gc", function()
 end, opts)
 
 -- Hop
-vim.api.nvim_set_keymap("n", "S", "<cmd>lua require'hop'.hint_words()<cr>", opts)
--- vim.api.nvim_set_keymap("n", "<leader>ww", "<cmd>lua require'hop'.hint_words()<cr>", opts)
+-- vim.api.nvim_set_keymap("n", "S", "<cmd>lua require'hop'.hint_words()<cr>", opts)
+vim.keymap.set("n", "<leader>ww", function()
+	require("hop").hint_words()
+end, opts)
 
 -- JsonPath
 keymap("n", "<leader>cp", "<cmd>JsonPath<CR>", opts)
@@ -1797,3 +1800,6 @@ end, opts)
 vim.keymap.set({ "n" }, "<leader>ge", function()
 	vim.cmd("e ~/.gitconfig")
 end, opts)
+
+-- vim.keymap.set("n", "<C-I>", "<C-I>", { noremap = true })
+-- vim.keymap.set("n", "<C-M>", "<C-M>", { noremap = true })

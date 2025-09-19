@@ -18,10 +18,11 @@ return {
 	build = "make tiktoken", -- Only on MacOS or Linux
 	opts = {
 		default = { "copilot" },
+    -- temperature = 0.1,           -- Lower = focused, higher = creative
 		chat_autocomplete = true,
 		highlight_selection = true, -- Highlight selection
 		highlight_headers = true, --
-    selection = 'visual',
+    -- selection = 'visual',
 		-- selection = function(source)
 		-- 	-- return require("CopilotChat.select").visual(source) or require("CopilotChat.select").line(source)
 		-- 	return require("CopilotChat.select").visual(source) or require("CopilotChat.select").buffer(source)
@@ -160,47 +161,48 @@ return {
 		},
 
 		-- { "<leader>ct", mode = { "n", "v" }, "<cmd>CopilotChatToggle<CR>", desc = "Toggle Copilot" },
+		-- {
+		-- 	"<leader>aa",
+		-- 	mode = { "t" },
+		-- 	function()
+		-- 		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", false)
+		-- 		-- local chat = require("CopilotChat")
+		-- 		-- chat.toggle()
+		-- 		local chat = require("CopilotChat")
+		--
+		-- 		local cwd = vim.fn.getcwd()
+		-- 		local wt_utils = require("jg.custom.worktree-utils")
+		-- 		local wt_info = wt_utils.get_wt_info(cwd)
+		--
+		-- 		if next(wt_info) == nil then
+		-- 			vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+		-- 		else
+		-- 			vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
+		-- 		end
+		--
+		-- 		-- print("<leader>ct vim.g.chat_title: ", vim.g.chat_title)
+		--
+		-- 		local existing_chat_path = vim.fn.stdpath("data")
+		-- 			.. "/copilotchat_history/"
+		-- 			.. vim.g.chat_title
+		-- 			.. ".json"
+		-- 		-- print("existing_chat_path: ", existing_chat_path)
+		--
+		-- 		local chat_exits = wt_utils.file_exists(existing_chat_path)
+		--
+		-- 		if chat_exits then
+		-- 			chat.toggle()
+		-- 			chat.load(vim.g.chat_title)
+		-- 		else
+		-- 			chat.toggle()
+		-- 		end
+		-- 	end,
+		-- 	desc = "Toggle Copilot",
+		-- },
 		{
-			"<M-m>",
-			mode = { "t" },
-			function()
-				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", false)
-				-- local chat = require("CopilotChat")
-				-- chat.toggle()
-				local chat = require("CopilotChat")
-
-				local cwd = vim.fn.getcwd()
-				local wt_utils = require("jg.custom.worktree-utils")
-				local wt_info = wt_utils.get_wt_info(cwd)
-
-				if next(wt_info) == nil then
-					vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
-				else
-					vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
-				end
-
-				-- print("<leader>ct vim.g.chat_title: ", vim.g.chat_title)
-
-				local existing_chat_path = vim.fn.stdpath("data")
-					.. "/copilotchat_history/"
-					.. vim.g.chat_title
-					.. ".json"
-				-- print("existing_chat_path: ", existing_chat_path)
-
-				local chat_exits = wt_utils.file_exists(existing_chat_path)
-
-				if chat_exits then
-					chat.toggle()
-					chat.load(vim.g.chat_title)
-				else
-					chat.toggle()
-				end
-			end,
-			desc = "Toggle Copilot",
-		},
-		{
-			"<M-m>",
-			mode = { "n", "v", "t" },
+			"<leader>aa",
+			-- mode = { "n", "v", "t" },
+      mode = { "n", "v" },
 			function()
 				-- local chat = require("CopilotChat")
 				-- chat.toggle()

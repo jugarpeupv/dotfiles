@@ -13,6 +13,13 @@ return {
 		event = { "BufReadPost", "BufNewFile" },
 		-- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
 		dependencies = {
+      {
+        'daliusd/incr.nvim',
+        opts = {
+          incr_key = '<cr>', -- increment selection key
+          decr_key = '<bs>', -- decrement selection key
+        },
+      },
 			{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
 			-- "RRethy/nvim-treesitter-endwise",
 			{ "cfdrake/vim-pbxproj" },
@@ -442,7 +449,14 @@ return {
           "jproperties",
           "properties",
           "codecompanion",
-          "bash"
+          "bash",
+          "html",
+          "htmlangular",
+          "scss",
+          "css",
+          "groovy",
+          "Avante",
+          "dockerfile"
 				},
 				callback = function()
           -- callback = function(ev)

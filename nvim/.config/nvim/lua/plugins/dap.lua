@@ -547,9 +547,9 @@ return {
 				dapui.open()
 			end
 
-			dap.listeners.before.attach["dapui_config"] = function()
-			  dapui.open()
-			end
+			-- dap.listeners.before.attach["dapui_config"] = function()
+			--   dapui.open()
+			-- end
 			--
 			-- dap.listeners.before.launch["dapui_config"] = function()
 			--   dapui.open()
@@ -572,6 +572,7 @@ return {
 			vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
 			vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
 			vim.api.nvim_set_hl(0, "DapStoppedText", { ctermbg = 0, fg = "#aa8430", bg = "none" })
+      vim.api.nvim_set_hl(0, "DapRejected", { ctermbg = 0, fg = "#89ddff", bg = "none" })
 			-- vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#664f1d" })
 
 			vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#1a3754" })
@@ -583,7 +584,7 @@ return {
 
 			-- vim.fn.sign_define("DapStopped", { text = "⇒", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" })
 			local signs = {
-				DapBreakpointRejected = { text = "⊚", texthl = "", linehl = "", numhl = "" },
+				DapBreakpointRejected = { text = "⊚", texthl = "DapRejected", linehl = "", numhl = "" },
 				DapBreakpoint = { text = "", texthl = "DapBreakpoint2", linehl = "", numhl = "" },
 				-- DapStopped = { text = "", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" },
 			}

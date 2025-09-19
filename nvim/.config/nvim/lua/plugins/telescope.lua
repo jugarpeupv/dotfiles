@@ -400,231 +400,18 @@ return {
 		-- event = "VeryLazy",
 		config = function()
 			local open_with_trouble = require("trouble.sources.telescope").open
-			-- local egrep_actions = require("telescope._extensions.egrepify.actions")
-
 			local fb_actions = require("telescope").extensions.file_browser.actions
-
 			local status_ok, telescope = pcall(require, "telescope")
 			if not status_ok then
 				return
 			end
 
+      local telescope_image_preview = require("jg.custom.telescope").telescope_image_preview()
+
 			local actions = require("telescope.actions")
 			local actions_live_grep_args = require("telescope-live-grep-args.actions")
-			-- local image_preview = require("jg.custom.telescope").telescope_image_preview()
-
-			-- local action_state = require("telescope.actions.state")
-			--
-			-- local append_to_history = function(prompt_bufnr)
-			-- 	action_state
-			-- 		.get_current_history()
-			-- 		:append(action_state.get_current_line(), action_state.get_current_picker(prompt_bufnr))
-			-- end
-			--
-			-- local action_set = require("telescope.actions.set")
-			--
-			-- local open_after_tree = {
-			-- 	pre = append_to_history,
-			-- 	action = function(prompt_bufnr)
-			-- 		vim.defer_fn(function()
-			-- 			return action_set.select(prompt_bufnr, "default")
-			-- 		end, 0)
-			-- 	end,
-			-- }
-
-			local open_after_tree = function(prompt_bufnr)
-				vim.defer_fn(function()
-					actions.select_default(prompt_bufnr)
-				end, 0)
-				-- local entry = action_state.get_selected_entry()
-				-- actions.close(prompt_bufnr)
-				--
-				-- vim.defer_fn(function()
-				--   vim.cmd("edit " .. vim.fn.fnameescape(entry.path or entry.value))
-				-- end, 0) -- Delay allows filetype and plugins to settle before opening
-			end
 
 			telescope.setup({
-				-- defaults = {
-				--     -- prompt_prefix = " ",
-				--     prompt_prefix = "> ",
-				--     history = {
-				--       path = "~/.local/share/nvim/databases/telescope_history.sqlite3",
-				--       limit = 50,
-				--     },
-				--     selection_caret = " ",
-				--     initial_mode = "insert",
-				--     cache_picker = { limit_entries = 100 },
-				--     scroll_strategy = "limit",
-				--     -- file_ignore_patterns = { "node_modules" },
-				--     -- file_ignore_patterns = { "%__template__" },
-				--     -- path_display = { "smart" },
-				--     -- path_display = { "tail" },
-				--     -- path_display = { shorten = { len = 5, exclude = { -1 } } },
-				--     -- path_display = { shorten = { len = 3, exclude = { -1 } } },
-				--     -- path_display = { "hidden" },
-				--     path_display = { truncate = 5 },
-				--     wrap_results = false,
-				--     vimgrep_arguments = {
-				--       "rg",
-				--       -- "--color=never",
-				--       "--no-heading",
-				--       "--with-filename",
-				--       "--line-number",
-				--       "--column",
-				--       "--smart-case",
-				--     },
-				--     file_previewer = image_preview.file_previewer,
-				--     buffer_previewer_maker = image_preview.buffer_previewer_maker,
-				--     -- layout_strategy = 'bottom_pane',
-				--     -- layout_config = {
-				--     --   height = 0.53,
-				--     -- },
-				--
-				--     -- layout_strategy = "horizontal",
-				--     sorting_strategy = "ascending",
-				--     layout_config = {
-				--       horizontal = { width = 0.98, height = 0.85, preview_width = 0.35, prompt_position = "top" },
-				--       vertical = { width = 0.90, height = 0.85, preview_height = 0.35 },
-				--       center = { width = 0.99, height = 0.85 },
-				--       bottom_pane = { width = 0.90, height = 0.85 },
-				--       prompt_position = "top",
-				--     },
-				--     preview = {
-				--       filesize_limit = 1, -- MB
-				--       hide_on_startup = false,
-				--       -- 1) Do not show previewer for certain files
-				--       filetype_hook = function(filepath, bufnr, opts)
-				--         -- you could analogously check opts.ft for filetypes
-				--         local putils = require("telescope.previewers.utils")
-				--         local excluded = vim.tbl_filter(function(ending)
-				--           return filepath:match(ending)
-				--         end, {
-				--             ".*%.pdf",
-				--             ".*%.docx",
-				--             ".*%.csv",
-				--             ".*%.toml",
-				--           })
-				--         if not vim.tbl_isempty(excluded) then
-				--           putils.set_preview_message(
-				--             bufnr,
-				--             opts.winid,
-				--             string.format("I don't like %s files!", excluded[1]:sub(5, -1))
-				--           )
-				--           return false
-				--         end
-				--         return true
-				--       end,
-				--       -- 2) Truncate lines to preview window for too large files
-				--       filesize_hook = function(filepath, bufnr, opts)
-				--         local path = require("plenary.path"):new(filepath)
-				--         -- opts exposes winid
-				--         local height = vim.api.nvim_win_get_height(opts.winid)
-				--         local lines = vim.split(path:head(height), "[\r]?\n")
-				--         vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
-				--       end,
-				--     },
-				--     mappings = {
-				--       i = {
-				--         ["<C-space>"] = actions.to_fuzzy_refine,
-				--         ["<C-n>"] = actions.cycle_history_next,
-				--         ["<C-p>"] = actions.cycle_history_prev,
-				--
-				--         ["<C-j>"] = actions.move_selection_next,
-				--         ["<C-k>"] = actions.move_selection_previous,
-				--
-				--         ["<C-c>"] = actions.close,
-				--
-				--         ["<Down>"] = actions.move_selection_next,
-				--         ["<Up>"] = actions.move_selection_previous,
-				--
-				--         ["<CR>"] = actions.select_default,
-				--         ["<C-s>"] = actions.select_horizontal,
-				--         ["<C-v>"] = actions.select_vertical,
-				--         -- ["<C-Enter>"] = actions.select_vertical,
-				--         ["<C-t>"] = actions.select_tab,
-				--         -- ["<C-t>"] = trouble.open_with_trouble,
-				--         ["<C-e>"] = open_with_trouble,
-				--         ["<C-w>"] = require("telescope.actions.layout").toggle_preview,
-				--         -- ["<C-t>"] = trouble.open_with_trouble,
-				--
-				--         -- ["<C-u>"] = actions.preview_scrolling_up,
-				--         -- ["<C-d>"] = actions.preview_scrolling_down,
-				--
-				--         -- ["<C-u>"] = actions.results_scrolling_up,
-				--         -- ["<C-d>"] = actions.results_scrolling_down,
-				--         ["<C-u>"] = function(prompt_bufnr)
-				--           for _ = 1, 5 do
-				--             actions.move_selection_previous(prompt_bufnr)
-				--           end
-				--         end,
-				--         ["<C-d>"] = function(prompt_bufnr)
-				--           for _ = 1, 5 do
-				--             actions.move_selection_next(prompt_bufnr)
-				--           end
-				--         end,
-				--
-				--         ["<PageUp>"] = actions.preview_scrolling_up,
-				--         ["<PageDown>"] = actions.preview_scrolling_down,
-				--
-				--         ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-				--         ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-				--
-				--         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-				--         ["<C-y>"] = actions.send_selected_to_qflist + actions.open_qflist,
-				--         ["<C-x>"] = "delete_buffer",
-				--         -- ["<C-l>"] = actions.complete_tag,
-				--         ["<C-h>"] = actions.which_key, -- keys from pressing <C-/>
-				--         ["<C-a>"] = actions.git_create_branch,
-				--       },
-				--
-				--       n = {
-				--         ["<esc>"] = actions.close,
-				--         ["<CR>"] = actions.select_default,
-				--         ["<C-s>"] = actions.select_horizontal,
-				--         ["<C-v>"] = actions.select_vertical,
-				--         -- ["<C-Enter>"] = actions.select_vertical,
-				--         ["<C-t>"] = actions.select_tab,
-				--         -- ["<C-t>"] = trouble.open_with_trouble,
-				--         ["<C-e>"] = open_with_trouble,
-				--
-				--         ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-				--         ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-				--         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-				--         ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-				--
-				--         ["j"] = actions.move_selection_next,
-				--         ["k"] = actions.move_selection_previous,
-				--         ["H"] = actions.move_to_top,
-				--         ["M"] = actions.move_to_middle,
-				--         ["L"] = actions.move_to_bottom,
-				--         ["<BS>"] = "delete_buffer",
-				--         ["<C-x>"] = "delete_buffer",
-				--
-				--         ["<C-j>"] = actions.move_selection_next,
-				--         ["<C-k>"] = actions.move_selection_previous,
-				--
-				--         ["<Down>"] = actions.move_selection_next,
-				--         ["<Up>"] = actions.move_selection_previous,
-				--         ["gg"] = actions.move_to_top,
-				--         ["G"] = actions.move_to_bottom,
-				--
-				--         -- ["<C-u>"] = actions.preview_scrolling_up,
-				--         -- ["<C-d>"] = actions.preview_scrolling_down,
-				--
-				--         -- ["<PageUp>"] = actions.results_scrolling_up,
-				--         -- ["<PageDown>"] = actions.results_scrolling_down,
-				--
-				--         ["<C-u>"] = actions.results_scrolling_up,
-				--         ["<C-d>"] = actions.results_scrolling_down,
-				--
-				--         ["<PageUp>"] = actions.preview_scrolling_up,
-				--         ["<PageDown>"] = actions.preview_scrolling_down,
-				--
-				--         ["?"] = actions.which_key,
-				--       },
-				--     },
-				--   },
 				defaults = vim.tbl_extend(
 					"force",
 					require("telescope.themes").get_ivy(), -- or get_cursor, get_ivy
@@ -639,13 +426,6 @@ return {
 						initial_mode = "insert",
 						cache_picker = { limit_entries = 100 },
 						scroll_strategy = "limit",
-						-- file_ignore_patterns = { "node_modules" },
-						-- file_ignore_patterns = { "%__template__" },
-						-- path_display = { "smart" },
-						-- path_display = { "tail" },
-						-- path_display = { shorten = { len = 5, exclude = { -1 } } },
-						-- path_display = { shorten = { len = 3, exclude = { -1 } } },
-						-- path_display = { "hidden" },
 						path_display = { truncate = 5 },
 						wrap_results = false,
 						vimgrep_arguments = {
@@ -657,8 +437,11 @@ return {
 							"--column",
 							"--smart-case",
 						},
-						-- file_previewer = image_preview.file_previewer,
-						-- buffer_previewer_maker = image_preview.buffer_previewer_maker,
+            -- file_previewer = file_previewer,
+            -- buffer_previewer_maker = M.buffer_previewer_maker,
+						-- file_previewer = telescope_image_preview.file_previewer,
+						buffer_previewer_maker = telescope_image_preview.buffer_previewer_maker,
+            -- buffer_previewer_maker = image_preview,
 						-- layout_strategy = 'bottom_pane',
 						-- layout_config = {
 						--   height = 0.53,
@@ -677,13 +460,40 @@ return {
 							filesize_limit = 1, -- MB
 							-- highlight_limit = 0.5, -- MB
 							hide_on_startup = false,
-							timeout = 100,
+							-- timeout = 100,
 							-- treesitter = false,
 							-- treesitter = {
 							--   enable = false
 							-- },
 							-- 1) Do not show previewer for certain files
-
+							-- mime_hook = function(filepath, bufnr, opts)
+							--          print('hi')
+							-- 	local is_image = function(mypath)
+							-- 		local image_extensions = { "png", "jpg" } -- Supported image formats
+							-- 		local split_path = vim.split(mypath:lower(), ".", { plain = true })
+							-- 		local extension = split_path[#split_path]
+							-- 		return vim.tbl_contains(image_extensions, extension)
+							-- 	end
+							-- 	if is_image(filepath) then
+							--            print('ho')
+							-- 		local term = vim.api.nvim_open_term(bufnr, {})
+							-- 		local function send_output(_, data, _)
+							-- 			for _, d in ipairs(data) do
+							-- 				vim.api.nvim_chan_send(term, d .. "\r\n")
+							-- 			end
+							-- 		end
+							-- 		vim.fn.jobstart({
+							-- 			"catimg",
+							-- 			filepath, -- Terminal image viewer command
+							-- 		}, { on_stdout = send_output, stdout_buffered = true, pty = true })
+							-- 	else
+							-- 		require("telescope.previewers.utils").set_preview_message(
+							-- 			bufnr,
+							-- 			opts.winid,
+							-- 			"Binary cannot be previewed"
+							-- 		)
+							-- 	end
+							-- end,
 							filetype_hook = function(filepath, bufnr, opts)
 								-- you could analogously check opts.ft for filetypes
 								local putils = require("telescope.previewers.utils")
@@ -729,7 +539,7 @@ return {
 								["<Up>"] = actions.move_selection_previous,
 
 								-- ["<CR>"] = actions.select_default,
-								["<CR>"] = open_after_tree,
+								-- ["<CR>"] = open_after_tree,
 								["<C-s>"] = actions.select_horizontal,
 								["<C-v>"] = actions.select_vertical,
 								-- ["<C-Enter>"] = actions.select_vertical,
@@ -771,7 +581,7 @@ return {
 							n = {
 								["<esc>"] = actions.close,
 								-- ["<CR>"] = actions.select_default,
-								["<CR>"] = open_after_tree,
+								-- ["<CR>"] = open_after_tree,
 								["<C-s>"] = actions.select_horizontal,
 								["<C-v>"] = actions.select_vertical,
 								-- ["<C-Enter>"] = actions.select_vertical,

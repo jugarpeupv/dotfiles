@@ -369,17 +369,23 @@ M.telescope_image_preview = function()
 	end
 
 	local create_image = function(filepath, winid, bufnr)
-		image = image_api.hijack_buffer(filepath, winid, bufnr)
+    delete_image()
+		-- image = image_api.hijack_buffer(filepath, winid, bufnr)
+    vim.schedule(function()
+      local winid_custom = vim.fn.bufwinid(bufnr)
+      image = image_api.hijack_buffer(filepath, winid_custom, bufnr)
+      -- image = image_api.from_file(filepath, { window = winid_custom, buffer = bufnr })
+      if not image then
+        print("not image")
+        return
+      end
 
-		if not image then
-			return
-		end
+      vim.schedule(function()
+        image:render()
+      end)
 
-		vim.schedule(function()
-			image:render()
-		end)
-
-		is_image_preview = true
+      is_image_preview = true
+    end)
 	end
 
 	local function defaulter(f, default_opts)
@@ -420,18 +426,30 @@ M.telescope_image_preview = function()
 				return from_entry.path(entry, true)
 			end,
 
-			define_preview = function(self, entry, _)
-				local p = from_entry.path(entry, true)
-				if p == nil or p == "" then
-					return
-				end
+			-- define_preview = function(self, entry, _)
+			-- 	local p = from_entry.path(entry, true)
+			-- 	if p == nil or p == "" then
+			-- 		return
+			-- 	end
+			--
+			-- 	conf.buffer_previewer_maker(p, self.state.bufnr, {
+			-- 		bufname = self.state.bufname,
+			-- 		winid = self.state.winid,
+			-- 		preview = opts.preview,
+			-- 	})
+			-- end,
 
-				conf.buffer_previewer_maker(p, self.state.bufnr, {
-					bufname = self.state.bufname,
-					winid = self.state.winid,
-					preview = opts.preview,
-				})
-			end,
+      define_preview = function(self, entry, _)
+        local filepath = entry.value
+        if is_supported_image(filepath) then
+          create_image(filepath, self.state.winid, self.state.bufnr)
+        else
+          require("telescope.previewers").buffer_previewer_maker(filepath, self.state.bufnr, {
+            bufname = self.state.bufname,
+            winid = self.state.winid,
+          })
+        end
+      end,
 
 			teardown = function(_)
 				if is_image_preview then
@@ -450,8 +468,12 @@ M.telescope_image_preview = function()
 		last_file_path = filepath
 
 		if is_supported_image(filepath) then
-			filepath = string.gsub(filepath, " ", "%%20"):gsub("\\", "")
-			create_image(filepath, opts.winid, bufnr)
+			-- filepath = string.gsub(filepath, " ", "%%20"):gsub("\\", "")
+
+      local winid = vim.fn.bufwinid(bufnr)
+      print("winid, ", winid)
+			create_image(filepath, winid, bufnr)
+		-- create_image(filepath, winid, bufnr)
 		else
 			previewers.buffer_previewer_maker(filepath, bufnr, opts)
 		end
@@ -859,7 +881,7 @@ M.nvimtree_fzf_dir = function(path)
 		".git",
 		"--exclude",
 		"node_modules",
-    "--no-ignore",
+		"--no-ignore",
 		"--max-depth",
 		"4",
 		"--hidden",

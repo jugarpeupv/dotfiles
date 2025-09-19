@@ -20,7 +20,7 @@ return {
 		},
 		lazy = true,
 		keys = {
-			{ "<Tab>", mode = "n" },
+			-- { "<Tab>", mode = "n" },
 			{ "P", mode = "n" },
 		},
 		config = function()
@@ -54,7 +54,7 @@ return {
 				-- All keymaps are set in normal mode. Other modes are not currently supported.
 				keymaps = {
 					["<Esc>"] = { action = "close", unwatch = true },
-					["<Tab>"] = { action = "toggle_focus" },
+					-- ["<Tab>"] = { action = "toggle_focus" },
 					["<CR>"] = { open = "edit" },
 					["<C-t>"] = { open = "tab" },
 					["<C-v>"] = { open = "vertical" },
@@ -450,17 +450,17 @@ return {
 				end, opts("Scroll Up"))
 
 				-- Option A: Smart tab behavior: Only preview files, expand/collapse directories (recommended)
-				vim.keymap.set("n", "<Tab>", function()
-					local ok, node = pcall(api_nvimtree.tree.get_node_under_cursor)
-					if ok and node then
-						if node.type == "directory" then
-							api_nvimtree.node.open.edit()
-						else
-							local preview = require("nvim-tree-preview")
-							preview.node(node, { toggle_focus = true })
-						end
-					end
-				end, opts("Preview"))
+				-- vim.keymap.set("n", "<Tab>", function()
+				-- 	local ok, node = pcall(api_nvimtree.tree.get_node_under_cursor)
+				-- 	if ok and node then
+				-- 		if node.type == "directory" then
+				-- 			api_nvimtree.node.open.edit()
+				-- 		else
+				-- 			local preview = require("nvim-tree-preview")
+				-- 			preview.node(node, { toggle_focus = true })
+				-- 		end
+				-- 	end
+				-- end, opts("Preview"))
 
 				-- Option B: Simple tab behavior: Always preview
 				-- vim.keymap.set('n', '<Tab>', preview.node_under_cursor, opts 'Preview')
@@ -732,10 +732,10 @@ return {
 				vim.keymap.set("n", "<C-e>", "", { buffer = bufnr })
 				vim.keymap.del("n", "<C-e>", { buffer = bufnr })
 
-				vim.keymap.set("n", "<C-i>", "", { buffer = bufnr })
+				vim.keymap.set("n", "<C-i>", "<C-i>", { buffer = bufnr })
 				-- vim.keymap.del("n", "<C-i>", "", { buffer = bufnr })
 
-				vim.keymap.set("n", "<C-o>", "", { buffer = bufnr })
+				vim.keymap.set("n", "<C-o>", "<C-o>", { buffer = bufnr })
 				-- vim.keymap.del("n", "<C-o>", { buffer = bufnr })
 
 				-- vim.keymap.set('n', '<C-k>', '', { buffer = bufnr })

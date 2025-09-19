@@ -488,11 +488,27 @@ vim.keymap.set("n", "<leader>ee", function()
 	open_dir_history()
 end, { noremap = true, silent = true })
 
-
 vim.api.nvim_create_autocmd("ModeChanged", {
 	desc = "Highlighting matched words when searching",
 	pattern = { "t:nt" },
 	callback = function(ev)
 		vim.wo.cursorline = true
+	end,
+})
+
+vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
+	desc = "Autosave",
+	callback = function(ev)
+    -- local winid = vim.api.nvim_get_current_win()  -- Get the current window ID
+    -- print("Window ID:", winid)                   -- Debug print to check the value
+
+    local win_id = vim.fn.win_findbuf(ev.buf)[1] -- Get the window ID(s) displaying the buffer
+    -- print("win_id:", vim.inspect(win_id))  -- Debug print to check the value
+
+		vim.cmd("wa")
+    -- require("barbecue.ui").update(winid)
+    require("barbecue.ui").update(win_id)
+		-- vim.defer_fn(function()
+		-- end, 200)
 	end,
 })

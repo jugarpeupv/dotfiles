@@ -1,5 +1,5 @@
 return {
-  -- require("plugins.ai.avante"),
+  require("plugins.ai.avante"),
   require("plugins.ai.copilotchat"),
   require("plugins.ai.codecompanion"),
   -- require("plugins.ai.gp"),

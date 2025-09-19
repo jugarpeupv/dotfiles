@@ -250,6 +250,12 @@ return {
 					name = "gradle",
 					color = "#89B4FA",
 				},
+        c = {
+          -- icon = "",
+          icon = "",
+          name = "c",
+          color = "#9CDCFE",
+        },
 				bat = {
 					-- icon = "",
 					icon = "",
@@ -352,6 +358,7 @@ return {
 				},
 
 				["tmux.conf"] = { icon = "", color = "#9CDCFE", name = "tmuxconf1" },
+        [".sdkmanrc"] = { icon = "", color = "#7C7F93", name = "sdkman" },
 				["docker-compose.yml"] = { icon = "󰡨", color = "#9CDCFE", name = "DockerComposeYml" },
 				["docker-compose.yaml"] = { icon = "󰡨", color = "#9CDCFE", name = "DockerComposeYml2" },
 				[".dockerignore"] = { icon = "", color = "#9CDCFE", name = "DockerfileIgnore" },

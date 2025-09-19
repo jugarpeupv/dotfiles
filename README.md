@@ -14,7 +14,6 @@
 - `skhd`: https://github.com/koekeishiya/skhd?tab=readme-ov-file#install
 - `tmux`: https://github.com/tmux/tmux?tab=readme-ov-file#installation
 
-
 ## Usage
 
 1- Clone the repository into `$HOME` directory

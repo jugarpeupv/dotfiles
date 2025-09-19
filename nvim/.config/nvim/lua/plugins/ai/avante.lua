@@ -1,5 +1,6 @@
 return {
 	"yetone/avante.nvim",
+  lazy = true,
 	enabled = function()
 		local is_headless = #vim.api.nvim_list_uis() == 0
 		if is_headless then
@@ -8,7 +9,8 @@ return {
 		return true
 	end,
 	-- event = "BufReadPost",
-	version = "*",
+	-- version = "*",
+  version = false,
 	-- version = false,
 	opts = {
 		-- system_prompt as function ensures LLM always has latest MCP server state
@@ -23,18 +25,18 @@ return {
 				require("mcphub.extensions.avante").mcp_tool(),
 			}
 		end,
-		disabled_tools = {
-			"list_files", -- Built-in file operations
-			"search_files",
-			"read_file",
-			"create_file",
-			"rename_file",
-			"delete_file",
-			"create_dir",
-			"rename_dir",
-			"delete_dir",
-			"bash", -- Built-in terminal access
-		},
+		-- disabled_tools = {
+		-- 	"list_files", -- Built-in file operations
+		-- 	"search_files",
+		-- 	"read_file",
+		-- 	"create_file",
+		-- 	"rename_file",
+		-- 	"delete_file",
+		-- 	"create_dir",
+		-- 	"rename_dir",
+		-- 	"delete_dir",
+		-- 	"bash", -- Built-in terminal access
+		-- },
 		provider = "copilot",
 		input = {
 			provider = "dressing",
@@ -48,6 +50,10 @@ return {
 			provider_opts = {},
       exclude_auto_select = { "NvimTree" },
 		},
+    selection = {
+      enabled = true,
+      hint_display = "none",
+    },
 		windows = {
 			---@type "right" | "left" | "top" | "bottom"
 			position = "right", -- the position of the sidebar
@@ -77,7 +83,7 @@ return {
 			},
 		},
 		mappings = {
-			ask = "<leader>aa", -- ask
+			ask = "<M-m>", -- ask
 			edit = "<leader>ae", -- edit
 			refresh = "<leader>ar", -- refresh
 
@@ -132,7 +138,7 @@ return {
 					require("avante.api").ask()
 				end,
 				desc = "avante: ask",
-				mode = { "n", "v" },
+				mode = { "n", "v", "t" },
 			},
 			{
 				opts.mappings.refresh,

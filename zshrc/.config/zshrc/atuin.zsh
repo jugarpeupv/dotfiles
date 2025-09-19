@@ -43,9 +43,9 @@ atuin-setup() {
   }
   zle -N fzf-atuin-history-widget
 
-  function my_keybindings() {
+  function set_keybindings() {
     bindkey '^R' fzf-atuin-history-widget
-    autoload -U edit-command-line
+    # autoload -U edit-command-line
     zle -N edit-command-line
     bindkey '^X^E' edit-command-line
     # bindkey '^p' history-search-backward
@@ -53,7 +53,7 @@ atuin-setup() {
     # bindkey '^E' _atuin_search_widget
   }
 
-  zvm_after_init_commands+=(my_keybindings)
+  zvm_after_init_commands+=(set_keybindings)
 }
 
 atuin-setup

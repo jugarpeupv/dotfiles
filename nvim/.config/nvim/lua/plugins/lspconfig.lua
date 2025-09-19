@@ -494,7 +494,6 @@ return {
 			-- require('lspconfig').npmls.setup({})
 
 			require("lspconfig").vtsls.setup({
-				-- reuse_client = function() return true end,
 				settings = {
 					vtsls = {
 						enableMoveToFileCodeAction = true,
@@ -747,7 +746,7 @@ return {
 				},
 			})
 
-			lspconfig["dockerls"].setup({
+			vim.lsp.enable("dockerls", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 			})
@@ -782,37 +781,44 @@ return {
 			})
 
 			-- configure lua server (with special settings)
-			lspconfig["lua_ls"].setup({
+
+			vim.lsp.config("emmylua_ls", {
 				capabilities = capabilities,
 				on_attach = on_attach,
-				settings = { -- custom settings for lua
-					Lua = {
-						diagnostics = {
-							globals = { "vim", "jit", "bit", "Config" },
-						},
-						-- workspace = {
-						--   library = {
-						--     [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-						--     [vim.fn.stdpath("config") .. "/lua"] = true,
-						--   },
-						-- },
-					},
-				},
 			})
 
-			require("lspconfig").clangd.setup({
-				on_attach = on_attach,
+			vim.lsp.enable("emmylua_ls")
+
+			-- lspconfig["lua_ls"].setup({
+			-- 	capabilities = capabilities,
+			-- 	on_attach = on_attach,
+			-- 	settings = { -- custom settings for lua
+			-- 		Lua = {
+			-- 			diagnostics = {
+			-- 				globals = { "vim", "jit", "bit", "Config" },
+			-- 			},
+			--          workspace = {
+			--              library = {
+			--                  -- [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+			--                  -- [vim.fn.stdpath("config") .. "/lua"] = true,
+			--                },
+			--              },
+			-- 			-- workspace = {
+			-- 			--   library = {
+			-- 			--     [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+			-- 			--     [vim.fn.stdpath("config") .. "/lua"] = true,
+			-- 			--   },
+			-- 			-- },
+			-- 		},
+			-- 	},
+			-- })
+
+			vim.lsp.config("clangd", {
 				capabilities = capabilities,
-				cmd = {
-					"clangd",
-					"--offset-encoding=utf-16",
-				},
+				on_attach = on_attach,
 			})
 
-			require("lspconfig").clangd.setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
+			vim.lsp.enable("clangd")
 
 			vim.filetype.add({
 				pattern = {
@@ -825,7 +831,7 @@ return {
 				return init_options
 			end
 
-			require("lspconfig").gh_actions_ls.setup({
+			vim.lsp.config("gh_actions_ls", {
 				capabilities = vim.tbl_deep_extend("force", capabilities, {
 					workspace = {
 						didChangeWorkspaceFolders = {
@@ -848,20 +854,10 @@ return {
 					end,
 				},
 				on_attach = on_attach,
+				before_init = function(params)
+					params.initializationOptions = get_init_options()
+				end,
 				init_options = get_init_options(),
-				-- init_options = {
-				-- 	sessionToken = session_token,
-				-- 	repos = {
-				-- 		{
-				-- 			id = 1008200293,
-				-- 			owner = "mapfre-tech",
-				-- 			name = "arch-ram-reusable-workflows-front",
-				-- 			workspaceUri = "file://" .. vim.fn.getcwd(),
-				-- 			organizationOwned = true,
-				-- 		},
-				-- 	},
-				-- },
-
 				filetypes = { "yaml.github" },
 				cmd = { home .. "/.local/share/nvim/mason/bin/gh-actions-language-server", "--stdio" },
 				settings = {
@@ -876,7 +872,14 @@ return {
 				},
 			})
 
+			vim.lsp.enable("gh_actions_ls")
+
 			require("lspconfig").ruby_lsp.setup({
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+
+			vim.lsp.enable("docker_compose_language_service", {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
