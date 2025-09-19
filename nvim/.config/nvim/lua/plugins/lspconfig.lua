@@ -295,74 +295,8 @@ return {
 		},
 		config = function()
 			local home = os.getenv("HOME")
-			-- import lspconfig plugin safely
 			local on_attach = require("jg.custom.lsp-utils").attach_lsp_config
-			local lspconfig_status, lspconfig = pcall(require, "lspconfig")
-			if not lspconfig_status then
-				return
-			end
-
-			-- import cmp-nvim-lsp plugin safely
-			-- local cmp_nvim_lsp_status, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-			-- if not cmp_nvim_lsp_status then
-			--   print("cmp_nvim_lsp could not be loaded")
-			--   -- return
-			-- end
-
-			-- import typescript plugin safely
-			-- local typescript_setup, typescript = pcall(require, "typescript")
-			-- if not typescript_setup then
-			--   return
-			-- end
-
 			local root_pattern = require("lspconfig.util").root_pattern
-
-			-- local calculate_angularls_root_dir = function()
-			-- 	local function read_file(file_path)
-			-- 		local file = io.open(file_path, "r")
-			-- 		if not file then
-			-- 			return nil
-			-- 		end
-			--
-			-- 		local content = file:read("*a")
-			-- 		file:close()
-			--
-			-- 		return content
-			-- 	end
-			--
-			-- 	-- Function to check if a specific dependency is present in the package.json file
-			-- 	local function has_dependency(package_json_content, dependency_name)
-			-- 		local status_decode, package_data = pcall(vim.json.decode, package_json_content)
-			-- 		if not status_decode then
-			-- 			return false
-			-- 		end
-			-- 		local dependencies = package_data.dependencies
-			--
-			-- 		return dependencies and dependencies[dependency_name] ~= nil
-			-- 	end
-			--
-			-- 	-- Example usage
-			-- 	local package_json_path = "package.json"
-			-- 	if pcall(read_file, package_json_path) then
-			-- 		local package_json_content = read_file(package_json_path)
-			--
-			-- 		if package_json_content then
-			-- 			local dependency_name = "@angular/core"
-			-- 			local hasAngularCore = has_dependency(package_json_content, dependency_name)
-			-- 			print("hasAngularCore: ", hasAngularCore)
-			--
-			-- 			if hasAngularCore then
-			-- 				return root_pattern("angular.json", "nx.json", "project.json")
-			-- 			else
-			-- 				return root_pattern("inventado")
-			-- 			end
-			-- 		else
-			-- 			return root_pattern("inventado")
-			-- 		end
-			-- 	else
-			-- 		return root_pattern("inventado")
-			-- 	end
-			-- end
 
 			-- used to enable autocompletion (assign to every lsp server config)
 			-- local capabilities = cmp_nvim_lsp.default_capabilities()
@@ -372,47 +306,6 @@ return {
 			vim.tbl_deep_extend("force", capabilities, blink_capabilities)
 			capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false -- https://github.com/neovim/neovim/issues/23291
 
-			-- local capabilities = require('blink.cmp').get_lsp_capabilities()
-			-- capabilities.textDocument.foldingRange = {
-			--   dynamicRegistration = false,
-			--   lineFoldingOnly = true,
-			-- }
-
-			-- Change the Diagnostic symbols in the sign column (gutter)
-			-- (not in youtube nvim video)
-			-- local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-			--
-			-- -- local signs = { Error = "", Warn = " ", Hint = "󰠠 ", Info = " " }
-			-- for type, icon in pairs(signs) do
-			--   local hl = "DiagnosticSign" .. type
-			--   -- vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-			--   vim.diagnostic.config({
-			--     signs = {
-			--       { name = hl, text = icon },
-			--     },
-			--   })
-			-- end
-
-			-- vim.diagnostic.config({
-			--   signs = {
-			--     text = {
-			--       [vim.diagnostic.severity.ERROR] = ' ',
-			--       [vim.diagnostic.severity.WARN] = ' ',
-			--       [vim.diagnostic.severity.INFO] = ' ',
-			--       [vim.diagnostic.severity.HINT] = '󰠠 ',
-			--     }
-			--   }
-			-- })
-
-			-- local signs_diag = {
-			--   { name = "DiagnosticSignError", text = "" },
-			--   { name = "DiagnosticSignWarn", text = "" },
-			--   -- { name = "DiagnosticSignHint", text = "" },
-			--   { name = "DiagnosticSignHint", text = "󰠠" },
-			--   -- { name = "DiagnosticSignInfo", text = "" },
-			--   { name = "DiagnosticSignInfo", text = "" },
-			-- }
-
 			local config = {
 				virtual_text = false,
 				-- virtual_text = { spacing = 4, prefix = "●" },
@@ -420,7 +313,6 @@ return {
 				-- virtual_text = { spacing = 4, prefix = " " },
 
 				signs = {
-					-- active = signs_diag,
 					text = {
 						[vim.diagnostic.severity.ERROR] = " ",
 						[vim.diagnostic.severity.WARN] = " ",
@@ -444,7 +336,6 @@ return {
 
 			vim.diagnostic.config(config)
 
-			-- vim.cmd([[autocmd! ColorScheme * highlight FloatBorder guifg=#394b70]])
 			local border = {
 				{ "╭", "FloatBorder" },
 				{ "─", "FloatBorder" },
@@ -468,19 +359,18 @@ return {
 			-- ################### SERVER CONFIGURATIONS
 
 			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-				-- Enable text wrapping in the hover window
 				wrap = true,
-				-- max_width = 80, -- Optional: Set maximum width for wrapping
-				-- max_height = 20, -- Optional: Set maximum height for the hover window
 				border = "rounded", -- Optional: Add rounded borders to the hover window
 			})
 
 			-- configure html server
-			lspconfig["html"].setup({
+			vim.lsp.config("html", {
 				capabilities = capabilities,
 				on_attach = on_attach,
 				filetypes = { "myangular", "html", "templ", "htmlangular" },
 			})
+
+			vim.lsp.enable("html")
 
 			-- require('lspconfig').npmls = {
 			--   default_config = {
@@ -493,7 +383,7 @@ return {
 			--
 			-- require('lspconfig').npmls.setup({})
 
-			require("lspconfig").vtsls.setup({
+			vim.lsp.config("vtsls", {
 				settings = {
 					vtsls = {
 						enableMoveToFileCodeAction = true,
@@ -531,19 +421,23 @@ return {
 				on_attach = on_attach,
 			})
 
-			-- configure css server
-			lspconfig["cssls"].setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
+			vim.lsp.enable("vtsls")
 
-			lspconfig["pyright"].setup({
+			-- configure css server
+			vim.lsp.config("cssls", {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
+			vim.lsp.enable("cssls")
+
+			vim.lsp.config("pyright", {
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			vim.lsp.enable("pyright")
 
 			-- configure tailwindcss server
-			lspconfig["tailwindcss"].setup({
+			vim.lsp.config("tailwindcss", {
 				capabilities = capabilities,
 				on_attach = on_attach,
 				filetypes = {
@@ -564,6 +458,8 @@ return {
 				),
 			})
 
+			vim.lsp.enable("tailwindcss")
+
 			-- local ok, mason_registry = pcall(require, "mason-registry")
 			-- if not ok then
 			-- 	vim.notify("mason-registry could not be loaded")
@@ -572,33 +468,6 @@ return {
 
 			-- local angularls_path = mason_registry.get_package("angular-language-server"):get_install_path()
 			local angularls_path = os.getenv("MASON") .. "/packages/angular-language-server"
-
-			-- local function get_angular_core_version(root_dir)
-			--   local project_root = vim.fs.dirname(vim.fs.find('node_modules', { path = root_dir, upward = true })[1])
-			--   local default_version = '17.3.9'
-			--
-			--   if not project_root then
-			--     return default_version
-			--   end
-			--
-			--   local package_json = project_root .. '/package.json'
-			--   if not vim.loop.fs_stat(package_json) then
-			--     return default_version
-			--   end
-			--
-			--   local contents = io.open(package_json):read '*a'
-			--   local json = vim.json.decode(contents)
-			--   if not json.dependencies then
-			--     return default_version
-			--   end
-			--
-			--   local angular_core_version = json.dependencies['@angular/core']
-			--
-			--   return angular_core_version
-			-- end
-
-			-- local default_angular_core_version = get_angular_core_version(vim.fn.getcwd())
-
 			local angular_cmd = {
 				"ngserver",
 				"--stdio",
@@ -612,26 +481,21 @@ return {
 					angularls_path .. "/node_modules/@angular/language-server",
 					vim.uv.cwd(),
 				}, ","),
-				-- '--angularCoreVersion',
-				-- default_angular_core_version,
 			}
 
-			lspconfig["angularls"].setup({
+			vim.lsp.config("angularls", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = angular_cmd,
 				on_new_config = function(new_config, _)
 					new_config.cmd = angular_cmd
 				end,
-				-- filetypes = { "typescript", "myangular", "html", "typescriptreact", "typescript.tsx" },
 				filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "htmlangular" },
 				root_dir = root_pattern("angular.json", "project.json", "nx.json"),
-				-- root_dir = angular_root_path
-				-- root_dir = root_pattern("angular.json", "nx.json"),
-				-- root_dir = calculate_angularls_root_dir(),
 			})
+			vim.lsp.enable("angularls")
 
-			lspconfig["groovyls"].setup({
+			vim.lsp.config("groovyls", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				handlers = {
@@ -644,10 +508,11 @@ return {
 					-- "~/.local/share/nvim/mason/packages/groovy-language-server/build/libs/groovy-language-server-all.jar",
 				},
 			})
+			vim.lsp.enable("groovyls")
 
 			local on_publish_diagnostics = vim.lsp.diagnostic.on_publish_diagnostics
 
-			lspconfig["bashls"].setup({
+			vim.lsp.config("bashls", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				cmd = { "bash-language-server", "start" },
@@ -661,11 +526,12 @@ return {
 					end,
 				},
 			})
+			vim.lsp.enable("bashls")
 
 			local capabilities_json_ls = vim.lsp.protocol.make_client_capabilities()
 			capabilities_json_ls.textDocument.completion.completionItem.snippetSupport = true
 
-			lspconfig["eslint"].setup({
+			vim.lsp.config("eslint", {
 				cmd = { home .. "/.local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
 				on_attach = on_attach,
 				-- filetypes = {
@@ -684,8 +550,10 @@ return {
 				capabilities = capabilities,
 			})
 
+			vim.lsp.enable("eslint")
+
 			-- defined in telescope yaml companion
-			require("lspconfig").yamlls.setup({
+			vim.lsp.config("yamlls", {
 				filetypes = { "yaml", "yml" },
 				cmd = { home .. "/.local/share/nvim/mason/bin/yaml-language-server", "--stdio" },
 				on_attach = on_attach,
@@ -713,8 +581,9 @@ return {
 					},
 				},
 			})
+			vim.lsp.enable("yamlls")
 
-			lspconfig["jsonls"].setup({
+			vim.lsp.config("jsonls", {
 				filetypes = { "jsonc", "json", "json5" },
 				on_attach = on_attach,
 				capabilities = capabilities_json_ls,
@@ -733,8 +602,9 @@ return {
 					},
 				},
 			})
+			vim.lsp.enable("jsonls")
 
-			lspconfig["rust_analyzer"].setup({
+			vim.lsp.config("rust_analyzer", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				settings = {
@@ -745,22 +615,19 @@ return {
 					},
 				},
 			})
+			vim.lsp.enable("rust_analyzer")
 
-			vim.lsp.enable("dockerls", {
+			vim.lsp.config("dockerls", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 			})
+			vim.lsp.enable("dockerls")
 
-			require("lspconfig").docker_compose_language_service.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-			})
-
-			lspconfig["marksman"].setup({
+			vim.lsp.config("marksman", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				root_markers = { ".marksman.toml", ".git", ".gitignore", ".obsidian.vimrc" },
-				root_dir = lspconfig.util.root_pattern(
+				root_dir = root_pattern(
 					".git",
 					".marksman.toml",
 					".obsidian",
@@ -769,16 +636,19 @@ return {
 					".gitignore"
 				),
 			})
+			vim.lsp.enable("marksman")
 
-			require("lspconfig").emmet_ls.setup({
+			vim.lsp.config("emmet_ls", {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
+			vim.lsp.enable("emmet_ls")
 
-			require("lspconfig").sourcekit.setup({
+			vim.lsp.config("sourcekit", {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
+			vim.lsp.enable("sourcekit")
 
 			-- configure lua server (with special settings)
 
@@ -786,7 +656,6 @@ return {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
-
 			vim.lsp.enable("emmylua_ls")
 
 			-- lspconfig["lua_ls"].setup({
@@ -817,7 +686,6 @@ return {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
-
 			vim.lsp.enable("clangd")
 
 			vim.filetype.add({
@@ -871,20 +739,23 @@ return {
 					},
 				},
 			})
-
 			vim.lsp.enable("gh_actions_ls")
 
-			require("lspconfig").ruby_lsp.setup({
+			vim.lsp.config("ruby_lsp", {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
+			vim.lsp.enable("ruby_lsp")
 
-			vim.lsp.enable("docker_compose_language_service", {
+			vim.lsp.config("docker_compose_language_service", {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
+			vim.lsp.enable("docker_compose_language_service")
 
 			-- Set global defaults for all servers
+
+			local lspconfig = require("lspconfig")
 			lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {
 				capabilities = vim.tbl_deep_extend(
 					"force",

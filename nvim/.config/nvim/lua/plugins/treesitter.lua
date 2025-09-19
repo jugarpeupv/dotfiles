@@ -10,8 +10,8 @@ return {
 		-- lazy = true,
 		-- branch = 'main',
 		-- build = ':TSUpdate',
-		event = { "BufReadPost", "BufNewFile" },
 		-- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
+    event = { "BufReadPost", "BufNewFile" },
 		dependencies = {
       {
         'daliusd/incr.nvim',
