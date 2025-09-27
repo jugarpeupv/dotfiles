@@ -86,8 +86,8 @@ else
   -- On ssh, use cmd+v to paste, copy should work just fine
   opt.clipboard:append("unnamedplus")
 
-  local function my_paste(reg)
-    return function(lines)
+  local function my_paste(_reg)
+    return function(_lines)
       local content = vim.fn.getreg('"')
       return vim.split(content, "\n")
     end

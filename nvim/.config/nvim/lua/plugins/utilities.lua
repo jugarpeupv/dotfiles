@@ -1,5 +1,38 @@
 -- return {}
 return {
+	{
+		"duqcyxwd/stringbreaker.nvim",
+		enabled = false,
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			require("string-breaker").setup()
+		end,
+	},
+	{
+		"yelog/i18n.nvim",
+		enabled = false,
+		dependencies = {
+			"ibhagwan/fzf-lua",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			require("i18n").setup({
+				-- Locales to parse; first is the default locale
+				-- Use I18nNextLocale command to switch the default locale in real time
+				locales = { "en", "es" },
+				-- sources can be string or table { pattern = "...", prefix = "..." }
+				sources = {
+					-- "src/locales/{locales}.json",
+					--      "src/assets/i18n/{locales}.json",
+					{ pattern = "src/assets/i18n/additional-coverages/{locales}.json" },
+					-- { pattern = "src/locales/lang/{locales}/{module}.ts",            prefix = "{module}." },
+					-- { pattern = "src/views/{bu}/locales/lang/{locales}/{module}.ts", prefix = "{bu}.{module}." },
+				},
+			})
+		end,
+	},
 	-- Lazy
 	{
 		"NMAC427/guess-indent.nvim",
@@ -82,35 +115,6 @@ return {
 	--   end,
 	-- },
 	{
-		"A7Lavinraj/fyler.nvim",
-		enabled = true,
-		cmd = { "Fyler" },
-		-- branch = "stable",
-		dependencies = { "echasnovski/mini.icons" },
-		keys = {
-			{
-				"<leader>fe",
-				function()
-					vim.cmd("Fyler kind=split_right")
-				end,
-				desc = "Fyler",
-			},
-		},
-		opts = {
-			default_explorer = false,
-			close_on_select = false,
-			git_status = true,
-			views = {
-				explorer = {
-					width = 0.4,
-					height = 1,
-					kind = "right",
-					border = "single",
-				},
-			},
-		},
-	},
-	{
 		"skanehira/denops-docker.vim",
 		dependencies = {
 			{ "vim-denops/denops.vim" },
@@ -184,6 +188,7 @@ return {
 			{ "<leader>wa", "<cmd>SessionSave<CR>", desc = "Save session" },
 		},
 		---enables autocomplete for opts
+		---@diagnostic disable-next-line: type-not-found
 		---@module "auto-session"
 		---@type AutoSession.Config
 		opts = {
@@ -350,6 +355,7 @@ return {
 		},
 		-- optional, you can also install and use `yq` instead.
 		build = "make",
+		---@diagnostic disable-next-line: type-not-found
 		---@type pipeline.Config
 		opts = {
 			--- The browser executable path to open workflow runs/jobs in
@@ -568,7 +574,7 @@ return {
 			require("bookmarks").setup({
 				save_file = vim.fn.expand("$HOME/.bookmarks"), -- bookmarks save file path
 				keywords = {},
-				on_attach = function(bufnr)
+				on_attach = function(_bufnr)
 					local bm = require("bookmarks")
 					local map = vim.keymap.set
 					map("n", "mm", bm.bookmark_toggle) -- add or remove bookmark at current line
@@ -706,6 +712,7 @@ return {
 			{
 				"<leader><space>",
 				function()
+					---@diagnostic disable-next-line: undefined-global
 					Snacks.picker.smart({
 						-- layout = {
 						-- 	preset = "ivy_split",
@@ -717,6 +724,7 @@ return {
 			{
 				"<leader>,",
 				function()
+					---@diagnostic disable-next-line: undefined-global
 					Snacks.picker.buffers()
 				end,
 				desc = "Buffers",
@@ -724,6 +732,7 @@ return {
 			{
 				"<leader>/",
 				function()
+					---@diagnostic disable-next-line: undefined-global
 					Snacks.picker.grep({
 						layout = {
 							preset = "ivy",
@@ -753,6 +762,7 @@ return {
 			{
 				"<leader>sg",
 				function()
+					---@diagnostic disable-next-line: undefined-global
 					Snacks.picker.grep({ preview = false })
 				end,
 				desc = "Grep",
@@ -760,6 +770,7 @@ return {
 			{
 				"<leader>sw",
 				function()
+					---@diagnostic disable-next-line: undefined-global
 					Snacks.picker.grep_word()
 				end,
 				desc = "Visual selection or word",
@@ -800,6 +811,7 @@ return {
 						end
 						local docDir = devdocs.GetDocDir(selected)
 						-- prettify the filename as you wish
+						---@diagnostic disable-next-line: undefined-global
 						Snacks.picker.files({ cwd = docDir })
 					end)
 				end,
@@ -845,7 +857,7 @@ return {
 	},
 	{
 		"vzze/calculator.nvim",
-		cmd = { "Calculate" },
+		-- cmd = { "Calculate" },
 		-- event = { "BufReadPost" },
 		keys = {
 			{
@@ -900,7 +912,7 @@ return {
 	{
 		"vuki656/package-info.nvim",
 		dependencies = { "MunifTanjim/nui.nvim" },
-		enabled = false,
+		enabled = true,
 		ft = { "json", "jsonc" },
 		-- config = function (_, opts)
 		--   require("package-info").setup(opts)
@@ -1136,38 +1148,6 @@ return {
 		-- Uncomment next line if you want to follow only stable versions
 		-- version = "*"
 	},
-	-- {
-	--   "chentoast/marks.nvim",
-	--   event = "VeryLazy",
-	--   opts = {},
-	-- },
-	-- {
-	--   "MattesGroeger/vim-bookmarks",
-	--   config = function()
-	--     vim.g.bookmark_save_per_working_dir = 1
-	--     vim.g.bookmark_auto_save = 1
-	--     vim.g.bookmark_sign = ''
-	--     vim.cmd([[highlight BookmarkSign guifg=#89B4FA]])
-	--     vim.cmd([[" Finds the Git super-project directory.
-	--       function! g:BMWorkDirFileLocation()
-	--           let filename = 'bookmarks'
-	--           let location = ''
-	--           if isdirectory('.git')
-	--               " Current work dir is git's work tree
-	--               let location = getcwd().'/.git'
-	--           else
-	--               " Look upwards (at parents) for a directory named '.git'
-	--               let location = finddir('info', '.;')
-	--           endif
-	--           if len(location) > 0
-	--               return location.'/'.filename
-	--           else
-	--               return getcwd().'/.'.filename
-	--           endif
-	--       endfunction]])
-	--     vim.keymap.set("n", "<leader>mm", "<cmd>Telescope vim_bookmarks all<cr>", { noremap = true, silent = true })
-	--   end,
-	-- },
 	{
 		"hedyhli/outline.nvim",
 		lazy = true,
@@ -1215,14 +1195,6 @@ return {
 			})
 		end,
 	},
-	-- https://github.com/johmsalas/text-case.nvim
-	-- { "VidocqH/data-viewer.nvim" },
-	-- { "Djancyp/regex.nvim" },
-	-- {"https://github.com/gabrielpoca/replacer.nvim"},
-	-- { "Wansmer/sibling-swap.nvim" },
-	-- { "nvim-spider" }
-	-- { "airblade/vim-matchquote" },
-	-- { "ton/vim-bufsurf" },
 	{ "taybart/b64.nvim", cmd = { "B64Encode", "B64Decode" } },
 	{
 		"lambdalisue/vim-suda",
@@ -1256,9 +1228,7 @@ return {
 			customPatterns = {}, -- check "Custom Movement Patterns" in the README for details
 		},
 	},
-	-- { https://github.com/axieax/urlview.nvim }
 	{ "dstein64/vim-startuptime", cmd = { "StartupTime" } },
-	-- { "dstein64/vim-startuptime", event = "VeryLazy" },
 	{
 		"christoomey/vim-tmux-navigator",
 		enabled = false,
@@ -1271,16 +1241,6 @@ return {
 		end,
 	},
 
-	-- {
-	--   "ibhagwan/fzf-lua",
-	--   -- optional for icon support
-	--   dependencies = { "nvim-tree/nvim-web-devicons" },
-	--   event = { "BufReadPost" },
-	--   config = function()
-	--     -- calling `setup` is optional for customization
-	--     require("fzf-lua").setup({})
-	--   end,
-	-- },
 	{
 		"junegunn/fzf",
 		dependencies = { "junegunn/fzf.vim" },

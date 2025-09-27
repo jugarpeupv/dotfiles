@@ -13,13 +13,13 @@ return {
 		-- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
     event = { "BufReadPost", "BufNewFile" },
 		dependencies = {
-      {
-        'daliusd/incr.nvim',
-        opts = {
-          incr_key = '<cr>', -- increment selection key
-          decr_key = '<bs>', -- decrement selection key
-        },
-      },
+      -- {
+      --   'daliusd/incr.nvim',
+      --   opts = {
+      --     incr_key = '<cr>', -- increment selection key
+      --     decr_key = '<bs>', -- decrement selection key
+      --   },
+      -- },
 			{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
 			-- "RRethy/nvim-treesitter-endwise",
 			{ "cfdrake/vim-pbxproj" },
@@ -27,8 +27,14 @@ return {
 			-- 	-- cmd = { "TSPlaygroundToggle" },
 			-- 	"nvim-treesitter/playground",
 			-- },
+      -- lazy.nvim
+      { 
+        "chrisgrieser/nvim-puppeteer",
+        lazy = false, -- plugin lazy-loads itself. Can also load on filetypes.
+      },
 			{
 				"axelvc/template-string.nvim",
+        enabled = false,
 				config = function()
 					require("template-string").setup({
 						filetypes = {
@@ -43,7 +49,7 @@ return {
 							"cs",
 						}, -- filetypes where the plugin is active
 						jsx_brackets = true, -- must add brackets to JSX attributes
-						remove_template_string = true, -- remove backticks when there are no template strings
+						remove_template_string = false, -- remove backticks when there are no template strings
 						restore_quotes = {
 							-- quotes used when "remove_template_string" option is enabled
 							normal = [[']],
@@ -306,15 +312,15 @@ return {
 				-- 		clear_on_cursor_move = false,
 				-- 	},
 				-- },
-				incremental_selection = {
-					enable = true,
-					keymaps = {
-						init_selection = "<CR>",
-						node_incremental = "<CR>",
-						scope_incremental = "<Tab>",
-						node_decremental = "<S-Tab>",
-					},
-				},
+				-- incremental_selection = {
+				-- 	enable = true,
+				-- 	keymaps = {
+				-- 		init_selection = "<CR>",
+				-- 		node_incremental = "<CR>",
+				-- 		scope_incremental = "<Tab>",
+				-- 		node_decremental = "<S-Tab>",
+				-- 	},
+				-- },
 				sync_install = true,
 				-- ignore_install = { "yaml" },
 				-- ignore_install = {},
@@ -331,6 +337,7 @@ return {
 				ensure_installed = {
 					-- "lua_patterns",
 					"toml",
+          "go",
 					"ruby",
 					"swift",
 					"json",
@@ -358,6 +365,7 @@ return {
 					"tsx",
 					"html",
 					"css",
+          "scss",
 					"yaml",
 					-- "sql",
 					"markdown",
@@ -435,6 +443,8 @@ return {
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = {
           "java",
+          "go",
+          "copilot-chat",
 					"yaml",
 					"yaml.github",
 					"jsonc",
@@ -500,6 +510,11 @@ return {
 				end,
 			})
 
+      require("jg.custom.incremental_selection").setup({
+        incr_key = '<cr>', -- increment selection key
+        decr_key = '<bs>', -- decrement selection key
+      })
+
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "TSUpdate",
 				callback = function()
@@ -509,6 +524,14 @@ return {
 							queries = "queries",
 						},
 					}
+
+          -- require("nvim-treesitter.parsers").scss = {
+          --   install_info = {
+          --     url = "https://github.com/tree-sitter-grammars/tree-sitter-scss",
+          --     queries = "queries",
+          --     branch = "master"
+          --   },
+          -- }
 				end,
 			})
 		end,

@@ -304,7 +304,7 @@ return {
 			local blink_capabilities = require("blink.cmp").get_lsp_capabilities()
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			vim.tbl_deep_extend("force", capabilities, blink_capabilities)
-			capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false -- https://github.com/neovim/neovim/issues/23291
+			-- capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false -- https://github.com/neovim/neovim/issues/23291
 
 			local config = {
 				virtual_text = false,
@@ -424,11 +424,11 @@ return {
 			vim.lsp.enable("vtsls")
 
 			-- configure css server
-			vim.lsp.config("cssls", {
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
-			vim.lsp.enable("cssls")
+			-- vim.lsp.config("cssls", {
+			-- 	capabilities = capabilities,
+			-- 	on_attach = on_attach,
+			-- })
+			-- vim.lsp.enable("cssls")
 
 			vim.lsp.config("pyright", {
 				capabilities = capabilities,
@@ -752,6 +752,33 @@ return {
 				on_attach = on_attach,
 			})
 			vim.lsp.enable("docker_compose_language_service")
+
+
+      vim.lsp.config("gopls", {
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+      vim.lsp.enable('gopls')
+
+
+      vim.lsp.config("copilot_ls", {
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+      vim.lsp.enable("copilot_ls")
+
+
+      vim.lsp.config("somesass_ls", {
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+      vim.lsp.enable("somesass_ls")
+
+      -- vim.lsp.config("css_variables", {
+      --   capabilities = capabilities,
+      --   on_attach = on_attach,
+      -- })
+      -- vim.lsp.enable("css_variables")
 
 			-- Set global defaults for all servers
 

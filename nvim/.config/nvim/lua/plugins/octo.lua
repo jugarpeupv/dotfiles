@@ -13,7 +13,7 @@ return {
       {
         mode = { "n" },
         "<leader>os",
-        "<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open<cr>",
+        "<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open label:task type:issue repo:mapfre-tech/arch-mar2-mgmt<cr>",
         { noremap = true, silent = true },
       },
     },
@@ -25,6 +25,9 @@ return {
         ["github.com-izertis"] = "github.com",
         ["github.com-personal"] = "github.com",
       }, -- SSH aliases. e.g. `ssh_aliases = {["github.com-work"] = "github.com"}`
+      -- picker = "fzf-lua", -- 'telescope' or 'fzf-lua'
+      -- picker = "snacks", -- 'telescope' or 'fzf-lua'
+      picker = "snacks", -- 'telescope' or 'fzf-lua'
       mappings = {
         review_diff = {
           submit_review = { lhs = "<localleader>vs", desc = "submit review" },
@@ -86,13 +89,8 @@ return {
     },
     config = function(_, opts)
       require("octo").setup(opts)
-      vim.cmd([[hi octo_mf_1e1e2f guifg=#1e1e2f]])
-      vim.cmd([[hi octo_mb_d73a4a guifg=#ffffff guibg=#F38BA8]])
-      vim.cmd([[hi octo_mf_d73a4a guifg=#F38BA8]])
-      vim.cmd([[hi octo_mb_d19821 guifg=#000000 guibg=#F5E0DC]])
-      vim.cmd([[hi octo_mf_d19821 guifg=#F5E0DC]])
-      vim.cmd([[hi octo_mb_1d76db guifg=#ffffff guibg=#89ddff]])
-      vim.cmd([[hi octo_mf_1d76db guifg=#89ddff]])
+      vim.treesitter.language.register('markdown', 'octo')
+
     end,
     -- config = function()
     --   require("octo").setup({

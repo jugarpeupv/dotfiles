@@ -12,15 +12,17 @@ return {
 
 	ft = { "copilot-chat" },
 	cmd = "MCPHub", -- lazy load by default
-	event = { "BufReadPost", "BufNewFile" }, -- Load on buffer read or new file
+	-- event = { "BufReadPost", "BufNewFile" }, -- Load on buffer read or new file
 	build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
 
 	-- uncomment this if you don't want mcp-hub to be available globally or can't use -g
 	-- build = "bundled_build.lua",  -- Use this and set use_bundled_binary = true in opts  (see Advanced configuration)
 	-- init = function()
-	--   local workspace_root = vim.fs.root(0, { ".git" }) or vim.uv.cwd()
-	--   print("MCPHub: Setting workspace root to " .. workspace_root)
-	--   vim.fn.setenv("MCP_PROJECT_ROOT_PATH", workspace_root)
+	--   -- local workspace_root = vim.fs.root(0, { ".git" }) or vim.uv.cwd()
+	--   -- print("MCPHub: Setting workspace root to " .. workspace_root)
+	--   -- vim.fn.setenv("MCP_PROJECT_ROOT_PATH", workspace_root)
+	--    vim.fn.setenv("TAVILY_API_KEY", os.getenv("TAVILY_API_KEY"))
+	--    vim.fn.setenv("GH_ACTIONS_PAT", os.getenv("GH_ACTIONS_PAT"))
 	-- end,
 	-- init = function()
 	-- 	local wt_utils = require("jg.custom.worktree-utils")
@@ -52,7 +54,8 @@ return {
 		-- }, -- Global environment variables available to all MCP servers (can be a table or a function returning a table)
     global_env = function(context)
       return {
-        GH_ACTIONS_PAT = os.getenv("GH_ACTIONS_PAT") or "",
+        GH_MCP_TOKEN = os.getenv("GH_MCP_TOKEN") or "",
+        TAVILY_API_KEY = os.getenv("TAVILY_API_KEY") or "",
       }
     end,
 		-- port = 2389,

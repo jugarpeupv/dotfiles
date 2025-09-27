@@ -35,6 +35,7 @@ return {
         -- ignored_next_char = [=[[%w%%%'%[%"%.%`%$]]=],
         enable_moveright = true,
         enable_afterquote = false,     -- add bracket pairs after quote
+        -- enable_check_bracket_line = true, --- check bracket in same line
         enable_check_bracket_line = true, --- check bracket in same line
         enable_bracket_in_quote = true, --
         enable_abbr = false,          -- trigger abbreviation
@@ -124,69 +125,15 @@ return {
             :set_end_pair_length(2),
       })
 
-      -- https://github.com/rstacruz/vim-closer/blob/master/autoload/closer.vim
-      local get_closing_for_line = function(line)
-        local i = -1
-        local clo = ""
-
-        while true do
-          i, _ = string.find(line, "[%(%)%{%}%[%]]", i + 1)
-          if i == nil then
-            break
-          end
-          local ch = string.sub(line, i, i)
-          local st = string.sub(clo, 1, 1)
-
-          if ch == "{" then
-            clo = "}" .. clo
-          elseif ch == "}" then
-            if st ~= "}" then
-              return ""
-            end
-            clo = string.sub(clo, 2)
-          elseif ch == "(" then
-            clo = ")" .. clo
-          elseif ch == ")" then
-            if st ~= ")" then
-              return ""
-            end
-            clo = string.sub(clo, 2)
-          elseif ch == "[" then
-            clo = "]" .. clo
-          elseif ch == "]" then
-            if st ~= "]" then
-              return ""
-            end
-            clo = string.sub(clo, 2)
-          end
-        end
-
-        return clo
-      end
-
-      -- autopairs.remove_rule("(")
-      -- autopairs.remove_rule("{")
-      -- autopairs.remove_rule("[")
-
-      -- autopairs.add_rule(Rule("[%(%{%[]", "")
-      --   :use_regex(true)
-      --   :replace_endpair(function(opts)
-      --     return get_closing_for_line(opts.line)
-      --   end)
-      --   :end_wise(function(opts)
-      --     -- Do not endwise if there is no closing
-      --     return get_closing_for_line(opts.line) ~= ""
-      --   end))
-
-      npairs.add_rules(require("nvim-autopairs.rules.endwise-lua"))
-      npairs.add_rules(require("nvim-autopairs.rules.endwise-ruby"))
+      -- npairs.add_rules(require("nvim-autopairs.rules.endwise-lua"))
+      -- npairs.add_rules(require("nvim-autopairs.rules.endwise-ruby"))
 
 
       autopairs.remove_rule("\"")
     end,
   },
-  -- { "rstacruz/vim-closer", event = { "InsertEnter" } },
-  -- { "tpope/vim-endwise",   event = { "InsertEnter" } },
+  { "rstacruz/vim-closer", event = { "InsertEnter" } },
+  { "tpope/vim-endwise",   event = { "InsertEnter" } },
   -- {
   --   "m4xshen/autoclose.nvim",
   --   event = "InsertEnter",

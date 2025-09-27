@@ -10,6 +10,7 @@ return {
 		-- event = "VeryLazy",
 		--
 		config = function()
+			---@diagnostic disable-next-line: param-type-not-match
 			require("catppuccin").setup({
 				flavour = "mocha", -- latte, frappe, macchiato, or mocha
 				transparent_background = true,
@@ -170,6 +171,11 @@ return {
 						AvanteSidebarWinSeparator = { fg = "#394b70" },
 						AvanteTaskCompleted = { fg = "#8ee2cf" },
 						AvanteStateSpinnerSucceeded = { bg = "#8ee2cf", fg = "black" },
+
+            octo_mb_b60205 = { fg="#ffffff", bg="#F5C2E7" },
+            octo_mf_b60205 = { fg="#F5C2E7" },
+            octo_mb_4493f8 = { fg="#ffffff", bg="#394b70" },
+            octo_mf_4493f8 = { fg="#394b70" },
 						-- remove bold from gui, use style = {}
 						BlinkCmpMenuSelection = { bg = "#394b70", style = {} },
 						LspReferenceText = { bg = "#264f78" },
@@ -431,7 +437,8 @@ return {
 
 			-- vim.cmd([[hi @property.scss guifg=#89ddff]])
 			-- vim.cmd([[hi @property.class.scss guifg=#89ddff]])
-			vim.cmd([[hi @property.class.scss guifg=#CBA6F7]])
+			-- vim.cmd([[hi @property.class.scss guifg=#CBA6F7]])
+      vim.cmd([[hi @property.class.scss guifg=#74C7EC]])
 			-- vim.cmd([[hi @parameter guifg=#B4BEFE]])
 
 			vim.cmd([[highlight @lsp.type.type guifg=#89ddff]])

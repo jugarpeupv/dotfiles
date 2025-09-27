@@ -1,5 +1,105 @@
 -- return {}
 return {
+	{
+		"A7Lavinraj/fyler.nvim",
+		enabled = true,
+		lazy = true,
+		cmd = { "Fyler" },
+		-- branch = "stable",
+		dependencies = { "echasnovski/mini.icons" },
+		keys = {
+			{
+				"<leader>fe",
+				function()
+					-- vim.cmd("Fyler kind=split_right")
+					for _, win in ipairs(vim.api.nvim_list_wins()) do
+						if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "fyler" then
+							return vim.api.nvim_win_close(win, false)
+						end
+					end
+					-- vim.cmd.Fyler()
+
+					local fyler = require("fyler")
+					fyler.open({ kind = "split_left_most" })
+				end,
+				desc = "Fyler",
+			},
+		},
+		opts = {
+			-- Changes explorer closing behaviour when a file get selected
+			close_on_select = false,
+			-- Changes explorer behaviour to auto confirm simple edits
+			confirm_simple = true,
+			-- Changes explorer behaviour to hijack NETRW
+			default_explorer = false,
+			-- Changes git statuses visibility
+			hooks = {
+				on_delete = nil, -- function(path) end
+				on_rename = nil, -- function(src_path, dst_path) end
+				on_highlight = nil, -- function(hl_groups, palette) end
+			},
+			-- Custom icons for various directory states
+			icon = {
+				directory_collapsed = nil,
+				directory_empty = nil,
+				directory_expanded = nil,
+			},
+			-- Changes icon provider
+			icon_provider = "mini_icons",
+			-- Changes Indentation marker properties
+			indentscope = {
+				enabled = true,
+				group = "FylerIndentMarker",
+				marker = "│",
+			},
+			-- Auto current buffer tracking
+			track_current_buffer = false,
+			win = {
+				-- Changes window border
+				border = "single",
+				-- Changes buffer options
+				buf_opts = {
+					-- buffer options
+				},
+				-- Changes window kind
+				kind = "replace",
+				-- Changes window kind preset
+				kind_presets = {
+					-- values can be "(0,1]rel" or "{1...}abs"
+
+					-- <preset_name> = {
+					--   height = "",
+					--   width = "",
+					--   top = "",
+					--   left = ""
+					-- }
+
+					-- replace = {},
+				},
+				-- Changes window options
+				win_opts = {
+					-- window options
+					-- Set a title in the window using winbar
+					winbar = vim.fn.getcwd()
+				},
+			},
+			mappings = {
+				-- ["Y"] = function(view)
+				--   print('hi')
+				-- end,
+				["q"] = "CloseView",
+				["<CR>"] = "Select",
+				["<C-t>"] = "SelectTab",
+				["<C-v>"] = "SelectVSplit",
+				["<C-s>"] = "SelectSplit",
+				["-"] = "GotoParent",
+				["="] = "GotoCwd",
+				["."] = "GotoNode",
+				["#"] = "CollapseAll",
+				["<BS>"] = "CollapseNode",
+			},
+		},
+	},
 	-- {
 	--   "nvim-tree/nvim-tree.lua",
 	--   version = "*",
@@ -326,6 +426,7 @@ return {
 						end
 
 						require("telescope.builtin").find_files({
+              prompt_title = "Find files in: " .. path,
 							cwd = path,
 							hidden = true,
 							find_command = {
@@ -484,8 +585,6 @@ return {
 				-- Default mappings. Feel free to modify or remove as you wish.
 				--
 				-- BEGIN_DEFAULT_ON_ATTACH
-				vim.keymap.set("n", "<C-c>", api_nvimtree.tree.change_root_to_node, opts("CD"))
-				vim.keymap.set("n", "<BS>", api_nvimtree.tree.change_root_to_node, opts("CD"))
 				-- vim.keymap.set("n", "<C-k>", api.node.show_info_popup, opts("Info"))
 				vim.keymap.set("n", "<C-r>", api_nvimtree.fs.rename_sub, opts("Rename: Omit Filename"))
 				vim.keymap.set("n", "<C-t>", api_nvimtree.node.open.tab, opts("Open: New Tab"))
@@ -512,10 +611,10 @@ return {
 							api_nvimtree.node.open.edit(node)
 						else -- there are terminal buffers
 							api_nvimtree.node.open.vertical(node)
-              vim.g.first_time_open = false
+							vim.g.first_time_open = false
 						end
-          else
-            api_nvimtree.node.open.edit(node)
+					else
+						api_nvimtree.node.open.edit(node)
 					end
 				end, opts("Open"))
 				-- vim.keymap.set('n', '<CR>', toggle_replace, opts('Open: In Place'))
@@ -523,9 +622,13 @@ return {
 				vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
 				vim.keymap.set("n", "<", api_nvimtree.node.navigate.sibling.prev, opts("Previous Sibling"))
 				vim.keymap.set("n", ".", api_nvimtree.node.run.cmd, opts("Run Command"))
+
 				vim.keymap.set("n", "H", api_nvimtree.tree.change_root_to_parent, opts("Up"))
+        vim.keymap.set("n", "<C-c>", api_nvimtree.tree.change_root_to_node, opts("CD"))
+        vim.keymap.set("n", "<BS>", api_nvimtree.tree.change_root_to_node, opts("CD"))
+
 				-- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
-				vim.keymap.set("n", "W", api_nvimtree.node.open.preview, opts("Open Preview"))
+				-- vim.keymap.set("n", "W", api_nvimtree.node.open.preview, opts("Open Preview"))
 				vim.keymap.set("n", "-", function()
 					vim.cmd("vsplit")
 					require("oil").open(vim.loop.cwd())
@@ -674,9 +777,9 @@ return {
 				-- vim.keymap.set("n", "D", api_nvimtree.fs.trash, opts("Trash"))
 				vim.keymap.set("n", "D", function(node)
 					api_nvimtree.fs.trash(node)
-          vim.defer_fn(function()
-            api_nvimtree.tree.reload()
-          end, 200)
+					vim.defer_fn(function()
+						api_nvimtree.tree.reload()
+					end, 200)
 				end, opts("Trash"))
 				vim.keymap.set("n", "E", api_nvimtree.tree.expand_all, opts("Expand All"))
 				vim.keymap.set("n", "e", api_nvimtree.fs.rename_basename, opts("Rename: Basename"))
@@ -1176,8 +1279,10 @@ return {
 			"MunifTanjim/nui.nvim",
 		},
 		keys = {
+			{ "\\", ":Neotree current<CR>" },
 			{ "<leader>nb", ":Neotree buffers<CR>" },
 			{ "<leader>ng", ":Neotree git_status<CR>" },
+			{ "<leader>nt", ":Neotree filesystem position=current<CR>" },
 		},
 		opts = {
 			default_component_configs = {
@@ -1210,14 +1315,14 @@ return {
 			-- vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
 			-- vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
 
-			vim.diagnostic.config({
-				signs = {
-					{ name = "DiagnosticSignError", text = " " },
-					{ name = "DiagnosticSignWarn", text = " " },
-					{ name = "DiagnosticSignInfo", text = " " },
-					{ name = "DiagnosticSignHint", text = "󰌵" },
-				},
-			})
+			-- vim.diagnostic.config({
+			-- 	signs = {
+			-- 		{ name = "DiagnosticSignError", text = " " },
+			-- 		{ name = "DiagnosticSignWarn", text = " " },
+			-- 		{ name = "DiagnosticSignInfo", text = " " },
+			-- 		{ name = "DiagnosticSignHint", text = "󰌵" },
+			-- 	},
+			-- })
 
 			require("neo-tree").setup({
 				close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
@@ -1257,8 +1362,6 @@ return {
 					},
 				},
 			})
-
-			vim.cmd([[nnoremap \ :Neotree current<cr>]])
 		end,
 	},
 }

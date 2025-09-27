@@ -83,7 +83,7 @@ vim.keymap.set({ "n" }, "<leader>gt", function()
 			-- 		return 0
 			-- 	end,
 			-- }),
-			attach_mappings = function(_, map)
+			attach_mappings = function(_, _map)
 				actions.select_default:replace(actions.git_checkout)
 				return true
 			end,
@@ -339,7 +339,7 @@ keymap("n", "<leader>ht", function()
 	require("telescope.builtin").help_tags()
 end, opts)
 keymap("n", "<leader>mp", function()
-	require("telescope.builtin").man_pages()
+	require("telescope.builtin").man_pages({ sections = { "ALL" } })
 end, opts)
 keymap("n", "<leader>of", function()
 	require("telescope.builtin").oldfiles({ only_cwd = true })
@@ -461,7 +461,7 @@ vim.keymap.set({ "n" }, "<leader>q", function()
 end, opts)
 
 -- keymap("t", "<leader>q", "<cmd>q!<CR>", opts)
-keymap("n", "<leader>nn", "<cmd>nohlsearch<CR>", opts)
+keymap("n", "<leader>nN", "<cmd>nohlsearch<CR>", opts)
 
 vim.keymap.set({ "n" }, "<leader>fi", function()
 	require("telescope.builtin").find_files({
@@ -815,6 +815,7 @@ vim.cmd([[nnoremap <F6> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_D
 
 -- vim.keymap.set("n", "<M-i>", "<cmd>split term://%:p:h//zsh<cr>", opts)
 vim.keymap.set("n", "<leader>ct", function()
+	---@diagnostic disable-next-line: redundant-parameter
 	require("terminal").run("", {
 		cwd = vim.fn.expand("%:p:h"),
 	})
@@ -891,7 +892,7 @@ local function show_documentation()
 			vim.lsp.buf.hover()
 		else
 			local _, err = pcall(vim.cmd, "h " .. cword)
-			if err then
+			if err ~= nil then
 				return
 			end
 		end
@@ -1028,7 +1029,7 @@ local function find_in_node_modules()
 				print("No directory selected!")
 				return
 			end
-			local dir_to_remove = selection.value
+			-- local dir_to_remove = selection.value
 
 			local api_nvimtree = require("nvim-tree.api")
 			api_nvimtree.fs.trash(node)
@@ -1091,20 +1092,18 @@ vim.keymap.set("n", "<leader>fn", find_in_node_modules, opts)
 
 -- fd . "node_modules" --no-ignore --exclude .git/* --exclude **/node_modules/**
 
-vim.keymap.set({ "n" }, "<leader>rs", function()
-	require("jg.custom.telescope").run_npm_scripts_improved()
-end, opts)
-
-vim.keymap.set({ "n" }, "<leader>rt", function()
-	require("jg.custom.telescope").run_nx_scripts()
-end, opts)
-
 vim.keymap.set({ "n" }, "<leader>bn", "<cmd>bn<cr>", opts)
 vim.keymap.set({ "n" }, "<leader>bp", "<cmd>bp<cr>", opts)
 
 vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
 
+-- vim.g.compile_command = ""
 vim.keymap.set({ "n" }, "<M-b>", function()
+	-- if vim.g.compile_command ~= "" then
+	-- 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(vim.g.compile_command, true, false, true), "n", true)
+	-- 	return
+	-- end
+
 	local current_buf_name = vim.fn.expand("%")
 
 	local function get_filetype_alias()
@@ -1115,23 +1114,15 @@ vim.keymap.set({ "n" }, "<M-b>", function()
 		elseif filetype == "typescript" or filetype == "javascript" then
 			return "bun"
 		else
-			return filetype
+			return "make"
 		end
 	end
 
 	local executable = get_filetype_alias()
 
-	vim.api.nvim_feedkeys(
-		vim.api.nvim_replace_termcodes(":Compile " .. executable .. " " .. current_buf_name, true, false, true),
-		"n",
-		true
-	)
-
-	-- vim.api.nvim_feedkeys(
-	--   vim.api.nvim_replace_termcodes("<ESC>" .. current_buf_name, true, false, true),
-	--   "n",
-	--   true
-	-- )
+	local command = ":Compile " .. executable .. " " .. current_buf_name
+	vim.g.compile_command = command
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(command, true, false, true), "n", true)
 end, opts)
 
 vim.api.nvim_set_keymap("i", "<C-e>", "<C-o>$", { noremap = true, silent = true })
@@ -1164,8 +1155,8 @@ if vim.fn.has("nvim-0.11") == 1 then
 	end
 end
 
-vim.api.nvim_create_user_command("NpmReadme", function(opts)
-	local package_name = opts.args
+vim.api.nvim_create_user_command("NpmReadme", function(opts_new)
+	local package_name = opts_new.args
 	local package_url = "https://registry.npmjs.org/" .. package_name .. "/latest"
 
 	-- Fetch the package metadata
@@ -1278,10 +1269,6 @@ vim.api.nvim_set_keymap("v", "H", "^", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>bk", "<cmd>bwipeout!<cr>", opts)
 
-vim.keymap.set("n", "<leader>nx", function()
-	require("telescope").extensions.nx.actions()
-end, opts)
-
 vim.cmd([[set wildcharm=<C-v>]])
 -- vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
 vim.cmd([[inoremap <C-l> <C-y>]])
@@ -1292,7 +1279,18 @@ vim.cmd([[cnoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"]])
 vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
 
+-- nx keymaps
+
+vim.keymap.set({ "n" }, "<leader>rs", function()
+	require("jg.custom.telescope").run_npm_scripts_improved()
+end, opts)
+
+vim.keymap.set({ "n" }, "<leader>rt", function()
+	require("jg.custom.telescope").run_nx_scripts()
+end, opts)
+
 vim.keymap.set("n", "<leader>nr", function()
+	-- Run nx under the cursor
 	-- Get the current buffer content
 	local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 
@@ -1392,9 +1390,9 @@ end
 
 vim.keymap.set("n", "<leader>DD", toggle_diffopt, { desc = "Toggle diffopt settings" })
 
-vim.keymap.set({ "n" }, "<leader>sc", function()
-	require("telescope").extensions.yaml_schema.yaml_schema({})
-end, opts)
+-- vim.keymap.set({ "n" }, "<leader>sc", function()
+-- 	require("telescope").extensions.yaml_schema.yaml_schema({})
+-- end, opts)
 
 vim.keymap.set("n", "<leader>gm", function()
 	local pickers = require("telescope.pickers")
@@ -1443,7 +1441,7 @@ vim.keymap.set("n", "<leader>gm", function()
 					end,
 				}),
 				sorter = conf.generic_sorter({}),
-				attach_mappings = function(prompt_bufnr, map)
+				attach_mappings = function(prompt_bufnr, _map)
 					actions.select_default:replace(function()
 						actions.close(prompt_bufnr)
 						local selection = action_state.get_selected_entry()
@@ -1485,7 +1483,7 @@ vim.keymap.set("n", "<leader>tp", function()
 	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_pendientes.md")
 end, opts)
 
-local function smart_move(direction, tmux_cmd)
+local function smart_move(direction, _tmux_cmd)
 	-- local curwin = vim.api.nvim_get_current_win()
 	vim.cmd("wincmd " .. direction)
 	-- if curwin == vim.api.nvim_get_current_win() then
@@ -1522,8 +1520,9 @@ vim.keymap.set("n", "<leader>wf", function()
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
 
-	local get_worktree_path = function(prompt_bufnr)
-		local selection = action_state.get_selected_entry(prompt_bufnr)
+	local get_worktree_path = function(_prompt_bufnr)
+		-- local selection = action_state.get_selected_entry(prompt_bufnr)
+		local selection = action_state.get_selected_entry()
 		if selection == nil then
 			return
 		end
@@ -1549,8 +1548,8 @@ vim.keymap.set("n", "<leader>wf", function()
 		})
 	end
 
-	local telescope_git_worktree = function(opts)
-		opts = opts or {}
+	local telescope_git_worktree = function(opts_new)
+		opts_new = opts_new or {}
 		local output = utils.get_os_command_output({ "git", "worktree", "list" })
 		local results = {}
 		local widths = {
@@ -1571,10 +1570,14 @@ vim.keymap.set("n", "<leader>wf", function()
 				local index = #results + 1
 				for key, val in pairs(widths) do
 					if key == "path" then
-						local path_len = strings.strdisplaywidth(entry[key] or "")
-						widths[key] = math.max(val, path_len)
+						if strings.strdisplaywidth then
+							local path_len = strings.strdisplaywidth(entry[key] or "")
+							widths[key] = math.max(val, path_len)
+						end
 					else
-						widths[key] = math.max(val, strings.strdisplaywidth(entry[key] or ""))
+						if strings.strdisplaywidth then
+							widths[key] = math.max(val, strings.strdisplaywidth(entry[key] or ""))
+						end
 					end
 				end
 
@@ -1600,7 +1603,7 @@ vim.keymap.set("n", "<leader>wf", function()
 		})
 
 		local make_display = function(entry)
-			local path, _ = utils.transform_path(opts, entry.path)
+			local path, _ = utils.transform_path(opts_new, entry.path)
 			return displayer({
 				{ entry.branch, "TelescopeResultsIdentifier" },
 				{ path },
@@ -1609,7 +1612,7 @@ vim.keymap.set("n", "<leader>wf", function()
 		end
 
 		pickers
-			.new(opts or {}, {
+			.new(opts_new or {}, {
 				prompt_title = "Git Worktrees",
 				finder = finders.new_table({
 					results = results,
@@ -1620,8 +1623,8 @@ vim.keymap.set("n", "<leader>wf", function()
 						return entry
 					end,
 				}),
-				sorter = conf.generic_sorter(opts),
-				attach_mappings = function(_, map)
+				sorter = conf.generic_sorter(opts_new),
+				attach_mappings = function(_, _map)
 					action_set.select:replace(select_worktree)
 					return true
 				end,
@@ -1642,8 +1645,8 @@ vim.keymap.set("n", "<leader>we", function()
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
 
-	local get_worktree_path = function(prompt_bufnr)
-		local selection = action_state.get_selected_entry(prompt_bufnr)
+	local get_worktree_path = function(_prompt_bufnr)
+		local selection = action_state.get_selected_entry()
 		if selection == nil then
 			return
 		end
@@ -1710,8 +1713,8 @@ vim.keymap.set("n", "<leader>we", function()
 		vim.cmd("e " .. worktree_path .. "/" .. relpath)
 	end
 
-	local telescope_git_worktree = function(opts)
-		opts = opts or {}
+	local telescope_git_worktree = function(opts_new)
+		opts_new = opts_new or {}
 		local output = utils.get_os_command_output({ "git", "worktree", "list" })
 		local results = {}
 		local widths = {
@@ -1732,10 +1735,14 @@ vim.keymap.set("n", "<leader>we", function()
 				local index = #results + 1
 				for key, val in pairs(widths) do
 					if key == "path" then
-						local path_len = strings.strdisplaywidth(entry[key] or "")
-						widths[key] = math.max(val, path_len)
+						if strings.strdisplaywidth then
+							local path_len = strings.strdisplaywidth(entry[key] or "")
+							widths[key] = math.max(val, path_len)
+						end
 					else
-						widths[key] = math.max(val, strings.strdisplaywidth(entry[key] or ""))
+						if strings.strdisplaywidth then
+							widths[key] = math.max(val, strings.strdisplaywidth(entry[key] or ""))
+						end
 					end
 				end
 
@@ -1761,7 +1768,7 @@ vim.keymap.set("n", "<leader>we", function()
 		})
 
 		local make_display = function(entry)
-			local path, _ = utils.transform_path(opts, entry.path)
+			local path, _ = utils.transform_path(opts_new, entry.path)
 			return displayer({
 				{ entry.branch, "TelescopeResultsIdentifier" },
 				{ path },
@@ -1770,7 +1777,7 @@ vim.keymap.set("n", "<leader>we", function()
 		end
 
 		pickers
-			.new(opts or {}, {
+			.new(opts_new or {}, {
 				prompt_title = "Git Worktrees",
 				finder = finders.new_table({
 					results = results,
@@ -1781,7 +1788,7 @@ vim.keymap.set("n", "<leader>we", function()
 						return entry
 					end,
 				}),
-				sorter = conf.generic_sorter(opts),
+				sorter = conf.generic_sorter(opts_new),
 				attach_mappings = function(_, map)
 					action_set.select:replace(select_worktree)
 					map("i", "<C-v>", open_in_vsplit)
@@ -1801,5 +1808,11 @@ vim.keymap.set({ "n" }, "<leader>ge", function()
 	vim.cmd("e ~/.gitconfig")
 end, opts)
 
+vim.keymap.set({ "n" }, "<leader>em", function()
+	vim.cmd("e ~/.config/mcphub/servers.json")
+end, opts)
+
 -- vim.keymap.set("n", "<C-I>", "<C-I>", { noremap = true })
 -- vim.keymap.set("n", "<C-M>", "<C-M>", { noremap = true })
+
+vim.api.nvim_set_keymap("c", "<CR>", "<C-M>", { noremap = true, silent = true })

@@ -60,6 +60,11 @@ return {
         "<M-l>",
         mode = { "n", "t" },
         function()
+          vim.cmd("wa")
+          local win_ids = vim.api.nvim_list_wins()
+          for _, win_id in ipairs(win_ids) do
+            require("barbecue.ui").update(win_id)
+          end
           local get_terminal_bufs = function()
             return vim.tbl_filter(function(bufnr)
               local filetype = vim.fn.getbufvar(bufnr, "&ft")

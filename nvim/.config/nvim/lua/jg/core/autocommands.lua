@@ -168,6 +168,7 @@ vim.filetype.add({
 
 vim.api.nvim_create_autocmd("User", {
 	pattern = "GitConflictDetected",
+  group = vim.api.nvim_create_augroup("GitConflictDetected", { clear = true }),
 	callback = function()
 		vim.notify("Conflict detected in " .. vim.fn.expand("<afile>"))
 
@@ -223,19 +224,114 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 vim.api.nvim_create_autocmd("BufEnter", {
 	group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
 	pattern = "copilot-chat",
-	callback = function()
+	callback = function(args)
 		vim.o.conceallevel = 0
 		vim.o.signcolumn = "no"
+		if vim.b[args.buf].view ~= nil then
+			vim.fn.winrestview(vim.b[args.buf].view)
+			return
+		end
+		vim.cmd("norm zz")
 	end,
 })
 
-vim.api.nvim_create_autocmd("BufLeave", {
-	group = vim.api.nvim_create_augroup("copilot-chat", { clear = true }),
+-- -- Save and restore window view when switching buffers
+vim.api.nvim_create_autocmd({ "BufLeave" }, {
+  group = vim.api.nvim_create_augroup("savecopilotchatvinsaveview", { clear = true }),
 	pattern = "copilot-chat",
+	callback = function(args)
+		vim.b[args.buf].view = vim.fn.winsaveview()
+	end,
+})
+
+-- vim.api.nvim_create_autocmd("BufLeave", {
+-- 	group = vim.api.nvim_create_augroup("copilot-chat", { clear = true }),
+-- 	pattern = "copilot-chat",
+-- 	callback = function()
+-- 		local chat = require("CopilotChat")
+-- 		if vim.g.chat_title then
+-- 			chat.save(vim.g.chat_title)
+-- 			return
+-- 		end
+--
+-- 		local cwd = vim.fn.getcwd()
+-- 		local wt_utils = require("jg.custom.worktree-utils")
+-- 		local wt_info = wt_utils.get_wt_info(cwd)
+-- 		-- print("wt_info", vim.inspect(wt_info))
+--
+-- 		if next(wt_info) == nil then
+-- 			vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+-- 		else
+-- 			-- print("wt_root_dir", wt_info["wt_root_dir"])
+-- 			if not wt_info["wt_root_dir"] then
+-- 				vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+-- 				return
+-- 			end
+-- 			vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
+-- 		end
+-- 		-- print("vim.g.chat_title", vim.g.chat_title)
+-- 		chat.save(vim.g.chat_title)
+-- 	end,
+-- })
+
+-- vim.g.copilot_chat_loaded = false
+
+-- vim.api.nvim_create_autocmd("BufReadPost", {
+--   group = vim.api.nvim_create_augroup("copilot-chat-enter", { clear = true }),
+--   pattern = "copilot-chat",
+--   callback = function()
+--     if not vim.g.copilot_chat_loaded then
+--       -- local chat = require("CopilotChat")
+--       -- chat.toggle()
+--       local chat = require("CopilotChat")
+--
+--       local cwd = vim.fn.getcwd()
+--       local wt_utils = require("jg.custom.worktree-utils")
+--       local wt_info = wt_utils.get_wt_info(cwd)
+--
+--       if next(wt_info) == nil then
+--         vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+--       else
+--         vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
+--       end
+--
+--       -- print("<leader>ct vim.g.chat_title: ", vim.g.chat_title)
+--
+--       local existing_chat_path = vim.fn.stdpath("data")
+--       .. "/copilotchat_history/"
+--       .. vim.g.chat_title
+--       .. ".json"
+--       -- print("existing_chat_path: ", existing_chat_path)
+--
+--       local chat_exits = wt_utils.file_exists(existing_chat_path)
+--
+--       if chat_exits then
+--         print('Loading existing copilot chat:', vim.g.chat_title)
+--         chat.load(vim.g.chat_title)
+--         vim.g.copilot_chat_loaded = true
+--       else
+--       end
+--     else
+--       print("Copilot chat already loaded for this session.")
+--       return
+--     end
+--   end,
+-- })
+
+vim.g.copilot_chat_saved = false
+
+vim.api.nvim_create_autocmd({"VimLeavePre", "VimLeave"}, {
+	group = vim.api.nvim_create_augroup("copilot-chat-leave", { clear = true }),
+  pattern = "*",
 	callback = function()
+    if vim.g.copilot_chat_saved then
+      return
+    end
+
 		local chat = require("CopilotChat")
 		if vim.g.chat_title then
 			chat.save(vim.g.chat_title)
+      vim.g.copilot_chat_saved = true
 			return
 		end
 
@@ -248,10 +344,15 @@ vim.api.nvim_create_autocmd("BufLeave", {
 			vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
 		else
 			-- print("wt_root_dir", wt_info["wt_root_dir"])
+			if not wt_info["wt_root_dir"] then
+				vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+				return
+			end
 			vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
 		end
 		-- print("vim.g.chat_title", vim.g.chat_title)
 		chat.save(vim.g.chat_title)
+    vim.g.copilot_chat_saved = true
 	end,
 })
 
@@ -317,6 +418,7 @@ vim.api.nvim_create_autocmd("BufLeave", {
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "applescript",
+  group = vim.api.nvim_create_augroup("applescript2", { clear = true }),
 	callback = function()
 		vim.cmd([[setlocal commentstring=--\ %s]])
 	end,
@@ -490,25 +592,76 @@ end, { noremap = true, silent = true })
 
 vim.api.nvim_create_autocmd("ModeChanged", {
 	desc = "Highlighting matched words when searching",
+  group = vim.api.nvim_create_augroup("modechangedcustom", { clear = true }),
 	pattern = { "t:nt" },
-	callback = function(ev)
+	callback = function()
 		vim.wo.cursorline = true
 	end,
 })
 
-vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave" }, {
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	desc = "Autosave",
+  group = vim.api.nvim_create_augroup("autosavegroup", { clear = true }),
 	callback = function(ev)
-    -- local winid = vim.api.nvim_get_current_win()  -- Get the current window ID
-    -- print("Window ID:", winid)                   -- Debug print to check the value
+		-- local winid = vim.api.nvim_get_current_win()  -- Get the current window ID
+		-- print("Window ID:", winid)                   -- Debug print to check the value
+		if vim.bo[ev.buf].buftype ~= "terminal" then
+			return
+		end
 
-    local win_id = vim.fn.win_findbuf(ev.buf)[1] -- Get the window ID(s) displaying the buffer
-    -- print("win_id:", vim.inspect(win_id))  -- Debug print to check the value
+    local win_ids = vim.api.nvim_list_wins()
+    -- print("win_ids:", vim.inspect(win_ids))  -- Debug print to check the value
 
-		vim.cmd("wa")
-    -- require("barbecue.ui").update(winid)
-    require("barbecue.ui").update(win_id)
+    local writable_win_ids = {}
+    for _, win in ipairs(win_ids) do
+      local buf = vim.api.nvim_win_get_buf(win)
+
+      if (vim.api.nvim_buf_get_option(buf, "buftype") == "") and not vim.api.nvim_buf_get_option(buf, "readonly") then
+        table.insert(writable_win_ids, win)
+      end
+
+      -- if vim.api.nvim_buf_get_option(buf, "modifiable") and not vim.api.nvim_buf_get_option(buf, "readonly") then
+      --   table.insert(writable_win_ids, win)
+      -- end
+    end
+    -- print("writable_win_ids:", vim.inspect(writable_win_ids))  -- Debug print to check the value
+
+    for _, id in ipairs(writable_win_ids) do
+      local buf = vim.api.nvim_win_get_buf(id)
+      vim.api.nvim_buf_call(buf, function()
+        vim.cmd("w")
+      end)
+      require("barbecue.ui").update(id)
+    end
+
+		-- local ok, win_id = pcall(vim.fn.win_findbuf(ev.buf)[1]) -- Get the window ID(s) displaying the buffer
+		-- if not ok then
+		--     print("Error getting window ID for buffer:", ev.buf)
+		-- 	vim.cmd("wa")
+		-- 	-- require("barbecue.ui").update(winid)
+		-- 	require("barbecue.ui").update()
+		-- 	return
+		-- end
+		-- -- print("win_id:", vim.inspect(win_id))  -- Debug print to check the value
+		--
+		-- -- vim.cmd("wa")
+		-- vim.api.nvim_buf_call(ev.buf, function()
+		-- 	vim.cmd("w")
+		-- end)
+		-- require("barbecue.ui").update(winid)
+		-- require("barbecue.ui").update(win_id)
 		-- vim.defer_fn(function()
 		-- end, 200)
 	end,
 })
+
+-- vim.api.nvim_create_autocmd("BufEnter", {
+-- 	pattern = "*",
+-- 	callback = function(ev)
+-- 		if vim.bo[ev.buf].buftype == "terminal" then
+-- 			-- local cmdline = vim.fn.getcmdline()
+-- 			-- print("Command executed:", cmdline)
+--       print("Terminal buffer entered:", vim.api.nvim_buf_get_name(ev.buf))
+-- 		end
+-- 	end,
+-- })

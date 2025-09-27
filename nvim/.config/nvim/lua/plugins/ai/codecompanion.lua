@@ -109,6 +109,20 @@ return {
 
 			strategies = {
 				chat = {
+          tools = {
+            opts = {
+              default_tools = {
+                "nx",
+                "github",
+                "tavily",
+                "files",
+                "neovim",
+                "search_web"
+              },
+              auto_submit_errors = true, -- Send any errors to the LLM automatically?
+              auto_submit_success = true, -- Send any successful output to the LLM automatically?
+            },
+          },
 					keymaps = {
 						clear = {
 							modes = {
@@ -149,6 +163,29 @@ return {
 					show_header_separator = true, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
 					start_in_insert_mode = false,
 					separator = "─", -- The separator between the different messages in the chat buffer
+
+					window = {
+						layout = "buffer", -- float|vertical|horizontal|buffer
+						position = nil, -- left|right|top|bottom (nil will default depending on vim.opt.splitright|vim.opt.splitbelow)
+						border = "single",
+						height = 0.8,
+						width = 0.45,
+						relative = "editor",
+						full_height = true, -- when set to false, vsplit will be used to open the chat buffer vs. botright/topleft vsplit
+						sticky = false, -- when set to true and `layout` is not `"buffer"`, the chat buffer will remain opened when switching tabs
+						opts = {
+							breakindent = true,
+							cursorcolumn = false,
+							cursorline = true,
+							foldcolumn = "0",
+							linebreak = true,
+							list = false,
+							numberwidth = 1,
+							signcolumn = "no",
+							spell = false,
+							wrap = true,
+						},
+					},
 				},
 			},
 		})
@@ -162,7 +199,7 @@ return {
 		-- 	end,
 		-- 	desc = "Toggle Copilot",
 		-- },
-		{ mode = { "n", "v" }, "<leader>at", "<cmd>CodeCompanionChat Toggle<CR>" },
+		{ mode = { "n", "v" }, "<leader>ca", "<cmd>CodeCompanionChat Toggle<CR>" },
 		{ mode = { "v" }, "ga", "<cmd>CodeCompanionChat Add<CR>" },
 	},
 }

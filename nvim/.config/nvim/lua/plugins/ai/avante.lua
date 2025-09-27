@@ -15,6 +15,17 @@ return {
 	opts = {
 		-- system_prompt as function ensures LLM always has latest MCP server state
 		-- This is evaluated for every message, even in existing chats
+    behavior = {
+      auto_focus_sidebar = true,
+      auto_approve_tool_permissions = false, -- automatically approve tool permissions requests
+      -- auto_suggestions = false,
+      -- auto_set_highlight_group = true,
+      -- auto_set_keymaps = true,
+      auto_apply_diff_after_generation = false,
+      -- support_paste_from_clipboard = true,
+      enable_token_counting = false,
+      enable_fastapply = false,
+    },
 		system_prompt = function()
 			local hub = require("mcphub").get_hub_instance()
 			return hub and hub:get_active_servers_prompt() or ""
@@ -83,7 +94,7 @@ return {
 			},
 		},
 		mappings = {
-			ask = "<M-m>", -- ask
+			ask = "<leader>at", -- ask
 			edit = "<leader>ae", -- edit
 			refresh = "<leader>ar", -- refresh
 
@@ -110,12 +121,18 @@ return {
 				normal = "<CR>",
 				insert = "<C-s>",
 			},
-			sidebar = {
-				apply_all = "A",
-				apply_cursor = "a",
-				switch_windows = "<Tab>",
-				reverse_switch_windows = "<S-Tab>",
-			},
+      sidebar = {
+        apply_all = "A",
+        apply_cursor = "a",
+        retry_user_request = "r",
+        edit_user_request = "e",
+        switch_windows = "<Tab>",
+        reverse_switch_windows = "<S-Tab>",
+        remove_file = "dd",
+        add_file = "@",
+        close = { "<Esc>", "q" },
+        close_from_input = nil, -- e.g., { normal = "<Esc>", insert = "<C-d>" }
+      },
 		},
 		hints = { enabled = false },
 	},

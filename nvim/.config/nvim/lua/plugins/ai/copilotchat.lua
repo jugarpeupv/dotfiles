@@ -1,3 +1,5 @@
+vim.g.chat_loaded = false
+
 return {
 	"CopilotC-Nvim/CopilotChat.nvim",
 	cmd = { "CopilotChat", "CopilotChatToggle", "CopilotChatCommit" },
@@ -18,14 +20,37 @@ return {
 	build = "make tiktoken", -- Only on MacOS or Linux
 	opts = {
 		default = { "copilot" },
-    -- temperature = 0.1,           -- Lower = focused, higher = creative
-		chat_autocomplete = true,
-		highlight_selection = true, -- Highlight selection
-		highlight_headers = true, --
-    -- selection = 'visual',
+		-- tools = { "nx", "github", "tavily", "neovim" },
+		tools = { "nx", "github", "tavily" },
+		resources = { "selection", "buffer" },
+		sticky = nil, -- Default sticky prompt or array of sticky prompts to use at start of every new chat (can be specified manually in prompt via >).
+		-- diff = "block", -- Default diff format to use, 'block' or 'unified'.
+		diff = "unified", -- Default diff format to use, 'block' or 'unified'.
+		language = "English", -- Default language to use for answers
+		chat_autocomplete = false, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
+		-- temperature = 0.1,           -- Lower = focused, higher = creative
+		-- chat_autocomplete = true,
+		highlight_selection = false, -- Highlight selection
+		highlight_headers = false, --
+
+		headers = {
+			user = "User", -- Header to use for user questions
+			assistant = "  Copilot", -- Header to use for AI answers
+			tool = "Tool", -- Header to use for tool calls
+		},
+
+		auto_follow_cursor = false, -- Auto-follow cursor in chat
+		auto_insert_mode = false, -- Automatically enter insert mode when opening window and on new prompt
+		insert_at_end = false, -- Move cursor to end of buffer when inserting text
+		clear_chat_on_new_prompt = false, -- Clears chat on every new prompt
+		stop_on_function_failure = false, -- Stop processing prompt if any function fails (preserves quota)
+		selection = "visual",
+		-- selection = 'visual',
 		-- selection = function(source)
 		-- 	-- return require("CopilotChat.select").visual(source) or require("CopilotChat.select").line(source)
-		-- 	return require("CopilotChat.select").visual(source) or require("CopilotChat.select").buffer(source)
+		-- 	-- return require("CopilotChat.select").visual(source) or require("CopilotChat.select").buffer(source)
+		--     -- return require("CopilotChat.select").buffer(source)
+		--     return require("CopilotChat.select").line(source)
 		--
 		-- 	-- return require("CopilotChat.select").visual(source)
 		-- 	-- 	or require("CopilotChat.select").line(source)
@@ -45,7 +70,8 @@ return {
 		-- answer_header = '#  ', -- Header to use for AI answers
 		-- error_header = '# Error ', -- Header to use for errors
 		mappings = {
-			complete = { insert = "<Tab>" },
+			-- complete = { insert = "<Tab>" },
+			complete = { insert = "<M-`>" },
 			toggle_sticky = {
 				detail = "Makes line under cursor sticky or deletes sticky line.",
 				normal = "gR",
@@ -55,7 +81,7 @@ return {
 				insert = "<C-y>",
 			},
 			reset = {
-				normal = "gX",
+				normal = "cl",
 				insert = "<C-x>",
 			},
 			jump_to_diff = {
@@ -75,79 +101,81 @@ return {
 			show_info = {
 				normal = "gi",
 			},
-			show_context = {
-				normal = "gc",
-			},
+			-- show_context = {
+			-- 	normal = "gC",
+			-- },
 			show_help = {
 				normal = "g?",
 			},
 		},
+
 		window = {
 			layout = "vertical", -- 'vertical', 'horizontal', 'float', 'replace'
-			width = 0.40, -- fractional width of parent, or absolute width in columns when > 1
-			height = 0.45, -- fractional height of parent, or absolute height in rows when > 1
+			width = 0.45, -- fractional width of parent, or absolute width in columns when > 1
+			height = 0.90, -- fractional height of parent, or absolute height in rows when > 1
 			-- Options below only apply to floating windows
 			relative = "editor", -- 'editor', 'win', 'cursor', 'mouse'
 			border = "rounded", -- 'none', single', 'double', 'rounded', 'solid', 'shadow'
-			row = nil, -- row position of the window, default is centered
-			col = nil, -- column position of the window, default is centered
+			row = 0, -- row position of the window, default is centered
+			col = 100, -- column position of the window, default is centered
 			title = "Copilot Chat", -- title of chat window
-			footer = "footer", -- footer of chat window
+			-- footer = "footer", -- footer of chat window
+			footer = "", -- footer of chat window
 			zindex = 1, -- determines if window is on top or below other floating windows
 		},
 
 		-- See Configuration section for options
-		callback = function()
-			local chat = require("CopilotChat")
-			if vim.g.chat_title then
-				-- print("saving chat quickly")
-				chat.save(vim.g.chat_title)
-				return
-			end
-
-			local cwd = vim.fn.getcwd()
-			local wt_utils = require("jg.custom.worktree-utils")
-			local wt_info = wt_utils.get_wt_info(cwd)
-			-- print("wt_info", vim.inspect(wt_info))
-
-			if next(wt_info) == nil then
-				vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
-			else
-				-- print("wt_root_dir", wt_info["wt_root_dir"])
-				vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
-			end
-			-- print("vim.g.chat_title", vim.g.chat_title)
-			chat.save(vim.g.chat_title)
-		end,
-		contexts = {
-			file = {
-				input = function(callback)
-					local telescope = require("telescope.builtin")
-					local actions = require("telescope.actions")
-					local action_state = require("telescope.actions.state")
-					telescope.find_files({
-						hidden = true,
-						find_command = {
-							"rg",
-							"--files",
-							"--color",
-							"never",
-							"--glob=!.git",
-							"--glob=!*__template__",
-							"--glob=!*DS_Store",
-						},
-						attach_mappings = function(prompt_bufnr)
-							actions.select_default:replace(function()
-								actions.close(prompt_bufnr)
-								local selection = action_state.get_selected_entry()
-								callback(selection[1])
-							end)
-							return true
-						end,
-					})
-				end,
-			},
-		},
+		-- callback = function()
+		-- 	local chat = require("CopilotChat")
+		-- 	if vim.g.chat_title then
+		-- 		-- print("saving chat quickly")
+		-- 		chat.save(vim.g.chat_title)
+		-- 		return
+		-- 	end
+		--
+		-- 	local cwd = vim.fn.getcwd()
+		-- 	local wt_utils = require("jg.custom.worktree-utils")
+		-- 	local wt_info = wt_utils.get_wt_info(cwd)
+		-- 	-- print("wt_info", vim.inspect(wt_info))
+		--
+		-- 	if next(wt_info) == nil then
+		-- 		vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+		-- 	else
+		-- 		-- print("wt_root_dir", wt_info["wt_root_dir"])
+		-- 		vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
+		-- 	end
+		-- 	-- print("vim.g.chat_title", vim.g.chat_title)
+		-- 	chat.save(vim.g.chat_title)
+		-- end,
+		-- contexts = {
+		-- 	file = {
+		-- 		input = function(callback)
+		-- 			local telescope = require("telescope.builtin")
+		-- 			local actions = require("telescope.actions")
+		-- 			local action_state = require("telescope.actions.state")
+		-- 			telescope.find_files({
+		-- 				hidden = true,
+		-- 				find_command = {
+		-- 					"rg",
+		-- 					"--files",
+		-- 					"--color",
+		-- 					"never",
+		-- 					"--glob=!.git",
+		-- 					"--glob=!*__template__",
+		-- 					"--glob=!*DS_Store",
+		-- 				},
+		-- 				attach_mappings = function(prompt_bufnr)
+		-- 					actions.select_default:replace(function()
+		-- 						actions.close(prompt_bufnr)
+		-- 						local selection = action_state.get_selected_entry()
+		-- 						callback(selection[1])
+		-- 					end)
+		-- 					return true
+		-- 				end,
+		-- 			})
+		-- 		end,
+		-- 	},
+		-- },
 	},
 	keys = {
 		{
@@ -200,14 +228,38 @@ return {
 		-- 	desc = "Toggle Copilot",
 		-- },
 		{
-			"<leader>aa",
-			-- mode = { "n", "v", "t" },
-      mode = { "n", "v" },
+			"<leader>sc",
 			function()
-				-- local chat = require("CopilotChat")
-				-- chat.toggle()
 				local chat = require("CopilotChat")
+				if vim.g.chat_title then
+					chat.save(vim.g.chat_title)
+					return
+				end
 
+				local cwd = vim.fn.getcwd()
+				local wt_utils = require("jg.custom.worktree-utils")
+				local wt_info = wt_utils.get_wt_info(cwd)
+				-- print("wt_info", vim.inspect(wt_info))
+
+				if next(wt_info) == nil then
+					vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+				else
+					-- print("wt_root_dir", wt_info["wt_root_dir"])
+					if not wt_info["wt_root_dir"] then
+						vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+						return
+					end
+					vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
+				end
+				-- print("vim.g.chat_title", vim.g.chat_title)
+				chat.save(vim.g.chat_title)
+			end,
+			desc = "save chat Copilot",
+		},
+		{
+			"<leader>lc",
+			function()
+				local chat = require("CopilotChat")
 				local cwd = vim.fn.getcwd()
 				local wt_utils = require("jg.custom.worktree-utils")
 				local wt_info = wt_utils.get_wt_info(cwd)
@@ -217,7 +269,6 @@ return {
 				else
 					vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
 				end
-
 				-- print("<leader>ct vim.g.chat_title: ", vim.g.chat_title)
 
 				local existing_chat_path = vim.fn.stdpath("data")
@@ -229,10 +280,47 @@ return {
 				local chat_exits = wt_utils.file_exists(existing_chat_path)
 
 				if chat_exits then
-					chat.toggle()
 					chat.load(vim.g.chat_title)
-				else
+				end
+				vim.g.chat_loaded = true
+			end,
+			desc = "CopilotChat - Prompt actions",
+		},
+		{
+			"<M-m>",
+			-- mode = { "n", "v", "t" },
+			mode = { "n", "v", "t" },
+			function()
+				local chat = require("CopilotChat")
+				if vim.g.chat_loaded then
 					chat.toggle()
+				else
+					local cwd = vim.fn.getcwd()
+					local wt_utils = require("jg.custom.worktree-utils")
+					local wt_info = wt_utils.get_wt_info(cwd)
+
+					if next(wt_info) == nil then
+						vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+					else
+						vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
+					end
+					-- print("<leader>ct vim.g.chat_title: ", vim.g.chat_title)
+
+					local existing_chat_path = vim.fn.stdpath("data")
+						.. "/copilotchat_history/"
+						.. vim.g.chat_title
+						.. ".json"
+					-- print("existing_chat_path: ", existing_chat_path)
+
+					local chat_exits = wt_utils.file_exists(existing_chat_path)
+
+					if chat_exits then
+						chat.load(vim.g.chat_title)
+						chat.toggle()
+					else
+						chat.toggle()
+					end
+					vim.g.chat_loaded = true
 				end
 			end,
 			desc = "Toggle Copilot",
@@ -244,7 +332,7 @@ return {
 			desc = "Toggle Copilot",
 		},
 		{
-			"<leader>ca",
+			"<leader>cA",
 			function()
 				local actions = require("CopilotChat.actions")
 				require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
@@ -252,5 +340,4 @@ return {
 			desc = "CopilotChat - Prompt actions",
 		},
 	},
-	-- See Commands section for default commands if you want to lazy load on them
 }

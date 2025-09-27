@@ -1,5 +1,21 @@
 local M = {}
 
+M.get_all_terminals = function()
+  local terminal_chans = {}
+  for _, chan in pairs(vim.api.nvim_list_chans()) do
+    if chan["mode"] == "terminal" and chan["pty"] ~= "" then
+      table.insert(terminal_chans, chan)
+    end
+  end
+  table.sort(terminal_chans, function(left, right)
+    return left["buffer"] < right["buffer"]
+  end)
+  if #terminal_chans == 0 then
+    return nil
+  end
+  return terminal_chans
+end
+
 M.is_bare = function(path)
   local is_bare_result = vim.system({ "git", "rev-parse", "--is-bare-repository" }, { cwd = path }):wait()
   local is_bare = false

@@ -2,12 +2,15 @@
 
 -- return { "griwes/telescope.nvim", branch = "group-by" }
 --
+vim.g.nx_loaded = false
+
 return {
 	{
 		"nvim-telescope/telescope.nvim",
 		-- branch = "0.1.x",
 		-- tag = "0.1.8",
 		branch = "master",
+		lazy = true,
 		dependencies = {
 			{
 				"prochri/telescope-all-recent.nvim",
@@ -182,21 +185,54 @@ return {
 			},
 			{
 				"jugarpeupv/nx.nvim",
-				enabled = false,
-				-- dir='~/private/nx.nvim/wt-main/',
-				-- dev = true,
+				enabled = true,
+				dir = "~/projects/nx.nvim",
+				dev = true,
 				dependencies = {
 					"nvim-telescope/telescope.nvim",
 				},
+				keys = {
+					{
+						"<leader>nx",
+						function()
+							if not vim.g.nx_loaded then
+								vim.defer_fn(function()
+									require("telescope").extensions.nx.actions()
+									vim.g.nx_loaded = true
+								end, 700)
+							else
+                -- print('vim.g.nx_loaded is: ', vim.inspect(vim.g.nx_loaded))
+								require("telescope").extensions.nx.actions()
+							end
+						end,
+						desc = "nx actions",
+					},
+					{
+						"<leader>nm",
+						function()
+							if not vim.g.nx_loaded then
+								vim.defer_fn(function()
+									require("telescope").extensions.nx.run_many()
+								end, 700)
+							else
+								require("telescope").extensions.nx.run_many()
+							end
+						end,
+						desc = "nx actions",
+					},
+				},
+
 				-- keys = {
 				--   { "<leader>nx", "<cmd>Telescope nx actions<CR>", desc = "nx actions" },
 				-- },
+				-- init = function()
+				--   require("telescope").load_extension("nx")
+				-- end,
 				config = function()
 					require("nx").setup({
 						nx_cmd_root = "npx nx",
 						command_runner = function(command)
 							-- vim.cmd('terminal ' .. command)
-
 							local myterm = require("terminal").terminal:new({
 								layout = { open_cmd = "botright new" },
 								-- cmd = { command },
@@ -204,8 +240,23 @@ return {
 							})
 							myterm:open()
 							myterm:send(command)
+
+							-- local terminals = require("jg.custom.worktree-utils").get_all_terminals()
+							-- if terminals and next(terminals) ~= nil and #terminals > 0 then
+							-- 	vim.fn.chansend(terminals[#terminals]["id"], command)
+							-- else
+							-- 	local myterm = require("terminal").terminal:new({
+							-- 		layout = { open_cmd = "botright new" },
+							-- 		-- cmd = { command },
+							-- 		autoclose = false,
+							-- 	})
+							-- 	myterm:open()
+							-- 	myterm:send(command)
+							-- end
 						end,
 					})
+
+					-- require("telescope").load_extension("nx")
 				end,
 			},
 			-- {
@@ -229,7 +280,8 @@ return {
 				keys = {
 					{
 						mode = { "i", "t", "n" },
-						"<M-i>",
+						"<M-`>",
+						-- "<M-i>",
 						function()
 							vim.cmd("UrlView")
 						end,
@@ -365,6 +417,7 @@ return {
 				--   "nvim-telescope/telescope.nvim",
 				-- },
 				config = function()
+					---@diagnostic disable-next-line: param-type-not-match
 					require("browser_bookmarks").setup({
 						-- Available: 'brave', 'buku', 'chrome', 'chrome_beta', 'edge', 'safari', 'firefox', 'vivaldi'
 						selected_browser = "brave",
@@ -395,7 +448,6 @@ return {
 		},
 		cmd = { "Telescope" },
 		-- event = { "BufReadPre", "BufNewFile" },
-		lazy = true,
 		-- keys = { "<M-.>" },
 		-- event = "VeryLazy",
 		config = function()
@@ -406,7 +458,7 @@ return {
 				return
 			end
 
-      local telescope_image_preview = require("jg.custom.telescope").telescope_image_preview()
+			local telescope_image_preview = require("jg.custom.telescope").telescope_image_preview()
 
 			local actions = require("telescope.actions")
 			local actions_live_grep_args = require("telescope-live-grep-args.actions")
@@ -437,11 +489,11 @@ return {
 							"--column",
 							"--smart-case",
 						},
-            -- file_previewer = file_previewer,
-            -- buffer_previewer_maker = M.buffer_previewer_maker,
+						-- file_previewer = file_previewer,
+						-- buffer_previewer_maker = M.buffer_previewer_maker,
 						-- file_previewer = telescope_image_preview.file_previewer,
 						buffer_previewer_maker = telescope_image_preview.buffer_previewer_maker,
-            -- buffer_previewer_maker = image_preview,
+						-- buffer_previewer_maker = image_preview,
 						-- layout_strategy = 'bottom_pane',
 						-- layout_config = {
 						--   height = 0.53,
@@ -968,6 +1020,7 @@ return {
 			telescope.load_extension("fzf")
 			telescope.load_extension("before")
 			telescope.load_extension("recent_files")
+			telescope.load_extension("nx")
 			-- require("telescope").load_extension("persisted")
 			-- telescope.load_extension("jsonfly")
 			-- telescope.load_extension("media_files")

@@ -229,6 +229,10 @@ M.get_gh_actions_init_options = function(org, workspace_path, session_token)
 	workspace_path = workspace_path or vim.fn.getcwd()
 	session_token = session_token or os.getenv("GH_ACTIONS_PAT")
 
+  if not session_token then
+    return
+  end
+
 	local function get_repo_name()
 		local handle = io.popen("git remote get-url origin 2>/dev/null")
 		if not handle then
