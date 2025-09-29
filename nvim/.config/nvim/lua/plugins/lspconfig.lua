@@ -781,7 +781,6 @@ return {
       -- vim.lsp.enable("css_variables")
 
 			-- Set global defaults for all servers
-
 			local lspconfig = require("lspconfig")
 			lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {
 				capabilities = vim.tbl_deep_extend(

@@ -8,7 +8,7 @@ return {
 				require("grug-far").toggle_instance({
 					instanceName = "far",
 					staticTitle = "Find and Replace",
-					prefills = { flags = "-i -w" },
+					-- prefills = { flags = "-i -w" },
 				})
 			end,
 		},
@@ -23,13 +23,13 @@ return {
           defaults = {
             search = nil,
             replacement = nil,
-            filesFilter = "**",
-            flags = nil,
+            filesFilter = "" ,
+            flags = "-i -w -g !**__template__** -g !**migrations** -g !**spec**",
             paths = nil,
           },
         }
       },
-			startInInsertMode = true,
+			startInInsertMode = false,
 			-- shortcuts for the actions you see at the top of the buffer
 			-- set to '' or false to unset. Mappings with no normal mode value will be removed from the help header
 			-- you can specify either a string which is then used as the mapping for both normal and insert mode
@@ -101,20 +101,6 @@ return {
 				-- format for the number label, by default it displays as for example:  [42]
 				numberLabelFormat = " [%d]",
 			},
-		})
-
-		vim.api.nvim_create_autocmd("FileType", {
-			group = vim.api.nvim_create_augroup("my-grug-far-custom-keybinds", { clear = true }),
-			pattern = { "grug-far" },
-			callback = function()
-        -- vim.defer_fn(function () vim.cmd("set buftype=") end, 500)
-				-- cabbrev w -> sync_all()
-				vim.keymap.set("ca", "w", function()
-					local inst = require("grug-far").get_instance(0)
-          print('inst', vim.inspect(inst))
-					inst:sync_all()
-				end, { buffer = true })
-			end,
 		})
 	end,
 }

@@ -54,6 +54,7 @@ return {
 			provider_opts = {},
 		},
 		selector = {
+      ---@diagnostic disable-next-line: type-not-found
 			--- @alias avante.SelectorProvider "native" | "fzf_lua" | "mini_pick" | "snacks" | "telescope" | fun(selector: avante.ui.Selector): nil
 			--- @type avante.SelectorProvider
 			provider = "telescope",
@@ -155,7 +156,7 @@ return {
 					require("avante.api").ask()
 				end,
 				desc = "avante: ask",
-				mode = { "n", "v", "t" },
+				mode = { "n", "v" },
 			},
 			{
 				opts.mappings.refresh,

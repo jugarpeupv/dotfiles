@@ -42,10 +42,6 @@ vim.cmd([[
   " augroup end
 ]])
 
--- vim.cmd([[autocmd BufRead */node_modules/* lua vim.diagnostic.disable(0)]])
--- vim.cmd([[autocmd BufRead,BufNewFile */dist/* lua vim.diagnostic.disable(0)]])
--- vim.cmd([[autocmd BufRead,BufNewFile */assets/* lua vim.diagnostic.disable(0)]])
-
 vim.cmd([[
   augroup filetypedetect
   autocmd BufRead,BufNewFile *Jenkinsfile set filetype=groovy
@@ -70,105 +66,15 @@ vim.cmd([[
 	augroup END
 ]])
 
--- vim.cmd([[
---   augroup WrapMarkdownAu
---   autocmd! FileType markdown set nowrap
---   augroup END
--- ]])
-
--- vim.cmd([[
---   augroup WrapTelescopePreview
---   autocmd! FileType TelescopePreview set wrap
---   augroup END
--- ]])
-
--- vim.api.nvim_create_autocmd({ "BufReadPre" }, {
--- 	group = vim.api.nvim_create_augroup("set-png-ft", { clear = true }),
--- 	pattern = "*.png",
--- 	callback = function()
--- 		vim.cmd([[set filetype=png]])
--- 	end,
--- })
-
--- vim.api.nvim_create_autocmd("CursorMoved", {
---   group = vim.api.nvim_create_augroup("auto-hlsearch", { clear = true }),
---   callback = function()
---     if vim.v.hlsearch == 1 and vim.fn.searchcount().exact_match == 0 then
---       vim.schedule(function()
---         vim.cmd.nohlsearch()
---       end)
---     end
---   end,
--- })
-
 vim.filetype.add({
 	extension = {
 		["http"] = "http",
 	},
 })
 
--- vim.cmd([[ augroup JsonToJsonc
---     autocmd! FileType json set filetype=jsonc
--- augroup END ]])
-
--- vim.api.nvim_create_augroup("JsonToJsonc", { clear = true })
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "json",
---   group = "JsonToJsonc",
---   callback = function ()
---     vim.cmd("set filetype=jsonc")
---     vim.cmd("set conceallevel=0")
---   end
--- })
-
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "json",
---   callback = function()
---     vim.cmd([[set commentstring=//\ %s]])
---   end,
--- })
-
--- vim.cmd([[autocmd BufReadPost * if &filetype == 'json' | execute 'set filetype jsonc' | endif]])
-
--- vim.cmd([[autocmd BufReadPre * if &buftype == 'terminal' | execute 'setlocal wrap' | endif]])
-
--- vim.cmd([[autocmd OptionSet * if &diff | execute 'set nowrap' | endif]])
-
--- vim.api.nvim_create_autocmd({ "OptionSet" }, {
---   pattern = "diff",
---   callback = function()
---     if vim.wo.diff then
---       require("barbecue.ui").toggle(false)
---     else
---       require("barbecue.ui").toggle(true)
---     end
---   end,
--- })
-
--- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
-
--- vim.cmd([[autocmd VimLeave * :!echo Hello; sleep 1]])
-
--- vim.api.nvim_create_autocmd("TermEnter", {
--- 	pattern = "*",
--- 	callback = function()
--- 		vim.wo.cursorline = true
--- 	end,
--- 	desc = "Enable cursorline in terminal buffers",
--- })
---
--- vim.api.nvim_create_autocmd("TermOpen", {
--- 	group = vim.api.nvim_create_augroup("term-open-buflisted", { clear = true }),
--- 	callback = function()
--- 		vim.cmd("setlocal relativenumber")
--- 		vim.cmd("setlocal wrap")
--- 		-- vim.bo.buflisted = false
--- 	end,
--- })
-
 vim.api.nvim_create_autocmd("User", {
 	pattern = "GitConflictDetected",
-  group = vim.api.nvim_create_augroup("GitConflictDetected", { clear = true }),
+	group = vim.api.nvim_create_augroup("GitConflictDetected", { clear = true }),
 	callback = function()
 		vim.notify("Conflict detected in " .. vim.fn.expand("<afile>"))
 
@@ -181,21 +87,6 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
--- vim.api.nvim_create_autocmd("User", {
---   pattern = "TelescopePreviewerLoaded",
---   callback = function(args)
---     -- if args.data.filetype ~= "help" then
---     --   vim.wo.number = true
---     --   return
---     -- end
---     -- -- elseif args.data.bufname:match("*.csv") then
---     -- --   vim.wo.wrap = false
---     -- -- end
---     vim.wo.wrap = true
---   end,
--- })
---
---
 local group = vim.api.nvim_create_augroup("__env", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	pattern = "*.env*",
@@ -205,21 +96,6 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 		vim.bo.filetype = "sh"
 	end,
 })
-
--- vim.api.nvim_create_autocmd("FileType", {
--- 	group = vim.api.nvim_create_augroup("wrap-markdown", { clear = true }),
--- 	pattern = "markdown",
--- 	callback = function()
--- 		-- vim.cmd([[set nowrap]])
---     local bufname = vim.api.nvim_buf_get_name(0)
---     if bufname == "" then
---       return
---     else
---       -- Disable wrapping for regular markdown buffers
---       vim.cmd([[set nowrap]])
---     end
--- 	end,
--- })
 
 vim.api.nvim_create_autocmd("BufEnter", {
 	group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
@@ -235,124 +111,12 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	end,
 })
 
--- -- Save and restore window view when switching buffers
+-- Save and restore window view when switching buffers
 vim.api.nvim_create_autocmd({ "BufLeave" }, {
-  group = vim.api.nvim_create_augroup("savecopilotchatvinsaveview", { clear = true }),
+	group = vim.api.nvim_create_augroup("savecopilotchatvinsaveview", { clear = true }),
 	pattern = "copilot-chat",
 	callback = function(args)
 		vim.b[args.buf].view = vim.fn.winsaveview()
-	end,
-})
-
--- vim.api.nvim_create_autocmd("BufLeave", {
--- 	group = vim.api.nvim_create_augroup("copilot-chat", { clear = true }),
--- 	pattern = "copilot-chat",
--- 	callback = function()
--- 		local chat = require("CopilotChat")
--- 		if vim.g.chat_title then
--- 			chat.save(vim.g.chat_title)
--- 			return
--- 		end
---
--- 		local cwd = vim.fn.getcwd()
--- 		local wt_utils = require("jg.custom.worktree-utils")
--- 		local wt_info = wt_utils.get_wt_info(cwd)
--- 		-- print("wt_info", vim.inspect(wt_info))
---
--- 		if next(wt_info) == nil then
--- 			vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
--- 		else
--- 			-- print("wt_root_dir", wt_info["wt_root_dir"])
--- 			if not wt_info["wt_root_dir"] then
--- 				vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
--- 				return
--- 			end
--- 			vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
--- 		end
--- 		-- print("vim.g.chat_title", vim.g.chat_title)
--- 		chat.save(vim.g.chat_title)
--- 	end,
--- })
-
--- vim.g.copilot_chat_loaded = false
-
--- vim.api.nvim_create_autocmd("BufReadPost", {
---   group = vim.api.nvim_create_augroup("copilot-chat-enter", { clear = true }),
---   pattern = "copilot-chat",
---   callback = function()
---     if not vim.g.copilot_chat_loaded then
---       -- local chat = require("CopilotChat")
---       -- chat.toggle()
---       local chat = require("CopilotChat")
---
---       local cwd = vim.fn.getcwd()
---       local wt_utils = require("jg.custom.worktree-utils")
---       local wt_info = wt_utils.get_wt_info(cwd)
---
---       if next(wt_info) == nil then
---         vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
---       else
---         vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
---       end
---
---       -- print("<leader>ct vim.g.chat_title: ", vim.g.chat_title)
---
---       local existing_chat_path = vim.fn.stdpath("data")
---       .. "/copilotchat_history/"
---       .. vim.g.chat_title
---       .. ".json"
---       -- print("existing_chat_path: ", existing_chat_path)
---
---       local chat_exits = wt_utils.file_exists(existing_chat_path)
---
---       if chat_exits then
---         print('Loading existing copilot chat:', vim.g.chat_title)
---         chat.load(vim.g.chat_title)
---         vim.g.copilot_chat_loaded = true
---       else
---       end
---     else
---       print("Copilot chat already loaded for this session.")
---       return
---     end
---   end,
--- })
-
-vim.g.copilot_chat_saved = false
-
-vim.api.nvim_create_autocmd({"VimLeavePre", "VimLeave"}, {
-	group = vim.api.nvim_create_augroup("copilot-chat-leave", { clear = true }),
-  pattern = "*",
-	callback = function()
-    if vim.g.copilot_chat_saved then
-      return
-    end
-
-		local chat = require("CopilotChat")
-		if vim.g.chat_title then
-			chat.save(vim.g.chat_title)
-      vim.g.copilot_chat_saved = true
-			return
-		end
-
-		local cwd = vim.fn.getcwd()
-		local wt_utils = require("jg.custom.worktree-utils")
-		local wt_info = wt_utils.get_wt_info(cwd)
-		-- print("wt_info", vim.inspect(wt_info))
-
-		if next(wt_info) == nil then
-			vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
-		else
-			-- print("wt_root_dir", wt_info["wt_root_dir"])
-			if not wt_info["wt_root_dir"] then
-				vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
-				return
-			end
-			vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
-		end
-		-- print("vim.g.chat_title", vim.g.chat_title)
-		chat.save(vim.g.chat_title)
-    vim.g.copilot_chat_saved = true
 	end,
 })
 
@@ -378,47 +142,9 @@ vim.api.nvim_create_autocmd("BufLeave", {
 	end,
 })
 
--- vim.api.nvim_create_autocmd({"OptionSet"}, {
---   pattern = "diff",
---   callback = function()
---     if vim.opt.diff:get() then
---       require("barbecue.ui").toggle(false)
---     end
---   end,
--- })
-
--- vim.api.nvim_create_autocmd("CmdlineLeave", {
---   pattern = "windo diffthis",
---   callback = function()
---     print("windo diffthis executed")
---     require("barbecue.ui").toggle(false)
---   end,
--- })
---
---
--- vim.api.nvim_create_autocmd("CmdlineLeave", {
---   pattern = "windo diffoff",
---   callback = function()
---     print("windo diffoff executed")
---     require("barbecue.ui").toggle(true)
---   end,
--- })
-
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "markbar",
---   callback = function()
---     vim.schedule(function()
---       pcall(vim.api.nvim_buf_del_keymap, 0, "n", "j")
---       pcall(vim.api.nvim_buf_del_keymap, 0, "n", "k")
---       pcall(vim.api.nvim_buf_del_keymap, 0, "n", "g")
---       pcall(vim.api.nvim_buf_del_keymap, 0, "n", "<leader>q")
---     end)
---   end,
--- })
-
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "applescript",
-  group = vim.api.nvim_create_augroup("applescript2", { clear = true }),
+	group = vim.api.nvim_create_augroup("applescript2", { clear = true }),
 	callback = function()
 		vim.cmd([[setlocal commentstring=--\ %s]])
 	end,
@@ -443,52 +169,6 @@ vim.filetype.add({
 		zsh = "bash", -- Treat .json files as jsonc
 	},
 })
-
--- vim.api.nvim_create_autocmd('User', {
---   pattern = 'BlinkCmpShow',
---   callback = function(ev)
---     local all_buffer = true
---     for _, item in ipairs(ev.data.items) do
---       if item.source_name ~= "Buffer" then
---         all_buffer = false
---         break
---       end
---     end
---     if #ev.data.items == 1 or all_buffer then
---       require('blink.cmp.completion.windows.menu').close()
---     end
---   end
--- })
-
--- local history_file = vim.fn.stdpath("data") .. "/dir_history.txt"
---
--- -- Normalize directory paths by removing "./" and trailing slashes
--- local function normalize_path(path)
--- 	return path:gsub("%./", ""):gsub("/$", "")
--- end
-
--- -- Save directory changes to a file
--- vim.api.nvim_create_autocmd({ "DirChangedPre" }, {
--- 	group = vim.api.nvim_create_augroup("DirChangedPreGroup", { clear = true }),
--- 	callback = function(event)
--- 		local dir = normalize_path(event.file)
--- 		local lines = {}
--- 		local file = io.open(history_file, "r")
--- 		if file then
--- 			for line in file:lines() do
--- 				lines[normalize_path(line)] = true
--- 			end
--- 			file:close()
--- 		end
--- 		if not lines[dir] then
--- 			file = io.open(history_file, "a")
--- 			if file then
--- 				file:write(dir .. "\n")
--- 				file:close()
--- 			end
--- 		end
--- 	end,
--- })
 
 local dir_history = {}
 
@@ -523,11 +203,6 @@ vim.api.nvim_create_autocmd("DirChanged", {
 		if new_dir:sub(1, #home) == home then
 			new_dir = "~" .. new_dir:sub(#home + 1)
 		end
-		-- if not vim.tbl_contains(dir_history, new_dir) then
-		--   -- table.insert(dir_history, new_dir)
-		--   table.insert(dir_history, 1, new_dir)
-		-- end
-
 		if vim.tbl_contains(dir_history, new_dir) then
 			-- Remove the existing entry if it exists
 			for i, dir in ipairs(dir_history) do
@@ -542,23 +217,11 @@ vim.api.nvim_create_autocmd("DirChanged", {
 	end,
 })
 
--- Telescope picker for directory history
 -- Telescope picker for directory history with default selection on the penultimate entry
 local function open_dir_history()
 	local pickers = require("telescope.pickers")
-	-- local finders = require("telescope.finders")
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
-	-- local entry_manager = require("telescope.entry_manager")
-
-	-- local entries = {}
-	-- local file = io.open(history_file, "r")
-	-- if file then
-	--   for line in file:lines() do
-	--     table.insert(entries, 1, line) -- Insert each line at the beginning to reverse the order
-	--   end
-	--   file:close()
-	-- end
 
 	pickers
 		.new({}, {
@@ -592,76 +255,66 @@ end, { noremap = true, silent = true })
 
 vim.api.nvim_create_autocmd("ModeChanged", {
 	desc = "Highlighting matched words when searching",
-  group = vim.api.nvim_create_augroup("modechangedcustom", { clear = true }),
+	group = vim.api.nvim_create_augroup("modechangedcustom", { clear = true }),
 	pattern = { "t:nt" },
 	callback = function()
 		vim.wo.cursorline = true
 	end,
 })
 
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
+
+
+
+vim.api.nvim_create_autocmd({ "BufEnter", "TermOpen" }, {
 	desc = "Autosave",
-  group = vim.api.nvim_create_augroup("autosavegroup", { clear = true }),
+	group = vim.api.nvim_create_augroup("autosavegroup", { clear = true }),
 	callback = function(ev)
-		-- local winid = vim.api.nvim_get_current_win()  -- Get the current window ID
-		-- print("Window ID:", winid)                   -- Debug print to check the value
 		if vim.bo[ev.buf].buftype ~= "terminal" then
 			return
 		end
 
-    local win_ids = vim.api.nvim_list_wins()
-    -- print("win_ids:", vim.inspect(win_ids))  -- Debug print to check the value
+		local win_ids = vim.api.nvim_list_wins()
 
-    local writable_win_ids = {}
-    for _, win in ipairs(win_ids) do
-      local buf = vim.api.nvim_win_get_buf(win)
+		local writable_win_ids = {}
+		for _, win in ipairs(win_ids) do
+			local buf = vim.api.nvim_win_get_buf(win)
 
-      if (vim.api.nvim_buf_get_option(buf, "buftype") == "") and not vim.api.nvim_buf_get_option(buf, "readonly") then
-        table.insert(writable_win_ids, win)
-      end
+      local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
+			local modified = vim.api.nvim_buf_get_option(buf, "modified")
+			local readonly = vim.api.nvim_buf_get_option(buf, "readonly")
 
-      -- if vim.api.nvim_buf_get_option(buf, "modifiable") and not vim.api.nvim_buf_get_option(buf, "readonly") then
-      --   table.insert(writable_win_ids, win)
-      -- end
-    end
-    -- print("writable_win_ids:", vim.inspect(writable_win_ids))  -- Debug print to check the value
+			if (buftype:match("") and modified and not readonly) then
+				table.insert(writable_win_ids, win)
+			end
+		end
 
-    for _, id in ipairs(writable_win_ids) do
-      local buf = vim.api.nvim_win_get_buf(id)
-      vim.api.nvim_buf_call(buf, function()
-        vim.cmd("w")
-      end)
-      require("barbecue.ui").update(id)
-    end
+		if next(writable_win_ids) == nil then
+			return
+		end
 
-		-- local ok, win_id = pcall(vim.fn.win_findbuf(ev.buf)[1]) -- Get the window ID(s) displaying the buffer
-		-- if not ok then
-		--     print("Error getting window ID for buffer:", ev.buf)
-		-- 	vim.cmd("wa")
-		-- 	-- require("barbecue.ui").update(winid)
-		-- 	require("barbecue.ui").update()
-		-- 	return
-		-- end
-		-- -- print("win_id:", vim.inspect(win_id))  -- Debug print to check the value
-		--
-		-- -- vim.cmd("wa")
-		-- vim.api.nvim_buf_call(ev.buf, function()
-		-- 	vim.cmd("w")
-		-- end)
-		-- require("barbecue.ui").update(winid)
-		-- require("barbecue.ui").update(win_id)
-		-- vim.defer_fn(function()
-		-- end, 200)
+		for _, id in ipairs(writable_win_ids) do
+			local buf = vim.api.nvim_win_get_buf(id)
+			vim.api.nvim_buf_call(buf, function()
+				vim.cmd("w")
+			end)
+			require("barbecue.ui").update(id)
+		end
 	end,
 })
 
--- vim.api.nvim_create_autocmd("BufEnter", {
--- 	pattern = "*",
--- 	callback = function(ev)
--- 		if vim.bo[ev.buf].buftype == "terminal" then
--- 			-- local cmdline = vim.fn.getcmdline()
--- 			-- print("Command executed:", cmdline)
---       print("Terminal buffer entered:", vim.api.nvim_buf_get_name(ev.buf))
--- 		end
--- 	end,
--- })
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("my-grug-far-custom-keybinds", { clear = true }),
+	pattern = "grug-far",
+	callback = function()
+		vim.defer_fn(function()
+			vim.cmd("set buftype=")
+		end, 500)
+		vim.api.nvim_create_autocmd("BufWriteCmd", {
+			buffer = 0,
+			group = vim.api.nvim_create_augroup("my-grug-far-bufwritecmd", { clear = true }),
+			callback = function()
+				require("grug-far").get_instance(0):sync_all()
+			end,
+		})
+	end,
+})

@@ -10,7 +10,7 @@ return {
       -- If a buffer has been inactive for this many minutes, close it.
       retirementAgeMins = 5,
       -- Filetypes to ignore.
-      ignoredFiletypes = { "BufTerm", "term", "NvimTree", "DiffviewFiles" },
+      ignoredFiletypes = { "BufTerm", "term", "NvimTree", "DiffviewFiles", "octo" },
       -- Ignore files matching this lua pattern; empty string disables this setting.
       ignoreFilenamePattern = "*compilation*",
       -- Will not close the alternate file.

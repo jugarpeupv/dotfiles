@@ -29,8 +29,9 @@ return {
 			-- },
       -- lazy.nvim
       { 
+        -- "axelvc/template-string.nvim",
         "chrisgrieser/nvim-puppeteer",
-        lazy = false, -- plugin lazy-loads itself. Can also load on filetypes.
+        -- lazy = false, -- plugin lazy-loads itself. Can also load on filetypes.
       },
 			{
 				"axelvc/template-string.nvim",
@@ -62,6 +63,7 @@ return {
 				"nvim-treesitter/nvim-treesitter-textobjects",
 				branch = "main",
 				config = function()
+					---@diagnostic disable-next-line: param-type-not-match
 					-- configuration
 					require("nvim-treesitter-textobjects").setup({
 						select = {
@@ -236,6 +238,7 @@ return {
 				-- affects = "nvim-treesitter",
 				-- event = "VeryLazy",
 				config = function()
+					---@diagnostic disable-next-line: param-type-not-match
 					require("treesitter-context").setup({
 						enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
 						multiwindow = true, -- Enable multiple floating windows
@@ -336,6 +339,7 @@ return {
 				-- ensure these language parsers are installed
 				ensure_installed = {
 					-- "lua_patterns",
+          "kitty",
 					"toml",
           "go",
 					"ruby",
@@ -442,6 +446,7 @@ return {
 			-- custom parsers
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = {
+          "kitty",
           "java",
           "go",
           "copilot-chat",

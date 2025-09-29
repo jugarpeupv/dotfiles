@@ -80,7 +80,8 @@ return {
 				win_opts = {
 					-- window options
 					-- Set a title in the window using winbar
-					winbar = vim.fn.getcwd()
+					-- winbar = vim.fn.getcwd()
+          winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 				},
 			},
 			mappings = {

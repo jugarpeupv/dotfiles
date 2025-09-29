@@ -1,3 +1,4 @@
+---@diagnostic disable: preferred-local-alias
 -- set leader key to space
 local opts = { noremap = true, silent = true }
 
@@ -153,7 +154,7 @@ vim.keymap.set({ "n" }, "<leader>.", function()
 		prompt_title = "< NvimRC >",
 		cwd = "~/dotfiles/nvim/.config/nvim",
 		no_ignore = true,
-		hidden = false,
+		hidden = true,
 		preview = {
 			hide_on_startup = true,
 		},
@@ -553,6 +554,8 @@ vim.keymap.set({ "n", "v" }, "<leader>ff", function()
 			"--glob=!icarSDK.js",
 			"--glob=!package-lock.json",
 			"--glob=!**/.git/**",
+      "--glob=!**__template__**",
+      "--glob=!**drawio**",
 			-- "--ignore-case",
 			-- "--smart-case",
 			-- "--word-regexp"
@@ -1036,24 +1039,28 @@ local function find_in_node_modules()
 			api_nvimtree.tree.reload()
 		end
 
-		actions.select_default:replace(function()
-			local api = require("nvim-tree.api")
+    function default_action()
+      local api = require("nvim-tree.api")
 
-			actions.close(prompt_bufnr)
-			local selection = action_state.get_selected_entry()
-			api.tree.open()
+      actions.close(prompt_bufnr)
+      local selection = action_state.get_selected_entry()
+      api.tree.open()
 
-			local uv = vim.loop
+      local uv = vim.loop
 
-			if uv.fs_stat(selection.value .. "/package.json") then
-				api.tree.find_file(selection.value .. "/package.json")
-			else
-				api.tree.find_file(selection.value)
-			end
-		end)
+      if uv.fs_stat(selection.value .. "/package.json") then
+        api.tree.find_file(selection.value .. "/package.json")
+      else
+        api.tree.find_file(selection.value)
+      end
+    end
+		actions.select_default:replace(default_action)
 
 		map("n", "<C-x>", remove_dir)
 		map("i", "<C-x>", remove_dir)
+
+    map("n", "<C-v>", default_action)
+    map("i", "<C-v>", default_action)
 		return true
 	end
 

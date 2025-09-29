@@ -20,12 +20,13 @@ vim.g.python3_host_prog = vim.fn.expand("~/.nvim-venv/bin/python3")
 require("jg.core.options")
 
 if vim.env.DEBUG then
-	vim.opt.runtimepath:prepend(".lazy/plugins/one-small-step-for-vimkind")
+	vim.opt.rtp:prepend(".lazy/plugins/one-small-step-for-vimkind")
 	require("osv").launch({ port = 8086, blocking = true })
 end
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+
+if not vim.uv.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
 		"clone",
@@ -35,6 +36,7 @@ if not vim.loop.fs_stat(lazypath) then
 		lazypath,
 	})
 end
+
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins", {
 	change_detection = { notify = false },

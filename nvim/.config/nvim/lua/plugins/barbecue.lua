@@ -117,6 +117,7 @@ return {
         -- end,
         exclude_filetypes = {
           -- "netrw",
+          "grug-far",
           "toggleterm",
           "copilot-chat",
           "copilot-diff",

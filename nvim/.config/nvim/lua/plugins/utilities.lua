@@ -1,5 +1,16 @@
 -- return {}
 return {
+  {
+    "typed-rocks/ts-worksheet-neovim",
+    cmd = { "Tsw" },
+    opts = {
+      severity = vim.diagnostic.severity.WARN,
+    },
+    config = function(_, opts)
+      require("tsw").setup(opts)
+    end
+  },
+
 	{
 		"duqcyxwd/stringbreaker.nvim",
 		enabled = false,
@@ -1314,6 +1325,7 @@ return {
 		--   },
 		-- },
 		config = function()
+			---@diagnostic disable-next-line: param-type-not-match
 			require("nvim-ts-autotag").setup({
 				aliases = {
 					["html"] = "html",

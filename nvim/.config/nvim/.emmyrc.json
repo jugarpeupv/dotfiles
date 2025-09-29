@@ -1,0 +1,27 @@
+{
+  "diagnostics": {
+    "globals": [
+      "vim"
+    ],
+    "disable": [
+      "param-type-not-match"
+    ]
+  },
+  "runtime": {
+    "version": "LuaJIT",
+    "requirePattern": [
+      "lua/?.lua",
+      "lua/?/init.lua",
+      "?/lua/?.lua",
+      "?/lua/?/init.lua"
+    ]
+  },
+  "workspace": {
+    // "library": [
+    //   "$HOME/.local/share/nvim/lazy/luvit-meta/library"
+    // ],
+    "ignoreGlobs": [
+      "**/*_spec.lua"
+    ]
+  }
+}

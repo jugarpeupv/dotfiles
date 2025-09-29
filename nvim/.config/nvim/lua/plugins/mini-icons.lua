@@ -1,37 +1,38 @@
 -- return {}
 return {
-  -- {
-  --   "echasnovski/mini.icons",
-  --   opts = {},
-  --   lazy = true,
-  --   specs = {
-  --     { "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
-  --   },
-  --   init = function()
-  --     package.preload["nvim-web-devicons"] = function()
-  --       require("mini.icons").mock_nvim_web_devicons()
-  --       return package.loaded["nvim-web-devicons"]
-  --     end
-  --   end,
-
-  --   config = function()
-  --     require("mini.icons").setup({
-  --       -- default = {
-  --       --   -- Override default glyph for "file" category (reuse highlight group)
-  --       --   file = { glyph = "󰈤" },
-  --       -- },
-  --       extension = {
-  --         -- Override highlight group (not necessary from 'mini.icons')
-  --         lua = { hl = "Special" },
-
-  --         -- Add icons for custom extension. This will also be used in
-  --         -- 'file' category for input like 'file.my.ext'.
-  --         -- ["config.js"] = { glyph = "󰜫", hl = "MiniIconsBlue" },
-  --         ["config.js"] = { glyph = "󰜫" },
-  --       },
-  --     })
-  --   end,
-  -- },
+	-- {
+	-- 	"echasnovski/mini.icons",
+	-- 	opts = {},
+	-- 	lazy = true,
+	--    enabled = false,
+	-- 	specs = {
+	-- 		{ "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
+	-- 	},
+	-- 	init = function()
+	-- 		package.preload["nvim-web-devicons"] = function()
+	-- 			require("mini.icons").mock_nvim_web_devicons()
+	-- 			return package.loaded["nvim-web-devicons"]
+	-- 		end
+	-- 	end,
+	--
+	-- 	config = function()
+	-- 		require("mini.icons").setup({
+	-- 			-- default = {
+	-- 			--   -- Override default glyph for "file" category (reuse highlight group)
+	-- 			--   file = { glyph = "󰈤" },
+	-- 			-- },
+	-- 			extension = {
+	-- 				-- Override highlight group (not necessary from 'mini.icons')
+	-- 				lua = { hl = "Special" },
+	--
+	-- 				-- Add icons for custom extension. This will also be used in
+	-- 				-- 'file' category for input like 'file.my.ext'.
+	-- 				-- ["config.js"] = { glyph = "󰜫", hl = "MiniIconsBlue" },
+	-- 				["config.js"] = { glyph = "󰜫" },
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
 }
 
 -- -- Helper data ================================================================
@@ -1080,4 +1081,3 @@ return {
 --   ubuntu       = { glyph = '󰕈', hl = 'MiniIconsOrange' },
 --   windows      = { glyph = '󰖳', hl = 'MiniIconsBlue'   },
 -- }
-

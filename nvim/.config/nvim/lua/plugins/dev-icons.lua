@@ -376,6 +376,7 @@ return {
 				-- ["readme.md"] = { icon = "", color = "#9CDCFE", name = "readmemd1" },
 				-- ["readme.md"] = { icon = "", color = "#9CDCFE", name = "readmemd1" },
 				["webpack.prod.config.js"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfigProd" },
+        ["webpack.config.prod.ts"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfigProdTS" },
 				["webpack.config.ts"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfigTS" },
 				["webpack.prod.config.ts"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfigProdTS" },
 

@@ -1,5 +1,6 @@
 return {
 	"ravitemer/mcphub.nvim",
+  enabled = true,
 	dependencies = {
 		{ "nvim-lua/plenary.nvim" }, -- Required for Job and HTTP requests
 		-- { "stevearc/overseer.nvim" }
@@ -13,7 +14,8 @@ return {
 	ft = { "copilot-chat" },
 	cmd = "MCPHub", -- lazy load by default
 	-- event = { "BufReadPost", "BufNewFile" }, -- Load on buffer read or new file
-	build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
+	-- build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
+  build = "bundled_build.lua",
 
 	-- uncomment this if you don't want mcp-hub to be available globally or can't use -g
 	-- build = "bundled_build.lua",  -- Use this and set use_bundled_binary = true in opts  (see Advanced configuration)
@@ -52,7 +54,8 @@ return {
 		-- global_env = {
 		-- 	"GITHUB_PERSONAL_ACCESS_TOKEN",
 		-- }, -- Global environment variables available to all MCP servers (can be a table or a function returning a table)
-    global_env = function(context)
+    use_bundled_binary = true,
+    global_env = function(_context)
       return {
         GH_MCP_TOKEN = os.getenv("GH_MCP_TOKEN") or "",
         TAVILY_API_KEY = os.getenv("TAVILY_API_KEY") or "",
