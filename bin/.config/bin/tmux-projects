@@ -5,7 +5,7 @@
 if [[ $# -eq 1 ]]; then
   selected=$1
 else
-  selected=$(find ~/work ~/work/tmp ~/private ~/work/Okode ~/dotfiles ~/.local/share/nvim/lazy ~ -mindepth 1 -maxdepth 1 -type d | fzf --bind=ctrl-k:up,ctrl-j:down)
+  selected=$(find ~/work ~/work/tmp ~/private ~/work/Okode ~/dotfiles ~/.local/share/nvim/lazy ~/Downloads ~ -mindepth 1 -maxdepth 1 -type d | fzf --bind=ctrl-k:up,ctrl-j:down)
 fi
 
 selected_name=$(echo "$selected" | sed 's/ /\\ /g')

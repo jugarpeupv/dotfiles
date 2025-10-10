@@ -148,6 +148,8 @@ return {
 			{ "<leader>3", "<cmd>Grapple select index=3<cr>", desc = "Select third tag" },
 			{ "<leader>4", "<cmd>Grapple select index=4<cr>", desc = "Select fourth tag" },
 			{ "<leader>5", "<cmd>Grapple select index=5<cr>", desc = "Select fifth tag" },
+      { "<leader>6", "<cmd>Grapple select index=6<cr>", desc = "Select fifth tag" },
+      { "<leader>7", "<cmd>Grapple select index=7<cr>", desc = "Select fifth tag" },
 		},
 		config = function()
 			require("grapple").setup({

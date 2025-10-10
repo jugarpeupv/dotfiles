@@ -2,6 +2,8 @@
 function zvm_after_init() {
   # source <(fzf --zsh)
   bindkey "ç" fzf-cd-widget
+  bindkey "^[f" forward-word
+  bindkey "^[b" backward-word
 }
 
 

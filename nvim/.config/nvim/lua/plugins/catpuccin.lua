@@ -97,6 +97,7 @@ return {
 						GitFooter = { bg = "none" },
 						GitAppBar = { bg = "none" },
 						String = { fg = "#F2CDCD" },
+            SnippetTabstop = { bg = "none" },
 						["@module.hurl"] = { fg = "#89ddff", style = { } },
 						["@keyword.ghactions"] = { fg = "#89ddff" },
 						["@property.ghactions"] = { fg = "#cdd6f5" },
@@ -139,6 +140,7 @@ return {
 						["@markup.heading.1.markdown"] = { fg = "#F5C2E7" },
 						["@markup.heading.2.markdown"] = { fg = "#89ddff" },
 						["@markup.heading.3.markdown"] = { fg = "#94E2D5" },
+            -- ["DevIconJsonc"] = { fg = "#94E2D5" },
 
 						["@lsp.typemod.interface.defaultLibrary.typescript"] = { fg = "#F38BA8" },
 						["@type.builtin.typescript"] = { fg = "#89ddfe" },
@@ -265,7 +267,7 @@ return {
 			vim.cmd([[hi RenderMarkdown_Inverse_RenderMarkdownCode guifg=#394b70]])
 			vim.cmd([[hi RenderMarkdown_DevIconBash_RenderMarkdownSign guifg=#94E2D5 gui=none]])
 			vim.cmd([[hi DevIconBash guifg=#94E2D5 gui=none]])
-			vim.cmd([[hi DevIconJsonc guifg=#F5C2E7 gui=none]])
+			vim.cmd([[hi DevIconJsonc guifg=#F5C2E7]])
 
 			-- vim.cmd([[@ibl           xxx cleared]])
 			vim.cmd([[highlight @ibl.indent.char.1  guifg=#3b4251]])

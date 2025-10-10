@@ -1,5 +1,19 @@
 return {
 	{
+		"mistweaverco/kulala.nvim",
+		ft = { "http", "rest" },
+		opts = {
+			debug = true,
+			vscode_rest_client_environmentvars = true,
+			winbar = true,
+			default_winbar_panes = { "body", "headers" },
+			-- show_icons = "nil",
+			-- winbar = false,
+			-- disable_script_print_output = false,
+			-- default_view = "headers_body",
+		},
+	},
+	{
 		"jellydn/hurl.nvim",
 		dependencies = {
 			"MunifTanjim/nui.nvim",
@@ -62,46 +76,6 @@ return {
 				desc = "Hurl Runner",
 				mode = "v",
 			},
-		},
-	},
-	-- { "BlackLight/nvim-http",  ft = "http" },
-	-- {
-	--   "lima1909/resty.nvim",
-	--   ft = "http",
-	--   dependencies = { "nvim-lua/plenary.nvim" },
-	-- },
-	-- {
-	--   "rest-nvim/rest.nvim",
-	--   ft = "http",
-	--   dependencies = {
-	--     {
-	--       "j-hui/fidget.nvim",
-	--       opts = {
-	--         -- options
-	--       },
-	--     },
-	--   },
-	-- },
-	-- {
-	--   "nicwest/vim-http",
-	--   ft = "http",
-	-- },
-	-- {
-	--   "askfiy/http-client.nvim",
-	--   ft = "http",
-	--   config = function()
-	--     require("http-client").setup()
-	--   end,
-	-- },
-	{ "aquach/vim-http-client", ft = "http" },
-	{
-		"mistweaverco/kulala.nvim",
-		ft = "http",
-		opts = {
-			show_icons = "nil",
-			winbar = false,
-			disable_script_print_output = false,
-			default_view = "headers_body",
 		},
 	},
 }

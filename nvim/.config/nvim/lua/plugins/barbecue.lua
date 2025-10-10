@@ -80,7 +80,7 @@ return {
             Hint = "󰠠",
           }
 
-          local bufferModified = vim.api.nvim_buf_get_option(bufnr, "modified")
+          -- local bufferModified = vim.api.nvim_buf_get_option(bufnr, "modified")
 
           local label = {}
           for severity, icon in pairs(icons) do
@@ -132,7 +132,6 @@ return {
           " ",
           "",
           "DiffviewFiles",
-          "NvimTree",
           "startify",
           "dashboard",
           "packer",

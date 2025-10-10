@@ -90,6 +90,7 @@ return {
 		-- optional: provides snippets for the snippet source
 		dependencies = {
 			"onsails/lspkind.nvim",
+			"Kaiser-Yang/blink-cmp-git",
 			"Kaiser-Yang/blink-cmp-avante",
 			"rafamadriz/friendly-snippets",
 			"moyiz/blink-emoji.nvim",
@@ -296,6 +297,7 @@ return {
 			-- elsewhere in your config, without redefining it, due to `opts_extend`
 			sources = {
 				default = {
+					"git",
 					"avante",
 					"lsp",
 					"path",
@@ -308,10 +310,29 @@ return {
 					"conventional_commits",
 				},
 				per_filetype = {
+					["octo"] = {
+						"git",
+						"lsp",
+						"path",
+						"emoji",
+						"nerdfont",
+						"conventional_commits",
+					},
 					["copilot-chat"] = {},
 					["AvanteInput"] = { "avante", "lsp", "buffer" },
 				},
 				providers = {
+					git = {
+						module = "blink-cmp-git",
+						name = "Git",
+						-- only enable this source when filetype is gitcommit, markdown, or 'octo'
+						enabled = function()
+							return vim.tbl_contains({ "octo", "gitcommit", "markdown" }, vim.bo.filetype)
+						end,
+						opts = {
+							-- options for the blink-cmp-git
+						},
+					},
 					avante = {
 						module = "blink-cmp-avante",
 						name = "Avante",

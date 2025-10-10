@@ -9,15 +9,20 @@ local keymap = vim.keymap.set
 -- q/ -- search history
 -- q: -- command history
 
-vim.keymap.set({ "n" }, "<S-D-Up>", ":resize +3<CR>", opts)
-vim.keymap.set({ "n" }, "<S-D-Down>", ":resize -3<CR>", opts)
-vim.keymap.set({ "n" }, "<S-D-Left>", ":vertical resize -5<CR>", opts)
-vim.keymap.set({ "n" }, "<S-D-Right>", ":vertical resize +5<CR>", opts)
+vim.keymap.set({ "n" }, "<C-Up>", ":resize +3<CR>", opts)
+vim.keymap.set({ "n" }, "<C-Down>", ":resize -3<CR>", opts)
+vim.keymap.set({ "n" }, "<C-Left>", ":vertical resize -5<CR>", opts)
+vim.keymap.set({ "n" }, "<C-Right>", ":vertical resize +5<CR>", opts)
 
-vim.keymap.set({ "t" }, "<S-D-Up>", "<C-\\><C-n><CMD>resize +3<CR>", opts)
-vim.keymap.set({ "t" }, "<S-D-Down>", "<C-\\><C-n><CMD>resize -3<CR>", opts)
-vim.keymap.set({ "t" }, "<S-D-Left>", "<C-\\><C-n><CMD>vertical resize -5<CR>", opts)
-vim.keymap.set({ "t" }, "<S-D-Right>", "<C-\\><C-n><CMD>vertical resize +5<CR>", opts)
+vim.keymap.set({ "t" }, "<C-Up>", "<C-\\><C-n><CMD>resize +3<CR>", opts)
+vim.keymap.set({ "t" }, "<C-Down>", "<C-\\><C-n><CMD>resize -3<CR>", opts)
+vim.keymap.set({ "t" }, "<C-Left>", "<C-\\><C-n><CMD>vertical resize -5<CR>", opts)
+vim.keymap.set({ "t" }, "<C-Right>", "<C-\\><C-n><CMD>vertical resize +5<CR>", opts)
+
+-- vim.cmd([[:tnoremap <C-Up> <C-\><C-N>:resize +5<cr>]])
+-- vim.cmd([[:tnoremap <C-Down> <C-\><C-N>:resize -5<cr>]])
+-- vim.cmd([[:tnoremap <C-Left> <C-\><C-N>:vertical resize -5<cr>]])
+-- vim.cmd([[:tnoremap <C-Right> <C-\><C-N>:vertical resize +5<cr>]])
 
 -- vim.keymap.set({ "t" }, "gT", "<C-\\><C-n>gT", opts)
 -- vim.keymap.set({ "t" }, "gt", "<C-\\><C-n>gt", opts)
@@ -118,6 +123,7 @@ end, opts)
 
 vim.keymap.set({ "n", "t" }, "<M-p>", function()
 	require("telescope.builtin").find_files({
+    cwd = vim.loop.cwd(),
 		hidden = true,
 		shorten_path = false,
 		path_display = { "absolute" },
@@ -774,10 +780,6 @@ vim.keymap.set("n", "<leader>xo", "<cmd>Trouble symbols toggle<cr>", { silent = 
 -- vim.cmd([[tnoremap <C-n> <C-\><C-n>]])
 vim.cmd([[tnoremap <C-Space> <C-\><C-n>]])
 
-vim.cmd([[:tnoremap <C-Up> <C-\><C-N>:resize +5<cr>]])
-vim.cmd([[:tnoremap <C-Down> <C-\><C-N>:resize -5<cr>]])
-vim.cmd([[:tnoremap <C-Left> <C-\><C-N>:vertical resize -5<cr>]])
-vim.cmd([[:tnoremap <C-Right> <C-\><C-N>:vertical resize +5<cr>]])
 
 vim.cmd([[:tnoremap <C-o> <C-\><C-N><C-o>]])
 
@@ -1263,6 +1265,10 @@ vim.keymap.set("n", "<leader>ch", function()
 	require("telescope.builtin").command_history()
 end, opts)
 
+vim.keymap.set("n", "<leader>rh", function()
+  require("telescope.builtin").search_history()
+end, opts)
+
 -- Map a shortcut to open the picker.
 vim.keymap.set("n", "<leader>ri", function()
 	require("telescope").extensions.recent_files.pick()
@@ -1279,6 +1285,7 @@ vim.keymap.set("n", "<leader>bk", "<cmd>bwipeout!<cr>", opts)
 vim.cmd([[set wildcharm=<C-v>]])
 -- vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
 vim.cmd([[inoremap <C-l> <C-y>]])
+-- vim.cmd([[cnoremap <C-l> <C-y><C-v>]])
 vim.cmd([[cnoremap <C-l> <C-y><C-v>]])
 -- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
 vim.cmd([[cnoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"]])
@@ -1481,10 +1488,10 @@ end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen com
 vim.keymap.set("i", "<C-j>", "<C-n>", { noremap = true })
 vim.keymap.set("i", "<C-k>", "<C-p>", { noremap = true })
 
-vim.keymap.set({ "v" }, "<C-x><C-f>", function()
-	print("Fuzzy complete path")
-	require("fzf-lua").complete_path()
-end, { silent = true, desc = "Fuzzy complete path" })
+-- vim.keymap.set({ "v" }, "<C-x><C-f>", function()
+-- 	print("Fuzzy complete path")
+-- 	require("fzf-lua").complete_path()
+-- end, { silent = true, desc = "Fuzzy complete path" })
 
 vim.keymap.set("n", "<leader>tp", function()
 	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_pendientes.md")
@@ -1813,10 +1820,6 @@ end, opts)
 
 vim.keymap.set({ "n" }, "<leader>ge", function()
 	vim.cmd("e ~/.gitconfig")
-end, opts)
-
-vim.keymap.set({ "n" }, "<leader>em", function()
-	vim.cmd("e ~/.config/mcphub/servers.json")
 end, opts)
 
 -- vim.keymap.set("n", "<C-I>", "<C-I>", { noremap = true })

@@ -3,7 +3,7 @@ return {
 	{
 		"folke/lazydev.nvim",
 		enabled = true,
-    lazy = false,
+    lazy = true,
 		ft = "lua", -- only load on lua files
 		dependencies = {
 			{ "Bilal2453/luvit-meta", lazy = true, enabled = true }, -- optional `vim.uv` typings
@@ -33,7 +33,7 @@ return {
 				-- It can also be a table with trigger words / mods
 				-- Only load luvit types when the `vim.uv` word is found
 				-- { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-				-- { path = "$HOME/.local/share/nvim/lazy/luvit-meta/library/uv.lua", words = { "vim%.uv" } },
+				{ path = "$HOME/.local/share/nvim/lazy/luvit-meta/library/uv.lua", words = { "vim%.uv" } },
 				-- always load the LazyVim library
 				"LazyVim",
 			},

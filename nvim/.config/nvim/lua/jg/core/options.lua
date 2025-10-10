@@ -2,15 +2,14 @@ local opt = vim.opt -- for conciseness
 
 -- line numbers
 opt.relativenumber = true -- show relative line numbers
-opt.number = true         -- shows absolute line number on cursor line (when relative number is on)
+opt.number = true -- shows absolute line number on cursor line (when relative number is on)
 -- opt.jumpoptions = 'clean'
-
 
 -- opt.guicursor="n-v-c-sm:block-Cursor,i-ci-ve:ver25,r-cr-o:hor20,t:block-blinkon500-blinkoff500-TermCursor"
 
 -- tabs & indentation
-opt.tabstop = 2      -- 2 spaces for tabs (prettier default)
-opt.shiftwidth = 2   -- 2 spaces for indent width
+opt.tabstop = 2 -- 2 spaces for tabs (prettier default)
+opt.shiftwidth = 2 -- 2 spaces for indent width
 opt.expandtab = true -- expand tab to spaces
 
 -- opt.expandtab = false -- expand tab to spaces
@@ -23,7 +22,7 @@ opt.wrap = true -- disable line wrapping
 
 -- search settings
 opt.ignorecase = true -- ignore case when searching
-opt.smartcase = true  -- if you include mixed case in your search, assumes you want case-sensitive
+opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
 
 -- cursor line
 opt.cursorline = true -- highlight the current cursor line
@@ -50,13 +49,12 @@ opt.formatoptions = opt.formatoptions - "c" - "r" - "o"
 
 -- opt.diffopt = { "iwhiteall", "internal", "filler", "closeoff", "hiddenoff", "algorithm:minimal", "followwrap" }
 -- opt.diffopt="iwhiteall,internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram"
-opt.diffopt="iwhiteall,internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:patience"
+opt.diffopt = "iwhiteall,internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:patience"
 
 opt.pumblend = 0
 opt.pumheight = 10
 opt.winborder = "rounded"
 
-opt.fillchars = opt.fillchars + "diff:╱"
 opt.breakindent = true
 opt.showbreak = "↪\\"
 
@@ -73,43 +71,42 @@ opt.showbreak = "↪\\"
 -- (have to use iterm2 or any other true color terminal)
 opt.termguicolors = true
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
-opt.signcolumn = "yes"  -- show sign column so that text doesn't shift
+opt.signcolumn = "yes" -- show sign column so that text doesn't shift
 
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
-
 -- clipboard
 if os.getenv("SSH_TTY") == nil then
-  opt.clipboard:append("unnamedplus")
+	opt.clipboard:append("unnamedplus")
 else
-  -- On ssh, use cmd+v to paste, copy should work just fine
-  opt.clipboard:append("unnamedplus")
+	-- On ssh, use cmd+v to paste, copy should work just fine
+	opt.clipboard:append("unnamedplus")
 
-  local function my_paste(_reg)
-    return function(_lines)
-      local content = vim.fn.getreg('"')
-      return vim.split(content, "\n")
-    end
-  end
+	local function my_paste(_reg)
+		return function(_lines)
+			local content = vim.fn.getreg('"')
+			return vim.split(content, "\n")
+		end
+	end
 
-  vim.g.clipboard = {
-    name = "OSC 52",
-    copy = {
-      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-    },
-    paste = {
-      ["+"] = my_paste("+"),
-      ["*"] = my_paste("*"),
-    },
-  }
+	vim.g.clipboard = {
+		name = "OSC 52",
+		copy = {
+			["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+			["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+		},
+		paste = {
+			["+"] = my_paste("+"),
+			["*"] = my_paste("*"),
+		},
+	}
 end
 
 -- split windows
 opt.splitright = true -- split vertical window to the right
 opt.splitbelow = true -- split horizontal window to the bottom
-opt.ea = true         -- equal always, windows same size
+opt.ea = true -- equal always, windows same size
 -- opt.ea = false         -- equal always, windows same size
 
 opt.iskeyword:append("-") -- consider string-string as whole word
@@ -140,16 +137,16 @@ opt.list = true
 
 local space = "·"
 opt.listchars:append({
-  -- tab = "» ",
-  tab = "  ",
-  -- multispace = "␣",
-  -- multispace = space,
-  -- lead = space,
-  -- trail = "󱁐",
-  -- trail = "␣",
-  trail = space,
-  -- trail = "»",
-  nbsp = "&",
+	-- tab = "» ",
+	tab = "  ",
+	-- multispace = "␣",
+	-- multispace = space,
+	-- lead = space,
+	-- trail = "󱁐",
+	-- trail = "␣",
+	trail = space,
+	-- trail = "»",
+	nbsp = "&",
 })
 -- opt.listchars:append("trail:.")
 -- opt.listchars:append("eol:↴")
@@ -160,16 +157,49 @@ opt.listchars:append({
 -- vim.cmd([[let g:TerminusInsertCursorShape=1]])
 -- vim.g.TerminusInsertCursorShape = 1
 
-vim.o.foldcolumn = "0"
+-- vim.o.foldcolumn = "0"
+-- vim.o.foldcolumn = "auto"
+vim.o.foldcolumn = "auto"
+-- vim.o.foldcolumn = "0"
+-- vim.o.foldcolumn = "2"
 vim.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = false
 vim.opt.foldmethod = "expr"
+
+-- vim.o.foldcolumn = '1'
+-- vim.o.foldlevelstart = 99
+-- vim.wo.foldtext = ''
+
+vim.o.numberwidth = 2
+
+local arrows = {
+	right = "",
+	left = "",
+	up = "",
+	down = "",
+}
+
+vim.opt.fillchars = {
+	fold = " ",
+	-- foldinner = ' ',
+	foldsep = " ",
+	-- foldclose = arrows.down,
+  -- foldclose = "",
+  foldclose = "",
+  -- foldclose = "",
+  foldopen = "",
+	-- foldopen = arrows.right,
+	diff = "╱",
+}
+
+-- opt.fillchars = opt.fillchars + "diff:╱"
+
 vim.o.foldtext = ""
 vim.o.foldopen = "search,tag,undo"
 -- vim.o.completeopt = "menu,popup,noselect,noinsert"
 
-vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"
 
 -- opt.updatetime = 1000
 

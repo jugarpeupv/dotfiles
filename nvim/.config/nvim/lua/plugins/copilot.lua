@@ -85,6 +85,7 @@ return {
 				},
 			},
 			filetypes = {
+        lua = false,
 				yaml = false,
 				markdown = false,
 				help = false,

@@ -29,7 +29,7 @@ return {
           },
         }
       },
-			startInInsertMode = false,
+			startInInsertMode = true,
 			-- shortcuts for the actions you see at the top of the buffer
 			-- set to '' or false to unset. Mappings with no normal mode value will be removed from the help header
 			-- you can specify either a string which is then used as the mapping for both normal and insert mode
@@ -38,7 +38,7 @@ return {
 			-- see https://learnvimscriptthehardway.stevelosh.com/chapters/11.html#local-leader
 			keymaps = {
 				replace = { n = "<localleader>r" },
-				qflist = { n = "<localleader>q" },
+				qflist = { n = "<c-q>" },
 				syncLocations = { n = "<localleader>s" },
 				syncLine = { n = "<localleader>l" },
 				close = { n = "<localleader>c" },
@@ -46,8 +46,8 @@ return {
 				historyAdd = { n = "<localleader>a" },
 				refresh = { n = "<localleader>f" },
 				openLocation = { n = "<localleader>o" },
-				openNextLocation = { n = "<down>" },
-				openPrevLocation = { n = "<up>" },
+				openNextLocation = { n = "J" },
+				openPrevLocation = { n = "K" },
 				gotoLocation = { n = "<enter>" },
 				pickHistoryEntry = { n = "<enter>" },
 				abort = { n = "<localleader>b" },
@@ -87,7 +87,7 @@ return {
       },
       showInputsTopPadding = false,
       showInputsBottomPadding = true,
-      showCompactInputs = false,
+      showCompactInputs = true,
 			resultsHighlight = true,
 			resultLocation = {
 				-- whether to show the result location number label

@@ -72,6 +72,12 @@ vim.filetype.add({
 	},
 })
 
+vim.filetype.add({
+	extension = {
+		["swcrc"] = "jsonc",
+	},
+})
+
 vim.api.nvim_create_autocmd("User", {
 	pattern = "GitConflictDetected",
 	group = vim.api.nvim_create_augroup("GitConflictDetected", { clear = true }),
@@ -103,6 +109,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	callback = function(args)
 		vim.o.conceallevel = 0
 		vim.o.signcolumn = "no"
+		vim.o.foldcolumn = "0"
 		if vim.b[args.buf].view ~= nil then
 			vim.fn.winrestview(vim.b[args.buf].view)
 			return
@@ -166,7 +173,7 @@ vim.filetype.add({
 
 vim.filetype.add({
 	extension = {
-		zsh = "bash", -- Treat .json files as jsonc
+		zsh = "bash",
 	},
 })
 
@@ -262,10 +269,7 @@ vim.api.nvim_create_autocmd("ModeChanged", {
 	end,
 })
 
-
-
-
-vim.api.nvim_create_autocmd({ "BufEnter", "TermOpen" }, {
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	desc = "Autosave",
 	group = vim.api.nvim_create_augroup("autosavegroup", { clear = true }),
 	callback = function(ev)
@@ -279,11 +283,11 @@ vim.api.nvim_create_autocmd({ "BufEnter", "TermOpen" }, {
 		for _, win in ipairs(win_ids) do
 			local buf = vim.api.nvim_win_get_buf(win)
 
-      local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
-			local modified = vim.api.nvim_buf_get_option(buf, "modified")
-			local readonly = vim.api.nvim_buf_get_option(buf, "readonly")
+			local buftype = vim.bo[buf].buftype
+			local modified = vim.bo[buf].modified
+			local readonly = vim.bo[buf].readonly
 
-			if (buftype:match("") and modified and not readonly) then
+			if buftype == "" and modified and not readonly then
 				table.insert(writable_win_ids, win)
 			end
 		end
@@ -302,19 +306,80 @@ vim.api.nvim_create_autocmd({ "BufEnter", "TermOpen" }, {
 	end,
 })
 
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	group = vim.api.nvim_create_augroup("my-grug-far-custom-keybinds", { clear = true }),
+-- 	pattern = "grug-far",
+-- 	callback = function()
+-- 		vim.defer_fn(function()
+-- 			vim.cmd("set buftype=")
+-- 		end, 500)
+-- 		vim.api.nvim_create_autocmd("BufWriteCmd", {
+-- 			buffer = 0,
+-- 			group = vim.api.nvim_create_augroup("my-grug-far-bufwritecmd", { clear = true }),
+-- 			callback = function()
+-- 				require("grug-far").get_instance(0):sync_all()
+--         vim.cmd("set buftype=nofile")
+-- 			end,
+-- 		})
+-- 	end,
+-- })
+
+-- vim.api.nvim_create_autocmd('FileType', {
+--   group = vim.api.nvim_create_augroup('my-grug-far-custom-keybinds', { clear = true }),
+--   pattern = { 'grug-far' },
+--   callback = function(ev)
+--     vim.keymap.set('ca', 'w', function()
+--       local inst = require('grug-far').get_instance(0)
+--       inst:sync_all()
+--     end, { buffer = ev.buf })
+--   end,
+-- })
+
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("my-grug-far-custom-keybinds", { clear = true }),
-	pattern = "grug-far",
-	callback = function()
-		vim.defer_fn(function()
-			vim.cmd("set buftype=")
-		end, 500)
-		vim.api.nvim_create_autocmd("BufWriteCmd", {
-			buffer = 0,
-			group = vim.api.nvim_create_augroup("my-grug-far-bufwritecmd", { clear = true }),
-			callback = function()
-				require("grug-far").get_instance(0):sync_all()
-			end,
-		})
+	pattern = {
+		"kitty",
+		"http",
+		"rest",
+		"java",
+		"go",
+		"copilot-chat",
+		"yaml",
+		"yaml.github",
+		"jsonc",
+		"sh",
+		"dosini",
+		"editorconfig",
+		"typescript",
+		"kulala_http",
+		"javascript",
+		"gitcommit",
+		"hurl",
+		"markdown",
+		"jproperties",
+		"properties",
+		"codecompanion",
+		"bash",
+		"html",
+		"htmlangular",
+		"scss",
+		"css",
+		"groovy",
+		"Avante",
+		"dockerfile",
+	},
+	callback = function(ev)
+		-- local has_treesitter = pcall(function()
+		-- 	vim.treesitter.get_parser(ev.buf)
+		-- end)
+		-- if has_treesitter then
+		-- 	vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		-- 	vim.opt_local.foldmethod = "expr"
+		-- end
+
+		-- vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		-- vim.opt_local.foldmethod = "expr"
+		vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		vim.treesitter.start()
 	end,
 })

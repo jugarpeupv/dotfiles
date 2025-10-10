@@ -471,7 +471,7 @@ M.telescope_image_preview = function()
 			-- filepath = string.gsub(filepath, " ", "%%20"):gsub("\\", "")
 
       local winid = vim.fn.bufwinid(bufnr)
-      print("winid, ", winid)
+      -- print("winid, ", winid)
 			create_image(filepath, winid, bufnr)
 		-- create_image(filepath, winid, bufnr)
 		else

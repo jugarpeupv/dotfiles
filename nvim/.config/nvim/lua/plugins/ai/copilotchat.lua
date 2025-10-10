@@ -256,7 +256,9 @@ return {
 		},
 		{
 			"<M-m>",
+      -- "<leader>ca",
 			mode = { "n", "v", "t" },
+      -- mode = { "n", "v" },
 			function()
 				local chat = require("CopilotChat")
 				if vim.g.chat_loaded then

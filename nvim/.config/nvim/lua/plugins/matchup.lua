@@ -2,6 +2,7 @@
 return {
 	-- enabled = false,
 	"andymass/vim-matchup",
+  enabled = true,
 
   -- dir='~/projects/vim-matchup/wt-feature-add_html_angular_filetype/',
   -- dev = true,

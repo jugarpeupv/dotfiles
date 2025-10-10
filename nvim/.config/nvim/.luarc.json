@@ -11,8 +11,6 @@
   "workspace.checkThirdParty": "Disable",
   "diagnostics.disable": [
     "undefined-field",
-    "missing-fields",
-    "param-type-mismatch",
-    "param-type-not-match"
+    "missing-fields"
   ]
 }

@@ -9,7 +9,7 @@ return {
 	end,
 	dependencies = {
 		"ravitemer/codecompanion-history.nvim",
-		-- "franco-ruggeri/codecompanion-spinner.nvim",
+		"franco-ruggeri/codecompanion-spinner.nvim",
 		"nvim-lua/plenary.nvim",
 		"nvim-treesitter/nvim-treesitter",
 		-- "hrsh7th/nvim-cmp", -- Optional: For using slash commands and variables in the chat buffer
@@ -57,7 +57,7 @@ return {
 			-- },
 
 			extensions = {
-				-- spinner = {},
+				spinner = {},
 				mcphub = {
 					callback = "mcphub.extensions.codecompanion",
 					opts = {
@@ -109,24 +109,24 @@ return {
 
 			strategies = {
 				chat = {
-          tools = {
-            opts = {
-              default_tools = {
-                "nx",
-                "github",
-                "tavily",
-                "files",
-                "neovim",
-                "search_web"
-              },
-              auto_submit_errors = true, -- Send any errors to the LLM automatically?
-              auto_submit_success = true, -- Send any successful output to the LLM automatically?
-            },
-          },
+					tools = {
+						opts = {
+							default_tools = {
+								"nx",
+								"github",
+								"tavily",
+								"files",
+								"neovim",
+								"search_web",
+							},
+							auto_submit_errors = true, -- Send any errors to the LLM automatically?
+							auto_submit_success = true, -- Send any successful output to the LLM automatically?
+						},
+					},
 					keymaps = {
 						clear = {
 							modes = {
-								n = "gX",
+								n = "cl",
 							},
 							index = 6,
 							callback = "keymaps.clear",
@@ -147,26 +147,68 @@ return {
 			display = {
 				diff = {
 					enabled = true,
-					close_chat_at = 240, -- Close an open chat buffer if the total columns of your display are less than...
-					layout = "vertical", -- vertical|horizontal split for default provider
-					opts = {
-						"internal",
-						"filler",
-						"closeoff",
-						"algorithm:patience",
-						"followwrap",
-						"linematch:120",
+					-- provider = providers.diff, -- mini_diff|split|inline
+          provider = "inline",
+					provider_opts = {
+						-- Options for inline diff provider
+						inline = {
+							layout = "buffer", -- float|buffer - Where to display the diff
+
+							diff_signs = {
+								signs = {
+									text = "▌", -- Sign text for normal changes
+									reject = "✗", -- Sign text for rejected changes in super_diff
+									highlight_groups = {
+										addition = "DiagnosticOk",
+										deletion = "DiagnosticError",
+										modification = "DiagnosticWarn",
+									},
+								},
+								-- Super Diff options
+								icons = {
+									accepted = " ",
+									rejected = " ",
+								},
+								colors = {
+									accepted = "DiagnosticOk",
+									rejected = "DiagnosticError",
+								},
+							},
+
+							opts = {
+								context_lines = 3, -- Number of context lines in hunks
+								dim = 100, -- Background dim level for floating diff (0-100, [100 full transparent], only applies when layout = "float")
+								full_width_removed = true, -- Make removed lines span full width
+								show_keymap_hints = true, -- Show "gda: accept | gdr: reject" hints above diff
+								show_removed = true, -- Show removed lines as virtual text
+							},
+						},
+
+						-- Options for the split provider
+						split = {
+							close_chat_at = 240, -- Close an open chat buffer if the total columns of your display are less than...
+							layout = "vertical", -- vertical|horizontal split
+							opts = {
+								"internal",
+								"filler",
+								"closeoff",
+								"algorithm:histogram", -- https://adamj.eu/tech/2024/01/18/git-improve-diff-histogram/
+								"indent-heuristic", -- https://blog.k-nut.eu/better-git-diffs
+								"followwrap",
+								"linematch:120",
+							},
+						},
 					},
-					provider = "default", -- default|mini_diff
 				},
 				chat = {
+					auto_scroll = false,
 					show_header_separator = true, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
 					start_in_insert_mode = false,
 					separator = "─", -- The separator between the different messages in the chat buffer
 
 					window = {
-						layout = "buffer", -- float|vertical|horizontal|buffer
-						position = nil, -- left|right|top|bottom (nil will default depending on vim.opt.splitright|vim.opt.splitbelow)
+						layout = "vertical", -- float|vertical|horizontal|buffer
+						position = "right", -- left|right|top|bottom (nil will default depending on vim.opt.splitright|vim.opt.splitbelow)
 						border = "single",
 						height = 0.8,
 						width = 0.45,
@@ -199,7 +241,8 @@ return {
 		-- 	end,
 		-- 	desc = "Toggle Copilot",
 		-- },
-		{ mode = { "n", "v" }, "<leader>ca", "<cmd>CodeCompanionChat Toggle<CR>" },
+		-- { mode = { "n", "v", "t" }, "<M-m>", "<cmd>CodeCompanionChat Toggle<CR>" },
+    { mode = { "n", "v" }, "<leader>ca", "<cmd>CodeCompanionChat Toggle<CR>" },
 		{ mode = { "v" }, "ga", "<cmd>CodeCompanionChat Add<CR>" },
 	},
 }

@@ -1,15 +1,105 @@
 -- return {}
 return {
-  {
-    "typed-rocks/ts-worksheet-neovim",
-    cmd = { "Tsw" },
-    opts = {
-      severity = vim.diagnostic.severity.WARN,
-    },
-    config = function(_, opts)
-      require("tsw").setup(opts)
-    end
-  },
+	{
+		"luukvbaal/statuscol.nvim",
+		enabled = true,
+		event = { "BufReadPre", "BufNewFile" },
+		lazy = true,
+		config = function()
+			local builtin = require("statuscol.builtin")
+
+			require("statuscol").setup({
+				-- configuration goes here, for example:
+				relculright = true,
+				-- ft_ignore = { "copilot-chat" },
+				segments = {
+					{
+						text = { builtin.foldfunc },
+						condition = { builtin.not_empty },
+						sign = { maxwidth = 1, colwidth = 1, auto = true, fillchar = "", wrap = true },
+					},
+					{
+						text = { "%s" },
+						-- condition = { line_possible_fold }, -- Only show if line is folded
+						-- condition = { function(args) return not has_fold(args) end },
+						condition = { builtin.not_empty },
+						sign = { namespace = { "diagnostic" }, maxwidth = 1, colwidth = 1, auto = true, fillchar = "" },
+					},
+					{ text = { builtin.lnumfunc, " " }, sign = { maxwidth = 1, fillchar = "", colwidth = 2 } },
+					-- {
+					-- 	sign = { name = { ".*" }, maxwidth = 1, colwidth = 1, auto = true },
+					-- },
+				},
+
+				-- segments = {
+				-- 	{
+				-- 		-- text = { builtin.foldfunc, " " },
+				--         text = { builtin.foldfunc, " " },
+				-- 		condition = { true, builtin.not_empty },
+				-- 		sign = {
+				-- 			maxwidth = 1,
+				-- 			wrap = false,
+				-- 			auto = true,
+				-- 			colwidth = 1,
+				-- 			-- foldclosed = true,
+				-- 		},
+				-- 	},
+				-- 	-- {
+				-- 	-- 	sign = { namespace = { "diagnostic/signs" }, maxwidth = 2, auto = true },
+				-- 	-- },
+				-- 	{
+				--         text = { builtin.signfunc },
+				-- 		sign = {
+				-- 			namespace = { "diagnostic" },
+				-- 			maxwidth = 1,
+				-- 			auto = false,
+				-- 			colwidth = 1,
+				-- 			foldclosed = false,
+				-- 		},
+				-- 	},
+				-- 	{
+				-- 		text = { builtin.lnumfunc, " " },
+				--         -- text = { builtin.lnumfunc },
+				-- 		-- condition = { true, builtin.not_empty },
+				-- 		sign = {
+				-- 			maxwidth = 1,
+				-- 			auto = false,
+				-- 			colwidth = 1,
+				-- 		},
+				-- 	},
+				-- },
+				-- segments = {
+				--   { text = { builtin.foldfunc }, click = "v:lua.ScFa" },
+				--   {
+				--     sign = { namespace = { "diagnostic/signs" }, maxwidth = 2, auto = true },
+				--     click = "v:lua.ScSa"
+				--   },
+				--   { text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
+				--   {
+				--     sign = { name = { ".*" }, maxwidth = 2, colwidth = 1, auto = true, wrap = true },
+				--     click = "v:lua.ScSa"
+				--   },
+				-- }
+			})
+		end,
+	},
+	{
+		"tpope/vim-rsi",
+		event = { "InsertEnter" },
+		config = function()
+			vim.api.nvim_del_keymap("i", "<C-X><C-A>")
+		end,
+	},
+	{
+		"typed-rocks/ts-worksheet-neovim",
+		cmd = { "Tsw" },
+		opts = {
+			severity = vim.diagnostic.severity.WARN,
+		},
+		config = function(_, opts)
+			require("tsw").setup(opts)
+		end,
+	},
 
 	{
 		"duqcyxwd/stringbreaker.nvim",
@@ -83,7 +173,7 @@ return {
 		"almo7aya/openingh.nvim",
 		keys = {
 			{
-				"<leader>op",
+				"<leader>oL",
 				function()
 					vim.cmd("OpenInGHFileLines")
 				end,
@@ -126,21 +216,63 @@ return {
 	--   end,
 	-- },
 	{
-		"skanehira/denops-docker.vim",
+		-- "skanehira/denops-docker.vim",
+		"jugarpeupv/denops-docker.vim",
+		enabled = true,
 		dependencies = {
 			{ "vim-denops/denops.vim" },
 		},
-		cmd = { "Docker", "DockerContainers", "DockerImages" },
+		dir = "~/projects/denops-docker.vim/wt-feature-fixes",
+		dev = true,
+		-- cmd = { "Docker", "DockerContainers", "DockerImages" },
+		-- event = { "BufReadPost", "BufNewFile" },
 		lazy = true,
 		-- config = function ()
 		--   vim.keymap.set("n", "<leader>dt", "<cmd>DockerContainers<cr>", { desc = "Docker Containers" })
 		-- end,
 		keys = {
 			{
+				"<leader>di",
+				function()
+
+          vim.cmd(":e docker://images")
+          vim.defer_fn(function()
+            vim.cmd(":e docker://images")
+            vim.g.docker_denops_loaded = true
+          end, 500)
+
+					-- if vim.g.docker_denops_loaded then
+					-- 	vim.cmd(":e docker://images")
+					-- 	return
+					-- else
+					-- 	vim.cmd(":e docker://images")
+					-- 	vim.defer_fn(function()
+					-- 		vim.cmd(":e docker://images")
+					-- 		vim.g.docker_denops_loaded = true
+					-- 	end, 500)
+					-- end
+				end,
+				desc = "Docker Images",
+			},
+			{
 				"<leader>dc",
 				-- "<cmd>DockerContainers<cr>",
 				function()
-					vim.cmd(":e docker://containers")
+
+          vim.cmd(":e docker://containers")
+          vim.defer_fn(function()
+            vim.cmd(":e docker://containers")
+          end, 500)
+
+					-- if vim.g.docker_denops_loaded then
+					-- 	vim.cmd(":e docker://containers")
+					-- else
+					-- 	vim.cmd(":e docker://containers")
+					-- 	vim.defer_fn(function()
+					-- 		vim.cmd(":e docker://containers")
+					-- 	end, 500)
+					-- end
+
 					-- vim.schedule(function() vim.cmd(":e docker://containers") end)
 					-- Execute the DockerContainers command
 					-- vim.cmd("DockerContainers")
@@ -199,8 +331,8 @@ return {
 			{ "<leader>wa", "<cmd>SessionSave<CR>", desc = "Save session" },
 		},
 		---enables autocomplete for opts
-		---@diagnostic disable-next-line: type-not-found
 		---@module "auto-session"
+		---@diagnostic disable-next-line: undefined-doc-name
 		---@type AutoSession.Config
 		opts = {
 			enabled = true, -- Enables/disables auto creating, saving and restoring
@@ -366,7 +498,7 @@ return {
 		},
 		-- optional, you can also install and use `yq` instead.
 		build = "make",
-		---@diagnostic disable-next-line: type-not-found
+		---@module "pipeline"
 		---@type pipeline.Config
 		opts = {
 			--- The browser executable path to open workflow runs/jobs in
@@ -585,6 +717,7 @@ return {
 			require("bookmarks").setup({
 				save_file = vim.fn.expand("$HOME/.bookmarks"), -- bookmarks save file path
 				keywords = {},
+				---@diagnostic disable-next-line: unused-local
 				on_attach = function(_bufnr)
 					local bm = require("bookmarks")
 					local map = vim.keymap.set
@@ -694,7 +827,8 @@ return {
 				ui_select = true,
 				layout = {
 					-- reverse = true,
-					preview = true,
+					-- layout = "bottom",
+					preview = false,
 					-- layout = {
 					-- 	-- box = 'horizontal',
 					-- 	-- backdrop = false,
@@ -1007,7 +1141,7 @@ return {
 		--   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
 		--   "nvim-tree/nvim-tree.lua"
 		-- },
-		event = { "BufReadPost", "BufNewFile" },
+		event = { "BufReadPre", "BufNewFile" },
 		-- Optional: you can add some keybindings
 		-- (I personally use lspsaga so check out lspsaga integration or lsp integration for a smoother experience without separate keybindings)
 		keys = {
@@ -1039,7 +1173,7 @@ return {
 					telescope_previewer = true, -- Mask values in telescope preview buffers
 					files = {
 						shelter_on_leave = false, -- Control automatic re-enabling of shelter when leaving buffer
-						disable_cmp = false, -- Disable completion in sheltered buffers (default: true)
+						disable_cmp = true, -- Disable completion in sheltered buffers (default: true)
 					},
 				},
 			},
@@ -1049,15 +1183,20 @@ return {
 			preferred_environment = "development", -- Optional: prioritize specific env files
 			env_file_patterns = {
 				"*.env*",
+				"*env*",
 				".env",
 				".env.*",
 				"config/env.*",
 				".env.local.*",
+				"config/.env", -- Matches .env file in config directory
+				"config/.env.*", -- Matches any .env.* file in config directory
+				"environments/*",
 				-- "*.zshrc",
 				-- ".config/zshrc/*.zshrc",
 				-- "/Users/jgarcia/.config/zshrc/.zshrc",
 				-- ".config/zshrc/.zshrc",
 				".config/zshrc/.env.*",
+				"/Users/jgarcia/dotfiles/zshrc/.config/zshrc/.env",
 			},
 			-- env_file_pattern = {
 			--   ".env",
@@ -1325,7 +1464,6 @@ return {
 		--   },
 		-- },
 		config = function()
-			---@diagnostic disable-next-line: param-type-not-match
 			require("nvim-ts-autotag").setup({
 				aliases = {
 					["html"] = "html",

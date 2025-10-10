@@ -28,19 +28,19 @@ function _G.get_winbar()
 end
 
 return {
-	{
-		"elihunter173/dirbuf.nvim",
-		enabled = false,
-		-- event = { "BufReadPost", "BufNewFile" },
-		keys = { "<leader>op" },
-
-		-- cmd = { "DirBuf" },
-		-- priority = 10000,
-		opts = { update_to_buf_dir = { enable = false } },
-		config = function()
-			vim.keymap.set("n", "<Leader>op", "<cmd>Dirbuf<cr>", {})
-		end,
-	},
+	-- {
+	-- 	"elihunter173/dirbuf.nvim",
+	-- 	enabled = false,
+	-- 	-- event = { "BufReadPost", "BufNewFile" },
+	-- 	keys = { "<leader>op" },
+	--
+	-- 	-- cmd = { "DirBuf" },
+	-- 	-- priority = 10000,
+	-- 	opts = { update_to_buf_dir = { enable = false } },
+	-- 	config = function()
+	-- 		vim.keymap.set("n", "<Leader>op", "<cmd>Dirbuf<cr>", {})
+	-- 	end,
+	-- },
 	{
 		"stevearc/oil.nvim",
 		dependencies = {

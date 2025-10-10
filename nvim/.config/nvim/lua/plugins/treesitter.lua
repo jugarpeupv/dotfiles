@@ -1,3 +1,4 @@
+vim.g.puppeteer_disable_filetypes = { "lua" }
 -- return {}
 return {
 	{
@@ -11,15 +12,15 @@ return {
 		-- branch = 'main',
 		-- build = ':TSUpdate',
 		-- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
-    event = { "BufReadPost", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		dependencies = {
-      -- {
-      --   'daliusd/incr.nvim',
-      --   opts = {
-      --     incr_key = '<cr>', -- increment selection key
-      --     decr_key = '<bs>', -- decrement selection key
-      --   },
-      -- },
+			-- {
+			--   'daliusd/incr.nvim',
+			--   opts = {
+			--     incr_key = '<cr>', -- increment selection key
+			--     decr_key = '<bs>', -- decrement selection key
+			--   },
+			-- },
 			{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
 			-- "RRethy/nvim-treesitter-endwise",
 			{ "cfdrake/vim-pbxproj" },
@@ -27,15 +28,15 @@ return {
 			-- 	-- cmd = { "TSPlaygroundToggle" },
 			-- 	"nvim-treesitter/playground",
 			-- },
-      -- lazy.nvim
-      { 
-        -- "axelvc/template-string.nvim",
-        "chrisgrieser/nvim-puppeteer",
-        -- lazy = false, -- plugin lazy-loads itself. Can also load on filetypes.
-      },
+			-- lazy.nvim
+			{
+				-- "axelvc/template-string.nvim",
+				"chrisgrieser/nvim-puppeteer",
+				-- lazy = false, -- plugin lazy-loads itself. Can also load on filetypes.
+			},
 			{
 				"axelvc/template-string.nvim",
-        enabled = false,
+				enabled = false,
 				config = function()
 					require("template-string").setup({
 						filetypes = {
@@ -63,7 +64,6 @@ return {
 				"nvim-treesitter/nvim-treesitter-textobjects",
 				branch = "main",
 				config = function()
-					---@diagnostic disable-next-line: param-type-not-match
 					-- configuration
 					require("nvim-treesitter-textobjects").setup({
 						select = {
@@ -238,7 +238,6 @@ return {
 				-- affects = "nvim-treesitter",
 				-- event = "VeryLazy",
 				config = function()
-					---@diagnostic disable-next-line: param-type-not-match
 					require("treesitter-context").setup({
 						enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
 						multiwindow = true, -- Enable multiple floating windows
@@ -339,9 +338,9 @@ return {
 				-- ensure these language parsers are installed
 				ensure_installed = {
 					-- "lua_patterns",
-          "kitty",
+					"kitty",
 					"toml",
-          "go",
+					"go",
 					"ruby",
 					"swift",
 					"json",
@@ -369,7 +368,7 @@ return {
 					"tsx",
 					"html",
 					"css",
-          "scss",
+					"scss",
 					"yaml",
 					-- "sql",
 					"markdown",
@@ -444,81 +443,14 @@ return {
 			-- }
 			-- vim.treesitter.language.register('ghactions', 'yaml')  -- the someft filetype will use the python parser and queries.
 			-- custom parsers
-			vim.api.nvim_create_autocmd("FileType", {
-				pattern = {
-          "kitty",
-          "java",
-          "go",
-          "copilot-chat",
-					"yaml",
-					"yaml.github",
-					"jsonc",
-					"sh",
-					"dosini",
-					"editorconfig",
-					"typescript",
-					"javascript",
-					"gitcommit",
-					"hurl",
-          "markdown",
-          "jproperties",
-          "properties",
-          "codecompanion",
-          "bash",
-          "html",
-          "htmlangular",
-          "scss",
-          "css",
-          "groovy",
-          "Avante",
-          "dockerfile"
-				},
-				callback = function()
-          -- callback = function(ev)
-          -- event fired: {
-          --   buf = 10,
-          --   event = "FileType",
-          --   file = "package.json",
-          --   id = 132,
-          --   match = "jsonc"
-          -- }
 
-					-- if
-					-- 	(ev.match == "json" or ev.match == "jsonc")
-					-- 	-- and vim.api.nvim_buf_get_name(ev.buf):match("package%-lock%.json")
-					--        and ev.file:match("package%-lock%.json")
-					-- then
-					-- 	vim.api.nvim_buf_set_option(ev.buf, "foldmethod", "syntax")
-					--        return
-					-- end
-					--
-					--      local line_number = 1
-					--      local line = vim.fn.getline(line_number)
-					--      local char_count = #line
-					--
-					--      if char_count > 1500 then
-					--        vim.api.nvim_buf_set_option(ev.buf, "foldmethod", "syntax")
-					--        return
-					--        -- print("char_count > 1500, disabling treesitter")
-					--      end
-					--
-					--      local max_filesize = 500 * 1024 -- 100 KB
-					--      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(ev.buf))
-					--      if ok and stats and stats.size > max_filesize and (ev.match == "json" or ev.match == "jsonc") then
-					--        -- print("buf_filesize > 100 KB, disabling treesitter")
-					--        return
-					--      end
 
-					vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-					vim.treesitter.start()
-				end,
+      vim.treesitter.language.register("markdown", "octo")
+
+			require("jg.custom.incremental_selection").setup({
+				incr_key = "<cr>", -- increment selection key
+				decr_key = "<bs>", -- decrement selection key
 			})
-
-      require("jg.custom.incremental_selection").setup({
-        incr_key = '<cr>', -- increment selection key
-        decr_key = '<bs>', -- decrement selection key
-      })
 
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "TSUpdate",
@@ -530,13 +462,13 @@ return {
 						},
 					}
 
-          -- require("nvim-treesitter.parsers").scss = {
-          --   install_info = {
-          --     url = "https://github.com/tree-sitter-grammars/tree-sitter-scss",
-          --     queries = "queries",
-          --     branch = "master"
-          --   },
-          -- }
+					-- require("nvim-treesitter.parsers").scss = {
+					--   install_info = {
+					--     url = "https://github.com/tree-sitter-grammars/tree-sitter-scss",
+					--     queries = "queries",
+					--     branch = "master"
+					--   },
+					-- }
 				end,
 			})
 		end,

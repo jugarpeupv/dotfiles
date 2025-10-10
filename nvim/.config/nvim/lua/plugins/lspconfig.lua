@@ -77,7 +77,7 @@ return {
 		},
 		config = function()
 			local springboot_nvim = require("springboot-nvim")
-			springboot_nvim.setup({})
+			springboot_nvim.setup()
 		end,
 	},
 	{
@@ -314,10 +314,10 @@ return {
 
 				signs = {
 					text = {
-						[vim.diagnostic.severity.ERROR] = " ",
-						[vim.diagnostic.severity.WARN] = " ",
-						[vim.diagnostic.severity.INFO] = " ",
-						[vim.diagnostic.severity.HINT] = "󰠠 ",
+						[vim.diagnostic.severity.ERROR] = "",
+						[vim.diagnostic.severity.WARN] = "",
+						[vim.diagnostic.severity.INFO] = "",
+						[vim.diagnostic.severity.HINT] = "󰠠",
 					},
 				},
 				update_in_insert = true,
@@ -358,10 +358,10 @@ return {
 
 			-- ################### SERVER CONFIGURATIONS
 
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-				wrap = true,
-				border = "rounded", -- Optional: Add rounded borders to the hover window
-			})
+			-- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+			-- 	wrap = true,
+			-- 	border = "rounded", -- Optional: Add rounded borders to the hover window
+			-- })
 
 			-- configure html server
 			vim.lsp.config("html", {
@@ -534,6 +534,38 @@ return {
 			vim.lsp.config("eslint", {
 				cmd = { home .. "/.local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
 				on_attach = on_attach,
+				-- handlers = {
+				-- 	["eslint/noLibrary"] = function(err, params, ctx, config)
+				-- 		print("[eslint] No ESLint library found for this project.")
+				-- 		print(err)
+				-- 		-- Do nothing else, suppress error
+				-- 	end,
+				-- 	["textDocument/diagnostic"] = function(err, result, ctx, config)
+				-- 		if result and result.diagnostics then
+				-- 			for _, diagnostic in ipairs(result.diagnostics) do
+				-- 				if diagnostic.message:match("failed to load plugin") then
+				-- 					diagnostic.severity = vim.diagnostic.severity.WARN
+				-- 				end
+				-- 			end
+				-- 		end
+				-- 		vim.lsp.handlers["textDocument/diagnostic"](err, result, ctx, config)
+				-- 	end,
+				-- },
+
+				-- handlers = {
+				--   ["eslint/noLibrary"] = function(err, params, ctx, config)
+				--     print("[eslint] No ESLint library found for this project.")
+				--     print(err)
+				--     -- Do nothing else, suppress error
+				--   end,
+				-- },
+				settings = {
+					quiet = false,
+					run = "onSave",
+					-- experimental = {
+					--   useFlatConfig = true
+					-- },
+				},
 				-- filetypes = {
 				--   'javascript',
 				--   'javascriptreact',
@@ -652,11 +684,17 @@ return {
 
 			-- configure lua server (with special settings)
 
-			vim.lsp.config("emmylua_ls", {
+			-- vim.lsp.config("emmylua_ls", {
+			-- 	capabilities = capabilities,
+			-- 	on_attach = on_attach,
+			-- })
+			-- vim.lsp.enable("emmylua_ls")
+
+			vim.lsp.config("lua_ls", {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
-			vim.lsp.enable("emmylua_ls")
+			vim.lsp.enable("lua_ls")
 
 			-- lspconfig["lua_ls"].setup({
 			-- 	capabilities = capabilities,
@@ -753,32 +791,35 @@ return {
 			})
 			vim.lsp.enable("docker_compose_language_service")
 
+			vim.lsp.config("gopls", {
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			vim.lsp.enable("gopls")
 
-      vim.lsp.config("gopls", {
-        capabilities = capabilities,
-        on_attach = on_attach,
-      })
-      vim.lsp.enable('gopls')
+			vim.lsp.config("copilot_ls", {
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			vim.lsp.enable("copilot_ls")
 
+			vim.lsp.config("kulala_ls", {
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			vim.lsp.enable("kulala_ls")
 
-      vim.lsp.config("copilot_ls", {
-        capabilities = capabilities,
-        on_attach = on_attach,
-      })
-      vim.lsp.enable("copilot_ls")
+			vim.lsp.config("somesass_ls", {
+				capabilities = capabilities,
+				on_attach = on_attach,
+			})
+			vim.lsp.enable("somesass_ls")
 
-
-      vim.lsp.config("somesass_ls", {
-        capabilities = capabilities,
-        on_attach = on_attach,
-      })
-      vim.lsp.enable("somesass_ls")
-
-      -- vim.lsp.config("css_variables", {
-      --   capabilities = capabilities,
-      --   on_attach = on_attach,
-      -- })
-      -- vim.lsp.enable("css_variables")
+			-- vim.lsp.config("css_variables", {
+			--   capabilities = capabilities,
+			--   on_attach = on_attach,
+			-- })
+			-- vim.lsp.enable("css_variables")
 
 			-- Set global defaults for all servers
 			local lspconfig = require("lspconfig")

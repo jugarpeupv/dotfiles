@@ -226,6 +226,7 @@ return {
 		dependencies = {},
 		config = function()
 			local api_nvimtree = require("nvim-tree.api")
+      
 			local nvim_tree_jg_utils = require("jg.custom.nvim-tree-utils")
 
 			local attach_git = function()
@@ -769,9 +770,9 @@ return {
 				vim.keymap.set("n", "a", api_nvimtree.fs.create, opts("Create"))
 				-- vim.keymap.set('n', '<leader>cr', change_root_to_global_cwd, opts('Change Root To Global CWD'))
 				-- vim.keymap.set('n', 'bmv',   api.marks.bulk.move,                   opts('Move Bookmarked'))
-				vim.keymap.set("n", "B", api_nvimtree.tree.toggle_no_buffer_filter, opts("Toggle No Buffer"))
+				-- vim.keymap.set("n", "B", api_nvimtree.tree.toggle_no_buffer_filter, opts("Toggle No Buffer"))
 				vim.keymap.set("n", "yy", api_nvimtree.fs.copy.node, opts("Copy"))
-				vim.keymap.set("n", "C", api_nvimtree.tree.toggle_git_clean_filter, opts("Toggle Git Clean"))
+				-- vim.keymap.set("n", "C", api_nvimtree.tree.toggle_git_clean_filter, opts("Toggle Git Clean"))
 				vim.keymap.set("n", "[c", api_nvimtree.node.navigate.git.prev, opts("Prev Git"))
 				vim.keymap.set("n", "]c", api_nvimtree.node.navigate.git.next, opts("Next Git"))
 				vim.keymap.set("n", "d", api_nvimtree.fs.remove, opts("Delete"))
@@ -782,7 +783,7 @@ return {
 						api_nvimtree.tree.reload()
 					end, 200)
 				end, opts("Trash"))
-				vim.keymap.set("n", "E", api_nvimtree.tree.expand_all, opts("Expand All"))
+				-- vim.keymap.set("n", "E", api_nvimtree.tree.expand_all, opts("Expand All"))
 				vim.keymap.set("n", "e", api_nvimtree.fs.rename_basename, opts("Rename: Basename"))
 				vim.keymap.set("n", "]e", api_nvimtree.node.navigate.diagnostics.next, opts("Next Diagnostic"))
 				vim.keymap.set("n", "[e", api_nvimtree.node.navigate.diagnostics.prev, opts("Prev Diagnostic"))
@@ -791,7 +792,7 @@ return {
 				vim.keymap.set("n", "g?", api_nvimtree.tree.toggle_help, opts("Help"))
 				vim.keymap.set("n", "gy", api_nvimtree.fs.copy.absolute_path, opts("Copy Absolute Path"))
 				-- vim.keymap.set("n", "H", api_nvimtree.tree.toggle_hidden_filter, opts("Toggle Dotfiles"))
-				vim.keymap.set("n", "I", api_nvimtree.tree.toggle_gitignore_filter, opts("Toggle Git Ignore"))
+				-- vim.keymap.set("n", "I", api_nvimtree.tree.toggle_gitignore_filter, opts("Toggle Git Ignore"))
 				-- vim.keymap.set('n', 'J',     api.node.navigate.sibling.last,        opts('Last Sibling'))
 				-- vim.keymap.set('n', 'K',     api.node.navigate.sibling.first,       opts('First Sibling'))
 				vim.keymap.set("n", "M", api_nvimtree.marks.clear, opts("Clear marks"))
@@ -877,7 +878,10 @@ return {
 				hijack_netrw = true,
 				-- hijack_netrw = false,
 				hijack_unnamed_buffer_when_opening = true,
-				sort_by = "name",
+				-- sort_by = "name",
+        -- sort = {
+        --   sorter = "modification_time"
+        -- },
 				sync_root_with_cwd = true,
 				-- prefer_startup_root = true,
 				-- *nvim-tree.prefer_startup_root*

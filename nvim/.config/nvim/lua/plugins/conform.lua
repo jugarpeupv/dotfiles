@@ -18,12 +18,20 @@ return {
 		},
     opts = {
       -- Conform will run the first available formatter
+      formatters = {
+        kulala = {
+          command = "kulala-fmt",
+          args = { "format", "$FILENAME" },
+          stdin = false,
+        },
+      },
       formatters_by_ft = {
         javascript = { "prettierd", "prettier", stop_after_first = true },
         typescript = { "prettierd", "prettier", stop_after_first = true },
         lua = { "stylua" },
         xml = { "xmlformatter" },
-        yaml = { "yamlfmt" }
+        yaml = { "yamlfmt" },
+        http = { "kulala" },
       }
     },
 		-- opts = function()

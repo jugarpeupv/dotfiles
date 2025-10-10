@@ -89,13 +89,13 @@ return {
 			-- 		-- require("dap").continue()
 			-- 	end,
 			-- },
-      {
-        "<leader>dO",
-        function()
-          require("dap-view").toggle()
-          -- require("dap-view").jump_to_view("scopes")
-        end,
-      },
+			{
+				"<leader>dO",
+				function()
+					require("dap-view").toggle()
+					-- require("dap-view").jump_to_view("scopes")
+				end,
+			},
 			{
 				"<leader>dd",
 				function()
@@ -152,7 +152,7 @@ return {
 				end,
 			},
 			{
-				"<leader>di",
+				"<leader>dI",
 				function()
 					require("dapui").eval(nil, { enter = true })
 				end,
@@ -195,13 +195,23 @@ return {
 		dependencies = {
 			{
 				"igorlfs/nvim-dap-view",
-        ---@module 'dap-view'
-        ---@type dapview.Config
+				enabled = false,
+				---@module 'dap-view'
+				---@type dapview.Config
 				opts = {
 					winbar = {
 						show = true,
 						-- You can add a "console" section to merge the terminal with the other views
-						sections = { "console", "scopes", "watches", "exceptions", "breakpoints", "threads", "repl", "sessions" },
+						sections = {
+							"console",
+							"scopes",
+							"watches",
+							"exceptions",
+							"breakpoints",
+							"threads",
+							"repl",
+							"sessions",
+						},
 						-- Must be one of the sections declared above
 						default_section = "scopes",
 						-- headers = {
@@ -293,18 +303,19 @@ return {
 				end,
 			},
 			{
-			  "theHamsta/nvim-dap-virtual-text",
-			  config = function()
-			    require("nvim-dap-virtual-text").setup({
-			      display_callback = function (variable)
-			        if #variable > 15 then
-			          return ": " .. string.sub(variable.value, 1, 15) .. "... "
-			        end
+				"theHamsta/nvim-dap-virtual-text",
+        enabled = false,
+				config = function()
+					require("nvim-dap-virtual-text").setup({
+						display_callback = function(variable)
+							if #variable > 15 then
+								return ": " .. string.sub(variable.value, 1, 15) .. "... "
+							end
 
-			        return ": " .. variable.value
-			      end
-			    })
-			  end,
+							return ": " .. variable.value
+						end,
+					})
+				end,
 			},
 			{
 				"jbyuki/one-small-step-for-vimkind",
@@ -338,7 +349,7 @@ return {
 			-- 	args = {'-e'};
 			-- }
 
-			dap.defaults.fallback.terminal_win_cmd = '50split new'
+			dap.defaults.fallback.terminal_win_cmd = "50split new"
 
 			dap.defaults.fallback.focus_terminal = true
 
@@ -464,17 +475,17 @@ return {
 						console = "integratedTerminal",
 						-- internalConsoleOptions = "neverOpen",
 					},
-          {
-            name = "tsx current file",
-            type = "node",
-            request = "launch",
-            program = "${file}",
-            runtimeExecutable = "tsx",
-            cwd = "${workspaceFolder}",
-            console = "integratedTerminal",
-            internalConsoleOptions = "neverOpen",
-            skipFiles = { "<node_internals>/**", "${workspaceFolder}/node_modules/**" },
-          },
+					{
+						name = "tsx current file",
+						type = "node",
+						request = "launch",
+						program = "${file}",
+						runtimeExecutable = "tsx",
+						cwd = "${workspaceFolder}",
+						console = "integratedTerminal",
+						internalConsoleOptions = "neverOpen",
+						skipFiles = { "<node_internals>/**", "${workspaceFolder}/node_modules/**" },
+					},
 					-- Debug web applications (client side)
 					{
 						type = "chrome",
@@ -526,8 +537,7 @@ return {
 				callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
 			end
 
-
-			local dv = require("dap-view")
+			-- local dv = require("dap-view")
 			-- dap.listeners.before.attach["dap-view-config"] = function()
 			-- 	dv.open()
 			-- end
@@ -572,15 +582,18 @@ return {
 			vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
 			vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
 			vim.api.nvim_set_hl(0, "DapStoppedText", { ctermbg = 0, fg = "#aa8430", bg = "none" })
-      vim.api.nvim_set_hl(0, "DapRejected", { ctermbg = 0, fg = "#89ddff", bg = "none" })
+			vim.api.nvim_set_hl(0, "DapRejected", { ctermbg = 0, fg = "#89ddff", bg = "none" })
 			-- vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#664f1d" })
 
 			vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#1a3754" })
 
 			-- vim.fn.sign_define("DapBreakpointRejected", { text = "⊚", texthl = "", linehl = "", numhl = "" })
 			-- vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint2", linehl = "", numhl = "" })
-			
-			vim.fn.sign_define("DapStopped", { text = "", texthl = "DapStoppedText", linehl = "DapDebug1", numhl = "" })
+
+			vim.fn.sign_define(
+				"DapStopped",
+				{ text = "", texthl = "DapStoppedText", linehl = "DapDebug1", numhl = "" }
+			)
 
 			-- vim.fn.sign_define("DapStopped", { text = "⇒", texthl = "DapStopped2", linehl = "DiffAdd", numhl = "" })
 			local signs = {
