@@ -717,7 +717,8 @@ keymap("n", "<leader>bt", "<cmd>Gitsigns toggle_current_line_blame<cr>", opts)
 keymap("n", "<leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 
 -- Replace
-vim.cmd([[nnoremap <leader>rr :%s///g<Left><Left><Left>]])
+vim.cmd([[nnoremap <leader>rr :OverCommandLine %s///g<cr><Left><Left><Left>]])
+-- vim.cmd([[nnoremap <leader>rr :%s///g<Left><Left><Left>]])
 vim.cmd([[xnoremap <leader>rr :s///g<Left><Left><Left>]])
 vim.cmd([[nnoremap <leader>sw /\<\><Left><Left>]])
 
@@ -1821,6 +1822,7 @@ end, opts)
 vim.keymap.set({ "n" }, "<leader>ge", function()
 	vim.cmd("e ~/.gitconfig")
 end, opts)
+
 
 -- vim.keymap.set("n", "<C-I>", "<C-I>", { noremap = true })
 -- vim.keymap.set("n", "<C-M>", "<C-M>", { noremap = true })

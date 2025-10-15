@@ -1,4 +1,3 @@
-vim.g.puppeteer_disable_filetypes = { "lua" }
 -- return {}
 return {
 	{
@@ -30,8 +29,8 @@ return {
 			-- },
 			-- lazy.nvim
 			{
-				-- "axelvc/template-string.nvim",
-				"chrisgrieser/nvim-puppeteer",
+				"axelvc/template-string.nvim",
+				-- "chrisgrieser/nvim-puppeteer",
 				-- lazy = false, -- plugin lazy-loads itself. Can also load on filetypes.
 			},
 			{
@@ -376,8 +375,6 @@ return {
 					-- "svelte",
 					"graphql",
 					"bash",
-					"lua",
-					"luadoc",
 					"vim",
 					"dockerfile",
 					"rust",

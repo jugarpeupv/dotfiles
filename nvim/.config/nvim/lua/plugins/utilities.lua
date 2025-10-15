@@ -1,9 +1,11 @@
 -- return {}
 return {
-	-- {
-	-- 	"osyo-manga/vim-over",
-	-- },
-  { "markonm/traces.vim", event = { "BufReadPost" } },
+  -- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
+	{
+		-- "osyo-manga/vim-over",
+    "jugarpeupv/vim-over"
+	},
+  -- { "markonm/traces.vim", event = { "BufReadPost" } },
 	{
 		"luukvbaal/statuscol.nvim",
 		enabled = true,
