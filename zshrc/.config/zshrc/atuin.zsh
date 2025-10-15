@@ -51,6 +51,16 @@ atuin-setup() {
     # bindkey '^p' history-search-backward
     # bindkey '^n' history-search-forward
     # bindkey '^E' _atuin_search_widget
+
+    autoload -U add-zsh-hook # Only for zsh, skip for bash
+    load-nvmrc() {
+      if [ -f .nvmrc ]; then
+        nvm use
+      fi
+    }
+    # For zsh
+    add-zsh-hook chpwd load-nvmrc
+    load-nvmrc
   }
 
   zvm_after_init_commands+=(set_keybindings)

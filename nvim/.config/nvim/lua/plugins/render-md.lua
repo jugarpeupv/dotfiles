@@ -61,7 +61,8 @@ return {
       icons = { "# ", "## ", "### ", "#### ", "##### ", "####### " },
       -- Added to the sign column if enabled
       -- The 'level' is used to index into the list using a cycle
-      signs = { "󰫎 " },
+      -- signs = { "󰫎" },
+      signs = { " " },
       -- Width of the heading background:
       --  block: width of the heading text
       --  full:  full width of the window

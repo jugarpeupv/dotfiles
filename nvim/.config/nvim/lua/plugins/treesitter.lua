@@ -337,7 +337,7 @@ return {
 				-- autotag = { enable = true },
 				-- ensure these language parsers are installed
 				ensure_installed = {
-					-- "lua_patterns",
+					"lua_patterns",
 					"kitty",
 					"toml",
 					"go",
@@ -444,8 +444,7 @@ return {
 			-- vim.treesitter.language.register('ghactions', 'yaml')  -- the someft filetype will use the python parser and queries.
 			-- custom parsers
 
-
-      vim.treesitter.language.register("markdown", "octo")
+			vim.treesitter.language.register("markdown", "octo")
 
 			require("jg.custom.incremental_selection").setup({
 				incr_key = "<cr>", -- increment selection key
@@ -460,6 +459,12 @@ return {
 							url = "https://github.com/rmuir/tree-sitter-ghactions",
 							queries = "queries",
 						},
+					}
+
+					require("nvim-treesitter.parsers").lua_patterns = {
+						install_info = {
+							url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns"
+						}
 					}
 
 					-- require("nvim-treesitter.parsers").scss = {

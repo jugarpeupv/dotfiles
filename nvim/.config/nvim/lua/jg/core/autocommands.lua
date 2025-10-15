@@ -110,6 +110,10 @@ vim.api.nvim_create_autocmd("BufEnter", {
 		vim.o.conceallevel = 0
 		vim.o.signcolumn = "no"
 		vim.o.foldcolumn = "0"
+		vim.o.relativenumber = false
+		vim.o.number = false
+		vim.o.completeopt = "menuone,noinsert,noselect"
+
 		if vim.b[args.buf].view ~= nil then
 			vim.fn.winrestview(vim.b[args.buf].view)
 			return
@@ -124,6 +128,12 @@ vim.api.nvim_create_autocmd({ "BufLeave" }, {
 	pattern = "copilot-chat",
 	callback = function(args)
 		vim.b[args.buf].view = vim.fn.winsaveview()
+    vim.o.conceallevel = 0
+    vim.o.signcolumn = "yes"
+    vim.o.foldcolumn = "auto"
+    vim.o.relativenumber = true
+    vim.o.number = true
+    vim.o.completeopt = "menu,popup"
 	end,
 })
 
@@ -350,7 +360,7 @@ vim.api.nvim_create_autocmd("FileType", {
 		"dosini",
 		"editorconfig",
 		"typescript",
-		"kulala_http",
+		-- "kulala_http",
 		"javascript",
 		"gitcommit",
 		"hurl",
@@ -366,6 +376,8 @@ vim.api.nvim_create_autocmd("FileType", {
 		"groovy",
 		"Avante",
 		"dockerfile",
+		"regex",
+		"lua",
 	},
 	callback = function(ev)
 		-- local has_treesitter = pcall(function()
@@ -383,3 +395,21 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.treesitter.start()
 	end,
 })
+
+-- vim.api.nvim_create_autocmd({ "BufEnter" }, {
+-- 	desc = "splitbelowtermi",
+-- 	group = vim.api.nvim_create_augroup("splitbelowtermi", { clear = true }),
+-- 	callback = function(ev)
+-- 		if vim.bo[ev.buf].buftype ~= "terminal" then
+-- 			return
+-- 		end
+-- 		vim.opt.splitbelow = true
+-- 	end,
+-- })
+--
+-- vim.api.nvim_create_autocmd("BufLeave", {
+-- 	pattern = "term://*",
+-- 	callback = function()
+-- 		vim.opt.splitbelow = true
+-- 	end,
+-- })

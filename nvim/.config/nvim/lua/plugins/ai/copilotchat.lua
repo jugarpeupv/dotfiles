@@ -75,12 +75,12 @@ return {
 			"github_get_pull_request",
 			"github_list_pull_requests",
 		},
-		resources = { "selection", "buffer" },
+		resources = { "selection", "buffer:visible" },
 		sticky = nil, -- Default sticky prompt or array of sticky prompts to use at start of every new chat (can be specified manually in prompt via >).
 		-- diff = "block", -- Default diff format to use, 'block' or 'unified'.
 		diff = "block", -- Default diff format to use, 'block' or 'unified'.
 		language = "English", -- Default language to use for answers
-		chat_autocomplete = false, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
+		chat_autocomplete = true, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
 		-- temperature = 0.1,           -- Lower = focused, higher = creative
 		-- chat_autocomplete = true,
 		highlight_selection = true, -- Highlight selection

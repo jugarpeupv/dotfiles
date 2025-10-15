@@ -171,6 +171,7 @@ return {
 						BlinkCmpKindVariable = { fg = "#F5C2E7" },
 						BlinkCmpMenuBorder = { fg = "#394b70" },
 						AvanteSidebarWinSeparator = { fg = "#394b70" },
+            NvimTreeSpecialFile = { fg = "#CDD6F4" },
 						AvanteTaskCompleted = { fg = "#8ee2cf" },
 						AvanteStateSpinnerSucceeded = { bg = "#8ee2cf", fg = "black" },
 
@@ -422,9 +423,13 @@ return {
 			vim.cmd([[highlight Visual gui=none cterm=none guibg=#264F78]])
 			-- vim.cmd([[hi DiffviewFilePanelFileName guifg=#B4BEFE]])
 			vim.cmd([[hi DiffviewFilePanelFileName guifg=#c0caf5]])
-			vim.cmd([[hi @tag guifg=#74C7EC]])
-			vim.cmd([[hi @tag.delimiter.angular guifg=#74C7EC]])
-			vim.cmd([[hi @tag.delimiter guifg=#74C7EC]])
+			-- vim.cmd([[hi @tag guifg=#74C7EC]])
+			-- vim.cmd([[hi @tag.delimiter.angular guifg=#74C7EC]])
+			-- vim.cmd([[hi @tag.delimiter guifg=#74C7EC]])
+
+      vim.cmd([[hi @tag guifg=#9CDCFE]])
+      vim.cmd([[hi @tag.delimiter.angular guifg=#9CDCFE]])
+      vim.cmd([[hi @tag.delimiter guifg=#9CDCFE]])
 			-- vim.cmd([[hi @tag guifg=#89ddfe]])
 			-- vim.cmd([[hi @tag.delimiter.angular guifg=#89ddfe]])
 			-- vim.cmd([[hi @tag.delimiter guifg=#89ddfe]])

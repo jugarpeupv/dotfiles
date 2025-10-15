@@ -1,38 +1,9 @@
 -- return {}
 return {
-  -- { "jayp0521/mason-null-ls.nvim", event = "VeryLazy" },
-  -- { "williamboman/mason-lspconfig.nvim", event = "VeryLazy" },
-  -- { "zapling/mason-conform.nvim", after = "stevearc/conform.nvim" },
-  -- {
-  --   "jayp0521/mason-null-ls.nvim",
-  --   enabled = function()
-  --     local is_headless = #vim.api.nvim_list_uis() == 0
-  --     if is_headless then
-  --       return false
-  --     end
-  --     return true
-  --   end,
-  --   cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
-  -- },
-  {
-    "williamboman/mason-lspconfig.nvim",
-    -- commit =  "1a31f824b9cd5bc6f342fc29e9a53b60d74af245",
-    enabled = false,
-    -- enabled = function()
-    --   local is_headless = #vim.api.nvim_list_uis() == 0
-    --   if is_headless then
-    --     return false
-    --   end
-    --   return true
-    -- end,
-    lazy = true,
-    -- cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
-  },
   {
     "williamboman/mason.nvim",
-    -- cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
-    -- commit = "fc98833b6da5de5a9c5b1446ac541577059555be",
     lazy = true,
+    cmd = { "Mason" },
     enabled = function()
       local is_headless = #vim.api.nvim_list_uis() == 0
       if is_headless then

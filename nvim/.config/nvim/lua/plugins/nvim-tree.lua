@@ -81,7 +81,7 @@ return {
 					-- window options
 					-- Set a title in the window using winbar
 					-- winbar = vim.fn.getcwd()
-          winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+					winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 				},
 			},
 			mappings = {
@@ -226,7 +226,7 @@ return {
 		dependencies = {},
 		config = function()
 			local api_nvimtree = require("nvim-tree.api")
-      
+
 			local nvim_tree_jg_utils = require("jg.custom.nvim-tree-utils")
 
 			local attach_git = function()
@@ -316,6 +316,7 @@ return {
 					-- vim.cmd("cd " .. last_active_wt)
 					api_nvimtree.tree.change_root(last_active_wt)
 				end
+
 				-- vim.cmd("hi! NvimTreeStatusLineNC guifg=none guibg=none")
 			end)
 
@@ -428,7 +429,7 @@ return {
 						end
 
 						require("telescope.builtin").find_files({
-              prompt_title = "Find files in: " .. path,
+							prompt_title = "Find files in: " .. path,
 							cwd = path,
 							hidden = true,
 							find_command = {
@@ -620,14 +621,21 @@ return {
 					end
 				end, opts("Open"))
 				-- vim.keymap.set('n', '<CR>', toggle_replace, opts('Open: In Place'))
+
+        local function change_root_to_global_cwd()
+          local api = require("nvim-tree.api")
+          local global_cwd = vim.fn.getcwd(-1, -1)
+          api.tree.change_root(global_cwd)
+        end
 				-- vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
 				vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
 				vim.keymap.set("n", "<", api_nvimtree.node.navigate.sibling.prev, opts("Previous Sibling"))
 				vim.keymap.set("n", ".", api_nvimtree.node.run.cmd, opts("Run Command"))
 
 				vim.keymap.set("n", "H", api_nvimtree.tree.change_root_to_parent, opts("Up"))
-        vim.keymap.set("n", "<C-c>", api_nvimtree.tree.change_root_to_node, opts("CD"))
-        vim.keymap.set("n", "<BS>", api_nvimtree.tree.change_root_to_node, opts("CD"))
+				-- vim.keymap.set("n", "<C-c>", api_nvimtree.tree.change_root_to_node, opts("CD"))
+        vim.keymap.set('n', '<C-c>', change_root_to_global_cwd, opts('Change Root To Global CWD'))
+				vim.keymap.set("n", "<BS>", api_nvimtree.tree.change_root_to_node, opts("CD"))
 
 				-- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
 				-- vim.keymap.set("n", "W", api_nvimtree.node.open.preview, opts("Open Preview"))
@@ -768,7 +776,6 @@ return {
 				-- end, opts("Open Oil"))
 
 				vim.keymap.set("n", "a", api_nvimtree.fs.create, opts("Create"))
-				-- vim.keymap.set('n', '<leader>cr', change_root_to_global_cwd, opts('Change Root To Global CWD'))
 				-- vim.keymap.set('n', 'bmv',   api.marks.bulk.move,                   opts('Move Bookmarked'))
 				-- vim.keymap.set("n", "B", api_nvimtree.tree.toggle_no_buffer_filter, opts("Toggle No Buffer"))
 				vim.keymap.set("n", "yy", api_nvimtree.fs.copy.node, opts("Copy"))
@@ -781,7 +788,7 @@ return {
 					api_nvimtree.fs.trash(node)
 					vim.defer_fn(function()
 						api_nvimtree.tree.reload()
-					end, 200)
+					end, 500)
 				end, opts("Trash"))
 				-- vim.keymap.set("n", "E", api_nvimtree.tree.expand_all, opts("Expand All"))
 				vim.keymap.set("n", "e", api_nvimtree.fs.rename_basename, opts("Rename: Basename"))
@@ -879,9 +886,9 @@ return {
 				-- hijack_netrw = false,
 				hijack_unnamed_buffer_when_opening = true,
 				-- sort_by = "name",
-        -- sort = {
-        --   sorter = "modification_time"
-        -- },
+				-- sort = {
+				--   sorter = "modification_time"
+				-- },
 				sync_root_with_cwd = true,
 				-- prefer_startup_root = true,
 				-- *nvim-tree.prefer_startup_root*
@@ -1131,11 +1138,16 @@ return {
 					-- ignore_dirs = { "/target", "/.ccls-cache" },
 					ignore_dirs = {
 						"/node_modules",
-						"node_modules",
 						"/target",
-						"node_modules",
-						"/Users/jgarcia/",
+						"/tmp",
+						"/dist",
+						"/.angular",
+						"/.nx",
 						"/Users/jgarcia",
+						"/cdk.out",
+						"/coverage",
+						"/out-tsc",
+						".DS_Store",
 					},
 				},
 				actions = {
@@ -1275,7 +1287,7 @@ return {
 	-- },
 	{
 		"nvim-neo-tree/neo-tree.nvim",
-		enabled = false,
+		enabled = true,
 		branch = "v3.x",
 		cmd = "Neotree",
 		dependencies = {

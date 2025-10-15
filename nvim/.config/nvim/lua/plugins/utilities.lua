@@ -1,5 +1,9 @@
 -- return {}
 return {
+	-- {
+	-- 	"osyo-manga/vim-over",
+	-- },
+  { "markonm/traces.vim", event = { "BufReadPost" } },
 	{
 		"luukvbaal/statuscol.nvim",
 		enabled = true,
@@ -226,7 +230,8 @@ return {
 		dev = true,
 		-- cmd = { "Docker", "DockerContainers", "DockerImages" },
 		-- event = { "BufReadPost", "BufNewFile" },
-		lazy = true,
+		-- event = { "CmdlineEnter" },
+		lazy = false,
 		-- config = function ()
 		--   vim.keymap.set("n", "<leader>dt", "<cmd>DockerContainers<cr>", { desc = "Docker Containers" })
 		-- end,
@@ -234,20 +239,20 @@ return {
 			{
 				"<leader>di",
 				function()
+					-- vim.cmd(":e docker://images")
+					-- vim.defer_fn(function()
+					--   vim.cmd(":e")
+					--   vim.g.docker_denops_loaded = true
+					-- end, 500)
 
-          vim.cmd(":e docker://images")
-          vim.defer_fn(function()
-            vim.cmd(":e docker://images")
-            vim.g.docker_denops_loaded = true
-          end, 500)
-
+					vim.cmd(":e docker://images")
 					-- if vim.g.docker_denops_loaded then
 					-- 	vim.cmd(":e docker://images")
 					-- 	return
 					-- else
 					-- 	vim.cmd(":e docker://images")
 					-- 	vim.defer_fn(function()
-					-- 		vim.cmd(":e docker://images")
+					-- 		vim.cmd(":e")
 					-- 		vim.g.docker_denops_loaded = true
 					-- 	end, 500)
 					-- end
@@ -258,11 +263,10 @@ return {
 				"<leader>dc",
 				-- "<cmd>DockerContainers<cr>",
 				function()
-
-          vim.cmd(":e docker://containers")
-          vim.defer_fn(function()
-            vim.cmd(":e docker://containers")
-          end, 500)
+					vim.cmd(":e docker://containers")
+					-- vim.defer_fn(function()
+					--   vim.cmd(":e")
+					-- end, 500)
 
 					-- if vim.g.docker_denops_loaded then
 					-- 	vim.cmd(":e docker://containers")
@@ -808,6 +812,7 @@ return {
 	{
 		-- regex plugin
 		"OXY2DEV/patterns.nvim",
+		enabled = false,
 		cmd = { "Patterns" },
 	},
 	{
@@ -1136,12 +1141,13 @@ return {
 	{
 		"philosofonusus/ecolog.nvim",
 		enabled = true,
+		branch = "beta",
 		-- commit = "d92107c88febabc2f51190339cabf0bc5e072bd9",
 		-- dependencies = {
 		--   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
 		--   "nvim-tree/nvim-tree.lua"
 		-- },
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		-- Optional: you can add some keybindings
 		-- (I personally use lspsaga so check out lspsaga integration or lsp integration for a smoother experience without separate keybindings)
 		keys = {
@@ -1183,7 +1189,7 @@ return {
 			preferred_environment = "development", -- Optional: prioritize specific env files
 			env_file_patterns = {
 				"*.env*",
-				"*env*",
+				-- "*env*",
 				".env",
 				".env.*",
 				"config/env.*",
@@ -1196,7 +1202,8 @@ return {
 				-- "/Users/jgarcia/.config/zshrc/.zshrc",
 				-- ".config/zshrc/.zshrc",
 				".config/zshrc/.env.*",
-				"/Users/jgarcia/dotfiles/zshrc/.config/zshrc/.env",
+				os.getenv("HOME") .. "/dotfiles/zshrc/.config/zshrc/.env",
+				os.getenv("HOME") .. "/.config/zshrc/.env",
 			},
 			-- env_file_pattern = {
 			--   ".env",

@@ -474,12 +474,13 @@ return {
 				"--tsProbeLocations",
 				table.concat({
 					angularls_path,
-					vim.uv.cwd(),
+					-- vim.uv.cwd() .. "/node_modules",
 				}, ","),
 				"--ngProbeLocations",
 				table.concat({
-					angularls_path .. "/node_modules/@angular/language-server",
-					vim.uv.cwd(),
+					angularls_path .. "/node_modules/@angular/language-server/node_modules",
+					--      vim.uv.cwd() .. "/node_modules",
+					-- vim.uv.cwd(),
 				}, ","),
 			}
 
@@ -491,7 +492,7 @@ return {
 					new_config.cmd = angular_cmd
 				end,
 				filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "htmlangular" },
-				root_dir = root_pattern("angular.json", "project.json", "nx.json"),
+				-- root_dir = root_pattern("angular.json", "project.json", "nx.json"),
 			})
 			vim.lsp.enable("angularls")
 

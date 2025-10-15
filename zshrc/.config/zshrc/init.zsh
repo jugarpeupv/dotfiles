@@ -6,6 +6,7 @@ source $HOME/.config/zshrc/oh-my-zsh/zsh-syntax-highlighting.zsh
 # plugins=(nvm evalcache git-open fzf-tab zsh-syntax-highlighting zsh-vi-mode zsh-autosuggestions ohmyzsh-full-autoupdate)
 export NVM_LAZY_LOAD_EXTRA_COMMANDS=('nvim')
 export NVM_LAZY_LOAD=true
+# export NVM_AUTO_USE=true
 
 plugins=(zsh-nvm evalcache git-open fzf-tab zsh-syntax-highlighting zsh-vi-mode zsh-autosuggestions ohmyzsh-full-autoupdate)
 

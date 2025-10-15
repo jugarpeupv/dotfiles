@@ -31,7 +31,8 @@ return {
         disable_in_replace_mode = true,
         -- ignored_next_char = "[%w%.%'%\"%`]",
         -- ignored_next_char = "[=[[%w%%%'%[%\"%.%`%$]]=]",
-        ignored_next_char = "[%w%(%)%.%'%\"%[%]%$]",
+        -- ignored_next_char = "[%w%(%)%.%'%\"%[%]%$]",
+        ignored_next_char = "[%w%.%'%\"%[%]%$]",
         -- ignored_next_char = [=[[%w%%%'%[%"%.%`%$]]=],
         enable_moveright = true,
         enable_afterquote = false,     -- add bracket pairs after quote
@@ -128,12 +129,13 @@ return {
       -- npairs.add_rules(require("nvim-autopairs.rules.endwise-lua"))
       -- npairs.add_rules(require("nvim-autopairs.rules.endwise-ruby"))
 
+
       autopairs.remove_rule("`")
       autopairs.remove_rule("\"")
     end,
   },
-  { "rstacruz/vim-closer", event = { "InsertEnter" } },
-  { "tpope/vim-endwise",   event = { "InsertEnter" } },
+  -- { "rstacruz/vim-closer", event = { "InsertEnter" } },
+  -- { "tpope/vim-endwise",   event = { "InsertEnter" } },
   -- {
   --   "m4xshen/autoclose.nvim",
   --   event = "InsertEnter",

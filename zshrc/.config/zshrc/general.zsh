@@ -1,6 +1,6 @@
 ulimit -S -n 65535
 export BAT_THEME="ansi"
-export TERM='xterm-kitty'
+export TERM='alacritty'
 export EDITOR=nvim
 # export PAGER='nvim -R'
 export MANPAGER='nvim +Man!'

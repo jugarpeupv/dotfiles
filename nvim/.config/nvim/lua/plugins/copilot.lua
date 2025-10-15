@@ -106,7 +106,7 @@ return {
 			},
 			-- copilot_model = "gpt-4o-copilot",
 			compilot_model = "gpt-41-copilot",
-			-- copilot_node_command = os.getenv("HOME") .. "/.nvm/versions/node/v22.11.0/bin/node", -- Node.js version must be > 18.x
+			copilot_node_command = os.getenv("HOME") .. "/.nvm/versions/node/v22.17.0/bin/node", -- Node.js version must be > 18.x
 			server_opts_overrides = {},
 		})
 	end,

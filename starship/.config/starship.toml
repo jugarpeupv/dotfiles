@@ -201,8 +201,10 @@ format = "[$symbol$version]($style) "
 style = "bold green"
 
 [bun]
-disabled = true
-style = "blue"
+disabled = false
+symbol = " "
+format='via $symbol[($version )]($style)'
+style = "#F5C2E7"
 
 [azure]
 disabled = true
