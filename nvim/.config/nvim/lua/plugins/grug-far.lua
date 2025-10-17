@@ -16,6 +16,7 @@ return {
 	cmd = { "GrugFar" },
 	"MagicDuck/grug-far.nvim",
 	config = function()
+    -- vim.api.nvim_set_keymap("c", "<CR>", "<C-M>", { noremap = true, silent = true })
 		require("grug-far").setup({
       debounceMs = 200,
       engines = {
@@ -24,12 +25,12 @@ return {
             search = nil,
             replacement = nil,
             filesFilter = "" ,
-            flags = "-i -w -g !**__template__** -g !**migrations** -g !**spec**",
+            flags = "-i -g !**__template__** -g !**migrations** -g !**spec**",
             paths = nil,
           },
         }
       },
-			startInInsertMode = true,
+			startInInsertMode = false,
 			-- shortcuts for the actions you see at the top of the buffer
 			-- set to '' or false to unset. Mappings with no normal mode value will be removed from the help header
 			-- you can specify either a string which is then used as the mapping for both normal and insert mode
@@ -81,7 +82,18 @@ return {
         -- whether to include file path in the fold, by default, only lines under the file path are included
         include_file_path = true,
       },
-			wrap = false,
+      -- specifies the command to run (with `vim.cmd(...)`) in order to create
+      -- the window in which the grug-far buffer will appear
+      -- ex (horizontal bottom right split): 'botright split'
+      -- ex (open new tab): 'tab split'
+      windowCreationCommand = 'vsplit',
+      -- windowCreationCommand = 'edit',
+      -- windowCreationCommand = 'topleft vsplit',
+
+      -- buffer line numbers + match line numbers can get a bit visually overwhelming
+      -- turn this off if you still like to see the line numbers
+      disableBufferLineNumbers = true,
+			wrap = true,
       helpLine = {
         enabled = false,
       },

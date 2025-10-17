@@ -128,12 +128,12 @@ vim.api.nvim_create_autocmd({ "BufLeave" }, {
 	pattern = "copilot-chat",
 	callback = function(args)
 		vim.b[args.buf].view = vim.fn.winsaveview()
-    vim.o.conceallevel = 0
-    vim.o.signcolumn = "yes"
-    vim.o.foldcolumn = "auto"
-    vim.o.relativenumber = true
-    vim.o.number = true
-    vim.o.completeopt = "menu,popup"
+    -- vim.o.conceallevel = 0
+    -- vim.o.signcolumn = "yes"
+    -- vim.o.foldcolumn = "auto"
+    -- -- vim.o.relativenumber = true
+    -- -- vim.o.number = true
+    -- vim.o.completeopt = "menu,popup"
 	end,
 })
 

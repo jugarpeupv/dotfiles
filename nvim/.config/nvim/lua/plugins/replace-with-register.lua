@@ -36,10 +36,9 @@ return {
 							default = mapping.set_register(utils.get_default_register()),
 							i = {
 								["<c-p>"] = mapping.put("p"),
-								["<c-g>"] = mapping.put("P"),
+								-- ["<c-g>"] = mapping.put("P"),
 								["<c-x>"] = mapping.delete(),
-								["<c-r>"] = mapping.put("p"),
-								["<C-k>"] = require("telescope.actions").move_selection_previous,
+								["<c-k>"] = require("telescope.actions").move_selection_previous,
 							},
 							n = {
 								p = mapping.put("p"),
@@ -56,7 +55,7 @@ return {
 			{
 				"<leader>cl",
 				function()
-					require("telescope").extensions.yank_history.yank_history({})
+					require("telescope").extensions.yank_history.yank_history()
 				end,
 				mode = { "n", "x" },
 				desc = "Open Yank History",

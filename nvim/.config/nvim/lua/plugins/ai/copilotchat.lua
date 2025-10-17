@@ -75,7 +75,7 @@ return {
 			"github_get_pull_request",
 			"github_list_pull_requests",
 		},
-		resources = { "selection", "buffer:visible" },
+		resources = { "selection", "buffer" },
 		sticky = nil, -- Default sticky prompt or array of sticky prompts to use at start of every new chat (can be specified manually in prompt via >).
 		-- diff = "block", -- Default diff format to use, 'block' or 'unified'.
 		diff = "block", -- Default diff format to use, 'block' or 'unified'.

@@ -2,8 +2,13 @@
 function zvm_after_init() {
   # source <(fzf --zsh)
   bindkey "ç" fzf-cd-widget
+  ## Make cmd+f and cmd+b move by word 
   bindkey "^[f" forward-word
   bindkey "^[b" backward-word
+
+  ## Make ctrl+f and ctrl+b move by word 
+  # bindkey "^F" forward-word
+  # bindkey "^B" backward-word
 }
 
 

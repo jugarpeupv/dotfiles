@@ -7,6 +7,8 @@ opt.number = true -- shows absolute line number on cursor line (when relative nu
 
 -- opt.guicursor="n-v-c-sm:block-Cursor,i-ci-ve:ver25,r-cr-o:hor20,t:block-blinkon500-blinkoff500-TermCursor"
 
+opt.guicursor="n-v-sm:block,i-ci-ve:ver25,r-cr-o:hor20,c:ver25,t:block-blinkon500-blinkoff500-TermCursor"
+
 -- tabs & indentation
 opt.tabstop = 2 -- 2 spaces for tabs (prettier default)
 opt.shiftwidth = 2 -- 2 spaces for indent width
@@ -158,7 +160,6 @@ opt.listchars:append({
 -- vim.g.TerminusInsertCursorShape = 1
 
 -- vim.o.foldcolumn = "0"
--- vim.o.foldcolumn = "auto"
 vim.o.foldcolumn = "auto"
 -- vim.o.foldcolumn = "0"
 -- vim.o.foldcolumn = "2"

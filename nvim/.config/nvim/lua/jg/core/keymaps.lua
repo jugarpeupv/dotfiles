@@ -69,14 +69,29 @@ vim.keymap.set({ "n" }, "<leader>gt", function()
 	local conf = require("telescope.config").values
 	local actions = require("telescope.actions")
 	local options = {
-		git_command = { "git", "tag", "-l" },
+		-- git_command = { "git", "tag", "-l" },
+    git_command = { "git", "tag", "-l", "--format", "%(refname:short) %(objectname)" },
 	}
-	local opts2 = {}
+  -- local opts2 = {}
+	local opts2 = {
+    entry_maker = function(line)
+      local tag, sha = line:match("^(%S+)%s+(%S+)$")
+      return {
+        value = tag,
+        sha = sha,
+        display = function(entry)
+          return string.format("%-10s --> %s", entry.value, entry.sha)
+        end,
+        ordinal = tag,
+      }
+    end,
+  }
 
 	pickers
 		.new(options, {
 			prompt_title = "Git Tags",
-			finder = finders.new_oneshot_job(options.git_command, opts2),
+			-- finder = finders.new_oneshot_job(options.git_command, opts2),
+      finder = finders.new_oneshot_job(options.git_command, opts2),
 			sorter = conf.file_sorter(options),
 			-- sorter = require("telescope.config").values.generic_sorter,
 			-- sorter = require("telescope.sorters").Sorter:new({
@@ -570,7 +585,8 @@ vim.keymap.set({ "n", "v" }, "<leader>ff", function()
 end)
 
 vim.keymap.set({ "n", "v" }, "<leader>f.", function()
-	local cwd = "~/dotfiles/nvim/.config/nvim"
+	-- local cwd = "~/dotfiles/nvim/.config/nvim"
+  local cwd = "~/dotfiles"
 	require("telescope").extensions.live_grep_args.live_grep_raw({
 		disable_coordinates = true,
 		cwd = cwd,
@@ -591,6 +607,8 @@ vim.keymap.set({ "n", "v" }, "<leader>f.", function()
 			"--glob=!icarSDK.js",
 			"--glob=!package-lock.json",
 			"--glob=!**/.git/**",
+      "--glob=!lazy-lock.json",
+      "--glob=!**karabiner**",
 			-- "--ignore-case",
 			-- "--smart-case",
 			-- "--word-regexp"
@@ -1475,13 +1493,21 @@ vim.keymap.set("n", "<leader>dv", function()
 	-- Get the current branch (faster method)
 	local current_branch = vim.fn.system("git symbolic-ref --short HEAD"):gsub("%s+", "")
 
-	-- Get the default branch (faster method)
-	-- local default_branch =
-	-- 	vim.fn.system("git symbolic-ref --short refs/remotes/origin/HEAD"):gsub("origin/", ""):gsub("%s+", "")
-	local default_branch = "develop"
+
+  local handle = io.popen("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
+  local default_branch = 'develop'
+  if handle ~= nil then
+    default_branch = handle:read("*a"):gsub("%s+", "")
+    handle:close()
+  end
+
+  if default_branch == 'develop' then
+    default_branch = 'main'
+  end
 
 	-- Construct the DiffviewOpen command
-	local diffview_command = string.format(":DiffviewOpen %s..%s", default_branch, current_branch)
+  local diffview_command = string.format(":DiffviewOpen %s..%s",
+    default_branch, current_branch)
 	-- Populate the command line using vim.api.nvim_feedkeys
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
@@ -1827,4 +1853,21 @@ end, opts)
 -- vim.keymap.set("n", "<C-I>", "<C-I>", { noremap = true })
 -- vim.keymap.set("n", "<C-M>", "<C-M>", { noremap = true })
 
-vim.api.nvim_set_keymap("c", "<CR>", "<C-M>", { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>to', function()
+  local found = false
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) then
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name:match('term://.*copilot') then
+        found = true
+        -- vim.cmd('split') -- open horizontal split
+        vim.api.nvim_set_current_buf(buf)
+        break
+      end
+    end
+  end
+  if not found then
+    -- vim.cmd('split | term copilot')
+    vim.cmd('term copilot')
+  end
+end, { desc = 'Toggle Copilot terminal in split' })

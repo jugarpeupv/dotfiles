@@ -301,7 +301,14 @@ return {
 			-- used to enable autocompletion (assign to every lsp server config)
 			-- local capabilities = cmp_nvim_lsp.default_capabilities()
 			-- local capabilities = require("blink.cmp").get_lsp_capabilities()
-			local blink_capabilities = require("blink.cmp").get_lsp_capabilities()
+
+      local ok, blink_cmp = pcall(require, "blink.cmp")
+      local blink_capabilities
+      if not ok then
+        blink_capabilities = {}
+      else
+        blink_capabilities = blink_cmp.get_lsp_capabilities()
+      end
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			vim.tbl_deep_extend("force", capabilities, blink_capabilities)
 			-- capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false -- https://github.com/neovim/neovim/issues/23291

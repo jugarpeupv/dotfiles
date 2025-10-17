@@ -1,87 +1,11 @@
 local t = function(str)
 	return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
--- return {}
+
 return {
 	{
-		"hrsh7th/nvim-cmp",
-		event = "InsertEnter",
-		enabled = false,
-		dependencies = {
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-cmdline",
-		},
-		config = function()
-			-- local cmp = require("cmp")
-			-- cmp.setup({
-			-- 	enabled = function()
-			-- 		return (vim.api.nvim_get_option_value("filetype", { buf = 0 }) ~= "gitcommit" or
-			--          vim.api.nvim_get_option_value("filetype", { buf = 0 }) ~= "copilot-chat") or
-			--          vim.api.nvim_get_option_value("filetype", { buf = 0 }) ~= "AvanteInput"
-			-- 	end,
-			-- 	sources = {},
-			-- 	window = {
-			-- 		completion = {
-			-- 			-- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
-			-- 			border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-			-- 			winhighlight = "Normal:CmpPmenu,FloatBorder:CmpPmenuBorder,CursorLine:PmenuSel,Search:None",
-			-- 		},
-			-- 		documentation = {
-			-- 			border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-			-- 			-- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
-			-- 			winhighlight = "Normal:CmpPmenu,FloatBorder:CmpPmenuBorder,CursorLine:PmenuSel,Search:None",
-			-- 		},
-			-- 	},
-			-- })
-			--
-			-- -- cmp.setup.filetype({ "gitcommit" }, {
-			-- -- 	sources = {},
-			-- -- })
-			--
-			-- -- `/` cmdline setup.
-			-- cmp.setup.cmdline({ "/", "?" }, {
-			-- 	mapping = cmp.mapping.preset.cmdline({
-			-- 		["<C-j>"] = { c = cmp.mapping.select_next_item() },
-			-- 		["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-			-- 		["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
-			-- 		["<C-l>"] = cmp.config.disable,
-			-- 		["<Tab>"] = cmp.config.disable,
-			-- 		["<CR>"] = cmp.mapping(function(fallback)
-			-- 			local selected_entry = cmp.get_selected_entry()
-			-- 			local filetype = vim.bo.filetype
-			-- 			if filetype == "" then
-			-- 				vim.api.nvim_feedkeys(t("<CR>"), "n", true)
-			-- 				return
-			-- 			elseif cmp.visible() and selected_entry ~= nil then
-			-- 				cmp.confirm({ select = true })
-			-- 				return
-			-- 			else
-			-- 				-- fallback()
-			-- 				vim.api.nvim_feedkeys(t("<CR>"), "n", true)
-			--            fallback()
-			-- 			end
-			-- 		end, { "i", "s" }),
-			-- 		-- ["<Tab>"] = cmp.config.disable,
-			-- 		-- ["<Tab>"] = cmp.mapping(function(fallback)
-			-- 		-- 	-- local copilot = require("copilot.suggestion")
-			-- 		-- 	-- if copilot.is_visible() then
-			-- 		-- 	--   copilot.accept()
-			-- 		-- 	-- elseif cmp.visible() then
-			-- 		-- 	fallback()
-			-- 		-- end),
-			-- 	}),
-			-- 	-- mapping = {
-			-- 	--   ["<C-j>"] = { c = cmp.mapping.select_next_item() },
-			-- 	--   ["<C-k>"] = { c = cmp.mapping.select_prev_item() },
-			-- 	-- },
-			-- 	sources = {
-			-- 		{ name = "buffer" },
-			-- 	},
-			-- })
-		end,
-	},
-	{
 		"saghen/blink.cmp",
+		enabled = true,
 		event = "InsertEnter",
 		keys = {
 			"?",
@@ -91,10 +15,10 @@ return {
 		dependencies = {
 			"onsails/lspkind.nvim",
 			"Kaiser-Yang/blink-cmp-git",
-			"Kaiser-Yang/blink-cmp-avante",
+			-- "Kaiser-Yang/blink-cmp-avante",
 			"rafamadriz/friendly-snippets",
-			"moyiz/blink-emoji.nvim",
-			"MahanRahmati/blink-nerdfont.nvim",
+			-- "moyiz/blink-emoji.nvim",
+			-- "MahanRahmati/blink-nerdfont.nvim",
 			"disrupted/blink-cmp-conventional-commits",
 		},
 
@@ -154,7 +78,7 @@ return {
 						local filetype = vim.bo.filetype
 						if filetype == "" then
 							-- vim.api.nvim_feedkeys(t("<CR>"), "n", true)
-							vim.api.nvim_feedkeys(t("<CR>"), "n", true)
+							vim.api.nvim_feedkeys(t("<CR>"), "n", false)
 							return
 						elseif cmp.is_menu_visible() and cmp.get_selected_item() then
 							return cmp.select_and_accept()
@@ -174,7 +98,8 @@ return {
 					preset = "cmdline",
 					["<Right>"] = {},
 					["<Left>"] = {},
-					["<CR>"] = { "accept_and_enter", "fallback" },
+					-- ["<CR>"] = { "accept_and_enter", "fallback" },
+          ["<CR>"] = {},
 					["<C-k>"] = { "select_prev", "fallback" },
 					["<C-j>"] = { "select_next", "fallback" },
 					-- ["<C-l>"] = { "accept", "fallback" },
@@ -297,17 +222,17 @@ return {
 			-- elsewhere in your config, without redefining it, due to `opts_extend`
 			sources = {
 				default = {
-					"git",
-					"avante",
+					-- "git",
+					-- "avante",
 					"lsp",
 					"path",
 					"buffer",
-					"omni",
-					"snippets",
-					"lazydev",
-					"emoji",
-					"nerdfont",
-					"conventional_commits",
+					-- "omni",
+					-- "snippets",
+					-- "lazydev",
+					-- "emoji",
+					-- "nerdfont",
+					-- "conventional_commits",
 				},
 				per_filetype = {
 					["octo"] = {
@@ -318,6 +243,13 @@ return {
 						"nerdfont",
 						"conventional_commits",
 					},
+					["gitcommit"] = {
+						"git",
+						"path",
+						"conventional_commits",
+            "buffer",
+					},
+					["md"] = {},
 					["copilot-chat"] = {},
 					["AvanteInput"] = { "avante", "lsp", "buffer" },
 				},
@@ -327,7 +259,7 @@ return {
 						name = "Git",
 						-- only enable this source when filetype is gitcommit, markdown, or 'octo'
 						enabled = function()
-							return vim.tbl_contains({ "octo", "gitcommit", "markdown" }, vim.bo.filetype)
+							return vim.tbl_contains({ "octo", "gitcommit" }, vim.bo.filetype)
 						end,
 						opts = {
 							-- options for the blink-cmp-git
@@ -396,20 +328,20 @@ return {
 						min_keyword_length = 3,
 						opts = { insert = true }, -- Insert nerdfont icon (default) or complete its name
 					},
-					emoji = {
-						module = "blink-emoji",
-						name = "Emoji",
-						score_offset = 15, -- Tune by preference
-						opts = { insert = true }, -- Insert emoji (default) or complete its name
-						should_show_items = function()
-							return vim.tbl_contains(
-								-- Enable emoji completion only for git commits and markdown.
-								-- By default, enabled for all file-types.
-								{ "gitcommit", "markdown" },
-								vim.o.filetype
-							)
-						end,
-					},
+					-- emoji = {
+					-- 	module = "blink-emoji",
+					-- 	name = "Emoji",
+					-- 	score_offset = 15, -- Tune by preference
+					-- 	opts = { insert = true }, -- Insert emoji (default) or complete its name
+					-- 	should_show_items = function()
+					-- 		return vim.tbl_contains(
+					-- 			-- Enable emoji completion only for git commits and markdown.
+					-- 			-- By default, enabled for all file-types.
+					-- 			{ "gitcommit" },
+					-- 			vim.o.filetype
+					-- 		)
+					-- 	end,
+					-- },
 					cmdline = {
 						-- ignores cmdline completions when executing shell commands
 						enabled = function()

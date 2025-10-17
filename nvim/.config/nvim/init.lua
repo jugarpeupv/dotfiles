@@ -92,18 +92,29 @@ require("lazy").setup("plugins", {
 	},
 })
 
-require("jg.core.autocommands")
-require("jg.core.keymaps")
+-- require("jg.core.autocommands")
+-- require("jg.core.keymaps")
 
--- vim.api.nvim_create_autocmd("User", {
---   pattern = "VeryLazy",
---   callback = function()
---     -- require("config.autocmds")
---     -- require("config.keymaps")
---     require("jg.core.autocommands")
---     require("jg.core.keymaps")
---   end,
--- })
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VeryLazy",
+  callback = function()
+    -- require("config.autocmds")
+    -- require("config.keymaps")
+    require("jg.core.autocommands")
+    require("jg.core.keymaps")
+  end,
+})
 
 
 vim.cmd("source /Users/jgarcia/.config/nvim/lua/jg/custom/proguard.vim")
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('my-grug-far-custom-keybinds', { clear = true }),
+  pattern = { 'grug-far' },
+  callback = function()
+    vim.keymap.set('ca', 'w', function()
+      local inst = require('grug-far').get_instance(0)
+      inst:sync_all()
+    end, { buffer = true })
+  end,
+})

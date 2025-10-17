@@ -14,6 +14,7 @@ return {
 			require("catppuccin").setup({
 				flavour = "mocha", -- latte, frappe, macchiato, or mocha
 				transparent_background = true,
+				auto_integrations = true,
 				color_overrides = {
 					all = {
 						-- surface0 = "#444444",
@@ -42,6 +43,7 @@ return {
 					harpoon = true,
 					telescope = true,
 					rainbow_delimiters = true,
+					symbols_outline = true,
 					-- ts_rainbow2 = false,
 					lsp_trouble = true,
 					neotree = true,
@@ -97,30 +99,35 @@ return {
 						GitFooter = { bg = "none" },
 						GitAppBar = { bg = "none" },
 						String = { fg = "#F2CDCD" },
-            SnippetTabstop = { bg = "none" },
-						["@module.hurl"] = { fg = "#89ddff", style = { } },
+            OverOldValue = { bg = "#F38BA8", fg = "black" },
+            OverNewValue = { bg = "#94E2D5", fg = "black" },
+            -- OverOldValue = { bg = "#3F2D3D" },
+            -- OverNewValue = { bg = "#103235" },
+						SnippetTabstop = { bg = "none" },
+						["@module.hurl"] = { fg = "#89ddff", style = {} },
 						["@keyword.ghactions"] = { fg = "#89ddff" },
 						["@property.ghactions"] = { fg = "#cdd6f5" },
 						["@module.builtin.ghactions"] = { fg = "#89ddff" },
 						["@function.call.bash"] = { fg = "#C6A0F6", style = {} },
 						["@function.builtin.bash"] = { fg = "#C6A0F6", style = {} },
 						["@variable.parameter.bash"] = { fg = "#F5C2E7" },
-            ["@string.special.url.comment"] = { style = { "underline" } },
+						["@string.special.url.comment"] = { style = { "underline" } },
 						-- StatusLine = { fg = "#737aa2", bg = "#292e42" },
 						fzf1 = { fg = "#737aa2", bg = "#292e42" },
 						fzf2 = { fg = "#737aa2", bg = "#292e42" },
 						fzf3 = { fg = "#737aa2", bg = "#292e42" },
 						StatusLine = { fg = "#737aa2", bg = "#292e42" },
+						DiffviewFolderName = { style = {}, fg = "#89B4FA" },
 						-- NvimTreeStatusLine  = { fg = "#737aa2", bg = "#292e42" },
 						-- NvimTreeStatusLineNC  = { fg = "#737aa2", bg = "#292e42" },
-						NvimTreeStatusLine  = { fg = "#737aa2", bg = "none" },
-						NvimTreeStatusLineNC  = { fg = "#737aa2", bg = "none" },
+						NvimTreeStatusLine = { fg = "#737aa2", bg = "none" },
+						NvimTreeStatusLineNC = { fg = "#737aa2", bg = "none" },
 						MatchParen = { bg = "#394b70", fg = "#F5E0DC" },
 						IlluminatedWordText = { bg = "#394b70" },
 						IlluminatedWordRead = { bg = "#394b70" },
 						IlluminatedWordWrite = { bg = "#394b70" },
 						illuminatedCurWord = { bg = "#394b70" },
-            Cursor  = { bg = "#a9b1d6" },
+						Cursor = { bg = "#a9b1d6" },
 						illuminatedWord = { bg = "#394b70" },
 						RenderMarkdownCode = { bg = "#1f2335" },
 						-- Folded = { bg = "#1f2335", fg = "#737aa2" },
@@ -140,7 +147,7 @@ return {
 						["@markup.heading.1.markdown"] = { fg = "#F5C2E7" },
 						["@markup.heading.2.markdown"] = { fg = "#89ddff" },
 						["@markup.heading.3.markdown"] = { fg = "#94E2D5" },
-            -- ["DevIconJsonc"] = { fg = "#94E2D5" },
+						-- ["DevIconJsonc"] = { fg = "#94E2D5" },
 
 						["@lsp.typemod.interface.defaultLibrary.typescript"] = { fg = "#F38BA8" },
 						["@type.builtin.typescript"] = { fg = "#89ddfe" },
@@ -161,6 +168,13 @@ return {
 						NvimTreeGitStagedIcon = { fg = "#8ee2cf" },
 						-- MatchupVirtualText = { fg = "#6C7086" }
 						MatchupVirtualText = { fg = "#747ebd" },
+						BlinkCmpGitKindCommit = { fg = "#8ee2cf" },
+						BlinkCmpGitLabelCommitId = { fg = "#8ee2cf" },
+
+						-- GitSignsChange
+						-- GitSignsStagedChange
+						-- GitSignsStagedChangedelete
+
 						-- GitSignsCurrentLineBlame = { fg = "#747ebd" },
 						-- GitSignsCurrentLineBlame = { fg = "#0f1219" },
 						GitSignsCurrentLineBlame = { fg = "#B4BEFE" },
@@ -171,14 +185,14 @@ return {
 						BlinkCmpKindVariable = { fg = "#F5C2E7" },
 						BlinkCmpMenuBorder = { fg = "#394b70" },
 						AvanteSidebarWinSeparator = { fg = "#394b70" },
-            NvimTreeSpecialFile = { fg = "#CDD6F4" },
+						NvimTreeSpecialFile = { fg = "#CDD6F4" },
 						AvanteTaskCompleted = { fg = "#8ee2cf" },
 						AvanteStateSpinnerSucceeded = { bg = "#8ee2cf", fg = "black" },
 
-            octo_mb_b60205 = { fg="#ffffff", bg="#F5C2E7" },
-            octo_mf_b60205 = { fg="#F5C2E7" },
-            octo_mb_4493f8 = { fg="#ffffff", bg="#394b70" },
-            octo_mf_4493f8 = { fg="#394b70" },
+						octo_mb_b60205 = { fg = "#ffffff", bg = "#F5C2E7" },
+						octo_mf_b60205 = { fg = "#F5C2E7" },
+						octo_mb_4493f8 = { fg = "#ffffff", bg = "#394b70" },
+						octo_mf_4493f8 = { fg = "#394b70" },
 						-- remove bold from gui, use style = {}
 						BlinkCmpMenuSelection = { bg = "#394b70", style = {} },
 						LspReferenceText = { bg = "#264f78" },
@@ -427,9 +441,9 @@ return {
 			-- vim.cmd([[hi @tag.delimiter.angular guifg=#74C7EC]])
 			-- vim.cmd([[hi @tag.delimiter guifg=#74C7EC]])
 
-      vim.cmd([[hi @tag guifg=#9CDCFE]])
-      vim.cmd([[hi @tag.delimiter.angular guifg=#9CDCFE]])
-      vim.cmd([[hi @tag.delimiter guifg=#9CDCFE]])
+			vim.cmd([[hi @tag guifg=#9CDCFE]])
+			vim.cmd([[hi @tag.delimiter.angular guifg=#9CDCFE]])
+			vim.cmd([[hi @tag.delimiter guifg=#9CDCFE]])
 			-- vim.cmd([[hi @tag guifg=#89ddfe]])
 			-- vim.cmd([[hi @tag.delimiter.angular guifg=#89ddfe]])
 			-- vim.cmd([[hi @tag.delimiter guifg=#89ddfe]])
@@ -445,7 +459,7 @@ return {
 			-- vim.cmd([[hi @property.scss guifg=#89ddff]])
 			-- vim.cmd([[hi @property.class.scss guifg=#89ddff]])
 			-- vim.cmd([[hi @property.class.scss guifg=#CBA6F7]])
-      vim.cmd([[hi @property.class.scss guifg=#74C7EC]])
+			vim.cmd([[hi @property.class.scss guifg=#74C7EC]])
 			-- vim.cmd([[hi @parameter guifg=#B4BEFE]])
 
 			vim.cmd([[highlight @lsp.type.type guifg=#89ddff]])

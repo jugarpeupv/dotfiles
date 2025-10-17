@@ -390,6 +390,7 @@ return {
 				["LICENSE"] = { icon = "", color = "#f38bad", name = "licensefile" },
 				[".gitignore"] = { icon = "󰊢", color = "#7C7F93", name = "gitignore" },
 				[".git"] = { icon = "󰊢", color = "#CA9EE6", name = "giticonworktree" },
+        [".gitconfig"] = { icon = "", color = "#CA9EE6", name = "giticonworktree" },
 				[".luacheckrc"] = { icon = "", color = "#9CDCFE", name = "luacheckrc" },
 				["readme.md"] = { icon = "", color = "#CA9EE6", name = "readmemd1" },
 				-- ["readme.md"] = { icon = "", color = "#9CDCFE", name = "readmemd1" },

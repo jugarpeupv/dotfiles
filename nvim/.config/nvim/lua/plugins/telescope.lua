@@ -12,6 +12,13 @@ return {
 		branch = "master",
 		lazy = true,
 		dependencies = {
+      {
+        -- "osyo-manga/vim-over",
+        "jugarpeupv/vim-over",
+        dev = true,
+        dir = "~/projects/vim-over/wt-master",
+        cmd = { "OverCommandLine" },
+      },
 			{
 				"prochri/telescope-all-recent.nvim",
 				dependencies = {

@@ -1,11 +1,8 @@
 -- return {}
 return {
-  -- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
-	{
-		-- "osyo-manga/vim-over",
-    "jugarpeupv/vim-over"
-	},
-  -- { "markonm/traces.vim", event = { "BufReadPost" } },
+	-- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
+	{ "rhysd/vim-syntax-codeowners", event = { "BufReadPost" } },
+	-- { "markonm/traces.vim", event = { "BufReadPost" } },
 	{
 		"luukvbaal/statuscol.nvim",
 		enabled = true,
@@ -91,9 +88,17 @@ return {
 	},
 	{
 		"tpope/vim-rsi",
-		event = { "InsertEnter" },
+    event = "CmdlineEnter",
+		-- event = { "InsertEnter" },
+    -- event = { "Lazy" },
 		config = function()
 			vim.api.nvim_del_keymap("i", "<C-X><C-A>")
+      -- vim.api.nvim_del_keymap("i", "<C-f>")
+      -- vim.api.nvim_del_keymap("i", "<C-b>")
+      -- vim.api.nvim_set_keymap("i", "<C-f>", "<S-Right>", { noremap = true, silent = true })
+      -- vim.api.nvim_set_keymap("i", "<C-b>", "<S-Left>", { noremap = true, silent = true })
+      -- vim.api.nvim_set_keymap("c", "<C-f>", "<S-Right>", { noremap = true, silent = true })
+      -- vim.api.nvim_set_keymap("c", "<C-b>", "<S-Left>", { noremap = true, silent = true })
 		end,
 	},
 	{
@@ -1142,14 +1147,15 @@ return {
 	},
 	{
 		"philosofonusus/ecolog.nvim",
-		enabled = true,
+		enabled = false,
 		branch = "beta",
+    lazy = true,
 		-- commit = "d92107c88febabc2f51190339cabf0bc5e072bd9",
 		-- dependencies = {
 		--   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
 		--   "nvim-tree/nvim-tree.lua"
 		-- },
-		event = { "BufReadPost", "BufNewFile" },
+		-- event = { "BufReadPost", "BufNewFile" },
 		-- Optional: you can add some keybindings
 		-- (I personally use lspsaga so check out lspsaga integration or lsp integration for a smoother experience without separate keybindings)
 		keys = {
@@ -1159,7 +1165,6 @@ return {
 			{ "<leader>el", "<cmd>EcologShelterLinePeek<cr>", desc = "Ecolog Shelter Line Peek" },
 			{ "<leader>et", "<cmd>EcologShelterToggle<cr>", desc = "Ecolog Shelter Line Peek" },
 		},
-		lazy = true,
 		opts = {
 			integrations = {
 				-- WARNING: for both cmp integrations see readme section below
@@ -1315,7 +1320,70 @@ return {
 			{ "<leader>ot", "<cmd>Outline<CR>", desc = "Toggle outline" },
 		},
 		opts = {
-			-- Your setup opts here
+			outline_window = {
+				position = "right",
+				width = 25,
+				relative_width = true,
+				auto_close = true,
+				-- Automatically scroll to the location in code when navigating outline window.
+				auto_jump = false,
+				jump_highlight_duration = 500,
+				wrap = true,
+			},
+
+			outline_items = {
+				show_symbol_details = true,
+				show_symbol_lineno = false,
+				highlight_hovered_item = true,
+				-- Whether to automatically set cursor location in outline to match
+				-- location in code when focus is in code. If disabled you can use
+				-- `:OutlineFollow[!]` from any window or `<C-g>` from outline window to
+				-- trigger this manually.
+				auto_set_cursor = false,
+			},
+
+			-- Options for outline guides which help show tree hierarchy of symbols
+
+			-- These keymaps can be a string or a table for multiple keys.
+			-- Set to `{}` to disable. (Using 'nil' will fallback to default keys)
+			keymaps = {
+				show_help = "?",
+				close = { "<Esc>", "q" },
+				-- Jump to symbol under cursor.
+				-- It can auto close the outline window when triggered, see
+				-- 'auto_close' option above.
+				goto_location = "<Cr>",
+				-- Jump to symbol under cursor but keep focus on outline window.
+				peek_location = "o",
+				-- Visit location in code and close outline immediately
+				goto_and_close = "<S-Cr>",
+				-- Change cursor position of outline window to match current location in code.
+				-- 'Opposite' of goto/peek_location.
+				restore_location = "<C-g>",
+				-- Open LSP/provider-dependent symbol hover information
+				hover_symbol = "<C-space>",
+				-- Preview location code of the symbol under cursor
+				toggle_preview = "K",
+				rename_symbol = "r",
+				code_actions = "a",
+				-- These fold actions are collapsing tree nodes, not code folding
+				fold = "h",
+				unfold = "l",
+				fold_toggle = "<Tab>",
+				-- Toggle folds for all nodes.
+				-- If at least one node is folded, this action will fold all nodes.
+				-- If all nodes are folded, this action will unfold all nodes.
+				fold_toggle_all = "<S-Tab>",
+				fold_all = "W",
+				unfold_all = "E",
+				fold_reset = "R",
+				-- Move down/up by one line and peek_location immediately.
+				-- You can also use outline_window.auto_jump=true to do this for any
+				-- j/k/<down>/<up>.
+				down_and_jump = "<C-j>",
+				up_and_jump = "<C-k>",
+			},
+
 		},
 	},
 	{
@@ -1442,8 +1510,20 @@ return {
 			},
 			{
 				mode = { "n" },
+				"<leader>gF",
+				"<cmd>Git! fetch --all --tags -v --force<cr>",
+				{ silent = true, noremap = true },
+			},
+			{
+				mode = { "n" },
 				"<Leader>gp",
 				"<cmd>Git! fetch --all | Git! pull<cr>",
+				{ silent = true, noremap = true },
+			},
+			{
+				mode = { "n" },
+				"<Leader>gy",
+				"<cmd>Git! tag -l --format '%(refname:short) --> %(objectname)'<cr>",
 				{ silent = true, noremap = true },
 			},
 			{
