@@ -241,7 +241,7 @@ M.get_gh_actions_init_options = function(org, workspace_path, session_token)
 		local result = handle:read("*a")
 		handle:close()
 		if not result or result == "" then
-			return vim.loop.cwd()
+			return nil
 		end
 		-- Remove trailing newline
 		result = result:gsub("%s+$", "")
@@ -250,6 +250,13 @@ M.get_gh_actions_init_options = function(org, workspace_path, session_token)
 		return repo
 	end
 	local repo_name = get_repo_name()
+
+  if not repo_name then
+    return {
+      sessionToken = session_token,
+      repos = {},
+    }
+  end
 
 	local repo_info = fetch_github_repo(repo_name, session_token, org, workspace_path)
 	return {

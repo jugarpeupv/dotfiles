@@ -12,13 +12,71 @@ return {
 		branch = "master",
 		lazy = true,
 		dependencies = {
-      {
-        -- "osyo-manga/vim-over",
-        "jugarpeupv/vim-over",
-        dev = true,
-        dir = "~/projects/vim-over/wt-master",
-        cmd = { "OverCommandLine" },
-      },
+			{
+				"zigotica/telescope-docker-commands.nvim",
+        dependencies = {
+          'nvim-lua/plenary.nvim',
+          'nvim-telescope/telescope.nvim',
+        },
+				keys = {
+					{
+						"<leader>dc",
+						function()
+							vim.cmd("Telescope docker_commands docker_containers")
+						end,
+						desc = "Docker Images",
+					},
+					{
+						"<leader>di",
+						function()
+							vim.cmd("Telescope docker_commands docker_images")
+						end,
+						desc = "Docker Images",
+					},
+					{
+						"<leader>DD",
+						function()
+							vim.cmd("Telescope docker_commands")
+						end,
+						desc = "Docker Images",
+					},
+				},
+				config = function()
+					require("docker_commands").setup({
+						-- Overwrite/Extend actions for each picker
+						-- Actions are defined as tables containing command details,
+						-- not direct functions, allowing for easier customization.
+						actions = {
+							-- Actions are categorized by main pickers
+							containers = {
+								-- Each action is referenced by a "key" action name, so it is easier to remap.
+								-- Example: Customize the 'logs' action
+								logs = {
+									key = "<C-l>", -- change from C-l to C-g
+									command_args = { "logs", "-f" }, -- add the -f to follow logs in real time
+									desc = "Container lo[G]s", -- this will be shown in telescope keymaps help
+									-- You dont need to modify all table
+								},
+								-- You can also add new key actions
+								kill = {
+									key = "<C-x>",
+									command_args = { "kill" },
+									identifier_field = "ID",
+									needs_confirmation = true,
+									desc = "[K]ill Container",
+								},
+							},
+						},
+					})
+				end,
+			},
+			{
+				-- "osyo-manga/vim-over",
+				"jugarpeupv/vim-over",
+				dev = true,
+				dir = "~/projects/vim-over/wt-master",
+				cmd = { "OverCommandLine" },
+			},
 			{
 				"prochri/telescope-all-recent.nvim",
 				dependencies = {
@@ -208,7 +266,7 @@ return {
 									vim.g.nx_loaded = true
 								end, 1000)
 							else
-                -- print('vim.g.nx_loaded is: ', vim.inspect(vim.g.nx_loaded))
+								-- print('vim.g.nx_loaded is: ', vim.inspect(vim.g.nx_loaded))
 								require("telescope").extensions.nx.actions()
 							end
 						end,
@@ -221,7 +279,7 @@ return {
 								vim.defer_fn(function()
 									require("telescope").extensions.nx.run_many()
 								end, 1000)
-                vim.g.nx_loaded = true
+								vim.g.nx_loaded = true
 							else
 								require("telescope").extensions.nx.run_many()
 							end
@@ -1029,6 +1087,7 @@ return {
 			telescope.load_extension("before")
 			telescope.load_extension("recent_files")
 			telescope.load_extension("nx")
+			telescope.load_extension("docker_commands")
 			-- require("telescope").load_extension("persisted")
 			-- telescope.load_extension("jsonfly")
 			-- telescope.load_extension("media_files")

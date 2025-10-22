@@ -1,6 +1,3 @@
-# TERM = "alacritty"
-live_config_reload = true
-
 [colors.bright]
 black = "0x555555"
 blue = "0x94BFF3"
@@ -163,3 +160,7 @@ opacity = 0.80
 [window.padding]
 x = 10
 y = 3
+
+[general]
+# TERM = "alacritty"
+live_config_reload = true

@@ -99,7 +99,10 @@ return {
 					["<Right>"] = {},
 					["<Left>"] = {},
 					-- ["<CR>"] = { "accept_and_enter", "fallback" },
-          ["<CR>"] = {},
+          -- ["<CR>"] = { "accept", "fallback" },
+          ["<c-y>"] = { "accept", "fallback" },
+          ["<CR>"] = { "accept_and_enter", "fallback" },
+          -- ["<CR>"] = {},
 					["<C-k>"] = { "select_prev", "fallback" },
 					["<C-j>"] = { "select_next", "fallback" },
 					-- ["<C-l>"] = { "accept", "fallback" },
@@ -239,8 +242,8 @@ return {
 						"git",
 						"lsp",
 						"path",
-						"emoji",
-						"nerdfont",
+						-- "emoji",
+						-- "nerdfont",
 						"conventional_commits",
 					},
 					["gitcommit"] = {
@@ -321,13 +324,13 @@ return {
 						---@type blink-cmp-conventional-commits.Options
 						opts = {}, -- none so far
 					},
-					nerdfont = {
-						module = "blink-nerdfont",
-						name = "Nerd Fonts",
-						score_offset = 10, -- Tune by preference
-						min_keyword_length = 3,
-						opts = { insert = true }, -- Insert nerdfont icon (default) or complete its name
-					},
+					-- nerdfont = {
+					-- 	module = "blink-nerdfont",
+					-- 	name = "Nerd Fonts",
+					-- 	score_offset = 10, -- Tune by preference
+					-- 	min_keyword_length = 3,
+					-- 	opts = { insert = true }, -- Insert nerdfont icon (default) or complete its name
+					-- },
 					-- emoji = {
 					-- 	module = "blink-emoji",
 					-- 	name = "Emoji",

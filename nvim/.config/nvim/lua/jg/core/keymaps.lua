@@ -1421,7 +1421,7 @@ local toggle_diffopt = function()
 	end
 end
 
-vim.keymap.set("n", "<leader>DD", toggle_diffopt, { desc = "Toggle diffopt settings" })
+vim.keymap.set("n", "<leader>TD", toggle_diffopt, { desc = "Toggle diffopt settings" })
 
 -- vim.keymap.set({ "n" }, "<leader>sc", function()
 -- 	require("telescope").extensions.yaml_schema.yaml_schema({})
@@ -1817,9 +1817,11 @@ vim.keymap.set("n", "<leader>we", function()
 			})
 		end
 
+    local filename = vim.fn.expand("%:t")
+
 		pickers
 			.new(opts_new or {}, {
-				prompt_title = "Git Worktrees",
+				prompt_title = "Open \"" .. filename .. "\" in different worktree",
 				finder = finders.new_table({
 					results = results,
 					entry_maker = function(entry)

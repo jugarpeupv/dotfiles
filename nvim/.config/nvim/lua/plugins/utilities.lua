@@ -1,6 +1,13 @@
 -- return {}
 return {
 	-- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
+  { "junegunn/gv.vim", dependencies = { "tpope/vim-fugitive" } },
+	{
+		"alex-popov-tech/store.nvim",
+		dependencies = { "OXY2DEV/markview.nvim" },
+		opts = {},
+		cmd = "Store",
+	},
 	{ "rhysd/vim-syntax-codeowners", event = { "BufReadPost" } },
 	-- { "markonm/traces.vim", event = { "BufReadPost" } },
 	{
@@ -88,17 +95,17 @@ return {
 	},
 	{
 		"tpope/vim-rsi",
-    event = "CmdlineEnter",
+		event = "CmdlineEnter",
 		-- event = { "InsertEnter" },
-    -- event = { "Lazy" },
+		-- event = { "Lazy" },
 		config = function()
 			vim.api.nvim_del_keymap("i", "<C-X><C-A>")
-      -- vim.api.nvim_del_keymap("i", "<C-f>")
-      -- vim.api.nvim_del_keymap("i", "<C-b>")
-      -- vim.api.nvim_set_keymap("i", "<C-f>", "<S-Right>", { noremap = true, silent = true })
-      -- vim.api.nvim_set_keymap("i", "<C-b>", "<S-Left>", { noremap = true, silent = true })
-      -- vim.api.nvim_set_keymap("c", "<C-f>", "<S-Right>", { noremap = true, silent = true })
-      -- vim.api.nvim_set_keymap("c", "<C-b>", "<S-Left>", { noremap = true, silent = true })
+			-- vim.api.nvim_del_keymap("i", "<C-f>")
+			-- vim.api.nvim_del_keymap("i", "<C-b>")
+			-- vim.api.nvim_set_keymap("i", "<C-f>", "<S-Right>", { noremap = true, silent = true })
+			-- vim.api.nvim_set_keymap("i", "<C-b>", "<S-Left>", { noremap = true, silent = true })
+			-- vim.api.nvim_set_keymap("c", "<C-f>", "<S-Right>", { noremap = true, silent = true })
+			-- vim.api.nvim_set_keymap("c", "<C-b>", "<S-Left>", { noremap = true, silent = true })
 		end,
 	},
 	{
@@ -229,7 +236,7 @@ return {
 	{
 		-- "skanehira/denops-docker.vim",
 		"jugarpeupv/denops-docker.vim",
-		enabled = true,
+		enabled = false,
 		dependencies = {
 			{ "vim-denops/denops.vim" },
 		},
@@ -237,8 +244,8 @@ return {
 		dev = true,
 		-- cmd = { "Docker", "DockerContainers", "DockerImages" },
 		-- event = { "BufReadPost", "BufNewFile" },
-		-- event = { "CmdlineEnter" },
-		lazy = false,
+		event = { "CmdlineEnter" },
+		lazy = true,
 		-- config = function ()
 		--   vim.keymap.set("n", "<leader>dt", "<cmd>DockerContainers<cr>", { desc = "Docker Containers" })
 		-- end,
@@ -253,6 +260,11 @@ return {
 					-- end, 500)
 
 					vim.cmd(":e docker://images")
+
+					-- vim.defer_fn(function()
+					--    vim.cmd(":e docker://images")
+					-- end, 200)
+
 					-- if vim.g.docker_denops_loaded then
 					-- 	vim.cmd(":e docker://images")
 					-- 	return
@@ -271,6 +283,10 @@ return {
 				-- "<cmd>DockerContainers<cr>",
 				function()
 					vim.cmd(":e docker://containers")
+
+					-- vim.defer_fn(function()
+					--   vim.cmd(":e docker://containers")
+					-- end, 200)
 					-- vim.defer_fn(function()
 					--   vim.cmd(":e")
 					-- end, 500)
@@ -295,7 +311,7 @@ return {
 	{
 		"kkvh/vim-docker-tools",
 		cmd = { "DockerToolsToggle" },
-		enabled = false,
+		enabled = true,
 		keys = {
 			{
 				"<leader>DT",
@@ -1149,7 +1165,7 @@ return {
 		"philosofonusus/ecolog.nvim",
 		enabled = false,
 		branch = "beta",
-    lazy = true,
+		lazy = true,
 		-- commit = "d92107c88febabc2f51190339cabf0bc5e072bd9",
 		-- dependencies = {
 		--   -- "hrsh7th/nvim-cmp", -- Optional: for autocompletion support (recommended)
@@ -1383,7 +1399,6 @@ return {
 				down_and_jump = "<C-j>",
 				up_and_jump = "<C-k>",
 			},
-
 		},
 	},
 	{

@@ -273,18 +273,6 @@ return {
 				end,
 			},
 			{
-				"jayp0521/mason-null-ls.nvim",
-				enabled = false,
-				-- enabled = function()
-				-- 	local is_headless = #vim.api.nvim_list_uis() == 0
-				-- 	if is_headless then
-				-- 		return false
-				-- 	end
-				-- 	return true
-				-- end,
-			},
-			-- { "nanotee/sqls.nvim" },
-			{
 				"yioneko/nvim-vtsls",
 				config = function()
 					require("vtsls").config({
@@ -312,6 +300,11 @@ return {
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			vim.tbl_deep_extend("force", capabilities, blink_capabilities)
 			-- capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false -- https://github.com/neovim/neovim/issues/23291
+
+      vim.lsp.config("*", {
+        on_attach = on_attach,
+        capabilities = capabilities
+      })
 
 			local config = {
 				virtual_text = false,
@@ -424,8 +417,8 @@ return {
 						},
 					},
 				},
-				capabilities = capabilities,
-				on_attach = on_attach,
+				-- capabilities = capabilities,
+				-- on_attach = on_attach,
 			})
 
 			vim.lsp.enable("vtsls")
@@ -539,58 +532,58 @@ return {
 			local capabilities_json_ls = vim.lsp.protocol.make_client_capabilities()
 			capabilities_json_ls.textDocument.completion.completionItem.snippetSupport = true
 
-			vim.lsp.config("eslint", {
-				cmd = { home .. "/.local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
-				on_attach = on_attach,
-				-- handlers = {
-				-- 	["eslint/noLibrary"] = function(err, params, ctx, config)
-				-- 		print("[eslint] No ESLint library found for this project.")
-				-- 		print(err)
-				-- 		-- Do nothing else, suppress error
-				-- 	end,
-				-- 	["textDocument/diagnostic"] = function(err, result, ctx, config)
-				-- 		if result and result.diagnostics then
-				-- 			for _, diagnostic in ipairs(result.diagnostics) do
-				-- 				if diagnostic.message:match("failed to load plugin") then
-				-- 					diagnostic.severity = vim.diagnostic.severity.WARN
-				-- 				end
-				-- 			end
-				-- 		end
-				-- 		vim.lsp.handlers["textDocument/diagnostic"](err, result, ctx, config)
-				-- 	end,
-				-- },
+			-- vim.lsp.config("eslint", {
+			-- 	cmd = { home .. "/.local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
+			-- 	on_attach = on_attach,
+			-- 	-- handlers = {
+			-- 	-- 	["eslint/noLibrary"] = function(err, params, ctx, config)
+			-- 	-- 		print("[eslint] No ESLint library found for this project.")
+			-- 	-- 		print(err)
+			-- 	-- 		-- Do nothing else, suppress error
+			-- 	-- 	end,
+			-- 	-- 	["textDocument/diagnostic"] = function(err, result, ctx, config)
+			-- 	-- 		if result and result.diagnostics then
+			-- 	-- 			for _, diagnostic in ipairs(result.diagnostics) do
+			-- 	-- 				if diagnostic.message:match("failed to load plugin") then
+			-- 	-- 					diagnostic.severity = vim.diagnostic.severity.WARN
+			-- 	-- 				end
+			-- 	-- 			end
+			-- 	-- 		end
+			-- 	-- 		vim.lsp.handlers["textDocument/diagnostic"](err, result, ctx, config)
+			-- 	-- 	end,
+			-- 	-- },
+			--
+			-- 	-- handlers = {
+			-- 	--   ["eslint/noLibrary"] = function(err, params, ctx, config)
+			-- 	--     print("[eslint] No ESLint library found for this project.")
+			-- 	--     print(err)
+			-- 	--     -- Do nothing else, suppress error
+			-- 	--   end,
+			-- 	-- },
+			-- 	settings = {
+			-- 		quiet = false,
+			-- 		run = "onSave",
+			-- 		-- experimental = {
+			-- 		--   useFlatConfig = true
+			-- 		-- },
+			-- 	},
+			-- 	-- filetypes = {
+			-- 	--   'javascript',
+			-- 	--   'javascriptreact',
+			-- 	--   'javascript.jsx',
+			-- 	--   'typescript',
+			-- 	--   'typescriptreact',
+			-- 	--   'typescript.tsx',
+			-- 	--   'vue',
+			-- 	--   'svelte',
+			-- 	--   'astro',
+			-- 	--   'json',
+			-- 	--   'jsonc'
+			-- 	-- },
+			-- 	capabilities = capabilities,
+			-- })
 
-				-- handlers = {
-				--   ["eslint/noLibrary"] = function(err, params, ctx, config)
-				--     print("[eslint] No ESLint library found for this project.")
-				--     print(err)
-				--     -- Do nothing else, suppress error
-				--   end,
-				-- },
-				settings = {
-					quiet = false,
-					run = "onSave",
-					-- experimental = {
-					--   useFlatConfig = true
-					-- },
-				},
-				-- filetypes = {
-				--   'javascript',
-				--   'javascriptreact',
-				--   'javascript.jsx',
-				--   'typescript',
-				--   'typescriptreact',
-				--   'typescript.tsx',
-				--   'vue',
-				--   'svelte',
-				--   'astro',
-				--   'json',
-				--   'jsonc'
-				-- },
-				capabilities = capabilities,
-			})
-
-			vim.lsp.enable("eslint")
+			-- vim.lsp.enable("eslint")
 
 			-- defined in telescope yaml companion
 			vim.lsp.config("yamlls", {
@@ -698,10 +691,10 @@ return {
 			-- })
 			-- vim.lsp.enable("emmylua_ls")
 
-			vim.lsp.config("lua_ls", {
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
+			-- vim.lsp.config("lua_ls", {
+			-- 	capabilities = capabilities,
+			-- 	on_attach = on_attach,
+			-- })
 			vim.lsp.enable("lua_ls")
 
 			-- lspconfig["lua_ls"].setup({

@@ -413,3 +413,21 @@ vim.api.nvim_create_autocmd("FileType", {
 -- 		vim.opt.splitbelow = true
 -- 	end,
 -- })
+
+-- vim.api.nvim_create_autocmd('FileType', {
+--   group = vim.api.nvim_create_augroup('my-grug-far-custom-keybinds', { clear = true }),
+--   pattern = { 'grug-far' },
+--   callback = function()
+--     vim.keymap.set('ca', 'w', function()
+--       local inst = require('grug-far').get_instance(0)
+--       inst:sync_all()
+--     end, { buffer = true })
+--   end,
+-- })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "git",
+  callback = function()
+    vim.opt_local.foldmethod = "syntax"
+  end,
+})
