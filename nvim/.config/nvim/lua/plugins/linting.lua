@@ -3,15 +3,15 @@ return {
 		"mfussenegger/nvim-lint",
 		event = "BufReadPost",
 		config = function()
-      vim.env.ESLINT_D_PPID = vim.fn.getpid()
+      -- vim.env.ESLINT_D_PPID = vim.fn.getpid()
 			require("lint").linters_by_ft = {
 				-- ["yaml.github"] = { "actionlint", "yamllint" },
 				["yaml.github"] = { "actionlint" },
-        javascript = {'eslint_d'},
-        typescript = {'eslint_d'},
+        -- javascript = {'eslint_d'},
+        -- typescript = {'eslint_d'},
 			}
 
-			vim.keymap.set("n", "<leader>nl", function()
+			vim.keymap.set("n", "<leader>lf", function()
 				require("lint").try_lint()
 			end, { noremap = true, silent = true })
 

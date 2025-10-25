@@ -378,8 +378,8 @@ return {
 			"akinsho/git-conflict.nvim",
 		},
 		keys = {
-			-- { "<leader>gd", mode = "n",     "<cmd>DiffviewOpen<cr>" },
-			{ "<leader>gd", mode = "n", "<cmd>DiffviewOpen -- :!package-lock.json<cr>" },
+			{ "<leader>gd", mode = "n",     "<cmd>DiffviewOpen<cr>" },
+			-- { "<leader>gd", mode = "n", "<cmd>DiffviewOpen -- :!package-lock.json<cr>" },
 			{ "<leader>cc", mode = "n", "<cmd>DiffviewClose<cr>" },
 			{ "<leader>gv", mode = { "v" }, "<cmd>'<,'>DiffviewFileHistory<cr>" },
 			{ "<leader>gv", mode = { "n" }, "<cmd>DiffviewFileHistory %<cr>" },

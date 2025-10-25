@@ -12,29 +12,13 @@ return {
 		-- build = ':TSUpdate',
 		-- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
 		event = { "BufReadPost", "BufNewFile" },
+    -- lazy = false,
 		dependencies = {
-			-- {
-			--   'daliusd/incr.nvim',
-			--   opts = {
-			--     incr_key = '<cr>', -- increment selection key
-			--     decr_key = '<bs>', -- decrement selection key
-			--   },
-			-- },
 			{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
-			-- "RRethy/nvim-treesitter-endwise",
 			{ "cfdrake/vim-pbxproj" },
-			-- {
-			-- 	-- cmd = { "TSPlaygroundToggle" },
-			-- 	"nvim-treesitter/playground",
-			-- },
-			-- lazy.nvim
 			{
 				"axelvc/template-string.nvim",
-				-- "chrisgrieser/nvim-puppeteer",
-				-- lazy = false, -- plugin lazy-loads itself. Can also load on filetypes.
-			},
-			{
-				"axelvc/template-string.nvim",
+        -- "chrisgrieser/nvim-puppeteer",
 				enabled = false,
 				config = function()
 					require("template-string").setup({
@@ -155,20 +139,6 @@ return {
 				-- event = "VeryLazy",
 				-- dependencies = "nvim-treesitter/nvim-treesitter",
 			},
-			-- "nvim-treesitter/nvim-treesitter-refactor",
-			-- {
-			--   "RRethy/nvim-treesitter-textsubjects",
-			--   config = function()
-			--     require("nvim-treesitter-textsubjects").configure({
-			--       prev_selection = ",",
-			--       keymaps = {
-			--         ["."] = "textsubjects-smart",
-			--         [";"] = "textsubjects-container-outer",
-			--         ["i;"] = "textsubjects-container-inner",
-			--       },
-			--     })
-			--   end,
-			-- },
 			{
 				"chrisgrieser/nvim-various-textobjs",
 				-- event = "VeryLazy",

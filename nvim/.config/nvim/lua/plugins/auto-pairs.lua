@@ -131,7 +131,7 @@ return {
 
 
       autopairs.remove_rule("`")
-      autopairs.remove_rule("\"")
+      -- autopairs.remove_rule("\"")
     end,
   },
   -- { "rstacruz/vim-closer", event = { "InsertEnter" } },

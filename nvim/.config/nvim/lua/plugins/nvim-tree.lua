@@ -3,10 +3,9 @@ return {
 	{
 		"A7Lavinraj/fyler.nvim",
 		enabled = true,
-		lazy = true,
 		cmd = { "Fyler" },
-		-- branch = "stable",
-		dependencies = { "echasnovski/mini.icons" },
+		branch = "stable",
+    dependencies = { "nvim-mini/mini.icons" },
 		keys = {
 			{
 				"<leader>fe",
@@ -29,7 +28,7 @@ return {
 			-- Changes explorer closing behaviour when a file get selected
 			close_on_select = false,
 			-- Changes explorer behaviour to auto confirm simple edits
-			confirm_simple = true,
+			confirm_simple = false,
 			-- Changes explorer behaviour to hijack NETRW
 			default_explorer = false,
 			-- Changes git statuses visibility
@@ -804,7 +803,7 @@ return {
 				-- vim.keymap.set('n', 'K',     api.node.navigate.sibling.first,       opts('First Sibling'))
 				vim.keymap.set("n", "M", api_nvimtree.marks.clear, opts("Clear marks"))
 				vim.keymap.set("n", "m", api_nvimtree.marks.toggle, opts("Toggle Bookmark"))
-				vim.keymap.set("n", "o", api_nvimtree.node.open.edit, opts("Open"))
+				-- vim.keymap.set("n", "o", api_nvimtree.node.open.edit, opts("Open"))
 
 				-- vim.keymap.set('n', 'O', function()
 				--   local node = api_nvimtree.tree.get_node_under_cursor()
@@ -1187,195 +1186,6 @@ return {
 						copy_paste = false,
 						git = false,
 						profile = false,
-					},
-				},
-			}) -- END_DEFAULT_OPTS
-
-			-- vim.cmd([[hi NvimTreeFolderIcon guifg=#89B4FA]])
-			-- vim.cmd([[hi NvimTreeRootFolder gui=none]])
-			-- vim.cmd([[highlight NvimTreeGitDirty guifg=#F9E2AF]])
-			-- vim.cmd([[highlight NvimTreeGitStaged guifg=#8ee2cf]])
-			-- vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F5C2E7]])
-			-- -- vim.cmd([[highlight NvimTreeExecFile gui=none guifg=#F38BA8]])
-			-- vim.cmd([[highlight NvimTreeModifiedFile gui=none guifg=#737aa2]])
-			-- -- vim.cmd [[highlight NvimTreeModifiedFile gui=none guifg=#EFF1F5]]
-			-- vim.cmd([[highlight NvimTreeGitNew guifg=#89ddff]])
-			-- vim.cmd([[highlight NvimTreeCursorLine guibg=#3b4261]])
-			-- vim.cmd([[highlight NvimTreeStatusLineNC guibg=none]])
-		end,
-	},
-	-- {
-	--   "echasnovski/mini.files",
-	--   version = "*",
-	--   keys = {
-	--     {
-	--       "<leader>E",
-	--       function()
-	--         require("mini.files").open(vim.uv.cwd(), true)
-	--       end,
-	--     },
-	--   },
-	--   -- No need to copy this inside `setup()`. Will be used automatically.
-	--   config = function()
-	--     require("mini.files").setup(
-	--     -- No need to copy this inside `setup()`. Will be used automatically.
-	--       {
-	--         -- Customization of shown content
-	--         content = {
-	--           -- Predicate for which file system entries to show
-	--           filter = nil,
-	--           -- What prefix to show to the left of file system entry
-	--           prefix = nil,
-	--           -- In which order to show file system entries
-	--           sort = nil,
-	--         },
-	--
-	--         -- Module mappings created only inside explorer.
-	--         -- Use `''` (empty string) to not create one.
-	--         mappings = {
-	--           close = "q",
-	--           go_in = "l",
-	--           go_in_plus = "L",
-	--           go_out = "h",
-	--           go_out_plus = "H",
-	--           mark_goto = "'",
-	--           mark_set = "m",
-	--           reset = "<BS>",
-	--           reveal_cwd = "@",
-	--           show_help = "g?",
-	--           synchronize = "=",
-	--           trim_left = "<",
-	--           trim_right = ">",
-	--         },
-	--
-	--         -- General options
-	--         options = {
-	--           -- Whether to delete permanently or move into module-specific trash
-	--           permanent_delete = true,
-	--           -- Whether to use for editing directories
-	--           use_as_default_explorer = true,
-	--         },
-	--
-	--         -- Customization of explorer windows
-	--         windows = {
-	--           -- Maximum number of windows to show side by side
-	--           max_number = math.huge,
-	--           -- Whether to show preview of file/directory under cursor
-	--           preview = true,
-	--           -- Width of focused window
-	--           width_focus = 50,
-	--           -- Width of non-focused window
-	--           width_nofocus = 50,
-	--           -- Width of preview window
-	--           width_preview = 50,
-	--         },
-	--       }
-	--     )
-	--   end,
-	-- },
-	-- {
-	--   "kelly-lin/ranger.nvim",
-	--   config = function()
-	--     require("ranger-nvim").setup({ replace_netrw = true })
-	--     vim.api.nvim_set_keymap("n", "<leader>ef", "", {
-	--       noremap = true,
-	--       callback = function()
-	--         require("ranger-nvim").open(true)
-	--       end,
-	--     })
-	--   end,
-	-- },
-	{
-		"nvim-neo-tree/neo-tree.nvim",
-		enabled = true,
-		branch = "v3.x",
-		cmd = "Neotree",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			-- "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-			"MunifTanjim/nui.nvim",
-		},
-		keys = {
-			{ "\\", ":Neotree current<CR>" },
-			{ "<leader>nb", ":Neotree buffers<CR>" },
-			{ "<leader>ng", ":Neotree git_status<CR>" },
-			{ "<leader>nt", ":Neotree filesystem position=current<CR>" },
-		},
-		opts = {
-			default_component_configs = {
-				-- If you don't want to use these columns, you can set `enabled = false` for each of them individually
-				file_size = {
-					enabled = true,
-					required_width = 64, -- min width of window required to show this column
-				},
-				type = {
-					enabled = true,
-					required_width = 64, -- min width of window required to show this column
-				},
-				last_modified = {
-					enabled = true,
-					required_width = 64, -- min width of window required to show this column
-				},
-				created = {
-					enabled = true,
-					required_width = 64, -- min width of window required to show this column
-				},
-				symlink_target = {
-					enabled = true,
-				},
-			},
-		},
-		config = function()
-			-- If you want icons for diagnostic errors, you'll need to define them somewhere:
-			-- vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
-			-- vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
-			-- vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
-			-- vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
-
-			-- vim.diagnostic.config({
-			-- 	signs = {
-			-- 		{ name = "DiagnosticSignError", text = " " },
-			-- 		{ name = "DiagnosticSignWarn", text = " " },
-			-- 		{ name = "DiagnosticSignInfo", text = " " },
-			-- 		{ name = "DiagnosticSignHint", text = "󰌵" },
-			-- 	},
-			-- })
-
-			require("neo-tree").setup({
-				close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
-				popup_border_style = "rounded",
-				enable_git_status = true,
-				enable_diagnostics = true,
-				open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
-				sort_case_insensitive = false, -- used when sorting files and directories in the tree
-				sort_function = nil, -- use a custom function for sorting files and directories in the tree
-				-- sort_function = function (a,b)
-				--       if a.type == b.type then
-				--           return a.path > b.path
-				--       else
-				--           return a.type > b.type
-				--       end
-				--   end , -- this sorts files and directories descendantly
-				default_component_configs = {
-					-- If you don't want to use these columns, you can set `enabled = false` for each of them individually
-					file_size = {
-						enabled = true,
-						required_width = 64, -- min width of window required to show this column
-					},
-					type = {
-						enabled = true,
-						required_width = 64, -- min width of window required to show this column
-					},
-					last_modified = {
-						enabled = true,
-						required_width = 64, -- min width of window required to show this column
-					},
-					created = {
-						enabled = true,
-						required_width = 64, -- min width of window required to show this column
-					},
-					symlink_target = {
-						enabled = true,
 					},
 				},
 			})

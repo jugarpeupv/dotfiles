@@ -6,7 +6,8 @@
   "Lua.diagnostics.globals": [
     "vim",
     "generate_diff_colors",
-    "show_dap_centered_scopes"
+    "show_dap_centered_scopes",
+    "Snacks"
   ],
   "workspace.checkThirdParty": "Disable",
   "diagnostics.disable": [

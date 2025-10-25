@@ -957,13 +957,13 @@ return {
 							},
 						},
 					},
-					["ui-select"] = {
-						require("telescope.themes").get_dropdown({
-							layout_config = { width = 0.70 },
-							prompt_prefix = "> ",
-							initial_mode = "normal",
-						}),
-					},
+					-- ["ui-select"] = {
+					-- 	require("telescope.themes").get_dropdown({
+					-- 		layout_config = { width = 0.70 },
+					-- 		prompt_prefix = "> ",
+					-- 		initial_mode = "normal",
+					-- 	}),
+					-- },
 					ecolog = {
 						shelter = {
 							-- Whether to show masked values when copying to clipboard
@@ -1077,7 +1077,7 @@ return {
 
 			telescope.load_extension("dap")
 			telescope.load_extension("zf-native")
-			telescope.load_extension("ui-select")
+			-- telescope.load_extension("ui-select")
 			telescope.load_extension("bookmarks")
 			telescope.load_extension("git_worktree")
 			telescope.load_extension("file_browser")
