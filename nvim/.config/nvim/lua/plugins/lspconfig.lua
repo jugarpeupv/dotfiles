@@ -939,6 +939,7 @@ return {
 			vim.lsp.enable("copilot_ls")
 
 			vim.lsp.config("kulala_ls", {
+        filetypes = { "json", "http", "rest" },
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})

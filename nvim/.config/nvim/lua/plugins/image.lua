@@ -1,3 +1,5 @@
+vim.g.image_rendered = false
+
 return {
 	{
 		"edluffy/hologram.nvim",
@@ -95,118 +97,84 @@ return {
 				hijack_file_patterns = {}, -- render image files as images when opened
 			})
 
-			local image_rendered = false
-			local my_image = nil
+      local function get_full_path(path)
+        -- Get the user's home directory
+        local home_dir = os.getenv("HOME")
+
+        -- Check if the path starts with the home directory
+        if string.sub(path, 1, #home_dir) == home_dir then
+          return path
+        end
+
+        -- Get the current buffer's full path
+        local current_buffer_dos = vim.api.nvim_buf_get_name(0)
+        -- Get the directory of the current buffer
+        local current_dir = vim.fn.fnamemodify(current_buffer_dos, ":p:h")
+        -- Combine the directory with the relative path
+        local full_path = vim.fn.fnamemodify(current_dir .. "/" .. path, ":p")
+
+        if vim.fn.filereadable(full_path) == 1 then
+          return full_path
+        else
+          full_path = vim.fn.fnamemodify(vim.loop.cwd() .. "/" .. path, ":p")
+        end
+
+        return full_path
+      end
 
 			vim.keymap.set({ "n", "v" }, "<leader>it", function()
-				local api = require("image")
+        local image_util = require("jg.custom.image-utils")
+        if image_util.image_rendered and image_util.loaded_image_under_cursor then
+          -- vim.g.image_object:clear() -- remove the image if it is already rendered
+          image_util.loaded_image_under_cursor:clear() -- remove the image if it is already rendered
+          image_util.image_rendered = false
+          -- vim.g.image_object = nil
+          image_util.loaded_image_under_cursor = nil
+          return
+        end
+
+
 				local current_window = vim.api.nvim_get_current_win()
 				local current_buffer = vim.api.nvim_get_current_buf()
 				local cursor_pos = vim.api.nvim_win_get_cursor(current_window)
 				local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
 				-- local cursor_col = cursor_pos[2]
 
-				local function get_full_path(path)
-					-- Get the user's home directory
-					local home_dir = os.getenv("HOME")
-
-					-- Check if the path starts with the home directory
-					if string.sub(path, 1, #home_dir) == home_dir then
-						return path
-					end
-
-					-- Get the current buffer's full path
-					local current_buffer_dos = vim.api.nvim_buf_get_name(0)
-					-- Get the directory of the current buffer
-					local current_dir = vim.fn.fnamemodify(current_buffer_dos, ":p:h")
-					-- Combine the directory with the relative path
-					local full_path = vim.fn.fnamemodify(current_dir .. "/" .. path, ":p")
-
-					if vim.fn.filereadable(full_path) == 1 then
-						return full_path
-					else
-						full_path = vim.fn.fnamemodify(vim.loop.cwd() .. "/" .. path, ":p")
-					end
-
-					return full_path
-				end
 
 				-- Get the file path under the cursor
 				local line = vim.api.nvim_buf_get_lines(current_buffer, cursor_row, cursor_row + 1, false)[1]
 				-- print("line", line)
 
 				local file_path
-				local extracted_content = string.match(line, "%[%[(.-)%]%]")
-				-- print("extracted_content", extracted_content)
 
-				if extracted_content then
-					file_path = extracted_content.gsub(extracted_content, "|.*", "")
-					file_path = vim.loop.cwd() .. "/zadjuntos/" .. file_path
-				else
-					file_path = line:match("%((.-)%)")
-					if not file_path then
-						print("No image found under the cursor")
-						return
-					end
-					file_path = get_full_path(file_path)
-				end
+        local toggle_image_under_cursor = function(file_path_cb)
+          image_util.toggle_image_under_cursor(file_path_cb, current_window, current_buffer, cursor_row)
+        end
 
-				-- print("file_path", file_path)
+        -- -- Try to extract <img src="...">
+        local url = line:match('<img%s+[^>]*src="([^"]+)"')
+        if url and url:match("^https?://") then
 
-				-- print("file_path", file_path)
+          image_util.get_github_attachment_image(url, toggle_image_under_cursor)
+        else
+          -- Fallback to your existing logic
+          local extracted_content = string.match(line, "%[%[(.-)%]%]")
+          -- print("extracted_content", extracted_content)
 
-				if image_rendered and my_image then
-					my_image:clear() -- remove the image if it is already rendered
-					image_rendered = false
-					my_image = nil
-				else
-					if vim.fn.filereadable(file_path) == 0 then
-						print("Image file does not exist: " .. file_path)
-						return
-					end
-					-- from a file (absolute path)
-					my_image = api.from_file(file_path, {
-						id = "my_image_id", -- optional, defaults to a random string
-						window = current_window, -- binds image to the current window
-						buffer = current_buffer, -- binds image to the current buffer
-						with_virtual_padding = true, -- optional, pads vertically with extmarks, defaults to false
-						inline = true, -- binds image to an extmark which it follows
-						-- geometry (optional)
-						-- x = cursor_col,
-						x = 0,
-						y = cursor_row + 1,
-						-- width = 1000,
-						-- height = 1000,
-					})
+          if extracted_content then
+            file_path = extracted_content.gsub(extracted_content, "|.*", "")
+            file_path = vim.loop.cwd() .. "/zadjuntos/" .. file_path
+          else
+            file_path = line:match("%((.-)%)")
+            if not file_path then
+              print("No image found under the cursor")
+              return
+            end
+            file_path = get_full_path(file_path)
+          end
 
-					-- print("my_image", vim.inspect(my_image))
-
-					if not my_image then
-						return
-					end
-
-					my_image:render() -- render image
-					image_rendered = true
-
-					-- local map = vim.keymap.set
-					-- map("n", "+", function()
-					--   my_image.image_width = my_image.image_width * 1.25
-					--   my_image.image_height = my_image.image_height * 1.25
-					--   my_image:render()
-					-- end, {
-					--     buffer = current_buffer,
-					--     desc = "Zoom in image",
-					--   })
-					--
-					-- map("n", "_", function()
-					--   my_image.image_width = my_image.image_width / 1.25
-					--   my_image.image_height = my_image.image_height / 1.25
-					--   my_image:render()
-					-- end, {
-					--     buffer = current_buffer,
-					--     desc = "Zoom out image",
-					--   })
-				end
+          toggle_image_under_cursor(file_path)
+        end
 			end, {})
 		end,
 	},

@@ -9,6 +9,7 @@ return {
 		--     enabled = false
 		--   }
 		-- },
+		layout = {},
 		bigfile = {
 			notify = false, -- show notification when big file detected
 			size = 0.7 * 1024 * 1024, -- 1.5MB
@@ -16,13 +17,14 @@ return {
 			-- Enable or disable features when big file detected
 			---@param ctx {buf: number, ft:string}
 			setup = function(ctx)
-				vim.b.matchup_matchparen_enabled = 0
-				-- vim.cmd("let b:matchup_matchparen_enabled = 0")
-				-- if vim.fn.exists(":NoMatchParen") ~= 0 then
-				-- 	vim.cmd([[NoMatchParen]])
-				-- end
+        vim.b.matchparen_enabled = false
+        vim.treesitter.stop(ctx.buf)
 
-				Snacks.util.wo(0, { foldmethod = "manual", statuscolumn = "", conceallevel = 0 })
+        vim.b.matchup_matchparen_enabled = 0
+        vim.b.matchup_matchparen_fallback = 0
+
+				-- Snacks.util.wo(0, { foldmethod = "manual", statuscolumn = "", conceallevel = 0, number = false, relativenumber = false })
+        Snacks.util.wo(0, { foldmethod = "manual", statuscolumn = "", conceallevel = 0, relativenumber = false, number = false })
 				vim.b.minianimate_disable = true
 				vim.b.minihipatterns_disable = true
 				vim.schedule(function()
@@ -35,31 +37,46 @@ return {
 		picker = {
 			ui_select = true,
 			layout = {
-				-- reverse = true,
-				-- layout = "bottom",
-				preview = false,
-				-- layout = {
-				-- 	-- box = 'horizontal',
-				-- 	-- backdrop = false,
-				-- 	width = 0.9,
-				-- 	height = 0.9,
-				-- 	-- border = 'none',
-				-- 	-- {
-				-- 	--   box = 'vertical',
-				-- 	--   { win = 'list', title = ' Results ', title_pos = 'center', border = vim.g.borderStyle },
-				-- 	--   { win = 'input', height = 1, border = vim.g.borderStyle, title = '{title} {live} {flags}', title_pos = 'center' },
-				-- 	-- },
-				-- 	-- {
-				-- 	--   win = 'preview',
-				-- 	--   title = '{preview:Preview}',
-				-- 	--   width = 0.65,
-				-- 	--   border = vim.g.borderStyle,
-				-- 	--   title_pos = 'center',
-				-- 	-- },
-				-- },
+        layout = {
+          box = "vertical",
+          backdrop = false,
+          row = -1,
+          width = 0,
+          height = 0.4,
+          border = "top",
+          title = " {title} {live} {flags}",
+          title_pos = "center",
+          { win = "input", height = 1, border = "none" },
+          {
+            box = "horizontal",
+            { win = "list", border = "none" },
+            { win = "preview", title = "{preview}", width = 0.35, border = "left" },
+          },
+        },
 			},
+
+			-- layout = {
+			-- 	preset = "ivy",
+			-- 	preview = "main",
+			-- 	layout = {
+			-- 		box = "vertical",
+			-- 		backdrop = false,
+			-- 		width = 0,
+			-- 		height = 0.4,
+			-- 		position = "bottom",
+			-- 		border = "top",
+			-- 		title = " {title} {live} {flags}",
+			-- 		title_pos = "left",
+			-- 		{ win = "input", height = 1, border = "bottom" },
+			-- 		{
+			-- 			box = "horizontal",
+			-- 			{ win = "list", border = "none" },
+			-- 			{ win = "preview", title = "{preview}", width = 0.6, border = "left" },
+			-- 		},
+			-- 	},
+			-- },
 		},
-		explorer = {},
+		explorer = { enabled = false },
 	},
 	keys = {
 		-- Top Pickers & Explorer
@@ -67,7 +84,6 @@ return {
 		{
 			"<leader><space>",
 			function()
-				---@diagnostic disable-next-line: undefined-global
 				Snacks.picker.smart({
 					-- layout = {
 					-- 	preset = "ivy_split",
@@ -79,7 +95,6 @@ return {
 		{
 			"<leader>,",
 			function()
-				---@diagnostic disable-next-line: undefined-global
 				Snacks.picker.buffers()
 			end,
 			desc = "Buffers",
@@ -87,11 +102,10 @@ return {
 		{
 			"<leader>/",
 			function()
-				---@diagnostic disable-next-line: undefined-global
 				Snacks.picker.grep({
-					layout = {
-						preset = "ivy",
-					},
+          layout = {
+            preview = false
+          }
 				})
 			end,
 			desc = "Grep",

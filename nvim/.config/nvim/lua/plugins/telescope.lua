@@ -1088,6 +1088,7 @@ return {
 			telescope.load_extension("recent_files")
 			telescope.load_extension("nx")
 			telescope.load_extension("docker_commands")
+      telescope.load_extension("git_file_history")
 			-- require("telescope").load_extension("persisted")
 			-- telescope.load_extension("jsonfly")
 			-- telescope.load_extension("media_files")

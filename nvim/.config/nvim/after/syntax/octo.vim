@@ -12,3 +12,4 @@ hi octo_mb_4493f8 guifg=#292e42 guibg=#F2CDCD
 hi octo_mf_4493f8 guifg=#F2CDCD
 
 hi octo_mf_89b4fb guifg=#89b4fb
+" hi octo_mf_89b4fb guifg=#F38BA8

@@ -4,7 +4,7 @@ return {
 		"tanvirtin/vgit.nvim",
 		-- branch = "v1.0.x",
 		branch = "main",
-		enabled = true,
+		enabled = false,
 		keys = {
 			{
 				mode = { "n" },
@@ -362,8 +362,12 @@ return {
 		config = function()
 			local neogit = require("neogit")
 			neogit.setup({
+        kind = "replace",
 				graph_style = "kitty",
 				process_spinner = true,
+        integrations = {
+          diffview = true
+        }
 			})
 		end,
 	},
@@ -503,29 +507,66 @@ return {
 					DiffviewFileHistory = {},
 				},
 				hooks = {
-					diff_buf_win_enter = function(bufnr, _winid, _ctx)
-						-- print("bufnr: ", bufnr)
-						-- print("ctx: ", vim.inspect(ctx))
-						-- print("winid: ", winid)
-						-- if winid == 1004 or ctx.symbol == 'b' then
-						--   vim.api.nvim_buf_set_option('wrap', true, { buf = bufnr})
-						-- end
-						-- local filename = vim.api.nvim_buf_get_name(bufnr)
-						vim.api.nvim_buf_set_option(bufnr, "wrap", false)
-						-- print('filename: ', filename)
-						-- local coincide = filename:match("package%-lock%.json")
-						-- print('coincide: ', coincide)
-						-- -- check if filename contains "package-lock.json"
-						-- if filename:match("package%-lock%.json") then
-						--   print('package-lock.json detected, disabling treesitter')
-						--   vim.treesitter.stop(bufnr)
-						-- end
-
-						-- vim.keymap.set({ "n" }, "<leader>sn", function()
-						--   -- vim.wo.wrap = not vim.wo.wrap
-						--   vim.cmd("windo set wrap!")
-						-- end, { buffer = bufnr, noremap = true, silent = true })
-					end,
+           diff_buf_read = function(bufnr)
+            -- Change local options in diff buffers
+            vim.opt_local.wrap = false
+            -- vim.opt_local.list = false
+            -- vim.opt_local.colorcolumn = { 80 }
+            -- vim.opt_local.foldenable = false
+            -- vim.opt_local.foldmethod = "manual"
+            -- vim.opt_local.syntax = "bigfile"
+            -- vim.opt_local.ft = "bigfile"
+            -- vim.treesitter.stop(0)
+           end,
+           --diff_buf_win_enter = function ()
+           --  vim.treesitter.stop(0)
+           --  vim.opt_local.wrap = false
+           --  vim.opt_local.list = false
+           --  vim.opt_local.colorcolumn = { 80 }
+           --  vim.opt_local.foldenable = false
+           --  vim.opt_local.foldmethod = "manual"
+           --  vim.opt_local.syntax = "bigfile"
+           --  vim.opt_local.ft = "bigfile"
+           --end,
+					-- diff_buf_win_enter = function(bufnr, _winid, _ctx)
+					-- 	-- print("bufnr: ", bufnr)
+					-- 	-- print("ctx: ", vim.inspect(ctx))
+					-- 	-- print("winid: ", winid)
+					-- 	-- if winid == 1004 or ctx.symbol == 'b' then
+					-- 	--   vim.api.nvim_buf_set_option('wrap', true, { buf = bufnr})
+					-- 	-- end
+					--
+					--
+					-- 	vim.api.nvim_buf_set_option(bufnr, "wrap", false)
+					--        -- vim.bo.ft = "bigfile"
+					--        -- vim.api.nvim_buf_set_option(bufnr, "foldenable", false)
+					-- 	--       local filename = vim.api.nvim_buf_get_name(bufnr)
+					-- 	-- -- print('filename: ', filename)
+					-- 	-- -- local coincide = filename:match("package%-lock%.json")
+					-- 	-- -- -- check if filename contains "package-lock.json"
+					--
+					--        -- if filename:match("package%-lock%.json") then
+					--        --   vim.api.nvim_buf_set_option(bufnr, "number", false)
+					--        -- end
+					--
+					-- 	-- if filename:match("package%-lock%.json") then
+					-- 	--   -- print('package-lock.json detected, disabling treesitter')
+					-- 	--   -- vim.treesitter.stop(bufnr)
+					-- 	--         -- Snacks.util.wo(0, { foldmethod = "manual", statuscolumn = "", conceallevel = 0, relativenumber = false })
+					-- 	--
+					-- 	--         vim.schedule(function()
+					-- 	--           if vim.api.nvim_buf_is_valid(bufnr) then
+					-- 	--             vim.bo[bufnr].syntax = "bigfile"
+					-- 	--           end
+					-- 	--         end)
+					-- 	--
+					-- 	-- end
+					--
+					-- 	-- vim.keymap.set({ "n" }, "<leader>sn", function()
+					-- 	--   -- vim.wo.wrap = not vim.wo.wrap
+					-- 	--   vim.cmd("windo set wrap!")
+					-- 	-- end, { buffer = bufnr, noremap = true, silent = true })
+					-- end,
 					-- diff_buf_read = function(bufnr, win)
 					--   print("win: ", vim.inspect(win))
 					--   -- print('bufnr', bufnr)
@@ -555,6 +596,7 @@ return {
 							utils.tbl_ensure(view, "winopts.diff2.b")
 							-- left
 							view.winopts.diff2.a = utils.tbl_union_extend(view.winopts.diff2.a, {
+                -- foldenable = false,
 								winhl = {
 									"DiffChange:DiffAddAsDelete",
 									"DiffText:DiffDeleteText",
@@ -562,11 +604,13 @@ return {
 							})
 							-- right
 							view.winopts.diff2.b = utils.tbl_union_extend(view.winopts.diff2.b, {
+                -- foldenable = false,
 								winhl = {
 									"DiffChange:DiffAdd",
 									"DiffText:DiffAddText",
 								},
 							})
+
 						end
 						vim.cmd("hi DiffviewDiffAddAsDelete guifg=none")
 						view.emitter:on("post_layout", post_layout)

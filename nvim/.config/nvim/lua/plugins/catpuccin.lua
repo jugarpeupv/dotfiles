@@ -101,6 +101,7 @@ return {
 						String = { fg = "#F2CDCD" },
             OverOldValue = { bg = "#F38BA8", fg = "black" },
             OverNewValue = { bg = "#94E2D5", fg = "black" },
+            -- OctoViewer = { bg = "#F38BA8" },
             -- OverOldValue = { bg = "#3F2D3D" },
             -- OverNewValue = { bg = "#103235" },
 						SnippetTabstop = { bg = "none" },

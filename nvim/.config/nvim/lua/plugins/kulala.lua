@@ -1,9 +1,10 @@
 return {
 	{
 		"mistweaverco/kulala.nvim",
-    enabled = false,
+    enabled = true,
 		ft = { "http", "rest" },
 		opts = {
+      lsp = { formatter = true },
 			debug = true,
 			vscode_rest_client_environmentvars = true,
 			winbar = true,

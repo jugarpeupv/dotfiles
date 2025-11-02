@@ -1,4 +1,3 @@
----@diagnostic disable: preferred-local-alias
 -- set leader key to space
 local opts = { noremap = true, silent = true }
 
@@ -70,28 +69,28 @@ vim.keymap.set({ "n" }, "<leader>gt", function()
 	local actions = require("telescope.actions")
 	local options = {
 		-- git_command = { "git", "tag", "-l" },
-    git_command = { "git", "tag", "-l", "--format", "%(refname:short) %(objectname)" },
+		git_command = { "git", "tag", "-l", "--format", "%(refname:short) %(objectname)" },
 	}
-  -- local opts2 = {}
+	-- local opts2 = {}
 	local opts2 = {
-    entry_maker = function(line)
-      local tag, sha = line:match("^(%S+)%s+(%S+)$")
-      return {
-        value = tag,
-        sha = sha,
-        display = function(entry)
-          return string.format("%-10s --> %s", entry.value, entry.sha)
-        end,
-        ordinal = tag,
-      }
-    end,
-  }
+		entry_maker = function(line)
+			local tag, sha = line:match("^(%S+)%s+(%S+)$")
+			return {
+				value = tag,
+				sha = sha,
+				display = function(entry)
+					return string.format("%-10s --> %s", entry.value, entry.sha)
+				end,
+				ordinal = tag,
+			}
+		end,
+	}
 
 	pickers
 		.new(options, {
 			prompt_title = "Git Tags",
 			-- finder = finders.new_oneshot_job(options.git_command, opts2),
-      finder = finders.new_oneshot_job(options.git_command, opts2),
+			finder = finders.new_oneshot_job(options.git_command, opts2),
 			sorter = conf.file_sorter(options),
 			-- sorter = require("telescope.config").values.generic_sorter,
 			-- sorter = require("telescope.sorters").Sorter:new({
@@ -104,7 +103,7 @@ vim.keymap.set({ "n" }, "<leader>gt", function()
 			-- 		return 0
 			-- 	end,
 			-- }),
-			attach_mappings = function(_, _map)
+			attach_mappings = function()
 				actions.select_default:replace(actions.git_checkout)
 				return true
 			end,
@@ -138,7 +137,7 @@ end, opts)
 
 vim.keymap.set({ "n", "t" }, "<M-p>", function()
 	require("telescope.builtin").find_files({
-    cwd = vim.loop.cwd(),
+		cwd = vim.loop.cwd(),
 		hidden = true,
 		shorten_path = false,
 		path_display = { "absolute" },
@@ -361,7 +360,8 @@ keymap("n", "<leader>ht", function()
 	require("telescope.builtin").help_tags()
 end, opts)
 keymap("n", "<leader>mp", function()
-	require("telescope.builtin").man_pages({ sections = { "ALL" } })
+	-- require("telescope.builtin").man_pages({ sections = { "ALL" } })
+	Snacks.picker.man()
 end, opts)
 keymap("n", "<leader>of", function()
 	require("telescope.builtin").oldfiles({ only_cwd = true })
@@ -393,7 +393,7 @@ end, opts)
 keymap("n", "<leader>td", function()
 	require("telescope.builtin").diagnostics()
 end, opts)
-keymap("n", "<leader>Th", function()
+keymap("n", "<leader>gh", function()
 	require("telescope").extensions.git_file_history.git_file_history()
 end, opts)
 
@@ -575,8 +575,8 @@ vim.keymap.set({ "n", "v" }, "<leader>ff", function()
 			"--glob=!icarSDK.js",
 			"--glob=!package-lock.json",
 			"--glob=!**/.git/**",
-      "--glob=!**__template__**",
-      "--glob=!**drawio**",
+			"--glob=!**__template__**",
+			"--glob=!**drawio**",
 			-- "--ignore-case",
 			-- "--smart-case",
 			-- "--word-regexp"
@@ -586,7 +586,7 @@ end)
 
 vim.keymap.set({ "n", "v" }, "<leader>f.", function()
 	-- local cwd = "~/dotfiles/nvim/.config/nvim"
-  local cwd = "~/dotfiles"
+	local cwd = "~/dotfiles"
 	require("telescope").extensions.live_grep_args.live_grep_raw({
 		disable_coordinates = true,
 		cwd = cwd,
@@ -607,8 +607,8 @@ vim.keymap.set({ "n", "v" }, "<leader>f.", function()
 			"--glob=!icarSDK.js",
 			"--glob=!package-lock.json",
 			"--glob=!**/.git/**",
-      "--glob=!lazy-lock.json",
-      "--glob=!**karabiner**",
+			"--glob=!lazy-lock.json",
+			"--glob=!**karabiner**",
 			-- "--ignore-case",
 			-- "--smart-case",
 			-- "--word-regexp"
@@ -684,8 +684,8 @@ vim.keymap.set("n", "<leader>gs", function()
 			end
 
 			-- Map a key to discard the selected stash
-			map("i", "<C-d>", discard_stash)
-			map("n", "<C-d>", discard_stash)
+			map("i", "<C-x>", discard_stash)
+			map("n", "<C-x>", discard_stash)
 
 			return true
 		end,
@@ -799,7 +799,6 @@ vim.keymap.set("n", "<leader>xo", "<cmd>Trouble symbols toggle<cr>", { silent = 
 -- vim.cmd([[tnoremap <C-n> <C-\><C-n>]])
 vim.cmd([[tnoremap <C-Space> <C-\><C-n>]])
 
-
 vim.cmd([[:tnoremap <C-o> <C-\><C-N><C-o>]])
 
 vim.keymap.set("n", "<leader>ih", function()
@@ -890,7 +889,10 @@ local function show_documentation()
 	local cword = vim.fn.expand("<cword>")
 
 	if filetype == "vim" or filetype == "help" then
-		local status, _ = pcall(vim.cmd, "h " .. cword)
+		-- local status, _ = pcall(vim.cmd, "h " .. cword)
+		local status, _ = pcall(function()
+			vim.cmd("h " .. cword)
+		end)
 		if not status then
 			print("No help for " .. cword)
 		end
@@ -915,7 +917,10 @@ local function show_documentation()
 		if has_lsp_info then
 			vim.lsp.buf.hover()
 		else
-			local _, err = pcall(vim.cmd, "h " .. cword)
+			-- local _, err = pcall(vim.cmd, "h " .. cword)
+			local _, err = pcall(function()
+				vim.cmd("h " .. cword)
+			end)
 			if err ~= nil then
 				return
 			end
@@ -957,7 +962,10 @@ vim.keymap.set({ "n" }, "<leader>sn", function()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>se", function()
-	local status, _ = pcall(vim.cmd, "vert h " .. vim.fn.expand("<cword>"))
+	-- local status, _ = pcall(vim.cmd, "vert h " .. vim.fn.expand("<cword>"))
+	local status, _ = pcall(function()
+		vim.cmd("vert h " .. vim.fn.expand("<cword>"))
+	end)
 	if not status then
 		print("No help for " .. vim.fn.expand("<cword>"))
 	end
@@ -1060,28 +1068,28 @@ local function find_in_node_modules()
 			api_nvimtree.tree.reload()
 		end
 
-    function default_action()
-      local api = require("nvim-tree.api")
+		local function default_action()
+			local api = require("nvim-tree.api")
 
-      actions.close(prompt_bufnr)
-      local selection = action_state.get_selected_entry()
-      api.tree.open()
+			actions.close(prompt_bufnr)
+			local selection = action_state.get_selected_entry()
+			api.tree.open()
 
-      local uv = vim.loop
+			local uv = vim.loop
 
-      if uv.fs_stat(selection.value .. "/package.json") then
-        api.tree.find_file(selection.value .. "/package.json")
-      else
-        api.tree.find_file(selection.value)
-      end
-    end
+			if uv.fs_stat(selection.value .. "/package.json") then
+				api.tree.find_file(selection.value .. "/package.json")
+			else
+				api.tree.find_file(selection.value)
+			end
+		end
 		actions.select_default:replace(default_action)
 
 		map("n", "<C-x>", remove_dir)
 		map("i", "<C-x>", remove_dir)
 
-    map("n", "<C-v>", default_action)
-    map("i", "<C-v>", default_action)
+		map("n", "<C-v>", default_action)
+		map("i", "<C-v>", default_action)
 		return true
 	end
 
@@ -1219,8 +1227,11 @@ vim.api.nvim_create_user_command("NpmReadme", function(opts_new)
 	vim.api.nvim_buf_set_name(0, "npm_info_" .. package_name .. ".md")
 	-- vim.api.nvim_buf_set_option(0, "buftype", "nofile")
 	-- vim.api.nvim_buf_set_option(0, "bufhidden", "wipe")
-	vim.api.nvim_buf_set_option(0, "filetype", "markdown")
-	vim.api.nvim_buf_set_option(0, "swapfile", false)
+	-- vim.api.nvim_buf_set_option(0, "filetype", "markdown")
+	-- vim.api.nvim_buf_set_option(0, "swapfile", false)
+	vim.bo.filetype = "markdown"
+	vim.bo.swapfile = false
+
 	vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(readme_content, "\n"))
 end, { nargs = 1 })
 
@@ -1281,11 +1292,12 @@ vim.keymap.set("n", "<leader>hw", function()
 end, opts)
 
 vim.keymap.set("n", "<leader>ch", function()
-	require("telescope.builtin").command_history()
+	-- require("telescope.builtin").command_history()
+	Snacks.picker.command_history({ layout = { preview = false } })
 end, opts)
 
 vim.keymap.set("n", "<leader>rh", function()
-  require("telescope.builtin").search_history()
+	require("telescope.builtin").search_history()
 end, opts)
 
 -- Map a shortcut to open the picker.
@@ -1474,7 +1486,7 @@ vim.keymap.set("n", "<leader>gm", function()
 					end,
 				}),
 				sorter = conf.generic_sorter({}),
-				attach_mappings = function(prompt_bufnr, _map)
+				attach_mappings = function(prompt_bufnr)
 					actions.select_default:replace(function()
 						actions.close(prompt_bufnr)
 						local selection = action_state.get_selected_entry()
@@ -1493,21 +1505,19 @@ vim.keymap.set("n", "<leader>dv", function()
 	-- Get the current branch (faster method)
 	local current_branch = vim.fn.system("git symbolic-ref --short HEAD"):gsub("%s+", "")
 
+	local handle = io.popen("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
+	local default_branch = "develop"
+	if handle ~= nil then
+		default_branch = handle:read("*a"):gsub("%s+", "")
+		handle:close()
+	end
 
-  local handle = io.popen("git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'")
-  local default_branch = 'develop'
-  if handle ~= nil then
-    default_branch = handle:read("*a"):gsub("%s+", "")
-    handle:close()
-  end
-
-  if default_branch == 'develop' then
-    default_branch = 'main'
-  end
+	if default_branch == "develop" then
+		default_branch = "main"
+	end
 
 	-- Construct the DiffviewOpen command
-  local diffview_command = string.format(":DiffviewOpen %s..%s",
-    default_branch, current_branch)
+	local diffview_command = string.format(":DiffviewOpen %s..%s", default_branch, current_branch)
 	-- Populate the command line using vim.api.nvim_feedkeys
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
@@ -1524,6 +1534,7 @@ vim.keymap.set("n", "<leader>tp", function()
 	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_pendientes.md")
 end, opts)
 
+---@diagnostic disable-next-line: unused-local
 local function smart_move(direction, _tmux_cmd)
 	-- local curwin = vim.api.nvim_get_current_win()
 	vim.cmd("wincmd " .. direction)
@@ -1561,7 +1572,7 @@ vim.keymap.set("n", "<leader>wf", function()
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
 
-	local get_worktree_path = function(_prompt_bufnr)
+	local get_worktree_path = function()
 		-- local selection = action_state.get_selected_entry(prompt_bufnr)
 		local selection = action_state.get_selected_entry()
 		if selection == nil then
@@ -1571,7 +1582,7 @@ vim.keymap.set("n", "<leader>wf", function()
 	end
 
 	local select_worktree = function(prompt_bufnr)
-		local worktree_path = get_worktree_path(prompt_bufnr)
+		local worktree_path = get_worktree_path()
 		if worktree_path == nil then
 			vim.print("No worktree selected")
 			return
@@ -1626,6 +1637,11 @@ vim.keymap.set("n", "<leader>wf", function()
 			end
 		end
 
+		if not output then
+			print('no output for "git worktree list"')
+			return
+		end
+
 		for _, line in ipairs(output) do
 			parse_line(line)
 		end
@@ -1665,7 +1681,7 @@ vim.keymap.set("n", "<leader>wf", function()
 					end,
 				}),
 				sorter = conf.generic_sorter(opts_new),
-				attach_mappings = function(_, _map)
+				attach_mappings = function()
 					action_set.select:replace(select_worktree)
 					return true
 				end,
@@ -1686,7 +1702,7 @@ vim.keymap.set("n", "<leader>we", function()
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
 
-	local get_worktree_path = function(_prompt_bufnr)
+	local get_worktree_path = function()
 		local selection = action_state.get_selected_entry()
 		if selection == nil then
 			return
@@ -1695,7 +1711,7 @@ vim.keymap.set("n", "<leader>we", function()
 	end
 
 	local open_in_split = function(prompt_bufnr)
-		local worktree_path = get_worktree_path(prompt_bufnr)
+		local worktree_path = get_worktree_path()
 		if worktree_path == nil then
 			vim.print("No worktree selected")
 			return
@@ -1715,7 +1731,7 @@ vim.keymap.set("n", "<leader>we", function()
 	end
 
 	local open_in_vsplit = function(prompt_bufnr)
-		local worktree_path = get_worktree_path(prompt_bufnr)
+		local worktree_path = get_worktree_path()
 		if worktree_path == nil then
 			vim.print("No worktree selected")
 			return
@@ -1735,7 +1751,7 @@ vim.keymap.set("n", "<leader>we", function()
 	end
 
 	local select_worktree = function(prompt_bufnr)
-		local worktree_path = get_worktree_path(prompt_bufnr)
+		local worktree_path = get_worktree_path()
 		if worktree_path == nil then
 			vim.print("No worktree selected")
 			return
@@ -1791,6 +1807,11 @@ vim.keymap.set("n", "<leader>we", function()
 			end
 		end
 
+		if not output then
+			print("no output for 'git worktree list'")
+			return
+		end
+
 		for _, line in ipairs(output) do
 			parse_line(line)
 		end
@@ -1817,11 +1838,11 @@ vim.keymap.set("n", "<leader>we", function()
 			})
 		end
 
-    local filename = vim.fn.expand("%:t")
+		local filename = vim.fn.expand("%:t")
 
 		pickers
 			.new(opts_new or {}, {
-				prompt_title = "Open \"" .. filename .. "\" in different worktree",
+				prompt_title = 'Open "' .. filename .. '" in different worktree',
 				finder = finders.new_table({
 					results = results,
 					entry_maker = function(entry)
@@ -1851,25 +1872,41 @@ vim.keymap.set({ "n" }, "<leader>ge", function()
 	vim.cmd("e ~/.gitconfig")
 end, opts)
 
-
 -- vim.keymap.set("n", "<C-I>", "<C-I>", { noremap = true })
 -- vim.keymap.set("n", "<C-M>", "<C-M>", { noremap = true })
 
-vim.keymap.set('n', '<leader>to', function()
-  local found = false
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_loaded(buf) then
-      local name = vim.api.nvim_buf_get_name(buf)
-      if name:match('term://.*copilot') then
-        found = true
-        -- vim.cmd('split') -- open horizontal split
-        vim.api.nvim_set_current_buf(buf)
-        break
-      end
-    end
-  end
-  if not found then
-    -- vim.cmd('split | term copilot')
-    vim.cmd('term copilot')
-  end
-end, { desc = 'Toggle Copilot terminal in split' })
+vim.keymap.set("n", "<leader>to", function()
+	local found = false
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		if vim.api.nvim_buf_is_loaded(buf) then
+			local name = vim.api.nvim_buf_get_name(buf)
+			if name:match("term://.*copilot") then
+				found = true
+				-- vim.cmd('split') -- open horizontal split
+				vim.api.nvim_set_current_buf(buf)
+				break
+			end
+		end
+	end
+	if not found then
+		-- vim.cmd('split | term copilot')
+		vim.cmd("term copilot")
+	end
+end, { desc = "Toggle Copilot terminal in split" })
+
+vim.keymap.set("c", "<C-r>", function()
+	-- Only trigger if command line is empty (just ':')
+	local cmd = vim.fn.getcmdline()
+	if cmd == "" then
+		vim.cmd("stopinsert")
+		vim.schedule(function()
+			Snacks.picker.command_history({ layout = { preview = false } })
+		end)
+
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+	else
+		-- Fallback to default <C-r> behavior
+		return "<C-r>"
+	end
+end, { expr = true, noremap = true })
+

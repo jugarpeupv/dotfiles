@@ -66,21 +66,22 @@ return {
 		default = { "copilot" },
 		-- tools = { "nx", "github", "tavily", "neovim" },
 		tools = {
-			"neovim",
-			"nx",
-			"copilot",
 			"tavily",
-			"github_list_issues",
-			"github_create_pending_pull_request_review",
-			"github_get_pull_request",
-			"github_list_pull_requests",
+      "github",
+			-- "github_list_issues",
+			-- "github_create_pending_pull_request_review",
+			-- "github_get_pull_request",
+			-- "github_list_pull_requests",
+      "neovim",
+      "nx",
+      -- "copilot",
 		},
 		resources = { "selection", "buffer" },
 		sticky = nil, -- Default sticky prompt or array of sticky prompts to use at start of every new chat (can be specified manually in prompt via >).
 		-- diff = "block", -- Default diff format to use, 'block' or 'unified'.
 		diff = "block", -- Default diff format to use, 'block' or 'unified'.
 		language = "English", -- Default language to use for answers
-		chat_autocomplete = true, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
+		chat_autocomplete = false, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
 		-- temperature = 0.1,           -- Lower = focused, higher = creative
 		-- chat_autocomplete = true,
 		highlight_selection = true, -- Highlight selection

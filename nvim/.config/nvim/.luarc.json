@@ -1,13 +1,13 @@
 {
   "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
   "diagnostics.globals": [
-    "vim"
+    "vim",
+    "Snacks"
   ],
   "Lua.diagnostics.globals": [
     "vim",
     "generate_diff_colors",
-    "show_dap_centered_scopes",
-    "Snacks"
+    "show_dap_centered_scopes"
   ],
   "workspace.checkThirdParty": "Disable",
   "diagnostics.disable": [
