@@ -81,17 +81,28 @@ return {
 	keys = {
 		-- Top Pickers & Explorer
 		{ mode = { "n", "v" }, "<M-.>", "<cmd>lua vim.lsp.buf.code_action()<cr>", { silent = true } },
-		{
-			"<leader><space>",
-			function()
-				Snacks.picker.smart({
-					-- layout = {
-					-- 	preset = "ivy_split",
-					-- },
-				})
-			end,
-			desc = "Smart Find Files",
-		},
+    {
+      "<leader><space>",
+      function()
+        Snacks.picker.resume({
+          -- layout = {
+          -- 	preset = "ivy_split",
+          -- },
+        })
+      end,
+      desc = "Smart Find Files",
+    },
+		-- {
+		-- 	"<leader><space>",
+		-- 	function()
+		-- 		Snacks.picker.smart({
+		-- 			-- layout = {
+		-- 			-- 	preset = "ivy_split",
+		-- 			-- },
+		-- 		})
+		-- 	end,
+		-- 	desc = "Smart Find Files",
+		-- },
 		{
 			"<leader>,",
 			function()
@@ -136,15 +147,15 @@ return {
 			end,
 			desc = "Grep",
 		},
-		{
-			"<leader>sw",
-			function()
-				---@diagnostic disable-next-line: undefined-global
-				Snacks.picker.grep_word()
-			end,
-			desc = "Visual selection or word",
-			mode = { "n", "x" },
-		},
+		-- {
+		-- 	"<leader>sw",
+		-- 	function()
+		-- 		---@diagnostic disable-next-line: undefined-global
+		-- 		Snacks.picker.grep_word()
+		-- 	end,
+		-- 	desc = "Visual selection or word",
+		-- 	mode = { "n", "x" },
+		-- },
 		-- search
 	},
 }

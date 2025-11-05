@@ -95,7 +95,7 @@ vim.api.nvim_create_autocmd("User", {
 
 local group = vim.api.nvim_create_augroup("__env", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
-	pattern = "*.env*",
+	pattern = "*.env",
 	group = group,
 	callback = function()
 		vim.o.wrap = false
@@ -253,10 +253,10 @@ local function open_dir_history()
 					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
 					if selection then
-						vim.cmd("e " .. selection[1])
-						-- local api_nvimtree = require("nvim-tree.api")
-						-- api_nvimtree.tree.change_root(selection[1])
-						-- api_nvimtree.tree.reload()
+						-- vim.cmd("e " .. selection[1])
+						local api_nvimtree = require("nvim-tree.api")
+						api_nvimtree.tree.change_root(selection[1])
+						api_nvimtree.tree.reload()
 					end
 				end)
 				return true

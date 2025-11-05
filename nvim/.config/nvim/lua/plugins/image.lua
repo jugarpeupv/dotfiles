@@ -18,7 +18,7 @@ return {
 	{
 		"3rd/image.nvim",
 		enabled = true,
-    -- commit = "21909e3eb03bc738cce497f45602bf157b396672",
+		-- commit = "21909e3eb03bc738cce497f45602bf157b396672",
 		branch = "master",
 		-- branch = "main",
 		-- event = "VeryLazy",
@@ -88,7 +88,7 @@ return {
 				max_width_window_percentage = 80,
 				max_height_window_percentage = 80,
 				window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
-				scale_factor = 3,                   -- scales the window size up or down
+				scale_factor = 3, -- scales the window size up or down
 				window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
 				editor_only_render_when_focused = true, -- auto show/hide images when the editor gains/looses focus
 				tmux_show_only_in_active_window = true, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
@@ -97,42 +97,65 @@ return {
 				hijack_file_patterns = {}, -- render image files as images when opened
 			})
 
-      local function get_full_path(path)
-        -- Get the user's home directory
-        local home_dir = os.getenv("HOME")
+			local function get_full_path(path)
+				-- Get the user's home directory
+				local home_dir = os.getenv("HOME")
 
-        -- Check if the path starts with the home directory
-        if string.sub(path, 1, #home_dir) == home_dir then
-          return path
-        end
+				-- Check if the path starts with the home directory
+				if string.sub(path, 1, #home_dir) == home_dir then
+					return path
+				end
 
-        -- Get the current buffer's full path
-        local current_buffer_dos = vim.api.nvim_buf_get_name(0)
-        -- Get the directory of the current buffer
-        local current_dir = vim.fn.fnamemodify(current_buffer_dos, ":p:h")
-        -- Combine the directory with the relative path
-        local full_path = vim.fn.fnamemodify(current_dir .. "/" .. path, ":p")
+				-- Get the current buffer's full path
+				local current_buffer_dos = vim.api.nvim_buf_get_name(0)
+				-- Get the directory of the current buffer
+				local current_dir = vim.fn.fnamemodify(current_buffer_dos, ":p:h")
+				-- Combine the directory with the relative path
+				local full_path = vim.fn.fnamemodify(current_dir .. "/" .. path, ":p")
 
-        if vim.fn.filereadable(full_path) == 1 then
-          return full_path
-        else
-          full_path = vim.fn.fnamemodify(vim.loop.cwd() .. "/" .. path, ":p")
-        end
+				if vim.fn.filereadable(full_path) == 1 then
+					return full_path
+				else
+					full_path = vim.fn.fnamemodify(vim.loop.cwd() .. "/" .. path, ":p")
+				end
 
-        return full_path
-      end
+				return full_path
+			end
+
+      vim.keymap.set({ "n", "v" }, "<leader>pI", function()
+        local Job = require("plenary.job")
+        Job
+          :new({
+            command = "bun",
+            args = { "upload.ts" },
+            cwd = "/Users/jgarcia/work/tmp/cookies-test",
+            on_exit = function(j, return_val)
+              if return_val == 0 then
+                local href = table.concat(j:result(), "\n"):gsub("%s+$", "")
+                vim.schedule(function()
+                  local img_tag = string.format('<img src="%s">', href)
+                  vim.api.nvim_put({ img_tag }, "c", true, true)
+                end)
+              else
+                vim.schedule(function()
+                  vim.notify("❌ Upload failed: " .. table.concat(j:stderr_result(), "\n"))
+                end)
+              end
+            end,
+          })
+          :start()
+      end)
 
 			vim.keymap.set({ "n", "v" }, "<leader>it", function()
-        local image_util = require("jg.custom.image-utils")
-        if image_util.image_rendered and image_util.loaded_image_under_cursor then
-          -- vim.g.image_object:clear() -- remove the image if it is already rendered
-          image_util.loaded_image_under_cursor:clear() -- remove the image if it is already rendered
-          image_util.image_rendered = false
-          -- vim.g.image_object = nil
-          image_util.loaded_image_under_cursor = nil
-          return
-        end
-
+				local image_util = require("jg.custom.image-utils")
+				if image_util.image_rendered and image_util.loaded_image_under_cursor then
+					-- vim.g.image_object:clear() -- remove the image if it is already rendered
+					image_util.loaded_image_under_cursor:clear() -- remove the image if it is already rendered
+					image_util.image_rendered = false
+					-- vim.g.image_object = nil
+					image_util.loaded_image_under_cursor = nil
+					return
+				end
 
 				local current_window = vim.api.nvim_get_current_win()
 				local current_buffer = vim.api.nvim_get_current_buf()
@@ -140,41 +163,39 @@ return {
 				local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
 				-- local cursor_col = cursor_pos[2]
 
-
 				-- Get the file path under the cursor
 				local line = vim.api.nvim_buf_get_lines(current_buffer, cursor_row, cursor_row + 1, false)[1]
 				-- print("line", line)
 
 				local file_path
 
-        local toggle_image_under_cursor = function(file_path_cb)
-          image_util.toggle_image_under_cursor(file_path_cb, current_window, current_buffer, cursor_row)
-        end
+				local toggle_image_under_cursor = function(file_path_cb)
+					image_util.toggle_image_under_cursor(file_path_cb, current_window, current_buffer, cursor_row)
+				end
 
-        -- -- Try to extract <img src="...">
-        local url = line:match('<img%s+[^>]*src="([^"]+)"')
-        if url and url:match("^https?://") then
+				-- -- Try to extract <img src="...">
+				local url = line:match('<img%s+[^>]*src="([^"]+)"')
+				if url and url:match("^https?://") then
+					image_util.get_github_attachment_image(url, toggle_image_under_cursor)
+				else
+					-- Fallback to your existing logic
+					local extracted_content = string.match(line, "%[%[(.-)%]%]")
+					-- print("extracted_content", extracted_content)
 
-          image_util.get_github_attachment_image(url, toggle_image_under_cursor)
-        else
-          -- Fallback to your existing logic
-          local extracted_content = string.match(line, "%[%[(.-)%]%]")
-          -- print("extracted_content", extracted_content)
+					if extracted_content then
+						file_path = extracted_content.gsub(extracted_content, "|.*", "")
+						file_path = vim.loop.cwd() .. "/zadjuntos/" .. file_path
+					else
+						file_path = line:match("%((.-)%)")
+						if not file_path then
+							print("No image found under the cursor")
+							return
+						end
+						file_path = get_full_path(file_path)
+					end
 
-          if extracted_content then
-            file_path = extracted_content.gsub(extracted_content, "|.*", "")
-            file_path = vim.loop.cwd() .. "/zadjuntos/" .. file_path
-          else
-            file_path = line:match("%((.-)%)")
-            if not file_path then
-              print("No image found under the cursor")
-              return
-            end
-            file_path = get_full_path(file_path)
-          end
-
-          toggle_image_under_cursor(file_path)
-        end
+					toggle_image_under_cursor(file_path)
+				end
 			end, {})
 		end,
 	},

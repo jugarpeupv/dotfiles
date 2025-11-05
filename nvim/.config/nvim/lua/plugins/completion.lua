@@ -259,7 +259,7 @@ return {
 					"path",
 					"buffer",
 					-- "omni",
-					-- "snippets",
+					"snippets",
 					-- "lazydev",
 					-- "emoji",
 					-- "nerdfont",

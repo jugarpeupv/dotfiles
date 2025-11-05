@@ -1,7 +1,7 @@
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
-    enabled = true,
+    enabled = false,
     branch = "v3.x",
     cmd = "Neotree",
     dependencies = {
