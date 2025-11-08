@@ -9,6 +9,9 @@ return {
       enabled = false,
     },
 		cli = {
+      tools = {
+        copilot = { cmd = { "copilot", "--allow-all-tools" } }
+      },
 			mux = {
 				backend = "tmux",
 				enabled = false,

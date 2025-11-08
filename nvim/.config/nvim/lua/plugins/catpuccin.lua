@@ -329,7 +329,8 @@ return {
 			--- -------------------- COMMON
 
 			vim.cmd([[highlight DiffAdd gui=none guifg=none guibg=#103235]])
-			vim.cmd([[highlight DiffChange gui=none guifg=none guibg=#272D43]])
+      vim.cmd([[highlight DiffChange gui=none guifg=none guibg=#103235]])
+			-- vim.cmd([[highlight DiffChange gui=none guifg=none guibg=#272D43]])
 			-- vim.cmd([[highlight DiffText gui=none guifg=none guibg=#394b70]])
 
 			vim.cmd([[highlight DiffText gui=none guifg=none guibg=#456f80]])
@@ -639,22 +640,47 @@ return {
 			-- }
 			--
 
-			vim.g.terminal_color_0 = "#a3a7bc"
+			vim.g.terminal_color_0 = "#1E1E2E"
+      vim.g.terminal_color_8 = "#585B70"
+
 			vim.g.terminal_color_1 = "#F38BA8"
+      vim.g.terminal_color_9 = "#F5C2E7"
+
 			vim.g.terminal_color_2 = "#94E2D5"
+      vim.g.terminal_color_10 = "#94E2D5"
+
 			vim.g.terminal_color_3 = "#F5E0DC"
+      vim.g.terminal_color_11 = "#F5E0DC"
+
 			vim.g.terminal_color_4 = "#B4BEFE"
+      vim.g.terminal_color_12 = "#89B4FA"
+
 			vim.g.terminal_color_5 = "#CA9EE6"
+      vim.g.terminal_color_13 = "#F2CDCD"
+
 			vim.g.terminal_color_6 = "#89DCEB"
-			vim.g.terminal_color_7 = "#a3a7bc"
-			vim.g.terminal_color_8 = "#a3a7bc"
-			vim.g.terminal_color_9 = "#F5C2E7"
-			vim.g.terminal_color_10 = "#94E2D5"
-			vim.g.terminal_color_11 = "#F5E0DC"
-			vim.g.terminal_color_12 = "#89DCEB"
-			vim.g.terminal_color_13 = "#F2CDCD"
-			vim.g.terminal_color_14 = "#89DCEB"
-			vim.g.terminal_color_15 = "#a3a7bc"
+      vim.g.terminal_color_14 = "#89DCEB"
+
+			vim.g.terminal_color_7 = "#BAC2DE"
+			vim.g.terminal_color_15 = "#7C7F93"
+
+
+      -- vim.g.terminal_color_0 = "#a3a7bc"
+      -- vim.g.terminal_color_1 = "#F38BA8"
+      -- vim.g.terminal_color_2 = "#94E2D5"
+      -- vim.g.terminal_color_3 = "#F5E0DC"
+      -- vim.g.terminal_color_4 = "#B4BEFE"
+      -- vim.g.terminal_color_5 = "#CA9EE6"
+      -- vim.g.terminal_color_6 = "#89DCEB"
+      -- vim.g.terminal_color_7 = "#a3a7bc"
+      -- vim.g.terminal_color_8 = "#a3a7bc"
+      -- vim.g.terminal_color_9 = "#F5C2E7"
+      -- vim.g.terminal_color_10 = "#94E2D5"
+      -- vim.g.terminal_color_11 = "#F5E0DC"
+      -- vim.g.terminal_color_12 = "#89DCEB"
+      -- vim.g.terminal_color_13 = "#F2CDCD"
+      -- vim.g.terminal_color_14 = "#89DCEB"
+      -- vim.g.terminal_color_15 = "#a3a7bc"
 
 			vim.cmd([[
 let g:fzf_colors =

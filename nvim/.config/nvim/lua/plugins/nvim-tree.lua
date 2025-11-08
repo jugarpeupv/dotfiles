@@ -4,7 +4,8 @@ return {
 		"A7Lavinraj/fyler.nvim",
 		enabled = true,
 		cmd = { "Fyler" },
-		branch = "stable",
+		-- branch = "stable",
+    branch = "main",
     dependencies = { "nvim-mini/mini.icons" },
 		keys = {
 			{
@@ -25,6 +26,7 @@ return {
 			},
 		},
 		opts = {
+
 			-- Changes explorer closing behaviour when a file get selected
 			close_on_select = false,
 			-- Changes explorer behaviour to auto confirm simple edits
@@ -32,11 +34,13 @@ return {
 			-- Changes explorer behaviour to hijack NETRW
 			default_explorer = false,
 			-- Changes git statuses visibility
-			hooks = {
-				on_delete = nil, -- function(path) end
-				on_rename = nil, -- function(src_path, dst_path) end
-				on_highlight = nil, -- function(hl_groups, palette) end
-			},
+      hooks = {
+        on_rename = function(src_path, destination_path)
+          Snacks.rename.on_rename_file(src_path, destination_path)
+        end,
+        on_delete = nil, -- function(path) end
+        on_highlight = nil, -- function(hl_groups, palette) end
+      },
 			-- Custom icons for various directory states
 			icon = {
 				directory_collapsed = nil,
@@ -1189,6 +1193,21 @@ return {
 					},
 				},
 			})
+
+
+      -- local prev = { new_name = "", old_name = "" } -- Prevents duplicate events
+      -- vim.api.nvim_create_autocmd("User", {
+      --   pattern = "NvimTreeSetup",
+      --   callback = function()
+      --     local events = require("nvim-tree.api").events
+      --     events.subscribe(events.Event.NodeRenamed, function(data)
+      --       if prev.new_name ~= data.new_name or prev.old_name ~= data.old_name then
+      --         data = data
+      --         Snacks.rename.on_rename_file(data.old_name, data.new_name)
+      --       end
+      --     end)
+      --   end,
+      -- })
 		end,
 	},
 }

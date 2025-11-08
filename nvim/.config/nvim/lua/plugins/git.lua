@@ -83,9 +83,20 @@ return {
 
 	{
 		"tpope/vim-fugitive",
-		cmd = { "Git", "G" },
+		dependencies = { "farhanmustar/fugitive-delta.nvim" },
+		cmd = { "Git", "G", "Gitdiff" },
+		keys = {},
 		config = function()
-			vim.cmd("command! -nargs=* G Git <args>")
+			-- vim.cmd([[let g:nremap = {'[m': '<Tab>'}]])
+			--    vim.cmd([[let g:nremap = {']m': '<S-Tab>'}]])
+			--
+			--    vim.cmd([[let g:xremap = {'[m': '<Tab>'}]])
+			--    vim.cmd([[let g:xremap = {']m': '<S-Tab>'}]])
+			--
+			--    vim.cmd([[let g:oremap = {'[m': '<Tab>'}]])
+			--    vim.cmd([[let g:oremap = {']m': '<S-Tab>'}]])
+
+			vim.cmd("command! -nargs=* G rightbelow vertical Git <args>")
 		end,
 	},
 	-- {

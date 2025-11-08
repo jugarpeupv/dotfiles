@@ -57,34 +57,34 @@ return {
 					end,
 				},
 				["<Tab>"] = {},
-        -- ["<Tab>"] = {
-        --   function(cmp)
-        --     if vim.b[vim.api.nvim_get_current_buf()].nes_state then
-        --       cmp.hide()
-        --       return (
-        --         require("copilot-lsp.nes").apply_pending_nes()
-        --         and require("copilot-lsp.nes").walk_cursor_end_edit()
-        --       )
-        --     end
-        --     if cmp.snippet_active() then
-        --       return cmp.accept()
-        --     else
-        --       return cmp.select_and_accept()
-        --     end
-        --   end,
-        --   "snippet_forward",
-        --   "fallback",
-        -- },
-        -- ["<Tab>"] = {
-        --   "snippet_forward",
-        --   function() -- sidekick next edit suggestion
-        --     return require("sidekick").nes_jump_or_apply()
-        --   end,
-        --   -- function() -- if you are using Neovim's native inline completions
-        --   --   return vim.lsp.inline_completion.get()
-        --   -- end,
-        --   "fallback",
-        -- },
+				-- ["<Tab>"] = {
+				--   function(cmp)
+				--     if vim.b[vim.api.nvim_get_current_buf()].nes_state then
+				--       cmp.hide()
+				--       return (
+				--         require("copilot-lsp.nes").apply_pending_nes()
+				--         and require("copilot-lsp.nes").walk_cursor_end_edit()
+				--       )
+				--     end
+				--     if cmp.snippet_active() then
+				--       return cmp.accept()
+				--     else
+				--       return cmp.select_and_accept()
+				--     end
+				--   end,
+				--   "snippet_forward",
+				--   "fallback",
+				-- },
+				-- ["<Tab>"] = {
+				--   "snippet_forward",
+				--   function() -- sidekick next edit suggestion
+				--     return require("sidekick").nes_jump_or_apply()
+				--   end,
+				--   -- function() -- if you are using Neovim's native inline completions
+				--   --   return vim.lsp.inline_completion.get()
+				--   -- end,
+				--   "fallback",
+				-- },
 				["<S-Tab>"] = {},
 				["<C-k>"] = { "select_prev", "fallback" },
 				["<C-j>"] = { "select_next", "fallback" },
@@ -127,10 +127,10 @@ return {
 					["<Right>"] = {},
 					["<Left>"] = {},
 					-- ["<CR>"] = { "accept_and_enter", "fallback" },
-          -- ["<CR>"] = { "accept", "fallback" },
-          ["<c-y>"] = { "accept", "fallback" },
-          ["<CR>"] = { "accept_and_enter", "fallback" },
-          -- ["<CR>"] = {},
+					-- ["<CR>"] = { "accept", "fallback" },
+					["<c-y>"] = { "accept", "fallback" },
+					["<CR>"] = { "accept_and_enter", "fallback" },
+					-- ["<CR>"] = {},
 					["<C-k>"] = { "select_prev", "fallback" },
 					["<C-j>"] = { "select_next", "fallback" },
 					-- ["<C-l>"] = { "accept", "fallback" },
@@ -278,7 +278,7 @@ return {
 						"git",
 						"path",
 						"conventional_commits",
-            "buffer",
+						"buffer",
 					},
 					["md"] = {},
 					["copilot-chat"] = {},
@@ -294,6 +294,126 @@ return {
 						end,
 						opts = {
 							-- options for the blink-cmp-git
+
+							git_centers = {
+								github = {
+									mention = {
+										-- Use gh CLI with GraphQL query for assignable users
+										get_command = function()
+											return "echo"
+										end,
+										get_command_args = function(command, token)
+											-- Your custom user list
+											local custom_users = {
+												"GPJULI6_mapfre",
+												"GDMARI2_mapfre",
+												"ABENAV1_mapfre",
+												"VVILAS1_mapfre",
+												"LUQUER1_mapfre",
+												"AHEVIAV_mapfre",
+												"RPANAD1_mapfre",
+												"RCDAVI3_mapfre",
+											}
+
+											-- Get issue number from Octo buffer URL
+
+											-- local function get_octo_issue_number()
+											-- 	if vim.bo.filetype ~= "octo" then
+											-- 		return nil
+											-- 	end
+											--
+											-- 	local bufname = vim.fn.expand("%:p")
+											--
+											-- 	-- Try to match issue pattern: octo://owner/repo/issues/123
+											-- 	local issue_num = bufname:match("octo://[^/]+/[^/]+/issue/(%d+)")
+											-- 	if issue_num then
+											-- 		return issue_num
+											-- 	end
+											--
+											-- 	-- Try to match PR pattern: octo://owner/repo/pull/123
+											-- 	issue_num = bufname:match("octo://[^/]+/[^/]+/pull/(%d+)")
+											-- 	if issue_num then
+											-- 		return issue_num
+											-- 	end
+
+											-- 	-- Try buffer variable as fallback
+											-- 	local bufnr = vim.api.nvim_get_current_buf()
+											-- 	local issue_obj = vim.b[bufnr].octo_issue
+											-- 	if issue_obj and issue_obj.number then
+											-- 		return tostring(issue_obj.number)
+											-- 	end
+											--
+											-- 	return nil
+											-- end
+											--
+											--            local issue_number = get_octo_issue_number()
+											--            vim.print(issue_number)
+											-- if issue_number then
+											-- 	-- Fetch issue author using gh CLI
+											-- 	local handle = io.popen(
+											-- 		string.format(
+											-- 			'gh issue view %s --json author --jq ".author.login" 2>/dev/null',
+											-- 			issue_number
+											-- 		)
+											-- 	)
+											-- 	if handle then
+											-- 		local author = handle:read("*a"):gsub("%s+$", "")
+											-- 		handle:close()
+											--
+											-- 		-- Add author to custom list if not already present
+											-- 		if author and author ~= "" then
+											-- 			local found = false
+											-- 			for _, username in ipairs(custom_users) do
+											-- 				if username == author then
+											-- 					found = true
+											-- 					break
+											-- 				end
+											-- 			end
+											-- 			if not found then
+											-- 				table.insert(custom_users, 1, author) -- Add at the beginning
+											-- 			end
+											-- 		end
+											-- 	end
+											-- end
+											--
+											-- Convert to the format that separate_output expects
+											local json_users = {}
+											for _, username in ipairs(custom_users) do
+												table.insert(json_users, string.format('{"login":"%s"}', username))
+											end
+
+											return { "[" .. table.concat(json_users, ",") .. "]" }
+										end,
+
+										-- get_command = function()
+										--     return 'gh'
+										-- end,
+										-- get_command_args = function(command, token)
+										--     local utils = require('blink-cmp-git.utils')
+										--     local owner_repo = utils.get_repo_owner_and_repo()
+										--     local owner, repo = owner_repo:match('([^/]+)/([^/]+)')
+										--
+										--     return {
+										--         'api',
+										--         'graphql',
+										--         '-f',
+										--         'query=query($owner: String!, $name: String!) { repository(owner: $owner, name: $name) { assignableUsers(first: 5) { nodes { login name } } } }',
+										--         '-F',
+										--         'owner=' .. owner,
+										--         '-F',
+										--         'name=' .. repo,
+										--         '--jq',
+										--         '.data.repository.assignableUsers.nodes',
+										--     }
+										-- end,
+										-- Parse the GraphQL response
+										separate_output = function(output)
+											local utils = require("blink-cmp-git.utils")
+											return utils.remove_empty_string_value(utils.json_decode(output))
+										end,
+									},
+								},
+							},
 						},
 					},
 					avante = {

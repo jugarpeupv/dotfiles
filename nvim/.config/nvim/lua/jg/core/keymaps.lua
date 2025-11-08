@@ -1905,8 +1905,23 @@ vim.keymap.set("c", "<C-r>", function()
 
 		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
 	else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+    -- vim.cmd("stopinsert")
+    Snacks.picker.command_history({ layout = { preview = false }, pattern = cmd })
+    -- vim.schedule(function()
+    --   Snacks.picker.command_history({ layout = { preview = false }, pattern = cmd })
+    --   -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+    -- end)
+
+    -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
 		-- Fallback to default <C-r> behavior
-		return "<C-r>"
+		-- return "<C-r>"
 	end
 end, { expr = true, noremap = true })
+
+
+-- vim.api.nvim_set_keymap('i', '<C-n>', '<C-o>j', { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('i', '<C-p>', '<C-o>k', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<C-n>', '<Down>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('i', '<C-p>', '<Up>', { noremap = true, silent = true })
 

@@ -1,7 +1,8 @@
 return {
 	"folke/snacks.nvim",
 	enabled = true,
-	event = { "BufReadPost", "BufNewFile" },
+	-- event = { "BufReadPost", "BufNewFile", "CmdlineEnter" },
+  event = { "BufReadPost", "BufNewFile" },
 	opts = {
 		-- input = {},
 		-- indent = {
@@ -75,8 +76,7 @@ return {
 			-- 		},
 			-- 	},
 			-- },
-		},
-		explorer = { enabled = false },
+		}
 	},
 	keys = {
 		-- Top Pickers & Explorer

@@ -16,6 +16,7 @@ return {
 		dependencies = {
 			{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
 			{ "cfdrake/vim-pbxproj" },
+      { "keith/xcconfig.vim" },
 			{
 				"axelvc/template-string.nvim",
         -- "chrisgrieser/nvim-puppeteer",
@@ -417,6 +418,12 @@ return {
 				incr_key = "<cr>", -- increment selection key
 				decr_key = "<bs>", -- decrement selection key
 			})
+
+      vim.filetype.add({
+        extension = {
+          ['http'] = 'http',
+        },
+      })
 
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "TSUpdate",

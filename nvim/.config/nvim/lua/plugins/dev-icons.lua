@@ -585,6 +585,7 @@ return {
 					color = "#73daca",
 					name = "Log",
 				},
+        ["xcconfig"] = { icon = "", color = "#9CDCFE", name = "xcconfigfile" },
 				["module.ts"] = { icon = "", color = "#CBA6F7", name = "AngularModule1" },
 				["*.module.ts"] = { icon = "", color = "#CBA6F7", name = "AngularModule2" },
 				[".module.ts"] = { icon = "", color = "#CBA6F7", name = "AngularModule" },

@@ -5,12 +5,18 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-telescope/telescope.nvim",
-			-- OR 'ibhagwan/fzf-lua',
+			-- 'ibhagwan/fzf-lua',
 			"nvim-tree/nvim-web-devicons",
 		},
 		cmd = { "Octo" },
     -- "<cmd>Octo search review-requested:GPJULI6_mapfre is:pr involves:GPJULI6_mapfre state:open -team-review-requested:arch-gva-dev -team-review-requested:arch-gva-mnt -team-review-requested:arch-gva-own<cr>",
 		keys = {
+      {
+        mode = { "n" },
+        "<leader>oc",
+        "<cmd>Octo issue create mapfre-tech/arch-mar2-mgmt<cr>",
+        { noremap = true, silent = true },
+      },
 			{
 				mode = { "n" },
 				"<leader>or",
@@ -26,8 +32,8 @@ return {
 			{
 				mode = { "n" },
 				"<leader>os",
-				-- "<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open label:task type:issue repo:mapfre-tech/arch-mar2-mgmt<cr>",
-        ":Octo search assignee:GPJULI6_mapfre is:issue is:open repo:mapfre-tech/arch-mar2-mgmt",
+				"<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open label:task type:issue repo:mapfre-tech/arch-mar2-mgmt<cr>",
+        -- ":Octo search assignee:GPJULI6_mapfre is:issue is:open repo:mapfre-tech/arch-mar2-mgmt",
 				{ noremap = true, silent = true },
 			},
 		},
@@ -41,8 +47,9 @@ return {
 			}, -- SSH aliases. e.g. `ssh_aliases = {["github.com-work"] = "github.com"}`
 			-- picker = "fzf-lua", -- 'telescope' or 'fzf-lua'
 			-- picker = "snacks", -- 'telescope' or 'fzf-lua'
-			picker = "snacks", -- 'telescope' or 'fzf-lua'
-      -- picker = "telescope", -- 'telescope' or 'fzf-lua'
+			-- picker = "snacks", -- 'telescope' or 'fzf-lua'
+      -- picker = "fzf-lua", -- 'telescope' or 'fzf-lua'
+      picker = "telescope", -- 'telescope' or 'fzf-lua'
       default_to_projects_v2 = true,
 			picker_config = {
 				use_emojis = false, -- only used by "fzf-lua" picker for now

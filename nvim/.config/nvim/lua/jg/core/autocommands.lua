@@ -103,6 +103,16 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	end,
 })
 
+local group = vim.api.nvim_create_augroup("__env_default", { clear = true })
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+	pattern = ".env.*",
+	group = group,
+	callback = function()
+		vim.o.wrap = false
+		vim.bo.filetype = "sh"
+	end,
+})
+
 vim.api.nvim_create_autocmd("BufEnter", {
 	group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
 	pattern = "copilot-chat",
@@ -432,20 +442,15 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-local api = vim.api
-local override = "DiffAddAsDelete"
-
 -- This overrides DiffAdd in fugitive buffers, turning them into something that
 -- looks like DiffDelete (while allowing it to be highlighted differently).
 --
 -- This hack ensures that deletions in the previous version of a diff show up
 -- as actual deletions, not additions (relative to the current version).
-local function fix_highlight()
-	local nr = api.nvim_win_get_buf(0)
-	local name = api.nvim_buf_get_name(nr)
+local function fix_highlight_in_a_buffer()
 	local winhl = vim.wo.winhl
 
-	if not vim.wo.diff or winhl:match(override) then
+	if not vim.wo.diff then
 		return
 	end
 
@@ -453,7 +458,8 @@ local function fix_highlight()
 		vim.wo.winhl = "DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText"
 	else
 		-- vim.wo.winhl = winhl .. ',DiffAdd:' .. override
-		vim.wo.winhl = winhl .. ",DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText"
+		-- vim.wo.winhl = winhl .. ",DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText"
+		vim.wo.winhl = "DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText"
 		-- vim.wo.winhl = {
 		-- 	"DiffChange:DiffAddAsDelete",
 		-- 	"DiffText:DiffDeleteText",
@@ -461,82 +467,111 @@ local function fix_highlight()
 	end
 end
 
-vim.api.nvim_create_autocmd("BufEnter", {
+vim.api.nvim_create_autocmd("BufNew", {
 	pattern = "fugitive://*",
 	group = vim.api.nvim_create_augroup("highlight_fugitive", { clear = true }),
 	callback = function()
-		for _, win in ipairs(vim.api.nvim_list_wins()) do
-			-- print(vim.inspect(win))
-			local buf = vim.api.nvim_win_get_buf(win)
-			local name = vim.api.nvim_buf_get_name(buf)
-			-- print('name of buffer: ', name)
-			-- If it's NOT a fugitive buffer, apply your highlight
-			if not name:match("^fugitive://") then
-				-- Call your highlight function for this window
-				-- vim.api.nvim_set_current_win(win)
-				-- fix_highlight() -- or your custom logic
-			end
-		end
-		-- fix_highlight()
+		fix_highlight_in_a_buffer()
+		-- for _, win in ipairs(vim.api.nvim_list_wins()) do
+		-- 	local buf = vim.api.nvim_win_get_buf(win)
+		-- 	local buf_name = vim.api.nvim_buf_get_name(buf)
+		-- 	if buf_name:match("^fugitive://") then
+		-- 		fix_highlight_in_a_buffer() -- or your custom logic
+		-- 	else
+		-- 		fix_highlight_in_b_buffer() -- or your custom logic
+		-- 	end
+		-- end
 	end,
 })
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "fugitive",
-	callback = function()
-		vim.keymap.set("n", "<Tab>", function()
-			for _, win in ipairs(vim.api.nvim_list_wins()) do
-				local buf = vim.api.nvim_win_get_buf(win)
-				local name = vim.api.nvim_buf_get_name(buf)
-				if name:sub(-2) == "//" then
-					vim.api.nvim_set_current_win(win)
-          -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("]m", true, false, true), "n", false)
-					-- vim.api.nvim_feedkeys("dv", "n", false)
-          vim.cmd("stopinsert")  -- ensures normal mode
-          vim.api.nvim_feedkeys("dv", "n", false)
-          -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("dv", true, false, true), "n", false)
-					break
-				end
-			end
-		end, { buffer = true, silent = true })
+	callback = function(args)
+		local opts = { buffer = args.buf, noremap = true, silent = true }
+		vim.keymap.set("n", "S", ":G add .<CR>", opts)
 
-    -- vim.keymap.set("n", "<S-Tab>", function()
-    --   for _, win in ipairs(vim.api.nvim_list_wins()) do
-    --     local buf = vim.api.nvim_win_get_buf(win)
-    --     local name = vim.api.nvim_buf_get_name(buf)
-    --     if name:sub(-2) == "//" then
-    --       vim.api.nvim_set_current_win(win)
-    --       vim.api.nvim_feedkeys("[m", "n", false)
-    --       vim.api.nvim_feedkeys("dv", "n", false)
-    --       break
-    --     end
-    --   end
-    -- end, { buffer = true, silent = true })
+		-- vim.keymap.set("n", "<Tab>", function()
+		--   vim.cmd("call fugitive#PreviousFile(v:count1)")
+		-- end, opts)
+		--
+		-- vim.keymap.set("n", "<S-Tab>", function()
+		--   vim.cmd("call fugitive#NextFile(v:count1)")
+		-- end, opts)
+
+		-- vim.keymap.set("n", "<Tab>", function()
+		--     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("[m", true, false, true), "n", false)
+		-- 	-- for _, win in ipairs(vim.api.nvim_list_wins()) do
+		-- 	-- 	local buf = vim.api.nvim_win_get_buf(win)
+		-- 	-- 	local name = vim.api.nvim_buf_get_name(buf)
+		-- 	-- 	if name:sub(-2) == "//" then
+		-- 	-- 		vim.api.nvim_set_current_win(win)
+		-- 	-- 		-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("]m", true, false, true), "n", false)
+		-- 	-- 		-- vim.api.nvim_feedkeys("dv", "n", false)
+		-- 	-- 		vim.cmd("stopinsert") -- ensures normal mode
+		-- 	-- 		vim.api.nvim_feedkeys("dv", "n", false)
+		-- 	-- 		-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("dv", true, false, true), "n", false)
+		-- 	-- 		break
+		-- 	-- 	end
+		-- 	-- end
+		-- end, { buffer = true, silent = true })
+		--
+		-- vim.keymap.set("n", "<S-Tab>", function()
+		--     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("[m", true, false, true), "n", false)
+		--     vim.api.nvim_feedkeys("dv", "n", false)
+		--   -- for _, win in ipairs(vim.api.nvim_list_wins()) do
+		--   --   local buf = vim.api.nvim_win_get_buf(win)
+		--   --   local name = vim.api.nvim_buf_get_name(buf)
+		--   --     local sub = name:sub(-2)
+		--   --     vim.print(sub)
+		--   --   if name:sub(-2) == "//" then
+		--   --     vim.api.nvim_set_current_win(win)
+		--   --     -- vim.api.nvim_feedkeys("[m", "n", false)
+		--   --       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("[m", true, false, true), "n", false)
+		--   --     vim.api.nvim_feedkeys("dv", "n", false)
+		--   --     break
+		--   --   end
+		--   -- end
+		-- end, { buffer = true, silent = true })
 	end,
 })
 
 -- vim.cmd([[au User FugitiveIndex nmap <buffer> dt :Gtabedit <Plug><cfile><Bar>Gvdiffsplit<CR>]])
 
 vim.api.nvim_create_autocmd("User", {
-  pattern = "FugitiveIndex",
-  callback = function()
-    vim.api.nvim_buf_set_keymap(0, "n", "dt", ":Gtabedit <Plug><cfile>|Gvdiffsplit<CR>", { noremap = true, silent = true })
-  end,
+	pattern = "FugitiveIndex",
+	callback = function()
+		vim.api.nvim_buf_set_keymap(
+			0,
+			"n",
+			"dt",
+			":Gtabedit <Plug><cfile>|Gvdiffsplit<CR>",
+			{ noremap = true, silent = true }
+		)
+	end,
 })
-
 
 vim.api.nvim_create_autocmd("BufEnter", {
 	pattern = "diffview://*",
 	group = vim.api.nvim_create_augroup("diffview-package-lock", { clear = true }),
 	callback = function(args)
-    local bufname = vim.api.nvim_buf_get_name(args.buf)
-    if bufname:match("package%-lock%.json") then
-      vim.b.matchup_matchparen_enabled = 0
-      vim.b.matchup_matchparen_fallback = 0
-      vim.treesitter.stop(args.buf)
-      vim.bo.filetype = "bigfile"
-      vim.wo.number = false
-      vim.wo.relativenumber = false
-    end
+		local bufname = vim.api.nvim_buf_get_name(args.buf)
+		if bufname:match("package%-lock%.json") then
+			vim.b.matchup_matchparen_enabled = 0
+			vim.b.matchup_matchparen_fallback = 0
+			vim.treesitter.stop(args.buf)
+			vim.bo.filetype = "bigfile"
+			vim.wo.number = false
+			vim.wo.relativenumber = false
+		end
 	end,
+})
+
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "sidekick_terminal",
+  group = vim.api.nvim_create_augroup("sidekick_terminal_au", { clear = true }),
+  callback = function(args)
+    local opts = { buffer = args.buf, noremap = true, silent = true }
+    vim.keymap.set("n", "<c-s>", "<cr>", opts)
+  end,
 })

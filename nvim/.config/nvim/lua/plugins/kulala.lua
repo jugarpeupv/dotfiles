@@ -4,7 +4,24 @@ return {
 		enabled = true,
 		ft = { "http", "rest" },
 		opts = {
-			lsp = { formatter = true, keymaps = false },
+      lsp = {
+        enable = true,
+        filetypes = { "http", "rest", "json", "yaml", "bruno" },
+        keymaps = false, -- disabled by default, as Kulala relies on default Neovim LSP keymaps
+        formatter = {
+          sort = { -- enable/disable alphabetical sorting
+            metadata = true,
+            variables = true,
+            commands = false,
+            json = true,
+          },
+          quote_json_variables = true, -- add quotes around {{variable}} in JSON bodies
+          indent = 2, -- base indentation for scripts
+        },
+        -- on_attach = function(client, bufnr)
+        --   -- custom on_attach function
+        -- end,
+      },
 			debug = true,
 			vscode_rest_client_environmentvars = true,
 			winbar = true,

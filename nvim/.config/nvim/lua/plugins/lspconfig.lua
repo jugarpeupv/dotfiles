@@ -630,20 +630,20 @@ return {
 			})
 			vim.lsp.enable("angularls")
 
-			vim.lsp.config("groovyls", {
-				on_attach = on_attach,
-				capabilities = capabilities,
-				handlers = {
-					["textDocument/publishDiagnostics"] = function() end,
-				},
-				cmd = {
-					"java",
-					"-jar",
-					home .. "/.config/groovy-language-server/build/libs/groovy-language-server-all.jar",
-					-- "~/.local/share/nvim/mason/packages/groovy-language-server/build/libs/groovy-language-server-all.jar",
-				},
-			})
-			vim.lsp.enable("groovyls")
+			-- vim.lsp.config("groovyls", {
+			-- 	on_attach = on_attach,
+			-- 	capabilities = capabilities,
+			-- 	handlers = {
+			-- 		["textDocument/publishDiagnostics"] = function() end,
+			-- 	},
+			-- 	cmd = {
+			-- 		"java",
+			-- 		"-jar",
+			-- 		home .. "/.config/groovy-language-server/build/libs/groovy-language-server-all.jar",
+			-- 		-- "~/.local/share/nvim/mason/packages/groovy-language-server/build/libs/groovy-language-server-all.jar",
+			-- 	},
+			-- })
+			-- vim.lsp.enable("groovyls")
 
 			local on_publish_diagnostics = vim.lsp.diagnostic.on_publish_diagnostics
 
@@ -939,7 +939,7 @@ return {
 			vim.lsp.enable("copilot_ls")
 
 			vim.lsp.config("kulala_ls", {
-        filetypes = { "json", "http", "rest" },
+			     filetypes = { "json", "http", "rest" },
 				capabilities = capabilities,
 				on_attach = on_attach,
 			})
