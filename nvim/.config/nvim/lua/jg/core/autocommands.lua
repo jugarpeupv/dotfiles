@@ -263,10 +263,12 @@ local function open_dir_history()
 					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
 					if selection then
+
 						-- vim.cmd("e " .. selection[1])
 						local api_nvimtree = require("nvim-tree.api")
 						api_nvimtree.tree.change_root(selection[1])
 						api_nvimtree.tree.reload()
+            vim.cmd("cd " .. selection[1])
 					end
 				end)
 				return true
@@ -325,24 +327,6 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 		end
 	end,
 })
-
--- vim.api.nvim_create_autocmd("FileType", {
--- 	group = vim.api.nvim_create_augroup("my-grug-far-custom-keybinds", { clear = true }),
--- 	pattern = "grug-far",
--- 	callback = function()
--- 		vim.defer_fn(function()
--- 			vim.cmd("set buftype=")
--- 		end, 500)
--- 		vim.api.nvim_create_autocmd("BufWriteCmd", {
--- 			buffer = 0,
--- 			group = vim.api.nvim_create_augroup("my-grug-far-bufwritecmd", { clear = true }),
--- 			callback = function()
--- 				require("grug-far").get_instance(0):sync_all()
---         vim.cmd("set buftype=nofile")
--- 			end,
--- 		})
--- 	end,
--- })
 
 -- vim.api.nvim_create_autocmd('FileType', {
 --   group = vim.api.nvim_create_augroup('my-grug-far-custom-keybinds', { clear = true }),
@@ -455,11 +439,11 @@ local function fix_highlight_in_a_buffer()
 	end
 
 	if winhl == "" then
-		vim.wo.winhl = "DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText"
+		vim.wo.winhl = "DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText,DiffAdd:DiffAddAsDelete"
 	else
 		-- vim.wo.winhl = winhl .. ',DiffAdd:' .. override
 		-- vim.wo.winhl = winhl .. ",DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText"
-		vim.wo.winhl = "DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText"
+		vim.wo.winhl = "DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText,DiffAdd:DiffAddAsDelete"
 		-- vim.wo.winhl = {
 		-- 	"DiffChange:DiffAddAsDelete",
 		-- 	"DiffText:DiffDeleteText",

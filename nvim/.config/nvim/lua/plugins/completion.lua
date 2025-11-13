@@ -129,7 +129,18 @@ return {
 					-- ["<CR>"] = { "accept_and_enter", "fallback" },
 					-- ["<CR>"] = { "accept", "fallback" },
 					["<c-y>"] = { "accept", "fallback" },
-					["<CR>"] = { "accept_and_enter", "fallback" },
+					["<CR>"] = {
+						-- function(cmp)
+						-- 	local filetype = vim.bo.filetype
+						-- 	if filetype == "grug-far" then
+						--           print('ft grugfar')
+						--           vim.api.nvim_feedkeys(t("<localleader>s"), "n", false)
+						--           -- return cmp.fallback()
+						-- 	end
+						-- end,
+						"accept_and_enter",
+						"fallback",
+					},
 					-- ["<CR>"] = {},
 					["<C-k>"] = { "select_prev", "fallback" },
 					["<C-j>"] = { "select_next", "fallback" },

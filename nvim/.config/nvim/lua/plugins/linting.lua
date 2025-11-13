@@ -1,14 +1,20 @@
 return {
+	-- {
+	-- 	"esmuellert/nvim-eslint",
+	-- 	config = function()
+	-- 		require("nvim-eslint").setup({})
+	-- 	end,
+	-- },
 	{
 		"mfussenegger/nvim-lint",
 		event = "BufReadPost",
 		config = function()
-      -- vim.env.ESLINT_D_PPID = vim.fn.getpid()
+			vim.env.ESLINT_D_PPID = vim.fn.getpid()
 			require("lint").linters_by_ft = {
 				-- ["yaml.github"] = { "actionlint", "yamllint" },
 				["yaml.github"] = { "actionlint" },
-        -- javascript = {'eslint_d'},
-        -- typescript = {'eslint_d'},
+				javascript = {'eslint_d'},
+				typescript = {'eslint_d'},
 			}
 
 			vim.keymap.set("n", "<leader>lf", function()

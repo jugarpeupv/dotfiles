@@ -805,8 +805,8 @@ vim.keymap.set("n", "<leader>ih", function()
 	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end)
 
-vim.cmd([[nmap <leader>tN :tabnew %<CR>]])
-vim.cmd([[nmap <leader>tC :tabclose<CR>]])
+vim.cmd([[nmap <leader>tw :tabnew %<CR>]])
+vim.cmd([[nmap <leader>tq :tabclose<CR>]])
 
 vim.keymap.set("n", "<leader>ta", require("jg.custom.telescope").curr_buf, {})
 
@@ -1522,8 +1522,8 @@ vim.keymap.set("n", "<leader>dv", function()
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
 
-vim.keymap.set("i", "<C-j>", "<C-n>", { noremap = true })
-vim.keymap.set("i", "<C-k>", "<C-p>", { noremap = true })
+-- vim.keymap.set("i", "<C-j>", "<C-n>", { noremap = true })
+-- vim.keymap.set("i", "<C-k>", "<C-p>", { noremap = true })
 
 -- vim.keymap.set({ "v" }, "<C-x><C-f>", function()
 -- 	print("Fuzzy complete path")
@@ -1905,23 +1905,40 @@ vim.keymap.set("c", "<C-r>", function()
 
 		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
 	else
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
-    -- vim.cmd("stopinsert")
-    Snacks.picker.command_history({ layout = { preview = false }, pattern = cmd })
-    -- vim.schedule(function()
-    --   Snacks.picker.command_history({ layout = { preview = false }, pattern = cmd })
-    --   -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
-    -- end)
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+		-- vim.cmd("stopinsert")
+		Snacks.picker.command_history({ layout = { preview = false }, pattern = cmd })
+		-- vim.schedule(function()
+		--   Snacks.picker.command_history({ layout = { preview = false }, pattern = cmd })
+		--   -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+		-- end)
 
-    -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+		-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
 		-- Fallback to default <C-r> behavior
 		-- return "<C-r>"
 	end
 end, { expr = true, noremap = true })
 
-
 -- vim.api.nvim_set_keymap('i', '<C-n>', '<C-o>j', { noremap = true, silent = true })
 -- vim.api.nvim_set_keymap('i', '<C-p>', '<C-o>k', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('i', '<C-n>', '<Down>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('i', '<C-p>', '<Up>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap("i", "<C-n>", "<Down>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("i", "<C-p>", "<Up>", { noremap = true, silent = true })
 
+
+vim.api.nvim_create_autocmd("TermOpen", {
+	pattern = "*",
+	callback = function(args)
+		local bufnr = args.buf
+
+    -- Utility to move from one prompt to another
+		vim.keymap.set({ "t" }, "<M-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+		vim.keymap.set({ "t" }, "<M-P>", "<C-\\><C-n>?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+
+    vim.keymap.set({ "n" }, "<M-N>", "/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+    vim.keymap.set({ "n" }, "<M-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+	end,
+})
+
+vim.keymap.set({ "n" }, "<leader>tt", function ()
+  require("barbecue.ui").toggle()
+end, opts)

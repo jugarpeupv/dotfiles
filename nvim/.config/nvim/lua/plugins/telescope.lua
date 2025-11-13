@@ -119,12 +119,12 @@ return {
 							sorting = "recent",
 						},
 						git_files = {
-							disable = false,
+							disable = true,
 							use_cwd = true,
 							sorting = "frecency",
 						},
 						find_files = {
-							disable = false,
+							disable = true,
 							use_cwd = true,
 							sorting = "frecency",
 						},

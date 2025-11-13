@@ -21,6 +21,8 @@ return {
           vim.notify("Not in a bare repo", vim.log.levels.INFO)
         elseif vim.fn.filereadable(git_path) == 1 then
           require("telescope").extensions.git_worktree.git_worktree()
+        elseif vim.fn.filereadable(vim.fn.getcwd() .. "HEAD") then
+          require("telescope").extensions.git_worktree.git_worktree()
         else
           vim.notify(".git not found", vim.log.levels.WARN)
         end
@@ -38,6 +40,8 @@ return {
         if vim.fn.isdirectory(git_path) == 1 then
           vim.notify("Not in a bare repo", vim.log.levels.INFO)
         elseif vim.fn.filereadable(git_path) == 1 then
+          require("telescope").extensions.git_worktree.create_git_worktree()
+        elseif vim.fn.filereadable(vim.fn.getcwd() .. "HEAD") then
           require("telescope").extensions.git_worktree.create_git_worktree()
         else
           vim.notify(".git not found", vim.log.levels.WARN)

@@ -25,7 +25,7 @@ return {
 		},
 		"nvim-telescope/telescope.nvim", -- Optional: For using slash commands
 		{ "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } }, -- Optional: For prettier markdown rendering
-		{ "stevearc/dressing.nvim", opts = {} }, -- Optional: Improves `vim.ui.select`
+		-- { "stevearc/dressing.nvim", opts = {} }, -- Optional: Improves `vim.ui.select`
 	},
 	-- config = true,
 	-- init = function()
@@ -87,7 +87,7 @@ return {
 						-- Picker interface ("telescope" or "snacks" or "fzf-lua" or "default")
 						picker = "telescope",
 						-- Automatically generate titles for new chats
-						auto_generate_title = false,
+						auto_generate_title = true,
 						---On exiting and entering neovim, loads the last chat on opening chat
 						continue_last_chat = true,
 						---When chat is cleared with `gx` delete the chat from history
@@ -110,15 +110,40 @@ return {
 			strategies = {
 				chat = {
 					tools = {
+						groups = {
+							["agentic"] = {
+								description = "A custom agent combining tools",
+								tools = {
+									"github",
+									"full_stack_dev",
+									"tavily",
+									"create_file",
+									"read_file",
+									"insert_edit_into_file",
+									"neovim",
+									"search_web",
+									"nx",
+								},
+								opts = {
+									collapse_tools = true, -- When true, show as a single group reference instead of individual tools
+								},
+							},
+						},
 						opts = {
 							default_tools = {
-								"nx",
 								"github",
+								"full_stack_dev",
 								"tavily",
-								"files",
+								"create_file",
+								"read_file",
+								"insert_edit_into_file",
 								"neovim",
 								"search_web",
+								"nx",
 							},
+							-- default_tools = {
+							--   "agentic"
+							-- },
 							auto_submit_errors = true, -- Send any errors to the LLM automatically?
 							auto_submit_success = true, -- Send any successful output to the LLM automatically?
 						},
@@ -148,7 +173,7 @@ return {
 				diff = {
 					enabled = true,
 					-- provider = providers.diff, -- mini_diff|split|inline
-          provider = "inline",
+					provider = "inline",
 					provider_opts = {
 						-- Options for inline diff provider
 						inline = {
@@ -241,8 +266,8 @@ return {
 		-- 	end,
 		-- 	desc = "Toggle Copilot",
 		-- },
-		-- { mode = { "n", "v", "t" }, "<M-m>", "<cmd>CodeCompanionChat Toggle<CR>" },
-    { mode = { "n", "v" }, "<leader>ca", "<cmd>CodeCompanionChat Toggle<CR>" },
+		{ mode = { "n", "v", "t" }, "<M-m>", "<cmd>CodeCompanionChat Toggle<CR>" },
+		-- { mode = { "n", "v" }, "<leader>ca", "<cmd>CodeCompanionChat Toggle<CR>" },
 		{ mode = { "v" }, "ga", "<cmd>CodeCompanionChat Add<CR>" },
 	},
 }

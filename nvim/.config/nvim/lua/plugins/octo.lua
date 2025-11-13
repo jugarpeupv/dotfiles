@@ -2,10 +2,12 @@ return {
 	{
 		"pwntester/octo.nvim",
 		-- commit = "c96a03d2aa4688f45fb8d58e832fdd37d104f12d",
+    dev = true,
+    dir = "~/projects/octo.nvim/wt-feature-static_search_config",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-telescope/telescope.nvim",
-			-- 'ibhagwan/fzf-lua',
+			'ibhagwan/fzf-lua',
 			"nvim-tree/nvim-web-devicons",
 		},
 		cmd = { "Octo" },
@@ -20,7 +22,7 @@ return {
 			{
 				mode = { "n" },
 				"<leader>or",
-				"<cmd>Octo search review-requested:GPJULI6_mapfre is:pr involves:GPJULI6_mapfre state:open<cr>",
+				"<cmd>Octo search is:pr involves:GPJULI6_mapfre state:open<cr>",
 				{ noremap = true, silent = true },
 			},
 			{
@@ -50,14 +52,16 @@ return {
 			-- picker = "snacks", -- 'telescope' or 'fzf-lua'
       -- picker = "fzf-lua", -- 'telescope' or 'fzf-lua'
       picker = "telescope", -- 'telescope' or 'fzf-lua'
+      -- picker = "fzf-lua",
       default_to_projects_v2 = true,
 			picker_config = {
 				use_emojis = false, -- only used by "fzf-lua" picker for now
+        search_static = true,
 				mappings = { -- mappings for the pickers
 					open_in_browser = { lhs = "<C-b>", desc = "open issue in browser" },
 					copy_url = { lhs = "<C-y>", desc = "copy url to system clipboard" },
-					copy_sha = { lhs = "<C-h>", desc = "copy commit SHA to system clipboard" },
-					checkout_pr = { lhs = "<C-e>", desc = "checkout pull request" },
+					copy_sha = { lhs = "<C-n>", desc = "copy commit SHA to system clipboard" },
+					checkout_pr = { lhs = "<C-l>", desc = "checkout pull request" },
 					merge_pr = { lhs = "<C-r>", desc = "merge pull request" },
 				},
 			},
@@ -156,6 +160,7 @@ return {
 					select_first_entry = { lhs = "[Q", desc = "move to first changed file" },
 					select_last_entry = { lhs = "]Q", desc = "move to last changed file" },
 					close_review_tab = { lhs = "<C-c>", desc = "close review tab" },
+          copy_sha = { lhs = "<C-n>", desc = "copy commit SHA to system clipboard" },
 					toggle_viewed = { lhs = "<localleader><space>", desc = "toggle viewer viewed state" },
 					goto_file = { lhs = "gf", desc = "go to file" },
 				},

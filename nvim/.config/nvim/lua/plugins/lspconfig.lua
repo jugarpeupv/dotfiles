@@ -669,55 +669,24 @@ return {
 			-- vim.lsp.config("eslint", {
 			-- 	cmd = { home .. "/.local/share/nvim/mason/bin/vscode-eslint-language-server", "--stdio" },
 			-- 	on_attach = on_attach,
-			-- 	-- handlers = {
-			-- 	-- 	["eslint/noLibrary"] = function(err, params, ctx, config)
-			-- 	-- 		print("[eslint] No ESLint library found for this project.")
-			-- 	-- 		print(err)
-			-- 	-- 		-- Do nothing else, suppress error
-			-- 	-- 	end,
-			-- 	-- 	["textDocument/diagnostic"] = function(err, result, ctx, config)
-			-- 	-- 		if result and result.diagnostics then
-			-- 	-- 			for _, diagnostic in ipairs(result.diagnostics) do
-			-- 	-- 				if diagnostic.message:match("failed to load plugin") then
-			-- 	-- 					diagnostic.severity = vim.diagnostic.severity.WARN
-			-- 	-- 				end
-			-- 	-- 			end
-			-- 	-- 		end
-			-- 	-- 		vim.lsp.handlers["textDocument/diagnostic"](err, result, ctx, config)
-			-- 	-- 	end,
-			-- 	-- },
-			--
-			-- 	-- handlers = {
-			-- 	--   ["eslint/noLibrary"] = function(err, params, ctx, config)
-			-- 	--     print("[eslint] No ESLint library found for this project.")
-			-- 	--     print(err)
-			-- 	--     -- Do nothing else, suppress error
-			-- 	--   end,
-			-- 	-- },
+			--      capabilities = capabilities,
+			-- 	handlers = {
+			-- 		["eslint/noLibrary"] = function(err, params, ctx, config)
+			-- 			vim.print("[eslint] No ESLint library found for this project.")
+			-- 			vim.print(err)
+			-- 		end,
+			-- 	},
 			-- 	settings = {
 			-- 		quiet = false,
+			--        validate = "on",
 			-- 		run = "onSave",
 			-- 		-- experimental = {
 			-- 		--   useFlatConfig = true
 			-- 		-- },
 			-- 	},
-			-- 	-- filetypes = {
-			-- 	--   'javascript',
-			-- 	--   'javascriptreact',
-			-- 	--   'javascript.jsx',
-			-- 	--   'typescript',
-			-- 	--   'typescriptreact',
-			-- 	--   'typescript.tsx',
-			-- 	--   'vue',
-			-- 	--   'svelte',
-			-- 	--   'astro',
-			-- 	--   'json',
-			-- 	--   'jsonc'
-			-- 	-- },
-			-- 	capabilities = capabilities,
 			-- })
-
-			vim.lsp.enable("eslint")
+			--
+			-- vim.lsp.enable("eslint")
 
 			-- defined in telescope yaml companion
 			vim.lsp.config("yamlls", {

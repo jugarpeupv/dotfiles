@@ -4,7 +4,7 @@ return {
 	{ "junegunn/gv.vim", dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
 	{
 		"alex-popov-tech/store.nvim",
-		dependencies = { "OXY2DEV/markview.nvim" },
+		-- dependencies = { "OXY2DEV/markview.nvim" },
 		opts = {},
 		cmd = "Store",
 	},
@@ -727,7 +727,7 @@ return {
 		dependencies = {
 			{ "kkharji/sqlite.lua" },
 			{ "nvim-telescope/telescope.nvim" },
-			{ "stevearc/dressing.nvim" }, -- optional: better UI
+			-- { "stevearc/dressing.nvim" }, -- optional: better UI
 		},
 		config = function()
 			local opts = {} -- go to the following link to see all the options in the deafult config file

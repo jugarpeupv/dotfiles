@@ -15,7 +15,7 @@ return {
         end,
       },
     },
-    event = { "BufReadPre", "BufNewFile" },
+    event = { "BufReadPre", "BufNewFile", "TermOpen" },
     -- keys = {
     --   { "?", mode = "n" },
     --   { "/", mode = "n" },
@@ -46,14 +46,14 @@ return {
       vim.api.nvim_set_keymap("x", "g*", [[<Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>]], opts)
       vim.api.nvim_set_keymap("x", "g#", [[<Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>]], opts)
 
-      vim.api.nvim_set_keymap(
-        "n",
+      vim.keymap.set(
+        {"n"},
         "n",
         [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
         opts
       )
-      vim.api.nvim_set_keymap(
-        "n",
+      vim.keymap.set(
+        {"n"},
         "N",
         [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
         opts

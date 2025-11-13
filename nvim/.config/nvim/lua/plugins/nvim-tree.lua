@@ -1,122 +1,6 @@
 -- return {}
 return {
 	{
-		"A7Lavinraj/fyler.nvim",
-		enabled = true,
-		cmd = { "Fyler" },
-		-- branch = "stable",
-    branch = "main",
-    dependencies = { "nvim-mini/mini.icons" },
-		keys = {
-			{
-				"<leader>fe",
-				function()
-					-- vim.cmd("Fyler kind=split_right")
-					for _, win in ipairs(vim.api.nvim_list_wins()) do
-						if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "fyler" then
-							return vim.api.nvim_win_close(win, false)
-						end
-					end
-					-- vim.cmd.Fyler()
-
-					local fyler = require("fyler")
-					fyler.open({ kind = "split_left_most" })
-				end,
-				desc = "Fyler",
-			},
-		},
-		opts = {
-
-			-- Changes explorer closing behaviour when a file get selected
-			close_on_select = false,
-			-- Changes explorer behaviour to auto confirm simple edits
-			confirm_simple = false,
-			-- Changes explorer behaviour to hijack NETRW
-			default_explorer = false,
-			-- Changes git statuses visibility
-      hooks = {
-        on_rename = function(src_path, destination_path)
-          Snacks.rename.on_rename_file(src_path, destination_path)
-        end,
-        on_delete = nil, -- function(path) end
-        on_highlight = nil, -- function(hl_groups, palette) end
-      },
-			-- Custom icons for various directory states
-			icon = {
-				directory_collapsed = nil,
-				directory_empty = nil,
-				directory_expanded = nil,
-			},
-			-- Changes icon provider
-			icon_provider = "mini_icons",
-			-- Changes Indentation marker properties
-			indentscope = {
-				enabled = true,
-				group = "FylerIndentMarker",
-				marker = "│",
-			},
-			-- Auto current buffer tracking
-			track_current_buffer = false,
-			win = {
-				-- Changes window border
-				border = "single",
-				-- Changes buffer options
-				buf_opts = {
-					-- buffer options
-				},
-				-- Changes window kind
-				kind = "replace",
-				-- Changes window kind preset
-				kind_presets = {
-					-- values can be "(0,1]rel" or "{1...}abs"
-
-					-- <preset_name> = {
-					--   height = "",
-					--   width = "",
-					--   top = "",
-					--   left = ""
-					-- }
-
-					-- replace = {},
-				},
-				-- Changes window options
-				win_opts = {
-					-- window options
-					-- Set a title in the window using winbar
-					-- winbar = vim.fn.getcwd()
-					winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
-				},
-			},
-			mappings = {
-				-- ["Y"] = function(view)
-				--   print('hi')
-				-- end,
-				["q"] = "CloseView",
-				["<CR>"] = "Select",
-				["<C-t>"] = "SelectTab",
-				["<C-v>"] = "SelectVSplit",
-				["<C-s>"] = "SelectSplit",
-				["-"] = "GotoParent",
-				["="] = "GotoCwd",
-				["."] = "GotoNode",
-				["#"] = "CollapseAll",
-				["<BS>"] = "CollapseNode",
-			},
-		},
-	},
-	-- {
-	--   "nvim-tree/nvim-tree.lua",
-	--   version = "*",
-	--   lazy = false,
-	--   dependencies = {
-	--     "nvim-tree/nvim-web-devicons",
-	--   },
-	--   config = function()
-	--     require("nvim-tree").setup({})
-	--   end,
-	-- },
-
-	{
 		"b0o/nvim-tree-preview.lua",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
@@ -625,19 +509,19 @@ return {
 				end, opts("Open"))
 				-- vim.keymap.set('n', '<CR>', toggle_replace, opts('Open: In Place'))
 
-        local function change_root_to_global_cwd()
-          local api = require("nvim-tree.api")
-          local global_cwd = vim.fn.getcwd(-1, -1)
-          api.tree.change_root(global_cwd)
-        end
+				local function change_root_to_global_cwd()
+					local api = require("nvim-tree.api")
+					local global_cwd = vim.fn.getcwd(-1, -1)
+					api.tree.change_root(global_cwd)
+				end
 				-- vim.keymap.set("n", "<Tab>", api_nvimtree.node.open.preview, opts("Open Preview"))
 				vim.keymap.set("n", ">", api_nvimtree.node.navigate.sibling.next, opts("Next Sibling"))
 				vim.keymap.set("n", "<", api_nvimtree.node.navigate.sibling.prev, opts("Previous Sibling"))
 				vim.keymap.set("n", ".", api_nvimtree.node.run.cmd, opts("Run Command"))
 
-				vim.keymap.set("n", "H", api_nvimtree.tree.change_root_to_parent, opts("Up"))
+				-- vim.keymap.set("n", "H", api_nvimtree.tree.change_root_to_parent, opts("Up"))
 				-- vim.keymap.set("n", "<C-c>", api_nvimtree.tree.change_root_to_node, opts("CD"))
-        vim.keymap.set('n', '<C-c>', change_root_to_global_cwd, opts('Change Root To Global CWD'))
+				vim.keymap.set("n", "<C-c>", change_root_to_global_cwd, opts("Change Root To Global CWD"))
 				vim.keymap.set("n", "<BS>", api_nvimtree.tree.change_root_to_node, opts("CD"))
 
 				-- vim.keymap.set("n", "O", api_nvimtree.node.open.no_window_picker, opts("Open: No Window Picker"))
@@ -780,9 +664,9 @@ return {
 
 				vim.keymap.set("n", "a", api_nvimtree.fs.create, opts("Create"))
 				-- vim.keymap.set('n', 'bmv',   api.marks.bulk.move,                   opts('Move Bookmarked'))
-				-- vim.keymap.set("n", "B", api_nvimtree.tree.toggle_no_buffer_filter, opts("Toggle No Buffer"))
+				vim.keymap.set("n", "B", api_nvimtree.tree.toggle_no_buffer_filter, opts("Toggle No Buffer"))
 				vim.keymap.set("n", "yy", api_nvimtree.fs.copy.node, opts("Copy"))
-				-- vim.keymap.set("n", "C", api_nvimtree.tree.toggle_git_clean_filter, opts("Toggle Git Clean"))
+				vim.keymap.set("n", "C", api_nvimtree.tree.toggle_git_clean_filter, opts("Toggle Git Clean"))
 				vim.keymap.set("n", "[c", api_nvimtree.node.navigate.git.prev, opts("Prev Git"))
 				vim.keymap.set("n", "]c", api_nvimtree.node.navigate.git.next, opts("Next Git"))
 				vim.keymap.set("n", "d", api_nvimtree.fs.remove, opts("Delete"))
@@ -1194,20 +1078,19 @@ return {
 				},
 			})
 
-
-      -- local prev = { new_name = "", old_name = "" } -- Prevents duplicate events
-      -- vim.api.nvim_create_autocmd("User", {
-      --   pattern = "NvimTreeSetup",
-      --   callback = function()
-      --     local events = require("nvim-tree.api").events
-      --     events.subscribe(events.Event.NodeRenamed, function(data)
-      --       if prev.new_name ~= data.new_name or prev.old_name ~= data.old_name then
-      --         data = data
-      --         Snacks.rename.on_rename_file(data.old_name, data.new_name)
-      --       end
-      --     end)
-      --   end,
-      -- })
+			-- local prev = { new_name = "", old_name = "" } -- Prevents duplicate events
+			-- vim.api.nvim_create_autocmd("User", {
+			--   pattern = "NvimTreeSetup",
+			--   callback = function()
+			--     local events = require("nvim-tree.api").events
+			--     events.subscribe(events.Event.NodeRenamed, function(data)
+			--       if prev.new_name ~= data.new_name or prev.old_name ~= data.old_name then
+			--         data = data
+			--         Snacks.rename.on_rename_file(data.old_name, data.new_name)
+			--       end
+			--     end)
+			--   end,
+			-- })
 		end,
 	},
 }
