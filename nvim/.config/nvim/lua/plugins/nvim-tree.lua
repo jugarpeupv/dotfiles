@@ -101,14 +101,6 @@ return {
 	{
 		"nvim-tree/nvim-tree.lua",
 		enabled = true,
-		-- commit = "543ed3cac212dc3993ef9f042f6c0812e34ddd43",
-		-- commit = "2a386fe567f9972632c3863105c986ee1366318f",
-		-- commit = "b0b49552c9462900a882fe772993b01d780445fe",
-		-- commit = "517e4fbb9ef3c0986da7047f44b4b91a2400f93c",
-		-- enabled = false,
-		-- cmd = { "NvimTreeToggle", "NvimTreeFocus", "NvimTreeFindFile" },
-		-- lazy = true,
-		-- event = "VeryLazy",
 		priority = 500,
 		dependencies = {},
 		config = function()
@@ -482,8 +474,11 @@ return {
 				-- vim.keymap.set("n", "<C-x>", api_nvimtree.node.open.horizontal, opts("Open: Horizontal Split"))
 				vim.keymap.set("n", "<C-s>", api_nvimtree.node.open.horizontal, opts("Open: Horizontal Split"))
 				-- vim.keymap.set("n", "<BS>", api_nvimtree.node.navigate.parent_close, opts("Close Directory"))
-				vim.keymap.set("n", "h", api_nvimtree.node.navigate.parent_close, opts("Close Directory"))
-				vim.keymap.set("n", "l", api_nvimtree.node.open.edit, opts("Open"))
+				-- vim.keymap.set("n", "h", api_nvimtree.node.navigate.parent_close, opts("Close Directory"))
+				-- vim.keymap.set("n", "l", api_nvimtree.node.open.edit, opts("Open"))
+
+        vim.keymap.set("n", "H", api_nvimtree.node.navigate.parent_close, opts("Close Directory"))
+        vim.keymap.set("n", "L", api_nvimtree.node.open.edit, opts("Open"))
 
 				vim.g.first_time_open = true
 				-- vim.keymap.set("n", "<CR>", api_nvimtree.node.open.edit, opts("Open"))
@@ -624,7 +619,7 @@ return {
 					-- } }
 				end, opts("Open Terminal in node"))
 
-				vim.keymap.set("n", "L", function()
+				vim.keymap.set("n", "E", function()
 					local path = api_nvimtree.tree.get_node_under_cursor().absolute_path
 					local function check_and_modify_path(path_to)
 						if vim.fn.isdirectory(path_to) == 1 then
@@ -747,10 +742,6 @@ return {
 				-- vim.keymap.set('n', '<C-p>', api.node.show_info_popup, opts('Info'))
 			end
 
-			local HEIGHT_RATIO = 0.8 -- You can change this
-			local WIDTH_RATIO = 0.5 -- You can change this too
-
-			-- setup with all defaults
 			local status_ok, nvim_tree = pcall(require, "nvim-tree")
 			if not status_ok then
 				return

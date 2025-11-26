@@ -1,0 +1,40 @@
+################################################################################
+###[ Global configuration ]#####################################################
+################################################################################
+
+display-name = "Izertis"
+
+################################################################################
+###[ Account configuration ]####################################################
+################################################################################
+
+# The account name should be unique.
+#
+[accounts.izertis]
+default = true
+email = "julio.garcia@izertis.com"
+display-name = "Izertis"
+signature = "/Users/jgarcia/.config/aerc/signatures/izertis-signature.txt"
+
+
+backend.type = "maildir"
+backend.root-dir = "/Users/jgarcia/Mail/izertis"
+# backend.host = "localhost"
+# backend.port = 1143
+# backend.encryption.type = "none"
+# backend.login = "julio.garcia@izertis.com"
+# backend.auth.type = "password"
+# backend.auth.cmd = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field password --reveal"
+
+message.send.backend.type = "smtp"
+
+# SMTP server host name.
+#
+message.send.backend.host = "localhost"
+message.send.backend.port = 1025
+
+message.send.backend.encryption.type = "none"
+message.send.backend.login = "julio.garcia@izertis.com"
+message.send.backend.auth.type = "password"
+message.send.backend.auth.cmd = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field password --reveal"
+

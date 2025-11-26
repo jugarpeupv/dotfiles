@@ -1,0 +1,62 @@
+#
+# aerc custom styleset (Catppuccin palette)
+#
+
+*.default=true
+
+# default.bg=#1E1E2E
+
+# title.reverse=true
+header.bold=true
+header.fg=#B4BEFE
+
+*error.bold=false
+error.fg=#F38BA8
+warning.fg=#F5E0DC
+success.fg=#94E2D5
+
+statusline*.default=true
+# statusline_default.reverse=true
+statusline_error.fg=#F38BA8
+# statusline_error.reverse=true
+statusline_default.fg=#737aa2
+statusline_default.bg=#292e42
+
+dirlist_default.selected.fg=#BAC2DE
+dirlist_default.selected.bg=#3b4261
+dirlist_recent.selected.fg=#BAC2DE
+dirlist_recent.selected.bg=#3b4261
+dirlist_unread.fg=#89ddff
+dirlist_unread.selected.fg=#89ddff
+dirlist_unread.selected.bg=#3b4261
+
+# msglist_default.selected.fg=#585B70
+msglist_default.selected.bg=#BAC2DE
+msglist_unread.bold=false
+msglist_unread.fg=#89ddff
+msglist_unread.selected.bg=#3b4261
+msglist_read.bold=false
+msglist_read.selected.fg=#BAC2DE
+msglist_read.selected.bg=#3b4261
+msglist_marked.fg=#F5E0DC
+msglist_marked.selected.fg=#F5E0DC
+msglist_marked.selected.bg=#3b4261
+msglist_deleted.fg=#F38BA8
+msglist_result.fg=#B4BEFE
+msglist_result.selected.bg=#3b4261
+
+msglist_deleted.selected.reverse=toggle
+
+completion_pill.reverse=false
+
+tab.reverse=false
+border.reverse=false
+# tab.bg=#CA9EE6
+tab.fg=#a9b1d6
+# tab.selected.bg=#585B70
+tab.selected.fg=#B4BEFE
+border.fg=#394b70
+border.bg=none
+
+# selector_focused.reverse=true
+selector_chooser.bold=true

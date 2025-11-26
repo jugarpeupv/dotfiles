@@ -1,12 +1,12 @@
 return {
   "MeanderingProgrammer/render-markdown.nvim",
-  ft = { "markdown", "codecompanion", "Avante" },
+  ft = { "markdown", "codecompanion", "Avante", "octo" },
   enabled = true,
   keys = {
     { "<leader>rm", "<cmd>RenderMarkdown toggle<CR>" },
   },
   opts = {
-    enabled = true,
+    enabled = false,
     max_file_size = 100.0,
     win_options = {
       -- @see :h 'conceallevel'
@@ -24,7 +24,7 @@ return {
       --   rendered = '',
       -- },
     },
-    file_types = { "markdown", "codecompanion", "Avante" },
+    file_types = { "markdown", "codecompanion", "Avante", "octo" },
     anti_conceal = {
       -- This enables hiding any added text on the line the cursor is on
       enabled = true,

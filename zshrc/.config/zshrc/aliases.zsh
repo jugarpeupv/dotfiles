@@ -1,5 +1,6 @@
 alias vf='vifm .'
 alias remote='~/.config/bin/remote.sh'
+alias neomutt='(TERM=xterm-direct neomutt) 2>/dev/null'
 alias js='jira issue'
 alias gl='git checkout . | git clean -fd'
 alias lsa='lsd -la'

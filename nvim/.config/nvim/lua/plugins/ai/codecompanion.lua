@@ -11,10 +11,12 @@ return {
 		"ravitemer/codecompanion-history.nvim",
 		"franco-ruggeri/codecompanion-spinner.nvim",
 		"nvim-lua/plenary.nvim",
+		"ravitemer/mcphub.nvim",
 		"nvim-treesitter/nvim-treesitter",
 		-- "hrsh7th/nvim-cmp", -- Optional: For using slash commands and variables in the chat buffer
 		{
 			"echasnovski/mini.diff",
+      enabled = false,
 			config = function()
 				local diff = require("mini.diff")
 				diff.setup({
@@ -91,7 +93,7 @@ return {
 						---On exiting and entering neovim, loads the last chat on opening chat
 						continue_last_chat = true,
 						---When chat is cleared with `gx` delete the chat from history
-						delete_on_clearing_chat = false,
+						delete_on_clearing_chat = true,
 						---Directory path to save the chats
 						dir_to_save = vim.fn.stdpath("data") .. "/codecompanion-history",
 						---Enable detailed logging for history extension
@@ -114,15 +116,12 @@ return {
 							["agentic"] = {
 								description = "A custom agent combining tools",
 								tools = {
-									"github",
-									"full_stack_dev",
-									"tavily",
 									"create_file",
 									"read_file",
 									"insert_edit_into_file",
-									"neovim",
-									"search_web",
-									"nx",
+									"cmd_runner",
+									"web_search",
+									"grep_search",
 								},
 								opts = {
 									collapse_tools = true, -- When true, show as a single group reference instead of individual tools
@@ -132,14 +131,9 @@ return {
 						opts = {
 							default_tools = {
 								"github",
-								"full_stack_dev",
 								"tavily",
-								"create_file",
-								"read_file",
-								"insert_edit_into_file",
-								"neovim",
-								"search_web",
 								"nx",
+								"agentic",
 							},
 							-- default_tools = {
 							--   "agentic"
@@ -226,6 +220,12 @@ return {
 					},
 				},
 				chat = {
+          icons = {
+            -- chat_context = "📎️", -- You can also apply an icon to the fold
+            chat_fold = " ",
+          },
+          fold_reasoning = true,
+          fold_context = false,
 					auto_scroll = false,
 					show_header_separator = true, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
 					start_in_insert_mode = false,
@@ -247,7 +247,8 @@ return {
 							foldcolumn = "0",
 							linebreak = true,
 							list = false,
-							numberwidth = 1,
+              number = false,
+              relativenumber = false,
 							signcolumn = "no",
 							spell = false,
 							wrap = true,
@@ -266,7 +267,13 @@ return {
 		-- 	end,
 		-- 	desc = "Toggle Copilot",
 		-- },
-		{ mode = { "n", "v", "t" }, "<M-m>", "<cmd>CodeCompanionChat Toggle<CR>" },
+		-- { mode = { "n", "v", "t" }, "<M-m>", "<cmd>CodeCompanionChat Toggle<CR>" },
+    { mode = { "n", "v", "t" }, "<M-m>", function ()
+      vim.cmd("CodeCompanionChat Toggle")
+      vim.schedule(function ()
+        vim.cmd('normal! zz')
+      end)
+    end },
 		-- { mode = { "n", "v" }, "<leader>ca", "<cmd>CodeCompanionChat Toggle<CR>" },
 		{ mode = { "v" }, "ga", "<cmd>CodeCompanionChat Add<CR>" },
 	},

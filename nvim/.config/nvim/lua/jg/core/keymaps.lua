@@ -356,13 +356,7 @@ end, opts)
 keymap("n", "<leader>ce", function()
 	require("telescope.builtin").colorscheme()
 end, opts)
-keymap("n", "<leader>ht", function()
-	require("telescope.builtin").help_tags()
-end, opts)
-keymap("n", "<leader>mp", function()
-	-- require("telescope.builtin").man_pages({ sections = { "ALL" } })
-	Snacks.picker.man()
-end, opts)
+
 keymap("n", "<leader>of", function()
 	require("telescope.builtin").oldfiles({ only_cwd = true })
 end, opts)
@@ -1398,15 +1392,15 @@ vim.keymap.set("n", "<leader>nr", function()
 	-- vim.fn.chansend(vim.b.terminal_job_id, command)
 end, opts)
 
-vim.cmd(
-	[[inoremap <C-G>  <C-O>:!whisper.nvim<CR><C-O>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^[[:space:\]\]*//'")<CR><C-R>an]]
-)
-vim.cmd(
-	[[nnoremap <C-G>       :!whisper.nvim<CR>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^\[\[:space:\]\]*//'")<CR>"ap]]
-)
-vim.cmd(
-	[[vnoremap <C-G> c<C-O>:!whisper.nvim<CR><C-O>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^[[:space:\]\]*//'")<CR><C-R>a]]
-)
+-- vim.cmd(
+-- 	[[inoremap <C-G>  <C-O>:!whisper.nvim<CR><C-O>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^[[:space:\]\]*//'")<CR><C-R>an]]
+-- )
+-- vim.cmd(
+-- 	[[nnoremap <C-G>       :!whisper.nvim<CR>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^\[\[:space:\]\]*//'")<CR>"ap]]
+-- )
+-- vim.cmd(
+-- 	[[vnoremap <C-G> c<C-O>:!whisper.nvim<CR><C-O>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^[[:space:\]\]*//'")<CR><C-R>a]]
+-- )
 
 local function tables_equal(t1, t2)
 	if #t1 ~= #t2 then
@@ -1941,4 +1935,20 @@ vim.api.nvim_create_autocmd("TermOpen", {
 
 vim.keymap.set({ "n" }, "<leader>tt", function ()
   require("barbecue.ui").toggle()
+end, opts)
+
+vim.keymap.set({ "n" }, "<C-S-H>", function ()
+  local cur = vim.fn.getqflist({ nr = 0 }).nr
+  local max = vim.fn.getqflist({ nr = '$' }).nr
+  if cur >= 2 and cur <= max then
+    vim.cmd("colder")
+  end
+end, opts)
+
+vim.keymap.set({ "n" }, "<C-S-L>", function ()
+  local cur = vim.fn.getqflist({ nr = 0 }).nr
+  local max = vim.fn.getqflist({ nr = '$' }).nr
+  if cur < max then
+    vim.cmd("cnewer")
+  end
 end, opts)

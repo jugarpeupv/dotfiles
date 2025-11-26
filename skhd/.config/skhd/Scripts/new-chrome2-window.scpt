@@ -1,6 +1,26 @@
-tell application "System Events" to tell process "Google Chrome"
-    perform action "AXRaise" of window 2
-    set frontmost to true
-    keystroke "º" using {command down}
-end tell
+-- tell application "System Events" to tell process "Google Chrome"
+--     perform action "AXRaise" of window 2
+--     set frontmost to true
+--     keystroke "º" using {command down}
+-- end tell
+
+if application "Google Chrome" is not running then
+  -- activate application "Brave"
+  do shell script "open \"/Applications/Google Chrome.app\";"
+
+else
+    tell application "Google Chrome"
+        activate
+        tell application "System Events"
+            keystroke "l" using {command down}
+            -- key code 53 -- escape key
+            key code 53
+            key code 53
+            key code 53
+            -- simulate control tab
+            -- key code 48 using {control down}
+            -- key code 48 using {control down, shift down}
+        end tell
+    end tell
+end if
 

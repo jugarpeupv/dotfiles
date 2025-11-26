@@ -1,0 +1,32 @@
+IMAPAccount izertis
+Host localhost
+Port 1143
+User julio.garcia@izertis.com
+Pass ""
+TLSType None
+AuthMech LOGIN
+
+IMAPStore izertis-remote
+Account izertis
+
+MaildirStore izertis-local
+Path ~/Mail/izertis/
+Inbox ~/Mail/izertis/INBOX
+SubFolders Verbatim
+
+Channel izertis-channel
+Far :izertis-remote:
+Near :izertis-local:
+Create Both
+Expunge Both
+Patterns *
+SyncState *
+CopyArrivalDate yes
+Sync All
+
+
+
+
+
+
+

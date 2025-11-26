@@ -6,8 +6,9 @@ chrome_window=$(yabai -m query --windows | jq '.[] | select(.app == "Google Chro
 
 if [ "$chrome_window" == "1" ]; then
   # /opt/homebrew/bin/cliclick c:52,164
-  # /opt/homebrew/bin/cliclick c:69,187
-  /opt/homebrew/bin/cliclick c:55,176
+  /opt/homebrew/bin/cliclick c:57,175
+  # /opt/homebrew/bin/cliclick c:55,176
+  # /opt/homebrew/bin/cliclick c:50,169
 fi
 
 if [ "$chrome_window" == "2" ]; then

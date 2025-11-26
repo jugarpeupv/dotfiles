@@ -79,6 +79,7 @@ return {
             -- end,
             ["q"] = "CloseView",
             ["<CR>"] = "Select",
+            ["L"] = "Select",
             ["<C-t>"] = "SelectTab",
             ["<C-v>"] = "SelectVSplit",
             ["<C-s>"] = "SelectSplit",
@@ -87,6 +88,7 @@ return {
             ["."] = "GotoNode",
             ["#"] = "CollapseAll",
             ["<BS>"] = "CollapseNode",
+            ["H"] = "CollapseNode",
           },
 					-- Current file tracking
 					follow_current_file = false,

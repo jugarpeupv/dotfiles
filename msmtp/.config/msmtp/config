@@ -1,0 +1,16 @@
+defaults
+auth           login
+protocol        smtp
+tls            off
+tls_starttls   off
+tls_certcheck  off
+logfile        ~/.config/msmtp/msmtp.log
+
+account        izertis
+host           localhost
+port           1025
+from           julio.garcia@izertis.com
+user           julio.garcia@izertis.com
+passwordeval   op item get u6k3e4k4gzbmxl76zbxphtutyi --field password --reveal
+
+account default : izertis

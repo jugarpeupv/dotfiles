@@ -14,10 +14,10 @@ return {
 		dependencies = {
 			{
 				"zigotica/telescope-docker-commands.nvim",
-        dependencies = {
-          'nvim-lua/plenary.nvim',
-          'nvim-telescope/telescope.nvim',
-        },
+				dependencies = {
+					"nvim-lua/plenary.nvim",
+					"nvim-telescope/telescope.nvim",
+				},
 				keys = {
 					{
 						"<leader>dc",
@@ -207,6 +207,22 @@ return {
 					},
 					{
 						mode = { "n" },
+						"<leader>mp",
+						function()
+							require("telescope.builtin").man_pages({
+								-- man_cmd = { "sh", "-c", "apropos . | sort | uniq" },
+                man_cmd = { "cat", os.getenv("HOME") .. "/.cache/telescope_man_list.txt" },
+                -- man_cmd = { "sh", "-c", "find /usr/share/man/man* -type f | sort | uniq" },
+								sections = { "ALL" },
+							})
+							-- require("telescope.builtin").man_pages({ section = "1" })
+							-- Snacks.picker.man({ section = { "1" } })
+              -- Snacks.picker.man()
+						end,
+						{ silent = true },
+					},
+					{
+						mode = { "n" },
 						-- "<leader>mp",
 						"mp",
 						"<cmd>lua require('recall').goto_prev()<CR>",
@@ -383,7 +399,7 @@ return {
 				"nvim-telescope/telescope-file-browser.nvim",
 				dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
 			},
-			{ "nvim-telescope/telescope-dap.nvim" },
+			-- { "nvim-telescope/telescope-dap.nvim" },
 			-- { "tom-anders/telescope-vim-bookmarks.nvim" },
 			{ "gbprod/yanky.nvim" },
 			-- { "Myzel394/jsonfly.nvim" },
@@ -524,7 +540,7 @@ return {
 				return
 			end
 
-			local telescope_image_preview = require("jg.custom.telescope").telescope_image_preview()
+			-- local telescope_image_preview = require("jg.custom.telescope").telescope_image_preview()
 
 			local actions = require("telescope.actions")
 			local actions_live_grep_args = require("telescope-live-grep-args.actions")
@@ -558,12 +574,17 @@ return {
 						-- file_previewer = file_previewer,
 						-- buffer_previewer_maker = M.buffer_previewer_maker,
 						-- file_previewer = telescope_image_preview.file_previewer,
-						buffer_previewer_maker = telescope_image_preview.buffer_previewer_maker,
+						-- buffer_previewer_maker = telescope_image_preview.buffer_previewer_maker,
 						-- buffer_previewer_maker = image_preview,
 						-- layout_strategy = 'bottom_pane',
 						-- layout_config = {
 						--   height = 0.53,
 						-- },
+
+
+
+            -- buffer_previewer_maker = telescope_image_preview.buffer_previewer_maker,
+
 
 						-- layout_strategy = "horizontal",
 						sorting_strategy = "ascending",
@@ -1075,7 +1096,7 @@ return {
 			--   telescope.load_extension("jsonfly")
 			-- end
 
-			telescope.load_extension("dap")
+			-- telescope.load_extension("dap")
 			telescope.load_extension("zf-native")
 			-- telescope.load_extension("ui-select")
 			telescope.load_extension("bookmarks")
@@ -1088,7 +1109,7 @@ return {
 			telescope.load_extension("recent_files")
 			telescope.load_extension("nx")
 			telescope.load_extension("docker_commands")
-      telescope.load_extension("git_file_history")
+			telescope.load_extension("git_file_history")
 			-- require("telescope").load_extension("persisted")
 			-- telescope.load_extension("jsonfly")
 			-- telescope.load_extension("media_files")

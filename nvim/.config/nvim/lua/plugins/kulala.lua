@@ -2,8 +2,10 @@ return {
 	{
 		"mistweaverco/kulala.nvim",
 		enabled = true,
+    branch = "develop",
 		ft = { "http", "rest" },
 		opts = {
+      default_env = "pre",
       lsp = {
         enable = true,
         filetypes = { "http", "rest", "json", "yaml", "bruno" },
@@ -30,7 +32,6 @@ return {
 				pickers = {
 					snacks = {
 						layout = {
-
 							layout = {
 								box = "vertical",
 								backdrop = false,
@@ -44,7 +45,7 @@ return {
 								{
 									box = "horizontal",
 									{ win = "list", border = "none" },
-									{ win = "preview", title = "{preview}", width = 0.35, border = "left" },
+									{ win = "preview", title = "{preview}", width = 0.45, border = "left" },
 								},
 							},
 						},
@@ -293,9 +294,9 @@ return {
 					ft = { "http", "rest" },
 				},
 				["Manage Auth Config"] = {
-					"<leader>kA",
+					"<leader>ka",
 					function()
-						require("lua.kulala.ui.auth_manager").open_auth_config()
+						require("kulala.ui.auth_manager").open_auth_config()
 					end,
 					ft = { "http", "rest" },
 				},

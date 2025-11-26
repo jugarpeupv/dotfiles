@@ -34,7 +34,8 @@ return {
 			{
 				mode = { "n" },
 				"<leader>os",
-				"<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open label:task type:issue repo:mapfre-tech/arch-mar2-mgmt<cr>",
+				-- "<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open label:task type:issue repo:mapfre-tech/arch-mar2-mgmt<cr>",
+        "<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open repo:mapfre-tech/arch-mar2-mgmt<cr>",
         -- ":Octo search assignee:GPJULI6_mapfre is:issue is:open repo:mapfre-tech/arch-mar2-mgmt",
 				{ noremap = true, silent = true },
 			},
@@ -59,7 +60,7 @@ return {
         search_static = true,
 				mappings = { -- mappings for the pickers
 					open_in_browser = { lhs = "<C-b>", desc = "open issue in browser" },
-					copy_url = { lhs = "<C-y>", desc = "copy url to system clipboard" },
+					copy_url = { lhs = "<C-p>", desc = "copy url to system clipboard" },
 					copy_sha = { lhs = "<C-n>", desc = "copy commit SHA to system clipboard" },
 					checkout_pr = { lhs = "<C-l>", desc = "checkout pull request" },
 					merge_pr = { lhs = "<C-r>", desc = "merge pull request" },

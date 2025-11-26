@@ -1,0 +1,135 @@
+compose bindings
+
+#              ungroup-attachment   ungroup 'multipart' attachment
+%              group-related        group tagged attachments as 'multipart/related'
+&              group-alternatives   group tagged attachments as 'multipart/alternative'
++              move-down            move an attachment down in the attachment list
+-              move-up              move an attachment up in the attachment list
+<Enter>        view-attach          view attachment using mailcap entry if necessary
+<Esc>e         edit-file            edit the file to be attached
+<Esc>f         edit-from            edit the from field
+<Esc>i         edit-content-id      edit the 'Content-ID' of the attachment
+<Esc>k         attach-key           attach a PGP public key
+<KeypadEnter>  view-attach          view attachment using mailcap entry if necessary
+<PageDown>     preview-page-down    show the next page of the message
+<PageUp>       preview-page-up      show the previous page of the message
+<Return>       view-attach          view attachment using mailcap entry if necessary
+A              attach-message       attach messages to this message
+C              copy-file            save message/attachment to a mailbox/file
+D              detach-file          delete the current entry
+E              edit-headers         edit the message with headers
+F              filter-entry         filter attachment through a shell command
+G              get-attachment       get a temporary copy of an attachment
+P              postpone-message     save this message to send later
+R              rename-file          rename/move an attached file
+S              smime-menu           show S/MIME options
+T              tag-entry            tag the current entry
+U              update-encoding      update an attachment's encoding info
+^              group-multilingual   group tagged attachments as 'multipart/multilingual'
+^D             toggle-disposition   toggle disposition between inline/attachment
+^E             edit-encoding        edit attachment transfer-encoding
+^F             forget-passphrase    wipe passphrases from memory
+^L             edit-language        edit the 'Content-Language' of the attachment
+^O             rename-attachment    send attachment with a different name
+^T             edit-type            edit attachment content type
+a              attach-file          attach files to this message
+b              edit-bcc             edit the BCC list
+c              edit-cc              edit the CC list
+d              edit-description     edit attachment description
+e              edit-message         edit the message
+f              edit-fcc             enter a file to save a copy of this message in
+h              display-toggle-weed  display message and toggle header weeding
+i              ispell               run ispell on the message
+l              print-entry          print the current entry
+m              edit-mime            edit attachment using mailcap entry
+n              new-mime             compose new attachment using mailcap entry
+o              autocrypt-menu       show autocrypt compose menu options
+p              pgp-menu             show PGP options
+q              exit                 exit this menu
+r              edit-reply-to        edit the Reply-To field
+s              edit-subject         edit the subject of this message
+t              edit-to              edit the TO list
+u              toggle-unlink        toggle whether to delete file after sending it
+w              write-fcc            write the message to a folder
+y              send-message         send the message
+|              pipe-entry           pipe message/attachment to a shell command
+
+generic bindings
+
+!              shell-escape         invoke a command in a subshell
+*              last-entry           move to the last entry
+/              search               search for a regular expression
+1              jump                 jump to an index number
+2              jump                 jump to an index number
+3              jump                 jump to an index number
+4              jump                 jump to an index number
+5              jump                 jump to an index number
+6              jump                 jump to an index number
+7              jump                 jump to an index number
+8              jump                 jump to an index number
+9              jump                 jump to an index number
+:              enter-command        enter a neomuttrc command
+;              tag-prefix           apply next function to tagged messages
+<              previous-line        scroll up one line
+<Down>         next-entry           move to the next entry
+<End>          last-entry           move to the last entry
+<Enter>        select-entry         select the current entry
+<Esc>/         search-reverse       search backwards for a regular expression
+<Home>         first-entry          move to the first entry
+<KeypadEnter>  select-entry         select the current entry
+<Left>         previous-page        move to the previous page
+<PageDown>     next-page            move to the next page
+<PageUp>       previous-page        move to the previous page
+<Return>       select-entry         select the current entry
+<Right>        next-page            move to the next page
+<Up>           previous-entry       move to the previous entry
+=              first-entry          move to the first entry
+>              next-line            scroll down one line
+?              help                 this screen
+H              top-page             move to the top of the page
+L              bottom-page          move to the bottom of the page
+M              middle-page          move to the middle of the page
+V              show-version         show the NeoMutt version number and date
+Z              previous-page        move to the previous page
+[              half-up              scroll up 1/2 page
+]              half-down            scroll down 1/2 page
+^L             redraw-screen        clear and redraw the screen
+j              next-entry           move to the next entry
+k              previous-entry       move to the previous entry
+n              search-next          search for next match
+t              tag-entry            tag the current entry
+z              next-page            move to the next page
+
+macros
+
+^B    call urlview to extract URLs out of a message
+<enter-command> set my_pipe_decode=$pipe_decode pipe_decode<Enter><pipe-message> urlview<Enter><enter-command> set pipe_decode=$my_pipe_decode; unset my_pipe_decode<Enter>
+
+<F1>  show NeoMutt documentation
+<shell-escape> less /opt/homebrew/Cellar/neomutt/20241002/share/doc/neomutt/manual.txt<Enter>
+
+<F2>  show NeoMutt documentation
+<shell-escape> less /opt/homebrew/Cellar/neomutt/20241002/share/doc/neomutt/manual.txt<Enter>
+
+
+unbound functions
+
+error-history        show log (and debug) messages
+edit-followup-to     edit the Followup-To field
+edit-newsgroups      edit the newsgroups list
+edit-x-comment-to    edit the X-Comment-To field
+toggle-recode        toggle recoding of this attachment
+view-mailcap         force viewing of attachment using mailcap
+view-pager           view attachment in pager using copiousoutput mailcap
+view-text            view attachment as text
+check-stats          calculate message statistics for all mailboxes
+current-bottom       move entry to bottom of screen
+current-middle       move entry to middle of screen
+  current-top          move entry to top of screen
+end-cond             end of conditional execution (noop)
+  jump                 jump to an index number
+  search-opposite      search for next match in opposite direction
+  show-log-messages    show log (and debug) messages
+  tag-prefix-cond      apply next function ONLY to tagged messages
+  what-key             display the keycode for a key press
+  attach-news-message  attach news articles to this message

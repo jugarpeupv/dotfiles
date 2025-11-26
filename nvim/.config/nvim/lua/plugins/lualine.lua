@@ -1,7 +1,7 @@
 -- return {}
 return {
 	"nvim-lualine/lualine.nvim",
-	enabled = false,
+	enabled = true,
 	-- event = "VeryLazy",
 	-- event = { "BufReadPost" },
 	ft = { "DiffviewFiles" },

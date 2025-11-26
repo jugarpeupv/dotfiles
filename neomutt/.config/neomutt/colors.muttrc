@@ -1,0 +1,174 @@
+# Formatting   ----------------------------------------------------------------------
+set date_format = "%a %d %h %H:%M"
+# set index_format="  %zc %zs %zt  | %-35.35L   %@attachment_info@  %?M10?~(%1M) ?%-30.100s %> %?Y?%Y ? %(!%a %d %h %H:%M)  "
+# Default:
+# set index_format="%4C %Z %{%b %d} %-15.15L (%<l?%4l&%4c>) %s"
+set index_format="%3.10Z  %-25.25L %-5.100s %<l?%4l&%4c> %> %(!%a %d %h %H:%M)"
+
+# set index_format="%zc %zs %zt  | %-35.35L %-30.100s %> %?Y?%Y? %(!%a %d %h %H:%M)  "
+# set pager_format="%n %T %s%*  %{!%d %b · %H:%M} %?X? %X?%P"
+# set status_format = " %D %?u? %u ?%?R? %R ?%?d? %d ?%?t? %t ?%?F? %F ?%?p? %p? \n  \n"
+# set compose_format="-- NeoMutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"
+# set vfolder_format = "%N %?n?%3n&   ?  %8m  · %f"
+# set attach_format = "%u%D  %T%-75.75d %?T?%&   ? %5s · %m/%M"
+set sidebar_format = '%D%?Z? [%Z]?%* %?S?%S?'
+# index-format-hook attachment_info '=B text/calendar ~X 1' '󰁦 '
+# index-format-hook attachment_info '=B text/calendar' "  "
+# index-format-hook attachment_info '~X 1' " 󰁦"
+# index-format-hook attachment_info '~A' "   "
+
+# General Colors   ------------------------------------------------------------------
+color normal default default                            # general text
+color error #F38BA8 default                            # error messages
+color message default default                           # messages at the bottom
+color prompt default default                            # prompt text
+color search #F38BA8 default                            # search highlight
+
+# Statusbar Colors   ----------------------------------------------------------------
+color status #B4BEFE default
+# color status #F5E0DC #BAC2DE '([a-zA-Z0-9\.,]|\[|\])(\s)'  # bubble content 1
+# color status #F5E0DC #BAC2DE '(\s)([a-zA-Z0-9\.,]|\[|\])'  # bubble content 2
+# color status #F5E0DC #BAC2DE '(\% )'                       # % symbol
+# color status #F5E0DC #BAC2DE '(\S)'                        # empty spaces
+# color status #BAC2DE default '(|)'                      # statusline "bubbles"
+# color status #74C7EC #BAC2DE '(\` )'                      # bubble account variation
+# color status #F5E0DC #74C7EC '([a-zA-Z0-9\.]+)( )'         # account text
+# color status #94E2D5 #BAC2DE ''                            # Unread messages count
+# color status #89B4FA #BAC2DE ''                             # Read messages count icon
+# color status #F5E0DC #BAC2DE ''                           # Flagged icon
+# color status #F38BA8 #BAC2DE ''                              # Pending delete icon
+
+# Index Colors   --------------------------------------------------------------------
+# color index default #103235 unread
+# color index default #103235 old
+color index_flags #B4BEFE default
+color index_size #F5C2E7 default
+color index_date #89ddff default
+color index_flags #94E2D5 default unread
+color index_flags #94E2D5 default  "~v~(~O)"        # collapsed thread with New
+color index_flags #94E2D5 default "~v~(~N)"        # collapsed thread with New
+color index_author #B4BEFE default
+# color index_flags #94E2D5 default new 
+# color index_flags #94E2D5 default old 
+color index #BAC2DE default '~R'                # read messages
+color index #BAC2DE default '~Q'                # messages which have been replied to
+color index_subject #F2CDCD default
+color index_collapsed #89B4FA default           # collapsed thread (message count text)
+# color index #CBA6F7 default '!~Q^~p'            # sent only to me and haven't been replied to
+# color index #94E2D5 default '~h X-Label..'     # messages with a complete label
+# color index #FAB387 default '~F'                # flagged messages
+# color index #FAB387 default '~F~N'              # flagged messages (new)
+# color index #F5E0DC default '~F~R'              # flagged messages (read)
+# color index #F38BA8 default '~D'                # deleted messages
+# color index #F38BA8 default '~D~N'              # deleted messages (new)
+# color index #EBA0AC default '~D~R'              # deleted messages (read)
+# color index #F5E0DC default '~T'                # tagged messages
+# color index #F5E0DC default '~T~N'              # tagged messages (new)
+# color index #FAB387 default '~T~R'              # tagged messages (read)
+# color tree  #BAC2DE default                       # thread tree lines/arrow
+color indicator default #394b70                  # selection indicator
+color index_label #FAB387 default                # label is always the same colour
+
+# Sidebar Colors   ------------------------------------------------------------------
+color sidebar_indicator #B4BEFE #394b70   # currently selected mailbox
+color sidebar_highlight default #526c96    # highlighted, but not open, mailbox.
+color sidebar_ordinary #BAC2DE default   # Color to give mailboxes by default
+color sidebar_divider #394b70 default      # divider between sidebar & content
+color sidebar_flagged default default         # mailboxes containing flagged mail
+color sidebar_new #94E2D5 default           # mailboxes containing new mail
+color sidebar_unread #94E2D5 default     # mailboxes containing unread mail
+# color sidebar_unread #94E2D5 default     # mailboxes containing unread mail
+
+# Message Headers   -----------------------------------------------------------------
+color hdrdefault #BAC2DE default
+
+# Message Body   --------------------------------------------------------------------
+
+# Attachments
+color attachment #BAC2DE default
+
+# Signature
+color signature #BAC2DE default
+
+# emails
+# color body  #F5E0DC default  '[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+'
+
+# hide "mailto" 
+color body  #F5E0DC #F5E0DC  '<mailto:[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+>'
+
+# URLs
+color body  #FAB387 default  '(https?|ftp)://[-\.,/%~_:?&=\#a-zA-Z0-9\+]+'
+
+# Dividers
+color body #BAC2DE default '(^[-_]*$)'
+
+# Important info in calendar invites
+color body #FAB387 default '^(Date\/Time|Location|Organiser|Invitees|Teams Meeting)(:| \~\~)'
+
+# Quotes
+color quoted		#F5E0DC		default
+color quoted1		#94E2D5	default
+color quoted2		#94E2D5	default
+color quoted3		#FAB387	default
+color quoted4		#F38BA8	default
+
+# Forward/reply headers
+color body #BAC2DE default '(^(To|From|Sent|Subject):.*)'
+
+# Patch syntax highlighting
+# color   body    #F5E0DC     default         '^[[:space:]].*'
+# color   body    #F5E0DC     default         ^(diff).*
+# color   body    #F5E0DC     default         ^[\-\-\-].*
+# color   body    #F5E0DC     default         ^[\+\+\+].*
+# color   body    #94E2D5     default         ^[\+].*
+# color   body    #F38BA8     default         ^[\-].*
+# color   body    #89DCEB     default         [@@].*
+# color   body    #94E2D5     default         ^(Signed-off-by).*
+# color   body    #F5E0DC     default         ^(Cc)
+# color   body    #F5E0DC     default         "^diff \-.*"
+# color   body    #F5E0DC     default         "^index [a-f0-9].*"
+# color   body    #89DCEB     default         "^---$"
+# color   body    #F5E0DC     default         "^\-\-\- .*"
+# color   body    #F5E0DC     default         "^[\+]{3} .*"
+# color   body    #94E2D5     default         "^[\+][^\+]+.*"
+# color   body    #F38BA8     default         "^\-[^\-]+.*"
+# color   body    #89DCEB     default         "^@@ .*"
+# color   body    #94E2D5     default         "LGTM"
+# color   body    #F5C2E7     default         "-- Commit Summary --"
+# color   body    #F5C2E7     default         "-- File Changes --"
+# color   body    #F5C2E7     default         "-- Patch Links --"
+# color   body    #94E2D5     default         "^Merged #.*"
+# color   body    #F38BA8     default         "^Closed #.*"
+# color   body    #89DCEB     default         "^Reply to this email.*"
+
+# Misc  -----------------------------------------------------------------------------
+
+# no addressed to me, to me, group, cc, sent by me, mailing list
+# Default: " +TCFLR"
+# set to_chars=" "
+set to_chars="   "
+
+# unchanged mailbox, changed, read only, attach mode
+set status_chars = " 󰦝󱘖"
+ifdef crypt_chars set crypt_chars = " "
+
+# tagged, flagged, marked for deletion, has attachments markded for deletion, the mail has been replied to, unread but seen, unread but not seen, mail thread is old, the mail thread is new
+# Default: "*!DdrONon- "
+# set flag_chars = ""
+set flag_chars = "--"
+
+# hide some tags
+# set hidden_tags = "unread,draft,flagged,passed,replied,attachment,signed,encrypted"
+tag-transforms "replied" "↻ "  \
+               "encrytpted" "" \
+               "signed" "" \
+               "attachment" "󰁦" \
+
+# The formats must start with 'G' and the entire sequence is case sensitive.
+tag-formats "replied" "GR" \
+            "encrypted" "GE" \
+            "signed" "GS" \
+            "attachment" "GA" \
+
+ # don't put '+' at the beginning of wrapped lines
+set markers=no

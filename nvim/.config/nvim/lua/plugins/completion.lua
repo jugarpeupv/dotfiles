@@ -105,11 +105,12 @@ return {
 					function(cmp)
 						local filetype = vim.bo.filetype
 						if filetype == "" then
-							-- vim.api.nvim_feedkeys(t("<CR>"), "n", true)
+              -- vim.api.nvim_feedkeys(t("<CR>"), "n", true)
 							vim.api.nvim_feedkeys(t("<CR>"), "n", false)
 							return
 						elseif cmp.is_menu_visible() and cmp.get_selected_item() then
 							return cmp.select_and_accept()
+              -- return cmp.select()
 						end
 					end,
 					"fallback",
@@ -202,7 +203,10 @@ return {
 				},
 				documentation = { window = { border = "rounded" }, auto_show = true },
 				menu = {
-					auto_show = true,
+          auto_show = true,
+					-- auto_show = function()
+					--        return vim.bo.filetype ~= 'codecompanion'
+					--      end,
 					border = "rounded",
 					draw = {
 						columns = {
@@ -281,6 +285,7 @@ return {
 						"git",
 						"lsp",
 						"path",
+            "buffer",
 						-- "emoji",
 						-- "nerdfont",
 						"conventional_commits",
@@ -317,6 +322,7 @@ return {
 											-- Your custom user list
 											local custom_users = {
 												"GPJULI6_mapfre",
+                        "RFERRA3_mapfre",
 												"GDMARI2_mapfre",
 												"ABENAV1_mapfre",
 												"VVILAS1_mapfre",

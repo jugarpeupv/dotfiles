@@ -1,0 +1,70 @@
+# An example configuration for vdirsyncer.
+#
+# Move it to ~/.vdirsyncer/config or ~/.config/vdirsyncer/config and edit it.
+# Run `vdirsyncer --help` for CLI usage.
+#
+# Optional parameters are commented out.
+# This file doesn't document all available parameters, see
+# http://vdirsyncer.pimutils.org/ for the rest of them.
+
+[general]
+# A folder where vdirsyncer can store some metadata about each pair.
+status_path = "~/.config/vdirsyncer/status/"
+
+# CARDDAV
+[pair izertis_contacts]
+# A `[pair <name>]` block defines two storages `a` and `b` that should be
+# synchronized. The definition of these storages follows in `[storage <name>]`
+# blocks. This is similar to accounts in OfflineIMAP.
+a = "izertis_contacts_local"
+b = "izertis_contacts_remote"
+
+# Synchronize all collections that can be found.
+# You need to run `vdirsyncer discover` if new calendars/addressbooks are added
+# on the server.
+
+collections = ["from a", "from b"]
+
+# Synchronize the "display name" property into a local file (~/.contacts/displayname).
+metadata = ["displayname"]
+
+# To resolve a conflict the following values are possible:
+#   `null` - abort when collisions occur (default)
+#   `"a wins"` - assume a's items to be more up-to-date
+#   `"b wins"` - assume b's items to be more up-to-date
+conflict_resolution = "b wins"
+
+[storage izertis_contacts_local]
+# A storage references actual data on a remote server or on the local disk.
+# Similar to repositories in OfflineIMAP.
+type = "filesystem"
+path = "~/.config/vdirsyncer/izertis_contacts_local/"
+fileext = ".vcf"
+
+[storage izertis_contacts_remote]
+type = "carddav"
+# url = "https://owncloud.example.com/remote.php/carddav/"
+url = "http://localhost:1080/users/julio.garcia@izertis.com/contacts/"
+username.fetch = ["command", "op", "item", "get", "u6k3e4k4gzbmxl76zbxphtutyi", "--field", "username", "--reveal"]
+password.fetch = ["command", "op", "item", "get", "u6k3e4k4gzbmxl76zbxphtutyi", "--field", "password", "--reveal"]
+
+# CALDAV
+[pair izertis_calendar]
+a = "izertis_calendar_local"
+b = "izertis_calendar_remote"
+collections = ["from a", "from b"]
+
+# Calendars also have a color property
+metadata = ["displayname", "color"]
+
+[storage izertis_calendar_local]
+type = "filesystem"
+path = "~/.config/vdirsyncer/izertis_calendar_local/"
+fileext = ".ics"
+
+[storage izertis_calendar_remote]
+type = "caldav"
+# url = "https://owncloud.example.com/remote.php/caldav/"
+url = "http://localhost:1080/users/julio.garcia@izertis.com/calendar/"
+username.fetch = ["command", "op", "item", "get", "u6k3e4k4gzbmxl76zbxphtutyi", "--field", "username", "--reveal"]
+password.fetch = ["command", "op", "item", "get", "u6k3e4k4gzbmxl76zbxphtutyi", "--field", "password", "--reveal"]
