@@ -1,9 +1,18 @@
 return {
 	"folke/snacks.nvim",
+	priority = 800,
 	enabled = true,
 	-- event = { "BufReadPost", "BufNewFile", "CmdlineEnter" },
 	event = { "BufReadPost", "BufNewFile" },
 	opts = {
+		image = {
+			doc = {
+				enabled = false
+			},
+			math = {
+				enabled = false,
+			},
+		},
 		-- input = {},
 		-- indent = {
 		--   animate = {
@@ -35,16 +44,13 @@ return {
 				vim.b.matchup_matchparen_fallback = 0
 
 				-- Snacks.util.wo(0, { foldmethod = "manual", statuscolumn = "", conceallevel = 0, number = false, relativenumber = false })
-				Snacks.util.wo(
-					0,
-					{
-						foldmethod = "manual",
-						statuscolumn = "",
-						conceallevel = 0,
-						relativenumber = false,
-						number = true,
-					}
-				)
+				Snacks.util.wo(0, {
+					foldmethod = "manual",
+					statuscolumn = "",
+					conceallevel = 0,
+					relativenumber = false,
+					number = true,
+				})
 				vim.b.minianimate_disable = true
 				vim.b.minihipatterns_disable = true
 				vim.schedule(function()
@@ -247,15 +253,84 @@ return {
 	},
 	keys = {
 		-- Top Pickers & Explorer
-		{ mode = { "n", "v" }, "<M-.>", "<cmd>lua vim.lsp.buf.code_action()<cr>", { silent = true } },
+		{
+			"<leader>ip",
+			function()
+				Snacks.picker.icons()
+			end,
+			desc = "Icons",
+		},
+		{
+			mode = { "c" },
+			"<C-r>",
+			function()
+				local cmd = vim.fn.getcmdline()
+				if cmd == "" then
+					vim.cmd("stopinsert")
+					vim.schedule(function()
+						Snacks.picker.command_history({ layout = { preview = false } })
+					end)
 
-    { mode = { "n", "v" }, "<leader>ht", function()
-      -- require("telescope.builtin").help_tags()
-      Snacks.picker.help()
-    end, { silent = true } },
+					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+				else
+					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+					-- vim.cmd("stopinsert")
+					Snacks.picker.command_history({ layout = { preview = false }, pattern = cmd })
+					-- vim.schedule(function()
+					--   Snacks.picker.command_history({ layout = { preview = false }, pattern = cmd })
+					--   -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+					-- end)
+
+					-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+					-- Fallback to default <C-r> behavior
+					-- return "<C-r>"
+				end
+			end,
+			{ silent = true },
+		},
+		{
+			mode = { "n", "t" },
+			"<M-p>",
+			function()
+				Snacks.picker.git_files()
+				-- require("telescope.builtin").find_files({
+				--   cwd = vim.loop.cwd(),
+				--   hidden = true,
+				--   shorten_path = false,
+				--   path_display = { "absolute" },
+				--   find_command = {
+				--     "rg",
+				--     "--files",
+				--     "--color",
+				--     "never",
+				--     "--glob=!.git",
+				--     "--glob=!*__template__",
+				--     "--glob=!*DS_Store",
+				--   },
+				-- })
+			end,
+			{ silent = true, noremap = true },
+		},
+		{ mode = { "n", "v" }, "<M-.>", "<cmd>lua vim.lsp.buf.code_action()<cr>", { silent = true } },
+		{
+			mode = { "n", "v" },
+			"<leader>ht",
+			function()
+				-- require("telescope.builtin").help_tags()
+				Snacks.picker.help()
+			end,
+			{ silent = true },
+		},
+		{
+			"<leader>au",
+			function()
+				Snacks.picker.autocmds()
+			end,
+			desc = "Smart Find Files",
+		},
 		{
 			-- "<leader><space>",
-      "<leader>Rs",
+			"<leader>rs",
 			function()
 				Snacks.picker.resume({
 					-- layout = {
@@ -265,17 +340,17 @@ return {
 			end,
 			desc = "Smart Find Files",
 		},
-		-- {
-		-- 	"<leader><space>",
-		-- 	function()
-		-- 		Snacks.picker.smart({
-		-- 			-- layout = {
-		-- 			-- 	preset = "ivy_split",
-		-- 			-- },
-		-- 		})
-		-- 	end,
-		-- 	desc = "Smart Find Files",
-		-- },
+		{
+			"<M-P>",
+			function()
+				Snacks.picker.smart({
+					-- layout = {
+					-- 	preset = "ivy_split",
+					-- },
+				})
+			end,
+			desc = "Smart Find Files",
+		},
 		{
 			"<leader>,",
 			function()
@@ -345,4 +420,22 @@ return {
 		-- },
 		-- search
 	},
+
+	config = function(_, opts)
+		require("snacks").setup(opts)
+		Snacks.util.icon = function(name, cat, opts)
+			-- Copy and modify from https://github.com/folke/snacks.nvim/blob/main/lua/snacks/util/init.lua#L120-L154
+			-- Example with `mini.icons`:
+			-- return require("mini.icons").get(cat or "file", name)
+      local basename = name
+      local ext = cat
+      if cat == "file" then
+        basename = vim.fn.fnamemodify(name, ":t")
+        -- ext = basename:match("%w%.(%w+)$")
+        ext = basename:match("%.(.+)$") -- matches everything after the first dot
+      end
+      return require("nvim-web-devicons").get_icon(basename, ext, { default = true })
+      -- return require("nvim-web-devicons").get_icon(name, cat or "file", opts)
+		end
+	end,
 }

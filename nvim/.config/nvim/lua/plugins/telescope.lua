@@ -208,16 +208,18 @@ return {
 					{
 						mode = { "n" },
 						"<leader>mp",
+
 						function()
 							require("telescope.builtin").man_pages({
 								-- man_cmd = { "sh", "-c", "apropos . | sort | uniq" },
-                man_cmd = { "cat", os.getenv("HOME") .. "/.cache/telescope_man_list.txt" },
-                -- man_cmd = { "sh", "-c", "find /usr/share/man/man* -type f | sort | uniq" },
+								man_cmd = { "cat", os.getenv("HOME") .. "/.cache/telescope_man_list.txt" },
+								-- man_cmd = { "sh", "-c", "find /usr/share/man/man* -type f | sort | uniq" },
 								sections = { "ALL" },
 							})
+
 							-- require("telescope.builtin").man_pages({ section = "1" })
 							-- Snacks.picker.man({ section = { "1" } })
-              -- Snacks.picker.man()
+							-- Snacks.picker.man()
 						end,
 						{ silent = true },
 					},
@@ -358,6 +360,7 @@ return {
 				cmd = { "UrlView" },
 				dependencies = {
 					"nvim-telescope/telescope.nvim",
+					"folke/snacks.nvim",
 				},
 				keys = {
 					{
@@ -581,10 +584,7 @@ return {
 						--   height = 0.53,
 						-- },
 
-
-
-            -- buffer_previewer_maker = telescope_image_preview.buffer_previewer_maker,
-
+						-- buffer_previewer_maker = telescope_image_preview.buffer_previewer_maker,
 
 						-- layout_strategy = "horizontal",
 						sorting_strategy = "ascending",
@@ -685,7 +685,7 @@ return {
 								["<C-t>"] = actions.select_tab,
 								-- ["<C-t>"] = trouble.open_with_trouble,
 								["<C-e>"] = open_with_trouble,
-								["<C-w>"] = require("telescope.actions.layout").toggle_preview,
+								["<C-b>"] = require("telescope.actions.layout").toggle_preview,
 								-- ["<C-t>"] = trouble.open_with_trouble,
 
 								-- ["<C-u>"] = actions.preview_scrolling_up,

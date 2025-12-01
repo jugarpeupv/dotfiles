@@ -162,6 +162,9 @@ return {
       {
         "zbirenbaum/copilot.lua"
       },
+      {
+        "folke/snacks.nvim"
+      },
 			{
 				"rachartier/tiny-inline-diagnostic.nvim",
 				enabled = false,

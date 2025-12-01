@@ -4,7 +4,6 @@ export BAT_THEME="ansi"
 # export TERM='alacritty'
 export TERM='xterm-kitty'
 export EDITOR=nvim
-export NOTMUCH_CONFIG="$HOME/.config/notmuch/config"
 export ESCDELAY=0
 # export PAGER='nvim -R'
 export MANPAGER='nvim +Man!'

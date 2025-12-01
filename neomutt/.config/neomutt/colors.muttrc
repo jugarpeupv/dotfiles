@@ -3,7 +3,7 @@ set date_format = "%a %d %h %H:%M"
 # set index_format="  %zc %zs %zt  | %-35.35L   %@attachment_info@  %?M10?~(%1M) ?%-30.100s %> %?Y?%Y ? %(!%a %d %h %H:%M)  "
 # Default:
 # set index_format="%4C %Z %{%b %d} %-15.15L (%<l?%4l&%4c>) %s"
-set index_format="%3.10Z  %-25.25L %-5.100s %<l?%4l&%4c> %> %(!%a %d %h %H:%M)"
+set index_format="%3.10Z  %-25.25L %-5.100s %<l?%4l&%4c> %> %(%d/%m/%Y %H:%M %a)"
 
 # set index_format="%zc %zs %zt  | %-35.35L %-30.100s %> %?Y?%Y? %(!%a %d %h %H:%M)  "
 # set pager_format="%n %T %s%*  %{!%d %b · %H:%M} %?X? %X?%P"

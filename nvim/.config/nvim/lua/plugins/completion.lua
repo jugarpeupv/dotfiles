@@ -281,7 +281,8 @@ return {
 					-- "conventional_commits",
 				},
 				per_filetype = {
-					["octo"] = {
+          ["codecompanion"] = {},
+          ["octo"] = {
 						"git",
 						"lsp",
 						"path",

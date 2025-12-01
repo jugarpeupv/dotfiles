@@ -705,7 +705,7 @@ return {
 				vim.keymap.set("n", "R", api_nvimtree.tree.reload, opts("Refresh"))
 				-- vim.keymap.set("n", "s", api_nvimtree.node.run.system, opts("Run System"))
 				vim.keymap.set("n", "gx", api_nvimtree.node.run.system, opts("Run System"))
-				vim.keymap.set("n", "z", api_nvimtree.tree.search_node, opts("Search"))
+				-- vim.keymap.set("n", "z", api_nvimtree.tree.search_node, opts("Search"))
 				-- vim.keymap.set("n", "U", api_nvimtree.tree.toggle_custom_filter, opts("Toggle Hidden"))
 				vim.keymap.set("n", "W", api_nvimtree.tree.collapse_all, opts("Collapse"))
 				vim.keymap.set("n", "x", api_nvimtree.fs.cut, opts("Cut"))

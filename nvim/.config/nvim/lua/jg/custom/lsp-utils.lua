@@ -17,30 +17,31 @@ M.attach_lsp_config = function(client, bufnr)
 	-- keymap.set("n", "gI", "<cmd>Lspsaga finder<CR>", opts)                  -- show definition, references
 	keymap.set("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts) -- got to declaration
 	-- keymap.set("n", "<leader>gD", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
-	keymap.set("n", "gd", function()
-    vim.lsp.buf.definition()
-    vim.cmd('normal! zz')
-  end, opts) -- see definition and make edits in window
+	-- keymap.set("n", "gd", function()
+	-- 	vim.lsp.buf.definition()
+	-- 	vim.cmd("normal! zz")
+	-- end, opts) -- see definition and make edits in window
 
-	-- vim.keymap.set({ "n" }, "gd", function()
-	--   require("telescope.builtin").lsp_definitions()
-	--   -- vim.schedule(function()
-	--   --   FeedKeys("zz", "n")
-	--   --   -- vim.api.nvim_feedkeys("zz", "n", true)
-	--   -- end)
-	-- end, { noremap = true, silent = true })
+	vim.keymap.set({ "n" }, "gd", function()
+		--   local params = vim.lsp.util.make_position_params(0, 'utf-8')
+		-- vim.lsp.buf_request(0, "textDocument/definition", params, function(_, result)
+		-- 	if result then
+		--       vim.lsp.util.show_document(result)
+		-- 		vim.cmd("normal! zz")
+		-- 	end
+		-- end)
+    Snacks.picker.lsp_definitions()
+	end, opts)
 
-  vim.keymap.set({ "n" }, "gv",function ()
-    vim.cmd("vsp")
-    vim.lsp.buf.definition()
-    vim.cmd('normal! zz')
-  end, opts)
+	vim.keymap.set({ "n" }, "gv", function()
+		vim.cmd("vsp")
+    Snacks.picker.lsp_definitions()
+	end, opts)
 
-  vim.keymap.set({ "n" }, "gs",function ()
-    vim.cmd("sp")
-    vim.lsp.buf.definition()
-    vim.cmd('normal! zz')
-  end, opts)
+	vim.keymap.set({ "n" }, "gs", function()
+		vim.cmd("sp")
+    Snacks.picker.lsp_definitions()
+	end, opts)
 
 	-- vim.keymap.set({ "n" }, "gv", function()
 	--   require("telescope.builtin").lsp_definitions({ jump_type = "vsplit" })
@@ -71,7 +72,7 @@ M.attach_lsp_config = function(client, bufnr)
 		-- vim.lsp.buf.references({ context = {
 		-- 	includeDeclaration = false,
 		-- } })
-    vim.lsp.buf.references()
+		vim.lsp.buf.references()
 	end, opts)
 	-- keymap.set("n", "<leader>fo", "<cmd>lua vim.lsp.buf.format({ async = true})<cr>", opts)
 	keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
@@ -240,9 +241,9 @@ M.get_gh_actions_init_options = function(org, workspace_path, session_token)
 	workspace_path = workspace_path or vim.fn.getcwd()
 	session_token = session_token or os.getenv("GH_ACTIONS_PAT")
 
-  if not session_token then
-    return
-  end
+	if not session_token then
+		return
+	end
 
 	local function get_repo_name()
 		local handle = io.popen("git remote get-url origin 2>/dev/null")
@@ -262,12 +263,12 @@ M.get_gh_actions_init_options = function(org, workspace_path, session_token)
 	end
 	local repo_name = get_repo_name()
 
-  if not repo_name then
-    return {
-      sessionToken = session_token,
-      repos = {},
-    }
-  end
+	if not repo_name then
+		return {
+			sessionToken = session_token,
+			repos = {},
+		}
+	end
 
 	local repo_info = fetch_github_repo(repo_name, session_token, org, workspace_path)
 	return {

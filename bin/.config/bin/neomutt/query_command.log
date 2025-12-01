@@ -1,0 +1,98 @@
+2025-11-27 11:32:03 QUERY=""
+2025-11-27 11:32:08 QUERY="rpa"
+2025-11-27 11:32:11 QUERY=""
+2025-11-27 11:32:17 QUERY="luq"
+2025-11-27 11:35:59 QUERY=mapfre|izertis
+2025-11-27 11:35:59 CMD=notmuch address --output=sender --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:36:00 QUERY=mapfre|izertis
+2025-11-27 11:36:00 CMD=notmuch address --output=sender --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:36:02 QUERY=rpa
+2025-11-27 11:36:02 CMD=notmuch address --output=sender --deduplicate=address from:/rpa/
+2025-11-27 11:36:05 QUERY=mapfre|izertis
+2025-11-27 11:36:05 CMD=notmuch address --output=sender --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:36:15 QUERY=rpa
+2025-11-27 11:36:15 CMD=notmuch address --output=sender --deduplicate=address from:/rpa/
+2025-11-27 11:38:22 QUERY=mapfre|izertis
+2025-11-27 11:38:22 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:38:23 QUERY=mapfre|izertis
+2025-11-27 11:38:23 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:38:23 QUERY=mapfre|izertis
+2025-11-27 11:38:23 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:38:23 QUERY=mapfre|izertis
+2025-11-27 11:38:23 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:38:25 QUERY=rpa
+2025-11-27 11:38:25 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/rpa/
+2025-11-27 11:38:26 QUERY=rpa
+2025-11-27 11:38:26 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/rpa/
+2025-11-27 11:38:26 QUERY=rpa
+2025-11-27 11:38:26 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/rpa/
+2025-11-27 11:38:26 QUERY=rpa
+2025-11-27 11:38:26 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/rpa/
+2025-11-27 11:38:27 QUERY=rpa
+2025-11-27 11:38:27 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/rpa/
+2025-11-27 11:38:27 QUERY=rpa
+2025-11-27 11:38:27 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/rpa/
+2025-11-27 11:38:51 QUERY=rpa
+2025-11-27 11:38:51 CMD=notmuch address --output=sender --format=text0 --deduplicate=address from:/rpa/
+2025-11-27 11:39:07 QUERY=mapfre|izertis
+2025-11-27 11:39:07 CMD=notmuch address --output=sender --format=sexp --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:39:07 QUERY=mapfre|izertis
+2025-11-27 11:39:07 CMD=notmuch address --output=sender --format=sexp --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:39:09 QUERY=rpa
+2025-11-27 11:39:09 CMD=notmuch address --output=sender --format=sexp --deduplicate=address from:/rpa/
+2025-11-27 11:39:12 QUERY=mapfre|izertis
+2025-11-27 11:39:12 CMD=notmuch address --output=sender --format=sexp --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:39:16 QUERY=luq
+2025-11-27 11:39:16 CMD=notmuch address --output=sender --format=sexp --deduplicate=address from:/luq/
+2025-11-27 11:39:17 QUERY=luq
+2025-11-27 11:39:17 CMD=notmuch address --output=sender --format=sexp --deduplicate=address from:/luq/
+2025-11-27 11:39:17 QUERY=luq
+2025-11-27 11:39:17 CMD=notmuch address --output=sender --format=sexp --deduplicate=address from:/luq/
+2025-11-27 11:39:18 QUERY=luq
+2025-11-27 11:39:18 CMD=notmuch address --output=sender --format=sexp --deduplicate=address from:/luq/
+2025-11-27 11:39:18 QUERY=luq
+2025-11-27 11:39:18 CMD=notmuch address --output=sender --format=sexp --deduplicate=address from:/luq/
+2025-11-27 11:39:18 QUERY=luq
+2025-11-27 11:39:18 CMD=notmuch address --output=sender --format=sexp --deduplicate=address from:/luq/
+2025-11-27 11:40:09 QUERY=mapfre|izertis
+2025-11-27 11:40:09 CMD=notmuch address --output=sender --format=text --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:40:10 QUERY=mapfre|izertis
+2025-11-27 11:40:10 CMD=notmuch address --output=sender --format=text --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:40:10 QUERY=mapfre|izertis
+2025-11-27 11:40:10 CMD=notmuch address --output=sender --format=text --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:40:10 QUERY=mapfre|izertis
+2025-11-27 11:40:10 CMD=notmuch address --output=sender --format=text --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:40:10 QUERY=mapfre|izertis
+2025-11-27 11:40:10 CMD=notmuch address --output=sender --format=text --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:40:10 QUERY=mapfre|izertis
+2025-11-27 11:40:10 CMD=notmuch address --output=sender --format=text --deduplicate=address from:/mapfre|izertis/
+2025-11-27 11:40:12 QUERY=rpa
+2025-11-27 11:40:12 CMD=notmuch address --output=sender --format=text --deduplicate=address from:/rpa/
+2025-11-27 11:41:03 QUERY=mapfre|izertis
+2025-11-27 11:41:03 CMD=notmuch address --output=sender --format=text --deduplicate=address 'from:/mapfre|izertis/'
+2025-11-27 11:41:11 QUERY=rpa
+2025-11-27 11:41:11 CMD=notmuch address --output=sender --format=text --deduplicate=address 'from:/rpa/'
+2025-11-27 11:42:26 QUERY=mapfre|izertis
+2025-11-27 11:42:26 CMD=notmuch address 'from:/mapfre|izertis/'
+2025-11-27 11:42:30 QUERY=rpa
+2025-11-27 11:42:30 CMD=notmuch address 'from:/rpa/'
+2025-11-27 11:42:43 QUERY=luq
+2025-11-27 11:42:43 CMD=notmuch address 'from:/luq/'
+2025-11-27 11:43:16 QUERY=rpa
+2025-11-27 11:43:16 CMD=notmuch address 'from:/rpa/'
+2025-11-27 11:46:55 QUERY=rpa
+2025-11-27 11:46:55 CMD=notmuch address 'from:/rpa/'
+2025-11-27 11:47:05 QUERY=luq
+2025-11-27 11:47:05 CMD=notmuch address 'from:/luq/'
+2025-11-27 11:47:14 QUERY=rpa
+2025-11-27 11:47:14 CMD=notmuch address 'from:/rpa/'
+2025-11-27 11:47:27 QUERY=gdmari
+2025-11-27 11:47:27 CMD=notmuch address 'from:/gdmari/'
+2025-11-27 20:56:50 QUERY=rpa
+2025-11-27 20:56:51 CMD=notmuch address 'from:/rpa/'
+2025-11-27 20:57:07 QUERY=jugarp
+2025-11-27 20:57:07 CMD=notmuch address 'from:/jugarp/'
+2025-11-27 21:01:09 QUERY=jugarpe
+2025-11-27 21:01:09 CMD=notmuch address 'from:/jugarpe/'
+2025-11-27 21:03:04 QUERY=jugarpe
+2025-11-27 21:03:04 CMD=notmuch address 'from:/jugarpe/'

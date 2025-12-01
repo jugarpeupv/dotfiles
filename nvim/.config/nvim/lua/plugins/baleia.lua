@@ -14,13 +14,24 @@ return {
 				end,
 			})
 
-			vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-				pattern = "*-tmux-logs",
-				callback = function()
-					vim.g.baleia.once(vim.fn.bufnr(vim.fn.expand("%")))
-				end,
-			})
+      -- Command to colorize the current buffer
+      vim.api.nvim_create_user_command("BaleiaColorize", function()
+        vim.g.baleia.once(vim.api.nvim_get_current_buf())
+      end, { bang = true })
 
+			-- vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+			-- 	pattern = "*-tmux-logs",
+			-- 	callback = function()
+			-- 		vim.g.baleia.once(vim.fn.bufnr(vim.fn.expand("%")))
+			-- 	end,
+			-- })
+			--
+			--    vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+			--      pattern = "tmux-logs",
+			--      callback = function()
+			--        vim.g.baleia.once(vim.fn.bufnr(vim.fn.expand("%")))
+			--      end,
+			--    })
 
 			-- vim.api.nvim_create_autocmd("User", {
 			--   pattern = "TelescopePreviewerLoaded",

@@ -1,5 +1,5 @@
 # HTML
-text/html; w3m -I %{charset} -T text/html; copiousoutput;
+# text/html; w3m -I %{charset} -T text/html; copiousoutput;
 text/plain; nvim %s
 
 #PDFs
@@ -8,3 +8,27 @@ application/pdf; /opt/homebrew/bin/zathura %s pdf
 #Images
 image/png; /opt/homebrew/bin/feh %s
 image/jpeg; /opt/homebrew/bin/feh %s
+
+
+# open html emails in browser (or whatever GUI program is used to render HTML)
+text/html; open %s ; nametemplate=%s.html
+# render html emails inline using magic (uncomment the line below to use lynx instead)
+text/html; lynx -assume_charset=%{charset} -display_charset=utf-8 -collapse_br_tags -dump %s; nametemplate=%s.html; copiousoutput
+# text/html; beautiful_html_render %s; nametemplate=%s.html; copiousoutput;
+
+# show calendar invites
+text/calendar; render-calendar-attachment.py %s; copiousoutput;
+application/ics; mutt-viewical; copiousoutput;
+
+# open images externally
+image/*; open %s ;
+
+# open videos in mpv
+# video/*; mpv --autofit-larger=90\%x90\% %s; needsterminal;
+# video/*; setsid mpv --quiet %s &; copiousoutput
+
+# open spreadsheets in sc-im
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; sc-im %s; needsterminal
+
+# open anything else externally
+# application/pdf; openfile %s;

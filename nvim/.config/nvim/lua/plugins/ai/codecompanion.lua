@@ -1,5 +1,6 @@
 return {
 	"olimorris/codecompanion.nvim",
+	tag = "v17.33.0",
 	enabled = function()
 		local is_headless = #vim.api.nvim_list_uis() == 0
 		if is_headless then
@@ -10,22 +11,8 @@ return {
 	dependencies = {
 		"ravitemer/codecompanion-history.nvim",
 		"franco-ruggeri/codecompanion-spinner.nvim",
-		"nvim-lua/plenary.nvim",
-		"ravitemer/mcphub.nvim",
-		"nvim-treesitter/nvim-treesitter",
-		-- "hrsh7th/nvim-cmp", -- Optional: For using slash commands and variables in the chat buffer
-		{
-			"echasnovski/mini.diff",
-      enabled = false,
-			config = function()
-				local diff = require("mini.diff")
-				diff.setup({
-					-- Disabled by default
-					source = diff.gen_source.none(),
-				})
-			end,
-		},
-		"nvim-telescope/telescope.nvim", -- Optional: For using slash commands
+		{ "nvim-lua/plenary.nvim", branch = "master" },
+		"folke/snacks.nvim",
 		{ "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } }, -- Optional: For prettier markdown rendering
 		-- { "stevearc/dressing.nvim", opts = {} }, -- Optional: Improves `vim.ui.select`
 	},
@@ -87,12 +74,12 @@ return {
 						-- Number of days after which chats are automatically deleted (0 to disable)
 						expiration_days = 100,
 						-- Picker interface ("telescope" or "snacks" or "fzf-lua" or "default")
-						picker = "telescope",
+						picker = "snacks",
 						-- Automatically generate titles for new chats
 						auto_generate_title = true,
 						---On exiting and entering neovim, loads the last chat on opening chat
-						continue_last_chat = true,
-						---When chat is cleared with `gx` delete the chat from history
+						continue_last_chat = false,
+						---When chat is cleared with `cl` delete the chat from history
 						delete_on_clearing_chat = true,
 						---Directory path to save the chats
 						dir_to_save = vim.fn.stdpath("data") .. "/codecompanion-history",
@@ -111,17 +98,58 @@ return {
 
 			strategies = {
 				chat = {
+					slash_commands = {
+						["image"] = {
+							opts = {
+								dirs = { os.getenv("HOME") .. "/Documents", os.getenv("HOME") .. "/Downloads" },
+								provider = "snacks", -- telescope|fzf_lua|mini_pick|snacks|default
+							},
+							keymaps = {
+								modes = {
+                  i = "<C-g>",
+                  n = { "<C-g>", "gi" },
+								},
+							},
+						},
+						["buffer"] = {
+							keymaps = {
+								modes = {
+									i = "<C-b>",
+									n = { "<C-b>", "gb" },
+								},
+							},
+						},
+					},
 					tools = {
 						groups = {
+							["fagent"] = {
+								description = "A custom agent combining tools",
+								tools = {
+									"full_stack_dev",
+									"memory",
+									"next_edit_suggestion",
+								},
+								opts = {
+									collapse_tools = true, -- When true, show as a single group reference instead of individual tools
+								},
+							},
+
 							["agentic"] = {
 								description = "A custom agent combining tools",
 								tools = {
-									"create_file",
-									"read_file",
-									"insert_edit_into_file",
 									"cmd_runner",
-									"web_search",
+									"create_file",
+									"delete_file",
+									"fetch_webpage",
+									"file_search",
+									"get_changed_files",
 									"grep_search",
+									"insert_edit_into_file",
+									"list_code_usages",
+									"memory",
+									"next_edit_suggestion",
+									"read_file",
+									"web_search",
 								},
 								opts = {
 									collapse_tools = true, -- When true, show as a single group reference instead of individual tools
@@ -130,16 +158,20 @@ return {
 						},
 						opts = {
 							default_tools = {
+								"memory",
+								"web_search",
+								"fetch_webpage",
+								"full_stack_dev",
 								"github",
 								"tavily",
 								"nx",
-								"agentic",
+								"neovim",
 							},
 							-- default_tools = {
 							--   "agentic"
 							-- },
-							auto_submit_errors = true, -- Send any errors to the LLM automatically?
-							auto_submit_success = true, -- Send any successful output to the LLM automatically?
+              auto_submit_errors = false, -- Send any errors to the LLM automatically?
+              auto_submit_success = false, -- Send any successful output to the LLM automatically?
 						},
 					},
 					keymaps = {
@@ -220,12 +252,13 @@ return {
 					},
 				},
 				chat = {
-          icons = {
-            -- chat_context = "📎️", -- You can also apply an icon to the fold
-            chat_fold = " ",
-          },
-          fold_reasoning = true,
-          fold_context = false,
+					-- icons = {
+					-- 	chat_context = "📎️", -- You can also apply an icon to the fold
+					-- 	chat_fold = " ",
+					-- },
+					fold_reasoning = false,
+          show_reasoning = true,
+					fold_context = false,
 					auto_scroll = false,
 					show_header_separator = true, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
 					start_in_insert_mode = false,
@@ -247,8 +280,8 @@ return {
 							foldcolumn = "0",
 							linebreak = true,
 							list = false,
-              number = false,
-              relativenumber = false,
+							number = false,
+							relativenumber = false,
 							signcolumn = "no",
 							spell = false,
 							wrap = true,
@@ -268,13 +301,26 @@ return {
 		-- 	desc = "Toggle Copilot",
 		-- },
 		-- { mode = { "n", "v", "t" }, "<M-m>", "<cmd>CodeCompanionChat Toggle<CR>" },
-    { mode = { "n", "v", "t" }, "<M-m>", function ()
-      vim.cmd("CodeCompanionChat Toggle")
-      vim.schedule(function ()
-        vim.cmd('normal! zz')
-      end)
-    end },
+		{
+			mode = { "n", "v", "t" },
+			"<M-m>",
+			function()
+				vim.cmd("CodeCompanionChat Toggle")
+				-- vim.cmd("normal! zz")
+				-- vim.schedule(function ()
+				--   vim.cmd('normal! zz')
+				-- end)
+			end,
+		},
 		-- { mode = { "n", "v" }, "<leader>ca", "<cmd>CodeCompanionChat Toggle<CR>" },
-		{ mode = { "v" }, "ga", "<cmd>CodeCompanionChat Add<CR>" },
+		-- { mode = { "v" }, "ga", "<cmd>CodeCompanionChat Add<CR>" },
+		{
+			mode = { "v" },
+			"ga",
+			function()
+				vim.cmd("CodeCompanionChat Add")
+				vim.cmd("normal! zz")
+			end,
+		},
 	},
 }

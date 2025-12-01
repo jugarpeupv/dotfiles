@@ -1,0 +1,396 @@
+#!/Users/jgarcia/.config/neomutt/python-envs/neomutt/bin/python
+
+import datetime
+import os
+import re
+import sys
+import textwrap
+import zoneinfo
+
+import icalendar  # https://pypi.python.org/pypi/icalendar
+import tzlocal    # https://pypi.python.org/pypi/tzlocal
+
+TIME_FORMAT = '%-I:%M %P'
+DATE_FORMAT = '%A, %B %-d, %Y'
+DATETIME_FORMAT = "%s %s" % (DATE_FORMAT, TIME_FORMAT)
+
+FREQ_UNITS = {
+    'SECONDLY': 'second',
+    'MINUTELY': 'minute',
+    'HOURLY': 'hour',
+    'DAILY': 'day',
+    'WEEKLY': 'week',
+    'MONTHLY': 'month',
+    'YEARLY': 'year',
+}
+DAY_NAMES = {
+    'SU': 'Sunday',
+    'MO': 'Monday',
+    'TU': 'Tuesday',
+    'WE': 'Wednesday',
+    'TH': 'Thursday',
+    'FR': 'Friday',
+    'SA': 'Saturday',
+}
+MONTH_NAMES = {
+    1: 'January',
+    2: 'February',
+    3: 'March',
+    4: 'April',
+    5: 'May',
+    6: 'June',
+    7: 'July',
+    8: 'August',
+    9: 'September',
+    10: 'October',
+    11: 'November',
+    12: 'December',
+}
+
+# Get local timezone.  Use TZ environment variable if present, otherwise use
+# the tzlocal module to figure it out.
+def get_local_timezone():
+    if 'TZ' in os.environ:
+        return zoneinfo.ZoneInfo(os.environ['TZ'])
+    else:
+        return tzlocal.get_localzone()
+
+
+def ordinal(integer):
+    """Converts an integer (e.g. "5") into an ordinal (e.g. "5th")."""
+    # Handle negative numbers separately
+    if integer < 0:
+        if integer == -1:
+            return "last"
+        if integer == -2:
+            return "penultimate"
+        else:
+            # FIXME: COuld probably have better wording here.
+            return "-" + ordinal(abs(integer))
+    # *Most* suffixes are based on the last digit of the number:
+    #  * 1st
+    #  * 2nd
+    #  * 3rd
+    #  * 0th, 4th–9th
+    # The three exceptions are: 11th, 12th, 13th
+    # other digits (hundreds, ten hundreds, etc.) don't make a difference.
+    if integer // 10 % 10 == 1:
+        return '{}th'.format(integer)
+    elif integer % 10 == 1:
+        return '{}st'.format(integer)
+    elif integer % 10 == 2:
+        return '{}nd'.format(integer)
+    elif integer % 10 == 3:
+        return '{}rd'.format(integer)
+    else:
+        return '{}th'.format(integer)
+
+def comma_list(items):
+    if len(items) == 1:
+        return items[0]
+    elif len(items) == 2:
+        return '{} and {}'.format(*items)
+    elif len(items) >= 3:
+        return '{}, and {}'.format(', '.join(items[:-1]), items[-1])
+
+def get_dtend(event):
+    if 'DTEND' in event:
+        return event['DTEND'].dt
+    else:
+        return None
+
+def localize(dt):
+    """Take a datetime in an arbitrary timezone and return it in the local
+    timezone."""
+    tz = get_local_timezone()
+    if dt.tzinfo:
+        return dt.astimezone(tz)
+    else:
+        return dt.replace(tzinfo=tz)
+
+def format_time(dt):
+    dtlocal = localize(dt)
+    fmt = dtlocal.strftime(TIME_FORMAT)
+    if fmt == '12:00 pm':
+        return 'noon'
+    elif fmt == '12:00 am':
+        return 'midnight'
+    else:
+        return fmt
+
+def format_date(dt):
+    if isinstance(dt, datetime.datetime):
+        dtlocal = localize(dt)
+    else:
+        dtlocal = dt
+    return dtlocal.strftime(DATE_FORMAT)
+
+def format_datetime(dt):
+    return '{} at {}'.format(format_date(dt), format_time(dt))
+
+def format_date_or_datetime(dt):
+    if isinstance(dt, datetime.datetime):
+        return format_datetime(dt)
+    else:
+        return format_date(dt)
+
+def format_person(person):
+    if 'ROLE' in person.params:
+        role = person.params['ROLE']
+        if role == 'CHAIR':
+            status_tpl = '{%s} '
+        elif role == 'REQ-PARTICIPANT':
+            status_tpl = '[%s] '
+        elif role == 'OPT-PARTICIPANT':
+            status_tpl = '<%s> '
+        elif role == 'NON-PARTICIPANT':
+            status_tpl = '(%s) '
+        else:
+            status_tpl = '?%s? '
+    else:
+        status_tpl = '_%s_ '
+    if 'PARTSTAT' in person.params:
+        status = person.params['PARTSTAT']
+        if status == 'NEEDS-ACTION':
+            display_status = status_tpl % ' '
+        elif status == 'ACCEPTED':
+            display_status = status_tpl % 'Y'
+        elif status == 'DECLINED':
+            display_status = status_tpl % '-'
+        elif status == 'TENTATIVE':
+            display_status = status_tpl % '~'
+        else:
+            display_status = status_tpl % '?'
+    else:
+        display_status = ''
+
+    email_address = re.sub('mailto:', '', person, flags=re.I)
+    if 'CN' in person.params:
+        # Sometimes programs will reuse the person's email address as the CN if
+        # they don't have a better value to use.  We'll strip that out, since
+        # it's kind of redundant.  The regex is nessary to catch cases where the
+        # email address is placed within quotes.
+        if re.search('^[\'"]?%s[\'"]?$' % re.escape(email_address), person.params['CN']):
+            display_name = email_address
+        else:
+            display_name = '%s <%s>' % (person.params['CN'], email_address)
+    else:
+        display_name = email_address
+    return display_status + display_name
+
+def format_recur_bymonth(monthnum):
+    if monthnum not in MONTH_NAMES:
+        return '[ERROR: failed to parse "BYMONTH={}"]'.format(monthnum)
+    return MONTH_NAMES[monthnum]
+
+def format_recur_bymonthday(monthdaynum):
+    return ordinal(monthdaynum)
+
+def format_recur_byday(weekdaynum):
+    match = re.search(r'^([+-]?\d*)(..)$', weekdaynum)
+    if match is None or match.group(2) not in DAY_NAMES:
+        return '[ERROR: failed to parse "BYDAY={}"]'.format(weekdaynum)
+    day = DAY_NAMES[match.group(2)]
+    if match.group(1) is None or match.group(1) == "":
+        return day
+    nth = ordinal(int(match.group(1)))
+    return 'the {} {}'.format(nth, day)
+
+def format_rrule(rrule):
+    interval = ""
+    freq = ""
+    days = ""
+    count = ""
+    until = ""
+
+    if 'INTERVAL' in rrule:
+        try:
+            interval_num = int(rrule['INTERVAL'][0])
+            if interval_num == 1:
+                interval = ''
+            elif interval_num == 2:
+                interval = 'other '
+            else:
+                interval = ordinal(interval_num) + ' '
+        except ValueError:
+            interval = rrule['INTERVAL'][0]
+    if 'FREQ' in rrule:
+        if rrule['FREQ'][0] in FREQ_UNITS:
+            freq_unit = FREQ_UNITS[rrule['FREQ'][0]]
+            freq = 'Every %s%s' % (interval, freq_unit)
+        else:
+            freq_unit = rrule['FREQ'][0][:-2].lower()
+            freq = '%s, with an interval of %s' % (rrule['FREQ'][0], rrule['INTERVAL'])
+    else:
+        freq_unit = 'interval'
+        freq = 'Every <unknown interval>'
+    if 'BYDAY' in rrule:
+        days = 'on ' + comma_list([format_recur_byday(d) for d in rrule['BYDAY']])
+    if 'BYMONTH' in rrule:
+        monthname = comma_list([format_recur_bymonth(d) for d in rrule['BYMONTH']])
+    else:
+        monthname = 'the month'
+    if 'BYMONTHDAY' in rrule:
+        if days == '':
+            days = 'on '
+        else:
+            days += '; and '
+        days += 'the ' \
+            + comma_list([format_recur_bymonthday(d) for d in rrule['BYMONTHDAY']]) \
+            + ' of ' \
+            + monthname
+    elif 'BYMONTH' in rrule:
+        if days != '':
+            days += ' '
+        days += 'in ' + monthname
+    if 'COUNT' in rrule:
+        count = 'for %s %s' % (rrule['COUNT'][0], freq_unit + 's')
+    if 'UNTIL' in rrule:
+        if isinstance(rrule['UNTIL'][0], datetime.datetime):
+            until = "until %s" % format_datetime(rrule['UNTIL'][0])
+        else:
+            until = "until %s" % format_date(rrule['UNTIL'][0])
+
+    return ' '.join([x for x in [freq, days, count, until] if (x and len(x) > 0)])
+
+def get_display_columns():
+    if 'COLUMNS' in os.environ:
+        return int(os.environ['COLUMNS'])
+    if 'TERMCAP' in os.environ:
+        termcap = os.environ['TERMCAP']
+        tc_fields = termcap.split(':')
+        col_fields = [f for f in tc_fields if f.startswith('co#')]
+        if len(col_fields) == 1:
+            return int(col_fields[0].split('#')[1])
+    return 80
+
+
+def main():
+    try:
+        cal = icalendar.Calendar.from_ical(sys.stdin.read())
+    except ValueError as e:
+        print('Unable to parse iCalendar file:', str(e), file=sys.stderr)
+        exit(1)
+    if 'METHOD' in cal:
+        if cal['METHOD'] == 'PUBLISH':
+            print('=== Publication ===')
+        elif cal['METHOD'] == 'REQUEST':
+            print('=== Reply Requested ===')
+        elif cal['METHOD'] == 'REPLY':
+            print('=== Response to Earlier Request ===')
+        elif cal['METHOD'] == 'ADD':
+            print('=== Request to Add a Calendar Entry ===')
+        elif cal['METHOD'] == 'CANCEL':
+            print('=== Cancellation ===')
+        elif cal['METHOD'] == 'REFRESH':
+            print('=== Request for Updated Information ===')
+        elif cal['METHOD'] == 'COUNTER':
+            print('=== Response to Earlier Request with Changes ===')
+        elif cal['METHOD'] == 'DECLINECOUNTER':
+            print('=== Denial of Request for Changes to Earlier Proposal ===')
+        print()
+
+    for event in cal.subcomponents:
+        if event.name == 'VEVENT':
+            if 'CLASS' in event and event['CLASS'] != 'PUBLIC':
+                print("Classification: %s" % event['CLASS'])
+            if 'STATUS' in event and event['STATUS'] != 'CONFIRMED':
+                print("Status:    %s" % event['STATUS'])
+            if 'ORGANIZER' in event:
+                print("Organizer: %s" % format_person(event['ORGANIZER']))
+            if 'SUMMARY' in event:
+                print("Event:     %s" % event['SUMMARY'])
+            elif 'UID' in event:
+                print('UID:       %s' % event['UID'])
+
+            if 'DTSTART' in event:
+                dtstart = event['DTSTART'].dt
+                dtend = get_dtend(event)
+                if isinstance(dtstart, datetime.datetime):
+                    # We have time information.
+                    if dtend:
+                        # We have an end date and time.
+                        if dtstart.date() == dtend.date():
+                            # Start end end times are on the same day.
+                            # This is a common occurence, so let's format things in a
+                            # friendly way.
+                            print("Date:      %s" % format_date(dtstart))
+                            print("Starts:    %s" % format_time(dtstart))
+                            print("Ends:      %s" % format_time(dtend))
+                        else:
+                            # Start and end times are on different days.
+                            print("Starts:    %s" % format_datetime(dtstart))
+                            print("Ends:      %s" % format_datetime(dtend))
+                    else:
+                        # No end date/time.
+                        print("Starts:    %s" % format_datetime(dtstart))
+                else:
+                    # We have no time information.
+                    if dtend and dtstart != dtend:
+                        # There's an end date and it's different from the start date.
+                        print("Starts:    %s" % format_date(dtstart))
+                        print("Ends:      %s" % format_date(dtend))
+                    else:
+                        # Either starts and ends on the same day or there's no end date.
+                        print("Date:      %s" % format_date(dtstart))
+
+            if 'RRULE' in event:
+                print("Recurs:    %s" % format_rrule(event['RRULE']))
+            if 'RDATE' in event:
+                if type(event['RDATE']) is list:
+                    rdates = []
+                    for rd in event['RDATE']:
+                        rdates.extend(rd.dts)
+                else:
+                    rdates = event['RDATE'].dts
+                print("Also:      %s" % format_date_or_datetime(rdates[0].dt))
+                for rdate in rdates[1:]:
+                    print("           %s" % format_date_or_datetime(rdate.dt))
+            if 'EXDATE' in event:
+                if type(event['EXDATE']) is list:
+                    exdates = []
+                    for ed in event['EXDATE']:
+                        exdates.extend(ed.dts)
+                else:
+                    exdates = event['EXDATE'].dts
+                print("Except:    Not %s" % format_date_or_datetime(exdates[0].dt))
+                for exdate in exdates[1:]:
+                    print("           Not %s" % format_date_or_datetime(exdate.dt))
+            if 'URL' in event:
+                print("URL:       %s" % event['URL'])
+            if 'LOCATION' in event:
+                print("Location:  %s" % event['LOCATION'])
+            if 'CONTACT' in event:
+                print("Contact:   %s" % event['CONTACT'])
+            if 'ATTENDEE' in event:
+                if isinstance(event['ATTENDEE'], list):
+                    print("Attendees: %s" % format_person(event['ATTENDEE'][0]))
+                    for attendee in event['ATTENDEE'][1:]:
+                        print("           %s" % format_person(attendee))
+                else:
+                    print("Attendee:  %s" % format_person(event['ATTENDEE']))
+            if 'COMMENT' in event:
+                field_header = 'Comment:   '
+                print(field_header, end='')
+                # Comments might sometimes be longer than will fit
+                # horizontally on screen.  Let's wrap the text to be a little
+                # more readable.
+                columns = get_display_columns()
+                field_width = len(field_header)
+                text_width = columns - field_width
+                comment = textwrap.fill(
+                    event['COMMENT'],
+                    width=text_width,
+                    replace_whitespace=False,
+                    drop_whitespace=False)
+                comment = textwrap.indent(comment, ' ' * field_width)
+                print(comment[field_width:])
+            if 'DESCRIPTION' in event:
+                print("Description:")
+                print(event['DESCRIPTION'])
+
+            print()
+
+
+if __name__ == '__main__':
+    main()

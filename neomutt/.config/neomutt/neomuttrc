@@ -1,14 +1,20 @@
 ## Neomutt davmail original config
+set realname = 'Julio Garcia'
+set from = 'julio.garcia@izertis.com'
+set sendmail = "msmtp -a izertis"
+set header_cache = ~/.cache/mutt/izertis/headers
+set message_cachedir = ~/.cache/mutt/izertis/bodies
+set mbox_type = Maildir
+
 set folder = "~/Mail/izertis"
-set spoolfile = "~/Mail/izertis/INBOX"
+# set spoolfile = "~/Mail/izertis/INBOX"
 set record = "+Sent"
 set postponed = "+Drafts"
-mailboxes =Trash =Sent =Junk =Github-notifications =Drafts =Archive =INBOX
+# mailboxes =Trash =Sent =Junk =Github-notifications =Drafts =Archive =INBOX
+mailboxes =Trash =Sent =Junk =Github-notifications =Drafts =Archive
 set imap_user = 'julio.garcia@izertis.com'
 # set imap_check_subscribed
 
-set realname = 'Julio Garcia'
-set from = 'julio.garcia@izertis.com'
 set use_from = yes
 
 set smtp_url="smtp://$imap_user@127.0.0.1:1025"
@@ -18,6 +24,9 @@ set signature="~/.config/aerc/signatures/izertis-signature.txt"
 
 set ssl_force_tls = no
 set ssl_starttls = no
+
+# set query_command = "khard email --parsable --search-in-source-files '%s'"
+set query_command = "~/.config/neomutt/notmuch_address_query.sh '%s'"
 
 
 # vim: filetype=neomuttrc
@@ -42,11 +51,13 @@ set fcc_attach			          # save attachments with the body
 set forward_format = "FW: %s" # format of subject when forwarding
 set forward_quote		          # quote forwarded message
 set reverse_name	            # reply as whomever it was to
-set reverse_realname=yes      # use any real name provided when replying
+set reverse_realname=no      # use any real name provided when replying
 set auto_tag                  # automatically apply commands to all tagged messages (if some messages are tagged)
 set include			              # include message in replies
-set mail_check=5              # to avoid lags using IMAP with some email providers (yahoo for example)
-set timeout=0                 # how long to wait after user input until unblocking background stuff like mail syncing
+set mail_check=60              # to avoid lags using IMAP with some email providers (yahoo for example)
+set mail_check_stats=yes
+set mail_check_stats_interval=360
+set timeout=3                 # how long to wait after user input until unblocking background stuff like mail syncing
 set count_alternatives=yes    # recurse into text/multipart when looking for attachement types
 set thorough_search=no        # don't process mail (via mailcap etc) before parsing with queries like ~B 
 set flag_safe                 # flagged messages can't be deleted
@@ -65,12 +76,17 @@ set markers = no           # don't show + at the end of the line
 set allow_ansi             # allow ansi escape codes (e.g. colors)
 set pager_index_lines = 10 # number of index lines to show
 set pager_context = 3      # number of context lines to show
-set pager = "nvim -R"
+set pager="nvim -R -c \"map <silent> q :qa!<CR>\""
+# set pager = "nvim -R"
 # set pager = "nvim -R -c 'set ft=mail' -"
 set pager_stop             # don't go to next message automatically
 set menu_scroll            # scroll in menus
-set smart_wrap             # wrap lines at word boundaries rather than splitting up words
-set wrap=90                # email view width
+# set smart_wrap             # wrap lines at word boundaries rather than splitting up words
+# set wrap=90                # email view width
+# set wrap = 0
+set nowrap
+set text_flowed = no
+
 set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
 set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
 # Tidy up emails significantly
@@ -80,8 +96,18 @@ set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
 set nm_query_type=threads                                   # bring in the whole thread instead of just the matched message, really useful
 set nm_default_url = "notmuch:///$HOME/Mail"   # default notmuch URL
 set nm_record_tags = "sent"                                 # default 'sent' tag
-# set virtual_spoolfile=yes                                   # allow using virtual mailboxes as spoolfile 
+set virtual_spoolfile=yes                                   # allow using virtual mailboxes as spoolfile 
+# Create a virtual "inbox" that includes items sent by you when part of a thread
+# Notice that the space after ACCOUNT_NAME is not a real space, it's a sneaky
+# hack used for formatting the status bar. Make sure not to accidentally delete
+# this.
+# INBOX might need changing to Inbox/inbox depending on the casing of the
+# folder in ~/.local/share/mail/ACCOUNT_ALIAS
+virtual-mailboxes "Inbox" "notmuch://?query=tag:inbox%20tag:unread%20and%20path:izertis%2FINBOX%2F**&entire-thread=true"
+set spoolfile = "Inbox"
+
 macro index \Cg "<enter-command>unset wait_key<enter><shell-escape>read -p 'Enter a search: ' x; echo \$x >~/.cache/mutt_terms<enter><limit>~i \"\`notmuch search --output=messages \$(/bin/cat ~/.cache/mutt_terms) | head -n 1000 | perl -le '@a=<>;chomp@a;s/\^id:// for@a;$,=\"|\";print@a' | sed 's/id://g' \`\"<enter>" "Search all mailboxes in all accounts (Global search)"
+bind index \Cf vfolder-from-query
 
 #### Content/Autoview
 auto_view application/ics
@@ -103,12 +129,21 @@ set sidebar_short_path = yes
 set sidebar_component_depth = 0
 
 #### Thread ordering
-set use_threads=reverse
-set sort='last-date'
 set collapse_all = yes
 set uncollapse_new = no
+set uncollapse_jump = yes  
 set thread_received = yes
-set narrow_tree=no
+# set narrow_tree=no
+
+# set use_threads=reverse
+# set sort='last-date'
+
+set narrow_tree=yes
+set use_threads=yes
+set sort=reverse-last-date
+set sort_aux=date   # this one is already the default
+
+
 
 #### Lists
 # set auto_subscribe

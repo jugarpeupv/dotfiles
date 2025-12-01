@@ -362,7 +362,7 @@ vim.api.nvim_create_autocmd("FileType", {
 		"markdown",
 		"jproperties",
 		"properties",
-		"codecompanion",
+		-- "codecompanion",
 		"bash",
 		"html",
 		"htmlangular",
@@ -552,62 +552,28 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 
-
-
-
--- local at_eof = {}
---
--- vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI"}, {
+-- vim.api.nvim_create_autocmd("User", {
+--   group = vim.api.nvim_create_augroup("CodeCompanionRequestStarted", { clear = true }),
+--   pattern = "CodeCompanionRequestStarted",
 --   callback = function(args)
 --     local bufnr = args.buf
---     if vim.bo[bufnr].filetype == "codecompanion" then
---       local last_line = vim.api.nvim_buf_line_count(bufnr)
---       local cur_line = vim.api.nvim_win_get_cursor(0)[1]
---       at_eof[bufnr] = (cur_line == last_line)
---     end
+--     if vim.bo[bufnr].filetype ~= "codecompanion" then return end
+--     local cursor = vim.api.nvim_win_get_cursor(0)
+--     local total_lines = vim.api.nvim_buf_line_count(bufnr)
+--     vim.b[bufnr].codecompanion_last_cursor_at_end = (cursor[1] == total_lines)
 --   end,
 -- })
 --
--- vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI"}, {
+-- -- On LLM response, move to end if cursor was at end before
+-- vim.api.nvim_create_autocmd("User", {
+--   group = vim.api.nvim_create_augroup("CodeCompanionCursor", { clear = true }),
+--   pattern = "CodeCompanionChatDone",
 --   callback = function(args)
 --     local bufnr = args.buf
---     if vim.bo[bufnr].filetype == "codecompanion"
---       and at_eof[bufnr]
---       and vim.api.nvim_get_mode().mode == "n"
---     then
---       local last_line = vim.api.nvim_buf_line_count(bufnr)
---       vim.api.nvim_win_set_cursor(0, {last_line, 0})
+--     if vim.bo[bufnr].filetype ~= "codecompanion" then return end
+--     -- if true then
+--     if vim.b[bufnr].codecompanion_last_cursor_at_end then
+--       vim.api.nvim_win_set_cursor(0, { vim.api.nvim_buf_line_count(bufnr), 0 })
 --     end
---   end,
--- })
-
-
-
--- vim.api.nvim_create_autocmd({ "BufEnter" }, {
---   callback = function(args)
---     local bufnr = args.buf
---     if vim.bo[bufnr].filetype == "codecompanion" then
---       print('codecompanion entering')
---     end
---   end,
--- })
---
---
---
--- vim.api.nvim_create_autocmd({"TextChanged", "TextChangedI"}, {
---   callback = function(args)
---     local bufnr = args.buf
---
---     if vim.bo[bufnr].filetype ~= "codecompanion" and vim.api.nvim_get_mode() ~= "n" then
---       return
---     end
---
---     local last_line = vim.api.nvim_buf_line_count(bufnr)
---     local cur_line = vim.api.nvim_win_get_cursor(0)[1]
---     if last_line == cur_line then
---       print('scrolling')
---       vim.api.nvim_win_set_cursor(0, {last_line, 0})
---     end
---
 --   end,
 -- })

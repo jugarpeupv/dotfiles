@@ -1,3 +1,5 @@
+# vim: set filetype=dosini :
+
 # .notmuch-config - Configuration file for the notmuch mail system
 #
 # For more information about notmuch, see https://notmuchmail.org
@@ -46,6 +48,7 @@ primary_email=julio.garcia@izertis.com
 #
 [new]
 tags=unread;inbox;
+ignore=.mbsyncstate;.mbsyncstate.journal;.mbsyncstate.lock;.mbsyncstate.new;.uidvalidity;.isyncuidmap.db
 # Search configuration
 #
 # The following option is supported here:

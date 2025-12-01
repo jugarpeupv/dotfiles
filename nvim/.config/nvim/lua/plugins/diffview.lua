@@ -385,7 +385,7 @@ return {
 			{ "<leader>gd", mode = "n",     "<cmd>DiffviewOpen<cr>" },
 			-- { "<leader>gd", mode = "n", "<cmd>DiffviewOpen -- :!package-lock.json<cr>" },
 			{ "<leader>cc", mode = "n", "<cmd>DiffviewClose<cr>" },
-			{ "<leader>gv", mode = { "v" }, "<cmd>'<,'>DiffviewFileHistory<cr>" },
+			{ "<leader>gv", mode = { "v" }, ":<C-u>'<,'>DiffviewFileHistory<CR>" },
 			{ "<leader>gv", mode = { "n" }, "<cmd>DiffviewFileHistory %<cr>" },
 			{ "<leader>ll", mode = "n", "<CMD>DiffviewFileHistory --range=HEAD<CR>" },
 			{ "<leader>l5", mode = "n", "<CMD>DiffviewFileHistory --range=HEAD~50..HEAD<CR>" },

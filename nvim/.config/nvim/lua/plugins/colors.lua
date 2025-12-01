@@ -73,7 +73,7 @@ return {
     --     lsp = true,
     --   },
     -- },
-    event = { "BufReadPre" },
+    -- event = { "BufReadPre" },
     keys = { { "<leader>CC", "<cmd>CccHighlighterToggle<cr>" } },
     cmd = { "CccPick", "CccHighlighterToggle", "CccConvert", "CccHighlighterEnable", "CccHighlighterDisable" },
     -- event = { "BufReadPost", "BufNewFile" },

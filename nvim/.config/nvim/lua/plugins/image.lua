@@ -2,20 +2,6 @@ vim.g.image_rendered = false
 
 return {
 	{
-		"edluffy/hologram.nvim",
-		enabled = false,
-		config = function()
-			require("hologram").setup({
-				auto_display = true, -- WIP automatic markdown image display, may be prone to breaking
-			})
-		end,
-	},
-	{
-		"kjuq/sixelview.nvim",
-		enabled = false,
-		opts = {},
-	},
-	{
 		"3rd/image.nvim",
 		enabled = true,
 		-- commit = "21909e3eb03bc738cce497f45602bf157b396672",
@@ -24,6 +10,113 @@ return {
 		-- event = "VeryLazy",
 		-- event = { "BufReadPost" },
 		ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
+		keys = {
+			{
+				mode = { "n", "v" },
+				"<leader>it",
+				function()
+					local function get_full_path(path)
+						-- Get the user's home directory
+						local home_dir = os.getenv("HOME")
+
+						-- Check if the path starts with the home directory
+						if string.sub(path, 1, #home_dir) == home_dir then
+							return path
+						end
+
+						-- Get the current buffer's full path
+						local current_buffer_dos = vim.api.nvim_buf_get_name(0)
+						-- Get the directory of the current buffer
+						local current_dir = vim.fn.fnamemodify(current_buffer_dos, ":p:h")
+						-- Combine the directory with the relative path
+						local full_path = vim.fn.fnamemodify(current_dir .. "/" .. path, ":p")
+
+						if vim.fn.filereadable(full_path) == 1 then
+							return full_path
+						else
+							full_path = vim.fn.fnamemodify(vim.loop.cwd() .. "/" .. path, ":p")
+						end
+
+						return full_path
+					end
+
+					local image_util = require("jg.custom.image-utils")
+					if image_util.image_rendered and image_util.loaded_image_under_cursor then
+						-- vim.g.image_object:clear() -- remove the image if it is already rendered
+						image_util.loaded_image_under_cursor:clear() -- remove the image if it is already rendered
+						image_util.image_rendered = false
+						-- vim.g.image_object = nil
+						image_util.loaded_image_under_cursor = nil
+						return
+					end
+
+					local current_window = vim.api.nvim_get_current_win()
+					local current_buffer = vim.api.nvim_get_current_buf()
+					local cursor_pos = vim.api.nvim_win_get_cursor(current_window)
+					local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
+					-- local cursor_col = cursor_pos[2]
+
+					-- Get the file path under the cursor
+					local line = vim.api.nvim_buf_get_lines(current_buffer, cursor_row, cursor_row + 1, false)[1]
+					-- print("line", line)
+
+					local file_path
+
+					local toggle_image_under_cursor = function(file_path_cb)
+						image_util.toggle_image_under_cursor(file_path_cb, current_window, current_buffer, cursor_row)
+					end
+
+					-- -- Try to extract <img src="...">
+					local url = line:match('<img%s+[^>]*src="([^"]+)"')
+					if url and url:match("^https?://") then
+						image_util.get_github_attachment_image(url, toggle_image_under_cursor)
+					else
+						-- Fallback to your existing logic
+						local extracted_content = string.match(line, "%[%[(.-)%]%]")
+						-- print("extracted_content", extracted_content)
+
+						if extracted_content then
+							file_path = extracted_content.gsub(extracted_content, "|.*", "")
+							file_path = vim.loop.cwd() .. "/zadjuntos/" .. file_path
+						else
+							file_path = line:match("%((.-)%)")
+							if not file_path then
+								print("No image found under the cursor")
+								return
+							end
+							file_path = get_full_path(file_path)
+						end
+
+						toggle_image_under_cursor(file_path)
+					end
+				end,
+			},
+			{
+				mode = { "n", "v" },
+				"<leader>pI",
+				function()
+					local Job = require("plenary.job")
+					Job:new({
+						command = "bun",
+						args = { "upload.ts" },
+						cwd = "/Users/jgarcia/work/tmp/cookies-test",
+						on_exit = function(j, return_val)
+							if return_val == 0 then
+								local href = table.concat(j:result(), "\n"):gsub("%s+$", "")
+								vim.schedule(function()
+									local img_tag = string.format('<img src="%s">', href)
+									vim.api.nvim_put({ img_tag }, "c", true, true)
+								end)
+							else
+								vim.schedule(function()
+									vim.notify("❌ Upload failed: " .. table.concat(j:stderr_result(), "\n"))
+								end)
+							end
+						end,
+					}):start()
+				end,
+			},
+		},
 		-- branch = "feat/toggle-rendering",
 		config = function()
 			local image = require("image")
@@ -96,107 +189,20 @@ return {
 
 				hijack_file_patterns = {}, -- render image files as images when opened
 			})
-
-			local function get_full_path(path)
-				-- Get the user's home directory
-				local home_dir = os.getenv("HOME")
-
-				-- Check if the path starts with the home directory
-				if string.sub(path, 1, #home_dir) == home_dir then
-					return path
-				end
-
-				-- Get the current buffer's full path
-				local current_buffer_dos = vim.api.nvim_buf_get_name(0)
-				-- Get the directory of the current buffer
-				local current_dir = vim.fn.fnamemodify(current_buffer_dos, ":p:h")
-				-- Combine the directory with the relative path
-				local full_path = vim.fn.fnamemodify(current_dir .. "/" .. path, ":p")
-
-				if vim.fn.filereadable(full_path) == 1 then
-					return full_path
-				else
-					full_path = vim.fn.fnamemodify(vim.loop.cwd() .. "/" .. path, ":p")
-				end
-
-				return full_path
-			end
-
-      vim.keymap.set({ "n", "v" }, "<leader>pI", function()
-        local Job = require("plenary.job")
-        Job
-          :new({
-            command = "bun",
-            args = { "upload.ts" },
-            cwd = "/Users/jgarcia/work/tmp/cookies-test",
-            on_exit = function(j, return_val)
-              if return_val == 0 then
-                local href = table.concat(j:result(), "\n"):gsub("%s+$", "")
-                vim.schedule(function()
-                  local img_tag = string.format('<img src="%s">', href)
-                  vim.api.nvim_put({ img_tag }, "c", true, true)
-                end)
-              else
-                vim.schedule(function()
-                  vim.notify("❌ Upload failed: " .. table.concat(j:stderr_result(), "\n"))
-                end)
-              end
-            end,
-          })
-          :start()
-      end)
-
-			vim.keymap.set({ "n", "v" }, "<leader>it", function()
-				local image_util = require("jg.custom.image-utils")
-				if image_util.image_rendered and image_util.loaded_image_under_cursor then
-					-- vim.g.image_object:clear() -- remove the image if it is already rendered
-					image_util.loaded_image_under_cursor:clear() -- remove the image if it is already rendered
-					image_util.image_rendered = false
-					-- vim.g.image_object = nil
-					image_util.loaded_image_under_cursor = nil
-					return
-				end
-
-				local current_window = vim.api.nvim_get_current_win()
-				local current_buffer = vim.api.nvim_get_current_buf()
-				local cursor_pos = vim.api.nvim_win_get_cursor(current_window)
-				local cursor_row = cursor_pos[1] - 1 -- 0-indexed row
-				-- local cursor_col = cursor_pos[2]
-
-				-- Get the file path under the cursor
-				local line = vim.api.nvim_buf_get_lines(current_buffer, cursor_row, cursor_row + 1, false)[1]
-				-- print("line", line)
-
-				local file_path
-
-				local toggle_image_under_cursor = function(file_path_cb)
-					image_util.toggle_image_under_cursor(file_path_cb, current_window, current_buffer, cursor_row)
-				end
-
-				-- -- Try to extract <img src="...">
-				local url = line:match('<img%s+[^>]*src="([^"]+)"')
-				if url and url:match("^https?://") then
-					image_util.get_github_attachment_image(url, toggle_image_under_cursor)
-				else
-					-- Fallback to your existing logic
-					local extracted_content = string.match(line, "%[%[(.-)%]%]")
-					-- print("extracted_content", extracted_content)
-
-					if extracted_content then
-						file_path = extracted_content.gsub(extracted_content, "|.*", "")
-						file_path = vim.loop.cwd() .. "/zadjuntos/" .. file_path
-					else
-						file_path = line:match("%((.-)%)")
-						if not file_path then
-							print("No image found under the cursor")
-							return
-						end
-						file_path = get_full_path(file_path)
-					end
-
-					toggle_image_under_cursor(file_path)
-				end
-			end, {})
 		end,
 	},
+  {
+    "edluffy/hologram.nvim",
+    enabled = false,
+    config = function()
+      require("hologram").setup({
+        auto_display = true, -- WIP automatic markdown image display, may be prone to breaking
+      })
+    end,
+  },
+  {
+    "kjuq/sixelview.nvim",
+    enabled = false,
+    opts = {},
+  },
 }

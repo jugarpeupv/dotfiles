@@ -135,33 +135,6 @@ vim.keymap.set({ "n", "t" }, "<D-p>", function()
 	-- builtin.find_files(themes.get_ivy(opts_ivy))
 end, opts)
 
-vim.keymap.set({ "n", "t" }, "<M-p>", function()
-	require("telescope.builtin").find_files({
-		cwd = vim.loop.cwd(),
-		hidden = true,
-		shorten_path = false,
-		path_display = { "absolute" },
-		find_command = {
-			"rg",
-			"--files",
-			"--color",
-			"never",
-			"--glob=!.git",
-			"--glob=!*__template__",
-			"--glob=!*DS_Store",
-		},
-	})
-	-- local builtin = require("telescope.builtin")
-	--
-	-- local themes = require("telescope.themes")
-	-- local opts_ivy = {
-	--   layout_config = { height = 0.4 },
-	--   hidden = true,
-	--   find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
-	-- }
-	-- builtin.find_files(themes.get_ivy(opts_ivy))
-end, opts)
-
 -- cd into dir of the current buffer
 vim.keymap.set({ "n" }, "<leader>cd", function()
 	local cwd = vim.fn.expand("%:p:h")
@@ -505,15 +478,17 @@ vim.keymap.set({ "n" }, "<leader>fi", function()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bi", function()
-	require("telescope.builtin").buffers({
-		prompt_title = "< IBuffers >",
-		ignore_current_buffer = false,
-		show_all_buffers = true,
-		sort_mru = true,
-		select_current = true,
-		-- sort_lastused = true,
-		-- initial_mode = "normal",
-	})
+  Snacks.picker.buffers({ finder = "buffers", title = "< IBuffers >" })
+
+	-- require("telescope.builtin").buffers({
+	-- 	prompt_title = "< IBuffers >",
+	-- 	ignore_current_buffer = false,
+	-- 	show_all_buffers = true,
+	-- 	sort_mru = true,
+	-- 	select_current = true,
+	-- 	-- sort_lastused = true,
+	-- 	-- initial_mode = "normal",
+	-- })
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bu", function()
@@ -1320,7 +1295,7 @@ vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
 
 -- nx keymaps
 
-vim.keymap.set({ "n" }, "<leader>rs", function()
+vim.keymap.set({ "n" }, "<leader>Rs", function()
 	require("jg.custom.telescope").run_npm_scripts_improved()
 end, opts)
 
@@ -1888,67 +1863,49 @@ vim.keymap.set("n", "<leader>to", function()
 	end
 end, { desc = "Toggle Copilot terminal in split" })
 
-vim.keymap.set("c", "<C-r>", function()
-	-- Only trigger if command line is empty (just ':')
-	local cmd = vim.fn.getcmdline()
-	if cmd == "" then
-		vim.cmd("stopinsert")
-		vim.schedule(function()
-			Snacks.picker.command_history({ layout = { preview = false } })
-		end)
-
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
-	else
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
-		-- vim.cmd("stopinsert")
-		Snacks.picker.command_history({ layout = { preview = false }, pattern = cmd })
-		-- vim.schedule(function()
-		--   Snacks.picker.command_history({ layout = { preview = false }, pattern = cmd })
-		--   -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
-		-- end)
-
-		-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
-		-- Fallback to default <C-r> behavior
-		-- return "<C-r>"
-	end
-end, { expr = true, noremap = true })
-
 -- vim.api.nvim_set_keymap('i', '<C-n>', '<C-o>j', { noremap = true, silent = true })
 -- vim.api.nvim_set_keymap('i', '<C-p>', '<C-o>k', { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<C-n>", "<Down>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<C-p>", "<Up>", { noremap = true, silent = true })
-
 
 vim.api.nvim_create_autocmd("TermOpen", {
 	pattern = "*",
 	callback = function(args)
 		local bufnr = args.buf
 
-    -- Utility to move from one prompt to another
-		vim.keymap.set({ "t" }, "<M-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
-		vim.keymap.set({ "t" }, "<M-P>", "<C-\\><C-n>?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+		-- Utility to move from one prompt to another
+		vim.keymap.set({ "t" }, "<C-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+		vim.keymap.set({ "t" }, "<C-P>", "<C-\\><C-n>?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
 
-    vim.keymap.set({ "n" }, "<M-N>", "/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
-    vim.keymap.set({ "n" }, "<M-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+		vim.keymap.set({ "n" }, "<C-N>", "/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+		vim.keymap.set({ "n" }, "<C-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
 	end,
 })
 
-vim.keymap.set({ "n" }, "<leader>tt", function ()
-  require("barbecue.ui").toggle()
+vim.keymap.set({ "n" }, "<leader>tt", function()
+	require("barbecue.ui").toggle()
 end, opts)
 
-vim.keymap.set({ "n" }, "<C-S-H>", function ()
-  local cur = vim.fn.getqflist({ nr = 0 }).nr
-  local max = vim.fn.getqflist({ nr = '$' }).nr
-  if cur >= 2 and cur <= max then
-    vim.cmd("colder")
-  end
+vim.keymap.set({ "n" }, "<C-S-H>", function()
+	local cur = vim.fn.getqflist({ nr = 0 }).nr
+	local max = vim.fn.getqflist({ nr = "$" }).nr
+	if cur >= 2 and cur <= max then
+		vim.cmd("colder")
+	end
 end, opts)
 
-vim.keymap.set({ "n" }, "<C-S-L>", function ()
-  local cur = vim.fn.getqflist({ nr = 0 }).nr
-  local max = vim.fn.getqflist({ nr = '$' }).nr
-  if cur < max then
-    vim.cmd("cnewer")
-  end
+vim.keymap.set({ "n" }, "<C-S-L>", function()
+	local cur = vim.fn.getqflist({ nr = 0 }).nr
+	local max = vim.fn.getqflist({ nr = "$" }).nr
+	if cur < max then
+		vim.cmd("cnewer")
+	end
 end, opts)
+
+vim.keymap.set("n", "<leader>na", function()
+	require("jg.custom.telescope").notmuch_picker()
+end, { desc = "Notmuch address picker" })
+
+vim.keymap.set("n", "<leader>gn", function()
+	require("jg.custom.telescope").show_global_npm_packages()
+end, { desc = "show global npm packages" })

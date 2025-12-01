@@ -168,6 +168,7 @@ return {
   -- },
   {
     "ziontee113/icon-picker.nvim",
+    enabled = false,
     cmd = { "IconPickerNormal", "IconPickerYank" },
     -- keys = { { "<leader>ip", "<cmd>IconPickerYank<cr>" } },
     -- dependencies = { "nvim-telescope/telescope-ui-select.nvim" },
@@ -177,6 +178,7 @@ return {
   },
   {
     "2kabhishek/nerdy.nvim",
+    enabled = false,
     dependencies = {
       "folke/snacks.nvim",
     },

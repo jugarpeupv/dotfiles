@@ -113,12 +113,11 @@ bind index,pager n search-next
 bind index,pager N search-opposite
 bind index,pager p search-opposite
 bind index,pager,attach,editor,compose <F5> refresh
-# macro index,pager \cl '<pipe-message>urlscan -d -w 80<enter>' "call urlscan to open links"
-macro index,pager S "<sync-mailbox><shell-escape>(mbsync -a && notmuch new) &> /dev/null &<enter>"
+
 # macro index O "<shell-escape>mbsync -a -c $HOME/.config/isync/mbsyncrc<enter>" "run mbsync to sync all mail"
 macro attach s '<save-entry><kill-line>~/Downloads/<enter>a' "Save file to ~/Downloads"
 macro browser h '<change-dir><kill-line>..<enter>' "Go to parent folder"
-# macro index \Ca "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
+macro index \Ca "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
 # macro attach,compose \cl "<pipe-entry> urlscan -d -w 80<Enter>" "call urlscan to extract URLs out of a message"
 
 
@@ -134,3 +133,36 @@ bind index                        W toggle-new
 
 bind index                      za  collapse-thread
 bind index                      zA  collapse-all # Missing :folddisable/foldenable
+
+
+
+
+macro index,pager gi "<change-folder>=INBOX<enter>" "go to inbox"
+macro index,pager Mi ";<save-message>=INBOX<enter><enter>" "move mail to inbox"
+macro index,pager Ci ";<copy-message>=INBOX<enter>" "copy mail to inbox"
+macro index,pager gs "<change-folder>=Sent<enter>" "go to sent"
+macro index,pager Ms ";<save-message>=Sent<enter><enter>" "move mail to sent"
+macro index,pager Cs ";<copy-message>=Sent<enter>" "copy mail to sent"
+macro index,pager gd "<change-folder>=Drafts<enter>" "go to drafts"
+macro index,pager Md ";<save-message>=Drafts<enter><enter>" "move mail to drafts"
+macro index,pager Cd ";<copy-message>=Drafts<enter>" "copy mail to drafts"
+macro index,pager gS "<change-folder>=Junk<enter>" "go to spam"
+macro index,pager MS ";<save-message>=Junk<enter><enter>" "move mail to spam"
+macro index,pager CS ";<copy-message>=Junk<enter>" "copy mail to spam"
+macro index,pager ga "<change-folder>=Archive<enter>" "go to archive"
+macro index,pager Ma ";<save-message>=Archive<enter><enter>" "move mail to archive"
+macro index,pager Ca ";<copy-message>=Archive<enter>" "copy mail to archive"
+
+
+# macro index,pager \cl '<pipe-message>urlscan -d -w 80<enter>' "call urlscan to open links"
+# macro index,pager S "<sync-mailbox><shell-escape>(mbsync -a && notmuch new) &> /dev/null &<enter>"
+
+macro index,pager S "<sync-mailbox><shell-escape>((mbsync -a && notmuch new) &> /dev/null && osascript -e 'display notification \"Mail sync complete\" with title \"neomutt\"') &<enter>"
+
+
+
+# macro index o "<shell-escape>mailsync -V ACCOUNT_ALIAS<enter>" "run mbsync to sync ACCOUNT_ALIAS"
+# Accept/decline a callendar invite
+# macro attach,pager A '<shell-escape>rm -vf /tmp/.mutt.ics<enter><save-entry><kill-line>/tmp/.mutt.ics<enter><shell-escape>mutt-ical -e julio.garcia@izertis.com /tmp/.mutt.ics<enter>'
+# macro attach,pager A '<shell-escape>rm -vf /tmp/.mutt.ics<enter><save-entry><kill-line>/tmp/.mutt.ics<enter>'
+

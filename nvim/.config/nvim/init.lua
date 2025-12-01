@@ -1,13 +1,18 @@
 -- vim.loader.enable()
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 vim.g.loaded_matchit = 1
 vim.g.python3_host_prog = vim.fn.expand("~/.nvim-venv/bin/python3")
 
--- if vim.env.TERM == 'xterm-kitty' then
---   -- request csi mode 2
---   vim.cmd([[autocmd UIEnter * if v:event.chan ==# 0 | call chansend(v:stderr, "\x1b[>2u") | endif]])
---   vim.cmd([[autocmd UILeave * if v:event.chan ==# 0 | call chansend(v:stderr, "\x1b[<0u") | endif]])
+if vim.env.TERM == "xterm-kitty" then
+	-- request csi mode 2
+	vim.cmd([[autocmd UIEnter * call chansend(v:stderr, "\x1b[>4;2m")]])
+	vim.cmd([[autocmd VimLeavePre * call chansend(v:stderr, "\x1b[>4;0m")]])
+end
+
+-- if vim.env.TERM == "xterm-kitty" then
+--   vim.api.nvim_chan_send(vim.api.nvim_get_chan(), "\27[>4;2m")
 -- end
 
 vim.g.loaded_netrw = 1
@@ -96,15 +101,13 @@ require("lazy").setup("plugins", {
 -- require("jg.core.keymaps")
 
 vim.api.nvim_create_autocmd("User", {
-  pattern = "VeryLazy",
-  callback = function()
-    -- require("config.autocmds")
-    -- require("config.keymaps")
-    require("jg.core.autocommands")
-    require("jg.core.keymaps")
-  end,
+	pattern = "VeryLazy",
+	callback = function()
+		-- require("config.autocmds")
+		-- require("config.keymaps")
+		require("jg.core.autocommands")
+		require("jg.core.keymaps")
+	end,
 })
 
-
 vim.cmd("source /Users/jgarcia/.config/nvim/lua/jg/custom/proguard.vim")
-
