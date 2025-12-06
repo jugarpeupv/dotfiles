@@ -204,6 +204,8 @@ return {
 				documentation = { window = { border = "rounded" }, auto_show = true },
 				menu = {
           auto_show = true,
+          -- Delay before showing the completion menu while typing
+          auto_show_delay_ms = 100,
 					-- auto_show = function()
 					--        return vim.bo.filetype ~= 'codecompanion'
 					--      end,
@@ -297,7 +299,8 @@ return {
 						"conventional_commits",
 						"buffer",
 					},
-					["md"] = {},
+					-- ["md"] = {},
+          ["markdown"] = { "buffer", "lsp" },
 					["copilot-chat"] = {},
 					["AvanteInput"] = { "avante", "lsp", "buffer" },
 				},

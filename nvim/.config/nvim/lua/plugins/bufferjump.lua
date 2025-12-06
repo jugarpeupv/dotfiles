@@ -1,6 +1,7 @@
 -- return {}
 return {
-  "kwkarlwang/bufjump.nvim",
+  -- "kwkarlwang/bufjump.nvim",
+  "jugarpeupv/bufjump.nvim",
   enabled = true,
   keys = {
     { "<M-i>" },

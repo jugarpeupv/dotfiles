@@ -3,7 +3,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		-- branch = "master",
-		-- lazy = false,
+		lazy = true,
 		branch = "main",
 		build = ":TSUpdate",
 		-- lazy = true,
@@ -11,15 +11,16 @@ return {
 		-- branch = 'main',
 		-- build = ':TSUpdate',
 		-- cmd = { "TSInstall", "TSBufEnable", "TSModuleInfo" },
-		event = { "BufReadPost", "BufNewFile" },
-    -- lazy = false,
+		-- event = { "BufReadPost", "BufNewFile" },
+		-- lazy = false,
 		dependencies = {
-			{ "wellle/targets.vim", event = { "BufReadPost", "BufNewFile" } },
+			{ "wellle/targets.vim" },
+      {"andymass/vim-matchup"},
 			{ "cfdrake/vim-pbxproj" },
-      { "keith/xcconfig.vim" },
+			{ "keith/xcconfig.vim" },
 			{
 				"axelvc/template-string.nvim",
-        -- "chrisgrieser/nvim-puppeteer",
+				-- "chrisgrieser/nvim-puppeteer",
 				enabled = false,
 				config = function()
 					require("template-string").setup({
@@ -199,7 +200,9 @@ return {
 				-- end,
 			},
 			{
-				"jugarpeupv/nvim-treesitter-context",
+				-- "jugarpeupv/nvim-treesitter-context",
+				"nvim-treesitter/nvim-treesitter-context",
+				enabled = true,
 				lazy = true,
 				-- dir='~/private/nvim-treesitter-context',
 				-- dev = true,
@@ -209,6 +212,14 @@ return {
 				-- event = "VeryLazy",
 				config = function()
 					require("treesitter-context").setup({
+						on_attach = function(buf)
+							-- get filetype based of buf
+							local filetype = vim.fn.getbufvar(buf, "&ft")
+							if filetype == "markdown" then
+								return false
+							end
+							return true
+						end, -- (fun(buf: integer): boolean) return false to disable attaching
 						enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
 						multiwindow = true, -- Enable multiple floating windows
 						max_lines = 6, -- How many lines the window should span. Values <= 0 mean no limit.
@@ -255,138 +266,7 @@ return {
 			end
 
 			-- configure treesitter
-			treesitter.setup({
-				-- endwise = {
-				--   enable = true,
-				-- },
-				-- refactor = {
-				--   highlight_definitions = {
-				--     enable = false,
-				--     -- Set to false if you have an `updatetime` of ~100.
-				--     clear_on_cursor_move = true,
-				--   },
-				-- },
-
-				-- enable syntax highlighting
-				-- refactor = {
-				-- 	navigation = { enable = false },
-				-- 	highlight_current_scope = { enable = false },
-				-- 	smart_rename = {
-				-- 		enable = false,
-				-- 		-- Assign keymaps to false to disable them, e.g. `smart_rename = false`.
-				-- 		keymaps = {
-				-- 			smart_rename = "grr",
-				-- 		},
-				-- 	},
-				-- 	highlight_definitions = {
-				-- 		enable = false,
-				-- 		-- Set to false if you have an `updatetime` of ~100.
-				-- 		clear_on_cursor_move = false,
-				-- 	},
-				-- },
-				-- incremental_selection = {
-				-- 	enable = true,
-				-- 	keymaps = {
-				-- 		init_selection = "<CR>",
-				-- 		node_incremental = "<CR>",
-				-- 		scope_incremental = "<Tab>",
-				-- 		node_decremental = "<S-Tab>",
-				-- 	},
-				-- },
-				sync_install = true,
-				-- ignore_install = { "yaml" },
-				-- ignore_install = {},
-				modules = {},
-				-- enable indentation
-				-- indent = { enable = true },
-				indent = {
-					enable = true,
-					disable = { "yaml" },
-				},
-				-- enable autotagging (w/ nvim-ts-autotag plugin)
-				-- autotag = { enable = true },
-				-- ensure these language parsers are installed
-				ensure_installed = {
-					"lua_patterns",
-					"kitty",
-					"toml",
-					"go",
-					"ruby",
-					"swift",
-					"json",
-					"jsonc",
-					"json5",
-					"angular",
-					"gitignore",
-					"git_config",
-					"git_rebase",
-					"gitattributes",
-					"gitcommit",
-					"gitignore",
-					"vimdoc",
-					"luadoc",
-					"vim",
-					"lua",
-					"javascript",
-					"xml",
-					"http",
-					"java",
-					"jq",
-					"jsdoc",
-					"groovy",
-					"typescript",
-					"tsx",
-					"html",
-					"css",
-					"scss",
-					"yaml",
-					-- "sql",
-					"markdown",
-					"markdown_inline",
-					-- "svelte",
-					"graphql",
-					"bash",
-					"vim",
-					"dockerfile",
-					"rust",
-					"cpp",
-					"dap_repl",
-					"regex",
-				},
-				-- ignore_install =  { "dockerfile" },
-				-- auto install above language parsers
-				auto_install = false,
-				rainbow = {
-					enable = true,
-					disable = { "html" },
-					-- query = 'rainbow-parens',
-					-- strategy = require('ts-rainbow').strategy.global
-					-- extended_mode = true,
-					-- max_file_lines = nil,
-					colors = {
-						-- vscode
-						-- "#DCDCAA",
-						-- "#569CD6",
-						-- "#9CDCFE",
-
-						-- catpuccin
-						"#C6A0F6",
-						"#8AADF4",
-						"#F0C6C6",
-
-						-- tokyo
-						-- "#7aa2f7",
-						-- "#2ac3de",
-						-- "#9d7cd8",
-					}, -- table of hex strings
-					-- termcolors = {} -- table of colour name strings
-				},
-				matchup = {
-					enable = true,
-					disable_virtual_text = false,
-					disable = { "javascript", "typescript" },
-				},
-			})
+			treesitter.setup()
 
 			--
 			-- parser_configs.lua_patterns = {
@@ -412,6 +292,47 @@ return {
 			-- vim.treesitter.language.register('ghactions', 'yaml')  -- the someft filetype will use the python parser and queries.
 			-- custom parsers
 
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = {
+					"kitty",
+					"http",
+					"rest",
+					"java",
+					"go",
+					"copilot-chat",
+					"yaml",
+					"yaml.github",
+					"jsonc",
+					"sh",
+					"dosini",
+					"editorconfig",
+					"typescript",
+					-- "kulala_http",
+					"javascript",
+					"markdown",
+					"gitcommit",
+					"hurl",
+					"jproperties",
+					"properties",
+					-- "codecompanion",
+					"bash",
+					"html",
+					"htmlangular",
+					"scss",
+					"css",
+					"groovy",
+					"Avante",
+					"dockerfile",
+					"regex",
+					"lua",
+				},
+				callback = function()
+					vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					vim.treesitter.start()
+				end,
+			})
+
 			vim.treesitter.language.register("markdown", "octo")
 
 			require("jg.custom.incremental_selection").setup({
@@ -419,11 +340,11 @@ return {
 				decr_key = "<bs>", -- decrement selection key
 			})
 
-      vim.filetype.add({
-        extension = {
-          ['http'] = 'http',
-        },
-      })
+			vim.filetype.add({
+				extension = {
+					["http"] = "http",
+				},
+			})
 
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "TSUpdate",
@@ -437,8 +358,8 @@ return {
 
 					require("nvim-treesitter.parsers").lua_patterns = {
 						install_info = {
-							url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns"
-						}
+							url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns",
+						},
 					}
 
 					-- require("nvim-treesitter.parsers").scss = {

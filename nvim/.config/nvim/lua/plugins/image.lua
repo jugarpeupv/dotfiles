@@ -9,7 +9,8 @@ return {
 		-- branch = "main",
 		-- event = "VeryLazy",
 		-- event = { "BufReadPost" },
-		ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
+		-- ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
+    ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "vimwiki" },
 		keys = {
 			{
 				mode = { "n", "v" },
@@ -121,6 +122,7 @@ return {
 		config = function()
 			local image = require("image")
 			image.setup({
+        disable = { 'markdown' },
 				backend = "kitty",
 				integrations = {
 					markdown = {

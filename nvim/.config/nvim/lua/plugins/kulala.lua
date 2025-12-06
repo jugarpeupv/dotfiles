@@ -177,7 +177,7 @@ return {
 				-- 	end,
 				-- },
 				["Open kulala"] = {
-					"<leader>kt",
+					"<leader>ko",
 					function()
 						require("kulala").open()
 					end,

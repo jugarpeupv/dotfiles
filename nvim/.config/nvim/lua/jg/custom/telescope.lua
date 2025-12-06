@@ -353,9 +353,9 @@ M.telescope_image_preview = function()
 	local last_file_path = ""
 
 	local is_supported_image = function(filepath)
-    if not filepath or filepath == "" then
-      return false
-    end
+		if not filepath or filepath == "" then
+			return false
+		end
 		local split_path = vim.split(filepath:lower(), ".", { plain = true })
 		local extension = split_path[#split_path]
 		return vim.tbl_contains(supported_images, extension)
@@ -1191,136 +1191,174 @@ M.run_npm_scripts_improved = function()
 	commands()
 end
 
-
-
 M.notmuch_picker = function(opts)
-  local pickers = require("telescope.pickers")
-  local finders = require("telescope.finders")
-  local conf = require("telescope.config").values
-  local actions = require("telescope.actions")
-  local action_state = require("telescope.actions.state")
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local conf = require("telescope.config").values
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
 
-  local function getaddresses()
-    local file = io.popen(
-      "notmuch address --format=json --deduplicate=address '*' | jq -r '.[] | .[\"name-addr\"]'"
-    )
-    local addresses = {}
+	local function getaddresses()
+		local file =
+			io.popen("notmuch address --format=json --deduplicate=address '*' | jq -r '.[] | .[\"name-addr\"]'")
+		local addresses = {}
 
-    if file == nil then
-      return addresses
-    end
+		if file == nil then
+			return addresses
+		end
 
-    local output = file:read("*a")
-    file:close()
+		local output = file:read("*a")
+		file:close()
 
-    for address in string.gmatch(output, "([^'\n']+)") do
-      table.insert(addresses, address)
-    end
+		for address in string.gmatch(output, "([^'\n']+)") do
+			table.insert(addresses, address)
+		end
 
-    return addresses
-  end
+		return addresses
+	end
 
-  opts = opts or {}
-  pickers
-    .new(opts, {
-      prompt_title = "contact",
-      finder = finders.new_table({
-        results = getaddresses(),
-      }),
-      sorter = conf.generic_sorter(opts),
-      attach_mappings = function(prompt_bufnr)
-        actions.select_default:replace(function()
-          actions.close(prompt_bufnr)
-          local selection = action_state.get_selected_entry()
-          -- vim.api.nvim_put({ selection[1] }, "", true, true)
-          vim.fn.setreg('+', selection[1])
-        end)
-        return true
-      end,
-    })
-    :find()
+	opts = opts or {}
+	pickers
+		.new(opts, {
+			prompt_title = "contact",
+			finder = finders.new_table({
+				results = getaddresses(),
+			}),
+			sorter = conf.generic_sorter(opts),
+			attach_mappings = function(prompt_bufnr)
+				actions.select_default:replace(function()
+					actions.close(prompt_bufnr)
+					local selection = action_state.get_selected_entry()
+					-- vim.api.nvim_put({ selection[1] }, "", true, true)
+					vim.fn.setreg("+", selection[1])
+				end)
+				return true
+			end,
+		})
+		:find()
 end
-
 
 M.show_global_npm_packages = function()
-  local pickers = require('telescope.pickers')
-  local finders = require('telescope.finders')
-  local conf = require('telescope.config').values
-  local uv = vim.loop
+	-- local pickers = require("telescope.pickers")
+	-- local finders = require("telescope.finders")
+	-- local conf = require("telescope.config").values
+	local uv = vim.loop
 
-  local function get_nvm_node_version()
-    local handle = io.popen("node -v")
-    local result = handle:read("*a")
-    handle:close()
-    return result:gsub("\n", ""):gsub("v", "")
-  end
+	local function get_nvm_node_version()
+		local handle = io.popen("node -v")
+		if not handle then
+			return
+		end
+		local result = handle:read("*a")
+		handle:close()
+		return result:gsub("\n", ""):gsub("v", "")
+	end
 
-  local function read_package_info(pkg_path, pkg_name)
-    local stat = uv.fs_lstat(pkg_path)
-    local display = pkg_name
-    local version = ""
-    local symlink = nil
+	local function read_package_info(pkg_path, pkg_name)
+		local stat = uv.fs_lstat(pkg_path)
+		local display = pkg_name
+		local version = ""
+		local symlink = nil
 
-    if stat and stat.type == "link" then
-      symlink = uv.fs_readlink(pkg_path)
-    end
+		if stat and stat.type == "link" then
+			symlink = uv.fs_readlink(pkg_path)
+		end
 
-    local pkg_json = pkg_path .. "/package.json"
-    local f = io.open(pkg_json, "r")
-    if f then
-      local content = f:read("*a")
-      f:close()
-      local v = content:match('"version"%s*:%s*"([^"]+)"')
-      if v then version = v end
-    end
+		local pkg_json = pkg_path .. "/package.json"
+		local f = io.open(pkg_json, "r")
+		if f then
+			local content = f:read("*a")
+			f:close()
+			local v = content:match('"version"%s*:%s*"([^"]+)"')
+			if v then
+				version = v
+			end
+		end
 
-    if version ~= "" then
-      display = display .. "@" .. version
-    end
-    if symlink then
-      display = display .. " -> " .. symlink
-    end
-    return display
-  end
+		if version ~= "" then
+			display = display .. "@" .. version
+		end
+		if symlink then
+			display = display .. " -> " .. symlink
+		end
+		return { display = display, value = pkg_path }
+	end
 
-  local function collect_packages(pkg_root)
-    local results = {}
-    for entry in vim.fs.dir(pkg_root) do
-      if entry ~= ".bin" then
-        local entry_path = pkg_root .. "/" .. entry
-        if entry:sub(1,1) == "@" then
-          -- Scoped packages
-          for subentry in vim.fs.dir(entry_path) do
-            local sub_path = entry_path .. "/" .. subentry
-            table.insert(results, read_package_info(sub_path, entry .. "/" .. subentry))
-          end
-        else
-          table.insert(results, read_package_info(entry_path, entry))
+  function flatten_table(t)
+    local result = {}
+    for k, v in pairs(t) do
+      if type(v) == "table" then
+        for subk, subv in pairs(v) do
+          result[subk] = subv
         end
+      else
+        result[k] = v
       end
     end
-    return results
+    return result
   end
 
-  local function npm_global_picker()
-    local node_version = get_nvm_node_version()
-    local nvm_dir = os.getenv("NVM_DIR") or "/Users/jgarcia/.nvm"
-    local pkg_path = nvm_dir .. "/versions/node/v" .. node_version .. "/lib/node_modules"
-    local packages = collect_packages(pkg_path)
-    pickers.new({}, {
-      prompt_title = "Global npm Packages",
-      finder = finders.new_table {
-        results = packages
-      },
-      sorter = conf.generic_sorter({}),
-    }):find()
-  end
+	local function collect_packages(pkg_root)
+		local results = {}
+		for entry in vim.fs.dir(pkg_root) do
+			if entry ~= ".bin" then
+				local entry_path = pkg_root .. "/" .. entry
+				if entry:sub(1, 1) == "@" then
+					-- Scoped packages
+					for subentry in vim.fs.dir(entry_path) do
+						local sub_path = entry_path .. "/" .. subentry
+            local populated_entry = read_package_info(sub_path, entry .. "/" .. subentry)
+            table.insert(populated_entry, { original_pkg_root = pkg_root })
+						table.insert(results, flatten_table(populated_entry))
+					end
+				else
+          local populated_entry =  read_package_info(entry_path, entry)
+          table.insert(populated_entry, { original_pkg_root = pkg_root })
+					table.insert(results, flatten_table(populated_entry))
+				end
+			end
+		end
+		return results
+	end
 
-  npm_global_picker()
+	local function npm_global_picker()
+		local node_version = get_nvm_node_version()
+		local nvm_dir = os.getenv("NVM_DIR") or "/Users/jgarcia/.nvm"
+		local pkg_path = nvm_dir .. "/versions/node/v" .. node_version .. "/lib/node_modules"
+		local packages = collect_packages(pkg_path)
+		local actions = require("telescope.actions")
+		local action_state = require("telescope.actions.state")
+		require("telescope.pickers")
+			.new({}, {
+				prompt_title = "Global npm Packages",
+				finder = require("telescope.finders").new_table({
+					results = packages,
+					entry_maker = function(entry)
+						return {
+							value = entry.value,
+							display = entry.display,
+							ordinal = entry.display,
+              original_pkg_root = entry.original_pkg_root
+						}
+					end,
+				}),
+				attach_mappings = function(prompt_bufnr)
+					actions.select_default:replace(function()
+						actions.close(prompt_bufnr)
+						local selection = action_state.get_selected_entry()
+						-- vim.cmd("e " .. selection.value)
+						local api = require("nvim-tree.api")
+						api.tree.change_root(selection.original_pkg_root)
+						-- api.tree.find_file(selection.value)
+					end)
+					return true
+				end,
+				sorter = require("telescope.config").values.generic_sorter({}),
+			})
+			:find()
+	end
 
+	npm_global_picker()
 end
 
-
-
 return M
-

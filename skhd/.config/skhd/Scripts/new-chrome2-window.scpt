@@ -12,14 +12,11 @@ else
     tell application "Google Chrome"
         activate
         tell application "System Events"
-            keystroke "l" using {command down}
-            -- key code 53 -- escape key
+            keystroke "l" using {command down, option down, shift down}
             key code 53
             key code 53
             key code 53
-            -- simulate control tab
-            -- key code 48 using {control down}
-            -- key code 48 using {control down, shift down}
+            -- key code 53
         end tell
     end tell
 end if

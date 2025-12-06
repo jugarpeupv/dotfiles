@@ -148,7 +148,8 @@ return {
 	},
 	{
 		"neovim/nvim-lspconfig",
-		event = { "BufReadPre", "BufNewFile" },
+		-- event = { "BufReadPre", "BufNewFile" },
+    event = { "InsertEnter" },
 		-- commit = "1f941b36",
 		enabled = function()
 			local is_headless = #vim.api.nvim_list_uis() == 0
@@ -159,12 +160,12 @@ return {
 		end,
 		-- event = { "InsertEnter" },
 		dependencies = {
-      {
-        "zbirenbaum/copilot.lua"
-      },
-      {
-        "folke/snacks.nvim"
-      },
+			{
+				"zbirenbaum/copilot.lua",
+			},
+			{
+				"folke/snacks.nvim",
+			},
 			{
 				"rachartier/tiny-inline-diagnostic.nvim",
 				enabled = false,
@@ -371,21 +372,21 @@ return {
 				enabled = false,
 				lazy = true,
 				config = true, -- necessary as per https://github.com/rmagatti/goto-preview/issues/88
-				keys = {
-					{
-						"<leader>pd",
-						function()
-							require("goto-preview").goto_preview_definition()
-						end,
-					},
-
-					{
-						"<leader>pr",
-						function()
-							require("goto-preview").goto_preview_references()
-						end,
-					},
-				},
+				-- keys = {
+				-- 	{
+				-- 		"<leader>pd",
+				-- 		function()
+				-- 			require("goto-preview").goto_preview_definition()
+				-- 		end,
+				-- 	},
+				--
+				-- 	{
+				-- 		"<leader>pr",
+				-- 		function()
+				-- 			require("goto-preview").goto_preview_references()
+				-- 		end,
+				-- 	},
+				-- },
 			},
 			-- { "folke/neodev.nvim", opts = {} },
 			{
@@ -678,7 +679,7 @@ return {
 				handlers = {
 					["eslint/noLibrary"] = function(err, params, ctx, config)
 						vim.print("[eslint] No ESLint library found for this project.")
-            return {}
+						return {}
 					end,
 				},
 				settings = {
@@ -767,15 +768,15 @@ return {
 			vim.lsp.config("marksman", {
 				on_attach = on_attach,
 				capabilities = capabilities,
-				root_markers = { ".marksman.toml", ".git", ".gitignore", ".obsidian.vimrc" },
-				root_dir = root_pattern(
-					".git",
-					".marksman.toml",
-					".obsidian",
-					"README.md",
-					".obsidian.vimrc",
-					".gitignore"
-				),
+				-- root_markers = { ".marksman.toml", ".git", ".gitignore", ".obsidian.vimrc", "README.md" },
+				-- root_dir = root_pattern(
+				-- 	".git",
+				-- 	".marksman.toml",
+				-- 	".obsidian",
+				-- 	"README.md",
+				-- 	".obsidian.vimrc",
+				-- 	".gitignore"
+				-- ),
 			})
 			vim.lsp.enable("marksman")
 

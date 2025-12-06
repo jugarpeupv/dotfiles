@@ -33,8 +33,10 @@ return {
 	},
 	{
 		"Weissle/persistent-breakpoints.nvim",
-		event = { "BufReadPost" },
+		-- event = { "BufReadPost" },
 		keys = {
+			{ "<C-d>" },
+			{ "<C-u>" },
 			{
 				mode = { "n" },
 				"<leader>de",
@@ -304,7 +306,7 @@ return {
 			},
 			{
 				"theHamsta/nvim-dap-virtual-text",
-        enabled = false,
+				enabled = false,
 				config = function()
 					require("nvim-dap-virtual-text").setup({
 						display_callback = function(variable)

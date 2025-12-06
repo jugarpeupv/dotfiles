@@ -17,6 +17,7 @@ return {
 					},
 				},
 				integrations = {
+					blink_pairs = true,
 					blink_cmp = true,
 					gitgraph = true,
 					neotest = true,
@@ -80,14 +81,14 @@ return {
 						-- remove bold from gui, use style = {}
 						Boolean = { fg = "#F38BA8" },
 						Number = { fg = "#F38BA8" },
-						NormalFloat = { fg = "none", bg = "none" },
-						GitHeader = { bg = "none" },
-						GitFooter = { bg = "none" },
-						GitAppBar = { bg = "none" },
+						NormalFloat = { fg = "", bg = "" },
+						GitHeader = { bg = "" },
+						GitFooter = { bg = "" },
+						GitAppBar = { bg = "" },
 						String = { fg = "#F2CDCD" },
 						OverOldValue = { bg = "#F38BA8", fg = "black" },
 						OverNewValue = { bg = "#94E2D5", fg = "black" },
-						SnippetTabstop = { bg = "none" },
+						SnippetTabstop = { bg = "" },
 						["@module.hurl"] = { fg = "#89ddff", style = {} },
 						["@keyword.ghactions"] = { fg = "#89ddff" },
 						["@property.ghactions"] = { fg = "#cdd6f5" },
@@ -101,8 +102,8 @@ return {
 						fzf3 = { fg = "#737aa2", bg = "#292e42" },
 						StatusLine = { fg = "#737aa2", bg = "#292e42" },
 						DiffviewFolderName = { style = {}, fg = "#89B4FA" },
-						NvimTreeStatusLine = { fg = "#737aa2", bg = "none" },
-						NvimTreeStatusLineNC = { fg = "#737aa2", bg = "none" },
+						NvimTreeStatusLine = { fg = "#737aa2", bg = "" },
+						NvimTreeStatusLineNC = { fg = "#737aa2", bg = "" },
 						MatchParen = { bg = "#394b70", fg = "#F5E0DC" },
 						IlluminatedWordText = { bg = "#394b70" },
 						IlluminatedWordRead = { bg = "#394b70" },
@@ -126,7 +127,7 @@ return {
 						["@markup.heading.3.markdown"] = { fg = "#94E2D5" },
 						["@lsp.typemod.interface.defaultLibrary.typescript"] = { fg = "#F38BA8" },
 						["@type.builtin.typescript"] = { fg = "#89ddfe" },
-						["@string.special.url.html"] = { fg = "#F5C2E7", bg = "none", style = {} },
+						["@string.special.url.html"] = { fg = "#F5C2E7", bg = "", style = {} },
 						["@markup.heading.4.markdown"] = { fg = "#B4BEFE" },
 						Ignore = { fg = "#394b70" },
 						NeotestPassed = { fg = "#8ee2cf" },
@@ -144,8 +145,8 @@ return {
 						BlinkCmpGitKindCommit = { fg = "#8ee2cf" },
 						BlinkCmpGitLabelCommitId = { fg = "#8ee2cf" },
 						GitSignsCurrentLineBlame = { fg = "#B4BEFE" },
-						FloatBorder = { fg = "#394b70" },
-						FloatTitle = { fg = "#394b70", bg = "none" },
+						FloatBorder = { fg = "#394b70", bg = "" },
+						FloatTitle = { fg = "#394b70", bg = "" },
 						BlinkCmpKindSnippet = { fg = "#747ebd" },
 						BlinkCmpKindVariable = { fg = "#F5C2E7" },
 						BlinkCmpMenuBorder = { fg = "#394b70" },
@@ -200,7 +201,7 @@ return {
 						RenderMarkdownH4Bg = { bg = "#526c96" },
 						RenderMarkdownH5Bg = { bg = "#6c7298" },
 						RenderMarkdownH6Bg = { bg = "#36394d" },
-						DiffviewFilePanelSelected = { bg = "#394b70", fg = "none" },
+						DiffviewFilePanelSelected = { bg = "#394b70", fg = "" },
 						DevIconBash = { fg = "#94E2D5", style = {} },
 						RenderMarkdownCodeInline = { bg = "#0F2745", fg = "#94E2D5" },
 						RenderMarkdown_Inverse_RenderMarkdownCode = { fg = "#394b70" },
@@ -229,7 +230,7 @@ return {
 						GitSignsChange = { fg = "#F2CDCD" },
 						GitSignsChangeInLine = { fg = "#F2CDCD" },
 						GitSignsDelete = { fg = "#F38BA8" },
-						GitSignsDeleteVirtLn = { bg = "#3F2D3D", fg = "none" },
+						GitSignsDeleteVirtLn = { bg = "#3F2D3D", fg = "" },
 						GitSignsStagedAddLn = { bg = "#103235" },
 						GitSignsStagedUntrackedLn = { bg = "#103235" },
 						GitSignsStagedAddCul = { fg = "#94E2D5" },
@@ -254,15 +255,23 @@ return {
 						GitSignsStagedChange = { fg = "#F2CDCD" },
 						GitSignsStagedChangedelete = { fg = "#F2CDCD" },
 						DiagnosticUnderlineWarn = { style = { "undercurl" }, sp = "#F5E0DC" },
-						DiagnosticUnderlineHint = { style = { "underline" }, sp = "#89ddff" },
+						DiagnosticUnderlineHint = { style = { "undercurl" }, sp = "#89ddff" },
 						DiagnosticUnderlineInfo = { style = { "undercurl" }, sp = "#89B4FA" },
 						DiagnosticUnderlineError = { style = { "undercurl" }, sp = "#f38bad" },
 						DiffviewFilePanelRootPath = { fg = "#B4BEFE" },
 						DiffviewFilePanelTitle = { fg = "#B4BEFE" },
+						markdownHeadingDelimiter = { fg = "#F38BA8" },
+						markdownH2Delimiter = { fg = "#89ddff" },
+						markdownH2 = { fg = "#89ddff" },
+						markdownH3 = { fg = "#94E2D5" },
+						markdownH3Delimiter = { fg = "#94E2D5" },
+						markdownH4 = { fg = "#B4BEFE" },
+						markdownH4Delimiter = { fg = "#B4BEFE" },
+						markdownUrl = { fg = "#F5C2E7" },
 						DiffviewFilePanelCounter = { fg = "#89B4FA" },
-						TelescopeSelection = { bg = "#394b70", fg = "none", style = {} },
+						TelescopeSelection = { bg = "#394b70", fg = "", style = {} },
 						TelescopePreviewLine = { bg = "#394b70", style = {} },
-						CmpPmenu = { bg = "none" },
+						CmpPmenu = { bg = "" },
 						CmpPmenuBorder = { fg = "#394b70" },
 						SubstituteSubstituted = { link = "Visual" },
 						DapUIPlayPauseNC = { link = "DapUIPlayPause" },
@@ -272,138 +281,131 @@ return {
 						DapUIStepIntoNC = { link = "DapUIStepInto" },
 						DapUIStepBackNC = { link = "DapUIStepBack" },
 						DapUIStepOutNC = { link = "DapUIStepOut" },
-            HimalayaSender = { fg = "#B4BEFE" },
-            HimalayaUnseen = { fg = "#89ddff" },
-            HimalayaDate = { fg = "#F5C2E7" }
+						HimalayaSender = { fg = "#B4BEFE" },
+						HimalayaUnseen = { fg = "#89ddff" },
+						HimalayaDate = { fg = "#F5C2E7" },
+						CmpItemKindField = { fg = "#f38ba9" },
+						PmenuSel = { bg = "#394b70", style = {} },
+						DiffAdd = { style = {}, bg = "#103235" },
+						DiffChange = { style = {}, bg = "#103235" },
+						DiffText = { style = {}, bg = "#456f80" },
+						DiffDelete = { style = {}, bg = "#3F2D3D" },
+						DiffviewDiffAddAsDelete = { bg = "#3f2d3d", style = {} },
+						DiffviewDiffDelete = { style = {}, fg = "#3B4252", bg = "" },
+						diffAdded = { style = {}, bg = "#103235" },
+						diffRemoved = { style = {}, bg = "#3F2D3D" },
+						DiffviewStatusDeleted = { style = {}, fg = "#f38bad", bg = "" },
+						DiffviewStatusModified = { style = {}, fg = "#89b4fa", bg = "" },
+						DiffviewStatusAdded = { style = {}, fg = "#1abc9c", bg = "" },
+						DiffviewStatusUntracked = { style = {}, fg = "#1abc9c", bg = "" },
+						DiffviewFilePanelInsertions = { style = {}, fg = "#1abc9c", bg = "" },
+						DiffviewFilePanelDeletions = { style = {}, fg = "#f38bad", bg = "" },
+						DiffAddAsDelete = { style = {}, bg = "#3F2D3D" },
+						DiffDeleteText = { style = {}, bg = "#7b3038" },
+						DiffAddText = { style = {}, bg = "#456f80" },
+						GitSignsAddPreview = { style = {}, bg = "#103235" },
+						GitSignsDeletePreview = { style = {}, bg = "#3F2D3D" },
+						BufferLineTabSeparator = { style = {}, fg = "#13182e" },
+						BufferLineTabSeparatorSelected = { style = {}, fg = "#13182e" },
+
+						BufferLineTabSelected = { style = {}, bg = "#394b70" },
+						InclineNormal = { bg = "#292e42" },
+						InclineNormalNC = { bg = "#292e42", fg = "#7C7F93" },
+						Winbar = { fg = "#bbc2e0" },
+						WinbarNC = { fg = "#7C7F93" },
+						TreesitterContextLineNumber = { bg = "#00122e", fg = "#737aa2" },
+						-- TreesitterContext = { fg='', bg = '', },
+						WinSeparator = { fg = "#292e42" },
+						NvimTreeFolderIcon = { fg = "#89B4FA" },
+						NvimTreeFolderArrowClosed = { fg = "#89B4FA" },
+						NvimTreeFolderArrowOpen = { fg = "#89B4FA" },
+						NvimTreeWinSeparator = { fg = "#292e42" },
+						NvimTreeIndentMarker = { fg = "#292e42" },
+						BufferLineOffsetSeparator = { fg = "#292e42" },
+						TelescopeBorder = { fg = "#394b70" },
+						DiagnosticWarn = { fg = "#F9E2AF" },
+						DiagnosticFloatingWarn = { fg = "#F9E2AF" },
+						DiagnosticSignWarn = { fg = "#F9E2AF" },
+						DiagnosticError = { fg = "#F38BA8" },
+						DiagnosticSignError = { fg = "#F38BA8" },
+						TroublePreview = { bg = "#264F78", fg = "" },
+						TroubleFileName = { fg = "#F5C2E7", bg = "" },
+						DiagnosticHint = { fg = "#89DCEB" },
+						DiagnosticFloatingHint = { fg = "#89DCEB" },
+						DiagnosticSignHint = { fg = "#89DCEB" },
+						Visual = { style = {}, bg = "#264F78" },
+						DiffviewFilePanelFileName = { fg = "#c0caf5" },
+						["@tag"] = { fg = "#9CDCFE" },
+						["@tag.delimiter.angular"] = { fg = "#9CDCFE" },
+						["@tag.delimiter"] = { fg = "#9CDCFE" },
+						["@tag.attribute"] = { fg = "#B4BEFE" },
+						Error = { style = {}, fg = "#F38BA8" },
+						ErrorMsg = { style = {}, fg = "#F38BA8" },
+						TreesitterContextBottom = { fg = "", style = {} },
+						["@property.class.scss"] = { fg = "#74C7EC" },
+						["@lsp.type.type"] = { fg = "#89ddff" },
+						["@lsp.type.interface"] = { fg = "#89ddff" },
+						["@attribute.typescript"] = { fg = "#89ddff" },
+						["@variable.member.lua"] = { fg = "#B4BEFE" },
+						["@variable.member"] = { fg = "#B4BEFE" },
+						["@variable"] = { fg = "#CAD3F5" },
+						["@variable.angular"] = { fg = "#B4BEFE" },
+						LspSignatureActiveParameter = { style = {}, fg = "", bg = "#264F78" },
+						SignatureActiveParameter = { style = {}, fg = "", bg = "#264F78" },
+						WarningMsg = { fg = "#F2CDCD" },
+						DiagnosticUnnecessary = { bg = "", fg = "", style = { "italic", "undercurl" }, sp = "#949cbb" },
+						CopilotSuggestion = { style = {} },
+						["@keyword"] = { style = { "bold" }, fg = "#CBA6F7" },
+						["@keyword.return"] = { style = { "bold" } },
+						["@keyword.operator"] = { style = { "bold" } },
+						["@keyword.exception"] = { style = { "bold" }, fg = "#F5C2E7" },
+						["@keyword.jsdoc"] = { style = {}, fg = "#CBA6F7" },
+						Constant = { style = {}, bg = "", blend = 0 },
+						Title = { style = {}, bg = "", blend = 0 },
+						NonText = { style = {}, bg = "", blend = 0 },
+						VertSplit = { fg = "#292e42" },
+						SagaBorder = { fg = "#394b70" },
+						SagaTitle = { fg = "#394b70" },
+						ctrlsfMatch = { fg = "#F2CDCD", bg = "#394b70" },
+						jsonKeyword = { fg = "#b4beff" },
+						["@property.json"] = { fg = "#b4beff" },
+						["@property.jsonc"] = { fg = "#b4beff" },
+						["@property"] = { fg = "#b4beff" },
+						["@text.uri"] = { style = {} },
+						QuickFixLine = { style = {}, bg = "#264F78" },
+						QuickFixLineNr = { style = {}, fg = "#747ebd" },
+						TabLine = { bg = "" },
+						TabLineSel = { bg = "" },
+						DiagnosticVirtualTextWarn = { fg = "#DCDCAA", bg = "#233745" },
+						DiagnosticVirtualTextInfo = { fg = "#2ac3de", bg = "#192b38" },
+						DiagnosticVirtualTextError = { fg = "#db4b4b", bg = "#362c3d" },
+						DiagnosticVirtualTextHint = { fg = "#89DCEB", bg = "#233745" },
+						EndOfBuffer = { fg = "#737aa2" },
+						DiagnosticVirtualTextWarnLine = { fg = "#DCDCAA", bg = "#292e42" },
+						DiagnosticVirtualTextInfoLine = { fg = "#2ac3de", bg = "#292e42" },
+						DiagnosticVirtualTextErrorLine = { fg = "#db4b4b", bg = "#292e42" },
+						DiagnosticVirtualTextHintLine = { fg = "#89DCEB", bg = "#292e42" },
+						barbecue_modified = { fg = "#737aa2" },
+						NvimTreeRootFolder = { style = {} },
+						NvimTreeGitDirty = { fg = "#F5E0DC" },
+						NvimTreeGitStaged = { fg = "#8ee2cf" },
+						NvimTreeExecFile = { style = {}, fg = "#F5C2E7" },
+						NvimTreeModifiedFile = { style = {}, fg = "#EFF1F5" },
+						NvimTreeGitNew = { fg = "#89ddff" },
+						["@markup.raw"] = { fg = "#CDD6F4" },
+						ContextVt = { fg = "#747ebd" },
+						GitConflictIncoming = { style = {}, bg = "#1a3754" },
+						GitConflictCurrent = { style = {}, bg = "#103235" },
+						GitConflictMiddle = { bg = "", fg = "#c0caf5" },
+						GitConflictIncomingLabel = { bg = "#394b70" },
+						GitConflictIncomingMark = { bg = "#394b70" },
+						GitConflictCurrentMark = { bg = "#104235" },
 					}
 				end,
 			})
 
 			-- setup must be called before loading
 			vim.cmd.colorscheme("catppuccin")
-
-			vim.cmd([[hi CmpItemKindField guifg=#f38ba9]])
-			vim.cmd([[hi! PmenuSel guibg=#394b70 gui=none]])
-			vim.cmd([[hi DiffAdd gui=none guifg=none guibg=#103235]])
-			vim.cmd([[hi DiffChange gui=none guifg=none guibg=#103235]])
-			vim.cmd([[hi DiffText gui=none guifg=none guibg=#456f80]])
-			vim.cmd([[hi DiffDelete gui=none guifg=none guibg=#3F2D3D]])
-			vim.cmd([[hi DiffviewDiffAddAsDelete guibg=#3f2d3d gui=none guifg=none]])
-			vim.cmd([[hi DiffviewDiffDelete gui=none guifg=#3B4252 guibg=none]])
-			vim.cmd([[hi diffAdded gui=none guifg=none guibg=#103235]])
-			vim.cmd([[hi diffRemoved gui=none guifg=none guibg=#3F2D3D]])
-			vim.cmd([[hi DiffviewStatusDeleted gui=none guifg=#f38bad guibg=none]])
-			vim.cmd([[hi DiffviewStatusModified gui=none guifg=#89b4fa guibg=none]])
-			vim.cmd([[hi DiffviewStatusAdded gui=none guifg=#1abc9c guibg=none]])
-			vim.cmd([[hi DiffviewStatusUntracked gui=none guifg=#1abc9c guibg=none]])
-			vim.cmd([[hi DiffviewFilePanelInsertions gui=none guifg=#1abc9c guibg=none]])
-			vim.cmd([[hi DiffviewFilePanelDeletions gui=none guifg=#f38bad guibg=none]])
-			vim.cmd([[hi DiffAddAsDelete gui=none guifg=none guibg=#3F2D3D]])
-			vim.cmd([[hi DiffDeleteText gui=none guifg=none guibg=#7b3038]])
-			vim.cmd([[hi DiffAddText gui=none guifg=none guibg=#456f80]])
-			vim.cmd([[hi GitSignsAddPreview gui=none guifg=none guibg=#103235]])
-			vim.cmd([[hi GitSignsDeletePreview gui=none guifg=none guibg=#3F2D3D]])
-			vim.cmd([[hi BufferLineTabSeparator gui=none guifg=#13182e]])
-			vim.cmd([[hi BufferLineTabSeparatorSelected gui=none guifg=#13182e]])
-			vim.cmd([[hi BufferLineTabSelected gui=none guibg=#394b70]])
-			vim.cmd([[hi InclineNormal  guibg=#292e42]])
-			vim.cmd([[hi InclineNormalNC  guibg=#292e42 guifg=#7C7F93]])
-			vim.cmd([[hi Winbar guifg=#bbc2e0]])
-			vim.cmd([[hi WinbarNC guifg=#7C7F93]])
-			vim.cmd([[hi TreesitterContextLineNumber guibg=#00122e guifg=#737aa2]])
-			vim.cmd([[hi TreesitterContext guifg=none guibg=none]])
-			vim.cmd([[hi WinSeparator guifg=#292e42 ]])
-			vim.cmd([[hi NvimTreeFolderIcon guifg=#89B4FA]])
-			vim.cmd([[hi NvimTreeFolderArrowClosed guifg=#89B4FA]])
-			vim.cmd([[hi NvimTreeFolderArrowOpen guifg=#89B4FA]])
-			vim.cmd([[hi NvimTreeWinSeparator guifg=#292e42]])
-			vim.cmd([[hi NvimTreeIndentMarker guifg=#292e42]])
-			vim.cmd([[hi BufferLineOffsetSeparator guifg=#292e42]])
-			vim.cmd([[hi TelescopeBorder guifg=#394b70]])
-			vim.cmd([[hi DiagnosticWarn guifg=#F9E2AF]])
-			vim.cmd([[hi DiagnosticFloatingWarn guifg=#F9E2AF]])
-			vim.cmd([[hi DiagnosticSignWarn guifg=#F9E2AF]])
-			vim.cmd([[hi DiagnosticError guifg=#F38BA8]])
-			vim.cmd([[hi DiagnosticSignError guifg=#F38BA8]])
-			vim.cmd([[hi TroublePreview guibg=#264F78 guifg=none]])
-			vim.cmd([[hi TroubleFileName guifg=#F5C2E7 guibg=none]])
-			vim.cmd([[hi DiagnosticHint guifg=#89DCEB]])
-			vim.cmd([[hi DiagnosticFloatingHint guifg=#89DCEB]])
-			vim.cmd([[hi DiagnosticSignHint guifg=#89DCEB]])
-			vim.cmd([[hi Visual gui=none cterm=none guibg=#264F78]])
-			vim.cmd([[hi DiffviewFilePanelFileName guifg=#c0caf5]])
-			vim.cmd([[hi @tag guifg=#9CDCFE]])
-			vim.cmd([[hi @tag.delimiter.angular guifg=#9CDCFE]])
-			vim.cmd([[hi @tag.delimiter guifg=#9CDCFE]])
-			vim.cmd([[hi @tag.attribute guifg=#B4BEFE]])
-			vim.cmd([[hi Error gui=none guifg=#F38BA8]])
-			vim.cmd([[hi ErrorMsg gui=none guifg=#F38BA8]])
-			vim.cmd([[hi TreesitterContextBottom guifg=none gui=none]])
-			vim.cmd([[hi @property.class.scss guifg=#74C7EC]])
-			vim.cmd([[hi @lsp.type.type guifg=#89ddff]])
-			vim.cmd([[hi @lsp.type.interface guifg=#89ddff]])
-			vim.cmd([[hi @attribute.typescript guifg=#89ddff]])
-			vim.cmd([[hi @variable.member.lua guifg=#B4BEFE]])
-			vim.cmd([[hi @variable.member guifg=#B4BEFE]])
-			vim.cmd([[hi @variable guifg=#CAD3F5]])
-			vim.cmd([[hi @variable.angular guifg=#B4BEFE]])
-			vim.cmd([[hi LspSignatureActiveParameter gui=none guifg=none guibg=#264F78]])
-			vim.cmd([[hi SignatureActiveParameter gui=none guifg=none guibg=#264F78]])
-			vim.cmd([[hi WarningMsg guifg=#F2CDCD]])
-			vim.cmd([[hi DiagnosticUnnecessary guibg=none guifg=none gui=italic,undercurl guisp=#949cbb]])
-			vim.cmd([[hi CopilotSuggestion gui=none]])
-			vim.cmd([[hi @keyword  gui=bold guifg=#CBA6F7]])
-			vim.cmd([[hi @keyword.return  gui=bold]])
-			vim.cmd([[hi @keyword.operator  gui=bold]])
-			vim.cmd([[hi @keyword.exception  gui=bold guifg=#F5C2E7]])
-			vim.cmd([[hi @keyword.jsdoc  gui=none guifg=#CBA6F7]])
-			vim.cmd([[hi Constant gui=none cterm=none guibg=none blend=0]])
-			vim.cmd([[hi Title gui=none cterm=none guibg=none blend=0]])
-			vim.cmd([[hi NonText gui=none cterm=none guibg=none blend=0]])
-			vim.cmd([[hi VertSplit  guifg=#292e42]])
-			vim.cmd([[hi FloatBorder  guifg=#394b70 guibg=none]])
-			vim.cmd([[hi SagaBorder  guifg=#394b70]])
-			vim.cmd([[hi SagaTitle  guifg=#394b70]])
-			vim.cmd([[hi ctrlsfMatch guifg=#F2CDCD guibg=#394b70]])
-			vim.cmd([[hi jsonKeyword guifg=#b4beff ]])
-			vim.cmd([[hi @property.json guifg=#b4beff ]])
-			vim.cmd([[hi @property.jsonc guifg=#b4beff ]])
-			vim.cmd([[hi @property guifg=#b4beff ]])
-			vim.cmd([[hi @text.uri gui=none]])
-			vim.cmd([[hi QuickFixLine gui=none guibg=#264F78]])
-			vim.cmd([[hi QuickFixLineNr gui=none guifg=#747ebd]])
-			vim.cmd([[hi TabLine guibg=none]])
-			vim.cmd([[hi TabLineSel guibg=none]])
-			vim.cmd([[hi DiagnosticVirtualTextWarn guifg=#DCDCAA guibg=#233745]])
-			vim.cmd([[hi DiagnosticVirtualTextInfo guifg=#2ac3de guibg=#192b38]])
-			vim.cmd([[hi DiagnosticVirtualTextError guifg=#db4b4b guibg=#362c3d]])
-			vim.cmd([[hi DiagnosticVirtualTextHint guifg=#89DCEB guibg=#233745]])
-			vim.cmd([[hi EndOfBuffer guifg=#737aa2]])
-			vim.cmd([[hi DiagnosticVirtualTextWarnLine guifg=#DCDCAA guibg=#292e42]])
-			vim.cmd([[hi DiagnosticVirtualTextInfoLine guifg=#2ac3de guibg=#292e42]])
-			vim.cmd([[hi DiagnosticVirtualTextErrorLine guifg=#db4b4b guibg=#292e42]])
-			vim.cmd([[hi DiagnosticVirtualTextHintLine guifg=#89DCEB guibg=#292e42]])
-			vim.cmd([[hi DiagnosticUnderlineHint gui=undercurl]])
-			vim.cmd([[hi barbecue_modified guifg=#737aa2]])
-			vim.cmd([[hi NvimTreeFolderIcon guifg=#89B4FA]])
-			vim.cmd([[hi NvimTreeRootFolder gui=none]])
-			vim.cmd([[hi NvimTreeGitDirty guifg=#F5E0DC]])
-			vim.cmd([[hi NvimTreeGitStaged guifg=#8ee2cf]])
-			vim.cmd([[hi NvimTreeExecFile gui=none guifg=#F5C2E7]])
-			vim.cmd([[hi NvimTreeModifiedFile gui=none guifg=#EFF1F5]])
-			vim.cmd([[hi NvimTreeGitNew guifg=#89ddff]])
-			vim.cmd([[hi @markup.raw guifg=#CDD6F4]])
-			vim.cmd([[hi ContextVt guifg=#747ebd]])
-			vim.cmd([[hi GitConflictIncoming gui=none guibg=#1a3754]])
-			vim.cmd([[hi GitConflictCurrent gui=none guibg=#103235]])
-			vim.cmd([[hi GitConflictMiddle guibg=none guifg=#c0caf5]])
-			vim.cmd([[hi GitConflictIncomingLabel guibg=#394b70]])
-			vim.cmd([[hi GitConflictIncomingMark guibg=#394b70]])
-			vim.cmd([[hi GitConflictCurrentMark guibg=#104235]])
-			vim.cmd([[hi GitHeader guibg=none]])
-			vim.cmd([[hi GitFooter guibg=none]])
-			vim.cmd([[hi GitAppBar guibg=none]])
-			vim.cmd([[hi NormalFloat guibg=none]])
 
 			vim.g.terminal_color_0 = "#1E1E2E"
 			vim.g.terminal_color_8 = "#585B70"
@@ -455,22 +457,6 @@ let g:fzf_colors =
 		end,
 	},
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- Name	Latte	Frappe	Macchiato	Mocha	Usage
 -- rosewater	#dc8a78	#F2D5CF	#F4DBD6	#F5E0DC	Winbar

@@ -2,7 +2,11 @@
 return {
   "lukas-reineke/indent-blankline.nvim",
   enabled = true,
-  event = "BufReadPost",
+  -- event = "BufReadPost",
+  keys = {
+    { "<C-d>" },
+    { "<C-u>" }
+  },
   config = function()
     -- require("indent_blankline").setup {
     --   -- char = '┊',

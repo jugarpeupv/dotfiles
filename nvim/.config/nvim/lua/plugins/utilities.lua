@@ -1,5 +1,13 @@
 -- return {}
 return {
+	{
+		"katonori/ps.vim",
+    cmd = "PS",
+    keys = {
+      { "<leader>ps","<cmd>PS<cr>" },
+      { "<leader>pr","<cmd>PsRefresh<cr>" }
+    }
+	},
 	-- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
 	{ "junegunn/gv.vim", dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
 	{
@@ -12,8 +20,8 @@ return {
 	-- { "markonm/traces.vim", event = { "BufReadPost" } },
 	{
 		"luukvbaal/statuscol.nvim",
-		enabled = true,
-		event = { "BufReadPre", "BufNewFile" },
+		enabled = false,
+		-- event = { "BufReadPre", "BufNewFile" },
 		lazy = true,
 		config = function()
 			local builtin = require("statuscol.builtin")
@@ -1260,8 +1268,7 @@ return {
 		event = { "BufReadPost" },
 		-- cmd = { "Git" },
 		keys = {
-
-			{ "<leader>jl", "<cmd>Jumps<CR>" },
+			{ "<leader>jL", "<cmd>Jumps<CR>" },
 			{
 				mode = { "n" },
 				"<leader>ga",

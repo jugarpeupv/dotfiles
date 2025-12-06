@@ -2,12 +2,13 @@ return {
 	"folke/snacks.nvim",
 	priority = 800,
 	enabled = true,
+  lazy = false,
 	-- event = { "BufReadPost", "BufNewFile", "CmdlineEnter" },
-	event = { "BufReadPost", "BufNewFile" },
+	-- event = { "BufReadPost", "BufNewFile" },
 	opts = {
 		image = {
 			doc = {
-				enabled = false
+				enabled = false,
 			},
 			math = {
 				enabled = false,
@@ -105,7 +106,7 @@ return {
 						["<a-i>"] = { "toggle_ignored", mode = { "i", "n" } },
 						["<a-r>"] = { "toggle_regex", mode = { "i", "n" } },
 						["<a-m>"] = { "toggle_maximize", mode = { "i", "n" } },
-						["<a-p>"] = { "toggle_preview", mode = { "i", "n" } },
+						["<C-l>"] = { "toggle_preview", mode = { "i", "n" } },
 						["<a-w>"] = { "cycle_win", mode = { "i", "n" } },
 						["<c-a>"] = { "select_all", mode = { "n", "i" } },
 						-- ["<c-b>"] = { "preview_scroll_up", mode = { "i", "n" } },
@@ -224,7 +225,7 @@ return {
 					{
 						box = "horizontal",
 						{ win = "list", border = "none" },
-						{ win = "preview", title = "{preview}", width = 0.35, border = "left" },
+						{ win = "preview", title = "{preview}", width = 0.45, border = "left" },
 					},
 				},
 			},
@@ -253,6 +254,34 @@ return {
 	},
 	keys = {
 		-- Top Pickers & Explorer
+		{
+			"<leader>ch",
+			function()
+				Snacks.picker.command_history({ layout = { preview = false } })
+				-- Snacks.picker.command_history({})
+			end,
+		},
+		{
+			"<leader>ds",
+			function()
+				Snacks.picker.lsp_symbols()
+				-- require("telescope.builtin").oldfiles({ only_cwd = true })
+			end,
+		},
+		{
+			"<leader>jl",
+			function()
+				Snacks.picker.jumps()
+				-- require("telescope.builtin").oldfiles({ only_cwd = true })
+			end,
+		},
+		{
+			"<leader>of",
+			function()
+				Snacks.picker.recent({ filter = { cwd = true } })
+				-- require("telescope.builtin").oldfiles({ only_cwd = true })
+			end,
+		},
 		{
 			"<leader>ip",
 			function()
@@ -289,10 +318,59 @@ return {
 			{ silent = true },
 		},
 		{
+			mode = { "n" },
+			"<leader>fi",
+			function()
+				Snacks.picker.files()
+
+				-- require("telescope.builtin").find_files({
+				--   hidden = true,
+				--   no_ignore = true,
+				--   -- find_command = { "fd", ".", "--type", "f", "--exclude", ".git/*", "--exclude", "node_modules/*" },
+				--   find_command = {
+				--     "fd",
+				--     ".",
+				--     "--type",
+				--     "f",
+				--     "--exclude",
+				--     ".git/*",
+				--     "--exclude",
+				--     "node_modules/*",
+				--     "--exclude",
+				--     "node_modules",
+				--     "--exclude",
+				--     "**/node_modules/**",
+				--   },
+				--   preview = {
+				--     hide_on_startup = true,
+				--   },
+				-- })
+			end,
+		},
+
+		{
 			mode = { "n", "t" },
 			"<M-p>",
 			function()
-				Snacks.picker.git_files()
+				local ok = pcall(function()
+					local git_root = Snacks.git.get_root()
+					if not git_root then
+						error("not in git repo")
+					end
+					Snacks.picker.git_files()
+				end)
+
+				if not ok then
+					Snacks.picker.files({
+						exclude = {
+							".git",
+							"*__template__*",
+							"*DS_Store*",
+						},
+					})
+				end
+
+				-- Snacks.picker.git_files()
 				-- require("telescope.builtin").find_files({
 				--   cwd = vim.loop.cwd(),
 				--   hidden = true,
@@ -424,18 +502,39 @@ return {
 	config = function(_, opts)
 		require("snacks").setup(opts)
 		Snacks.util.icon = function(name, cat, opts)
-			-- Copy and modify from https://github.com/folke/snacks.nvim/blob/main/lua/snacks/util/init.lua#L120-L154
-			-- Example with `mini.icons`:
-			-- return require("mini.icons").get(cat or "file", name)
-      local basename = name
-      local ext = cat
-      if cat == "file" then
-        basename = vim.fn.fnamemodify(name, ":t")
-        -- ext = basename:match("%w%.(%w+)$")
-        ext = basename:match("%.(.+)$") -- matches everything after the first dot
-      end
-      return require("nvim-web-devicons").get_icon(basename, ext, { default = true })
-      -- return require("nvim-web-devicons").get_icon(name, cat or "file", opts)
+			--    -- WORKING
+			-- -- Copy and modify from https://github.com/folke/snacks.nvim/blob/main/lua/snacks/util/init.lua#L120-L154
+			-- -- Example with `mini.icons`:
+			-- -- return require("mini.icons").get(cat or "file", name)
+			-- local basename = name
+			-- local ext = cat
+			-- if cat == "file" then
+			-- 	basename = vim.fn.fnamemodify(name, ":t")
+			-- 	-- ext = basename:match("%w%.(%w+)$")
+			-- 	ext = basename:match("%.(.+)$") -- matches everything after the first dot
+			-- end
+			-- return require("nvim-web-devicons").get_icon(basename, ext, { default = true })
+			-- -- return require("nvim-web-devicons").get_icon(name, cat or "file", opts)
+			--    -- END WORKING
+
+			local devicons = require("nvim-web-devicons")
+			local basename = name
+			local ext = cat
+			if cat == "file" then
+				basename = vim.fn.fnamemodify(name, ":t")
+				ext = basename:match("%.([^.]+)$")
+			end
+			local icon, hl = devicons.get_icon(basename, ext, { default = true })
+			-- Check if we got a default icon by comparing with a known default
+			local default_icon = devicons.get_icon("", "", { default = true })
+			-- If icon is the default icon and we have an extension, try with just the extension
+			if icon == default_icon and ext then
+				local ext_icon, ext_hl = devicons.get_icon(ext, ext, { default = true })
+				if ext_icon and ext_icon ~= default_icon then
+					return ext_icon, ext_hl
+				end
+			end
+			return icon, hl
 		end
 	end,
 }

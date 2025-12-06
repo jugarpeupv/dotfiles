@@ -16,6 +16,7 @@ opt.expandtab = true -- expand tab to spaces
 
 -- opt.expandtab = false -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
+opt.smartindent = true -- copy indent from current line when starting new one
 -- opt.shortmess:append("I") -- remove :intro
 
 -- line wrapping
@@ -130,7 +131,7 @@ opt.winblend = 0
 -- vim.cmd([[let &t_Ce = "\e[4:0m]"]])
 
 opt.showmode = false
-vim.g.markdown_folding = 1
+-- vim.g.markdown_folding = 1
 -- vim.cmd([[set noshowmode]])
 -- vim.cmd([[let g:markdown_folding=1]])
 -- vim.cmd[[set shada+=r/mnt/exdisk]]

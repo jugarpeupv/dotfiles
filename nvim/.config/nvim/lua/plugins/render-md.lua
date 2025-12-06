@@ -2,7 +2,7 @@ return {
   "MeanderingProgrammer/render-markdown.nvim",
   -- ft = { "markdown", "codecompanion", "Avante", "octo" },
   ft = { "markdown", "Avante", "octo" },
-  enabled = true,
+  enabled = false,
   keys = {
     { "<leader>rm", "<cmd>RenderMarkdown toggle<CR>" },
   },

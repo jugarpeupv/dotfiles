@@ -189,7 +189,7 @@ return {
 				-- dir = "~/projects/recall.nvim",
 				-- dev = true,
 				version = "*",
-				event = { "BufReadPre", "BufNewFile" },
+				-- event = { "BufReadPre", "BufNewFile" },
 				keys = {
 					{
 						mode = { "n" },
@@ -282,7 +282,7 @@ return {
 								vim.defer_fn(function()
 									require("telescope").extensions.nx.actions()
 									vim.g.nx_loaded = true
-								end, 1000)
+								end, 2000)
 							else
 								-- print('vim.g.nx_loaded is: ', vim.inspect(vim.g.nx_loaded))
 								require("telescope").extensions.nx.actions()
@@ -589,10 +589,10 @@ return {
 						-- layout_strategy = "horizontal",
 						sorting_strategy = "ascending",
 						layout_config = {
-							horizontal = { width = 0.98, height = 0.53, preview_width = 0.53, prompt_position = "top" },
-							vertical = { width = 0.90, height = 0.53, preview_height = 0.35 },
-							center = { width = 0.99, height = 0.47 },
-							bottom_pane = { width = 1, height = 0.47, preview_width = 0.40 },
+							horizontal = { width = 0.98, height = 0.40, preview_width = 0.53, prompt_position = "top" },
+							vertical = { width = 0.90, height = 0.40, preview_height = 0.35 },
+							center = { width = 0.99, height = 0.40 },
+							bottom_pane = { width = 1, height = 0.40, preview_width = 0.40 },
 							prompt_position = "top",
 						},
 						preview = {
@@ -685,7 +685,8 @@ return {
 								["<C-t>"] = actions.select_tab,
 								-- ["<C-t>"] = trouble.open_with_trouble,
 								["<C-e>"] = open_with_trouble,
-								["<C-b>"] = require("telescope.actions.layout").toggle_preview,
+                ["<C-l>"] = require("telescope.actions.layout").toggle_preview,
+								-- ["<C-o>"] = require("telescope.actions.layout").toggle_preview,
 								-- ["<C-t>"] = trouble.open_with_trouble,
 
 								-- ["<C-u>"] = actions.preview_scrolling_up,

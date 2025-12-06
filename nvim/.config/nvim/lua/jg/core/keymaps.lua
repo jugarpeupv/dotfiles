@@ -369,9 +369,9 @@ keymap("n", "<leader>Cd", "<cmd>lua vim.diagnostic.reset()<cr>", opts)
 keymap("n", "<leader>bo", function()
 	require("telescope").extensions.bookmarks.bookmarks()
 end, opts)
-keymap("n", "<leader>sy", function()
-	require("telescope.builtin").lsp_document_symbols()
-end, opts)
+-- keymap("n", "<leader>sy", function()
+-- 	require("telescope.builtin").lsp_document_symbols()
+-- end, opts)
 keymap("n", "<leader>lr", "<cmd>LspRestart<cr>", opts)
 
 keymap("n", "<D-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
@@ -451,31 +451,6 @@ end, opts)
 
 -- keymap("t", "<leader>q", "<cmd>q!<CR>", opts)
 keymap("n", "<leader>nN", "<cmd>nohlsearch<CR>", opts)
-
-vim.keymap.set({ "n" }, "<leader>fi", function()
-	require("telescope.builtin").find_files({
-		hidden = true,
-		no_ignore = true,
-		-- find_command = { "fd", ".", "--type", "f", "--exclude", ".git/*", "--exclude", "node_modules/*" },
-		find_command = {
-			"fd",
-			".",
-			"--type",
-			"f",
-			"--exclude",
-			".git/*",
-			"--exclude",
-			"node_modules/*",
-			"--exclude",
-			"node_modules",
-			"--exclude",
-			"**/node_modules/**",
-		},
-		preview = {
-			hide_on_startup = true,
-		},
-	})
-end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bi", function()
   Snacks.picker.buffers({ finder = "buffers", title = "< IBuffers >" })
@@ -1260,11 +1235,6 @@ vim.keymap.set("n", "<leader>hw", function()
 	end
 end, opts)
 
-vim.keymap.set("n", "<leader>ch", function()
-	-- require("telescope.builtin").command_history()
-	Snacks.picker.command_history({ layout = { preview = false } })
-end, opts)
-
 vim.keymap.set("n", "<leader>rh", function()
 	require("telescope.builtin").search_history()
 end, opts)
@@ -1909,3 +1879,9 @@ end, { desc = "Notmuch address picker" })
 vim.keymap.set("n", "<leader>gn", function()
 	require("jg.custom.telescope").show_global_npm_packages()
 end, { desc = "show global npm packages" })
+
+vim.keymap.set('n', '<S-left>', 'zH')
+vim.keymap.set('n', '<S-right>', 'zL')
+
+vim.keymap.set('n', '<left>', '10zh')
+vim.keymap.set('n', '<right>', '10zl')

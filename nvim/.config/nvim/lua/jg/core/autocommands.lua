@@ -12,7 +12,7 @@ if vim.fn.has("nvim-0.11") == 1 then
 		pattern = "*",
 		callback = function()
 			vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
-      -- vim.hl.on_yank({ higroup = "IncSearch", timeout = 200 })
+			-- vim.hl.on_yank({ higroup = "IncSearch", timeout = 200 })
 		end,
 	})
 else
@@ -79,21 +79,6 @@ vim.filetype.add({
 	},
 })
 
-vim.api.nvim_create_autocmd("User", {
-	pattern = "GitConflictDetected",
-	group = vim.api.nvim_create_augroup("GitConflictDetected", { clear = true }),
-	callback = function()
-		vim.notify("Conflict detected in " .. vim.fn.expand("<afile>"))
-
-		vim.keymap.set({ "n", "v" }, "cc", "<Plug>(git-conflict-ours)")
-		vim.keymap.set({ "n", "v" }, "ci", "<Plug>(git-conflict-theirs)")
-		vim.keymap.set({ "n", "v" }, "cb", "<Plug>(git-conflict-both)")
-		vim.keymap.set({ "n", "v" }, "cn", "<Plug>(git-conflict-none)")
-		vim.keymap.set({ "n", "v" }, "<leader>ck", "<Plug>(git-conflict-prev-conflict)")
-		vim.keymap.set({ "n", "v" }, "<leader>cj", "<Plug>(git-conflict-next-conflict)")
-	end,
-})
-
 local group = vim.api.nvim_create_augroup("__env", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	pattern = "*.env",
@@ -104,10 +89,10 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	end,
 })
 
-local group = vim.api.nvim_create_augroup("__env_default", { clear = true })
+local env_group = vim.api.nvim_create_augroup("__env_default", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	pattern = ".env.*",
-	group = group,
+	group = env_group,
 	callback = function()
 		vim.o.wrap = false
 		vim.bo.filetype = "sh"
@@ -264,12 +249,11 @@ local function open_dir_history()
 					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
 					if selection then
-
 						-- vim.cmd("e " .. selection[1])
 						local api_nvimtree = require("nvim-tree.api")
 						api_nvimtree.tree.change_root(selection[1])
 						api_nvimtree.tree.reload()
-            vim.cmd("cd " .. selection[1])
+						vim.cmd("cd " .. selection[1])
 					end
 				end)
 				return true
@@ -340,46 +324,6 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 --   end,
 -- })
 
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = {
-		"kitty",
-		"http",
-		"rest",
-		"java",
-		"go",
-		"copilot-chat",
-		"yaml",
-		"yaml.github",
-		"jsonc",
-		"sh",
-		"dosini",
-		"editorconfig",
-		"typescript",
-		-- "kulala_http",
-		"javascript",
-		"gitcommit",
-		"hurl",
-		"markdown",
-		"jproperties",
-		"properties",
-		-- "codecompanion",
-		"bash",
-		"html",
-		"htmlangular",
-		"scss",
-		"css",
-		"groovy",
-		"Avante",
-		"dockerfile",
-		"regex",
-		"lua",
-	},
-	callback = function(ev)
-		vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-		vim.treesitter.start()
-	end,
-})
 
 -- vim.api.nvim_create_autocmd({ "BufEnter" }, {
 -- 	desc = "splitbelowtermi",
@@ -541,39 +485,50 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	end,
 })
 
-
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "sidekick_terminal",
-  group = vim.api.nvim_create_augroup("sidekick_terminal_au", { clear = true }),
-  callback = function(args)
-    local opts = { buffer = args.buf, noremap = true, silent = true }
-    vim.keymap.set("n", "<c-s>", "<cr>", opts)
-  end,
+	pattern = "sidekick_terminal",
+	group = vim.api.nvim_create_augroup("sidekick_terminal_au", { clear = true }),
+	callback = function(args)
+		local opts = { buffer = args.buf, noremap = true, silent = true }
+		vim.keymap.set("n", "<c-s>", "<cr>", opts)
+	end,
 })
 
-
--- vim.api.nvim_create_autocmd("User", {
---   group = vim.api.nvim_create_augroup("CodeCompanionRequestStarted", { clear = true }),
---   pattern = "CodeCompanionRequestStarted",
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "codecompanion",
+--   group = vim.api.nvim_create_augroup("CodeCompanionAppendDetect", { clear = true }),
 --   callback = function(args)
 --     local bufnr = args.buf
---     if vim.bo[bufnr].filetype ~= "codecompanion" then return end
---     local cursor = vim.api.nvim_win_get_cursor(0)
---     local total_lines = vim.api.nvim_buf_line_count(bufnr)
---     vim.b[bufnr].codecompanion_last_cursor_at_end = (cursor[1] == total_lines)
---   end,
--- })
+--     vim.b[bufnr].last_line_count = vim.api.nvim_buf_line_count(bufnr)
+--     vim.b[bufnr].last_cursor_line = vim.api.nvim_win_get_cursor(0)[1]
 --
--- -- On LLM response, move to end if cursor was at end before
--- vim.api.nvim_create_autocmd("User", {
---   group = vim.api.nvim_create_augroup("CodeCompanionCursor", { clear = true }),
---   pattern = "CodeCompanionChatDone",
---   callback = function(args)
---     local bufnr = args.buf
---     if vim.bo[bufnr].filetype ~= "codecompanion" then return end
---     -- if true then
---     if vim.b[bufnr].codecompanion_last_cursor_at_end then
---       vim.api.nvim_win_set_cursor(0, { vim.api.nvim_buf_line_count(bufnr), 0 })
---     end
+--     vim.api.nvim_create_autocmd("TextChanged", {
+--       buffer = bufnr,
+--       callback = function()
+--         if vim.fn.mode() == "i" then
+--           return
+--         end
+--
+--         local prev_line_count = vim.b[bufnr].last_line_count or vim.api.nvim_buf_line_count(bufnr)
+--         local new_line_count = vim.api.nvim_buf_line_count(bufnr)
+--         local cursor = vim.api.nvim_win_get_cursor(0)
+--
+--         -- Only move if new lines were appended and cursor was at previous end
+--         if new_line_count > prev_line_count and cursor[1] == prev_line_count then
+--           vim.api.nvim_win_set_cursor(0, {new_line_count, 0})
+--         end
+--
+--         -- Update last known line count
+--         vim.b[bufnr].last_line_count = new_line_count
+--         vim.cmd("norm! zz")
+--       end,
+--     })
 --   end,
 -- })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "ps" },
+	callback = function()
+		vim.wo.wrap = false
+	end,
+})

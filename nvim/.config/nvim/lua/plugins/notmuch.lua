@@ -19,6 +19,8 @@ return {
 		keys = {
 			-- { mode = { "n" }, "<leader>nn", "<cmd>Notmuch<cr>", { silent = true } },
 			{ mode = { "n" }, "<leader><space>", "<cmd>Notmuch<cr>", { silent = true } },
+
+      { mode = { "n" }, "<leader>nn", "<cmd>NmSearch tag:inbox and tag:unread and not tag:github<cr>", { silent = true } },
 		},
 	},
 	-- {

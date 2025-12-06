@@ -1,12 +1,12 @@
 return {
 	{
 		"m00qek/baleia.nvim",
-		event = { "BufReadPost", "BufNewFile" },
+		-- event = { "BufReadPost", "BufNewFile" },
+    lazy = true,
 		tag = "v1.3.0",
 		config = function()
 			-- local baleia = require("baleia").setup({})
 			vim.g.baleia = require("baleia").setup({ })
-			
 			vim.api.nvim_create_autocmd({ "FileType" }, {
 				pattern = "dap-repl",
 				callback = function()
