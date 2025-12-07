@@ -1,0 +1,74 @@
+return {}
+-- vim.filetype.add({
+--   pattern = {
+--     [".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
+--   },
+-- })
+--
+-- local function get_init_options()
+-- 	local init_options = require("jg.custom.lsp-utils").get_gh_actions_init_options()
+-- 	return init_options
+-- end
+--
+--
+-- return {
+-- 	-- capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), {
+-- 	-- 	workspace = {
+-- 	-- 		didChangeWorkspaceFolders = {
+-- 	-- 			dynamicRegistration = true,
+-- 	-- 		},
+-- 	-- 	},
+-- 	-- }),
+-- 	capabilities = {
+-- 		workspace = {
+-- 			didChangeWorkspaceFolders = {
+-- 				dynamicRegistration = true,
+-- 			},
+-- 		},
+-- 	},
+--   single_file_support = true,
+-- 	root_dir = function(bufnr, on_dir)
+-- 		local parent = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
+-- 		if vim.endswith(parent, "/.github/workflows") then
+-- 			on_dir(parent)
+-- 		end
+-- 	end,
+-- 	handlers = {
+-- 		["actions/readFile"] = function(_, result)
+-- 			if type(result.path) ~= "string" then
+-- 				return nil, nil
+-- 			end
+-- 			local file_path = vim.uri_to_fname(result.path)
+-- 			if vim.fn.filereadable(file_path) == 1 then
+-- 				local content = vim.fn.readfile(file_path)
+-- 				local text = table.concat(content, "\n")
+-- 				return text, nil
+-- 			end
+-- 			return nil, nil
+-- 		end,
+-- 	},
+-- 	-- before_init = function(params)
+-- 	-- 	if vim.bo.filetype ~= "yaml.github" then
+-- 	-- 		return
+-- 	-- 	end
+-- 	-- 	params.initializationOptions = get_init_options()
+-- 	-- end,
+-- 	init_options = function()
+-- 		if vim.bo.filetype ~= "yaml.github" then
+-- 			return {}
+-- 		end
+-- 		get_init_options()
+-- 	end,
+-- 	filetypes = { "yaml.github" },
+-- 	cmd = { os.getenv("HOME") .. "/.local/share/nvim/mason/bin/gh-actions-language-server", "--stdio" },
+-- 	settings = {
+-- 		yaml = {
+-- 			format = {
+-- 				enable = true,
+-- 			},
+-- 			validate = {
+-- 				enable = true,
+-- 			},
+-- 		},
+-- 	},
+-- }

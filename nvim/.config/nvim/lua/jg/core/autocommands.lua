@@ -532,3 +532,45 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.wo.wrap = false
 	end,
 })
+
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {
+    "kitty",
+    "http",
+    "rest",
+    "java",
+    "go",
+    "copilot-chat",
+    "yaml",
+    "yaml.github",
+    "jsonc",
+    "sh",
+    "dosini",
+    "editorconfig",
+    "typescript",
+    -- "kulala_http",
+    "javascript",
+    "markdown",
+    "gitcommit",
+    "hurl",
+    "jproperties",
+    "properties",
+    -- "codecompanion",
+    "bash",
+    "html",
+    "htmlangular",
+    "scss",
+    "css",
+    "groovy",
+    "Avante",
+    "dockerfile",
+    "regex",
+    "lua",
+  },
+  callback = function()
+    vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    vim.treesitter.start()
+  end,
+})

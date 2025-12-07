@@ -357,7 +357,7 @@ return {
 					if not git_root then
 						error("not in git repo")
 					end
-					Snacks.picker.git_files()
+					Snacks.picker.git_files({ untracked = true })
 				end)
 
 				if not ok then

@@ -199,35 +199,36 @@ M.attach_lsp_config = function(client, bufnr)
 end
 
 local function fetch_github_repo(repo_name, token, org, workspace_path)
-	local cmd = {
-		"curl",
-		"-H",
-		"Authorization: Bearer " .. token,
-		"-H",
-		"User-Agent: Neovim",
-		"https://api.github.com/repos/" .. org .. "/" .. repo_name,
-	}
-
-	local result = vim.system(cmd):wait()
-	if not result or not result.stdout then
-		print("No result from GitHub API")
-		return {}
-	end
-
-	local raw_json = result.stdout
-	if raw_json == "" then
-		print("Empty JSON from GitHub API")
-		return {}
-	end
-
-	local ok, data = pcall(vim.json.decode, raw_json)
-	if not ok or type(data) ~= "table" then
-		-- print("Failed to decode JSON from GitHub API")
-		return {}
-	end
+	-- local cmd = {
+	-- 	"curl",
+	-- 	"-H",
+	-- 	"Authorization: Bearer " .. token,
+	-- 	"-H",
+	-- 	"User-Agent: Neovim",
+	-- 	"https://api.github.com/repos/" .. org .. "/" .. repo_name,
+	-- }
+	--
+	-- local result = vim.system(cmd):wait()
+	-- if not result or not result.stdout then
+	-- 	print("No result from GitHub API")
+	-- 	return {}
+	-- end
+	--
+	-- local raw_json = result.stdout
+	-- if raw_json == "" then
+	-- 	print("Empty JSON from GitHub API")
+	-- 	return {}
+	-- end
+	--
+	-- local ok, data = pcall(vim.json.decode, raw_json)
+	-- if not ok or type(data) ~= "table" then
+	-- 	-- print("Failed to decode JSON from GitHub API")
+	-- 	return {}
+	-- end
 
 	local repo_info = {
-		id = data.id,
+		-- id = data.id,
+    id = '1344400112',
 		owner = org,
 		name = repo_name,
 		workspaceUri = "file://" .. workspace_path,
@@ -245,7 +246,7 @@ M.get_gh_actions_init_options = function(org, workspace_path, session_token)
 		return
 	end
 
-	local function get_repo_name()
+	local function get_repo_owner_and_name()
 		local handle = io.popen("git remote get-url origin 2>/dev/null")
 		if not handle then
 			return vim.loop.cwd()
@@ -258,19 +259,23 @@ M.get_gh_actions_init_options = function(org, workspace_path, session_token)
 		-- Remove trailing newline
 		result = result:gsub("%s+$", "")
 		-- Extract repo name from URL
-		local repo = result:match("([^/:]+)%.git$")
-		return repo
+		-- local repo = result:match("([^/:]+)%.git$")
+    local owner, repo = result:match("[/:]([%w%-_]+)/([%w%-_]+)%.git$")
+    if owner and repo then
+      return { owner = owner, repo = repo }
+    end
+    return nil
 	end
-	local repo_name = get_repo_name()
+	local repo = get_repo_owner_and_name()
 
-	if not repo_name then
+	if not repo then
 		return {
 			sessionToken = session_token,
 			repos = {},
 		}
 	end
 
-	local repo_info = fetch_github_repo(repo_name, session_token, org, workspace_path)
+	local repo_info = fetch_github_repo(repo.repo, session_token, repo.owner, workspace_path)
 	return {
 		sessionToken = session_token,
 		repos = {

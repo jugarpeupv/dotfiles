@@ -7,6 +7,7 @@ return {
 	-- },
 	{
 		"mfussenegger/nvim-lint",
+    enabled = false,
 		event = "BufReadPost",
 		config = function()
 			-- vim.env.ESLINT_D_PPID = vim.fn.getpid()

@@ -1265,7 +1265,7 @@ return {
 		"junegunn/fzf",
 		dependencies = { "junegunn/fzf.vim" },
 		build = "./install --all",
-		event = { "BufReadPost" },
+		-- event = { "BufReadPost" },
 		-- cmd = { "Git" },
 		keys = {
 			{ "<leader>jL", "<cmd>Jumps<CR>" },

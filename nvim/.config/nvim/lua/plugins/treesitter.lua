@@ -1,11 +1,14 @@
 -- return {}
 return {
+	{ "keith/xcconfig.vim", ft = { "xcconfig" } },
+  { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
 	{
 		"nvim-treesitter/nvim-treesitter",
 		-- branch = "master",
-		lazy = true,
+		-- lazy = false,
 		branch = "main",
 		build = ":TSUpdate",
+		event = { "VeryLazy" },
 		-- lazy = true,
 		-- lazy = true,
 		-- branch = 'main',
@@ -15,9 +18,6 @@ return {
 		-- lazy = false,
 		dependencies = {
 			{ "wellle/targets.vim" },
-      {"andymass/vim-matchup"},
-			{ "cfdrake/vim-pbxproj" },
-			{ "keith/xcconfig.vim" },
 			{
 				"axelvc/template-string.nvim",
 				-- "chrisgrieser/nvim-puppeteer",

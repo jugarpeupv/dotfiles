@@ -6,7 +6,7 @@ return {
   lazy = true,
 	-- dependencies = { "nvim-treesitter/nvim-treesitter" },
 	-- event = { "VeryLazy" },
-	-- event = { "BufReadPost", "BufNewFile" },
+	event = { "BufReadPost", "BufNewFile" },
 	-- keys = { { mode = "n", "%" } },
 	config = function()
 		vim.g.matchup_matchparen_enabled = 0
@@ -24,16 +24,32 @@ return {
 		vim.g.matchup_matchparen_end_sign = "󱐋"
 		vim.g.matchup_treesitter_include_match_words = 1
 
-    local match_parent_active = false
+    -- https://github.com/andymass/vim-matchup/issues/416
+    vim.g.matchup_treesitter_disabled = { "markdown" }
 
-    vim.keymap.set("n", "%", function()
-      if not match_parent_active then
-        match_parent_active = true
-        vim.cmd("DoMatchParen")
-        match_parent_active = false
-      end
-      vim.api.nvim_feedkeys("%", "n", false)
-    end, { noremap = true, silent = true })
+    vim.cmd("NoMatchParen")
+    vim.cmd("DoMatchParen")
+
+    -- vim.api.nvim_create_autocmd("BufEnter", {
+    --   callback = function()
+    --     if vim.bo.filetype ~= "markdown" and not vim.g.matchup_activated then
+    --       print('activating matchup')
+    --       vim.cmd("NoMatchParen")
+    --       vim.cmd("DoMatchParen")
+    --       vim.g.matchup_activated = true
+    --     end
+    --   end,
+    -- })
+    -- local match_parent_active = false
+
+    -- vim.keymap.set("n", "%", function()
+    --   if not match_parent_active then
+    --     match_parent_active = true
+    --     vim.cmd("DoMatchParen")
+    --     match_parent_active = false
+    --   end
+    --   vim.api.nvim_feedkeys("%", "n", false)
+    -- end, { noremap = true, silent = true })
 		-- vim.cmd("NoMatchParen")
 		-- vim.cmd("DoMatchParen")
 	end,

@@ -46,7 +46,7 @@ return {
 			{ mode = { "n" }, "<leader>st", "<cmd>CtrlSFToggle<cr>", desc = "CtrlSF Toggle" },
 		},
 		-- branch = "feature/add-devicon",
-		event = { "BufRead", "BufNewFile"},
+		-- event = { "BufRead", "BufNewFile"},
 		-- cmd = { "CtrlSFCwordPath", "CtrlSFToggle", "CtrlSF" },
 	},
 }
