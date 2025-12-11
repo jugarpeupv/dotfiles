@@ -282,7 +282,7 @@ return {
 								vim.defer_fn(function()
 									require("telescope").extensions.nx.actions()
 									vim.g.nx_loaded = true
-								end, 2000)
+								end, 2500)
 							else
 								-- print('vim.g.nx_loaded is: ', vim.inspect(vim.g.nx_loaded))
 								require("telescope").extensions.nx.actions()

@@ -1,12 +1,15 @@
 local home = os.getenv("HOME")
 
+local mason_root_path = os.getenv("HOME") .. "/.local/share/nvim/mason"
+
+
 local bundles = {}
 
 ---
 -- Include java-test bundle if present
 ---
 -- local java_test_path = require("mason-registry").get_package("java-test"):get_install_path()
-local java_test_path = os.getenv("MASON") .. "/packages/java-test"
+local java_test_path = mason_root_path .. "/packages/java-test"
 
 -- java_test_path /Users/jgarcia/.local/share/nvim/mason/packages/java-test
 -- print("java_test_path", java_test_path)
@@ -21,7 +24,7 @@ end
 ---
 -- local java_debug_path = require("mason-registry").get_package("java-debug-adapter"):get_install_path()
 
-local java_debug_path = os.getenv("MASON") .. "/packages/java-debug-adapter"
+local java_debug_path = mason_root_path .. "/packages/java-debug-adapter"
 -- print("java_debug_path", java_debug_path)
 -- java_debug_path /Users/jgarcia/.local/share/nvim/mason/packages/java-debug-adapter
 

@@ -13,8 +13,8 @@ return {
         copilot = { cmd = { "copilot", "--allow-all-tools" } }
       },
 			mux = {
-				backend = "tmux",
-				enabled = false,
+        enabled = false,
+				backend = "zellij"
 			}
 		},
 	},

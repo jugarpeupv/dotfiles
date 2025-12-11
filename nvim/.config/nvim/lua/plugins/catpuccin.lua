@@ -186,6 +186,8 @@ return {
 						AvanteConflictCurrent = { style = {}, fg = "#394b70" },
 						LineNR = { style = {}, fg = "#3b4261" },
 						CursorLineNR = { style = {}, fg = "#737aa2" },
+            ["typescriptImport"] = { link = "Keyword" },
+            ["typescriptExport"] = { link = "Keyword" },
 						["@lsp.typemod.method.defaultLibrary.typescript"] = { link = "Function" },
 						TelescopePathSeparator = { link = "TelescopeNormal" },
 						TreesitterContext = { link = "Function" },

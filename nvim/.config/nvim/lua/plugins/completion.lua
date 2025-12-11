@@ -205,7 +205,7 @@ return {
 				menu = {
           auto_show = true,
           -- Delay before showing the completion menu while typing
-          auto_show_delay_ms = 100,
+          -- auto_show_delay_ms = 100,
 					-- auto_show = function()
 					--        return vim.bo.filetype ~= 'codecompanion'
 					--      end,
@@ -301,7 +301,7 @@ return {
 					},
 					-- ["md"] = {},
           ["markdown"] = { "buffer", "lsp" },
-					["copilot-chat"] = {},
+					["copilot-chat"] = { "buffer" },
 					["AvanteInput"] = { "avante", "lsp", "buffer" },
 				},
 				providers = {

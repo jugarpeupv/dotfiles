@@ -5,11 +5,11 @@ vim.g.maplocalleader = ","
 vim.g.loaded_matchit = 1
 vim.g.python3_host_prog = vim.fn.expand("~/.nvim-venv/bin/python3")
 
--- if vim.env.TERM == "xterm-kitty" then
--- 	-- request csi mode 2
--- 	vim.cmd([[autocmd UIEnter * call chansend(v:stderr, "\x1b[>4;2m")]])
--- 	vim.cmd([[autocmd VimLeavePre * call chansend(v:stderr, "\x1b[>4;0m")]])
--- end
+if vim.env.TERM == "xterm-kitty" then
+	-- request csi mode 2
+	vim.cmd([[autocmd UIEnter * call chansend(v:stderr, "\x1b[>4;2m")]])
+	vim.cmd([[autocmd VimLeavePre * call chansend(v:stderr, "\x1b[>4;0m")]])
+end
 
 -- if vim.env.TERM == "xterm-kitty" then
 --   vim.api.nvim_chan_send(vim.api.nvim_get_chan(), "\27[>4;2m")

@@ -11,9 +11,9 @@ return {
 	dependencies = {
 		"ravitemer/codecompanion-history.nvim",
 		-- "franco-ruggeri/codecompanion-spinner.nvim",
-		{ "nvim-lua/plenary.nvim", branch = "master" },
-		"folke/snacks.nvim",
-		{ "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } }, -- Optional: For prettier markdown rendering
+		-- { "nvim-lua/plenary.nvim", branch = "master" },
+		-- "folke/snacks.nvim",
+		-- { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } }, -- Optional: For prettier markdown rendering
 		-- { "stevearc/dressing.nvim", opts = {} }, -- Optional: Improves `vim.ui.select`
 	},
 	-- config = true,
@@ -44,6 +44,31 @@ return {
 			--   -- submit_delay = 2000, -- Delay in milliseconds before auto-submitting the chat buffer
 			--   submit_delay = 100, -- Delay in milliseconds before auto-submitting the chat buffer
 			-- },
+			memory = {
+				opts = {
+					chat = {
+						enabled = true,
+					},
+				},
+			},
+			adapters = {
+				acp = {
+					opencode = function()
+						return require("codecompanion.adapters").extend("opencode", {})
+					end,
+					codex = function()
+						return require("codecompanion.adapters").extend("codex", {
+							defaults = {
+								auth_method = "openai-api-key", -- "openai-api-key"|"codex-api-key"|"chatgpt"
+							},
+							env = {
+								-- api_key = "OPENAI_API_KEY_GPT",
+								api_key = os.getenv("OPENAI_API_KEY"),
+							},
+						})
+					end,
+				},
+			},
 
 			extensions = {
 				-- spinner = {},
@@ -76,7 +101,7 @@ return {
 						-- Picker interface ("telescope" or "snacks" or "fzf-lua" or "default")
 						picker = "snacks",
 						-- Automatically generate titles for new chats
-						auto_generate_title = true,
+						auto_generate_title = false,
 						---On exiting and entering neovim, loads the last chat on opening chat
 						continue_last_chat = false,
 						---When chat is cleared with `cl` delete the chat from history
@@ -98,6 +123,11 @@ return {
 
 			strategies = {
 				chat = {
+          adapter = "opencode",
+          -- adapter = {
+          --   name = "opencode",
+          --   model = "claude-sonnet-4",
+          -- },
 					slash_commands = {
 						["image"] = {
 							opts = {
@@ -133,7 +163,24 @@ return {
 									collapse_tools = true, -- When true, show as a single group reference instead of individual tools
 								},
 							},
-
+							["githubcustom"] = {
+								description = "GitHub operations from issue to PR",
+								tools = {
+									-- File operations
+									"neovim__read_multiple_files",
+									"neovim__write_file",
+									"neovim__edit_file",
+									-- GitHub operations
+									"github__list_issues",
+									"github__get_issue",
+									"github__get_issue_comments",
+									"github__create_issue",
+									"github__create_pull_request",
+									"github__get_file_contents",
+									"github__create_or_update_file",
+									"github__search_code",
+								},
+							},
 							["agentic"] = {
 								description = "A custom agent combining tools",
 								tools = {
@@ -142,6 +189,7 @@ return {
 									"delete_file",
 									"fetch_webpage",
 									"file_search",
+									"full_stack_dev",
 									"get_changed_files",
 									"grep_search",
 									"insert_edit_into_file",
@@ -158,11 +206,11 @@ return {
 						},
 						opts = {
 							default_tools = {
-								"memory",
-								"web_search",
-								"fetch_webpage",
-								"full_stack_dev",
-								"github",
+                "full_stack_dev",
+                "fetch_webpage",
+                "web_search",
+                "memory",
+                -- "githubcustom",
 								"tavily",
 								"nx",
 								"neovim",
@@ -170,8 +218,8 @@ return {
 							-- default_tools = {
 							--   "agentic"
 							-- },
-							auto_submit_errors = false, -- Send any errors to the LLM automatically?
-							auto_submit_success = false, -- Send any successful output to the LLM automatically?
+							auto_submit_errors = true, -- Send any errors to the LLM automatically?
+							auto_submit_success = true, -- Send any successful output to the LLM automatically?
 						},
 					},
 					keymaps = {
@@ -256,10 +304,13 @@ return {
 					-- 	chat_context = "📎️", -- You can also apply an icon to the fold
 					-- 	chat_fold = " ",
 					-- },
+          intro_message = "",
+					show_settings = true,
 					fold_reasoning = false,
 					show_reasoning = true,
 					fold_context = false,
 					auto_scroll = false,
+					show_tools_processing = true,
 					show_header_separator = true, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
 					start_in_insert_mode = false,
 					separator = "─", -- The separator between the different messages in the chat buffer
@@ -306,8 +357,9 @@ return {
 			"<M-m>",
 			function()
 				-- vim.cmd("CodeCompanionChat Toggle")
-        require("codecompanion").toggle()
-        -- require()
+				require("codecompanion").toggle()
+				vim.cmd("normal! zz")
+				-- require()
 				-- vim.cmd("normal! zz")
 				-- vim.schedule(function ()
 				--   vim.cmd('normal! zz')

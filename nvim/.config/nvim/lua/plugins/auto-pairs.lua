@@ -120,18 +120,18 @@ return {
       end
 
       -- arrow key on javascript
-      npairs.add_rules({
-        Rule("%(.*%)%s*%=>$", " {  }", { "typescript", "typescriptreact", "javascript" })
-            :use_regex(true)
-            :set_end_pair_length(2),
-      })
+      -- npairs.add_rules({
+      --   Rule("%(.*%)%s*%=>$", " {  }", { "typescript", "typescriptreact", "javascript" })
+      --       :use_regex(true)
+      --       :set_end_pair_length(2),
+      -- })
 
       -- npairs.add_rules(require("nvim-autopairs.rules.endwise-lua"))
       -- npairs.add_rules(require("nvim-autopairs.rules.endwise-ruby"))
 
 
       autopairs.remove_rule("`")
-      -- autopairs.remove_rule("\"")
+      autopairs.remove_rule("\"")
     end,
   },
   -- { "rstacruz/vim-closer", event = { "InsertEnter" } },

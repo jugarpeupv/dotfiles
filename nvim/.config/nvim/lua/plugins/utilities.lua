@@ -20,8 +20,8 @@ return {
 	-- { "markonm/traces.vim", event = { "BufReadPost" } },
 	{
 		"luukvbaal/statuscol.nvim",
-		enabled = false,
-		-- event = { "BufReadPre", "BufNewFile" },
+		enabled = true,
+		event = { "BufReadPre", "BufNewFile" },
 		lazy = true,
 		config = function()
 			local builtin = require("statuscol.builtin")

@@ -149,6 +149,7 @@ return {
 				return orig_util_open_floating_preview(contents, syntax, opts, ...)
 			end
 
+      vim.lsp.enable("jdtls")
 			vim.lsp.enable("html")
 			vim.lsp.enable("vtsls")
 			vim.lsp.enable("pyright")

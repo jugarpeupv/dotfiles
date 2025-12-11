@@ -81,7 +81,7 @@ return {
 		-- diff = "block", -- Default diff format to use, 'block' or 'unified'.
 		diff = "block", -- Default diff format to use, 'block' or 'unified'.
 		language = "English", -- Default language to use for answers
-		chat_autocomplete = false, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
+		chat_autocomplete = true, -- Enable chat autocompletion (when disabled, requires manual `mappings.complete` trigger)
 		-- temperature = 0.1,           -- Lower = focused, higher = creative
 		-- chat_autocomplete = true,
 		highlight_selection = true, -- Highlight selection

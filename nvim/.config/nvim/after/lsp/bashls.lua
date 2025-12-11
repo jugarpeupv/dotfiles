@@ -1,7 +1,8 @@
 local on_publish_diagnostics = vim.lsp.diagnostic.on_publish_diagnostics
 
 return {
-	cmd = { "bash-language-server", "start" },
+	-- cmd = { "bash-language-server", "start" },
+  cmd = { os.getenv("HOME") .. "/.local/share/nvim/mason/bin/bash-language-server", "start" },
 	filetypes = { "bash", "sh", "yaml.github" },
 	handlers = {
 		["textDocument/publishDiagnostics"] = function(err, res, ...)

@@ -3,7 +3,8 @@ return {
 		"yousefakbar/notmuch.nvim",
 
     -- "jugarpeupv/springboot-nvim",
-    dir = "~/projects/notmuch.nvim/wt-baumea-feat-email-deletion",
+    -- dir = "~/projects/notmuch.nvim/wt-baumea-feat-email-deletion",
+    dir = "~/projects/notmuch.nvim/wt-main",
     dev = true,
 		enabled = true,
 		opts = {
