@@ -3,7 +3,8 @@
 text/plain; nvim %s
 
 #PDFs
-application/pdf; /opt/homebrew/bin/zathura %s pdf
+# application/pdf; /opt/homebrew/bin/zathura %s pdf
+application/pdf; /opt/homebrew/bin/zathura %s
 
 #Images
 image/png; /opt/homebrew/bin/feh %s
@@ -32,3 +33,7 @@ application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; sc-im %s; nee
 
 # open anything else externally
 # application/pdf; openfile %s;
+
+application/msword; open %s;
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; open %s;
+application/*word*; open %s;

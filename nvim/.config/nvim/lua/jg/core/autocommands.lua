@@ -556,7 +556,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "hurl",
     "jproperties",
     "properties",
-    -- "codecompanion",
+    "codecompanion",
     "bash",
     "html",
     "htmlangular",

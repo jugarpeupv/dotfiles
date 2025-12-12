@@ -204,7 +204,25 @@ return {
         },
       },
       -- Override for different filetype values, @see :h 'filetype'.
-      filetype = {},
+      filetype = {
+        -- codecompanion = {
+        --   heading = {
+        --     enabled = true,
+        --   },
+        --   code = {
+        --     enabled = true,
+        --   },
+        --   win_options = {
+        --     -- @see :h 'conceallevel'
+        --     conceallevel = {
+        --       -- Used when not being rendered, get user setting.
+        --       default = vim.api.nvim_get_option_value("conceallevel", {}),
+        --       -- Used when being rendered, concealed text is completely hidden.
+        --       rendered = 0,
+        --     },
+        --   },
+        -- }
+      },
     },
   },
   dependencies = { "nvim-treesitter/nvim-treesitter" }, -- if you use the mini.nvim suite

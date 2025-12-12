@@ -183,7 +183,7 @@ return {
 				end,
 			},
 			{
-				enabled = true,
+				enabled = false,
 				"jugarpeupv/recall.nvim",
 				dependencies = { "nvim-telescope/telescope.nvim" },
 				-- dir = "~/projects/recall.nvim",

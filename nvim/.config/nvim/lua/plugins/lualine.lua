@@ -235,6 +235,15 @@ return {
 			-- color = { fg = colors.green }, -- Customize the colors as needed
 		}
 
+		-- CodeCompanion adapter component
+		local codecompanion_adapter = {
+			require("jg.custom.codecompanion_lualine"),
+			color = { fg = colors.blue },
+			cond = function()
+				return vim.bo.filetype == "codecompanion"
+			end,
+		}
+
 		local diff = {
 			"diff",
 			colored = true, -- Displays a colored diff status if set to true
@@ -332,7 +341,7 @@ return {
 				lualine_b = {  },
 				lualine_c = { diff_mode },
 				-- lualine_x = { dirname, "filetype", get_schema },
-				lualine_x = { "filetype" },
+				lualine_x = { codecompanion_adapter, "filetype" },
 				-- lualine_x = {},
 				-- lualine_y = {},
 				lualine_y = { "progress" },

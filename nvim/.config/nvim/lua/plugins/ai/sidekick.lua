@@ -60,6 +60,14 @@ return {
 			desc = "Sidekick Toggle",
 			mode = { "n", "t", "i", "x" },
 		},
+    {
+      "<leader>as",
+      function()
+        require("sidekick.cli").select()
+      end,
+      mode = { "n" },
+      desc = "select sidekick",
+    },
 		{
 			"<leader>at",
 			function()

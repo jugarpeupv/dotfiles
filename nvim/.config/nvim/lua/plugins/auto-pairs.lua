@@ -25,7 +25,7 @@ return {
         --   javascript = { "template_string" }, -- don't add pairs in javscript template_string treesitter nodes
         --   -- java = false,                       -- don't check treesitter on java
         -- },
-        disable_filetype = { "TelescopePrompt", "vim", "spectre_panel" },
+        disable_filetype = { "TelescopePrompt", "vim", "spectre_panel", 'snacks_picker_input' },
         disable_in_macro = true,   -- disable when recording or executing a macro
         disable_in_visualblock = true, -- disable when insert after visual block mode
         disable_in_replace_mode = true,

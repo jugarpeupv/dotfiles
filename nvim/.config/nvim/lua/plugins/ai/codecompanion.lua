@@ -8,8 +8,15 @@ return {
 		end
 		return true
 	end,
+  -- init = function()
+  --   -- vim.cmd([[cab cc CodeCompanion]])
+  --   -- require("plugins.custom.spinner"):init()
+  --   require("jg.custom.codecompanion_spinner"):init()
+  -- end,
 	dependencies = {
 		"ravitemer/codecompanion-history.nvim",
+    "j-hui/fidget.nvim", -- Display status
+    "ravitemer/mcphub.nvim"
 		-- "franco-ruggeri/codecompanion-spinner.nvim",
 		-- { "nvim-lua/plenary.nvim", branch = "master" },
 		-- "folke/snacks.nvim",
@@ -22,28 +29,6 @@ return {
 	-- end,
 	config = function()
 		require("codecompanion").setup({
-			-- opts = {
-			-- 	system_prompt = function(opts)
-			-- 		-- return "hello"
-			-- 		return "You are an AI programming assistant named 'CodeCompanion'. You are currently plugged in to the Neovim text editor on a user's machine. Your core tasks include: - Answering general programming questions. - Explaining how the code in a Neovim buffer works. - Reviewing the selected code in a Neovim buffer. - Generating unit tests for the selected code. - Proposing fixes for problems in the selected code. - Scaffolding code for a new workspace. - Finding relevant code to the user's query. - Proposing fixes for test failures. - Answering questions about Neovim. - Running tools. You must: - Follow the user's requirements carefully and to the letter. - Keep your answers short and impersonal, especially if the user responds with context outside of your tasks. - Minimize other prose. - Use Markdown formatting in your answers. - Include the programming language name at the start of the Markdown code blocks. - Surround code blocks with backticks. - Avoid including line numbers in code blocks. - Avoid wrapping the whole response in triple backticks. - Only return code that's relevant to the task at hand. You may not need to return all of the code that the user has shared. - Use actual line breaks instead of '\n' in your response to begin new lines. - Use '\n' only when you want a literal backslash followed by a character 'n'. - All non-code responses must be in %s. When given a task: 1. Think step-by-step and describe your plan for what to build in pseudocode, written out in great detail, unless asked not to do so. 2. Output the code in a single code block, being careful to only return relevant code. 3. You should always generate short suggestions for the next user turns that are relevant to the conversation. 4. You can only give one reply for each conversation turn."
-			-- 	end,
-			-- },
-
-			-- opts = {
-			--   log_level = "ERROR", -- TRACE|DEBUG|ERROR|INFO
-			--   language = "English", -- The language used for LLM responses
-			--
-			--   -- If this is false then any default prompt that is marked as containing code
-			--   -- will not be sent to the LLM. Please note that whilst I have made every
-			--   -- effort to ensure no code leakage, using this is at your own risk
-			--   ---@type boolean|function
-			--   ---@return boolean
-			--   send_code = true,
-			--
-			--   job_start_delay = 100, -- Delay in milliseconds between cmd tools
-			--   -- submit_delay = 2000, -- Delay in milliseconds before auto-submitting the chat buffer
-			--   submit_delay = 100, -- Delay in milliseconds before auto-submitting the chat buffer
-			-- },
 			memory = {
 				opts = {
 					chat = {
@@ -53,20 +38,6 @@ return {
 			},
 			adapters = {
 				acp = {
-					opencode = function()
-						return require("codecompanion.adapters").extend("opencode", {})
-					end,
-					codex = function()
-						return require("codecompanion.adapters").extend("codex", {
-							defaults = {
-								auth_method = "openai-api-key", -- "openai-api-key"|"codex-api-key"|"chatgpt"
-							},
-							env = {
-								-- api_key = "OPENAI_API_KEY_GPT",
-								api_key = os.getenv("OPENAI_API_KEY"),
-							},
-						})
-					end,
 				},
 			},
 
@@ -124,9 +95,12 @@ return {
 			strategies = {
 				chat = {
           adapter = "opencode",
+
           -- adapter = {
-          --   name = "opencode",
-          --   model = "claude-sonnet-4",
+          --   -- name = "opencode",
+          --   -- model = "claude-sonnet-4",
+          --   name = "copilot",
+          --   model = "gpt-5.1-codex",
           -- },
 					slash_commands = {
 						["image"] = {
@@ -244,71 +218,93 @@ return {
 				},
 			},
 			display = {
-				diff = {
-					enabled = true,
-					-- provider = providers.diff, -- mini_diff|split|inline
-					provider = "inline",
-					provider_opts = {
-						-- Options for inline diff provider
-						inline = {
-							layout = "buffer", -- float|buffer - Where to display the diff
+        action_palette = {
+          provider = "snacks", -- or "telescope", "mini_pick", etc.
+          opts = {
+            -- Configure snacks picker options
+            show_preview = false, -- Disable preview in the picker
+          }
+        },
+        diff = {
+          provider_opts = {
+            inline = {
+              layout = "buffer", -- float|buffer - Where to display the diff
+              opts = {
+                context_lines = 3, -- Number of context lines in hunks
+                dim = 0, -- Background dim level for floating diff (0-100, [100 full transparent], only applies when layout = "float")
+                full_width_removed = true, -- Make removed lines span full width
+                show_keymap_hints = true, -- Show "gda: accept | gdr: reject" hints above diff
+                show_removed = true, -- Show removed lines as virtual text
+              },
+            },
+          },
+        },
 
-							diff_signs = {
-								signs = {
-									text = "▌", -- Sign text for normal changes
-									reject = "✗", -- Sign text for rejected changes in super_diff
-									highlight_groups = {
-										addition = "DiagnosticOk",
-										deletion = "DiagnosticError",
-										modification = "DiagnosticWarn",
-									},
-								},
-								-- Super Diff options
-								icons = {
-									accepted = " ",
-									rejected = " ",
-								},
-								colors = {
-									accepted = "DiagnosticOk",
-									rejected = "DiagnosticError",
-								},
-							},
-
-							opts = {
-								context_lines = 3, -- Number of context lines in hunks
-								dim = 100, -- Background dim level for floating diff (0-100, [100 full transparent], only applies when layout = "float")
-								full_width_removed = true, -- Make removed lines span full width
-								show_keymap_hints = true, -- Show "gda: accept | gdr: reject" hints above diff
-								show_removed = true, -- Show removed lines as virtual text
-							},
-						},
-
-						-- Options for the split provider
-						split = {
-							close_chat_at = 240, -- Close an open chat buffer if the total columns of your display are less than...
-							layout = "vertical", -- vertical|horizontal split
-							opts = {
-								"internal",
-								"filler",
-								"closeoff",
-								"algorithm:histogram", -- https://adamj.eu/tech/2024/01/18/git-improve-diff-histogram/
-								"indent-heuristic", -- https://blog.k-nut.eu/better-git-diffs
-								"followwrap",
-								"linematch:120",
-							},
-						},
-					},
-				},
+				-- diff = {
+				-- 	enabled = true,
+				-- 	-- provider = providers.diff, -- mini_diff|split|inline
+				-- 	provider = "inline",
+				-- 	provider_opts = {
+				-- 		-- Options for inline diff provider
+				-- 		inline = {
+				-- 			layout = "buffer", -- float|buffer - Where to display the diff
+				--
+				-- 			diff_signs = {
+				-- 				signs = {
+				-- 					text = "▌", -- Sign text for normal changes
+				-- 					reject = "✗", -- Sign text for rejected changes in super_diff
+				-- 					highlight_groups = {
+				-- 						addition = "DiagnosticOk",
+				-- 						deletion = "DiagnosticError",
+				-- 						modification = "DiagnosticWarn",
+				-- 					},
+				-- 				},
+				-- 				-- Super Diff options
+				-- 				icons = {
+				-- 					accepted = " ",
+				-- 					rejected = " ",
+				-- 				},
+				-- 				colors = {
+				-- 					accepted = "DiagnosticOk",
+				-- 					rejected = "DiagnosticError",
+				-- 				},
+				-- 			},
+				--
+				-- 			opts = {
+				-- 				context_lines = 3, -- Number of context lines in hunks
+				-- 				dim = 100, -- Background dim level for floating diff (0-100, [100 full transparent], only applies when layout = "float")
+				-- 				full_width_removed = true, -- Make removed lines span full width
+				-- 				show_keymap_hints = true, -- Show "gda: accept | gdr: reject" hints above diff
+				-- 				show_removed = true, -- Show removed lines as virtual text
+				-- 			},
+				-- 		},
+				--
+				-- 		-- Options for the split provider
+				-- 		-- split = {
+				-- 		-- 	close_chat_at = 240, -- Close an open chat buffer if the total columns of your display are less than...
+				-- 		-- 	layout = "vertical", -- vertical|horizontal split
+				-- 		-- 	opts = {
+				-- 		-- 		"internal",
+				-- 		-- 		"filler",
+				-- 		-- 		"closeoff",
+				-- 		-- 		"algorithm:histogram", -- https://adamj.eu/tech/2024/01/18/git-improve-diff-histogram/
+				-- 		-- 		"indent-heuristic", -- https://blog.k-nut.eu/better-git-diffs
+				-- 		-- 		"followwrap",
+				-- 		-- 		"linematch:120",
+				-- 		-- 	},
+				-- 		-- },
+				-- 	},
+				-- },
 				chat = {
 					-- icons = {
 					-- 	chat_context = "📎️", -- You can also apply an icon to the fold
-					-- 	chat_fold = " ",
+					-- 	chat_fold = "",
 					-- },
           intro_message = "",
-					show_settings = true,
-					fold_reasoning = false,
+					show_settings = false,
+					fold_reasoning = true,
 					show_reasoning = true,
-					fold_context = false,
+					fold_context = true,
 					auto_scroll = false,
 					show_tools_processing = true,
 					show_header_separator = true, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
@@ -328,7 +324,7 @@ return {
 							breakindent = true,
 							cursorcolumn = false,
 							cursorline = true,
-							foldcolumn = "0",
+							-- foldcolumn = "0",
 							linebreak = true,
 							list = false,
 							number = false,
@@ -341,6 +337,7 @@ return {
 				},
 			},
 		})
+    require("jg.custom.codecompanion_spinner"):init()
 	end,
 	keys = {
 		-- {

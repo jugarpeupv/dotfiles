@@ -1,5 +1,36 @@
 -- return {}
 return {
+  {
+    "j-hui/fidget.nvim",
+    enabled = true,
+    event = { 'BufReadPost', "BufNewFile" },
+    opts = {
+      progress = {
+        suppress_on_insert = false, -- Suppress new messages while in insert mode
+        ignore_done_already = true, -- Ignore new tasks that are already complete
+        ignore_empty_message = false,
+        display = {
+          -- done_style = "Operator",
+          done_style = "String",
+        },
+      },
+      -- Options related to integrating with other plugins
+      integration = {
+        ["nvim-tree"] = {
+          enable = true, -- Integrate with nvim-tree/nvim-tree.lua (if installed)
+        },
+      },
+      -- Options related to notification subsystem
+      notification = {
+
+        window = {
+          -- border = "rounded",
+          winblend = 0, -- Background color opacity in the notification window
+          zindex = 1,
+        },
+      },
+    },
+  },
 	{
 		"yioneko/nvim-vtsls",
 		ft = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
@@ -19,10 +50,12 @@ return {
 			return true
 		end,
 		event = { "VeryLazy" },
+    -- lazy = true,
     -- event = { "BufReadPost", "BufNewFile" },
 		dependencies = {
       {
         "jugarpeupv/gh-actions-lsp.nvim",
+        -- ft = { 'github.yaml', 'yaml' },
         dir = "~/work/tmp/gh-actions-lsp.nvim/wt-main",
         dev = true,
         opts = {
@@ -49,36 +82,6 @@ return {
 				"b0o/schemastore.nvim",
 				enabled = true,
 				lazy = true,
-			},
-			{
-				"j-hui/fidget.nvim",
-				enabled = true,
-				opts = {
-					progress = {
-						suppress_on_insert = true, -- Suppress new messages while in insert mode
-						ignore_done_already = true, -- Ignore new tasks that are already complete
-						ignore_empty_message = true,
-						display = {
-							-- done_style = "Operator",
-							done_style = "String",
-						},
-					},
-					-- Options related to integrating with other plugins
-					integration = {
-						["nvim-tree"] = {
-							enable = true, -- Integrate with nvim-tree/nvim-tree.lua (if installed)
-						},
-					},
-					-- Options related to notification subsystem
-					notification = {
-
-						window = {
-							-- border = "rounded",
-							winblend = 0, -- Background color opacity in the notification window
-							zindex = 1,
-						},
-					},
-				},
 			},
 			{
 				"igorlfs/nvim-lsp-file-operations",
@@ -167,7 +170,7 @@ return {
 			vim.lsp.enable("sourcekit")
 			vim.lsp.enable("lua_ls")
 			vim.lsp.enable("clangd")
-			vim.lsp.enable("gh_actions_ls")
+			-- vim.lsp.enable("gh_actions_ls")
 			vim.lsp.enable("ruby_lsp")
 			vim.lsp.enable("docker_compose_language_service")
 			vim.lsp.enable("gopls")

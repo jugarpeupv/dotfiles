@@ -545,7 +545,7 @@ return {
 					require("oil").open(modified_path)
 				end, opts("Open Oil"))
 
-				vim.keymap.set("n", "T", function()
+				vim.keymap.set("n", "gt", function()
 					local path = api_nvimtree.tree.get_node_under_cursor().absolute_path
 					local function check_and_modify_path(path_to)
 						if vim.fn.isdirectory(path_to) == 1 then

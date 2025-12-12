@@ -92,12 +92,12 @@ return {
     end,
     dependencies = {
       { "mfussenegger/nvim-jdtls" },
-      {
-        "simrat39/symbols-outline.nvim",
-        config = function()
-          require("symbols-outline").setup()
-        end,
-      },
+      -- {
+      --   "simrat39/symbols-outline.nvim",
+      --   config = function()
+      --     require("symbols-outline").setup()
+      --   end,
+      -- },
     },
     config = function()
       require("java-deps").setup({})
