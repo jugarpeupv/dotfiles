@@ -81,29 +81,29 @@ opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or 
 
 -- clipboard
 if os.getenv("SSH_TTY") == nil then
-	opt.clipboard:append("unnamedplus")
+  opt.clipboard:append("unnamedplus")
 else
-	-- On ssh, use cmd+v to paste, copy should work just fine
-	opt.clipboard:append("unnamedplus")
+  -- On ssh, use cmd+v to paste, copy should work just fine
+  opt.clipboard:append("unnamedplus")
 
-	local function my_paste(_reg)
-		return function(_lines)
-			local content = vim.fn.getreg('"')
-			return vim.split(content, "\n")
-		end
-	end
+  local function my_paste(_reg)
+    return function(_lines)
+      local content = vim.fn.getreg('"')
+      return vim.split(content, "\n")
+    end
+  end
 
-	vim.g.clipboard = {
-		name = "OSC 52",
-		copy = {
-			["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-			["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-		},
-		paste = {
-			["+"] = my_paste("+"),
-			["*"] = my_paste("*"),
-		},
-	}
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    },
+    paste = {
+      ["+"] = my_paste("+"),
+      ["*"] = my_paste("*"),
+    },
+  }
 end
 
 -- split windows
@@ -140,16 +140,16 @@ opt.list = true
 
 local space = "·"
 opt.listchars:append({
-	-- tab = "» ",
-	tab = "  ",
-	-- multispace = "␣",
-	-- multispace = space,
-	-- lead = space,
-	-- trail = "󱁐",
-	-- trail = "␣",
-	trail = space,
-	-- trail = "»",
-	nbsp = "&",
+  -- tab = "» ",
+  tab = "  ",
+  -- multispace = "␣",
+  -- multispace = space,
+  -- lead = space,
+  -- trail = "󱁐",
+  -- trail = "␣",
+  trail = space,
+  -- trail = "»",
+  nbsp = "&",
 })
 -- opt.listchars:append("trail:.")
 -- opt.listchars:append("eol:↴")
@@ -176,23 +176,23 @@ vim.opt.foldmethod = "expr"
 vim.o.numberwidth = 2
 
 local arrows = {
-	right = "",
-	left = "",
-	up = "",
-	down = "",
+  right = "",
+  left = "",
+  up = "",
+  down = "",
 }
 
 vim.opt.fillchars = {
-	fold = " ",
-	-- foldinner = ' ',
-	foldsep = " ",
-	-- foldclose = arrows.down,
+  fold = " ",
+  -- foldinner = ' ',
+  foldsep = " ",
+  -- foldclose = arrows.down,
   -- foldclose = "",
   foldclose = "",
   -- foldclose = "",
   foldopen = "",
-	-- foldopen = arrows.right,
-	diff = "╱",
+  -- foldopen = arrows.right,
+  diff = "╱",
 }
 
 -- opt.fillchars = opt.fillchars + "diff:╱"
@@ -217,52 +217,52 @@ vim.g.suda_smart_edit = 1
 -- vim.opt.foldtext = ""
 
 -- vim.api.nvim_create_autocmd("BufReadPost", {
---   callback = function()
---     vim.defer_fn(function()
---       vim.opt.foldmethod = "expr"
---       vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
---       vim.opt.foldtext = ""
---     end, 100)
---   end,
--- })
+  --   callback = function()
+    --     vim.defer_fn(function()
+      --       vim.opt.foldmethod = "expr"
+      --       vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+      --       vim.opt.foldtext = ""
+      --     end, 100)
+      --   end,
+      -- })
 
-vim.g.zoomwintab_remap = false
-vim.g.zoomwintab_remap = 0
+      vim.g.zoomwintab_remap = false
+      vim.g.zoomwintab_remap = 0
 
 
-vim.api.nvim_create_autocmd("VimEnter", {
-  group = vim.api.nvim_create_augroup("vim-enter-worktree-group", { clear = true }),
-  callback = function()
+      vim.api.nvim_create_autocmd("VimEnter", {
+        group = vim.api.nvim_create_augroup("vim-enter-worktree-group", { clear = true }),
+        callback = function()
 
-    local wt_utils = require("jg.custom.worktree-utils")
-    local cwd = vim.loop.cwd()
+          local wt_utils = require("jg.custom.worktree-utils")
+          local cwd = vim.loop.cwd()
 
-    local has_worktrees = wt_utils.has_worktrees(cwd)
-    if has_worktrees then
-      local file_utils = require("jg.custom.file-utils")
-      local key = vim.fn.fnamemodify(cwd or "", ":p")
-      local bps_path = file_utils.get_bps_path(key)
-      local data = file_utils.load_bps(bps_path)
-      if data == nil then
-        require("fyler").open({ dir = cwd })
-        return
-      end
-      if next(data) == nil or data.last_active_wt == nil then
-        require("fyler").open({ dir = cwd })
-        return
-      end
-      local last_active_wt = data.last_active_wt
+          local has_worktrees = wt_utils.has_worktrees(cwd)
+          if has_worktrees then
+            local file_utils = require("jg.custom.file-utils")
+            local key = vim.fn.fnamemodify(cwd or "", ":p")
+            local bps_path = file_utils.get_bps_path(key)
+            local data = file_utils.load_bps(bps_path)
+            if data == nil then
+              require("fyler").open({ dir = cwd })
+              return
+            end
+            if next(data) == nil or data.last_active_wt == nil then
+              require("fyler").open({ dir = cwd })
+              return
+            end
+            local last_active_wt = data.last_active_wt
 
-      local api_nvimtree = require("nvim-tree.api")
-      api_nvimtree.tree.change_root(last_active_wt)
-      -- vim.cmd("Explore " .. last_active_wt)  -- Open netrw browser
-      -- vim.cmd("cd " .. last_active_wt)
+            local api_nvimtree = require("nvim-tree.api")
+            api_nvimtree.tree.change_root(last_active_wt)
+            -- vim.cmd("Explore " .. last_active_wt)  -- Open netrw browser
+            -- vim.cmd("cd " .. last_active_wt)
 
-      -- if vim.fn.argc() >  0 then
-      --   -- require("fyler").open({ dir = last_active_wt })
-      --   vim.cmd("Explore " .. last_active_wt)  -- Open netrw browser
-      -- end
+            -- if vim.fn.argc() >  0 then
+            --   -- require("fyler").open({ dir = last_active_wt })
+            --   vim.cmd("Explore " .. last_active_wt)  -- Open netrw browser
+            -- end
 
-    end
-  end,
-})
+          end
+        end,
+      })

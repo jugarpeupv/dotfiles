@@ -5,9 +5,27 @@ vim.filetype.get_option = function(filetype, option)
 		or get_option(filetype, option)
 end
 
+local augroups = {
+	general = vim.api.nvim_create_augroup("cc_general", { clear = true }),
+	highlight = vim.api.nvim_create_augroup("cc_highlight", { clear = true }),
+	env = vim.api.nvim_create_augroup("cc_env", { clear = true }),
+	copilot = vim.api.nvim_create_augroup("cc_copilot", { clear = true }),
+	dir = vim.api.nvim_create_augroup("cc_dir_history", { clear = true }),
+	mode = vim.api.nvim_create_augroup("cc_mode_changed", { clear = true }),
+	autosave = vim.api.nvim_create_augroup("cc_autosave", { clear = true }),
+	git = vim.api.nvim_create_augroup("cc_git", { clear = true }),
+	diff = vim.api.nvim_create_augroup("cc_diff_ui", { clear = true }),
+	terminal = vim.api.nvim_create_augroup("cc_terminal", { clear = true }),
+	codecompanion = vim.api.nvim_create_augroup("cc_codecompanion", { clear = true }),
+	filetype_misc = vim.api.nvim_create_augroup("cc_filetype_misc", { clear = true }),
+	filetypedetect = vim.api.nvim_create_augroup("cc_filetypedetect", { clear = true }),
+}
+
+
 if vim.fn.has("nvim-0.11") == 1 then
+
 	vim.api.nvim_create_autocmd("TextYankPost", {
-		group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+		group = augroups.highlight,
 		desc = "Hightlight selection on yank",
 		pattern = "*",
 		callback = function()
@@ -17,7 +35,7 @@ if vim.fn.has("nvim-0.11") == 1 then
 	})
 else
 	vim.api.nvim_create_autocmd("TextYankPost", {
-		group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+		group = augroups.highlight,
 		desc = "Highlight selection on yank",
 		pattern = "*",
 		callback = function()
@@ -28,44 +46,48 @@ else
 	})
 end
 
-vim.cmd([[
-  augroup _general_settings
-  autocmd!
-  " autocmd FileType qf,help,man,lspinfo nnoremap <silent> <buffer> q :close<CR>
-  " autocmd TextYankPost * silent!lua require('vim.highlight').on_yank({higroup = 'Visual', timeout = 200})
-  autocmd BufWinEnter * :set formatoptions-=cro
-  " autocmd FileType qf set nobuflisted
-  augroup end
 
-  " augroup _auto_resize
-  " autocmd!
-  " autocmd VimResized * tabdo wincmd =
-  " augroup end
-]])
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	group = augroups.general,
+	desc = "Disable formatoptions kro",
+	callback = function()
+		vim.opt_local.formatoptions:remove({ "c", "r", "o" })
+	end,
+})
 
-vim.cmd([[
-  augroup filetypedetect
-  autocmd BufRead,BufNewFile *Jenkinsfile set filetype=groovy
-  augroup END
-]])
 
-vim.cmd([[
-  augroup filetypedetect
-  autocmd BufRead,BufNewFile Gemfile.lock set filetype=gemfilelock
-  augroup END
-]])
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	group = augroups.filetypedetect,
+	pattern = "*Jenkinsfile",
+	callback = function()
+		vim.bo.filetype = "groovy"
+	end,
+})
 
-vim.cmd([[
-	augroup filetypedetect
-	autocmd BufRead,BufNewFile *Pluginfile set filetype=ruby
-	augroup END
-]])
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	group = augroups.filetypedetect,
+	pattern = "Gemfile.lock",
+	callback = function()
+		vim.bo.filetype = "gemfilelock"
+	end,
+})
 
-vim.cmd([[
-	augroup filetypedetect
-	autocmd BufRead,BufNewFile *proguard-rules.pro set filetype=proguard
-	augroup END
-]])
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	group = augroups.filetypedetect,
+	pattern = "*Pluginfile",
+	callback = function()
+		vim.bo.filetype = "ruby"
+	end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	group = augroups.filetypedetect,
+	pattern = "*proguard-rules.pro",
+	callback = function()
+		vim.bo.filetype = "proguard"
+	end,
+})
+
 
 vim.filetype.add({
 	extension = {
@@ -79,28 +101,18 @@ vim.filetype.add({
 	},
 })
 
-local group = vim.api.nvim_create_augroup("__env", { clear = true })
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
-	pattern = "*.env",
-	group = group,
+	pattern = { "*.env", ".env.*" },
+	group = augroups.env,
 	callback = function()
 		vim.o.wrap = false
 		vim.bo.filetype = "sh"
 	end,
 })
 
-local env_group = vim.api.nvim_create_augroup("__env_default", { clear = true })
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-	pattern = ".env.*",
-	group = env_group,
-	callback = function()
-		vim.o.wrap = false
-		vim.bo.filetype = "sh"
-	end,
-})
 
 vim.api.nvim_create_autocmd("BufEnter", {
-	group = vim.api.nvim_create_augroup("copilot-conceal", { clear = true }),
+	group = augroups.copilot,
 	pattern = "copilot-chat",
 	callback = function(args)
 		vim.o.conceallevel = 0
@@ -118,23 +130,16 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	end,
 })
 
--- Save and restore window view when switching buffers
 vim.api.nvim_create_autocmd({ "BufLeave" }, {
-	group = vim.api.nvim_create_augroup("savecopilotchatvinsaveview", { clear = true }),
+	group = augroups.copilot,
 	pattern = "copilot-chat",
 	callback = function(args)
 		vim.b[args.buf].view = vim.fn.winsaveview()
-		-- vim.o.conceallevel = 0
-		-- vim.o.signcolumn = "yes"
-		-- vim.o.foldcolumn = "auto"
-		-- -- vim.o.relativenumber = true
-		-- -- vim.o.number = true
-		-- vim.o.completeopt = "menu,popup"
 	end,
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
-	group = vim.api.nvim_create_augroup("copilot-barbecue-ui-enter", { clear = true }),
+	group = augroups.copilot,
 	pattern = "copilot-overlay",
 	callback = function()
 		require("barbecue.ui").toggle(false)
@@ -143,7 +148,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 })
 
 vim.api.nvim_create_autocmd("BufLeave", {
-	group = vim.api.nvim_create_augroup("copilot-barbecue-ui-leave", { clear = true }),
+	group = augroups.copilot,
 	pattern = "copilot-overlay",
 	callback = function()
 		if vim.opt.diff:get() then
@@ -155,6 +160,7 @@ vim.api.nvim_create_autocmd("BufLeave", {
 	end,
 })
 
+
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "applescript",
 	group = vim.api.nvim_create_augroup("applescript2", { clear = true }),
@@ -164,12 +170,13 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-	group = vim.api.nvim_create_augroup("filetypedetect2", { clear = true }),
+	group = augroups.filetypedetect,
 	pattern = { "Gymfile", "Fastfile", "Podfile" },
 	callback = function()
 		vim.bo.filetype = "ruby"
 	end,
 })
+
 
 vim.filetype.add({
 	extension = {
@@ -207,9 +214,8 @@ add_current_dir_to_history()
 
 -- Autocommand to track directory changes
 vim.api.nvim_create_autocmd("DirChanged", {
-	group = vim.api.nvim_create_augroup("DirChanged_custom_jg", { clear = true }),
+	group = augroups.dir,
 	desc = "Track directory changes and update dir_history",
-	-- pattern = "*",
 	callback = function(args)
 		local new_dir = args.file
 		local home = os.getenv("HOME")
@@ -217,7 +223,6 @@ vim.api.nvim_create_autocmd("DirChanged", {
 			new_dir = "~" .. new_dir:sub(#home + 1)
 		end
 		if vim.tbl_contains(dir_history, new_dir) then
-			-- Remove the existing entry if it exists
 			for i, dir in ipairs(dir_history) do
 				if dir == new_dir then
 					table.remove(dir_history, i)
@@ -229,6 +234,7 @@ vim.api.nvim_create_autocmd("DirChanged", {
 		table.insert(dir_history, 1, new_dir)
 	end,
 })
+
 
 -- Telescope picker for directory history with default selection on the penultimate entry
 local function open_dir_history()
@@ -269,7 +275,7 @@ end, { noremap = true, silent = true })
 
 vim.api.nvim_create_autocmd("ModeChanged", {
 	desc = "Highlighting matched words when searching",
-	group = vim.api.nvim_create_augroup("modechangedcustom", { clear = true }),
+	group = augroups.mode,
 	pattern = { "t:nt" },
 	callback = function()
 		vim.wo.cursorline = true
@@ -278,14 +284,13 @@ vim.api.nvim_create_autocmd("ModeChanged", {
 
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	desc = "Autosave",
-	group = vim.api.nvim_create_augroup("autosavegroup", { clear = true }),
+	group = augroups.autosave,
 	callback = function(ev)
 		if vim.bo[ev.buf].buftype ~= "terminal" then
 			return
 		end
 
 		local win_ids = vim.api.nvim_list_wins()
-
 		local writable_win_ids = {}
 		for _, win in ipairs(win_ids) do
 			local buf = vim.api.nvim_win_get_buf(win)
@@ -312,6 +317,7 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 		end
 	end,
 })
+
 
 -- vim.api.nvim_create_autocmd('FileType', {
 --   group = vim.api.nvim_create_augroup('my-grug-far-custom-keybinds', { clear = true }),
@@ -355,10 +361,12 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "git",
+	group = augroups.git,
 	callback = function()
 		vim.opt_local.foldmethod = "syntax"
 	end,
 })
+
 
 -- This overrides DiffAdd in fugitive buffers, turning them into something that
 -- looks like DiffDelete (while allowing it to be highlighted differently).
@@ -375,88 +383,31 @@ local function fix_highlight_in_a_buffer()
 	if winhl == "" then
 		vim.wo.winhl = "DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText,DiffAdd:DiffAddAsDelete"
 	else
-		-- vim.wo.winhl = winhl .. ',DiffAdd:' .. override
-		-- vim.wo.winhl = winhl .. ",DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText"
 		vim.wo.winhl = "DiffChange:DiffAddAsDelete,DiffText:DiffDeleteText,DiffAdd:DiffAddAsDelete"
-		-- vim.wo.winhl = {
-		-- 	"DiffChange:DiffAddAsDelete",
-		-- 	"DiffText:DiffDeleteText",
-		-- }
 	end
 end
 
 vim.api.nvim_create_autocmd("BufNew", {
 	pattern = "fugitive://*",
-	group = vim.api.nvim_create_augroup("highlight_fugitive", { clear = true }),
+	group = augroups.diff,
 	callback = function()
 		fix_highlight_in_a_buffer()
-		-- for _, win in ipairs(vim.api.nvim_list_wins()) do
-		-- 	local buf = vim.api.nvim_win_get_buf(win)
-		-- 	local buf_name = vim.api.nvim_buf_get_name(buf)
-		-- 	if buf_name:match("^fugitive://") then
-		-- 		fix_highlight_in_a_buffer() -- or your custom logic
-		-- 	else
-		-- 		fix_highlight_in_b_buffer() -- or your custom logic
-		-- 	end
-		-- end
 	end,
 })
+
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "fugitive",
+	group = augroups.git,
 	callback = function(args)
 		local opts = { buffer = args.buf, noremap = true, silent = true }
 		vim.keymap.set("n", "S", ":G add .<CR>", opts)
-
-		-- vim.keymap.set("n", "<Tab>", function()
-		--   vim.cmd("call fugitive#PreviousFile(v:count1)")
-		-- end, opts)
-		--
-		-- vim.keymap.set("n", "<S-Tab>", function()
-		--   vim.cmd("call fugitive#NextFile(v:count1)")
-		-- end, opts)
-
-		-- vim.keymap.set("n", "<Tab>", function()
-		--     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("[m", true, false, true), "n", false)
-		-- 	-- for _, win in ipairs(vim.api.nvim_list_wins()) do
-		-- 	-- 	local buf = vim.api.nvim_win_get_buf(win)
-		-- 	-- 	local name = vim.api.nvim_buf_get_name(buf)
-		-- 	-- 	if name:sub(-2) == "//" then
-		-- 	-- 		vim.api.nvim_set_current_win(win)
-		-- 	-- 		-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("]m", true, false, true), "n", false)
-		-- 	-- 		-- vim.api.nvim_feedkeys("dv", "n", false)
-		-- 	-- 		vim.cmd("stopinsert") -- ensures normal mode
-		-- 	-- 		vim.api.nvim_feedkeys("dv", "n", false)
-		-- 	-- 		-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("dv", true, false, true), "n", false)
-		-- 	-- 		break
-		-- 	-- 	end
-		-- 	-- end
-		-- end, { buffer = true, silent = true })
-		--
-		-- vim.keymap.set("n", "<S-Tab>", function()
-		--     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("[m", true, false, true), "n", false)
-		--     vim.api.nvim_feedkeys("dv", "n", false)
-		--   -- for _, win in ipairs(vim.api.nvim_list_wins()) do
-		--   --   local buf = vim.api.nvim_win_get_buf(win)
-		--   --   local name = vim.api.nvim_buf_get_name(buf)
-		--   --     local sub = name:sub(-2)
-		--   --     vim.print(sub)
-		--   --   if name:sub(-2) == "//" then
-		--   --     vim.api.nvim_set_current_win(win)
-		--   --     -- vim.api.nvim_feedkeys("[m", "n", false)
-		--   --       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("[m", true, false, true), "n", false)
-		--   --     vim.api.nvim_feedkeys("dv", "n", false)
-		--   --     break
-		--   --   end
-		--   -- end
-		-- end, { buffer = true, silent = true })
 	end,
 })
 
--- vim.cmd([[au User FugitiveIndex nmap <buffer> dt :Gtabedit <Plug><cfile><Bar>Gvdiffsplit<CR>]])
-
 vim.api.nvim_create_autocmd("User", {
 	pattern = "FugitiveIndex",
+	group = augroups.git,
 	callback = function()
 		vim.api.nvim_buf_set_keymap(
 			0,
@@ -468,9 +419,10 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
+
 vim.api.nvim_create_autocmd("BufEnter", {
 	pattern = "diffview://*",
-	group = vim.api.nvim_create_augroup("diffview-package-lock", { clear = true }),
+	group = augroups.diff,
 	callback = function(args)
 		local bufname = vim.api.nvim_buf_get_name(args.buf)
 		if bufname:match("package%-lock%.json") then
@@ -486,7 +438,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "sidekick_terminal",
-	group = vim.api.nvim_create_augroup("sidekick_terminal_au", { clear = true }),
+	group = augroups.terminal,
 	callback = function(args)
 		local opts = { buffer = args.buf, noremap = true, silent = true }
 		vim.keymap.set("n", "<c-s>", "<cr>", opts)
@@ -495,7 +447,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "codecompanion",
-	group = vim.api.nvim_create_augroup("CodeCompanionAppendDetect", { clear = true }),
+	group = augroups.codecompanion,
 	callback = function(args)
 		local bufnr = args.buf
 		local state = {
@@ -544,10 +496,12 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = { "markdown", "ps" },
+	group = augroups.filetype_misc,
 	callback = function()
 		vim.wo.wrap = false
 	end,
 })
+
 
 
 -- vim.api.nvim_create_autocmd("TermOpen", {

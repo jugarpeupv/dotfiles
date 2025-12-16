@@ -2,12 +2,16 @@ return {
 	{
 		"A7Lavinraj/fyler.nvim",
 		enabled = true,
-    lazy = true,
+		lazy = false,
 		cmd = { "Fyler" },
-    -- event = { "VeryLazy" },
-		-- branch = "stable",
-		branch = "main",
-		dependencies = { "nvim-mini/mini.icons" },
+		-- event = { "VeryLazy" },
+		branch = "stable",
+		-- branch = "main",
+		-- dependencies = {
+		-- 	{ "nvim-tree/nvim-web-devicons" },
+		-- 	{ "nvim-mini/mini.icons", version = "*" },
+		-- 	{ "lambdalisue/vim-nerdfont" },
+		-- },
 		keys = {
 			{
 				"<leader>fe",
@@ -36,7 +40,7 @@ return {
 				on_highlight = nil,
 			},
 			integrations = {
-				icon = "mini_icons",
+				icon = "none",
 			},
 			views = {
 				finder = {
@@ -75,23 +79,23 @@ return {
 						marker = "│",
 					},
 					-- Key mappings
-          mappings = {
-            -- ["Y"] = function(view)
-            --   print('hi')
-            -- end,
-            ["q"] = "CloseView",
-            ["<CR>"] = "Select",
-            ["L"] = "Select",
-            ["<C-t>"] = "SelectTab",
-            ["<C-v>"] = "SelectVSplit",
-            ["<C-s>"] = "SelectSplit",
-            ["-"] = "GotoParent",
-            ["="] = "GotoCwd",
-            ["."] = "GotoNode",
-            ["#"] = "CollapseAll",
-            ["<BS>"] = "CollapseNode",
-            ["H"] = "CollapseNode",
-          },
+					mappings = {
+						-- ["Y"] = function(view)
+						--   print('hi')
+						-- end,
+						["q"] = "CloseView",
+						["<CR>"] = "Select",
+						["L"] = "Select",
+						["<C-t>"] = "SelectTab",
+						["<C-v>"] = "SelectVSplit",
+						["<C-s>"] = "SelectSplit",
+						["-"] = "GotoParent",
+						["="] = "GotoCwd",
+						["."] = "GotoNode",
+						["#"] = "CollapseAll",
+						["<BS>"] = "CollapseNode",
+						["H"] = "CollapseNode",
+					},
 					-- Current file tracking
 					follow_current_file = false,
 					-- File system watching(includes git status)
@@ -110,7 +114,7 @@ return {
 							shiftwidth = 2,
 						},
 						kind = "replace",
-            -- kind = "split_left",
+						-- kind = "split_left",
 						kinds = {
 							float = {
 								height = "70%",
@@ -145,7 +149,7 @@ return {
 							},
 						},
 						win_opts = {
-              winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+							winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 							concealcursor = "nvic",
 							conceallevel = 3,
 							cursorline = true,

@@ -6,7 +6,7 @@ return {
 		-- priority = 500,
 		dependencies = {},
     -- event = { "VeryLazy" },
-    lazy = false,
+    lazy = true,
     keys = {
       { mode = { "n", "t" }, "<M-k>", "<cmd>NvimTreeFindFile<cr>", { noremap = true, silent = true } },
       { mode = { "n", "t" }, "<D-k>", "<cmd>NvimTreeFindFile<cr>", { noremap = true, silent = true } },

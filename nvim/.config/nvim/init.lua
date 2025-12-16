@@ -1,4 +1,4 @@
--- vim.loader.enable()
+vim.loader.enable()
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
@@ -16,8 +16,8 @@ end
 --   vim.api.nvim_chan_send(vim.api.nvim_get_chan(), "\27[>4;2m")
 -- end
 
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 
 
 if vim.env.DEBUG then
@@ -43,7 +43,12 @@ end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins", {
 -- require("lazy").setup({}, {
+	defaults = {
+		lazy = true,
+		version = false,
+	},
 	change_detection = { notify = false },
+
 	-- rocks = { enabled = false },
 	rocks = {
 		hererocks = true, -- recommended if you do not have global installation of Lua 5.1.
@@ -66,7 +71,12 @@ require("lazy").setup("plugins", {
 	},
 
 	performance = {
+		cache = {
+			enabled = true,
+			path = vim.fn.stdpath("state") .. "/lazy/cache",
+		},
 		rtp = {
+
 			disabled_plugins = {
 				"2html_plugin",
 				"tohtml",
@@ -75,8 +85,8 @@ require("lazy").setup("plugins", {
 				"gzip",
 				"logipat",
 				"netrw",
-				"netrwPlugin",
-				"netrwSettings",
+				-- "netrwPlugin",
+				-- "netrwSettings",
 				"netrwFileHandlers",
 				"matchit",
 				"tar",
@@ -116,3 +126,50 @@ vim.api.nvim_create_autocmd("User", {
 
 
 -- vim.cmd("source /Users/jgarcia/.config/nvim/lua/jg/custom/proguard.vim")
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = vim.api.nvim_create_augroup("vim-enter-worktree-group", { clear = true }),
+  callback = function()
+    vim.schedule(function()
+      local cwd = vim.loop.cwd()
+      if not cwd or cwd == "" then
+        return
+      end
+
+      local has_wt_utils, wt_utils = pcall(require, "jg.custom.worktree-utils")
+      if not has_wt_utils or not wt_utils.has_worktrees(cwd) then
+        return
+      end
+
+      local has_file_utils, file_utils = pcall(require, "jg.custom.file-utils")
+      if not has_file_utils then
+        return
+      end
+
+      local key = vim.fn.fnamemodify(cwd, ":p")
+      local bps_path = file_utils.get_bps_path(key)
+      local data = file_utils.load_bps(bps_path)
+
+      local function open_fyler(dir)
+        local ok, fyler = pcall(require, "fyler")
+        if ok then
+          fyler.open({ dir = dir })
+        else
+          pcall(vim.cmd, "Fyler")
+        end
+      end
+
+      if not data or next(data) == nil or not data.last_active_wt then
+        open_fyler(cwd)
+        return
+      end
+
+      local last_active_wt = data.last_active_wt
+      local escaped = vim.fn.fnameescape(last_active_wt)
+      -- vim.cmd(("Explore %s"):format(escaped))
+      open_fyler(last_active_wt)
+      vim.cmd(("cd %s"):format(escaped))
+    end)
+  end,
+})
+

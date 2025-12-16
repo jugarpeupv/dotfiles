@@ -4,6 +4,8 @@ return {
 	{
 		"catppuccin/nvim",
 		priority = 1000,
+    enabled = true,
+    lazy = false,
 		config = function()
       -- require("catppuccin").setup({})
       -- vim.cmd.colorscheme("catppuccin")
@@ -192,7 +194,6 @@ return {
 						["typescriptExport"] = { link = "Keyword" },
 						["@lsp.typemod.method.defaultLibrary.typescript"] = { link = "Function" },
 						TelescopePathSeparator = { link = "TelescopeNormal" },
-						TreesitterContext = { link = "Function" },
 						IndentBlanklineChar = { fg = "#3b4251" },
 						IndentBlanklineContextChar = { fg = "#737aa2" },
 						RenderMarkdownH1 = { fg = "#F5C2E7" },
@@ -318,13 +319,12 @@ return {
 						Winbar = { fg = "#bbc2e0" },
 						WinbarNC = { fg = "#7C7F93" },
 						TreesitterContextLineNumber = { bg = "#00122e", fg = "#737aa2" },
-						-- TreesitterContext = { fg='', bg = '', },
 						WinSeparator = { fg = "#292e42" },
 						NvimTreeFolderIcon = { fg = "#89B4FA" },
 						NvimTreeFolderArrowClosed = { fg = "#89B4FA" },
 						NvimTreeFolderArrowOpen = { fg = "#89B4FA" },
 						NvimTreeWinSeparator = { fg = "#292e42" },
-						NvimTreeIndentMarker = { fg = "#292e42" },
+						NvimTreeIndentMarker = { fg = "#394b70" },
 						BufferLineOffsetSeparator = { fg = "#292e42" },
 						TelescopeBorder = { fg = "#394b70" },
 						DiagnosticWarn = { fg = "#F9E2AF" },
@@ -392,6 +392,8 @@ return {
 						barbecue_modified = { fg = "#737aa2" },
 						NvimTreeRootFolder = { style = {} },
 						NvimTreeGitDirty = { fg = "#F5E0DC" },
+            TreesitterContext = { fg = "#B4BEFE" },
+            -- TreesitterContext = { link = "Function" },
 						NvimTreeGitStaged = { fg = "#8ee2cf" },
 						NvimTreeExecFile = { style = {}, fg = "#F5C2E7" },
 						NvimTreeModifiedFile = { style = {}, fg = "#EFF1F5" },
@@ -404,6 +406,8 @@ return {
 						GitConflictIncomingLabel = { bg = "#394b70" },
 						GitConflictIncomingMark = { bg = "#394b70" },
 						GitConflictCurrentMark = { bg = "#104235" },
+            FylerFSDirectoryName = { bg = "", fg = "#89B4FA" },
+            FylerIndentMarker = { fg = "#394b70" },
 					}
 				end,
 			})
