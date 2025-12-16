@@ -2,7 +2,9 @@ return {
 	{
 		"A7Lavinraj/fyler.nvim",
 		enabled = true,
+    lazy = true,
 		cmd = { "Fyler" },
+    -- event = { "VeryLazy" },
 		-- branch = "stable",
 		branch = "main",
 		dependencies = { "nvim-mini/mini.icons" },
@@ -19,7 +21,7 @@ return {
 					-- -- vim.cmd.Fyler()
 
 					local fyler = require("fyler")
-					fyler.toggle({ kind = "replace" })
+					fyler.focus()
 				end,
 				desc = "Fyler",
 			},
@@ -43,7 +45,7 @@ return {
 					-- Auto-confirm simple file operations
 					confirm_simple = false,
 					-- Replace netrw as default explorer
-					default_explorer = false,
+					default_explorer = true,
 					-- Move deleted files/directories to the system trash
 					delete_to_trash = true,
 					-- Git status
@@ -108,6 +110,7 @@ return {
 							shiftwidth = 2,
 						},
 						kind = "replace",
+            -- kind = "split_left",
 						kinds = {
 							float = {
 								height = "70%",

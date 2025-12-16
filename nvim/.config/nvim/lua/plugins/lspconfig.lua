@@ -1,9 +1,21 @@
 -- return {}
 return {
   {
+    "igorlfs/nvim-lsp-file-operations",
+    enabled = true,
+    keys = { "<C-d>", "<C-u>" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    config = function()
+      require("lsp-file-operations").setup()
+    end,
+  },
+  {
     "j-hui/fidget.nvim",
     enabled = true,
-    event = { 'BufReadPost', "BufNewFile" },
+    -- event = { 'BufReadPost', "BufNewFile" },
+    lazy = true,
     opts = {
       progress = {
         suppress_on_insert = false, -- Suppress new messages while in insert mode
@@ -53,17 +65,6 @@ return {
     -- lazy = true,
     -- event = { "BufReadPost", "BufNewFile" },
 		dependencies = {
-      {
-        "jugarpeupv/gh-actions-lsp.nvim",
-        -- ft = { 'github.yaml', 'yaml' },
-        dir = "~/work/tmp/gh-actions-lsp.nvim/wt-main",
-        dev = true,
-        opts = {
-          fallback_org = "mapfre-tech", -- Optional: specify a fallback organization if organization cannot be determined in repo
-        },
-        lazy = true
-        -- event = "VeryLazy",
-      },
 			{
 				"hinell/lsp-timeout.nvim",
 				enabled = false,
@@ -78,21 +79,11 @@ return {
 					notifications = false,
 				},
 			},
-			{
-				"b0o/schemastore.nvim",
-				enabled = true,
-				lazy = true,
-			},
-			{
-				"igorlfs/nvim-lsp-file-operations",
-				enabled = true,
-				dependencies = {
-					"nvim-lua/plenary.nvim",
-				},
-				config = function()
-					require("lsp-file-operations").setup()
-				end,
-			},
+      {
+        "b0o/schemastore.nvim",
+        enabled = true,
+        lazy = true,
+      },
 		},
 		config = function()
 			-- local capabilities = vim.tbl_deep_extend(
@@ -170,7 +161,7 @@ return {
 			vim.lsp.enable("sourcekit")
 			vim.lsp.enable("lua_ls")
 			vim.lsp.enable("clangd")
-			-- vim.lsp.enable("gh_actions_ls")
+			vim.lsp.enable("gh_actions_ls")
 			vim.lsp.enable("ruby_lsp")
 			vim.lsp.enable("docker_compose_language_service")
 			vim.lsp.enable("gopls")

@@ -471,6 +471,13 @@ return {
           color = "#9CDCFE",
           name = "TSDeclarationfile23",
         },
+        ["tsconfig.lib.prod.json"] = {
+          -- icon = "텗",
+          -- icon = "",
+          icon = "󰛦",
+          color = "#9CDCFE",
+          name = "tslibprodjson2",
+        },
 				["tsconfig.json"] = {
 					-- icon = "텗",
           -- icon = "",

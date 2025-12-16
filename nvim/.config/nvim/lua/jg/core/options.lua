@@ -201,7 +201,8 @@ vim.o.foldtext = ""
 vim.o.foldopen = "search,tag,undo"
 -- vim.o.completeopt = "menu,popup,noselect,noinsert"
 
-vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"
+-- vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 -- opt.updatetime = 1000
 
@@ -227,3 +228,41 @@ vim.g.suda_smart_edit = 1
 
 vim.g.zoomwintab_remap = false
 vim.g.zoomwintab_remap = 0
+
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = vim.api.nvim_create_augroup("vim-enter-worktree-group", { clear = true }),
+  callback = function()
+
+    local wt_utils = require("jg.custom.worktree-utils")
+    local cwd = vim.loop.cwd()
+
+    local has_worktrees = wt_utils.has_worktrees(cwd)
+    if has_worktrees then
+      local file_utils = require("jg.custom.file-utils")
+      local key = vim.fn.fnamemodify(cwd or "", ":p")
+      local bps_path = file_utils.get_bps_path(key)
+      local data = file_utils.load_bps(bps_path)
+      if data == nil then
+        require("fyler").open({ dir = cwd })
+        return
+      end
+      if next(data) == nil or data.last_active_wt == nil then
+        require("fyler").open({ dir = cwd })
+        return
+      end
+      local last_active_wt = data.last_active_wt
+
+      local api_nvimtree = require("nvim-tree.api")
+      api_nvimtree.tree.change_root(last_active_wt)
+      -- vim.cmd("Explore " .. last_active_wt)  -- Open netrw browser
+      -- vim.cmd("cd " .. last_active_wt)
+
+      -- if vim.fn.argc() >  0 then
+      --   -- require("fyler").open({ dir = last_active_wt })
+      --   vim.cmd("Explore " .. last_active_wt)  -- Open netrw browser
+      -- end
+
+    end
+  end,
+})

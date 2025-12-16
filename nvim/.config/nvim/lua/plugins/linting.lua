@@ -13,7 +13,8 @@ return {
 			-- vim.env.ESLINT_D_PPID = vim.fn.getpid()
 			require("lint").linters_by_ft = {
 				-- ["yaml.github"] = { "actionlint", "yamllint" },
-				["yaml.github"] = { "actionlint" },
+				["yamlgithub"] = { "actionlint" },
+        -- ["yaml"] = { "actionlint" },
 				-- javascript = {'eslint_d'},
 				-- typescript = {'eslint_d'},
 			}

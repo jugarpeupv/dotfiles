@@ -12,7 +12,8 @@ else
     tell application "Google Chrome"
         activate
         tell application "System Events"
-            keystroke "l" using {command down, option down, shift down}
+            keystroke "l" using {command down}
+            -- keystroke "l" using {command down, option down, shift down}
             key code 53
             key code 53
             key code 53

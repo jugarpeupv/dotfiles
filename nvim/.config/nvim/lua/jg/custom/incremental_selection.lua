@@ -47,6 +47,7 @@ local function select_node(node)
 	vim.api.nvim_win_set_cursor(0, { end_row_pos, end_col_pos > 0 and end_col_pos - 1 or 0 })
 end
 
+
 M.setup = function(config)
 	local incr_key = config.incr_key and config.incr_key or "<tab>"
 	local decr_key = config.decr_key and config.decr_key or "<s-tab>"
@@ -142,3 +143,4 @@ M.setup = function(config)
 end
 
 return M
+

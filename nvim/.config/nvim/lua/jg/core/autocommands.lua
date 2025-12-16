@@ -324,7 +324,6 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 --   end,
 -- })
 
-
 -- vim.api.nvim_create_autocmd({ "BufEnter" }, {
 -- 	desc = "splitbelowtermi",
 -- 	group = vim.api.nvim_create_augroup("splitbelowtermi", { clear = true }),
@@ -494,83 +493,74 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "codecompanion",
---   group = vim.api.nvim_create_augroup("CodeCompanionAppendDetect", { clear = true }),
---   callback = function(args)
---     local bufnr = args.buf
---     vim.b[bufnr].last_line_count = vim.api.nvim_buf_line_count(bufnr)
---     vim.b[bufnr].last_cursor_line = vim.api.nvim_win_get_cursor(0)[1]
---
---     vim.api.nvim_create_autocmd("TextChanged", {
---       buffer = bufnr,
---       callback = function()
---         if vim.fn.mode() == "i" then
---           return
---         end
---
---         local prev_line_count = vim.b[bufnr].last_line_count or vim.api.nvim_buf_line_count(bufnr)
---         local new_line_count = vim.api.nvim_buf_line_count(bufnr)
---         local cursor = vim.api.nvim_win_get_cursor(0)
---
---         -- Only move if new lines were appended and cursor was at previous end
---         if new_line_count > prev_line_count and cursor[1] == prev_line_count then
---           vim.api.nvim_win_set_cursor(0, {new_line_count, 0})
---         end
---
---         -- Update last known line count
---         vim.b[bufnr].last_line_count = new_line_count
---         vim.cmd("norm! zz")
---       end,
---     })
---   end,
--- })
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "codecompanion",
+	group = vim.api.nvim_create_augroup("CodeCompanionAppendDetect", { clear = true }),
+	callback = function(args)
+		local bufnr = args.buf
+		local state = {
+			line_count = vim.api.nvim_buf_line_count(bufnr),
+		}
+		vim.b[bufnr].codecompanion_follow_state = state
+
+		local function follow_windows(prev_count, new_count)
+			for _, winid in ipairs(vim.fn.win_findbuf(bufnr)) do
+				local cursor = vim.api.nvim_win_get_cursor(winid)
+				local near_end = cursor[1] >= math.max(prev_count - 1, 1)
+				if near_end then
+					vim.api.nvim_win_call(winid, function()
+						vim.api.nvim_win_set_cursor(0, { new_count, 0 })
+						local height = vim.api.nvim_win_get_height(0)
+						local view = vim.fn.winsaveview()
+						view.topline = math.max(new_count - height + 1, 1)
+						vim.fn.winrestview(view)
+					end)
+				end
+			end
+		end
+
+		vim.api.nvim_create_autocmd("TextChanged", {
+			buffer = bufnr,
+			callback = function()
+				local mode = vim.api.nvim_get_mode().mode
+				if vim.startswith(mode, "i") then
+					state.line_count = vim.api.nvim_buf_line_count(bufnr)
+					return
+				end
+
+				local prev_count = state.line_count or vim.api.nvim_buf_line_count(bufnr)
+				local new_count = vim.api.nvim_buf_line_count(bufnr)
+				if new_count <= prev_count then
+					state.line_count = new_count
+					return
+				end
+
+				follow_windows(prev_count, new_count)
+				state.line_count = new_count
+			end,
+		})
+	end,
+})
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "markdown", "ps" },
+	pattern = { "markdown", "ps" },
 	callback = function()
 		vim.wo.wrap = false
 	end,
 })
 
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = {
-    "kitty",
-    "http",
-    "rest",
-    "java",
-    "go",
-    "copilot-chat",
-    "yaml",
-    "yaml.github",
-    "jsonc",
-    "sh",
-    "dosini",
-    "editorconfig",
-    "typescript",
-    -- "kulala_http",
-    "javascript",
-    "markdown",
-    "gitcommit",
-    "hurl",
-    "jproperties",
-    "properties",
-    "codecompanion",
-    "bash",
-    "html",
-    "htmlangular",
-    "scss",
-    "css",
-    "groovy",
-    "Avante",
-    "dockerfile",
-    "regex",
-    "lua",
-  },
-  callback = function()
-    vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-    vim.treesitter.start()
-  end,
-})
+-- vim.api.nvim_create_autocmd("TermOpen", {
+--   pattern = "*",
+--   callback = function(args)
+--     local bufnr = args.buf
+--
+--     -- Utility to move from one prompt to another
+--     vim.keymap.set({ "t" }, "<C-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+--     vim.keymap.set({ "t" }, "<C-P>", "<C-\\><C-n>?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+--
+--     vim.keymap.set({ "n" }, "<C-N>", "/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+--     vim.keymap.set({ "n" }, "<C-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+--   end,
+-- })
+

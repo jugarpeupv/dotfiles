@@ -83,12 +83,14 @@ return {
 
 	{
 		"tpope/vim-fugitive",
-		dependencies = { "farhanmustar/fugitive-delta.nvim" },
-		cmd = { "Git", "G", "Gitdiff" },
-		keys = {},
+		-- dependencies = { "farhanmustar/fugitive-delta.nvim" },
+		cmd = { "Git", "G", "Gitdiff", "Gedit" },
+		keys = {
+      { mode = { "n" },  "<leader>ge", "<cmd>Gedit stash<cr>" }
+    },
 		config = function()
-			-- vim.cmd([[let g:nremap = {'[m': '<Tab>'}]])
-			--    vim.cmd([[let g:nremap = {']m': '<S-Tab>'}]])
+			-- vim.cmd([[let g:nremap = {'[m': 'H', ']m': 'L'}]])
+      vim.cmd([[let g:nremap = {'[m': '<s-tab>', ']m': '<tab>'}]])
 			--
 			--    vim.cmd([[let g:xremap = {'[m': '<Tab>'}]])
 			--    vim.cmd([[let g:xremap = {']m': '<S-Tab>'}]])

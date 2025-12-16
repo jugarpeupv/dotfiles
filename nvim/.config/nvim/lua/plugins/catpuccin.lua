@@ -5,6 +5,8 @@ return {
 		"catppuccin/nvim",
 		priority = 1000,
 		config = function()
+      -- require("catppuccin").setup({})
+      -- vim.cmd.colorscheme("catppuccin")
 			require("catppuccin").setup({
 				flavour = "mocha", -- latte, frappe, macchiato, or mocha
 				transparent_background = true,
@@ -186,8 +188,8 @@ return {
 						AvanteConflictCurrent = { style = {}, fg = "#394b70" },
 						LineNR = { style = {}, fg = "#3b4261" },
 						CursorLineNR = { style = {}, fg = "#737aa2" },
-            ["typescriptImport"] = { link = "Keyword" },
-            ["typescriptExport"] = { link = "Keyword" },
+						["typescriptImport"] = { link = "Keyword" },
+						["typescriptExport"] = { link = "Keyword" },
 						["@lsp.typemod.method.defaultLibrary.typescript"] = { link = "Function" },
 						TelescopePathSeparator = { link = "TelescopeNormal" },
 						TreesitterContext = { link = "Function" },
@@ -433,29 +435,33 @@ return {
 			vim.g.terminal_color_7 = "#BAC2DE"
 			vim.g.terminal_color_15 = "#7C7F93"
 
-			vim.cmd([[
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Visual'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'TelescopeMatching'],
-  \ 'fg+':     ['fg', 'Normal', 'Normal', 'Normal'],
-  \ 'bg+':     ['bg', 'Normal', 'Normal'],
-  \ 'hl+':     ['fg', 'TelescopeMatching'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
-]])
-			vim.cmd([[let g:fzf_checkout_view_mode = 'inline']])
-			vim.cmd([[let g:fzf_checkout_git_options = "--format='%(color:#c0caf5)%(refname:short)'"]])
-			vim.cmd([[let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit',
-  \ 'ctrl-q': 'fill_quickfix'}]])
+-- 			vim.cmd([[
+-- let g:fzf_colors =
+-- \ { 'fg':      ['fg', 'Visual'],
+--   \ 'bg':      ['bg', 'Normal'],
+--   \ 'hl':      ['fg', 'TelescopeMatching'],
+--   \ 'fg+':     ['fg', 'Normal', 'Normal', 'Normal'],
+--   \ 'bg+':     ['bg', 'Normal', 'Normal'],
+--   \ 'hl+':     ['fg', 'TelescopeMatching'],
+--   \ 'info':    ['fg', 'PreProc'],
+--   \ 'border':  ['fg', 'Ignore'],
+--   \ 'prompt':  ['fg', 'Conditional'],
+--   \ 'pointer': ['fg', 'Exception'],
+--   \ 'marker':  ['fg', 'Keyword'],
+--   \ 'spinner': ['fg', 'Label'],
+--   \ 'header':  ['fg', 'Comment'] }
+-- ]])
+-- 			vim.cmd([[let g:fzf_checkout_view_mode = 'inline']])
+-- 			vim.cmd([[let g:fzf_checkout_git_options = "--format='%(color:#c0caf5)%(refname:short)'"]])
+-- 			vim.cmd([[let g:fzf_action = {
+--   \ 'ctrl-t': 'tab split',
+--   \ 'ctrl-x': 'split',
+--   \ 'ctrl-v': 'vsplit',
+--   \ 'ctrl-q': 'fill_quickfix'}]])
+
+
+
+
 		end,
 	},
 }

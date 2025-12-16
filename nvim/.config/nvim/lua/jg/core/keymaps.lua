@@ -374,13 +374,6 @@ end, opts)
 -- end, opts)
 keymap("n", "<leader>lr", "<cmd>LspRestart<cr>", opts)
 
-keymap("n", "<D-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
-keymap("i", "<D-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
-keymap("t", "<D-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
-keymap("n", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
-keymap("i", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
-keymap("t", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
-
 -- vim.keymap.set("n", "<D-j>", function()
 --   local api = require("nvim-tree.api")
 --   if api.tree.is_visible() then
@@ -403,11 +396,6 @@ keymap("t", "<M-j>", "<cmd>keepjumps NvimTreeToggle<cr>", opts)
 
 keymap("n", "<leader>d", "<Nop>", opts)
 -- keymap("n", "<leader>d", ":NvimTreeFindFile<cr>", opts)
-keymap("n", "<D-k>", "<cmd>keepjumps NvimTreeFindFile<cr>", opts)
-keymap("t", "<D-k>", "<C-\\><C-n><cmd>keepjumps NvimTreeFindFile<cr>", opts)
-
-keymap("n", "<M-k>", "<cmd>keepjumps NvimTreeFindFile<cr>", opts)
-keymap("t", "<M-k>", "<C-\\><C-n><cmd>keepjumps NvimTreeFindFile<cr>", opts)
 
 -- vim.keymap.set("n", "<D-k>", function()
 --   local api = require("nvim-tree.api")
@@ -453,7 +441,7 @@ end, opts)
 keymap("n", "<leader>nN", "<cmd>nohlsearch<CR>", opts)
 
 vim.keymap.set({ "n" }, "<leader>bi", function()
-  Snacks.picker.buffers({ finder = "buffers", title = "< IBuffers >" })
+	Snacks.picker.buffers({ finder = "buffers", title = "< IBuffers >" })
 
 	-- require("telescope.builtin").buffers({
 	-- 	prompt_title = "< IBuffers >",
@@ -501,7 +489,7 @@ vim.keymap.set({ "n", "v" }, "<leader>ff", function()
 		path_display = { "absolute" },
 		-- path_display = { "filename_first" },
 		theme = "ivy",
-		layout_config = { height = 0.47 },
+		layout_config = { height = 0.40 },
 		preview = {
 			hide_on_startup = true,
 		},
@@ -1807,7 +1795,7 @@ vim.keymap.set("n", "<leader>we", function()
 	telescope_git_worktree()
 end, opts)
 
-vim.keymap.set({ "n" }, "<leader>ge", function()
+vim.keymap.set({ "n" }, "<leader>gE", function()
 	vim.cmd("e ~/.gitconfig")
 end, opts)
 
@@ -1838,19 +1826,6 @@ end, { desc = "Toggle Copilot terminal in split" })
 vim.api.nvim_set_keymap("i", "<C-n>", "<Down>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<C-p>", "<Up>", { noremap = true, silent = true })
 
-vim.api.nvim_create_autocmd("TermOpen", {
-	pattern = "*",
-	callback = function(args)
-		local bufnr = args.buf
-
-		-- Utility to move from one prompt to another
-		vim.keymap.set({ "t" }, "<C-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
-		vim.keymap.set({ "t" }, "<C-P>", "<C-\\><C-n>?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
-
-		vim.keymap.set({ "n" }, "<C-N>", "/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
-		vim.keymap.set({ "n" }, "<C-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
-	end,
-})
 
 vim.keymap.set({ "n" }, "<leader>tt", function()
 	require("barbecue.ui").toggle()
@@ -1872,16 +1847,15 @@ vim.keymap.set({ "n" }, "<C-S-L>", function()
 	end
 end, opts)
 
-vim.keymap.set("n", "<leader>na", function()
-	require("jg.custom.telescope").notmuch_picker()
-end, { desc = "Notmuch address picker" })
-
 vim.keymap.set("n", "<leader>gn", function()
 	require("jg.custom.telescope").show_global_npm_packages()
 end, { desc = "show global npm packages" })
 
-vim.keymap.set('n', '<S-left>', 'zH')
-vim.keymap.set('n', '<S-right>', 'zL')
+vim.keymap.set("n", "<S-left>", "zH")
+vim.keymap.set("n", "<S-right>", "zL")
 
-vim.keymap.set('n', '<left>', '10zh')
-vim.keymap.set('n', '<right>', '10zl')
+vim.keymap.set("n", "<left>", "10zh")
+vim.keymap.set("n", "<right>", "10zl")
+
+vim.keymap.set("n", "<C-i>", "<C-i>", { noremap = true })
+

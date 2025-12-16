@@ -52,6 +52,14 @@ return {
 			})
 		end,
 		keys = {
+      {
+        "<M-`>",
+        function()
+          require("telescope").extensions.yank_history.yank_history()
+        end,
+        mode = { "i", "x", "n" },
+        desc = "Open Yank History",
+      },
 			{
 				"<leader>cl",
 				function()

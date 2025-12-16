@@ -2,11 +2,11 @@
 return {
 	{
 		"katonori/ps.vim",
-    cmd = "PS",
-    keys = {
-      { "<leader>ps","<cmd>PS<cr>" },
-      { "<leader>pr","<cmd>PsRefresh<cr>" }
-    }
+		cmd = "PS",
+		keys = {
+			{ "<leader>ps", "<cmd>PS<cr>" },
+			{ "<leader>pr", "<cmd>PsRefresh<cr>" },
+		},
 	},
 	-- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
 	{ "junegunn/gv.vim", dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
@@ -359,70 +359,27 @@ return {
 		"rmagatti/auto-session",
 		enabled = false,
 		-- event = "BufReadPost",
-		lazy = true,
+		lazy = false,
 		keys = {
 			-- Will use Telescope if installed or a vim.ui.select picker otherwise
-			{ "<leader>ws", "<cmd>SessionSearch<CR>", desc = "Session search" },
-			{ "<leader>wa", "<cmd>SessionSave<CR>", desc = "Save session" },
+			{ "<leader>ws", "<cmd>AutoSession search<CR>", desc = "Session search" },
+			{ "<leader>wa", "<cmd>AutoSession save<CR>", desc = "Save session" },
 		},
 		---enables autocomplete for opts
 		---@module "auto-session"
 		---@diagnostic disable-next-line: undefined-doc-name
 		---@type AutoSession.Config
 		opts = {
-			enabled = true, -- Enables/disables auto creating, saving and restoring
-			root_dir = vim.fn.stdpath("data") .. "/sessions/", -- Root dir where sessions will be stored
-			auto_save = true, -- Enables/disables auto saving session on exit
-			auto_restore = true, -- Enables/disables auto restoring session on start
-			auto_create = true, -- Enables/disables auto creating new session files. Can take a function that should return true/false if a new session file should be created or not
-			suppressed_dirs = nil, -- Suppress session restore/create in certain directories
-			allowed_dirs = nil, -- Allow session restore/create in certain directories
-			auto_restore_last_session = true, -- On startup, loads the last saved session if session for cwd does not exist
-			git_use_branch_name = true, -- Include git branch name in session name
-			git_auto_restore_on_branch_change = false, -- Should we auto-restore the session when the git branch changes. Requires git_use_branch_name
-			lazy_support = true, -- Automatically detect if Lazy.nvim is being used and wait until Lazy is done to make sure session is restored correctly. Does nothing if Lazy isn't being used. Can be disabled if a problem is suspected or for debugging
-			bypass_save_filetypes = nil, -- List of filetypes to bypass auto save when the only buffer open is one of the file types listed, useful to ignore dashboards
-			close_unsupported_windows = true, -- Close windows that aren't backed by normal file before autosaving a session
-			args_allow_single_directory = true, -- Follow normal sesion save/load logic if launched with a single directory as the only argument
-			args_allow_files_auto_save = false, -- Allow saving a session even when launched with a file argument (or multiple files/dirs). It does not load any existing session first. While you can just set this to true, you probably want to set it to a function that decides when to save a session when launched with file args. See documentation for more detail
-			continue_restore_on_error = true, -- Keep loading the session even if there's an error
-			show_auto_restore_notif = false, -- Whether to show a notification when auto-restoring
-			cwd_change_handling = true, -- Follow cwd changes, saving a session before change and restoring after
-			lsp_stop_on_restore = false, -- Should language servers be stopped when restoring a session. Can also be a function that will be called if set. Not called on autorestore from startup
-			restore_error_handler = nil, -- Called when there's an error restoring. By default, it ignores fold errors otherwise it displays the error and returns false to disable auto_save
-			purge_after_minutes = 14400, -- Sessions older than purge_after_minutes will be deleted asynchronously on startup, e.g. set to 14400 to delete sessions that haven't been accessed for more than 10 days, defaults to off (no purging), requires >= nvim 0.10
-			post_restore_cmds = {
-				function()
-					-- Restore nvim-tree after a session is restored
-					local nvim_tree_api = require("nvim-tree.api")
-					nvim_tree_api.tree.open()
-					nvim_tree_api.tree.change_root(vim.fn.getcwd())
-					nvim_tree_api.tree.reload()
-				end,
+			auto_save_enabled = true,
+			auto_restore_enabled = true,
+			auto_session_use_git_branch = true,
+			pre_save_cmds = {
+				"NvimTreeClose",
 			},
-
-			-- ⚠️ This will only work if Telescope.nvim is installed
-			-- The following are already the default values, no need to provide them if these are already the settings you want.
-
-			session_lens = {
-				-- If load_on_setup is false, make sure you use `:SessionSearch` to open the picker as it will initialize everything first
-				load_on_setup = true,
-				previewer = true,
-				mappings = {
-					-- Mode can be a string or a table, e.g. {"i", "n"} for both insert and normal mode
-					delete_session = { "i", "<C-D>" },
-					alternate_session = { "i", "<C-S>" },
-					copy_session = { "i", "<C-Y>" },
-				},
-				-- Can also set some Telescope picker options
-				-- For all options, see: https://github.com/nvim-telescope/telescope.nvim/blob/master/doc/telescope.txt#L112
-				theme_conf = {
-					border = true,
-					layout_config = {
-						width = 0.8, -- Can set width and height as percent of window
-						height = 0.5,
-					},
-				},
+			cwd_change_handling = {
+				post_cwd_changed_hook = function()
+					require("lualine").refresh()
+				end,
 			},
 		},
 	},

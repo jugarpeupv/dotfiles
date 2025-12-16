@@ -2,7 +2,8 @@ return {
 	"folke/snacks.nvim",
 	priority = 800,
 	enabled = true,
-  lazy = false,
+	lazy = true,
+  event = { "VeryLazy" },
 	-- event = { "BufReadPost", "BufNewFile", "CmdlineEnter" },
 	-- event = { "BufReadPost", "BufNewFile" },
 	opts = {
@@ -442,6 +443,16 @@ return {
 				Snacks.picker.grep({
 					layout = {
 						preview = false,
+					},
+					-- formatters = {
+					-- 	file = {
+					-- 		filename_first = true,
+					-- 	},
+					-- },
+					win = {
+						list = {
+							treesitter = false, -- disable treesitter highlights
+						},
 					},
 				})
 			end,

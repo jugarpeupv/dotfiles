@@ -1,15 +1,14 @@
 return {
 	{
 		"yousefakbar/notmuch.nvim",
-
-    -- "jugarpeupv/springboot-nvim",
-    -- dir = "~/projects/notmuch.nvim/wt-baumea-feat-email-deletion",
-    dir = "~/projects/notmuch.nvim/wt-main",
-    dev = true,
+		-- "jugarpeupv/springboot-nvim",
+		-- dir = "~/projects/notmuch.nvim/wt-baumea-feat-email-deletion",
+		-- dir = "~/projects/notmuch.nvim/wt-main",
+		-- dev = true,
 		enabled = true,
 		opts = {
 			notmuch_db_path = os.getenv("HOME") .. "/Mail",
-      open_cmd = 'open',
+			open_cmd = "open",
 			maildir_sync_cmd = "mbsync -a",
 			keymaps = {
 				sendmail = "S",
@@ -21,7 +20,21 @@ return {
 			-- { mode = { "n" }, "<leader>nn", "<cmd>Notmuch<cr>", { silent = true } },
 			{ mode = { "n" }, "<leader><space>", "<cmd>Notmuch<cr>", { silent = true } },
 
-      { mode = { "n" }, "<leader>nn", "<cmd>NmSearch tag:inbox and tag:unread and not tag:github<cr>", { silent = true } },
+			{
+				mode = { "n" },
+				"<leader>nn",
+				"<cmd>NmSearch tag:inbox and tag:unread and not tag:github<cr>",
+				{ silent = true },
+			},
+
+			{
+				mode = { "n" },
+				"<leader>na",
+				function()
+					require("jg.custom.telescope").notmuch_picker()
+				end,
+				{ silent = true },
+			},
 		},
 	},
 	-- {

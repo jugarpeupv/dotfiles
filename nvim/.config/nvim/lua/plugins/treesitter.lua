@@ -5,7 +5,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		-- branch = "master",
-		-- lazy = false,
+		lazy = true,
 		branch = "main",
 		build = ":TSUpdate",
 		event = { "VeryLazy" },
@@ -294,10 +294,66 @@ return {
 
 
 			vim.treesitter.language.register("markdown", "octo")
+      vim.treesitter.language.register('yaml', 'yaml.github')  -- the someft filetype will use the python parser and queries.
+
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("treesitter-enabled-filetype", { clear = true }),
+        pattern = {
+          "kitty",
+          "http",
+          "rest",
+          "java",
+          "go",
+          "copilot-chat",
+          "yaml",
+          "yml",
+          "yaml.github",
+          "jsonc",
+          "sh",
+          "dosini",
+          "editorconfig",
+          "typescript",
+          -- "kulala_http",
+          "javascript",
+          "markdown",
+          "gitcommit",
+          "hurl",
+          "jproperties",
+          "properties",
+          "codecompanion",
+          "bash",
+          "html",
+          "htmlangular",
+          "scss",
+          "css",
+          "groovy",
+          "Avante",
+          "dockerfile",
+          "regex",
+          "lua",
+        },
+        callback = function()
+          -- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+          vim.wo[0][0].foldmethod = 'expr'
+          vim.treesitter.start()
+        end,
+      })
+
+
+      vim.filetype.add({
+        pattern = {
+          [".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
+        },
+      })
+
 
 			require("jg.custom.incremental_selection").setup({
-				incr_key = "<cr>", -- increment selection key
-				decr_key = "<bs>", -- decrement selection key
+				-- incr_key = "<cr>", -- increment selection key
+				-- decr_key = "<bs>", -- decrement selection key
+			     incr_key = "<tab>", -- increment selection key
+			     decr_key = "<s-tab>", -- decrement selection key
 			})
 
 			vim.filetype.add({

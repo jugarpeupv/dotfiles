@@ -103,17 +103,16 @@ local function custom_toggle_file_info(node)
 	})
 end
 
-local api = require("nvim-tree.api")
 
 local M = {}
 
 M.change_root_to_global_cwd = function()
 	local global_cwd = vim.fn.getcwd(-1, -1)
-	api.tree.change_root(global_cwd)
+	require("nvim-tree.api").tree.change_root(global_cwd)
 end
 
 M.custom_info_popup = function()
-	local node = api.tree.get_node_under_cursor()
+	local node = require("nvim-tree.api").tree.get_node_under_cursor()
 	custom_toggle_file_info(node)
 end
 

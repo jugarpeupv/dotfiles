@@ -116,7 +116,7 @@ return {
 				--   return label
 				-- end,
 				exclude_filetypes = {
-					-- "netrw",
+					"netrw",
           "mail",
 					"grug-far",
 					"toggleterm",

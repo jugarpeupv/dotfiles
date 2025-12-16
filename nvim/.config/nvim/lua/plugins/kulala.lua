@@ -29,6 +29,7 @@ return {
 			winbar = true,
 			ui = {
 				default_winbar_panes = { "body", "headers", "verbose", "script_output", "report" },
+        win_opts = { bo = {}, wo = { wrap = true } },
 				pickers = {
 					snacks = {
 						layout = {
