@@ -21,9 +21,7 @@ local augroups = {
 	filetypedetect = vim.api.nvim_create_augroup("cc_filetypedetect", { clear = true }),
 }
 
-
 if vim.fn.has("nvim-0.11") == 1 then
-
 	vim.api.nvim_create_autocmd("TextYankPost", {
 		group = augroups.highlight,
 		desc = "Hightlight selection on yank",
@@ -46,7 +44,6 @@ else
 	})
 end
 
-
 vim.api.nvim_create_autocmd("BufWinEnter", {
 	group = augroups.general,
 	desc = "Disable formatoptions kro",
@@ -54,7 +51,6 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
 		vim.opt_local.formatoptions:remove({ "c", "r", "o" })
 	end,
 })
-
 
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	group = augroups.filetypedetect,
@@ -88,7 +84,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	end,
 })
 
-
 vim.filetype.add({
 	extension = {
 		["http"] = "http",
@@ -109,7 +104,6 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 		vim.bo.filetype = "sh"
 	end,
 })
-
 
 vim.api.nvim_create_autocmd("BufEnter", {
 	group = augroups.copilot,
@@ -160,7 +154,6 @@ vim.api.nvim_create_autocmd("BufLeave", {
 	end,
 })
 
-
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "applescript",
 	group = vim.api.nvim_create_augroup("applescript2", { clear = true }),
@@ -176,7 +169,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 		vim.bo.filetype = "ruby"
 	end,
 })
-
 
 vim.filetype.add({
 	extension = {
@@ -234,7 +226,6 @@ vim.api.nvim_create_autocmd("DirChanged", {
 		table.insert(dir_history, 1, new_dir)
 	end,
 })
-
 
 -- Telescope picker for directory history with default selection on the penultimate entry
 local function open_dir_history()
@@ -318,7 +309,6 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	end,
 })
 
-
 -- vim.api.nvim_create_autocmd('FileType', {
 --   group = vim.api.nvim_create_augroup('my-grug-far-custom-keybinds', { clear = true }),
 --   pattern = { 'grug-far' },
@@ -367,7 +357,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-
 -- This overrides DiffAdd in fugitive buffers, turning them into something that
 -- looks like DiffDelete (while allowing it to be highlighted differently).
 --
@@ -395,7 +384,6 @@ vim.api.nvim_create_autocmd("BufNew", {
 	end,
 })
 
-
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "fugitive",
 	group = augroups.git,
@@ -418,7 +406,6 @@ vim.api.nvim_create_autocmd("User", {
 		)
 	end,
 })
-
 
 vim.api.nvim_create_autocmd("BufEnter", {
 	pattern = "diffview://*",
@@ -502,8 +489,6 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-
-
 -- vim.api.nvim_create_autocmd("TermOpen", {
 --   pattern = "*",
 --   callback = function(args)
@@ -517,4 +502,3 @@ vim.api.nvim_create_autocmd("FileType", {
 --     vim.keymap.set({ "n" }, "<C-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
 --   end,
 -- })
-

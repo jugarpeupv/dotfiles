@@ -5,11 +5,11 @@ return {
 		lazy = false,
 		cmd = { "Fyler" },
 		-- event = { "VeryLazy" },
-		branch = "stable",
+		-- branch = "stable",
 		-- branch = "main",
 		-- dependencies = {
 		-- 	{ "nvim-tree/nvim-web-devicons" },
-		-- 	{ "nvim-mini/mini.icons", version = "*" },
+		-- 	{ "nvim-mini/mini.icons"},
 		-- 	{ "lambdalisue/vim-nerdfont" },
 		-- },
 		keys = {
@@ -40,7 +40,15 @@ return {
 				on_highlight = nil,
 			},
 			integrations = {
-				icon = "none",
+				-- icon = "mini_icons",
+        -- icon = "none",
+        icon = function(item_type, path)
+          if item_type == "directory" then
+            return "", "FylerFSDirectoryIcon"
+          else
+            return "", "FylerFSDirectoryIcon"
+          end
+        end
 			},
 			views = {
 				finder = {
@@ -100,7 +108,7 @@ return {
 					follow_current_file = false,
 					-- File system watching(includes git status)
 					watcher = {
-						enabled = true,
+						enabled = false,
 					},
 					-- Window configuration
 					win = {
@@ -152,9 +160,10 @@ return {
 							winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 							concealcursor = "nvic",
 							conceallevel = 3,
+              foldcolumn = "1",
 							cursorline = true,
-							number = true,
-							relativenumber = true,
+							number = false,
+							relativenumber = false,
 							winhighlight = "Normal:FylerNormal",
 							wrap = false,
 						},

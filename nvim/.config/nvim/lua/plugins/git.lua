@@ -6,6 +6,11 @@ return {
 	-- { "skanehira/denops-gh.vim", dependencies = {
 	-- 	{ "vim-denops/denops.vim" },
 	-- } },
+	-- {
+	-- 	"esmuellert/vscode-diff.nvim",
+	-- 	dependencies = { "MunifTanjim/nui.nvim" },
+	-- 	cmd = "CodeDiff",
+	-- },
 
 	{
 		"isakbm/gitgraph.nvim",
@@ -86,11 +91,11 @@ return {
 		-- dependencies = { "farhanmustar/fugitive-delta.nvim" },
 		cmd = { "Git", "G", "Gitdiff", "Gedit" },
 		keys = {
-      { mode = { "n" },  "<leader>ge", "<cmd>Gedit stash<cr>" }
-    },
+			{ mode = { "n" }, "<leader>ge", "<cmd>Gedit stash<cr>" },
+		},
 		config = function()
 			-- vim.cmd([[let g:nremap = {'[m': 'H', ']m': 'L'}]])
-      vim.cmd([[let g:nremap = {'[m': '<s-tab>', ']m': '<tab>'}]])
+			vim.cmd([[let g:nremap = {'[m': '<s-tab>', ']m': '<tab>'}]])
 			--
 			--    vim.cmd([[let g:xremap = {'[m': '<Tab>'}]])
 			--    vim.cmd([[let g:xremap = {']m': '<S-Tab>'}]])
@@ -112,10 +117,10 @@ return {
 	{
 		"lewis6991/gitsigns.nvim",
 		-- event = { "BufReadPost", "BufNewFile" },
-    keys = {
-      { "<C-d>" },
-      { "<C-u>" }
-    },
+		keys = {
+			{ "<C-d>" },
+			{ "<C-u>" },
+		},
 		config = function()
 			-- import gitsigns plugin safely
 			local setup, gitsigns = pcall(require, "gitsigns")

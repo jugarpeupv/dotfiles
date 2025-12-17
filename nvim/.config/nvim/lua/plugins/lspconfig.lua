@@ -41,11 +41,15 @@ return {
       -- 	vim.lsp.protocol.make_client_capabilities(),
       -- 	require("lsp-file-operations").default_capabilities()
       -- )
+
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false -- https://github.com/neovim/neovim/issues/23291
+
       local on_attach = require("jg.custom.lsp-utils").attach_lsp_config
 
       vim.lsp.config("*", {
         on_attach = on_attach,
-        -- capabilities = capabilities,
+        capabilities = capabilities,
       })
 
       local config = {

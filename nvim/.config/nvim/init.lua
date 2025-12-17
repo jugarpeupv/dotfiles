@@ -130,6 +130,10 @@ vim.api.nvim_create_autocmd("User", {
 vim.api.nvim_create_autocmd("VimEnter", {
   group = vim.api.nvim_create_augroup("vim-enter-worktree-group", { clear = true }),
   callback = function()
+    if vim.list_contains(vim.v.argv, "-R") then
+      return
+    end
+
     vim.schedule(function()
       local cwd = vim.loop.cwd()
       if not cwd or cwd == "" then

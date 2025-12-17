@@ -408,6 +408,8 @@ return {
 						GitConflictCurrentMark = { bg = "#104235" },
             FylerFSDirectoryName = { bg = "", fg = "#89B4FA" },
             FylerIndentMarker = { fg = "#394b70" },
+            -- nmSubject = { fg = "#B4BEFE" },
+            -- nmFrom = { fg = "#89ddff" },
 					}
 				end,
 			})
