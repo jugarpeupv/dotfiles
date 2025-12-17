@@ -85,8 +85,8 @@ require("lazy").setup("plugins", {
 				"gzip",
 				"logipat",
 				"netrw",
-				-- "netrwPlugin",
-				-- "netrwSettings",
+				"netrwPlugin",
+				"netrwSettings",
 				"netrwFileHandlers",
 				"matchit",
 				"tar",
@@ -130,6 +130,12 @@ vim.api.nvim_create_autocmd("User", {
 vim.api.nvim_create_autocmd("VimEnter", {
   group = vim.api.nvim_create_augroup("vim-enter-worktree-group", { clear = true }),
   callback = function()
+    if vim.fn.argc() == 0 and vim.fn.line2byte("$") == -1 then
+      -- No arguments and buffer is empty
+      -- Open dashboard, file explorer, etc.
+      return
+    end
+
     if vim.list_contains(vim.v.argv, "-R") then
       return
     end
@@ -164,14 +170,16 @@ vim.api.nvim_create_autocmd("VimEnter", {
       end
 
       if not data or next(data) == nil or not data.last_active_wt then
-        open_fyler(cwd)
+        -- open_fyler(cwd)
+        require("oil").open(cwd)
         return
       end
 
       local last_active_wt = data.last_active_wt
       local escaped = vim.fn.fnameescape(last_active_wt)
       -- vim.cmd(("Explore %s"):format(escaped))
-      open_fyler(last_active_wt)
+      -- open_fyler(last_active_wt)
+      require("oil").open(last_active_wt)
       vim.cmd(("cd %s"):format(escaped))
     end)
   end,

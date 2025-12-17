@@ -55,6 +55,7 @@ return {
 			-- },
 		},
 		-- commit = "ba858b662599eab8ef1cba9ab745afded99cb180",
+    lazy = false,
 		cmd = { "Oil" },
 		-- event = { "BufReadPost", "BufNewFile" },
 		keys = {
@@ -80,7 +81,7 @@ return {
 			require("oil").setup({
 				-- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
 				-- Set to false if you want some other plugin (e.g. netrw) to open when you edit directories.
-				default_file_explorer = false,
+				default_file_explorer = true,
 				-- Id is automatically added at the beginning, and name at the end
 				-- See :help oil-columns
 				columns = {

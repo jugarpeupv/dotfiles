@@ -528,11 +528,11 @@ return {
 			},
 			{ "nvim-telescope/telescope-smart-history.nvim", cmd = { "Telescope" } },
 			{ "nvim-telescope/telescope-live-grep-args.nvim", cmd = { "Telescope" } },
-			{
-				"nvim-telescope/telescope-ui-select.nvim",
-				dependencies = { "prochri/telescope-all-recent.nvim" },
-				cmd = { "Telescope" },
-			},
+			-- {
+			-- 	"nvim-telescope/telescope-ui-select.nvim",
+			-- 	dependencies = { "prochri/telescope-all-recent.nvim" },
+			-- 	cmd = { "Telescope" },
+			-- },
 		},
 		cmd = { "Telescope" },
 		-- event = { "BufReadPre", "BufNewFile" },

@@ -33,8 +33,8 @@ return {
 		name = "barbecue",
 		-- branch = "feature/preserveIconOnBufferModified",
 		branch = "main",
-		-- event = "VeryLazy",
-		event = { "BufReadPost", "BufNewFile" },
+		event = "VeryLazy",
+		-- event = { "BufReadPost", "BufNewFile" },
 		-- event = { "BufWinEnter" },
 		-- version = "*",
 		dependencies = {

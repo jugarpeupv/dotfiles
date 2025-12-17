@@ -4,11 +4,11 @@ return {
 	{
 		"catppuccin/nvim",
 		priority = 1000,
-    enabled = true,
-    lazy = false,
+		enabled = true,
+		lazy = false,
 		config = function()
-      -- require("catppuccin").setup({})
-      -- vim.cmd.colorscheme("catppuccin")
+			-- require("catppuccin").setup({})
+			-- vim.cmd.colorscheme("catppuccin")
 			require("catppuccin").setup({
 				flavour = "mocha", -- latte, frappe, macchiato, or mocha
 				transparent_background = true,
@@ -392,8 +392,8 @@ return {
 						barbecue_modified = { fg = "#737aa2" },
 						NvimTreeRootFolder = { style = {} },
 						NvimTreeGitDirty = { fg = "#F5E0DC" },
-            TreesitterContext = { fg = "#B4BEFE" },
-            -- TreesitterContext = { link = "Function" },
+						TreesitterContext = { fg = "#B4BEFE" },
+						-- TreesitterContext = { link = "Function" },
 						NvimTreeGitStaged = { fg = "#8ee2cf" },
 						NvimTreeExecFile = { style = {}, fg = "#F5C2E7" },
 						NvimTreeModifiedFile = { style = {}, fg = "#EFF1F5" },
@@ -406,10 +406,8 @@ return {
 						GitConflictIncomingLabel = { bg = "#394b70" },
 						GitConflictIncomingMark = { bg = "#394b70" },
 						GitConflictCurrentMark = { bg = "#104235" },
-            FylerFSDirectoryName = { bg = "", fg = "#89B4FA" },
-            FylerIndentMarker = { fg = "#394b70" },
-            -- nmSubject = { fg = "#B4BEFE" },
-            -- nmFrom = { fg = "#89ddff" },
+						FylerFSDirectoryName = { bg = "", fg = "#89B4FA" },
+						FylerIndentMarker = { fg = "#394b70" }
 					}
 				end,
 			})
@@ -441,33 +439,29 @@ return {
 			vim.g.terminal_color_7 = "#BAC2DE"
 			vim.g.terminal_color_15 = "#7C7F93"
 
--- 			vim.cmd([[
--- let g:fzf_colors =
--- \ { 'fg':      ['fg', 'Visual'],
---   \ 'bg':      ['bg', 'Normal'],
---   \ 'hl':      ['fg', 'TelescopeMatching'],
---   \ 'fg+':     ['fg', 'Normal', 'Normal', 'Normal'],
---   \ 'bg+':     ['bg', 'Normal', 'Normal'],
---   \ 'hl+':     ['fg', 'TelescopeMatching'],
---   \ 'info':    ['fg', 'PreProc'],
---   \ 'border':  ['fg', 'Ignore'],
---   \ 'prompt':  ['fg', 'Conditional'],
---   \ 'pointer': ['fg', 'Exception'],
---   \ 'marker':  ['fg', 'Keyword'],
---   \ 'spinner': ['fg', 'Label'],
---   \ 'header':  ['fg', 'Comment'] }
--- ]])
--- 			vim.cmd([[let g:fzf_checkout_view_mode = 'inline']])
--- 			vim.cmd([[let g:fzf_checkout_git_options = "--format='%(color:#c0caf5)%(refname:short)'"]])
--- 			vim.cmd([[let g:fzf_action = {
---   \ 'ctrl-t': 'tab split',
---   \ 'ctrl-x': 'split',
---   \ 'ctrl-v': 'vsplit',
---   \ 'ctrl-q': 'fill_quickfix'}]])
-
-
-
-
+			-- 			vim.cmd([[
+			-- let g:fzf_colors =
+			-- \ { 'fg':      ['fg', 'Visual'],
+			--   \ 'bg':      ['bg', 'Normal'],
+			--   \ 'hl':      ['fg', 'TelescopeMatching'],
+			--   \ 'fg+':     ['fg', 'Normal', 'Normal', 'Normal'],
+			--   \ 'bg+':     ['bg', 'Normal', 'Normal'],
+			--   \ 'hl+':     ['fg', 'TelescopeMatching'],
+			--   \ 'info':    ['fg', 'PreProc'],
+			--   \ 'border':  ['fg', 'Ignore'],
+			--   \ 'prompt':  ['fg', 'Conditional'],
+			--   \ 'pointer': ['fg', 'Exception'],
+			--   \ 'marker':  ['fg', 'Keyword'],
+			--   \ 'spinner': ['fg', 'Label'],
+			--   \ 'header':  ['fg', 'Comment'] }
+			-- ]])
+			-- 			vim.cmd([[let g:fzf_checkout_view_mode = 'inline']])
+			-- 			vim.cmd([[let g:fzf_checkout_git_options = "--format='%(color:#c0caf5)%(refname:short)'"]])
+			-- 			vim.cmd([[let g:fzf_action = {
+			--   \ 'ctrl-t': 'tab split',
+			--   \ 'ctrl-x': 'split',
+			--   \ 'ctrl-v': 'vsplit',
+			--   \ 'ctrl-q': 'fill_quickfix'}]])
 		end,
 	},
 }

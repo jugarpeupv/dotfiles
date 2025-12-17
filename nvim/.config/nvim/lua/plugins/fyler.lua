@@ -2,7 +2,7 @@ return {
 	{
 		"A7Lavinraj/fyler.nvim",
 		enabled = true,
-		lazy = false,
+		lazy = true,
 		cmd = { "Fyler" },
 		-- event = { "VeryLazy" },
 		-- branch = "stable",

@@ -71,7 +71,7 @@ return {
 					"jsonc",
 					"sh",
 					"dosini",
-					"editorconfig",
+					-- "editorconfig",
 					"typescript",
 					-- "kulala_http",
 					"javascript",

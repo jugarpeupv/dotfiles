@@ -146,10 +146,10 @@ return {
 
 						adapter = {
 							-- name = "opencode",
-							-- model = "claude-sonnet-4",
+							model = "claude-sonnet-4.5",
 							name = "copilot",
 							-- model = "gpt-5.1-codex",
-							model = "claude-opus-4.5",
+							-- model = "claude-opus-4.5",
 							-- model = "gpt-5.1",
 						},
 						slash_commands = {

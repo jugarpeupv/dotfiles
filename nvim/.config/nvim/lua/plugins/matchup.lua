@@ -5,8 +5,8 @@ return {
 	enabled = true,
   lazy = true,
 	-- dependencies = { "nvim-treesitter/nvim-treesitter" },
-	-- event = { "VeryLazy" },
-	event = { "BufReadPost", "BufNewFile" },
+	event = { "VeryLazy" },
+	-- event = { "BufReadPost", "BufNewFile" },
 	-- keys = { { mode = "n", "%" } },
 	config = function()
 		vim.g.matchup_matchparen_enabled = 0

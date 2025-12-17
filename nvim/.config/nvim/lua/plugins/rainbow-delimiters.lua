@@ -70,7 +70,8 @@ return {
 	},
 	{
 		"HiPhish/rainbow-delimiters.nvim",
-		event = { "BufReadPost", "BufNewFile" },
+		-- event = { "BufReadPost", "BufNewFile" },
+    event = { "VeryLazy" },
 		enabled = true,
 		config = function()
 			local rainbow = require("rainbow-delimiters")
@@ -97,6 +98,9 @@ return {
 
 						return rainbow.strategy["global"]
 					end,
+          ["editorconfig"] = function()
+            return nil
+          end,
 
 					["html"] = function()
 						return nil

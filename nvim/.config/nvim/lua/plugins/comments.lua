@@ -3,8 +3,9 @@
 return {
 	{
 		"JoosepAlviste/nvim-ts-context-commentstring",
-		event = { "BufReadPost", "BufNewFile" },
-		after = { "nvim-treesitter/nvim-treesitter", "nvim-treesitter" },
+    enabled = true,
+		-- event = { "BufReadPost", "BufNewFile" },
+    event = { "VeryLazy" },
 		opts = { enable = true, enable_autocmd = false, config = { http = "# %s" } },
 		-- config = function()
 		--   require("ts_context_commentstring").setup({
