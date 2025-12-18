@@ -34,6 +34,7 @@ return {
 		-- branch = "feature/preserveIconOnBufferModified",
 		branch = "main",
 		event = "VeryLazy",
+    -- event = "LspAttach",
 		-- event = { "BufReadPost", "BufNewFile" },
 		-- event = { "BufWinEnter" },
 		-- version = "*",

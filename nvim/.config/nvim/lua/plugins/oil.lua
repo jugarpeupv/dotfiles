@@ -1,30 +1,22 @@
--- Declare a global function to retrieve the current directory
-function _G.get_oil_winbar()
-	local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
-	local dir = require("oil").get_current_dir(bufnr)
-	if dir then
-		return vim.fn.fnamemodify(dir, ":~")
-	else
-		-- If there is no current directory (e.g. over ssh), just show the buffer name
-		return vim.api.nvim_buf_get_name(0)
+local function get_parent_dir(buffer)
+	if not buffer then
+		return nil
 	end
+	local path = vim.api.nvim_buf_get_name(buffer)
+	if path == "" then
+		return vim.loop.cwd()
+	end
+	return vim.fn.fnamemodify(path, ":p:h")
 end
 
--- Function to get the current directory
-function _G.get_current_dir()
-	local dir = vim.fn.substitute(vim.fn.getcwd(), "^" .. vim.fn.expand("$HOME"), "~", "")
-
-	if dir == "" then
-		return ""
+local function open_or_focus_oil(target)
+	if not target then
+		target = get_parent_dir(vim.api.nvim_get_current_buf())
 	end
-	return dir
-end
-
--- Function to combine SSH information and current directory for the winbar
-function _G.get_winbar()
-	-- local ssh_info = get_ssh_info()
-	local current_dir = get_current_dir()
-	return current_dir
+	if not target then
+		return
+	end
+	require("oil").open(target)
 end
 
 return {
@@ -55,27 +47,41 @@ return {
 			-- },
 		},
 		-- commit = "ba858b662599eab8ef1cba9ab745afded99cb180",
-    lazy = false,
+		lazy = false,
 		cmd = { "Oil" },
 		-- event = { "BufReadPost", "BufNewFile" },
 		keys = {
-			{ mode = { "n" }, "<leader>ou", "<cmd>Oil /Users/jgarcia<cr>" },
 			{
-				mode = { "n" },
+				"-",
+				open_or_focus_oil,
+				desc = "Oil: parent directory",
+				mode = "n",
+			},
+			{
+				"<leader>ou",
+				function()
+					local home = vim.loop.os_homedir()
+					if home then
+						open_or_focus_oil(home)
+					end
+				end,
+				desc = "Oil: home directory",
+				mode = "n",
+			},
+			{
 				"<leader>ob",
 				function()
-					local current_dir = vim.fn.expand("%:p:h")
-					if current_dir:find("oil://") then
-						current_dir = current_dir:gsub("oil://", "")
+					local current_dir = get_parent_dir(vim.api.nvim_get_current_buf())
+					if current_dir then
+						open_or_focus_oil(current_dir)
 					end
-					local cmd = ":Oil " .. current_dir .. "/"
-					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd, true, false, true), "n", true)
 				end,
-				{ noremap = true, silent = false },
+				desc = "Oil: buffer directory",
+				mode = "n",
 			},
-			{ mode = { "n" }, "-", "<cmd>Oil<cr>" },
+
 		},
-		opts = {},
+
 		config = function()
 			---@diagnostic disable-next-line: param-type-not-match
 			require("oil").setup({

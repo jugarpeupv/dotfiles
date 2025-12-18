@@ -32,13 +32,15 @@ return {
 	{
 		"luukvbaal/statuscol.nvim",
 		enabled = true,
-		event = { "BufReadPre", "BufNewFile" },
-		-- event = { "VeryLazy" },
+		-- event = { "BufReadPre", "BufNewFile" },
+		-- event = "VeryLazy",
+    event = { "LspAttach" },
 		lazy = true,
 		config = function()
 			local builtin = require("statuscol.builtin")
 
 			require("statuscol").setup({
+
 				-- configuration goes here, for example:
 				relculright = true,
 				-- ft_ignore = { "copilot-chat" },
@@ -577,8 +579,8 @@ return {
 	},
 	{
 		"farmergreg/vim-lastplace",
-		event = { "BufNewFile", "BufReadPost" },
-		-- event = { "VeryLazy" }
+		-- event = { "BufNewFile", "BufReadPost" },
+		event = { "VeryLazy" }
 	},
 	{
 		"vim-scripts/applescript.vim",

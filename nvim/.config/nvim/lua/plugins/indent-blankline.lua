@@ -3,7 +3,8 @@ return {
 	{
 		"saghen/blink.indent",
     enabled = true,
-    event = { "VeryLazy" },
+    -- event = { "VeryLazy" },
+    event = { "LspAttach" },
     -- event = { "BufReadPost", "BufNewFile" },
 		-- keys = {
 		-- 	{ "<C-d>" },

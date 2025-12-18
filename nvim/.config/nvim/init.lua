@@ -186,55 +186,53 @@ vim.api.nvim_create_autocmd("User", {
 
 
 
-if vim.fn.argc() == 0 and vim.fn.line2byte("$") == -1 then
-	-- No arguments and buffer is empty
-	-- Open dashboard, file explorer, etc.
-	return
-end
-
-if vim.list_contains(vim.v.argv, "-R") then
-	return
-end
-
-local cwd = vim.loop.cwd()
-if not cwd or cwd == "" then
-	return
-end
-
-local has_wt_utils, wt_utils = pcall(require, "jg.custom.worktree-utils")
-if not has_wt_utils or not wt_utils.has_worktrees(cwd) then
-	return
-end
-
-local has_file_utils, file_utils = pcall(require, "jg.custom.file-utils")
-if not has_file_utils then
-	return
-end
-
-local key = vim.fn.fnamemodify(cwd, ":p")
-local bps_path = file_utils.get_bps_path(key)
-local data = file_utils.load_bps(bps_path)
-
-local function open_fyler(dir)
-	local ok, fyler = pcall(require, "fyler")
-	if ok then
-		fyler.open({ dir = dir })
-	else
-		pcall(vim.cmd, "Fyler")
+local function should_restore_worktree()
+	if vim.fn.argc() == 0 and vim.fn.line2byte("$") == -1 then
+		return false
 	end
+	if vim.list_contains(vim.v.argv, "-R") then
+		return false
+	end
+	local cwd = vim.loop.cwd()
+	if not cwd or cwd == "" then
+		return false
+	end
+	local has_wt_utils, wt_utils = pcall(require, "jg.custom.worktree-utils")
+	if not has_wt_utils or not wt_utils.has_worktrees(cwd) then
+		return false
+	end
+	return true
 end
 
-if not data or next(data) == nil or not data.last_active_wt then
-	-- open_fyler(cwd)
-	require("oil").open(cwd)
-	return
+local function restore_last_worktree()
+	local cwd = vim.loop.cwd()
+	if not cwd then
+		return
+	end
+	local has_file_utils, file_utils = pcall(require, "jg.custom.file-utils")
+	if not has_file_utils then
+		return
+	end
+	local key = vim.fn.fnamemodify(cwd, ":p")
+	local bps_path = file_utils.get_bps_path(key)
+	local data = file_utils.load_bps(bps_path)
+	if not data or next(data) == nil or not data.last_active_wt then
+		vim.schedule(function()
+			require("oil").open(cwd)
+		end)
+		return
+	end
+	local last_active_wt = data.last_active_wt
+	vim.schedule(function()
+		vim.cmd.cd(last_active_wt)
+		require("oil").open(last_active_wt)
+	end)
 end
 
-local last_active_wt = data.last_active_wt
-local escaped = vim.fn.fnameescape(last_active_wt)
--- vim.cmd(("Explore %s"):format(escaped))
-vim.cmd(("cd %s"):format(escaped))
--- open_fyler(last_active_wt)
-require("oil").open(last_active_wt)
--- local api_nvimtree = require("nvim-tree.api")
--- api_nvimtree.tree.change_root(last_active_wt)
+if should_restore_worktree() then
+	vim.api.nvim_create_autocmd("User", {
+		pattern = "VeryLazy",
+		once = true,
+		callback = restore_last_worktree,
+	})
+end

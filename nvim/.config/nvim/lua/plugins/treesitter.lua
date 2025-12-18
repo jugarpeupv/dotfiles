@@ -147,7 +147,7 @@ return {
 			})
 		end,
 	},
-	{ "wellle/targets.vim", lazy = true, event = { "BufReadPost", "BufNewFile" } },
+	{ "wellle/targets.vim", lazy = true, event = { "VeryLazy" } },
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		branch = "main",

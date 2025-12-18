@@ -179,31 +179,58 @@ return {
 			-- 	end)
 			-- end
 
-			vim.lsp.enable("jdtls")
-			vim.lsp.enable("html")
-			vim.lsp.enable("vtsls")
-			vim.lsp.enable("pyright")
-			vim.lsp.enable("tailwindcss")
-			vim.lsp.enable("angularls")
-			vim.lsp.enable("groovyls")
-			vim.lsp.enable("bashls")
-			vim.lsp.enable("eslint")
-			vim.lsp.enable("yamlls")
-			vim.lsp.enable("jsonls")
-			vim.lsp.enable("rust_analyzer")
-			vim.lsp.enable("dockerls")
-			vim.lsp.enable("marksman")
-			vim.lsp.enable("emmet_ls")
-			vim.lsp.enable("sourcekit")
-			vim.lsp.enable("lua_ls")
-			vim.lsp.enable("clangd")
-      vim.lsp.enable("gh_actions_ls")
-			vim.lsp.enable("ruby_lsp")
-			vim.lsp.enable("docker_compose_language_service")
-			vim.lsp.enable("gopls")
-			vim.lsp.enable("copilot_ls")
-			vim.lsp.enable("kulala_ls")
-			vim.lsp.enable("somesass_ls")
+					local server_filetypes = {
+				angularls = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "javascript.jsx", "html" },
+				bashls = { "sh", "bash", "zsh" },
+				clangd = { "c", "cpp", "objc", "objcpp" },
+				copilot_ls = { "lua", "python", "javascript", "typescript", "typescriptreact", "javascriptreact", "go", "ruby", "rust", "java" },
+				docker_compose_language_service = { "yaml", "yml", "dockercompose" },
+				dockerls = { "dockerfile" },
+				emmet_ls = { "html", "css", "scss", "less", "javascriptreact", "typescriptreact" },
+				eslint = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+				gh_actions_ls = { "yaml", "yaml.github", "yml" },
+				gopls = { "go", "gomod", "gowork" },
+				groovyls = { "groovy" },
+				html = { "html" },
+				jdtls = { "java" },
+				jsonls = { "json", "jsonc" },
+				kulala_ls = { "http" },
+				lua_ls = { "lua" },
+				marksman = { "markdown" },
+				pyright = { "python" },
+				ruby_lsp = { "ruby" },
+				rust_analyzer = { "rust" },
+				somesass_ls = { "sass", "scss" },
+				tailwindcss = { "html", "javascript", "typescript", "vue", "svelte", "php", "heex", "tsx", "jsx" },
+				vtsls = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+				yamlls = { "yaml", "yaml.github", "yml" },
+			}
+
+			local has_new_lsp_api = vim.fn.has("nvim-0.10") == 1 and vim.lsp.enable ~= nil
+			if has_new_lsp_api then
+				local group = vim.api.nvim_create_augroup("lazy_lsp_enable", { clear = true })
+				for server, patterns in pairs(server_filetypes) do
+					vim.api.nvim_create_autocmd("FileType", {
+						group = group,
+						pattern = patterns,
+						once = false,
+						callback = function(event)
+							local clients = vim.lsp.get_clients({ bufnr = event.buf, name = server })
+							if #clients > 0 then
+								return
+							end
+							local ok, err = pcall(vim.lsp.enable, server, { bufnr = event.buf })
+							if not ok then
+								vim.notify(string.format("Failed to enable LSP '%s': %s", server, err), vim.log.levels.WARN)
+							end
+						end,
+					})
+				end
+			else
+				for server, _ in pairs(server_filetypes) do
+					vim.lsp.enable(server)
+				end
+			end
 		end,
 	},
 	{

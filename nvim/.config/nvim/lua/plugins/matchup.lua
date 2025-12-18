@@ -6,6 +6,7 @@ return {
   lazy = true,
 	-- dependencies = { "nvim-treesitter/nvim-treesitter" },
 	event = { "VeryLazy" },
+  -- event = { "LspAttach" },
 	-- event = { "BufReadPost", "BufNewFile" },
 	-- keys = { { mode = "n", "%" } },
 	config = function()

@@ -2,7 +2,8 @@
 return {
 	"nvim-lualine/lualine.nvim",
 	-- enabled = true,
-	event = "VeryLazy",
+	-- event = "VeryLazy",
+  event = "LspAttach",
 	-- event = { "BufReadPost", "BufNewFile" },
 	ft = { "DiffviewFiles" },
 	lazy = true,
