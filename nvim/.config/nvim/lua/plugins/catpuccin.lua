@@ -198,7 +198,7 @@ return {
 						IndentBlanklineContextChar = { fg = "#737aa2" },
 						IndentBlanklineContextCharUnderline = {
 							-- fg = "#737aa2",
-							style = { "underline" },
+							style = { "underdouble" },
 							sp = "#737aa2",
 						},
 						RenderMarkdownH1 = { fg = "#F5C2E7" },

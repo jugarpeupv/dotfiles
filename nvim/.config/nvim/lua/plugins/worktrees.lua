@@ -160,8 +160,14 @@ return {
 			}
 			file_utils.write_bps(file_utils.get_bps_path(wt_root_dir_with_ending), my_table)
 
+
+
 			-- Update current file opened
 			local current_buffer_filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+      if current_buffer_filetype == 'oil' then
+        require("oil").open(path)
+        return
+      end
 			if current_buffer_filetype == "NvimTree" then
 				return
 			else

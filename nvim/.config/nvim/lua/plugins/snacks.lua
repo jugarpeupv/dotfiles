@@ -3,7 +3,6 @@ return {
 	priority = 800,
 	enabled = true,
 	lazy = true,
-	-- event = { "VeryLazy" },
 
 	-- event = { "BufReadPost", "BufNewFile", "CmdlineEnter" },
 	-- event = { "BufReadPost", "BufNewFile" },

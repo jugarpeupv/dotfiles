@@ -216,9 +216,9 @@ return {
 						once = false,
 						callback = function(event)
 							local clients = vim.lsp.get_clients({ bufnr = event.buf, name = server })
-							if #clients > 0 then
-								return
-							end
+							-- if #clients > 0 then
+							-- 	return
+							-- end
 							local ok, err = pcall(vim.lsp.enable, server, { bufnr = event.buf })
 							if not ok then
 								vim.notify(string.format("Failed to enable LSP '%s': %s", server, err), vim.log.levels.WARN)
