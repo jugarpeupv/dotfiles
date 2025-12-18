@@ -21,49 +21,30 @@ return {
 		},
 		build = "make tiktoken", -- Only on MacOS or Linux
 		opts = {
-			callback = function(_response, _source)
-				-- -- Find the buffer number by name
-				-- for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-				-- 	if vim.api.nvim_buf_get_name(buf):match("copilot%-chat") then
-				-- 		-- Find the window displaying this buffer
-				-- 		for _, win in ipairs(vim.api.nvim_list_wins()) do
-				-- 			if vim.api.nvim_win_get_buf(win) == buf then
-				-- 				-- Scroll to the end in that window
-				-- 				vim.api.nvim_win_call(win, function()
-				-- 					-- print("Scrolling to the end of Copilot Chat window")
-				-- 					vim.cmd("normal! G")
-				--              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-d>", true, false, true), "n", false)
-				--              vim.cmd("normal! zz")
-				-- 				end)
-				-- 			end
-				-- 		end
-				-- 	end
-				-- end
-
-				local chat = require("CopilotChat")
-				if vim.g.chat_title then
-					chat.save(vim.g.chat_title)
-					return
-				end
-
-				local cwd = vim.fn.getcwd()
-				local wt_utils = require("jg.custom.worktree-utils")
-				local wt_info = wt_utils.get_wt_info(cwd)
-				-- print("wt_info", vim.inspect(wt_info))
-
-				if next(wt_info) == nil then
-					vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
-				else
-					-- print("wt_root_dir", wt_info["wt_root_dir"])
-					if not wt_info["wt_root_dir"] then
-						vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
-						return
-					end
-					vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
-				end
-				-- print("vim.g.chat_title", vim.g.chat_title)
-				chat.save(vim.g.chat_title)
-			end,
+			-- callback = function(_response, _source)
+			-- 	local chat = require("CopilotChat")
+			-- 	if vim.g.chat_title then
+			-- 		chat.save(vim.g.chat_title)
+			-- 		return
+			-- 	end
+			--
+			-- 	local cwd = vim.fn.getcwd()
+			-- 	local wt_utils = require("jg.custom.worktree-utils")
+			-- 	local wt_info = wt_utils.get_wt_info(cwd)
+			--
+			-- 	if next(wt_info) == nil then
+			-- 		vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+			-- 	else
+			-- 		-- print("wt_root_dir", wt_info["wt_root_dir"])
+			-- 		if not wt_info["wt_root_dir"] then
+			-- 			vim.g.chat_title = vim.trim(cwd:gsub("/", "_"))
+			-- 			return
+			-- 		end
+			-- 		vim.g.chat_title = vim.trim(wt_info["wt_root_dir"]:gsub("/", "_"))
+			-- 	end
+			-- 	-- print("vim.g.chat_title", vim.g.chat_title)
+			-- 	chat.save(vim.g.chat_title)
+			-- end,
 			default = { "copilot" },
 			-- tools = { "nx", "github", "tavily", "neovim" },
 			tools = {

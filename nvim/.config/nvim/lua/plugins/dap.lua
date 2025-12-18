@@ -279,7 +279,6 @@ return {
 			-- 		vim.api.nvim_set_hl(0, "dCursor", { bg = "#89ddff" })
 			-- 	end,
 			-- },
-			{ "nvim-telescope/telescope.nvim" },
 			{
 				"LiadOz/nvim-dap-repl-highlights",
 				config = function()

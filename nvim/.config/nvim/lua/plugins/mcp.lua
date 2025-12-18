@@ -11,7 +11,7 @@ return {
 	},
 	-- comment the following line to ensure hub will be ready at the earliest
 
-	ft = { "copilot-chat" },
+	ft = { "copilot-chat", "codecompanion" },
 	cmd = "MCPHub", -- lazy load by default
 	-- event = { "BufReadPost", "BufNewFile" }, -- Load on buffer read or new file
 	-- build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module

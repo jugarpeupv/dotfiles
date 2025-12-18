@@ -1,5 +1,15 @@
 -- return {}
 return {
+
+	{
+		"mogelbrod/vim-jsonpath",
+		ft = { "json", "jsonc" },
+		config = function()
+			vim.g.jsonpath_register = "*"
+
+			vim.keymap.set("n", "<leader>cp", "<cmd>JsonPath<CR>", {})
+		end,
+	},
 	-- { 'mistweaverco/snap.nvim', opts = {}, cmd = { "Snap" } },
 	{
 		"katonori/ps.vim",

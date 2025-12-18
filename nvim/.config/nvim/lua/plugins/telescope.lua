@@ -539,7 +539,7 @@ return {
 		-- keys = { "<M-.>" },
 		-- event = "VeryLazy",
 		config = function()
-			local open_with_trouble = require("trouble.sources.telescope").open
+			-- local open_with_trouble = require("trouble.sources.telescope").open
 			local fb_actions = require("telescope").extensions.file_browser.actions
 			local status_ok, telescope = pcall(require, "telescope")
 			if not status_ok then
@@ -687,7 +687,7 @@ return {
 								-- ["<C-Enter>"] = actions.select_vertical,
 								["<C-t>"] = actions.select_tab,
 								-- ["<C-t>"] = trouble.open_with_trouble,
-								["<C-e>"] = open_with_trouble,
+								-- ["<C-e>"] = open_with_trouble,
                 ["<C-l>"] = require("telescope.actions.layout").toggle_preview,
 								-- ["<C-o>"] = require("telescope.actions.layout").toggle_preview,
 								-- ["<C-t>"] = trouble.open_with_trouble,
@@ -730,7 +730,7 @@ return {
 								-- ["<C-Enter>"] = actions.select_vertical,
 								["<C-t>"] = actions.select_tab,
 								-- ["<C-t>"] = trouble.open_with_trouble,
-								["<C-e>"] = open_with_trouble,
+								-- ["<C-e>"] = open_with_trouble,
 
 								["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
 								["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,

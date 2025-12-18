@@ -1,20 +1,8 @@
 return {
-	-- {
-	--     'mrloop/telescope-git-branch.nvim'
-	-- },
-
-	-- { "skanehira/denops-gh.vim", dependencies = {
-	-- 	{ "vim-denops/denops.vim" },
-	-- } },
-	-- {
-	-- 	"esmuellert/vscode-diff.nvim",
-	-- 	dependencies = { "MunifTanjim/nui.nvim" },
-	-- 	cmd = "CodeDiff",
-	-- },
-
 	{
 		"isakbm/gitgraph.nvim",
 		dependencies = { "sindrets/diffview.nvim" },
+    enabled = false,
 		keys = {
 			{
 				"<leader>gL",

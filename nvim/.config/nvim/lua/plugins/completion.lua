@@ -1,7 +1,3 @@
-local t = function(str)
-	return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
 return {
 	{
 		"saghen/blink.cmp",
@@ -105,7 +101,11 @@ return {
 					function(cmp)
 						local filetype = vim.bo.filetype
 						if filetype == "" then
+
               -- vim.api.nvim_feedkeys(t("<CR>"), "n", true)
+              local t = function(str)
+                return vim.api.nvim_replace_termcodes(str, true, true, true)
+              end
 							vim.api.nvim_feedkeys(t("<CR>"), "n", false)
 							return
 						elseif cmp.is_menu_visible() and cmp.get_selected_item() then
