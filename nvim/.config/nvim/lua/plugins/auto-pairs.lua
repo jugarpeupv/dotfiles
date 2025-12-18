@@ -129,10 +129,82 @@ return {
       -- npairs.add_rules(require("nvim-autopairs.rules.endwise-lua"))
       -- npairs.add_rules(require("nvim-autopairs.rules.endwise-ruby"))
 
-
       autopairs.remove_rule("`")
       autopairs.remove_rule("\"")
+
+      npairs.add_rules({
+        Rule('"', '"')
+          :with_pair(cond.not_after_regex("[^%s]"))  -- next char must be space
+          :with_pair(cond.not_before_regex("[^%s]")) -- previous char must be space
+      })
     end,
+  },
+  {
+    "saghen/blink.pairs",
+    enabled = false,
+    version = "*", -- (recommended) only required with prebuilt binaries
+    -- event = "BufReadPre",
+
+    -- download prebuilt binaries from github releases
+    dependencies = "saghen/blink.download",
+    -- OR build from source, requires nightly:
+    -- https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+    -- build = 'cargo build --release',
+    -- If you use nix, you can build from source using latest nightly rust with:
+    -- build = 'nix run .#build-plugin',
+
+    --- @module 'blink.pairs'
+    --- @type blink.pairs.Config
+    opts = {
+      mappings = {
+        -- you can call require("blink.pairs.mappings").enable()
+        -- and require("blink.pairs.mappings").disable()
+        -- to enable/disable mappings at runtime
+        enabled = true,
+        cmdline = true,
+        -- or disable with `vim.g.pairs = false` (global) and `vim.b.pairs = false` (per-buffer)
+        -- and/or with `vim.g.blink_pairs = false` and `vim.b.blink_pairs = false`
+        disabled_filetypes = {},
+        -- see the defaults:
+        -- https://github.com/Saghen/blink.pairs/blob/main/lua/blink/pairs/config/mappings.lua#L14
+        pairs = {},
+      },
+      highlights = {
+        enabled = true,
+        -- requires require('vim._extui').enable({}), otherwise has no effect
+        cmdline = true,
+        -- groups = {
+        -- 	"BlinkPairsRed",
+        -- 	"BlinkPairsYellow",
+        -- 	"BlinkPairsBlue",
+        -- 	"BlinkPairsOrange",
+        -- 	"BlinkPairsGreen",
+        -- 	"BlinkPairsPurple",
+        -- 	"BlinkPairsCyan",
+        -- },
+        groups = {
+          -- "BlinkPairsOrange",
+          -- "BlinkPairsPurple",
+          -- "BlinkPairsBlue",
+          "TSRainbowBlue",
+          "TSRainbowOrange",
+          "TSRainbowGreen",
+        },
+        unmatched_group = "BlinkPairsUnmatched",
+
+        -- highlights matching pairs under the cursor
+        matchparen = {
+          enabled = true,
+          -- known issue where typing won't update matchparen highlight, disabled by default
+          cmdline = false,
+          -- also include pairs not on top of the cursor, but surrounding the cursor
+          include_surrounding = false,
+          group = "BlinkPairsMatchParen",
+          priority = 250,
+        },
+      },
+      debug = false,
+    },
   },
   -- { "rstacruz/vim-closer", event = { "InsertEnter" } },
   -- { "tpope/vim-endwise",   event = { "InsertEnter" } },

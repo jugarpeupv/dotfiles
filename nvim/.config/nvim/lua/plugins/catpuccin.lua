@@ -196,6 +196,11 @@ return {
 						TelescopePathSeparator = { link = "TelescopeNormal" },
 						IndentBlanklineChar = { fg = "#3b4251" },
 						IndentBlanklineContextChar = { fg = "#737aa2" },
+						IndentBlanklineContextCharUnderline = {
+							-- fg = "#737aa2",
+							style = { "underline" },
+							sp = "#737aa2",
+						},
 						RenderMarkdownH1 = { fg = "#F5C2E7" },
 						RenderMarkdownH2 = { fg = "#89ddff" },
 						RenderMarkdownH3 = { fg = "#94E2D5" },
@@ -407,7 +412,7 @@ return {
 						GitConflictIncomingMark = { bg = "#394b70" },
 						GitConflictCurrentMark = { bg = "#104235" },
 						FylerFSDirectoryName = { bg = "", fg = "#89B4FA" },
-						FylerIndentMarker = { fg = "#394b70" }
+						FylerIndentMarker = { fg = "#394b70" },
 					}
 				end,
 			})

@@ -281,7 +281,7 @@ return {
 		"nvim-treesitter/nvim-treesitter-context",
 		enabled = true,
 		lazy = true,
-    ft = { "json", "jsonc", "yaml", "yml", "yaml.github" },
+    ft = { "json", "jsonc", "yaml", "yml", "yaml.github", "javascript", "typescript" },
 		config = function()
 			require("treesitter-context").setup({
 				on_attach = function(buf)

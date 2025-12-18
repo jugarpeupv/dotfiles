@@ -44,8 +44,8 @@ return {
 	{
 		"stevearc/oil.nvim",
 		dependencies = {
-			{ "nvim-lualine/lualine.nvim" },
-			{ "HakonHarnes/img-clip.nvim" },
+			-- { "nvim-lualine/lualine.nvim" },
+			-- { "HakonHarnes/img-clip.nvim" },
 			-- {
 			--   "adelarsq/image_preview.nvim",
 			--   ft = { "png", "jpeg", "gif", "webp", "bmp", "ico", "svg", "pdf" },

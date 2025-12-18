@@ -3,8 +3,13 @@ return {
   {
     "mbbill/undotree",
     -- cmd = { 'UndotreeShow', 'UndotreeToggle' },
-    -- event = "VeryLazy",
-    event = { "BufReadPost", "BufNewFile" },
+    event = "VeryLazy",
+    -- event = { "BufReadPost", "BufNewFile" },
+    lazy = true,
+    keys = {
+      { "<leader>uu", vim.cmd.UndotreeToggle},
+      { "<leader>us", vim.cmd.UndotreeShow}
+    },
     config = function()
       -- I am using this to clear the jumps list so that when we hit <C-o> we do not jump to nvimtree
       -- vim.cmd("clearjumps")
@@ -25,8 +30,6 @@ return {
       -- vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle)
       vim.g.undotree_WindowLayout = 3
       vim.g.undotree_SetFocusWhenToggle = 1
-      vim.keymap.set("n", "<leader>uu", vim.cmd.UndotreeToggle)
-      vim.keymap.set("n", "<leader>us", vim.cmd.UndotreeShow)
     end,
   },
 }

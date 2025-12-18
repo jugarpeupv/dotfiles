@@ -1,15 +1,15 @@
 -- return {}
 return {
 	"nvim-lualine/lualine.nvim",
-	enabled = true,
-	-- event = "VeryLazy",
-	-- event = { "BufReadPost" },
+	-- enabled = true,
+	event = "VeryLazy",
+	-- event = { "BufReadPost", "BufNewFile" },
 	ft = { "DiffviewFiles" },
 	lazy = true,
 	-- dependencies = { "catppuccin/nvim" },
 	-- priority = 10,
 	-- event = { "TermOpen" ,"BufReadPre", "BufNewFile" },
-	event = { "TermOpen", "BufReadPost" },
+	-- event = { "TermOpen", "BufReadPost" },
 	config = function()
 		-- local dmode_enabled = false
 		-- vim.api.nvim_create_autocmd("User", {

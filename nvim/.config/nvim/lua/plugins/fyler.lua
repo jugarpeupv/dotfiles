@@ -7,11 +7,22 @@ return {
 		-- event = { "VeryLazy" },
 		-- branch = "stable",
 		-- branch = "main",
-		-- dependencies = {
-		-- 	{ "nvim-tree/nvim-web-devicons" },
-		-- 	{ "nvim-mini/mini.icons"},
-		-- 	{ "lambdalisue/vim-nerdfont" },
-		-- },
+		dependencies = {
+			{ "nvim-tree/nvim-web-devicons" },
+			-- {
+			-- 	"nvim-mini/mini.icons",
+			-- 	config = function()
+			-- 		require("mini.icons").setup({
+			-- 			file = {
+			-- 				[".eslintignore"] = { glyph = "󰱺" },
+			-- 				["Gemfile.lock"] = { glyph = "" },
+			-- 				["Pluginfile"] = { glyph = "", hl = "MiniIconsRed" },
+			-- 			},
+			-- 		})
+			-- 	end,
+			-- },
+			-- { "lambdalisue/vim-nerdfont" },
+		},
 		keys = {
 			{
 				"<leader>fe",
@@ -41,14 +52,15 @@ return {
 			},
 			integrations = {
 				-- icon = "mini_icons",
-        -- icon = "none",
-        icon = function(item_type, path)
-          if item_type == "directory" then
-            return "", "FylerFSDirectoryIcon"
-          else
-            return "", "FylerFSDirectoryIcon"
-          end
-        end
+        icon = "nvim_web_devicons",
+				-- icon = "none",
+				-- icon = function(item_type, path)
+				--   if item_type == "directory" then
+				--     return "", "FylerFSDirectoryIcon"
+				--   else
+				--     return "", "FylerFSDirectoryIcon"
+				--   end
+				-- end
 			},
 			views = {
 				finder = {
@@ -57,7 +69,7 @@ return {
 					-- Auto-confirm simple file operations
 					confirm_simple = false,
 					-- Replace netrw as default explorer
-					default_explorer = true,
+					default_explorer = false,
 					-- Move deleted files/directories to the system trash
 					delete_to_trash = true,
 					-- Git status
@@ -76,9 +88,9 @@ return {
 					},
 					-- Icons for directory states
 					icon = {
-						directory_collapsed = nil,
-						directory_empty = nil,
-						directory_expanded = nil,
+						directory_collapsed = "",
+						-- directory_empty = "󱞞",
+						directory_expanded = "",
 					},
 					-- Indentation guides
 					indentscope = {
@@ -97,18 +109,20 @@ return {
 						["<C-t>"] = "SelectTab",
 						["<C-v>"] = "SelectVSplit",
 						["<C-s>"] = "SelectSplit",
-						["-"] = "GotoParent",
+						["-"] = false,
+						-- ["-"] = "GotoParent",
+						["<BS>"] = "GotoParent",
 						["="] = "GotoCwd",
 						["."] = "GotoNode",
 						["#"] = "CollapseAll",
-						["<BS>"] = "CollapseNode",
+						-- ["<BS>"] = "CollapseNode",
 						["H"] = "CollapseNode",
 					},
 					-- Current file tracking
 					follow_current_file = false,
 					-- File system watching(includes git status)
 					watcher = {
-						enabled = false,
+						enabled = true,
 					},
 					-- Window configuration
 					win = {
@@ -159,11 +173,11 @@ return {
 						win_opts = {
 							winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 							concealcursor = "nvic",
-							conceallevel = 3,
-              foldcolumn = "1",
+							-- conceallevel = 3,
+							foldcolumn = "1",
 							cursorline = true,
-							number = false,
-							relativenumber = false,
+							number = true,
+							relativenumber = true,
 							winhighlight = "Normal:FylerNormal",
 							wrap = false,
 						},

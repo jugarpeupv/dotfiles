@@ -4,7 +4,7 @@ return {
   -- config = true,
   -- event = "VeryLazy",
   event = { "BufReadPost", "BufNewFile" },
-  enabled = true,
+  enabled = false,
   config = function()
     require("early-retirement").setup({
       -- If a buffer has been inactive for this many minutes, close it.

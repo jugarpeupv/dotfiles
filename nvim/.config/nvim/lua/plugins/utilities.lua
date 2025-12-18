@@ -1,5 +1,6 @@
 -- return {}
 return {
+	-- { 'mistweaverco/snap.nvim', opts = {}, cmd = { "Snap" } },
 	{
 		"katonori/ps.vim",
 		cmd = "PS",
@@ -16,13 +17,13 @@ return {
 		opts = {},
 		cmd = "Store",
 	},
-	{ "rhysd/vim-syntax-codeowners", event = { "BufReadPost" } },
+	{ "rhysd/vim-syntax-codeowners", ft = { "codeowners" } },
 	-- { "markonm/traces.vim", event = { "BufReadPost" } },
 	{
 		"luukvbaal/statuscol.nvim",
 		enabled = true,
-		-- event = { "BufReadPre", "BufNewFile" },
-    event = { "VeryLazy" },
+		event = { "BufReadPre", "BufNewFile" },
+		-- event = { "VeryLazy" },
 		lazy = true,
 		config = function()
 			local builtin = require("statuscol.builtin")
@@ -567,6 +568,7 @@ return {
 	{
 		"farmergreg/vim-lastplace",
 		event = { "BufNewFile", "BufReadPost" },
+		-- event = { "VeryLazy" }
 	},
 	{
 		"vim-scripts/applescript.vim",

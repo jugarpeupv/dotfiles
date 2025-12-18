@@ -257,6 +257,26 @@ return {
 	keys = {
 		-- Top Pickers & Explorer
 		{
+			"gd",
+			function()
+				Snacks.picker.lsp_definitions()
+			end,
+		},
+		{
+			"gv",
+			function()
+				vim.cmd("vsp")
+				Snacks.picker.lsp_definitions()
+			end,
+		},
+		{
+			"gs",
+			function()
+				vim.cmd("sp")
+				Snacks.picker.lsp_definitions()
+			end,
+		},
+		{
 			"<leader>ch",
 			function()
 				Snacks.picker.command_history({ layout = { preview = false } })
