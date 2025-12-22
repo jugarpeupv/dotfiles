@@ -197,8 +197,7 @@ return {
 						IndentBlanklineChar = { fg = "#3b4251" },
 						IndentBlanklineContextChar = { fg = "#737aa2" },
 						IndentBlanklineContextCharUnderline = {
-							-- fg = "#737aa2",
-							style = { "underdouble" },
+							style = { "underline" },
 							sp = "#737aa2",
 						},
 						RenderMarkdownH1 = { fg = "#F5C2E7" },
@@ -235,7 +234,6 @@ return {
 						["@markup.heading"] = { style = {}, fg = "#89B4FA" },
 						["@markup.heading.gitcommit"] = { style = {}, fg = "#89B4FA" },
 						gitcommitSummary = { style = {}, fg = "#f5e0dd" },
-
 						GitSignsAdd = { fg = "#30969f" },
 						GitSignsChange = { fg = "#F2CDCD" },
 						GitSignsChangeInLine = { fg = "#F2CDCD" },
@@ -317,7 +315,6 @@ return {
 						GitSignsDeletePreview = { style = {}, bg = "#3F2D3D" },
 						BufferLineTabSeparator = { style = {}, fg = "#13182e" },
 						BufferLineTabSeparatorSelected = { style = {}, fg = "#13182e" },
-
 						BufferLineTabSelected = { style = {}, bg = "#394b70" },
 						InclineNormal = { bg = "#292e42" },
 						InclineNormalNC = { bg = "#292e42", fg = "#7C7F93" },
@@ -413,6 +410,18 @@ return {
 						GitConflictCurrentMark = { bg = "#104235" },
 						FylerFSDirectoryName = { bg = "", fg = "#89B4FA" },
 						FylerIndentMarker = { fg = "#394b70" },
+						CompileModeError = { fg = "#F38BA8" },
+						CompileModeMessage = { style = {} },
+						CompileModeMessageRow = { fg = "#F5C2E7" },
+						CompileModeMessageCol = { fg = "#F5C2E7" },
+						CompileModeCommandOutput = { style = {}, fg = "#c0caf5" },
+						CompileModeWarning = { fg = "#F5E0DC" },
+						CompileModeInfo = { fg = "#94E2D5" },
+						CompileModeDirectoryMessage = { fg = "#89B4FA" },
+						CompileModeOutputFile = { fg = "#B4BEFE" },
+						CompileModeCheckResult = { style = { "bold" }, fg = "#FAB387" },
+						CompileModeCheckTarget = { fg = "#FAB387" },
+            BlinkPairsUnmatched = { fg = "#F38BA8", style = { "bold" } },
 					}
 				end,
 			})

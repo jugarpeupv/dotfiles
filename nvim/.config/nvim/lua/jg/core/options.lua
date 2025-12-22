@@ -81,29 +81,29 @@ opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or 
 
 -- clipboard
 if os.getenv("SSH_TTY") == nil then
-	opt.clipboard:append("unnamedplus")
+  opt.clipboard:append("unnamedplus")
 else
-	-- On ssh, use cmd+v to paste, copy should work just fine
-	opt.clipboard:append("unnamedplus")
+  -- On ssh, use cmd+v to paste, copy should work just fine
+  opt.clipboard:append("unnamedplus")
 
-	local function my_paste(_reg)
-		return function(_lines)
-			local content = vim.fn.getreg('"')
-			return vim.split(content, "\n")
-		end
-	end
+  local function my_paste(_reg)
+    return function(_lines)
+      local content = vim.fn.getreg('"')
+      return vim.split(content, "\n")
+    end
+  end
 
-	vim.g.clipboard = {
-		name = "OSC 52",
-		copy = {
-			["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-			["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-		},
-		paste = {
-			["+"] = my_paste("+"),
-			["*"] = my_paste("*"),
-		},
-	}
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    },
+    paste = {
+      ["+"] = my_paste("+"),
+      ["*"] = my_paste("*"),
+    },
+  }
 end
 
 -- split windows
@@ -140,16 +140,16 @@ opt.list = true
 
 local space = "·"
 opt.listchars:append({
-	-- tab = "» ",
-	tab = "  ",
-	-- multispace = "␣",
-	-- multispace = space,
-	-- lead = space,
-	-- trail = "󱁐",
-	-- trail = "␣",
-	trail = space,
-	-- trail = "»",
-	nbsp = "&",
+  -- tab = "» ",
+  tab = "  ",
+  -- multispace = "␣",
+  -- multispace = space,
+  -- lead = space,
+  -- trail = "󱁐",
+  -- trail = "␣",
+  trail = space,
+  -- trail = "»",
+  nbsp = "&",
 })
 -- opt.listchars:append("trail:.")
 -- opt.listchars:append("eol:↴")
@@ -176,23 +176,23 @@ vim.opt.foldmethod = "expr"
 vim.o.numberwidth = 2
 
 local arrows = {
-	right = "",
-	left = "",
-	up = "",
-	down = "",
+  right = "",
+  left = "",
+  up = "",
+  down = "",
 }
 
 vim.opt.fillchars = {
-	fold = " ",
-	-- foldinner = ' ',
-	foldsep = " ",
-	-- foldclose = arrows.down,
-	-- foldclose = "",
-	foldclose = "",
-	-- foldclose = "",
-	foldopen = "",
-	-- foldopen = arrows.right,
-	diff = "╱",
+  fold = " ",
+  -- foldinner = ' ',
+  foldsep = " ",
+  -- foldclose = arrows.down,
+  -- foldclose = "",
+  foldclose = "",
+  -- foldclose = "",
+  foldopen = "",
+  -- foldopen = arrows.right,
+  diff = "╱",
 }
 
 -- opt.fillchars = opt.fillchars + "diff:╱"

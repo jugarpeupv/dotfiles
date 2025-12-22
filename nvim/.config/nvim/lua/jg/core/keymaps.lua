@@ -417,6 +417,7 @@ keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jum
 
 keymap("n", "<M-8>", "<cmd>cnext<cr>", opts)
 keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
+
 -- Utilities
 keymap("n", "<BS>", "<C-^>", opts)
 keymap("o", "<BS>", "^", opts)
@@ -524,7 +525,7 @@ vim.keymap.set({ "n", "v" }, "<leader>f.", function()
 		cwd = cwd,
 		prompt_title = "Find files in " .. cwd,
 		theme = "ivy",
-		layout_config = { height = 0.53 },
+		layout_config = { height = 0.40 },
 		-- group_by = "filename",
 		-- disable_devicons = true,
 		vimgrep_arguments = {
@@ -1831,6 +1832,7 @@ vim.keymap.set({ "n" }, "<leader>tt", function()
 	require("barbecue.ui").toggle()
 end, opts)
 
+-- quickfix list previous
 vim.keymap.set({ "n" }, "<C-S-H>", function()
 	local cur = vim.fn.getqflist({ nr = 0 }).nr
 	local max = vim.fn.getqflist({ nr = "$" }).nr
@@ -1839,6 +1841,7 @@ vim.keymap.set({ "n" }, "<C-S-H>", function()
 	end
 end, opts)
 
+-- quickfix list next
 vim.keymap.set({ "n" }, "<C-S-L>", function()
 	local cur = vim.fn.getqflist({ nr = 0 }).nr
 	local max = vim.fn.getqflist({ nr = "$" }).nr

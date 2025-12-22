@@ -52,30 +52,30 @@ return {
 										"-m",
 										"github-copilot/gpt-5.1-codex",
 									},
-									-- copilot_sonnet_4_5 = {
-									-- 	"opencode",
-									-- 	"acp",
-									-- 	"-m",
-									-- 	"github-copilot/claude-sonnet-4.5",
-									-- },
-									-- copilot_opus_4_5 = {
-									-- 	"opencode",
-									-- 	"acp",
-									-- 	"-m",
-									-- 	"github-copilot/claude-opus-4.5",
-									-- },
-									-- anthropic_sonnet_4_5 = {
-									-- 	"opencode",
-									-- 	"acp",
-									-- 	"-m",
-									-- 	"anthropic/claude-sonnet-4.5",
-									-- },
-									-- anthropic_opus_4_5 = {
-									-- 	"opencode",
-									-- 	"acp",
-									-- 	"-m",
-									-- 	"anthropic/claude-opus-4.5",
-									-- },
+									copilot_sonnet_4_5 = {
+										"opencode",
+										"acp",
+										"-m",
+										"github-copilot/claude-sonnet-4.5",
+									},
+									copilot_opus_4_5 = {
+										"opencode",
+										"acp",
+										"-m",
+										"github-copilot/claude-opus-4.5",
+									},
+									anthropic_sonnet_4_5 = {
+										"opencode",
+										"acp",
+										"-m",
+										"anthropic/claude-sonnet-4.5",
+									},
+									anthropic_opus_4_5 = {
+										"opencode",
+										"acp",
+										"-m",
+										"anthropic/claude-opus-4.5",
+									},
 								},
 							})
 						end,
@@ -142,16 +142,14 @@ return {
 
 				interactions = {
 					chat = {
-						-- adapter = "opencode",
-
-						adapter = {
-							-- name = "opencode",
-							-- model = "claude-sonnet-4.5",
-							name = "copilot",
-							model = "gpt-5.1-codex",
-							-- model = "claude-opus-4.5",
-							-- model = "gpt-5.1",
-						},
+						adapter = "opencode",
+						-- adapter = {
+						-- 	-- name = "copilot",
+						-- 	-- model = "gpt-5.1-codex",
+						-- 	-- model = "claude-opus-4.5",
+						--         -- model = "claude-sonnet-4.5",
+						-- 	-- model = "gpt-5.1",
+						-- },
 						slash_commands = {
 							["image"] = {
 								opts = {

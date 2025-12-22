@@ -17,7 +17,7 @@ error_symbol = "[✗](red)"
 vicmd_symbol = "[](green)"
 
 [cmd_duration]
-min_time = 5_000  # Show command duration over 10,000 milliseconds (=10 sec)
+min_time = 1_000  # Show command duration over 10,000 milliseconds (=10 sec)
 style = "yellow"
 format = "took [$duration]($style) "
 

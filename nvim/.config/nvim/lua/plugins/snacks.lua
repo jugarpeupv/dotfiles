@@ -2,6 +2,7 @@ return {
 	"folke/snacks.nvim",
 	priority = 800,
 	enabled = true,
+  event = { "LspAttach" },
 	lazy = true,
 
 	-- event = { "BufReadPost", "BufNewFile", "CmdlineEnter" },
@@ -373,25 +374,32 @@ return {
 			mode = { "n", "t" },
 			"<M-p>",
 			function()
-				local ok = pcall(function()
-					local git_root = Snacks.git.get_root()
-					if not git_root then
-						error("not in git repo")
-					end
-					Snacks.picker.git_files({ untracked = true })
-				end)
+				-- local ok = pcall(function()
+				-- 	local git_root = Snacks.git.get_root()
+				-- 	if not git_root then
+				-- 		error("not in git repo")
+				-- 	end
+				-- 	Snacks.picker.git_files({ untracked = true })
+				-- end)
+				--
+				-- if not ok then
+				-- 	Snacks.picker.files({
+				-- 		exclude = {
+				-- 			".git",
+				-- 			"*__template__*",
+				-- 			"*DS_Store*",
+				-- 		},
+				-- 	})
+				-- end
 
-				if not ok then
-					Snacks.picker.files({
-						exclude = {
-							".git",
-							"*__template__*",
-							"*DS_Store*",
-						},
-					})
-				end
+        Snacks.picker.files({
+          exclude = {
+            ".git",
+            "*__template__*",
+            "*DS_Store*",
+          },
+        })
 
-				-- Snacks.picker.git_files()
 				-- require("telescope.builtin").find_files({
 				--   cwd = vim.loop.cwd(),
 				--   hidden = true,

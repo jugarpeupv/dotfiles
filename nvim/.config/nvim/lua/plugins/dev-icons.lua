@@ -2,21 +2,13 @@ return {
 	{
 		"nvim-tree/nvim-web-devicons",
 		lazy = true,
-		-- dependencies = {
-		-- 	{
-		-- 		"mskelton/termicons.nvim",
-		-- 		requires = { "nvim-tree/nvim-web-devicons" },
-		-- 		build = false,
-		-- 		config = function()
-		-- 			require("termicons").setup()
-		-- 		end,
-		-- 	},
-		-- },
-		-- cmd = { "NvimTreeToggle", "NvimTreeFocus", "NvimTreeFindFile" },
-		-- lazy = true,
-		-- priority = 800,
 		opts = {
 			override = {
+        ics = {
+          icon = "",
+          name = "ics",
+          color = "#CBA6F7",
+        },
 				css = {
 					icon = "",
 					name = "css",
@@ -27,6 +19,11 @@ return {
 					name = "heic",
 					color = "#CBA6F7",
 				},
+        bin = {
+          icon = "",
+          name = "bin",
+          color = "#f38bad",
+        },
 				ipa = {
 					icon = "",
 					name = "ipa",

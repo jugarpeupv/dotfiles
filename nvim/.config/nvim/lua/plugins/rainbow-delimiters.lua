@@ -6,7 +6,7 @@ return {
 		-- event = { "BufReadPost", "BufNewFile" },
     -- event = { "VeryLazy" },
     event = { "LspAttach" },
-		enabled = true,
+		enabled = false,
 		config = function()
 			local rainbow = require("rainbow-delimiters")
 			vim.g.rainbow_delimiters = {

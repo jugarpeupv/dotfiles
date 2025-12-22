@@ -1,47 +1,28 @@
 local home = os.getenv("HOME")
 
 local mason_root_path = os.getenv("HOME") .. "/.local/share/nvim/mason"
-
-
 local bundles = {}
 
----
 -- Include java-test bundle if present
----
--- local java_test_path = require("mason-registry").get_package("java-test"):get_install_path()
 local java_test_path = mason_root_path .. "/packages/java-test"
-
--- java_test_path /Users/jgarcia/.local/share/nvim/mason/packages/java-test
--- print("java_test_path", java_test_path)
 
 local java_test_bundle = vim.split(vim.fn.glob(java_test_path .. "/extension/server/*.jar"), "\n")
 if java_test_bundle[1] ~= "" then
 	vim.list_extend(bundles, java_test_bundle)
 end
 
----
 -- Include java-debug-adapter bundle if present
----
--- local java_debug_path = require("mason-registry").get_package("java-debug-adapter"):get_install_path()
-
 local java_debug_path = mason_root_path .. "/packages/java-debug-adapter"
--- print("java_debug_path", java_debug_path)
--- java_debug_path /Users/jgarcia/.local/share/nvim/mason/packages/java-debug-adapter
-
 local java_debug_bundle =
 	vim.split(vim.fn.glob(java_debug_path .. "/extension/server/com.microsoft.java.debug.plugin-*.jar"), "\n")
 if java_debug_bundle[1] ~= "" then
 	vim.list_extend(bundles, java_debug_bundle)
 end
 
----
 -- Include spring boot ls bundle if present
----
 vim.list_extend(bundles, require("spring_boot").java_extensions())
 
----
 -- Include vscode-java-dependency bundle if present (Java project libs visualizer)
----
 local java_dependency_bundle = vim.split(
 	vim.fn.glob(
 		home
@@ -160,93 +141,93 @@ require("jdtls").start_or_attach(config)
 
 --------------------------------------------------------------------------------
 
--- run debug
-local function get_test_runner(test_name, debug)
-	if debug then
-		return 'mvn test -Dmaven.surefire.debug -Dtest="' .. test_name .. '"'
-	end
-	return 'mvn test -Dtest="' .. test_name .. '"'
-end
-
-local function run_java_test_method(debug)
-	local utils = require("jg.core.utils")
-	local method_name = utils.get_current_full_method_name("\\#")
-	vim.cmd("term " .. get_test_runner(method_name, debug))
-end
-
-local function run_java_test_class(debug)
-	local utils = require("jg.core.utils")
-	local class_name = utils.get_current_full_class_name()
-	vim.cmd("term " .. get_test_runner(class_name, debug))
-end
-
-local function get_spring_boot_runner(profile, debug)
-	local debug_param = ""
-	if debug then
-		debug_param =
-			' -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000" '
-	end
-
-	local profile_param = ""
-	if profile then
-		profile_param = " -Dspring-boot.run.profiles=" .. profile .. " "
-	end
-
-	return "mvn spring-boot:run " .. profile_param .. debug_param
-end
-
-local function run_spring_boot(debug)
-	vim.cmd("15sp|term " .. get_spring_boot_runner(nil, debug))
-end
-
-vim.keymap.set("n", "<leader>Tm", function()
-	run_java_test_method()
-end)
-vim.keymap.set("n", "<leader>TM", function()
-	run_java_test_method(true)
-end)
-vim.keymap.set("n", "<leader>Tc", function()
-	run_java_test_class()
-end)
-vim.keymap.set("n", "<leader>TC", function()
-	run_java_test_class(true)
-end)
-vim.keymap.set("n", "<F9>", function()
-	run_spring_boot()
-end)
-vim.keymap.set("n", "<F10>", function()
-	run_spring_boot(true)
-end)
-
--- live reload with gradle
--- first terminal
--- ./gradlew build --continuous --parallel --build-cache --configuration-cache
--- second terminal
--- ./gradlew bootRun --continuous --parallel --build-cache --configuration-cache
-
--- MAVEN
--- mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
-
--- GRADLE
--- build.gradle
--- bootRun {
---   debugOptions {
---     enabled = true
---     port = 8000
---     server = true
---     suspend = false
---   }
--- }
--- Then run:
--- ./gradlew bootRun --debug-jvm
-
--- Then dap.continue() and select Attach to process:
+-- -- run debug
+-- local function get_test_runner(test_name, debug)
+-- 	if debug then
+-- 		return 'mvn test -Dmaven.surefire.debug -Dtest="' .. test_name .. '"'
+-- 	end
+-- 	return 'mvn test -Dtest="' .. test_name .. '"'
+-- end
 --
-
--- local _, _ = pcall(vim.lsp.codelens.refresh)
--- vim.api.nvim_create_autocmd({ "BufWritePost" }, {
---   pattern = { "*.java" },
---   callback = function()
---     local _, _ = pcall(vim.lsp.codelens.refresh)
---   end,
--- })
+-- local function run_java_test_method(debug)
+-- 	local utils = require("jg.core.utils")
+-- 	local method_name = utils.get_current_full_method_name("\\#")
+-- 	vim.cmd("term " .. get_test_runner(method_name, debug))
+-- end
+--
+-- local function run_java_test_class(debug)
+-- 	local utils = require("jg.core.utils")
+-- 	local class_name = utils.get_current_full_class_name()
+-- 	vim.cmd("term " .. get_test_runner(class_name, debug))
+-- end
+--
+-- local function get_spring_boot_runner(profile, debug)
+-- 	local debug_param = ""
+-- 	if debug then
+-- 		debug_param =
+-- 			' -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000" '
+-- 	end
+--
+-- 	local profile_param = ""
+-- 	if profile then
+-- 		profile_param = " -Dspring-boot.run.profiles=" .. profile .. " "
+-- 	end
+--
+-- 	return "mvn spring-boot:run " .. profile_param .. debug_param
+-- end
+--
+-- local function run_spring_boot(debug)
+-- 	vim.cmd("15sp|term " .. get_spring_boot_runner(nil, debug))
+-- end
+--
+-- vim.keymap.set("n", "<leader>Tm", function()
+-- 	run_java_test_method()
+-- end)
+-- vim.keymap.set("n", "<leader>TM", function()
+-- 	run_java_test_method(true)
+-- end)
+-- vim.keymap.set("n", "<leader>Tc", function()
+-- 	run_java_test_class()
+-- end)
+-- vim.keymap.set("n", "<leader>TC", function()
+-- 	run_java_test_class(true)
+-- end)
+-- vim.keymap.set("n", "<F9>", function()
+-- 	run_spring_boot()
+-- end)
+-- vim.keymap.set("n", "<F10>", function()
+-- 	run_spring_boot(true)
+-- end)
+--
+-- -- live reload with gradle
+-- -- first terminal
+-- -- ./gradlew build --continuous --parallel --build-cache --configuration-cache
+-- -- second terminal
+-- -- ./gradlew bootRun --continuous --parallel --build-cache --configuration-cache
+--
+-- -- MAVEN
+-- -- mvn spring-boot:run -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"
+--
+-- -- GRADLE
+-- -- build.gradle
+-- -- bootRun {
+-- --   debugOptions {
+-- --     enabled = true
+-- --     port = 8000
+-- --     server = true
+-- --     suspend = false
+-- --   }
+-- -- }
+-- -- Then run:
+-- -- ./gradlew bootRun --debug-jvm
+--
+-- -- Then dap.continue() and select Attach to process:
+-- --
+--
+-- -- local _, _ = pcall(vim.lsp.codelens.refresh)
+-- -- vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+-- --   pattern = { "*.java" },
+-- --   callback = function()
+-- --     local _, _ = pcall(vim.lsp.codelens.refresh)
+-- --   end,
+-- -- })

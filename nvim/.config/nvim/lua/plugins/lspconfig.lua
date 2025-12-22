@@ -36,12 +36,6 @@ return {
 			},
 		},
 		config = function()
-			-- local capabilities = vim.tbl_deep_extend(
-			-- 	"force",
-			-- 	vim.lsp.protocol.make_client_capabilities(),
-			-- 	require("lsp-file-operations").default_capabilities()
-			-- )
-
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false -- https://github.com/neovim/neovim/issues/23291
 
@@ -97,97 +91,41 @@ return {
 				return orig_util_open_floating_preview(contents, syntax, opts, ...)
 			end
 
-			-- local lsp_config = {
-			-- 	cmd = { os.getenv("HOME") .. "/.local/share/nvim/mason/bin/gh-actions-language-server", "--stdio" },
-			-- 	filetypes = { "yaml.github" },
-			-- 	init_options = {
-			-- 		sessionToken = os.getenv("GH_ACTIONS_PAT"),
-			-- 		repos = {},
-			-- 	},
-			-- 	-- single_file_support = true,
-			-- 	-- `root_dir` ensures that the LSP does not attach to all yaml files
-			-- 	root_dir = function(bufnr, on_dir)
-			-- 		local parent = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
-			-- 		if vim.endswith(parent, "/.github/workflows") then
-			-- 			on_dir(parent)
-			-- 		end
-			-- 	end,
-			-- 	-- root_dir = function(bufnr, on_dir)
-			-- 	-- 	local parent = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
-			-- 	--
-			-- 	-- 	-- Check if we're in a workflow directory
-			-- 	-- 	if
-			-- 	-- 		vim.endswith(parent, "/.github/workflows")
-			-- 	-- 		or vim.endswith(parent, "/.forgejo/workflows")
-			-- 	-- 		or vim.endswith(parent, "/.gitea/workflows")
-			-- 	-- 	then
-			-- 	-- 		-- Find the git root of the current worktree
-			-- 	-- 		local git_root = vim.fs.find(".git", {
-			-- 	-- 			path = parent,
-			-- 	-- 			upward = true,
-			-- 	-- 			type = "directory",
-			-- 	-- 		})[1]
-			-- 	--
-			-- 	-- 		if git_root then
-			-- 	-- 			on_dir(vim.fs.dirname(git_root))
-			-- 	-- 		else
-			-- 	-- 			on_dir(parent)
-			-- 	-- 		end
-			-- 	-- 	end
-			-- 	-- end,
-			-- 	handlers = {
-			-- 		["actions/readFile"] = function(_, result)
-			-- 			if type(result.path) ~= "string" then
-			-- 				return nil, { code = -32602, message = "Invalid path parameter" }
-			-- 			end
-			-- 			local file_path = vim.uri_to_fname(result.path)
-			-- 			if vim.fn.filereadable(file_path) == 1 then
-			-- 				local f = assert(io.open(file_path, "r"))
-			-- 				local text = f:read("*a")
-			-- 				f:close()
-			-- 				return text, nil
-			-- 			else
-			-- 				return nil, { code = -32603, message = "File not found: " .. file_path }
-			-- 			end
-			-- 		end,
-			-- 	},
-			-- 	capabilities = {
-			-- 		workspace = {
-			-- 			didChangeWorkspaceFolders = {
-			-- 				dynamicRegistration = true,
-			-- 			},
-			-- 		},
-			-- 	},
-			-- }
-			--
-			-- if vim.lsp.config then
-			-- 	vim.lsp.config["gh_actions_ls"] = lsp_config
-			-- 	vim.lsp.enable({ "gh_actions_ls" })
-			-- 	-- Fetch repo info async and update running clients
-			-- 	vim.schedule(function()
-			-- 		local init_opts = require("jg.custom.lsp-utils").get_gh_actions_init_options()
-			--
-			-- 		-- Update the config for future clients
-			-- 		lsp_config.init_options = init_opts
-			--
-			-- 		-- Notify any already-running clients with workspace/didChangeConfiguration
-			-- 		for _, client in ipairs(vim.lsp.get_clients({ name = "gh_actions_ls" })) do
-			-- 			client.config.init_options = init_opts
-			-- 			---@diagnostic disable-next-line: param-type-mismatch
-			-- 			client.notify("workspace/didChangeConfiguration", { settings = init_opts })
-			-- 		end
-			-- 	end)
-			-- end
-
-					local server_filetypes = {
-				angularls = { "typescript", "typescriptreact", "typescript.tsx", "javascript", "javascriptreact", "javascript.jsx", "html" },
+			local server_filetypes = {
+				angularls = {
+					"typescript",
+					"typescriptreact",
+					"typescript.tsx",
+					"javascript",
+					"javascriptreact",
+					"javascript.jsx",
+					"html",
+				},
 				bashls = { "sh", "bash", "zsh" },
 				clangd = { "c", "cpp", "objc", "objcpp" },
-				copilot_ls = { "lua", "python", "javascript", "typescript", "typescriptreact", "javascriptreact", "go", "ruby", "rust", "java" },
+				copilot_ls = {
+					"lua",
+					"python",
+					"javascript",
+					"typescript",
+					"typescriptreact",
+					"javascriptreact",
+					"go",
+					"ruby",
+					"rust",
+					"java",
+				},
 				docker_compose_language_service = { "yaml", "yml", "dockercompose" },
 				dockerls = { "dockerfile" },
 				emmet_ls = { "html", "css", "scss", "less", "javascriptreact", "typescriptreact" },
-				eslint = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+				eslint = {
+					"javascript",
+					"javascriptreact",
+					"javascript.jsx",
+					"typescript",
+					"typescriptreact",
+					"typescript.tsx",
+				},
 				gh_actions_ls = { "yaml", "yaml.github", "yml" },
 				gopls = { "go", "gomod", "gowork" },
 				groovyls = { "groovy" },
@@ -202,41 +140,43 @@ return {
 				rust_analyzer = { "rust" },
 				somesass_ls = { "sass", "scss" },
 				tailwindcss = { "html", "javascript", "typescript", "vue", "svelte", "php", "heex", "tsx", "jsx" },
-				vtsls = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+				vtsls = {
+					"javascript",
+					"javascriptreact",
+					"javascript.jsx",
+					"typescript",
+					"typescriptreact",
+					"typescript.tsx",
+				},
 				yamlls = { "yaml", "yaml.github", "yml" },
 			}
 
-			local has_new_lsp_api = vim.fn.has("nvim-0.10") == 1 and vim.lsp.enable ~= nil
-			if has_new_lsp_api then
-				local group = vim.api.nvim_create_augroup("lazy_lsp_enable", { clear = true })
-				for server, patterns in pairs(server_filetypes) do
-					vim.api.nvim_create_autocmd("FileType", {
-						group = group,
-						pattern = patterns,
-						once = false,
-						callback = function(event)
-							local clients = vim.lsp.get_clients({ bufnr = event.buf, name = server })
-							-- if #clients > 0 then
-							-- 	return
-							-- end
-							local ok, err = pcall(vim.lsp.enable, server, { bufnr = event.buf })
-							if not ok then
-								vim.notify(string.format("Failed to enable LSP '%s': %s", server, err), vim.log.levels.WARN)
-							end
-						end,
-					})
-				end
-			else
-				for server, _ in pairs(server_filetypes) do
-					vim.lsp.enable(server)
-				end
+			local group = vim.api.nvim_create_augroup("lazy_lsp_enable", { clear = true })
+			for server, patterns in pairs(server_filetypes) do
+				vim.api.nvim_create_autocmd("FileType", {
+					group = group,
+					pattern = patterns,
+					once = true,
+					callback = function(event)
+						local clients = vim.lsp.get_clients({ bufnr = event.buf, name = server })
+						if #clients > 0 then
+							vim.notify("Already running client " .. server)
+							return
+						end
+						local ok, err = pcall(vim.lsp.enable, server)
+						if not ok then
+							vim.notify(string.format("Failed to enable LSP '%s': %s", server, err), vim.log.levels.WARN)
+						end
+					end,
+				})
 			end
 		end,
 	},
 	{
 		"igorlfs/nvim-lsp-file-operations",
 		enabled = true,
-		keys = { "<C-d>", "<C-u>" },
+		-- keys = { "<C-d>", "<C-u>" },
+    event = { "LspAttach" },
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},

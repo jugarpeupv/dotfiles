@@ -1,6 +1,143 @@
--- return {}
 return {
+  {
+    "chrisgrieser/nvim-early-retirement",
+    event = "LspAttach",
+    opts = {
+      retirementAgeMins = 10,
+      -- Filetypes to ignore.
+      ignoredFiletypes = {},
+      -- Ignore files matching this lua pattern; empty string disables this setting.
+      ignoreFilenamePattern = "",
+      -- Will not close the alternate file.
+      ignoreAltFile = true,
+      -- Minimum number of open buffers for auto-closing to become active. E.g.,
+      -- by setting this to 4, no auto-closing will take place when you have 3
+      -- or fewer open buffers. Note that this plugin never closes the currently
+      -- active buffer, so a number < 2 will effectively disable this setting.
+      minimumBufferNum = 3,
+      -- Ignore buffers with unsaved changes. If false, the buffers will
+      -- automatically be written and then closed.
+      ignoreUnsavedChangesBufs = true,
+      -- Ignore non-empty buftypes, for example terminal buffers
+      ignoreSpecialBuftypes = true,
+      -- Ignore visible buffers. Buffers that are open in a window or in a tab
+      -- are considered visible by vim. ("a" in `:buffers`)
+      ignoreVisibleBufs = true,
+      -- ignore unloaded buffers. Session-management plugin often add buffers
+      -- to the buffer list without loading them.
+      ignoreUnloadedBufs = false,
+      -- Show notification on closing. Works with plugins like nvim-notify.
+      notificationOnAutoClose = false,
+      -- When a file is deleted, for example via an external program, delete the
+      -- associated buffer as well. Requires Neovim >= 0.10.
+      -- (This feature is independent from the automatic closing)
+      deleteBufferWhenFileDeleted = true,
+    }
+  },
+	{
+		"Wansmer/treesj",
+		keys = {
+			{
+				"sj",
+				function()
+					require("treesj").toggle({ split = { recursive = true } })
+				end,
+			},
+		},
+		dependencies = { "nvim-treesitter/nvim-treesitter" }, -- if you install parsers with `nvim-treesitter`
+		config = function()
+			require("treesj").setup({ use_default_keymaps = false, max_join_length = 240 })
+		end,
+	},
+	{
+		"jugarpeupv/bufjump.nvim",
+		enabled = true,
+		keys = {
+			{ "<M-i>" },
+			{ "<M-o>" },
+			{ "<D-i>" },
+			{ "<D-o>" },
+		},
+		config = function()
+			local function is_inside_tmux()
+				return os.getenv("TMUX") ~= nil
+			end
 
+			local function get_mi_key()
+				if is_inside_tmux() then
+					return "<M-i>"
+				else
+					return "<D-i>"
+				end
+			end
+
+			local function get_mo_key()
+				if is_inside_tmux() then
+					return "<M-o>"
+				else
+					return "<D-o>"
+				end
+			end
+
+			require("bufjump").setup({
+				forward_key = get_mi_key(),
+				backward_key = get_mo_key(),
+				-- on_success = nil
+				on_success = function()
+					vim.cmd([[execute "normal! g`\"zz"]])
+				end,
+			})
+		end,
+	},
+	{
+		"JoosepAlviste/nvim-ts-context-commentstring",
+		enabled = true,
+		-- event = { "BufReadPost", "BufNewFile" },
+		-- event = { "VeryLazy" },
+		event = { "LspAttach" },
+		opts = { enable = true, enable_autocmd = false, config = { http = "# %s" } },
+	},
+	{
+		"uga-rosa/ccc.nvim",
+		keys = { { "<leader>CC", "<cmd>CccHighlighterToggle<cr>" } },
+		cmd = { "CccPick", "CccHighlighterToggle", "CccConvert", "CccHighlighterEnable", "CccHighlighterDisable" },
+		config = function()
+			local ccc = require("ccc")
+			ccc.setup({
+				highlighter = {
+					excludes = { "lazy" },
+					auto_enable = true,
+					lsp = false,
+				},
+			})
+		end,
+	},
+	{
+		"AndrewRadev/bufferize.vim",
+		cmd = { "Bufferize" },
+		config = function()
+			vim.g.bufferize_keep_buffers = 1
+		end,
+	},
+	{
+		"m00qek/baleia.nvim",
+		lazy = true,
+		tag = "v1.3.0",
+		config = function()
+			-- local baleia = require("baleia").setup({})
+			vim.g.baleia = require("baleia").setup({})
+			vim.api.nvim_create_autocmd({ "FileType" }, {
+				pattern = "dap-repl",
+				callback = function()
+					vim.g.baleia.automatically(vim.api.nvim_get_current_buf())
+				end,
+			})
+
+			vim.api.nvim_create_user_command("BaleiaColorize", function()
+				vim.g.baleia.once(vim.api.nvim_get_current_buf())
+			end, { bang = true })
+		end,
+	},
 	{
 		"mogelbrod/vim-jsonpath",
 		ft = { "json", "jsonc" },
@@ -34,7 +171,7 @@ return {
 		enabled = true,
 		-- event = { "BufReadPre", "BufNewFile" },
 		-- event = "VeryLazy",
-    event = { "LspAttach" },
+		event = { "LspAttach" },
 		lazy = true,
 		config = function()
 			local builtin = require("statuscol.builtin")
@@ -43,7 +180,7 @@ return {
 
 				-- configuration goes here, for example:
 				relculright = true,
-				-- ft_ignore = { "copilot-chat" },
+				ft_ignore = { "NvimTree", "codecompanion" },
 				segments = {
 					{
 						text = { builtin.foldfunc },
@@ -498,89 +635,9 @@ return {
 		},
 	},
 	{
-		"topaxi/pipeline.nvim",
-		keys = {
-			{ "<leader>cI", "<cmd>Pipeline toggle<cr>", desc = "Open pipeline.nvim" },
-		},
-		-- optional, you can also install and use `yq` instead.
-		build = "make",
-		---@module "pipeline"
-		---@type pipeline.Config
-		opts = {
-			--- The browser executable path to open workflow runs/jobs in
-			browser = nil,
-			--- Interval to refresh in seconds
-			refresh_interval = 10,
-			--- How much workflow runs and jobs should be indented
-			indent = 2,
-			providers = {
-				github = {
-					default_host = "github.com",
-					--- Mapping of names that should be renamed to resolvable hostnames
-					--- names are something that you've used as a repository url,
-					--- that can't be resolved by this plugin, like aliases from ssh config
-					--- for example to resolve "gh" to "github.com"
-					--- ```lua
-					--- resolve_host = function(host)
-					---   if host == "gh" then
-					---     return "github.com"
-					---   end
-					--- end
-					--- ```
-					--- Return nil to fallback to the default_host
-					---@param host string
-					---@return string|nil
-					resolve_host = function(host)
-						if host == "gh" or host:match("^github%.com%-") then
-							return "github.com"
-						end
-						return host
-					end,
-				},
-			},
-			--- Allowed hosts to fetch data from, github.com is always allowed
-			allowed_hosts = {},
-			icons = {
-				workflow_dispatch = "⚡️",
-				conclusion = {
-					success = "✓",
-					failure = "X",
-					startup_failure = "X",
-					cancelled = "⊘",
-					skipped = "◌",
-				},
-				status = {
-					unknown = "?",
-					pending = "○",
-					queued = "○",
-					requested = "○",
-					waiting = "○",
-					in_progress = "●",
-				},
-			},
-			split = {
-				relative = "editor",
-				position = "right",
-				size = 60,
-				buf_options = {
-					filetype = "pipeline",
-					buflisted = true,
-				},
-				win_options = {
-					wrap = true,
-					number = true,
-					foldlevel = nil,
-					foldcolumn = "0",
-					cursorcolumn = false,
-					signcolumn = "no",
-				},
-			},
-		},
-	},
-	{
 		"farmergreg/vim-lastplace",
 		-- event = { "BufNewFile", "BufReadPost" },
-		event = { "VeryLazy" }
+		event = { "VeryLazy" },
 	},
 	{
 		"vim-scripts/applescript.vim",
@@ -593,239 +650,8 @@ return {
 	--   'vim-ruby/vim-ruby',
 	--   event = { "BufNewFile", "BufReadPre" },
 	-- },
-	{
-		"RRethy/vim-illuminate",
-		enabled = false,
-		event = { "BufNewFile", "BufReadPost" },
-		opts = {
-			-- providers: provider used to get references in the buffer, ordered by priority
-			providers = {
-				"lsp",
-				"treesitter",
-				-- "regex",
-			},
-			-- delay: delay in milliseconds
-			delay = 300,
-			-- filetype_overrides: filetype specific overrides.
-			-- The keys are strings to represent the filetype while the values are tables that
-			-- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
-			-- filetype_overrides = {},
-			-- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
-			filetypes_denylist = {
-				"grug-far",
-				"oil",
-				"dirvish",
-				"fugitive",
-				"alpha",
-				"NvimTree",
-				"lazy",
-				"neogitstatus",
-				"Trouble",
-				"lir",
-				"Outline",
-				"spectre_panel",
-				"toggleterm",
-				"DressingSelect",
-				"TelescopePrompt",
-				"NvimTree",
-			},
-			-- filetypes_denylist = {
-			--   "TelescopePrompt",
-			--   "NvimTree",
-			--   "dirbuf",
-			--   "dirvish",
-			--   "fugitive",
-			-- },
-			-- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
-			-- You must set filetypes_denylist = {} to override the defaults to allow filetypes_allowlist to take effect
-			-- filetypes_allowlist = {},
-			-- modes_denylist: modes to not illuminate, this overrides modes_allowlist
-			-- See `:help mode()` for possible values
-			-- modes_denylist = { "i" },
-			-- modes_allowlist: modes to illuminate, this is overridden by modes_denylist
-			-- See `:help mode()` for possible values
-			-- modes_allowlist = {},
-			-- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
-			-- Only applies to the 'regex' provider
-			-- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
-			-- providers_regex_syntax_denylist = {},
-			-- -- providers_regex_syntax_allowlist: syntax to illuminate, this is overridden by providers_regex_syntax_denylist
-			-- -- Only applies to the 'regex' provider
-			-- -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
-			-- providers_regex_syntax_allowlist = {},
-			-- under_cursor: whether or not to illuminate under the cursor
-			under_cursor = true,
-			-- large_file_cutoff: number of lines at which to use large_file_config
-			-- The `under_cursor` option is disabled when this cutoff is hit
-			large_file_cutoff = 10000,
-			-- large_file_config: config to use for large files (based on large_file_cutoff).
-			-- Supports the same keys passed to .configure
-			-- If nil, vim-illuminate will be disabled for large files.
-			-- large_file_overrides = nil,
-			-- -- min_count_to_highlight: minimum number of matches required to perform highlighting
-			-- min_count_to_highlight = 1,
-			-- should_enable: a callback that overrides all other settings to
-			-- enable/disable illumination. This will be called a lot so don't do
-			-- anything expensive in it.
-			-- should_enable = function(bufnr)
-			--   return true
-			-- end,
-			-- case_insensitive_regex: sets regex case sensitivity
-			case_insensitive_regex = false,
-			-- disable_keymaps: disable default keymaps
-			disable_keymaps = true,
-		},
-		config = function(_, opts)
-			require("illuminate").configure(opts)
-			vim.keymap.set({ "n" }, "<leader>ij", function()
-				require("illuminate").goto_next_reference(true)
-			end, { noremap = true, silent = true })
-
-			vim.keymap.set({ "n" }, "<leader>ik", function()
-				require("illuminate").goto_prev_reference(true)
-			end, { noremap = true, silent = true })
-		end,
-	},
 	-- { 'ii14/neorepl.nvim', cmd = { "Repl" }},
-	{
-		"Yilin-Yang/vim-markbar",
-		event = { "BufReadPre", "BufNewFile" },
-		enabled = false,
-		config = function()
-			vim.g.markbar_marks_to_display = "QPOMLKJIHGFEDCBA"
-			vim.g.markbar_width = 50
-			vim.g.markbar_context_indent_block = "  "
-			vim.g.markbar_num_lines_context = 0
-		end,
-	},
-	{
-		"LintaoAmons/bookmarks.nvim",
-		enabled = false,
-		-- pin the plugin at specific version for stability
-		-- backup your bookmark sqlite db when there are breaking changes
-		-- tag = "v2.3.0",
-		dependencies = {
-			{ "kkharji/sqlite.lua" },
-			{ "nvim-telescope/telescope.nvim" },
-			-- { "stevearc/dressing.nvim" }, -- optional: better UI
-		},
-		config = function()
-			local opts = {} -- go to the following link to see all the options in the deafult config file
-			require("bookmarks").setup(opts) -- you must call setup to init sqlite db
-		end,
-	},
 	-- run :BookmarksInfo to see the running status of the plugin
-	{
-		"tomasky/bookmarks.nvim",
-		enabled = false,
-		-- after = "telescope.nvim",
-		-- event = "VimEnter",
-		config = function()
-			require("bookmarks").setup({
-				save_file = vim.fn.expand("$HOME/.bookmarks"), -- bookmarks save file path
-				keywords = {},
-				---@diagnostic disable-next-line: unused-local
-				on_attach = function(_bufnr)
-					local bm = require("bookmarks")
-					local map = vim.keymap.set
-					map("n", "mm", bm.bookmark_toggle) -- add or remove bookmark at current line
-					map("n", "mi", bm.bookmark_ann) -- add or edit mark annotation at current line
-					map("n", "mc", bm.bookmark_clean) -- clean all marks in local buffer
-					map("n", "mn", bm.bookmark_next) -- jump to next mark in local buffer
-					map("n", "mp", bm.bookmark_prev) -- jump to previous mark in local buffer
-					map("n", "ml", bm.bookmark_list) -- show marked file list in quickfix window
-					map("n", "mx", bm.bookmark_clear_all) -- removes all bookmarks
-					map("n", "mL", function()
-						require("telescope").extensions.bookmarks.list()
-					end)
-				end,
-			})
-		end,
-	},
-	{
-		"2kabhishek/markit.nvim",
-		enabled = false,
-		event = { "BufReadPre", "BufNewFile" },
-		keys = {
-			{
-				mode = { "n" },
-				-- "<leader>mm",
-				"<leader>mL",
-				function()
-					require("telescope").extensions.markit.bookmarks_list_all()
-				end,
-				{ noremap = true, silent = true },
-			},
-
-			{
-				mode = { "n" },
-				-- "<leader>mm",
-				"<leader>ml",
-				"<cmd>MarksQFListGlobal<cr>",
-				{ noremap = true, silent = true },
-			},
-			-- {
-			--   mode = { "n" },
-			--   "<leader>mp",
-			--   function()
-			--     require("telescope").extensions.markit.bookmarks_list_all({ project_only = true })
-			--   end,
-			--   { noremap = true, silent = true },
-			-- },
-		},
-		config = function()
-			require("markit").setup({
-				-- whether to map keybinds or not. default true
-				default_mappings = true,
-				-- which builtin marks to show. default {}
-				-- builtin_marks = { ".", "<", ">", "^" },
-				-- whether movements cycle back to the beginning/end of buffer. default true
-				cyclic = true,
-				-- whether the shada file is updated after modifying uppercase marks. default false
-				force_write_shada = false,
-				-- how often (in ms) to redraw signs/recompute mark positions.
-				-- higher value means better performance but may cause visual lag,
-				-- while lower value may cause performance penalties. default 150.
-				refresh_interval = 150,
-				-- sign priorities for each type of mark - builtin marks, uppercase marks, lowercase
-				-- marks, and bookmarks.
-				-- can be either a table with all/none of the keys, or a single number, in which case
-				-- the priority applies to all marks.
-				-- default 10.
-				sign_priority = { lower = 10, upper = 15, builtin = 8, bookmark = 20 },
-				-- disables mark tracking for specific filetypes. default {}
-				excluded_filetypes = { "qf", "NvimTree" },
-				-- disables mark tracking for specific buftypes. default {}
-				excluded_buftypes = {},
-				-- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
-				-- sign/virttext. Bookmarks can be used to group together positions and quickly move
-				-- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
-				-- default virt_text is "".
-				bookmark_0 = {
-					sign = "⚑",
-					virt_text = "hello world",
-					-- explicitly prompt for a virtual line annotation when setting a bookmark from this group.
-					-- defaults to false.
-					annotate = false,
-				},
-				mappings = {},
-			})
-		end,
-	},
-	{
-		-- regex plugin
-		"OXY2DEV/patterns.nvim",
-		enabled = false,
-		cmd = { "Patterns" },
-	},
-	{
-		"andersevenrud/nvim_context_vt",
-		-- event = { "BufReadPre", "BufNewFile" },
-		opts = {
-			enabled = true,
-		},
-		keys = { { "<leader>co", "<cmd>NvimContextVtToggle<cr>" } },
-	},
 	-- lazy.nvim
 	{
 		"maskudo/devdocs.nvim",
@@ -882,26 +708,6 @@ return {
 				-- "openjdk~21"
 			},
 		},
-	},
-	-- {
-	--   'girishji/devdocs.vim',
-	--   cmd = { "DevdocsFind", "DevdocsInstall" },
-	-- },
-	-- {
-	--   "yuratomo/w3m.vim",
-	-- },
-	-- {
-	--   "luckasRanarison/nvim-devdocs",
-	--   dependencies = {
-	--     "nvim-lua/plenary.nvim",
-	--     "nvim-telescope/telescope.nvim",
-	--     "nvim-treesitter/nvim-treesitter",
-	--   },
-	--   opts = {},
-	-- },
-	{
-		"ragnarok22/whereami.nvim",
-		cmd = "Whereami",
 	},
 	{
 		"vzze/calculator.nvim",
@@ -1048,17 +854,6 @@ return {
 		cmd = { "LiveServerStart", "LiveServerStop", "LiveServerToggle" },
 		config = true,
 	},
-	-- {
-	--   "alexxGmZ/Md2Pdf",
-	--   cmd = "Md2Pdf"
-	-- },
-
-	-- {
-	--   "andrewferrier/wrapping.nvim",
-	--   config = function()
-	--     require("wrapping").setup()
-	--   end,
-	-- },
 	{
 		"danymat/neogen",
 		keys = {
@@ -1152,12 +947,6 @@ return {
 		},
 	},
 	{
-		"gennaro-tedesco/nvim-jqx",
-		event = { "BufReadPost" },
-		enabled = false,
-		ft = { "json", "yaml" },
-	},
-	{
 		"sontungexpt/url-open",
 		-- event = "VeryLazy",
 		keys = { { "gx", "<esc>:URLOpenUnderCursor<cr>" } },
@@ -1221,18 +1010,6 @@ return {
 		},
 	},
 	{ "dstein64/vim-startuptime", cmd = { "StartupTime" } },
-	{
-		"christoomey/vim-tmux-navigator",
-		enabled = false,
-		-- event = "VeryLazy",
-		-- commit = "d847ea942a5bb4d4fab6efebc9f30d787fd96e65",
-		keys = { "<C-h>", "<C-j>", "<C-k>", "<C-l>" },
-		config = function()
-			vim.g.tmux_navigator_disable_when_zoomed = 1
-			vim.g.tmux_navigator_preserve_zoom = 1
-		end,
-	},
-
 	{
 		"junegunn/fzf",
 		dependencies = { "junegunn/fzf.vim" },

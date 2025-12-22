@@ -11,6 +11,9 @@ return {
 	-- keys = { { mode = "n", "%" } },
 	config = function()
 		vim.g.matchup_matchparen_enabled = 0
+    vim.g.matchup_matchparen_deferred = 1
+    vim.g.matchup_matchparen_deferred_show_delay=100
+    vim.g.matchup_matchparen_stopline=200
 		vim.g.matchup_matchpref = {
 			xml = { tagnameonly = 1 },
 			svelte = { tagnameonly = 1 },

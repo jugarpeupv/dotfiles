@@ -2,7 +2,7 @@
 return {
 	{
 		"saghen/blink.indent",
-    enabled = true,
+    enabled = false,
     -- event = { "VeryLazy" },
     event = { "LspAttach" },
     -- event = { "BufReadPost", "BufNewFile" },
@@ -62,11 +62,11 @@ return {
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		enabled = false,
-		-- event = "BufReadPost",
-		keys = {
-			{ "<C-d>" },
-			{ "<C-u>" },
-		},
+		event = "LspAttach",
+		-- keys = {
+		-- 	{ "<C-d>" },
+		-- 	{ "<C-u>" },
+		-- },
 		config = function()
 			-- require("indent_blankline").setup {
 			--   -- char = '┊',
