@@ -4,6 +4,16 @@ return {
 		lazy = true,
 		opts = {
 			override = {
+        mfd = {
+          icon = "󰘸",
+          name = "mfd",
+          color = "#CBA6F7",
+        },
+        nfc = {
+          icon = "󰎘",
+          name = "nfc",
+          color = "#9CDCFE",
+        },
         ics = {
           icon = "",
           name = "ics",

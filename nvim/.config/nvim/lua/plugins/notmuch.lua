@@ -6,7 +6,6 @@ return {
 		enabled = true,
 		opts = {
 			notmuch_db_path = os.getenv("HOME") .. "/Mail",
-			open_cmd = "open",
 			maildir_sync_cmd = "mbsync -a",
 			keymaps = {
 				sendmail = "S",

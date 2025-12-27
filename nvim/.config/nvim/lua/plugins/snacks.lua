@@ -104,7 +104,7 @@ return {
 						["<Up>"] = { "list_up", mode = { "i", "n" } },
 						["<a-d>"] = { "inspect", mode = { "n", "i" } },
 						["<a-f>"] = { "toggle_follow", mode = { "i", "n" } },
-						["<a-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+						["<a-o>"] = { "toggle_hidden", mode = { "i", "n" } },
 						["<a-i>"] = { "toggle_ignored", mode = { "i", "n" } },
 						["<a-r>"] = { "toggle_regex", mode = { "i", "n" } },
 						["<a-m>"] = { "toggle_maximize", mode = { "i", "n" } },
@@ -276,6 +276,92 @@ return {
 				Snacks.picker.lsp_definitions()
 			end,
 		},
+    {
+      mode = { "n" },
+      "<leader>mp",
+      function()
+        -- require("telescope.builtin").man_pages({
+        --   -- man_cmd = { "sh", "-c", "apropos . | sort | uniq" },
+        --   man_cmd = { "cat", os.getenv("HOME") .. "/.cache/telescope_man_list.txt" },
+        --   -- man_cmd = { "sh", "-c", "find /usr/share/man/man* -type f | sort | uniq" },
+        --   sections = { "ALL" },
+        -- })
+
+        -- require("telescope.builtin").man_pages({ section = "1" })
+        -- Snacks.picker.man({ section = { "1" } })
+        -- Snacks.picker.man()
+
+        local items = {}
+        for line in io.lines(os.getenv("HOME") .. "/.cache/telescope_man_list.txt") do
+          local prefix, desc = line:match("^(.-)%s+%-%s+(.*)$")
+          if prefix then
+            local name, section = prefix:match("^([^%(,]+)%((%w+)%)")
+            if name then
+              table.insert(items, {
+                text = line,
+                name = vim.trim(name),
+                section = section,
+                desc = desc,
+              })
+            end
+          end
+        end
+
+        Snacks.picker({
+          title = "Man Pages",
+          format = "text",
+          layout = { preview = false },
+          -- format = function(item, picker)
+          -- 	local ret = {}
+          -- 	-- name(section) - highlighted
+          -- 	ret[#ret + 1] = { item.name, "NvimTreeExecFile" }
+          -- 	ret[#ret + 1] = { "(", "Delimiter" }
+          -- 	ret[#ret + 1] = { item.section, "Number" }
+          -- 	ret[#ret + 1] = { ")", "Delimiter" }
+          -- 	ret[#ret + 1] = { " - ", "Comment" }
+          -- 	ret[#ret + 1] = { item.desc or "", "String" }
+          -- 	return ret
+          -- end,
+          items = items,
+          win = {
+            input = {
+              keys = {
+                ["<C-v>"] = { "vertical", mode = { "i", "n" } },
+                ["<C-x>"] = { "horizontal", mode = { "i", "n" } },
+                ["<C-t>"] = { "tab", mode = { "i", "n" } },
+              },
+            },
+          },
+          actions = {
+            vertical = function(picker, item)
+              picker:close()
+              if item and item.name and item.section then
+                vim.cmd("vert Man " .. item.section .. " " .. item.name)
+              end
+            end,
+            horizontal = function(picker, item)
+              picker:close()
+              if item and item.name and item.section then
+                vim.cmd("Man " .. item.section .. " " .. item.name)
+              end
+            end,
+            tab = function(picker, item)
+              picker:close()
+              if item and item.name and item.section then
+                vim.cmd("tab Man " .. item.section .. " " .. item.name)
+              end
+            end,
+          },
+          confirm = function(picker, item)
+            picker:close()
+            if item and item.name and item.section then
+              vim.cmd("Man " .. item.section .. " " .. item.name)
+            end
+          end,
+        })
+      end,
+      { silent = true },
+    },
 		{
 			"<leader>ch",
 			function()
@@ -393,6 +479,8 @@ return {
 				-- end
 
         Snacks.picker.files({
+          cmd = "rg",
+          hidden = true,
           exclude = {
             ".git",
             "*__template__*",

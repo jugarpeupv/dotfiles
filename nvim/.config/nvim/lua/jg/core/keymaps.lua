@@ -409,6 +409,7 @@ keymap("n", "<leader>d", "<Nop>", opts)
 --   api.tree.find_file({ winid = vim.api.nvim_get_current_win(), focus = true })
 -- end, { noremap = true, silent = true })
 
+-- this could be remapped
 keymap("n", "<M-u>", "<cmd> lua require('trouble').next({skip_groups = true, jump = true})<cr>", opts)
 keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jump = true})<cr>", opts)
 
@@ -1827,7 +1828,6 @@ end, { desc = "Toggle Copilot terminal in split" })
 vim.api.nvim_set_keymap("i", "<C-n>", "<Down>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<C-p>", "<Up>", { noremap = true, silent = true })
 
-
 vim.keymap.set({ "n" }, "<leader>tt", function()
 	require("barbecue.ui").toggle()
 end, opts)
@@ -1861,4 +1861,3 @@ vim.keymap.set("n", "<left>", "10zh")
 vim.keymap.set("n", "<right>", "10zl")
 
 vim.keymap.set("n", "<C-i>", "<C-i>", { noremap = true })
-

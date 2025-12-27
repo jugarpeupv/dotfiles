@@ -1,5 +1,19 @@
 local M = {}
 
+local workspace_cache = {}
+
+local function get_workspace_key(path)
+	if path and path ~= "" then
+		return path
+	end
+
+	return "__default__"
+end
+
+local function clear_workspace_cache_for(path)
+	workspace_cache[get_workspace_key(path)] = nil
+end
+
 -- git branch --set-upstream-to=origin/release release Selection:  {
 --   authorname = "Garcia Perera, Julio",
 --   committerdate = "2024/11/06 09:59:49",
@@ -692,46 +706,74 @@ M.telescope_file_picker_in_workspace = function(path, no_ignore)
 	local conf = require("telescope.config").values
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
+	local telescope_builtin = require("telescope.builtin")
+	local key = get_workspace_key(path)
+	local open_workspace_picker
 
-	local find_command = {
-		"fd",
-		".",
-		path,
-		"--type",
-		"d",
-		"--exclude",
-		".git",
-		"--exclude",
-		"node_modules",
-		-- "--one-file-system",
-		"--max-depth",
-		"4",
-		"--hidden",
-	}
+	local function show_files_picker(dir)
+		telescope_builtin.find_files({
+			hidden = true,
+			cwd = dir,
+      prompt_title = "Find files in: " .. dir,
+			find_command = {
+				"rg",
+				"--files",
+				"--color",
+				"never",
+				"--glob=!.git",
+				"--glob=!*__template__",
+				"--glob=!*DS_Store",
+			},
+			attach_mappings = function(prompt_bufnr, map)
+				local function reopen_workspace_picker()
+					clear_workspace_cache_for(path)
+					workspace_cache[key] = nil
+					actions.close(prompt_bufnr)
+					open_workspace_picker()
+				end
 
-	if no_ignore then
-		table.insert(find_command, "--no-ignore")
+				map("i", "<C-b>", reopen_workspace_picker)
+				map("n", "<C-b>", reopen_workspace_picker)
+
+				return true
+			end,
+		})
 	end
 
-	-- Function to escape special characters in a string for use in a pattern
-	local function escape_pattern(text)
-		return text:gsub("([^%w])", "%%%1")
-	end
+	open_workspace_picker = function()
+		local find_command = {
+			"fd",
+			".",
+			path,
+			"--type",
+			"d",
+			"--exclude",
+			".git",
+			"--exclude",
+			"node_modules",
+			"--max-depth",
+			"3",
+			"--hidden",
+		}
 
-	local escaped_path = escape_pattern(path)
+		if no_ignore then
+			table.insert(find_command, "--no-ignore")
+		end
 
-	local commands = function(opts)
-		opts = opts or {}
+		local function escape_pattern(text)
+			return text:gsub("([^%w])", "%%%1")
+		end
+
+		local escaped_path = escape_pattern(path)
+
 		pickers
-			.new(opts, {
+			.new({}, {
 				prompt_title = 'Select a dir and open git files: "' .. path:gsub(os.getenv("HOME"), "~") .. '"',
 				finder = finders.new_oneshot_job(find_command, {
 					entry_maker = function(entry)
 						local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
 						return {
 							value = entry,
-							-- display = "  ~/" .. entry_substituted,
-
 							display = function()
 								local display_string
 								if string.find(path, os.getenv("HOME")) then
@@ -741,30 +783,17 @@ M.telescope_file_picker_in_workspace = function(path, no_ignore)
 								end
 								return display_string, { { { 0, 1 }, "Directory" } }
 							end,
-							-- { { {1, 3}, hl_group } }
 							ordinal = entry,
 						}
 					end,
 				}),
-				sorter = conf.generic_sorter(opts),
+				sorter = conf.generic_sorter({}),
 				attach_mappings = function(prompt_bufnr)
 					actions.select_default:replace(function()
 						local selection = action_state.get_selected_entry()
+						workspace_cache[key] = selection.value
 						actions.close(prompt_bufnr)
-						-- require("oil").open(selection.value)
-						require("telescope.builtin").find_files({
-							hidden = true,
-							cwd = selection.value,
-							find_command = {
-								"rg",
-								"--files",
-								"--color",
-								"never",
-								"--glob=!.git",
-								"--glob=!*__template__",
-								"--glob=!*DS_Store",
-							},
-						})
+						show_files_picker(selection.value)
 					end)
 
 					return true
@@ -773,7 +802,12 @@ M.telescope_file_picker_in_workspace = function(path, no_ignore)
 			:find()
 	end
 
-	commands()
+	local cached = workspace_cache[key]
+	if cached and vim.fn.isdirectory(cached) == 1 then
+		show_files_picker(cached)
+	else
+		open_workspace_picker()
+	end
 end
 
 M.oil_fzf_dir = function(path, no_ignore)

@@ -11,26 +11,6 @@ return {
 		-- tag = "0.1.8",
 		branch = "master",
 		lazy = true,
-    keys = {
-      {
-        mode = { "n" },
-        "<leader>mp",
-
-        function()
-          require("telescope.builtin").man_pages({
-            -- man_cmd = { "sh", "-c", "apropos . | sort | uniq" },
-            man_cmd = { "cat", os.getenv("HOME") .. "/.cache/telescope_man_list.txt" },
-            -- man_cmd = { "sh", "-c", "find /usr/share/man/man* -type f | sort | uniq" },
-            sections = { "ALL" },
-          })
-
-          -- require("telescope.builtin").man_pages({ section = "1" })
-          -- Snacks.picker.man({ section = { "1" } })
-          -- Snacks.picker.man()
-        end,
-        { silent = true },
-      },
-    },
 		dependencies = {
 			{
 				"zigotica/telescope-docker-commands.nvim",
@@ -93,7 +73,7 @@ return {
 			{
 				-- "osyo-manga/vim-over",
 				"jugarpeupv/vim-over",
-        enabled = false,
+				enabled = false,
 				dev = true,
 				dir = "~/projects/vim-over/wt-master",
 				cmd = { "OverCommandLine" },
@@ -688,7 +668,7 @@ return {
 								["<C-t>"] = actions.select_tab,
 								-- ["<C-t>"] = trouble.open_with_trouble,
 								-- ["<C-e>"] = open_with_trouble,
-                ["<C-l>"] = require("telescope.actions.layout").toggle_preview,
+								["<C-l>"] = require("telescope.actions.layout").toggle_preview,
 								-- ["<C-o>"] = require("telescope.actions.layout").toggle_preview,
 								-- ["<C-t>"] = trouble.open_with_trouble,
 

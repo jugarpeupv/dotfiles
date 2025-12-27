@@ -11,7 +11,7 @@ return {
 		dependencies = {
 			"onsails/lspkind.nvim",
 			"Kaiser-Yang/blink-cmp-git",
-			-- "Kaiser-Yang/blink-cmp-avante",
+			"Kaiser-Yang/blink-cmp-avante",
 			"rafamadriz/friendly-snippets",
 			-- "moyiz/blink-emoji.nvim",
 			-- "MahanRahmati/blink-nerdfont.nvim",
@@ -101,16 +101,15 @@ return {
 					function(cmp)
 						local filetype = vim.bo.filetype
 						if filetype == "" then
-
-              -- vim.api.nvim_feedkeys(t("<CR>"), "n", true)
-              local t = function(str)
-                return vim.api.nvim_replace_termcodes(str, true, true, true)
-              end
+							-- vim.api.nvim_feedkeys(t("<CR>"), "n", true)
+							local t = function(str)
+								return vim.api.nvim_replace_termcodes(str, true, true, true)
+							end
 							vim.api.nvim_feedkeys(t("<CR>"), "n", false)
 							return
 						elseif cmp.is_menu_visible() and cmp.get_selected_item() then
 							return cmp.select_and_accept()
-              -- return cmp.select()
+							-- return cmp.select()
 						end
 					end,
 					"fallback",
@@ -203,12 +202,12 @@ return {
 				},
 				documentation = { window = { border = "rounded" }, auto_show = true },
 				menu = {
-          auto_show = true,
-          -- Delay before showing the completion menu while typing
-          -- auto_show_delay_ms = 100,
-					-- auto_show = function()
-					--        return vim.bo.filetype ~= 'codecompanion'
-					--      end,
+					-- auto_show = true,
+					-- Delay before showing the completion menu while typing
+					-- auto_show_delay_ms = 100,
+					auto_show = function()
+						return vim.bo.filetype ~= "codecompanion"
+					end,
 					border = "rounded",
 					draw = {
 						columns = {
@@ -283,12 +282,13 @@ return {
 					-- "conventional_commits",
 				},
 				per_filetype = {
-          ["codecompanion"] = {},
-          ["octo"] = {
+					["opencode"] = { "buffer", "path" },
+					["codecompanion"] = { "buffer", "path" },
+					["octo"] = {
 						"git",
 						"lsp",
 						"path",
-            "buffer",
+						"buffer",
 						-- "emoji",
 						-- "nerdfont",
 						"conventional_commits",
@@ -300,7 +300,7 @@ return {
 						"buffer",
 					},
 					-- ["md"] = {},
-          ["markdown"] = { "buffer", "lsp" },
+					["markdown"] = { "buffer", "lsp" },
 					["copilot-chat"] = { "buffer" },
 					["AvanteInput"] = { "avante", "lsp", "buffer" },
 				},
@@ -326,7 +326,7 @@ return {
 											-- Your custom user list
 											local custom_users = {
 												"GPJULI6_mapfre",
-                        "RFERRA3_mapfre",
+												"RFERRA3_mapfre",
 												"GDMARI2_mapfre",
 												"ABENAV1_mapfre",
 												"VVILAS1_mapfre",

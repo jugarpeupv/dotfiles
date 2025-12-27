@@ -2,6 +2,31 @@
   "$schema": "https://opencode.ai/config.json",
   // Theme configuration
   "theme": "catppuccin-transparent",
+  "model": "github-copilot/gpt-5.1-codex",
+  "mcp": {
+    "nx": {
+      "type": "local",
+      "command": [
+        "npx",
+        "nx-mcp@latest"
+      ],
+      "environment": {
+        "npm_config_registry": "https://registry.npmjs.org"
+      },
+    },
+    "tavily": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "tavily-mcp"
+      ],
+      "environment": {
+        "TAVILY_API_KEY": "{env:TAVILY_API_KEY}",
+        "npm_config_registry": "https://registry.npmjs.org"
+      }
+    }
+  },
   "autoupdate": true,
   "keybinds": {
     "leader": "ctrl+x",
