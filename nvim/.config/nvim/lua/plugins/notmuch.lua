@@ -20,7 +20,7 @@ return {
 			{
 				mode = { "n" },
 				"<leader>nn",
-				"<cmd>NmSearch tag:inbox and tag:unread and not tag:github<cr>",
+				"<cmd>NmSearch tag:inbox and tag:unread and tag:izertis and not tag:github<cr>",
 				{ silent = true },
 			},
 

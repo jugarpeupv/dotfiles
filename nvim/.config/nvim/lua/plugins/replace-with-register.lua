@@ -17,14 +17,17 @@ return {
 			local utils = require("yanky.utils")
 			local mapping = require("yanky.telescope.mapping")
 			require("yanky").setup({
-				ring = { storage = "sqlite" },
+				ring = {
+					storage = "sqlite",
+					history_length = 200,
+				},
 				highlight = {
 					on_put = false,
 					on_yank = false,
 					timer = 500,
 				},
 				preserve_cursor_position = {
-					enabled = false,
+					enabled = true,
 				},
 				textobj = {
 					enabled = true,
@@ -51,14 +54,14 @@ return {
 			})
 		end,
 		keys = {
-      {
-        "<M-`>",
-        function()
-          require("telescope").extensions.yank_history.yank_history()
-        end,
-        mode = { "i", "x", "n" },
-        desc = "Open Yank History",
-      },
+			{
+				"<M-`>",
+				function()
+					require("telescope").extensions.yank_history.yank_history()
+				end,
+				mode = { "i", "x", "n", "c" },
+				desc = "Open Yank History",
+			},
 			{
 				"<leader>cl",
 				function()

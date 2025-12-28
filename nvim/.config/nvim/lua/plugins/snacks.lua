@@ -116,7 +116,8 @@ return {
 						["<c-d>"] = { "list_scroll_down", mode = { "i", "n" } },
 						-- ["<c-f>"] = { "preview_scroll_down", mode = { "i", "n" } },
 						["<PageDown>"] = { "preview_scroll_down", mode = { "i", "n" } },
-						["<c-g>"] = { "toggle_live", mode = { "i", "n" } },
+						-- ["<c-g>"] = { "toggle_live", mode = { "i", "n" } },
+            ["<c-space>"] = { "toggle_live", mode = { "i", "n" } },
 						["<c-j>"] = { "list_down", mode = { "i", "n" } },
 						["<c-k>"] = { "list_up", mode = { "i", "n" } },
 						["<c-n>"] = { "list_down", mode = { "i", "n" } },
@@ -479,7 +480,7 @@ return {
 				-- end
 
         Snacks.picker.files({
-          cmd = "rg",
+          -- cmd = "rg",
           hidden = true,
           exclude = {
             ".git",

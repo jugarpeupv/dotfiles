@@ -1,7 +1,7 @@
 IMAPAccount izertis
 Host localhost
 Port 1143
-User julio.garcia@izertis.com
+UserCmd "op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal"
 Pass ""
 TLSType None
 AuthMech LOGIN
@@ -28,5 +28,30 @@ Sync All
 
 
 
+IMAPAccount gmail-personal
+Host imap.gmail.com
+Port 993
+TLSType IMAPS
+UserCmd "op item get v3hyvpc4e7oapibxqso4rferiy --field username --reveal"
+AuthMechs XOAUTH2
+PassCmd "mutt_oauth2.py ~/.config/mbsync/personal@gmail.com.tokens --provider google --format token --encryption-pipe 'gpg --decrypt'"
+
+IMAPStore gmail-personal-remote
+Account gmail-personal
+
+MaildirStore gmail-personal-local
+Path ~/Mail/gmail-personal/
+Inbox ~/Mail/gmail-personal/INBOX
+SubFolders Verbatim
+
+Channel gmail-personal-channel
+Far :gmail-personal-remote:
+Near :gmail-personal-local:
+Create Both
+Expunge Both
+Patterns *
+SyncState *
+CopyArrivalDate yes
+Sync All
 
 

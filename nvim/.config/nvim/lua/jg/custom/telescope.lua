@@ -829,7 +829,7 @@ M.oil_fzf_dir = function(path, no_ignore)
 		"node_modules",
 		-- "--one-file-system",
 		"--max-depth",
-		"4",
+		"3",
 		"--hidden",
 	}
 
@@ -1235,6 +1235,8 @@ M.notmuch_picker = function(opts)
 	local function getaddresses()
 		local file =
 			io.popen("notmuch address --format=json --deduplicate=address '*' | jq -r '.[] | .[\"name-addr\"]'")
+    --   io.popen("notmuch address --format=json --deduplicate=address -- 'tag:izertis' | jq -r '.[] | .[\"name-addr\"]'")
+    -- io.popen("notmuch address --format=json --deduplicate=address -- 'tag:personal' | jq -r '.[] | .[\"name-addr\"]'")
 		local addresses = {}
 
 		if file == nil then

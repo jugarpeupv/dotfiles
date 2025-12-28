@@ -9,8 +9,8 @@ logfile        ~/.config/msmtp/msmtp.log
 account        izertis
 host           localhost
 port           1025
-from           julio.garcia@izertis.com
-user           julio.garcia@izertis.com
+eval echo user $(op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal)
+eval echo from $(op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal)
 passwordeval   op item get u6k3e4k4gzbmxl76zbxphtutyi --field password --reveal
 
 account default : izertis

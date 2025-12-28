@@ -2,7 +2,7 @@ return {
   { 'cohama/lexima.vim', enabled = false },
 	{
 		"saghen/blink.pairs",
-		enabled = true,
+		enabled = false,
 		version = "*",
 		event = { "InsertEnter", "LspAttach" },
 		dependencies = "saghen/blink.download",
@@ -22,7 +22,7 @@ return {
 							if ctx:text_after_cursor(1) == "" or ctx:text_after_cursor(1) == " " then
 								return true
 							end
-							if ctx:text_after_cursor(1) == ")" then
+							if ctx:text_after_cursor(1) == "}" then
 								return true
 							end
 							return false
@@ -34,6 +34,28 @@ return {
 							return false
 						end,
 					},
+          ["["] = {
+            "]",
+            open = function(ctx)
+              if
+                ctx:text_after_cursor(1) == ""
+                or ctx:text_after_cursor(1) == " "
+                or ctx:text_after_cursor(1) == "]"
+              then
+                return true
+              end
+              return false
+            end,
+            close = function(ctx)
+              if
+                (ctx:text_before_cursor(1) == "[" or ctx:text_before_cursor(1) == "]")
+                and ctx:text_after_cursor(1) == "]"
+              then
+                return true
+              end
+              return false
+            end,
+          },
 					["("] = {
 						")",
 						open = function(ctx)
@@ -59,7 +81,7 @@ return {
 				},
 			},
 			highlights = {
-				enabled = true,
+				enabled = false,
 				cmdline = true,
 				groups = {
 					"TSRainbowBlue",
@@ -68,7 +90,7 @@ return {
 				},
 				unmatched_group = "BlinkPairsUnmatched",
 				matchparen = {
-					enabled = true,
+					enabled = false,
 					-- known issue where typing won't update matchparen highlight, disabled by default
 					cmdline = false,
 					include_surrounding = true,
