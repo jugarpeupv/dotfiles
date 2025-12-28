@@ -14,3 +14,15 @@ eval echo from $(op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --revea
 passwordeval   op item get u6k3e4k4gzbmxl76zbxphtutyi --field password --reveal
 
 account default : izertis
+
+
+
+account        gmail
+host           smtp.gmail.com
+port           587
+auth           oauthbearer
+tls            on
+tls_starttls   on
+eval echo user $(op item get v3hyvpc4e7oapibxqso4rferiy --field username --reveal)
+eval echo from $(op item get v3hyvpc4e7oapibxqso4rferiy --field username --reveal)
+passwordeval   mutt_oauth2.py ~/.config/mbsync/personal@gmail.com.tokens --provider google --format token --encryption-pipe 'gpg --decrypt'
