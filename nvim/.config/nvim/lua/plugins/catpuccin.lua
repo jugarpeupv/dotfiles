@@ -425,6 +425,7 @@ return {
 						CompileModeCheckTarget = { fg = "#FAB387" },
             -- BlinkPairsUnmatched = { fg = "#F38BA8", style = { "bold" } },
             BlinkPairsUnmatched = { fg = "#F38BA8" },
+            OpencodeDiffAdd = { bg = "#103235" },
 					}
 				end,
 			})

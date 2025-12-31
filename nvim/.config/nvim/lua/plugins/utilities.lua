@@ -40,6 +40,7 @@ return {
 	},
 	{
 		"chrisgrieser/nvim-early-retirement",
+		enabled = false,
 		event = "LspAttach",
 		opts = {
 			retirementAgeMins = 10,
@@ -298,6 +299,7 @@ return {
 		-- event = { "Lazy" },
 		config = function()
 			vim.api.nvim_del_keymap("i", "<C-X><C-A>")
+      vim.api.nvim_del_keymap("c", "<C-f>")
 			-- vim.api.nvim_del_keymap("i", "<C-f>")
 			-- vim.api.nvim_del_keymap("i", "<C-b>")
 			-- vim.api.nvim_set_keymap("i", "<C-f>", "<S-Right>", { noremap = true, silent = true })
@@ -770,9 +772,11 @@ return {
 		-- end,
 	},
 	{ "sam4llis/nvim-lua-gf", keys = { "gf" } },
+	{ "wlemuel/vim-tldr", cmd = { "Tldr", "Telescope" } },
 	{
 		"tldr-pages/tldr-neovim-extension",
 		cmd = { "Tldr", "Telescope" },
+		enabled = false,
 		dependencies = {
 			"nvim-telescope/telescope.nvim",
 		},

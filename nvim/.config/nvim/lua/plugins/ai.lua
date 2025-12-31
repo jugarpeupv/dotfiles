@@ -479,9 +479,10 @@ return {
 		dev = true,
 		dir = "~/work/tmp/opencode.nvim/wt-feature-auto_scroll_config",
 		lazy = true,
-		enabled = false,
+		enabled = true,
 		keys = {
 			{
+        mode = { "n", "v" },
 				"<C-.>",
 				function()
 					require("opencode.api").toggle()
@@ -530,7 +531,7 @@ return {
 					},
 					input_window = {
 						["<esc>"] = false, -- Close UI windows
-						["<cr>"] = { "submit_input_prompt", mode = { "n", "i" } }, -- Submit prompt (normal mode and insert mode)
+						["<cr>"] = { "submit_input_prompt", mode = { "n" } }, -- Submit prompt (normal mode and insert mode)
 						["<c-s>"] = { "submit_input_prompt", mode = { "i" } }, -- Submit prompt (normal mode and insert mode)
 						["q"] = { "close" }, -- Close UI windows
 						["<C-c>"] = { "cancel" }, -- Cancel opencode request while it is running
@@ -603,7 +604,6 @@ return {
 							show_output = true,
 							show_reasoning_output = true,
 						},
-						auto_scroll = false,
 						always_scroll_to_bottom = false,
 					},
 					input = {

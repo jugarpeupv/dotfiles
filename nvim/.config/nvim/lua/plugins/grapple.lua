@@ -1,7 +1,9 @@
 -- return {}
 return {
 	{
-		"cbochs/grapple.nvim",
+		-- "cbochs/grapple.nvim",
+    dir = "~/projects/grapple.nvim/wt-main",
+    dev = true,
 		enabled = true,
 		keys = {
 			{
@@ -115,7 +117,7 @@ return {
 					end
 
 					require("telescope").extensions.grapple.tags({
-						layout_strategy = 'bottom_pane',
+						layout_strategy = "bottom_pane",
 						layout_config = {
 							bottom_pane = { width = 1, height = 0.47, preview_width = 0.40 },
 						},
@@ -143,13 +145,13 @@ return {
 			{ "<leader>3", "<cmd>Grapple select index=3<cr>", desc = "Select third tag" },
 			{ "<leader>4", "<cmd>Grapple select index=4<cr>", desc = "Select fourth tag" },
 			{ "<leader>5", "<cmd>Grapple select index=5<cr>", desc = "Select fifth tag" },
-      { "<leader>6", "<cmd>Grapple select index=6<cr>", desc = "Select fifth tag" },
-      { "<leader>7", "<cmd>Grapple select index=7<cr>", desc = "Select fifth tag" },
+			{ "<leader>6", "<cmd>Grapple select index=6<cr>", desc = "Select fifth tag" },
+			{ "<leader>7", "<cmd>Grapple select index=7<cr>", desc = "Select fifth tag" },
 		},
 		config = function()
 			require("grapple").setup({
 				scope = "worktree",
-        style = "basename",
+				style = "relative",
 				---Default command to use when selecting a tag
 				---@type fun(path: string)
 				command = function(path)
@@ -166,6 +168,29 @@ return {
 					local actual_path = actual_worktree_dir .. "/" .. last_part
 					vim.cmd("edit " .. actual_path)
 				end,
+
+        ---Additional window options for Grapple windows
+        ---See :h nvim_open_win
+        ---@type grapple.vim.win_opts
+        win_opts = {
+          -- Can be fractional
+          width = 150,
+          height = 12,
+          row = 0.5,
+          col = 0.5,
+
+          relative = "editor",
+          border = "single",
+          focusable = false,
+          style = "minimal",
+
+          title = "Grapple", -- fallback title for Grapple windows
+          title_pos = "center",
+          title_padding = " ", -- custom: adds padding around window title
+
+          -- footer = "", -- disable footer
+          footer_pos = "center",
+        },
 				scopes = {
 					{
 						name = "worktree",

@@ -25,4 +25,4 @@ tls            on
 tls_starttls   on
 eval echo user $(op item get v3hyvpc4e7oapibxqso4rferiy --field username --reveal)
 eval echo from $(op item get v3hyvpc4e7oapibxqso4rferiy --field username --reveal)
-passwordeval   mutt_oauth2.py ~/.config/mbsync/personal@gmail.com.tokens --provider google --format token --encryption-pipe 'gpg --decrypt'
+passwordeval   mutt_oauth2.py ~/.config/mbsync/personal@gmail.com.tokens --provider google --format token

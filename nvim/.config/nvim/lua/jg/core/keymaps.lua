@@ -162,6 +162,10 @@ vim.keymap.set({ "n" }, "<leader>fw", function()
 	require("jg.custom.telescope").telescope_file_picker_in_workspace(vim.fn.expand("~"))
 end, opts)
 
+vim.keymap.set("n", "<leader>fs", function()
+	require("jg.custom.telescope").telescope_live_grep_in_workspace(vim.fn.expand("~"))
+end, opts)
+
 vim.keymap.set({ "n" }, "so", function()
 	require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
 end, opts)
@@ -477,9 +481,9 @@ vim.keymap.set("n", "<leader>tr", function()
 	require("telescope.builtin").resume()
 end, opts)
 -- keymap("n", "<leader>tm", function() require('telescope.builtin').node_modules list end, opts)
-vim.keymap.set("n", "<leader>fs", function()
-	require("telescope.builtin").grep_string({ search = vim.fn.input("Grep For > ") })
-end, opts)
+-- vim.keymap.set("n", "<leader>fs", function()
+-- 	require("telescope.builtin").grep_string({ search = vim.fn.input("Grep For > ") })
+-- end, opts)
 
 vim.keymap.set({ "n", "v" }, "<leader>fR", function()
 	require("telescope.builtin").egrepify()
@@ -1861,3 +1865,18 @@ vim.keymap.set("n", "<left>", "10zh")
 vim.keymap.set("n", "<right>", "10zl")
 
 vim.keymap.set("n", "<C-i>", "<C-i>", { noremap = true })
+
+vim.keymap.set("n", "gy", function()
+	local path = vim.fn.expand("%:p")
+	vim.fn.setreg("+", path)
+	vim.notify("Copied: " .. path)
+end, { desc = "Yank absolute file path to clipboard" })
+
+
+-- vim.keymap.set('x', 'an', function()
+--   vim.lsp.buf.selection_range('outer')
+-- end, { desc = "vim.lsp.buf.selection_range('outer')" })
+--
+-- vim.keymap.set('x', 'in', function()
+--   vim.lsp.buf.selection_range('inner')
+-- end, { desc = "vim.lsp.buf.selection_range('inner')" })

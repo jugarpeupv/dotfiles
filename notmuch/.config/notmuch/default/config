@@ -14,6 +14,7 @@
 # the database location (in a subdirectory called ".notmuch").
 #
 [database]
+; mail_root=/Users/jgarcia/Mail
 path=/Users/jgarcia/Mail
 # User configuration
 #
@@ -31,7 +32,6 @@ path=/Users/jgarcia/Mail
 # address to which the original email was addressed.
 #
 [user]
-primary_email=julio.garcia@izertis.com
 # Configuration for "notmuch new"
 #
 # The following options are supported here:

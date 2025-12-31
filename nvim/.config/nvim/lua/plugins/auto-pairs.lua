@@ -1,5 +1,17 @@
 return {
-  { 'cohama/lexima.vim', enabled = false },
+	{
+		"cohama/lexima.vim",
+		enabled = true,
+    event = { "InsertEnter" },
+		config = function()
+      vim.g.lexima_enable_space_rules = 0
+      vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': '(', 'input': '('})]])
+			vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': '[', 'input': '['})]])
+			vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': '{', 'input': '{'})]])
+      vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': '"', 'input': '"'})]])
+      vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': "'", 'input': "'"})]])
+		end,
+	},
 	{
 		"saghen/blink.pairs",
 		enabled = false,
@@ -34,28 +46,28 @@ return {
 							return false
 						end,
 					},
-          ["["] = {
-            "]",
-            open = function(ctx)
-              if
-                ctx:text_after_cursor(1) == ""
-                or ctx:text_after_cursor(1) == " "
-                or ctx:text_after_cursor(1) == "]"
-              then
-                return true
-              end
-              return false
-            end,
-            close = function(ctx)
-              if
-                (ctx:text_before_cursor(1) == "[" or ctx:text_before_cursor(1) == "]")
-                and ctx:text_after_cursor(1) == "]"
-              then
-                return true
-              end
-              return false
-            end,
-          },
+					["["] = {
+						"]",
+						open = function(ctx)
+							if
+								ctx:text_after_cursor(1) == ""
+								or ctx:text_after_cursor(1) == " "
+								or ctx:text_after_cursor(1) == "]"
+							then
+								return true
+							end
+							return false
+						end,
+						close = function(ctx)
+							if
+								(ctx:text_before_cursor(1) == "[" or ctx:text_before_cursor(1) == "]")
+								and ctx:text_after_cursor(1) == "]"
+							then
+								return true
+							end
+							return false
+						end,
+					},
 					["("] = {
 						")",
 						open = function(ctx)

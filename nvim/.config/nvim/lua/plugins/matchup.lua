@@ -3,19 +3,28 @@ return {
 	-- enabled = false,
 	"andymass/vim-matchup",
 	enabled = true,
-  lazy = true,
+	lazy = true,
 	-- dependencies = { "nvim-treesitter/nvim-treesitter" },
 	event = { "VeryLazy" },
-  -- event = { "LspAttach" },
+	-- event = { "LspAttach" },
 	-- event = { "BufReadPost", "BufNewFile" },
 	-- keys = { { mode = "n", "%" } },
 	config = function()
+		vim.keymap.set(
+			{ "n", "v" },
+			"<M-lt>",
+			"<Plug>(matchup-hi-surround)",
+			{ silent = true, desc = "Highlight surrounding match" }
+		)
+
 		vim.g.matchup_matchparen_enabled = 0
-    vim.g.matchup_matchparen_hi_surround_always = 1
-    -- nmap <silent> <F7> <plug>(matchup-hi-surround)
-    vim.g.matchup_matchparen_deferred = 1
-    vim.g.matchup_matchparen_deferred_show_delay=300
-    vim.g.matchup_matchparen_stopline=200
+		vim.g.matchup_matchparen_hi_surround_always = 1
+    vim.g.matchup_matchparen_timeout = 100
+    vim.g.matchup_matchparen_insert_timeout = 20
+		-- nmap <silent> <F7> <plug>(matchup-hi-surround)
+		vim.g.matchup_matchparen_deferred = 1
+		vim.g.matchup_matchparen_deferred_show_delay = 60
+		vim.g.matchup_matchparen_stopline = 100
 		vim.g.matchup_matchpref = {
 			xml = { tagnameonly = 1 },
 			svelte = { tagnameonly = 1 },
@@ -30,32 +39,32 @@ return {
 		vim.g.matchup_matchparen_end_sign = "󱐋"
 		vim.g.matchup_treesitter_include_match_words = 1
 
-    -- https://github.com/andymass/vim-matchup/issues/416
-    vim.g.matchup_treesitter_disabled = { "markdown" }
+		-- https://github.com/andymass/vim-matchup/issues/416
+		vim.g.matchup_treesitter_disabled = { "markdown" }
 
-    vim.cmd("NoMatchParen")
-    vim.cmd("DoMatchParen")
+		vim.cmd("NoMatchParen")
+		vim.cmd("DoMatchParen")
 
-    -- vim.api.nvim_create_autocmd("BufEnter", {
-    --   callback = function()
-    --     if vim.bo.filetype ~= "markdown" and not vim.g.matchup_activated then
-    --       print('activating matchup')
-    --       vim.cmd("NoMatchParen")
-    --       vim.cmd("DoMatchParen")
-    --       vim.g.matchup_activated = true
-    --     end
-    --   end,
-    -- })
-    -- local match_parent_active = false
+		-- vim.api.nvim_create_autocmd("BufEnter", {
+		--   callback = function()
+		--     if vim.bo.filetype ~= "markdown" and not vim.g.matchup_activated then
+		--       print('activating matchup')
+		--       vim.cmd("NoMatchParen")
+		--       vim.cmd("DoMatchParen")
+		--       vim.g.matchup_activated = true
+		--     end
+		--   end,
+		-- })
+		-- local match_parent_active = false
 
-    -- vim.keymap.set("n", "%", function()
-    --   if not match_parent_active then
-    --     match_parent_active = true
-    --     vim.cmd("DoMatchParen")
-    --     match_parent_active = false
-    --   end
-    --   vim.api.nvim_feedkeys("%", "n", false)
-    -- end, { noremap = true, silent = true })
+		-- vim.keymap.set("n", "%", function()
+		--   if not match_parent_active then
+		--     match_parent_active = true
+		--     vim.cmd("DoMatchParen")
+		--     match_parent_active = false
+		--   end
+		--   vim.api.nvim_feedkeys("%", "n", false)
+		-- end, { noremap = true, silent = true })
 		-- vim.cmd("NoMatchParen")
 		-- vim.cmd("DoMatchParen")
 	end,

@@ -34,7 +34,7 @@ Port 993
 TLSType IMAPS
 UserCmd "op item get v3hyvpc4e7oapibxqso4rferiy --field username --reveal"
 AuthMechs XOAUTH2
-PassCmd "mutt_oauth2.py ~/.config/mbsync/personal@gmail.com.tokens --provider google --format token --encryption-pipe 'gpg --decrypt'"
+PassCmd "mutt_oauth2.py ~/.config/mbsync/personal@gmail.com.tokens --provider google --format token"
 
 IMAPStore gmail-personal-remote
 Account gmail-personal

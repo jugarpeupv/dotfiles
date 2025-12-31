@@ -14,6 +14,7 @@ local function clear_workspace_cache_for(path)
 	workspace_cache[get_workspace_key(path)] = nil
 end
 
+
 -- git branch --set-upstream-to=origin/release release Selection:  {
 --   authorname = "Garcia Perera, Julio",
 --   committerdate = "2024/11/06 09:59:49",
@@ -805,6 +806,115 @@ M.telescope_file_picker_in_workspace = function(path, no_ignore)
 	local cached = workspace_cache[key]
 	if cached and vim.fn.isdirectory(cached) == 1 then
 		show_files_picker(cached)
+	else
+		open_workspace_picker()
+	end
+end
+
+M.telescope_live_grep_in_workspace = function(path, no_ignore)
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local conf = require("telescope.config").values
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+	local telescope_builtin = require("telescope.builtin")
+	local key = get_workspace_key(path)
+	local open_workspace_picker
+
+	local function build_additional_args()
+		local args = { "--hidden", "--glob", "!.git", "--glob", "!*__template__", "--glob", "!*DS_Store" }
+		if no_ignore then
+			table.insert(args, "--no-ignore")
+		end
+		return args
+	end
+
+	local function show_live_grep(dir)
+		telescope_builtin.live_grep({
+			cwd = dir,
+			prompt_title = "Live grep in: " .. dir,
+			additional_args = build_additional_args,
+			attach_mappings = function(prompt_bufnr, map)
+				local function reopen_workspace_picker()
+					clear_workspace_cache_for(path)
+					workspace_cache[key] = nil
+					actions.close(prompt_bufnr)
+					open_workspace_picker()
+				end
+
+				map("i", "<C-b>", reopen_workspace_picker)
+				map("n", "<C-b>", reopen_workspace_picker)
+
+				return true
+			end,
+		})
+	end
+
+	open_workspace_picker = function()
+		local find_command = {
+			"fd",
+			".",
+			path,
+			"--type",
+			"d",
+			"--exclude",
+			".git",
+			"--exclude",
+			"node_modules",
+			"--max-depth",
+			"3",
+			"--hidden",
+		}
+
+		if no_ignore then
+			table.insert(find_command, "--no-ignore")
+		end
+
+		local function escape_pattern(text)
+			return text:gsub("([^%w])", "%%%1")
+		end
+
+		local escaped_path = escape_pattern(path)
+
+		pickers
+			.new({}, {
+				prompt_title = 'Select a dir and live grep: "' .. path:gsub(os.getenv("HOME"), "~") .. '"',
+				finder = finders.new_oneshot_job(find_command, {
+					entry_maker = function(entry)
+						local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
+						return {
+							value = entry,
+							display = function()
+								local display_string
+								if string.find(path, os.getenv("HOME")) then
+									display_string = "  ~/" .. entry_substituted
+								else
+									display_string = "  " .. entry_substituted
+								end
+								return display_string, { { { 0, 1 }, "Directory" } }
+							end,
+							ordinal = entry,
+						}
+					end,
+				}),
+				sorter = conf.generic_sorter({}),
+				attach_mappings = function(prompt_bufnr)
+					actions.select_default:replace(function()
+						local selection = action_state.get_selected_entry()
+						workspace_cache[key] = selection.value
+						actions.close(prompt_bufnr)
+						show_live_grep(selection.value)
+					end)
+
+					return true
+				end,
+			})
+			:find()
+	end
+
+	local cached = workspace_cache[key]
+	if cached and vim.fn.isdirectory(cached) == 1 then
+		show_live_grep(cached)
 	else
 		open_workspace_picker()
 	end

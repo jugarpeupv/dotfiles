@@ -1,9 +1,27 @@
 -- return {}
 return {
 	{
+		"nvim-mini/mini.ai",
+		version = "*",
+		event = "LspAttach",
+		config = function()
+			require("mini.ai").setup({
+				custom_textobjects = vim.tbl_extend("force", require("mini.ai").config.custom_textobjects or {}, {
+					-- Alias “B” → only square or curly brackets
+					B = {
+						{ "%b[]", "%b{}" }, -- balanced [] or {}
+						"^.().*().$", -- use captures to distinguish `a` vs `i`
+					},
+
+					-- optionally keep the stock “b” alias untouched by *not* redefining it
+				}),
+			})
+		end,
+	},
+	{
 		"nvim-treesitter/nvim-treesitter",
 		lazy = true,
-    event = "VeryLazy",
+		event = "VeryLazy",
 		branch = "main",
 		build = ":TSUpdate",
 		config = function()
@@ -21,12 +39,12 @@ return {
 				local ok = pcall(vim.treesitter.start, buf, lang)
 				if ok then
 					vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-          vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-          vim.wo[0][0].foldmethod = "expr"
-          -- vim.schedule(function ()
-          --   vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-          --   vim.wo[0][0].foldmethod = "expr"
-          -- end)
+					vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+					vim.wo[0][0].foldmethod = "expr"
+					-- vim.schedule(function ()
+					--   vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+					--   vim.wo[0][0].foldmethod = "expr"
+					-- end)
 				end
 				return ok
 			end
@@ -137,7 +155,7 @@ return {
 
 			local ignore_filetypes = {
 				"checkhealth",
-        "codecompanion",
+				"codecompanion",
 				"lazy",
 				"mason",
 				"snacks_dashboard",
@@ -322,11 +340,11 @@ return {
 	-- 		})
 	-- 	end,
 	-- },
-	{ "wellle/targets.vim", lazy = true, event = { "VeryLazy" } },
+	{ "wellle/targets.vim", lazy = true, event = { "VeryLazy" }, enabled = true },
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		branch = "main",
-    event = { "LspAttach" },
+		event = { "LspAttach" },
 		keys = {
 			{
 				mode = { "x", "o" },
@@ -408,7 +426,7 @@ return {
 	},
 	{
 		"chrisgrieser/nvim-various-textobjs",
-    event = { "InsertEnter", "LspAttach" },
+		event = { "InsertEnter", "LspAttach" },
 		keys = {
 			{ mode = { "o", "x" }, "as", "<cmd>lua require('various-textobjs').subword('outer')<CR>" },
 			{ mode = { "o", "x" }, "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>" },
@@ -425,7 +443,18 @@ return {
 		"nvim-treesitter/nvim-treesitter-context",
 		enabled = true,
 		lazy = true,
-		ft = { "json", "jsonc", "yaml", "yml", "yaml.github", "javascript", "typescript", "lua" },
+		-- ft = { "json", "jsonc", "yaml", "yml", "yaml.github", "javascript", "typescript", "lua" },
+		event = { "LspAttach" },
+		keys = {
+			{
+				mode = { "n" },
+				"<leader>co",
+				function()
+					require("treesitter-context").go_to_context(vim.v.count1)
+				end,
+				{ silent = true },
+			},
+		},
 		config = function()
 			require("treesitter-context").setup({
 				on_attach = function(buf)
@@ -443,7 +472,7 @@ return {
 				zindex = 20, -- The Z-index of the context window
 				mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
 				-- separator = nil,
-        separator = "–"
+				separator = "–",
 			})
 		end,
 	},

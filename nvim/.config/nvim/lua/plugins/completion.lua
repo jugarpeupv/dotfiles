@@ -2,7 +2,7 @@ return {
 	{
 		"saghen/blink.cmp",
 		enabled = true,
-		event = "InsertEnter",
+    event = {"InsertEnter", "CmdlineEnter" },
 		keys = {
 			"?",
 			"/",
@@ -206,7 +206,7 @@ return {
 					-- Delay before showing the completion menu while typing
 					-- auto_show_delay_ms = 100,
 					auto_show = function()
-						return vim.bo.filetype ~= "codecompanion"
+						return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode"
 					end,
 					border = "rounded",
 					draw = {

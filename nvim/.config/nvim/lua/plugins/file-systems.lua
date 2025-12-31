@@ -1,7 +1,21 @@
+
+function _G.FylerWinbarCwd()
+  local ok, fyler = pcall(require, "fyler")
+  if not ok or type(fyler.get_current_dir) ~= "function" then
+    print('hello')
+    return (vim.loop.cwd() or ""):gsub("^" .. vim.env.HOME, "~")
+  end
+  local dir = fyler.get_current_dir() or vim.loop.cwd() or ""
+  return dir:gsub("^" .. vim.env.HOME, "~")
+end
+
+
 -- return {}
 return {
 	{
-		"A7Lavinraj/fyler.nvim",
+		-- "A7Lavinraj/fyler.nvim",
+		dir = "~/projects/fyler.nvim/wt-feature-get_current_dir",
+		dev = true,
 		enabled = true,
 		lazy = true,
 		cmd = { "Fyler" },
@@ -79,6 +93,15 @@ return {
 								Ignored = " ",
 							},
 						},
+						diagnostic = {
+							enabled = true,
+							symbols = {
+								Error = " ",
+								Warn = " ",
+								Info = " ",
+								Hint = "󰠠 ",
+							},
+						},
 					},
 					-- Icons for directory states
 					icon = {
@@ -89,8 +112,10 @@ return {
 					-- Indentation guides
 					indentscope = {
 						enabled = true,
-						group = "FylerIndentMarker",
-						marker = "│",
+						markers = {
+							{ "│", "FylerIndentMarker" },
+							{ "└", "FylerIndentMarker" },
+						},
 					},
 					-- Key mappings
 					mappings = {
@@ -166,7 +191,9 @@ return {
 							},
 						},
 						win_opts = {
-							winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+							-- winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+              winbar = "%#NvimTreeRootFolder#%{v:lua.FylerWinbarCwd()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+							-- winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 							concealcursor = "nvic",
 							-- conceallevel = 3,
 							foldcolumn = "1",
@@ -180,6 +207,9 @@ return {
 				},
 			},
 		},
+    config = function(_, opts)
+      require("fyler").setup(opts)
+    end
 	},
 	{
 		"stevearc/oil.nvim",
@@ -274,8 +304,8 @@ return {
 				-- Oil will automatically delete hidden buffers after this delay
 				-- You can set the delay to false to disable cleanup entirely
 				-- Note that the cleanup process only starts when none of the oil buffers are currently displayed
-				-- cleanup_delay_ms = 2000,
-				cleanup_delay_ms = false,
+				cleanup_delay_ms = 30000,
+				-- cleanup_delay_ms = false,
 				lsp_file_methods = {
 					enabled = true,
 					-- Time to wait for LSP file operations to complete before skipping
@@ -422,6 +452,23 @@ return {
 							zaread:open()
 						end,
 					},
+					["gy"] = {
+						callback = function()
+							local oil = require("oil")
+							local dir = oil.get_current_dir()
+							local entry = oil.get_cursor_entry()
+
+							if not dir or not entry then
+								return
+							end
+
+							local path = vim.fn.fnamemodify(dir .. entry.name, ":p")
+
+							vim.fn.setreg("+", path)
+							vim.fn.setreg('"', path)
+							vim.notify("Copied path: " .. path, vim.log.levels.INFO)
+						end,
+					},
 					["gt"] = {
 						callback = function()
 							local oil = require("oil")
@@ -429,11 +476,11 @@ return {
 							local dir = oil.get_current_dir()
 							-- local term_map = require("terminal.mappings")
 							-- term_map.toggle(nil, { cwd = dir })
-							local htop = require("terminal").terminal:new({
+							local myterm = require("terminal").terminal:new({
 								layout = { open_cmd = "botright new" },
 								cwd = dir,
 							})
-							htop:open()
+							myterm:open()
 						end,
 					},
 					["gx"] = "actions.open_external",
