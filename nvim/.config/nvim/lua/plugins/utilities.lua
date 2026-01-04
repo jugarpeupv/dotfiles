@@ -1,5 +1,10 @@
 return {
 	{
+		"yuratomo/w3m.vim",
+    lazy = true,
+    cmd = { "W3m" }
+	},
+	{
 		"Avi-D-coder/whisper.nvim",
 		enabled = true,
 		config = function()
@@ -299,7 +304,7 @@ return {
 		-- event = { "Lazy" },
 		config = function()
 			vim.api.nvim_del_keymap("i", "<C-X><C-A>")
-      vim.api.nvim_del_keymap("c", "<C-f>")
+			vim.api.nvim_del_keymap("c", "<C-f>")
 			-- vim.api.nvim_del_keymap("i", "<C-f>")
 			-- vim.api.nvim_del_keymap("i", "<C-b>")
 			-- vim.api.nvim_set_keymap("i", "<C-f>", "<S-Right>", { noremap = true, silent = true })
@@ -1127,7 +1132,7 @@ return {
 	{ "stsewd/fzf-checkout.vim", keys = { { "<leader>GT", "<cmd>GTags<CR>" } } },
 	{ "tpope/vim-repeat", keys = { "." } },
 	{ "nvim-lua/plenary.nvim", lazy = true },
-	{ "tpope/vim-surround", event = { "BufReadPost", "BufNewFile" } },
+	{ "tpope/vim-surround", event = { "LspAttach" } },
 	{
 		"windwp/nvim-ts-autotag",
 		ft = { "html", "htmlangular" },

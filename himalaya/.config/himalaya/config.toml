@@ -12,7 +12,7 @@ display-name = "Izertis"
 #
 [accounts.izertis]
 default = true
-email = "julio.garcia@izertis.com"
+email = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal"
 display-name = "Izertis"
 signature = "/Users/jgarcia/.config/aerc/signatures/izertis-signature.txt"
 
@@ -22,7 +22,6 @@ backend.root-dir = "/Users/jgarcia/Mail/izertis"
 # backend.host = "localhost"
 # backend.port = 1143
 # backend.encryption.type = "none"
-# backend.login = "julio.garcia@izertis.com"
 # backend.auth.type = "password"
 # backend.auth.cmd = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field password --reveal"
 
@@ -34,7 +33,7 @@ message.send.backend.host = "localhost"
 message.send.backend.port = 1025
 
 message.send.backend.encryption.type = "none"
-message.send.backend.login = "julio.garcia@izertis.com"
+message.send.backend.login = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal"
 message.send.backend.auth.type = "password"
 message.send.backend.auth.cmd = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field password --reveal"
 

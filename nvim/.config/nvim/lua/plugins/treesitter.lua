@@ -158,9 +158,20 @@ return {
 				"codecompanion",
 				"lazy",
 				"mason",
+        "NvimTree",
+        "conf",
+        "opencode_footer",
+        "TelescopePrompt",
+        "fidget",
+        "DiffviewFiles",
+        "blink-cmp-menu",
+        "oil",
 				"snacks_dashboard",
+        "TelescopeResults",
 				"snacks_notif",
+        "text",
 				"snacks_win",
+        "bigfile"
 			}
 
 			-- Auto-install parsers and enable highlighting on FileType

@@ -10,7 +10,7 @@ export FZF_DEFAULT_OPTS="--reverse \
   --height=50% \
   --no-bold \
   --ansi \
-  --bind='ctrl-k:up,ctrl-j:down' \
+  --bind='ctrl-k:up,ctrl-j:down,ctrl-y:accept' \
   --color='pointer:#1abc9c:bold,bg+:#264F78,hl:#569CD6,hl+:#569CD6,gutter:-1,border:#394b70',header:#89ddff,spinner:#89ddff,info:#89ddff"
 
 export FZF_CTRL_R_OPTS="

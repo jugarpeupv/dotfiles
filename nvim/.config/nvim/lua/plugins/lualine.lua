@@ -11,7 +11,6 @@ return {
 		dependencies = {
 			{ "SmiteshP/nvim-navic" },
 		},
-		dev = true,
 		opts = {
 			-- configurations go here
 		},

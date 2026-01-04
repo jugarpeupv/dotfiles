@@ -1,6 +1,6 @@
 ## Neomutt davmail original config
 set realname = 'Julio Garcia'
-set from = 'julio.garcia@izertis.com'
+set from = 'op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal'
 set sendmail = "msmtp -a izertis"
 set header_cache = ~/.cache/mutt/izertis/headers
 set message_cachedir = ~/.cache/mutt/izertis/bodies
@@ -12,7 +12,7 @@ set record = "+Sent"
 set postponed = "+Drafts"
 # mailboxes =Trash =Sent =Junk =Github-notifications =Drafts =Archive =INBOX
 mailboxes =Trash =Sent =Junk =Github-notifications =Drafts =Archive
-set imap_user = 'julio.garcia@izertis.com'
+set imap_user = 'op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal'
 # set imap_check_subscribed
 
 set use_from = yes

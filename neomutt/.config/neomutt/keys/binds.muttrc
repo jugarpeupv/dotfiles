@@ -163,6 +163,5 @@ macro index,pager S "<sync-mailbox><shell-escape>((mbsync -a && notmuch new) &> 
 
 # macro index o "<shell-escape>mailsync -V ACCOUNT_ALIAS<enter>" "run mbsync to sync ACCOUNT_ALIAS"
 # Accept/decline a callendar invite
-# macro attach,pager A '<shell-escape>rm -vf /tmp/.mutt.ics<enter><save-entry><kill-line>/tmp/.mutt.ics<enter><shell-escape>mutt-ical -e julio.garcia@izertis.com /tmp/.mutt.ics<enter>'
 # macro attach,pager A '<shell-escape>rm -vf /tmp/.mutt.ics<enter><save-entry><kill-line>/tmp/.mutt.ics<enter>'
 

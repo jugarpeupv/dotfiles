@@ -7,5 +7,5 @@ export PATH="$NVM_BIN:$HOME/.bun/bin:$HOME/.pnpm:$HOME/.local/share/nvim/mason/b
 # mutt_oauth.py
 export SASL_PATH=/opt/homebrew/opt/cyrus-sasl/lib/sasl2;
 
-export DYLD_LIBRARY_PATH="/opt/homebrew/opt/girara/lib:$DYLD_LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="/opt/homebrew/opt/girara/lib:/opt/homebrew/lib:$DYLD_LIBRARY_PATH"
 export DYLD_FALLBACK_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_FALLBACK_LIBRARY_PATH"

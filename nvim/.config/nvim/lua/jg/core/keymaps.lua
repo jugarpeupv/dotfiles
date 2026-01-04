@@ -444,10 +444,10 @@ vim.keymap.set({ "n" }, "<leader>q", function()
 end, opts)
 
 -- keymap("t", "<leader>q", "<cmd>q!<CR>", opts)
-keymap("n", "<leader>nN", "<cmd>nohlsearch<CR>", opts)
+keymap("n", "<leader>nh", "<cmd>nohlsearch<CR>", opts)
 
 vim.keymap.set({ "n" }, "<leader>bi", function()
-	Snacks.picker.buffers({ finder = "buffers", title = "< IBuffers >" })
+	Snacks.picker.buffers({ finder = "buffers", hidden = true, title = "< IBuffers >" })
 
 	-- require("telescope.builtin").buffers({
 	-- 	prompt_title = "< IBuffers >",

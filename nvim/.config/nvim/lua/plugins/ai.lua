@@ -475,14 +475,14 @@ return {
 		},
 	},
 	{
-		-- "sudo-tee/opencode.nvim",
-		dev = true,
-		dir = "~/work/tmp/opencode.nvim/wt-feature-auto_scroll_config",
+		"sudo-tee/opencode.nvim",
+		-- dev = true,
+		-- dir = "~/work/tmp/opencode.nvim/wt-feature-auto_scroll_config",
 		lazy = true,
 		enabled = true,
 		keys = {
 			{
-        mode = { "n", "v" },
+        mode = { "n", "v"},
 				"<C-.>",
 				function()
 					require("opencode.api").toggle()
@@ -561,9 +561,9 @@ return {
 						["<leader>ods"] = { "debug_session" }, -- Open raw session in new buffer for debugging
 					},
 					permission = {
-						accept = "<C-x>a", -- Accept permission request once (only available when there is a pending permission request)
-						accept_all = "<C-x>A", -- Accept all (for current tool) permission request once (only available when there is a pending permission request)
-						deny = "<C-x>d", -- Deny permission request once (only available when there is a pending permission request)
+						accept = "a", -- Accept permission request once (only available when there is a pending permission request)
+						accept_all = "A", -- Accept all (for current tool) permission request once (only available when there is a pending permission request)
+						deny = "D", -- Deny permission request once (only available when there is a pending permission request)
 					},
 					session_picker = {
 						rename_session = { "<C-r>" }, -- Rename selected session in the session picker
@@ -604,6 +604,7 @@ return {
 							show_output = true,
 							show_reasoning_output = true,
 						},
+            auto_scroll = false,
 						always_scroll_to_bottom = false,
 					},
 					input = {

@@ -2,7 +2,7 @@ return {
 	{
 		"saghen/blink.cmp",
 		enabled = true,
-    event = {"InsertEnter", "CmdlineEnter" },
+		event = { "InsertEnter", "CmdlineEnter" },
 		keys = {
 			"?",
 			"/",
@@ -149,8 +149,33 @@ return {
 						function(cmp)
 							cmp.accept({
 								callback = function()
+									local items = cmp.get_items() or {}
+									local items_are_zero = #items <= 0
+									if items_are_zero then
+										return
+									end
+
+									local function every(tbl, predicate)
+										for k, v in pairs(tbl) do -- use ipairs for sequential arrays
+											if not predicate(v, k, tbl) then
+												return false
+											end
+										end
+										return true
+									end
+
 									vim.defer_fn(function()
-										cmp.show()
+										local all_next_items_are_files = false
+										all_next_items_are_files = every(items, function(value)
+											if value.filterText:sub(-1) ~= "/" then
+												return true
+											end
+										end)
+										if all_next_items_are_files then
+                      cmp.accept()
+										else
+                      cmp.show()
+										end
 									end, 100) -- 100 ms delay
 								end,
 							})

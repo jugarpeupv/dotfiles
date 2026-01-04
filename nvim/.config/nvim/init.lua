@@ -219,6 +219,7 @@ local function restore_last_worktree()
 	if not data or next(data) == nil or not data.last_active_wt then
 		vim.schedule(function()
 			require("oil").open(cwd)
+      -- require("fyler").open(cwd)
 		end)
 		return
 	end
@@ -226,6 +227,7 @@ local function restore_last_worktree()
 	vim.schedule(function()
 		vim.cmd.cd(last_active_wt)
 		require("oil").open(last_active_wt)
+    -- require("fyler").open(last_active_wt)
 	end)
 end
 

@@ -15,6 +15,12 @@ return {
 		},
 		keys = {
 			-- { mode = { "n" }, "<leader>nn", "<cmd>Notmuch<cr>", { silent = true } },
+      {
+        mode = { "n" },
+        "<leader>ns",
+        ":NmSearch tag:izertis subject:",
+        { noremap = true, silent = true },
+      },
 			{ mode = { "n" }, "<leader><space>", "<cmd>Notmuch<cr>", { silent = true } },
 
 			{

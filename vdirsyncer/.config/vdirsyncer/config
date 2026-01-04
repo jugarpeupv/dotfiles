@@ -44,7 +44,7 @@ fileext = ".vcf"
 [storage izertis_contacts_remote]
 type = "carddav"
 # url = "https://owncloud.example.com/remote.php/carddav/"
-url = "http://localhost:1080/users/julio.garcia@izertis.com/contacts/"
+url = "http://localhost:1080/users/$(op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal)/contacts/"
 username.fetch = ["command", "op", "item", "get", "u6k3e4k4gzbmxl76zbxphtutyi", "--field", "username", "--reveal"]
 password.fetch = ["command", "op", "item", "get", "u6k3e4k4gzbmxl76zbxphtutyi", "--field", "password", "--reveal"]
 
@@ -65,6 +65,6 @@ fileext = ".ics"
 [storage izertis_calendar_remote]
 type = "caldav"
 # url = "https://owncloud.example.com/remote.php/caldav/"
-url = "http://localhost:1080/users/julio.garcia@izertis.com/calendar/"
+url = "http://localhost:1080/users/$(op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal)/calendar/"
 username.fetch = ["command", "op", "item", "get", "u6k3e4k4gzbmxl76zbxphtutyi", "--field", "username", "--reveal"]
 password.fetch = ["command", "op", "item", "get", "u6k3e4k4gzbmxl76zbxphtutyi", "--field", "password", "--reveal"]

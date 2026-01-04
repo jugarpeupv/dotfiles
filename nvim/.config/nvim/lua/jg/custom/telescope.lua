@@ -15,22 +15,6 @@ local function clear_workspace_cache_for(path)
 end
 
 
--- git branch --set-upstream-to=origin/release release Selection:  {
---   authorname = "Garcia Perera, Julio",
---   committerdate = "2024/11/06 09:59:49",
---   display = <function 1>,
---   head = " ",
---   index = 24,
---   name = "origin/develop",
---   ordinal = "origin/develop",
---   upstream = "",
---   value = "origin/develop",
---   <metatable> = {
---     __index = <function 2>
---   }
--- }
--- Branch:  origin/develop
---
 local function branch_name()
 	local branch = vim.fn.system("git branch --show-current 2> /dev/null | tr -d '\n'")
 	if branch ~= "" then

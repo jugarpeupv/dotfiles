@@ -4,6 +4,11 @@ return {
 		lazy = true,
 		opts = {
 			override = {
+        keys = {
+          icon = "",
+          name = "keys",
+          color = "#F5C2E7",
+        },
         mfd = {
           icon = "󰘸",
           name = "mfd",

@@ -1,21 +1,18 @@
-
 function _G.FylerWinbarCwd()
-  local ok, fyler = pcall(require, "fyler")
-  if not ok or type(fyler.get_current_dir) ~= "function" then
-    print('hello')
-    return (vim.loop.cwd() or ""):gsub("^" .. vim.env.HOME, "~")
-  end
-  local dir = fyler.get_current_dir() or vim.loop.cwd() or ""
-  return dir:gsub("^" .. vim.env.HOME, "~")
+	local ok, fyler = pcall(require, "fyler")
+	if not ok or type(fyler.get_current_dir) ~= "function" then
+		return (vim.loop.cwd() or ""):gsub("^" .. vim.env.HOME, "~")
+	end
+	local dir = fyler.get_current_dir() or vim.loop.cwd() or ""
+	return dir:gsub("^" .. vim.env.HOME, "~")
 end
-
 
 -- return {}
 return {
 	{
-		-- "A7Lavinraj/fyler.nvim",
-		dir = "~/projects/fyler.nvim/wt-feature-get_current_dir",
-		dev = true,
+		"A7Lavinraj/fyler.nvim",
+		-- dir = "~/projects/fyler.nvim/wt-feature-get_current_dir",
+		-- dev = true,
 		enabled = true,
 		lazy = true,
 		cmd = { "Fyler" },
@@ -192,7 +189,7 @@ return {
 						},
 						win_opts = {
 							-- winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
-              winbar = "%#NvimTreeRootFolder#%{v:lua.FylerWinbarCwd()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+							winbar = "%#NvimTreeRootFolder#%{v:lua.FylerWinbarCwd()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 							-- winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 							concealcursor = "nvic",
 							-- conceallevel = 3,
@@ -207,9 +204,9 @@ return {
 				},
 			},
 		},
-    config = function(_, opts)
-      require("fyler").setup(opts)
-    end
+		config = function(_, opts)
+			require("fyler").setup(opts)
+		end,
 	},
 	{
 		"stevearc/oil.nvim",
@@ -262,7 +259,6 @@ return {
 			},
 		},
 		config = function()
-			---@diagnostic disable-next-line: param-type-not-match
 			require("oil").setup({
 				-- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
 				-- Set to false if you want some other plugin (e.g. netrw) to open when you edit directories.
@@ -1015,7 +1011,7 @@ return {
 				vim.keymap.set("n", "<CR>", function(node)
 					if vim.g.first_time_open == true then
 						local get_terminal_bufs = function()
-							return vim.tbl_filter(function(bufnr)
+							return vim.tbl_filter(function()
 								return vim.fn.getbufvar(bufnr, "&buftype") == "terminal"
 									and vim.fn.getbufvar(bufnr, "&ft") == ""
 							end, vim.api.nvim_list_bufs())
