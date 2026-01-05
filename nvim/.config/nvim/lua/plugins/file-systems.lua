@@ -246,9 +246,9 @@ return {
 		"stevearc/oil.nvim",
 		lazy = false,
 		-- cmd = { "Oil" },
-    dependencies = {
-      { "benomahony/oil-git.nvim", enabled = false, dev = true, dir = "~/projects/oil-git.nvim"  },
-    },
+		dependencies = {
+			{ "benomahony/oil-git.nvim", enabled = false, dev = true, dir = "~/projects/oil-git.nvim" },
+		},
 		keys = {
 			{
 				"-",
@@ -449,22 +449,84 @@ return {
 						end,
 						mode = "n",
 					},
-          ["."] = {
-            callback = function()
-              local oil = require("oil")
-              local dir = oil.get_current_dir()
-              if not dir then
-                return
-              end
-              -- Ensure trailing slash
-              if not dir:match("/$") then
-                dir = dir .. "/"
-              end
-              local cmd = string.format(":!wget -P %s ", vim.fn.shellescape(dir))
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd, true, false, true), "c", true)
-            end,
-            mode = "n",
-          },
+					["<M-b>"] = {
+						callback = function()
+							local oil = require("oil")
+							local entry = oil.get_cursor_entry()
+							local dir = oil.get_current_dir()
+
+							if not entry or not dir then
+								return
+							end
+
+							entry.name = entry.name:gsub(" ", "\\ ")
+							local path = dir .. entry.name
+
+							local cmd_run = string.format(":Compile  %s", path)
+							local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
+							vim.api.nvim_feedkeys(keys, "c", true)
+
+							local hops =
+								string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
+							vim.api.nvim_feedkeys(hops, "n", true)
+
+							-- vim.ui.input({ prompt = "Command to run on " .. entry.name .. ": " }, function(cmd)
+							-- 	if not cmd or cmd == "" then
+							-- 		return
+							-- 	end
+							-- 	-- local myterm = require("terminal").terminal:new({
+							-- 	-- 	layout = { open_cmd = "botright new" },
+							-- 	-- 	cwd = dir,
+							-- 	--           cmd = { cmd, path },
+							-- 	--           autoclose = false
+							-- 	-- })
+							-- 	-- myterm:open()
+							--
+							-- 	local cmd_run = string.format(":Bufferize !" .. cmd .. " " .. path)
+							-- 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd_run, true, false, true), "c", true)
+							-- end)
+						end,
+						mode = "n",
+					},
+					["."] = {
+						callback = function()
+							local oil = require("oil")
+							local entry = oil.get_cursor_entry()
+							local dir = oil.get_current_dir()
+
+							if not entry or not dir then
+								return
+							end
+
+							entry.name = entry.name:gsub(" ", "\\ ")
+							local path = dir .. entry.name
+
+							local cmd_run = string.format(":Bufferize ! %s", path)
+							local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
+							vim.api.nvim_feedkeys(keys, "c", true)
+
+							local hops =
+								string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
+							vim.api.nvim_feedkeys(hops, "n", true)
+
+							-- vim.ui.input({ prompt = "Command to run on " .. entry.name .. ": " }, function(cmd)
+							-- 	if not cmd or cmd == "" then
+							-- 		return
+							-- 	end
+							-- 	-- local myterm = require("terminal").terminal:new({
+							-- 	-- 	layout = { open_cmd = "botright new" },
+							-- 	-- 	cwd = dir,
+							-- 	--           cmd = { cmd, path },
+							-- 	--           autoclose = false
+							-- 	-- })
+							-- 	-- myterm:open()
+							--
+							-- 	local cmd_run = string.format(":Bufferize !" .. cmd .. " " .. path)
+							-- 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd_run, true, false, true), "c", true)
+							-- end)
+						end,
+						mode = "n",
+					},
 					-- ["."] = {
 					-- 	callback = function()
 					-- 		local oil = require("oil")
@@ -907,6 +969,33 @@ return {
 				-- vim.keymap.set("n", "U", function()
 				-- 	api_nvimtree.marks.clear()
 				-- end, opts("Delete marks"))
+
+				vim.keymap.set("n", "<M-b>", function()
+					local node = api_nvimtree.tree.get_node_under_cursor()
+					if node then
+						-- get directory of current file if it's a file
+						local path
+						if node.type == "directory" then
+							-- Keep the full path for directories
+							path = node.absolute_path
+						else
+							-- Get the directory of the file
+							path = vim.fn.fnamemodify(node.absolute_path, ":h")
+						end
+
+						local home = os.getenv("HOME")
+						if home then
+							path = path:gsub("^" .. home, "~")
+						end
+
+						local cmd_run = string.format(":Compile  %s", path)
+						local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
+						vim.api.nvim_feedkeys(keys, "c", true)
+
+						local hops = string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
+						vim.api.nvim_feedkeys(hops, "n", true)
+					end
+				end, opts("Search in directory"))
 
 				vim.keymap.set("n", "S", function()
 					local node = api_nvimtree.tree.get_node_under_cursor()

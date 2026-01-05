@@ -160,6 +160,7 @@ return {
         "git",
         "snacks_picker_preview",
         "fyler",
+        "bufferize",
         "snacks_picker_list",
         "snacks_picker_input",
         "snacks_layout_box",
