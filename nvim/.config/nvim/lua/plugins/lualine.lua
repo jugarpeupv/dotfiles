@@ -433,7 +433,7 @@ return {
 					},
 					-- lualine_b = { branch, ahead_behind_indicator },
 					lualine_b = {},
-					lualine_c = { diff_mode },
+          lualine_c = { diff_mode },
 					-- lualine_x = { dirname, "filetype", get_schema },
 					lualine_x = { codecompanion_adapter, "filetype" },
 					-- lualine_x = {},

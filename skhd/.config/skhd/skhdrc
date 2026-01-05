@@ -9,8 +9,8 @@ shift + alt - return : osascript ~/.config/skhd/Scripts/new-space.scpt
 shift + alt - n : osascript ~/.config/skhd/Scripts/kitty-original.scpt
 # shift + alt - c : osascript ~/.config/skhd/Scripts/new-capcut-window.scpt
 # shift + alt - p : osascript ~/.config/skhd/Scripts/new-brave-window.scpt
-# shift + alt - p : osascript ~/.config/skhd/Scripts/new-chrome-window.scpt
-shift + alt - p : osascript ~/.config/skhd/Scripts/new-chrome2-window.scpt
+shift + alt - p : osascript ~/.config/skhd/Scripts/new-chrome-window.scpt
+# shift + alt - p : osascript ~/.config/skhd/Scripts/new-chrome2-window.scpt
 
 shift + alt - i : osascript ~/.config/skhd/Scripts/new-spotify2-window.scpt
 shift + alt - o : osascript ~/.config/skhd/Scripts/new-vscode-window.scpt

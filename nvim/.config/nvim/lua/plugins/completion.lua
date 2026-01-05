@@ -2,7 +2,7 @@ return {
 	{
 		"saghen/blink.cmp",
 		enabled = true,
-		event = { "InsertEnter", "CmdlineEnter" },
+		event = { "InsertEnter" },
 		keys = {
 			"?",
 			"/",

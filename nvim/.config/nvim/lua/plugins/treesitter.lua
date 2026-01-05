@@ -156,6 +156,14 @@ return {
 			local ignore_filetypes = {
 				"checkhealth",
 				"codecompanion",
+        "notmuch-hello",
+        "git",
+        "snacks_picker_preview",
+        "fyler",
+        "snacks_picker_list",
+        "snacks_picker_input",
+        "snacks_layout_box",
+        "oil_preview",
 				"lazy",
 				"mason",
         "NvimTree",
@@ -457,6 +465,14 @@ return {
 		-- ft = { "json", "jsonc", "yaml", "yml", "yaml.github", "javascript", "typescript", "lua" },
 		event = { "LspAttach" },
 		keys = {
+      {
+        mode = { "n" },
+        "<leader>ce",
+        function()
+          require("treesitter-context").toggle()
+        end,
+        { silent = true },
+      },
 			{
 				mode = { "n" },
 				"<leader>co",
@@ -475,9 +491,9 @@ return {
 					end
 					return true
 				end, -- (fun(buf: integer): boolean) return false to disable attaching
-				enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+				enable = false, -- Enable this plugin (Can be enabled/disabled later via commands)
 				multiwindow = true, -- Enable multiple floating windows
-				max_lines = 5, -- How many lines the window should span. Values <= 0 mean no limit.
+				max_lines = 6, -- How many lines the window should span. Values <= 0 mean no limit.
 				trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
 				min_window_height = 10, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
 				zindex = 20, -- The Z-index of the context window

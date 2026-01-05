@@ -330,7 +330,7 @@ vim.keymap.set({ "n" }, "se", function()
 	})
 end, opts)
 
-keymap("n", "<leader>ce", function()
+keymap("n", "<leader>cE", function()
 	require("telescope.builtin").colorscheme()
 end, opts)
 

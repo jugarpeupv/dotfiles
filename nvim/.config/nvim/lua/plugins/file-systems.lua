@@ -125,11 +125,9 @@ return {
 						["<C-t>"] = "SelectTab",
 						["<C-v>"] = "SelectVSplit",
 						["<C-s>"] = "SelectSplit",
-						["-"] = false,
-						-- ["-"] = "GotoParent",
-						["<BS>"] = "GotoParent",
+						["-"] = "GotoParent",
 						["="] = "GotoCwd",
-						["."] = "GotoNode",
+						["<BS>"] = "GotoNode",
 						["#"] = "CollapseAll",
 						-- ["<BS>"] = "CollapseNode",
 						["H"] = "CollapseNode",
@@ -151,8 +149,8 @@ return {
 							expandtab = true,
 							shiftwidth = 2,
 						},
-						-- kind = "split_right_most",
-						kind = "replace",
+						kind = "split_right_most",
+						-- kind = "replace",
 						-- kind = "split_left",
 						kinds = {
 							float = {
@@ -209,9 +207,48 @@ return {
 		end,
 	},
 	{
+		"refractalize/oil-git-status.nvim",
+		enabled = false,
+		lazy = false,
+		config = function()
+			require("oil-git-status").setup({
+				show_ignored = true, -- show files that match gitignore with !!
+				symbols = { -- customize the symbols that appear in the git status columns
+					index = {
+						["!"] = "",
+						["?"] = "?",
+						["A"] = "+",
+						["C"] = "C",
+						["D"] = "✗",
+						["M"] = "!",
+						["R"] = "󰕛",
+						["T"] = "T",
+						["U"] = "",
+						[" "] = " ",
+					},
+					working_tree = {
+						["!"] = "",
+						["?"] = "?",
+						["A"] = "+",
+						["C"] = "C",
+						["D"] = "✗",
+						["M"] = "!",
+						["R"] = "󰕛",
+						["T"] = "T",
+						["U"] = "",
+						[" "] = " ",
+					},
+				},
+			})
+		end,
+	},
+	{
 		"stevearc/oil.nvim",
 		lazy = false,
-		cmd = { "Oil" },
+		-- cmd = { "Oil" },
+    dependencies = {
+      { "benomahony/oil-git.nvim", enabled = false, dev = true, dir = "~/projects/oil-git.nvim"  },
+    },
 		keys = {
 			{
 				"-",
@@ -340,7 +377,7 @@ return {
 					--   img_clip.paste_image({}, dir .. filename)
 					-- end,
 					["<CR>"] = "actions.select",
-					-- ["<C-v>"] = { "actions.select", opts = { vertical = true } },
+					["<C-v>"] = { "actions.select", opts = { vertical = true } },
 					["<C-s>"] = { "actions.select", opts = { horizontal = true } },
 					["<C-t>"] = { "actions.select", opts = { tab = true } },
 					["<C-p>"] = "actions.preview",
@@ -350,8 +387,9 @@ return {
 					-- ["<C-l>"] = "",
 					["R"] = "actions.refresh",
 					["-"] = { "actions.parent", mode = "n" },
-					["`"] = { "actions.open_cwd", mode = "n" },
-					["_"] = { "actions.cd", mode = "n" },
+					["_"] = { "actions.open_cwd", mode = "n" },
+					-- ["<BS>"] = { "actions.cd", mode = "n" },
+					["<BS>"] = { "actions.select", mode = "n" },
 					["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 					["gs"] = { "actions.change_sort", mode = "n" },
 
@@ -411,22 +449,38 @@ return {
 						end,
 						mode = "n",
 					},
-					["."] = {
-						callback = function()
-							local oil = require("oil")
-							local dir = oil.get_current_dir()
-							if not dir then
-								return
-							end
-							-- Ensure trailing slash
-							if not dir:match("/$") then
-								dir = dir .. "/"
-							end
-							local cmd = string.format(":!wget -P %s ", vim.fn.shellescape(dir))
-							vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd, true, false, true), "c", true)
-						end,
-						mode = "n",
-					},
+          ["."] = {
+            callback = function()
+              local oil = require("oil")
+              local dir = oil.get_current_dir()
+              if not dir then
+                return
+              end
+              -- Ensure trailing slash
+              if not dir:match("/$") then
+                dir = dir .. "/"
+              end
+              local cmd = string.format(":!wget -P %s ", vim.fn.shellescape(dir))
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd, true, false, true), "c", true)
+            end,
+            mode = "n",
+          },
+					-- ["."] = {
+					-- 	callback = function()
+					-- 		local oil = require("oil")
+					-- 		local dir = oil.get_current_dir()
+					-- 		if not dir then
+					-- 			return
+					-- 		end
+					-- 		-- Ensure trailing slash
+					-- 		if not dir:match("/$") then
+					-- 			dir = dir .. "/"
+					-- 		end
+					-- 		local cmd = string.format(":!wget -P %s ", vim.fn.shellescape(dir))
+					-- 		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd, true, false, true), "c", true)
+					-- 	end,
+					-- 	mode = "n",
+					-- },
 					["go"] = {
 						callback = function()
 							local oil = require("oil")

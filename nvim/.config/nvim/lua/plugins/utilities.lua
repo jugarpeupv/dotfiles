@@ -1,8 +1,19 @@
 return {
 	{
+		"https://tangled.org/cuducos.me/yaml.nvim",
+		ft = { "yaml", "yml", "yaml.github" }, -- optional
+		dependencies = {
+			"folke/snacks.nvim", -- optional
+		},
+		config = function()
+			require("yaml_nvim").setup({ ft = { "yaml", "yml", "yaml.github" } })
+		end,
+	},
+	{
 		"yuratomo/w3m.vim",
-    lazy = true,
-    cmd = { "W3m" }
+		lazy = true,
+		cmd = { "W3m" },
+		enabled = false,
 	},
 	{
 		"Avi-D-coder/whisper.nvim",
@@ -41,6 +52,7 @@ return {
 	{
 		"necrom4/calcium.nvim",
 		cmd = { "Calcium" },
+		enabled = false,
 		opts = {},
 	},
 	{
@@ -81,6 +93,7 @@ return {
 	},
 	{
 		"Wansmer/treesj",
+		enabled = false,
 		keys = {
 			{
 				"sj",
@@ -202,11 +215,12 @@ return {
 		},
 	},
 	-- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
-	{ "junegunn/gv.vim", dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
+	{ "junegunn/gv.vim", enabled = false, dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
 	{
 		"alex-popov-tech/store.nvim",
 		-- dependencies = { "OXY2DEV/markview.nvim" },
 		opts = {},
+		enabled = false,
 		cmd = "Store",
 	},
 	{ "rhysd/vim-syntax-codeowners", ft = { "codeowners" } },
@@ -315,6 +329,7 @@ return {
 	},
 	{
 		"typed-rocks/ts-worksheet-neovim",
+		enabled = false,
 		cmd = { "Tsw" },
 		opts = {
 			severity = vim.diagnostic.severity.WARN,
@@ -386,7 +401,7 @@ return {
 	-- },
 	{
 		"axkirillov/unified.nvim",
-		enabled = true,
+		enabled = false,
 		cmd = { "Unified" },
 		opts = {
 			-- your configuration comes here
@@ -407,6 +422,7 @@ return {
 	},
 	{
 		"uga-rosa/translate.nvim",
+		enabled = false,
 		cmd = { "Translate", "TranslateW" },
 		config = function()
 			require("translate").setup({
@@ -580,125 +596,17 @@ return {
 			},
 		},
 	},
-	-- {
-	-- 	"eyalk11/speech-to-text.nvim",
-	-- 	build = "pip install -r requirements.txt", -- Optional: Install Python dependencies
-	--    config = function()
-	--      -- Plugin-specific configuration
-	--    end,
-	-- },
-
-	-- with lazy.nvim
-	-- {
-	-- 	"cd-4/git-needy.nvim",
-	-- 	keys = {
-	-- 		{ "<leader>wf", "<cmd>GitNeedyOpen<cr>", desc = "Git needy" },
-	-- 	},
-	-- 	config = function()
-	-- 		require("git-needy").setup({
-	-- 			repos = { "my-user-or-org/my-repo-i-watch", "my-user/another-repo" },
-	-- 		})
-	-- 	end,
-	-- 	dependencies = { "nvim-lua/plenary.nvim" },
-	-- },
-	{
-		"johnseth97/gh-dash.nvim",
-		lazy = true,
-		enabled = false,
-		keys = {
-			{
-				"<leader>cc",
-				function()
-					require("gh_dash").toggle()
-				end,
-				desc = "Toggle gh-dash popup",
-			},
-		},
-		opts = {
-			keymaps = {}, -- disable internal mapping
-			border = "rounded", -- or 'double'
-			width = 0.8,
-			height = 0.8,
-			autoinstall = true,
-		},
-	},
-	{
-		"mecattaf/murmur.nvim",
-		enabled = false,
-		event = "VeryLazy",
-		opts = {
-			-- Optional: Override default configuration
-			server = {
-				host = "127.0.0.1", -- whisper.cpp server host
-				port = 8009, -- whisper.cpp server port
-				model = "whisper-small", -- Model to use
-				timeout = 30,
-			},
-			recording = {
-				command = nil, -- Auto-detect (sox, arecord, or ffmpeg)
-			},
-			ui = {
-				border = "single", -- Popup border style
-				spinner = true, -- Show processing spinner
-			},
-		},
-	},
-	{
-		"kyza0d/vocal.nvim",
-		enabled = false,
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
-		cmd = { "Vocal" },
-		opts = {
-			-- API key (string, table with command, or nil to use OPENAI_API_KEY env var)
-			api_key = nil,
-
-			-- Directory to save recordings
-			recording_dir = os.getenv("HOME") .. "/recordings",
-
-			-- Delete recordings after transcription
-			delete_recordings = true,
-
-			-- Keybinding to trigger :Vocal (set to nil to disable)
-			keymap = nil,
-
-			-- Local model configuration (set this to use local model instead of API)
-			local_model = nil,
-			-- local_model = {
-			-- 	model = "base", -- Model size: tiny, base, small, medium, large
-			-- 	path = "~/whisper", -- Path to download and store models
-			-- },
-
-			-- API configuration (used only when local_model is not set)
-			api = {
-				model = "whisper-1",
-				language = nil, -- Auto-detect language
-				response_format = "json",
-				temperature = 0,
-				timeout = 60,
-			},
-		},
-	},
 	{
 		"farmergreg/vim-lastplace",
 		-- event = { "BufNewFile", "BufReadPost" },
 		event = { "VeryLazy" },
 	},
-	{
-		"vim-scripts/applescript.vim",
-		ft = { "applescript" },
-		-- event = { "BufNewFile", "BufReadPre" },
-	},
-	{ "tpope/vim-bundler", ft = { "ruby", "rake", "gemfile", "gemfilelock" } },
-	{ "tpope/vim-rails", ft = { "ruby", "rake", "gemfile", "gemfilelock" } },
 	-- {
-	--   'vim-ruby/vim-ruby',
-	--   event = { "BufNewFile", "BufReadPre" },
+	-- 	"vim-scripts/applescript.vim",
+	-- 	ft = { "applescript" },
 	-- },
-	-- { 'ii14/neorepl.nvim', cmd = { "Repl" }},
-	-- run :BookmarksInfo to see the running status of the plugin
-	-- lazy.nvim
+	-- { "tpope/vim-bundler", ft = { "ruby", "rake", "gemfile", "gemfilelock" } },
+	-- { "tpope/vim-rails", ft = { "ruby", "rake", "gemfile", "gemfilelock" } },
 	{
 		"maskudo/devdocs.nvim",
 		enabled = true,
@@ -757,6 +665,7 @@ return {
 	},
 	{
 		"vzze/calculator.nvim",
+		enabled = false,
 		-- cmd = { "Calculate" },
 		-- event = { "BufReadPost" },
 		keys = {
@@ -768,127 +677,13 @@ return {
 				desc = "Calculate",
 			},
 		},
-		-- config = function()
-		-- 	vim.api.nvim_create_user_command(
-		-- 		"Calculate",
-		-- 		'lua require("calculator").calculate()',
-		-- 		{ ["range"] = 1, ["nargs"] = 0 }
-		-- 	)
-		-- end,
 	},
 	{ "sam4llis/nvim-lua-gf", keys = { "gf" } },
 	{ "wlemuel/vim-tldr", cmd = { "Tldr", "Telescope" } },
-	{
-		"tldr-pages/tldr-neovim-extension",
-		cmd = { "Tldr", "Telescope" },
-		enabled = false,
-		dependencies = {
-			"nvim-telescope/telescope.nvim",
-		},
-		config = function()
-			require("tldr").setup()
-		end,
-	},
-	-- {
-	--   "matthewmturner/rfsee",
-	--   opts = {},
-	--   cmd = { "RFSeeIndex", "RFSee" },
-	--   dependencies = {
-	--     "nvim-lua/plenary.nvim",
-	--   },
-	-- },
 	{ "benelori/vim-rfc", cmd = { "RFC" } },
 	{
 		"troydm/zoomwintab.vim",
 		keys = { { mode = { "n" }, "<c-w>m", "<cmd>ZoomWinTabToggle<CR>" } },
-	},
-	-- { "dhruvasagar/vim-zoom" },
-	{
-		"fasterius/simple-zoom.nvim",
-		enabled = false,
-		config = true,
-		opts = {
-			hide_tabline = false,
-		},
-	},
-	{
-		"vuki656/package-info.nvim",
-		dependencies = { "MunifTanjim/nui.nvim" },
-		enabled = true,
-		ft = { "json", "jsonc" },
-		-- config = function (_, opts)
-		--   require("package-info").setup(opts)
-		-- end,
-
-		opts = {
-			-- colors = {
-			--   up_to_date = "#94E2D5", -- Text color for up to date dependency virtual text
-			--   outdated = "#313244", -- Text color for outdated dependency virtual text
-			--   invalid = "#F38BA8", -- Text color for invalid dependency virtual text
-			-- },
-			icons = {
-				enable = true, -- Whether to display icons
-				style = {
-					up_to_date = "|  ", -- Icon for up to date dependencies
-					outdated = "| 󰃰 ", -- Icon for outdated dependencies
-					invalid = "|  ", -- Icon for invalid dependencies
-				},
-			},
-			autostart = false, -- Whether to autostart when `package.json` is opened
-			hide_up_to_date = false, -- It hides up to date versions when displaying virtual text
-			hide_unstable_versions = true, -- It hides unstable versions from version list e.g next-11.1.3-canary3
-			-- Can be `npm`, `yarn`, or `pnpm`. Used for `delete`, `install` etc...
-			-- The plugin will try to auto-detect the package manager based on
-			-- `yarn.lock` or `package-lock.json`. If none are found it will use the
-			-- provided one, if nothing is provided it will use `yarn`
-			package_manager = "npm",
-		},
-		config = function(_, opts)
-			require("package-info").setup(opts)
-			-- manually register them
-			vim.cmd("highlight PackageInfoUpToDateVersion guifg=#94E2D5 guibg=#394b70")
-			vim.cmd("highlight PackageInfoOutdatedVersion guifg=#747ebd guibg=#394b70")
-			vim.cmd("highlight PackageInfoInvalidVersion guifg=#F38BA8 guibg=#394b70")
-
-			-- Show dependency versions
-			-- vim.keymap.set({ "n" }, "<leader>ns", require("package-info").show, { silent = true, noremap = true })
-			-- vim.api.nvim_set_keymap(
-			--   "n",
-			--   "<leader>nr",
-			--   "<cmd>lua require('package-info').show({ force = true })<cr>",
-			--   { silent = true, noremap = true }
-			-- )
-
-			-- -- Hide dependency versions
-			-- vim.keymap.set({ "n" }, "<leader>nh", require("package-info").hide, { silent = true, noremap = true })
-
-			-- Toggle dependency versions
-			vim.keymap.set({ "n" }, "<leader>nt", require("package-info").toggle, { silent = true, noremap = true })
-
-			-- vim.api.nvim_set_keymap(
-			--   "n",
-			--   "<leader>nt",
-			--   "<cmd>lua require('package-info').toggle({ force = true })<cr>",
-			--   { silent = true, noremap = true }
-			-- )
-
-			-- Update dependency on the line
-			vim.keymap.set({ "n" }, "<leader>nu", require("package-info").update, { silent = true, noremap = true })
-
-			-- Delete dependency on the line
-			vim.keymap.set({ "n" }, "<leader>nd", require("package-info").delete, { silent = true, noremap = true })
-
-			-- Install a new dependency
-			-- vim.keymap.set({ "n" }, "<leader>ni", require("package-info").install, { silent = true, noremap = true })
-
-			-- Install a different dependency version
-			vim.keymap.set(
-				{ "n" },
-				"<leader>nc",
-				require("package-info").change_version,
-				{ silent = true, noremap = true }
-			)
-		end,
 	},
 	{ "heavenshell/vim-jsdoc", cmd = { "JsDoc" } },
 	{
@@ -917,9 +712,6 @@ return {
 		config = function()
 			require("neogen").setup({ enabled = true, snippet_engine = "luasnip" })
 		end,
-
-		-- Uncomment next line if you want to follow only stable versions
-		-- version = "*"
 	},
 	{
 		"hedyhli/outline.nvim",
@@ -1136,11 +928,6 @@ return {
 	{
 		"windwp/nvim-ts-autotag",
 		ft = { "html", "htmlangular" },
-		-- opts = {
-		--   aliases = {
-		--     ["htmlangular"] = "html",
-		--   },
-		-- },
 		config = function()
 			require("nvim-ts-autotag").setup({
 				aliases = {
@@ -1150,8 +937,8 @@ return {
 			})
 		end,
 	},
-	{ "tpope/vim-dispatch", lazy = true },
-	{ "kkharji/sqlite.lua", lazy = true },
+	{ "tpope/vim-dispatch", enabled = false },
+	{ "kkharji/sqlite.lua", enabled = true },
 	{
 		"ckipp01/nvim-jenkinsfile-linter",
 		enabled = false,

@@ -12,7 +12,8 @@ return {
 			require("catppuccin").setup({
 				flavour = "mocha", -- latte, frappe, macchiato, or mocha
 				transparent_background = true,
-				auto_integrations = true,
+				auto_integrations = false,
+        default_integrations = false,
 				color_overrides = {
 					all = {
 						yellow = "#89ddff",
@@ -21,41 +22,48 @@ return {
 					},
 				},
 				integrations = {
-					blink_pairs = true,
+          snacks = true,
+          barbecue = {
+            dim_dirname = true, -- directory name is dimmed by default
+            bold_basename = false,
+            dim_context = false,
+            alt_background = false,
+          },
+					blink_pairs = false,
 					blink_cmp = true,
-					gitgraph = true,
-					neotest = true,
-					render_markdown = true,
-					markdown = true,
+					gitgraph = false,
+					neotest = false,
+					render_markdown = false,
+					markdown = false,
 					dropbar = {
-						enabled = true,
-						color_mode = true, -- enable color for kind's texts, not just kind's icons
+						enabled = false,
+						color_mode = false, -- enable color for kind's texts, not just kind's icons
 					},
-					cmp = true,
-					hop = true,
-					gitsigns = true,
-					harpoon = true,
+					cmp = false,
+					hop = false,
+					gitsigns = false,
+					harpoon = false,
 					telescope = true,
-					rainbow_delimiters = true,
-					symbols_outline = true,
-					lsp_trouble = true,
-					neotree = true,
+          symbols_outline = false,
+					rainbow_delimiters = false,
+					lsp_trouble = false,
+					neotree = false,
 					octo = true,
-					lsp_saga = true,
-					mason = true,
-					dap = true,
+					lsp_saga = false,
+					mason = false,
+					dap = false,
 					navic = {
 						enabled = false,
 						custom_bg = "NONE",
 					},
 					nvimtree = true,
-					dadbod_ui = true,
+					dadbod_ui = false,
 					treesitter = true,
-					neogit = true,
+					neogit = false,
 					semantic_tokens = true,
-					treesitter_context = true,
-					illuminate = true,
-					gitgutter = true,
+					treesitter_context = false,
+					illuminate = false,
+					gitgutter = false,
 				},
 				show_end_of_buffer = true, -- show the '~' characters after the end of buffers
 				term_colors = true,
@@ -124,7 +132,7 @@ return {
 						NvimTreeBookmark = { fg = "#f2cdcd" },
 						HlSearchNear = { fg = "#181826", bg = "#F38BA8" },
 						HlSearchLensNear = { fg = "#181826", bg = "#F38BA8" },
-						GrugFarResultsMatch = { bg = "#394b70" },
+						GrugFarResultsMatch = { style = { "underdouble" }, sp = "#F38BA8" },
 						["@string.special.symbol.ruby"] = { fg = "#B4BEFE" },
 						["@markup.heading.1.marker"] = { fg = "#F5C2E7" },
 						["@markup.heading.1.markdown"] = { fg = "#F5C2E7" },
@@ -427,6 +435,7 @@ return {
             -- BlinkPairsUnmatched = { fg = "#F38BA8", style = { "bold" } },
             BlinkPairsUnmatched = { fg = "#F38BA8" },
             OpencodeDiffAdd = { bg = "#103235" },
+            ["@markup.raw.markdown_inline"] = { fg = "#c0caf5", bg = "#1a3754" }
 					}
 				end,
 			})
