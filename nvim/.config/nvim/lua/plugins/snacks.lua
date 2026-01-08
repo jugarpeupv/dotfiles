@@ -400,7 +400,7 @@ return {
 		},
 		{
 			mode = { "c" },
-			"<C-r>",
+			"<C-r><C-r>",
 			function()
 				local cmd = vim.fn.getcmdline()
 				if cmd == "" then
@@ -650,7 +650,8 @@ return {
 			local ext = cat
 			if cat == "file" then
 				basename = vim.fn.fnamemodify(name, ":t")
-				ext = basename:match("%.([^.]+)$")
+				-- ext = basename:match("%.([^.]+)$")
+        ext = basename:match("%.([^.]+%.[^.]+)$") or basename:match("%.([^.]+)$")
 			end
 			local icon, hl = devicons.get_icon(basename, ext, { default = true })
 			-- Check if we got a default icon by comparing with a known default

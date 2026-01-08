@@ -2,21 +2,50 @@ return {
 	{
 		"cohama/lexima.vim",
 		enabled = true,
-    event = { "InsertEnter" },
+		event = { "InsertEnter" },
 		config = function()
-      vim.g.lexima_enable_space_rules = 0
-      vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': '(', 'input': '('})]])
+			vim.g.lexima_enable_space_rules = 0
+			vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': '(', 'input': '('})]])
 			vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': '[', 'input': '['})]])
 			vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': '{', 'input': '{'})]])
 
-      vim.cmd([[call lexima#add_rule({'at': '\S\%#', 'char': '"', 'input': '"'})]])
-      vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': '"', 'input': '"'})]])
+			vim.cmd([[call lexima#add_rule({'at': '\S\%#', 'char': '"', 'input': '"'})]])
+			vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': '"', 'input': '"'})]])
+      vim.cmd([[
+        call lexima#add_rule({
+        \ 'char': '"',
+        \ 'at': '"\%#"',
+        \ 'input': '',
+        \ 'leave': '"',
+        \ 'priority': 10,
+        \ })
+        ]])
 
-      vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': "'", 'input': "'"})]])
       vim.cmd([[call lexima#add_rule({'at': '\S\%#', 'char': "'", 'input': "'"})]])
+			vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': "'", 'input': "'"})]])
+      vim.cmd([[
+        call lexima#add_rule({
+        \ 'char': "'",
+        \ 'at': "\'\\%#\'",
+        \ 'input': '',
+        \ 'leave': "'",
+        \ 'priority': 14,
+        \ })
+        ]])
 
-      vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': "`", 'input': "`"})]])
       vim.cmd([[call lexima#add_rule({'at': '\S\%#', 'char': "`", 'input': "`"})]])
+			vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': "`", 'input': "`"})]])
+			vim.cmd([[call lexima#add_rule({'char': '`', 'at': '``\%#', 'input_after': '``'})]])
+			vim.cmd([[
+        call lexima#add_rule({
+        \ 'char': '`',
+        \ 'at': '`\%#`',
+        \ 'input': '',
+        \ 'leave': '`',
+        \ 'priority': 12,
+        \ })
+      ]])
+
 		end,
 	},
 	{
@@ -25,8 +54,6 @@ return {
 		version = "*",
 		event = { "InsertEnter", "LspAttach" },
 		dependencies = "saghen/blink.download",
-		--- @module 'blink.pairs'
-		--- @type blink.pairs.Config
 		opts = {
 			mappings = {
 				enabled = true,

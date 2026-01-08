@@ -13,7 +13,7 @@ return {
 				flavour = "mocha", -- latte, frappe, macchiato, or mocha
 				transparent_background = true,
 				auto_integrations = false,
-        default_integrations = false,
+				default_integrations = false,
 				color_overrides = {
 					all = {
 						yellow = "#89ddff",
@@ -22,18 +22,18 @@ return {
 					},
 				},
 				integrations = {
-          snacks = true,
-          barbecue = {
-            dim_dirname = true, -- directory name is dimmed by default
-            bold_basename = false,
-            dim_context = false,
-            alt_background = false,
-          },
+					snacks = true,
+					barbecue = {
+						dim_dirname = true, -- directory name is dimmed by default
+						bold_basename = false,
+						dim_context = false,
+						alt_background = false,
+					},
 					blink_pairs = false,
 					blink_cmp = true,
 					gitgraph = false,
 					neotest = false,
-					render_markdown = false,
+					render_markdown = true,
 					markdown = false,
 					dropbar = {
 						enabled = false,
@@ -44,7 +44,7 @@ return {
 					gitsigns = false,
 					harpoon = false,
 					telescope = true,
-          symbols_outline = false,
+					symbols_outline = false,
 					rainbow_delimiters = false,
 					lsp_trouble = false,
 					neotree = false,
@@ -117,7 +117,7 @@ return {
 						NvimTreeStatusLine = { fg = "#737aa2", bg = "" },
 						NvimTreeStatusLineNC = { fg = "#737aa2", bg = "" },
 						-- MatchParen = { bg = "#394b70", fg = "#F5E0DC" },
-            MatchParen = { bg = "none", fg = "#F5E0DC", style = { "bold" } },
+						MatchParen = { bg = "none", fg = "#F5E0DC", style = { "bold" } },
 						IlluminatedWordText = { bg = "#394b70" },
 						IlluminatedWordRead = { bg = "#394b70" },
 						IlluminatedWordWrite = { bg = "#394b70" },
@@ -197,7 +197,7 @@ return {
 						gitcommitOverflow = { style = {} },
 						AvanteConflictIncoming = { style = {}, bg = "#103235" },
 						-- AvanteConflictCurrent = { style = {}, fg = "#394b70" },
-            AvanteConflictCurrent = { style = {} },
+						AvanteConflictCurrent = { style = {} },
 						LineNR = { style = {}, fg = "#3b4261" },
 						CursorLineNR = { style = {}, fg = "#737aa2" },
 						["typescriptImport"] = { link = "Keyword" },
@@ -330,8 +330,8 @@ return {
 						InclineNormalNC = { bg = "#292e42", fg = "#7C7F93" },
 						Winbar = { fg = "#bbc2e0" },
 						WinbarNC = { fg = "#7C7F93" },
-						-- TreesitterContextLineNumber = { bg = "#00122e", fg = "#737aa2" },
-            TreesitterContextLineNumber = { fg = "#737aa2" },
+						TreesitterContextLineNumber = { bg = "#00122e", fg = "#737aa2" },
+						-- TreesitterContextLineNumber = { fg = "#737aa2" },
 						WinSeparator = { fg = "#292e42" },
 						NvimTreeFolderIcon = { fg = "#89B4FA" },
 						NvimTreeFolderArrowClosed = { fg = "#89B4FA" },
@@ -432,10 +432,11 @@ return {
 						CompileModeOutputFile = { fg = "#B4BEFE" },
 						CompileModeCheckResult = { style = { "bold" }, fg = "#FAB387" },
 						CompileModeCheckTarget = { fg = "#FAB387" },
-            -- BlinkPairsUnmatched = { fg = "#F38BA8", style = { "bold" } },
-            BlinkPairsUnmatched = { fg = "#F38BA8" },
-            OpencodeDiffAdd = { bg = "#103235" },
-            ["@markup.raw.markdown_inline"] = { fg = "#c0caf5", bg = "#1a3754" }
+						-- BlinkPairsUnmatched = { fg = "#F38BA8", style = { "bold" } },
+						BlinkPairsUnmatched = { fg = "#F38BA8" },
+						OpencodeDiffAdd = { bg = "#103235" },
+						-- ["@markup.raw.markdown_inline"] = { fg = "#c0caf5", bg = "#1a3754" }
+						["@markup.raw.markdown_inline"] = { fg = "#B4BEFE" },
 					}
 				end,
 			})

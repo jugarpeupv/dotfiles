@@ -36,7 +36,7 @@ return {
 				"<leader>os",
 				-- "<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open label:task type:issue repo:mapfre-tech/arch-mar2-mgmt<cr>",
 				-- ":Octo search assignee:GPJULI6_mapfre is:issue is:open repo:mapfre-tech/arch-mar2-mgmt",
-        ":Octo search assignee:GPJULI6_mapfre is:issue is:open",
+				":Octo search assignee:GPJULI6_mapfre is:issue is:open",
 				-- ":Octo search assignee:GPJULI6_mapfre is:issue is:open repo:mapfre-tech/arch-mar2-mgmt",
 				{ noremap = true, silent = true },
 			},
@@ -218,6 +218,16 @@ return {
 		},
 		config = function(_, opts)
 			require("octo").setup(opts)
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "octo",
+				group = vim.api.nvim_create_augroup("octo_filetypedetect", { clear = true }),
+				callback = function()
+					vim.schedule(function()
+						vim.wo.conceallevel = 0
+            vim.wo.cursorline = true
+					end)
+				end,
+			})
 		end,
 		-- config = function()
 		--   require("octo").setup({

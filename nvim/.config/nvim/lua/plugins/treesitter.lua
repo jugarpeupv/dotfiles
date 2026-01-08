@@ -60,6 +60,7 @@ return {
 						"css",
 						"diff",
 						"fish",
+            "jsonc",
 						"git_config",
 						"git_rebase",
 						"gitcommit",
@@ -115,6 +116,12 @@ return {
 			vim.treesitter.language.register("markdown", "octo")
 			vim.treesitter.language.register("yaml", "yaml.github") -- the someft filetype will use the python parser and queries.
 
+      vim.filetype.add({
+        extension = { zsh = 'bash' },
+        filename = { ['.zshrc'] = 'bash' },
+        pattern = { ['.*/zsh.*'] = 'bash' },
+      })
+
 			vim.filetype.add({
 				pattern = {
 					[".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
@@ -156,7 +163,10 @@ return {
 			local ignore_filetypes = {
 				"checkhealth",
 				"codecompanion",
+        "codediff-explorer",
+        "grug-far",
         "notmuch-hello",
+        "opencode",
         "git",
         "snacks_picker_preview",
         "fyler",
@@ -492,15 +502,16 @@ return {
 					end
 					return true
 				end, -- (fun(buf: integer): boolean) return false to disable attaching
-				enable = false, -- Enable this plugin (Can be enabled/disabled later via commands)
+				enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
 				multiwindow = true, -- Enable multiple floating windows
 				max_lines = 6, -- How many lines the window should span. Values <= 0 mean no limit.
-				trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+				trim_scope = "inner", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
 				min_window_height = 10, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
 				zindex = 20, -- The Z-index of the context window
 				mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
 				-- separator = nil,
-				separator = "–",
+				-- separator = "–",
+        separator = "",
 			})
 		end,
 	},

@@ -156,7 +156,7 @@ vim.api.nvim_create_autocmd("BufLeave", {
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "applescript",
-	group = vim.api.nvim_create_augroup("applescript2", { clear = true }),
+	group = augroups.filetypedetect,
 	callback = function()
 		vim.cmd([[setlocal commentstring=--\ %s]])
 	end,

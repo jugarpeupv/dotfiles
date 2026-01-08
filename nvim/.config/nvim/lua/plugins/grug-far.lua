@@ -30,7 +30,7 @@ return {
           },
         }
       },
-			startInInsertMode = false,
+			startInInsertMode = true,
 			-- shortcuts for the actions you see at the top of the buffer
 			-- set to '' or false to unset. Mappings with no normal mode value will be removed from the help header
 			-- you can specify either a string which is then used as the mapping for both normal and insert mode

@@ -93,7 +93,7 @@ return {
 	},
 	{
 		"Wansmer/treesj",
-		enabled = false,
+		enabled = true,
 		keys = {
 			{
 				"sj",
@@ -229,8 +229,8 @@ return {
 		"luukvbaal/statuscol.nvim",
 		enabled = true,
 		-- event = { "BufReadPre", "BufNewFile" },
-		-- event = "VeryLazy",
-		event = { "LspAttach" },
+		event = "VeryLazy",
+		-- event = { "LspAttach" },
 		lazy = true,
 		config = function()
 			local builtin = require("statuscol.builtin")
@@ -246,13 +246,13 @@ return {
 						condition = { builtin.not_empty },
 						sign = { maxwidth = 1, colwidth = 1, auto = true, fillchar = "", wrap = true },
 					},
-					{
-						text = { "%s" },
-						-- condition = { line_possible_fold }, -- Only show if line is folded
-						-- condition = { function(args) return not has_fold(args) end },
-						condition = { builtin.not_empty },
-						sign = { namespace = { "diagnostic" }, maxwidth = 1, colwidth = 1, auto = true, fillchar = "" },
-					},
+					-- {
+					-- 	text = { "%s" },
+					-- 	-- condition = { line_possible_fold }, -- Only show if line is folded
+					-- 	-- condition = { function(args) return not has_fold(args) end },
+					-- 	condition = { builtin.not_empty },
+					-- 	sign = { namespace = { "diagnostic" }, maxwidth = 1, colwidth = 1, auto = true, fillchar = "" },
+					-- },
 					{ text = { builtin.lnumfunc, " " }, sign = { maxwidth = 1, fillchar = "", colwidth = 2 } },
 					-- {
 					-- 	sign = { name = { ".*" }, maxwidth = 1, colwidth = 1, auto = true },
@@ -924,7 +924,7 @@ return {
 	{ "stsewd/fzf-checkout.vim", keys = { { "<leader>GT", "<cmd>GTags<CR>" } } },
 	{ "tpope/vim-repeat", keys = { "." } },
 	{ "nvim-lua/plenary.nvim", lazy = true },
-	{ "tpope/vim-surround", event = { "LspAttach" } },
+	{ "tpope/vim-surround", event = { "VeryLazy" } },
 	{
 		"windwp/nvim-ts-autotag",
 		ft = { "html", "htmlangular" },

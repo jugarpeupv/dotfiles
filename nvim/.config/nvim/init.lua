@@ -184,8 +184,6 @@ vim.api.nvim_create_autocmd("User", {
 -- })
 
 
-
-
 local function should_restore_worktree()
 	if vim.fn.argc() == 0 and vim.fn.line2byte("$") == -1 then
 		return false
@@ -193,6 +191,13 @@ local function should_restore_worktree()
 	if vim.list_contains(vim.v.argv, "-R") then
 		return false
 	end
+
+  -- C-x C-e
+  -- { "nvim", "--embed", "-c", "normal! 19go", "--", "/tmp/zshBXRabd.zsh" }
+  if vim.list_contains(vim.v.argv, "--") then
+    return false
+  end
+
 	local cwd = vim.loop.cwd()
 	if not cwd or cwd == "" then
 		return false

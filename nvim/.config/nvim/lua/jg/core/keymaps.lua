@@ -761,8 +761,8 @@ end, { silent = true })
 --
 -- vim.api.nvim_set_keymap("n", "gN", "<cmd> lua require('illuminate').goto_prev_reference()<cr>", opts)
 
-vim.cmd([[nnoremap * /\<<C-R>=expand('<cword>')<CR>\><CR>]])
-vim.cmd([[nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>]])
+-- vim.cmd([[nnoremap * /\<<C-R>=expand('<cword>')<CR>\><CR>]])
+-- vim.cmd([[nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>]])
 
 -- vim.keymap.set("i", "<Tab>", function()
 --   if require("copilot.suggestion").is_visible() then

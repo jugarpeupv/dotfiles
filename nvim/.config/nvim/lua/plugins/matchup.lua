@@ -6,7 +6,11 @@ return {
 	lazy = true,
 	-- dependencies = { "nvim-treesitter/nvim-treesitter" },
 	-- event = { "VeryLazy" },
-	event = { "LspAttach" },
+	keys = {
+		{ "<C-d>" },
+		{ "<C-u>" },
+	},
+	-- event = { "LspAttach" },
 	-- event = { "BufReadPost", "BufNewFile" },
 	-- keys = { { mode = "n", "%" } },
 	config = function()
@@ -19,11 +23,11 @@ return {
 
 		vim.g.matchup_matchparen_enabled = 0
 		vim.g.matchup_matchparen_hi_surround_always = 1
-    vim.g.matchup_matchparen_timeout = 100
-    vim.g.matchup_matchparen_insert_timeout = 20
+		vim.g.matchup_matchparen_timeout = 100
+		vim.g.matchup_matchparen_insert_timeout = 20
 		-- nmap <silent> <F7> <plug>(matchup-hi-surround)
 		vim.g.matchup_matchparen_deferred = 1
-		vim.g.matchup_matchparen_deferred_show_delay = 60
+		-- vim.g.matchup_matchparen_deferred_show_delay = 50
 		vim.g.matchup_matchparen_stopline = 100
 		vim.g.matchup_matchpref = {
 			xml = { tagnameonly = 1 },
