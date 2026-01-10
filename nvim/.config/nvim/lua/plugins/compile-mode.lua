@@ -81,6 +81,8 @@ return {
 			error_locus_highlight = false,
 			ask_about_save = false,
 			ask_to_interrupt = false,
+      use_pseudo_terminal = true,
+      auto_scroll = false,
 			error_regexp_table = {
 				typescript = {
 					-- TypeScript errors take the form

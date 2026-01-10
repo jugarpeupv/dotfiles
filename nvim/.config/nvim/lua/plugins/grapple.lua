@@ -1,13 +1,13 @@
 -- return {}
 return {
 	{
-		-- "cbochs/grapple.nvim",
-    dir = "~/projects/grapple.nvim/wt-main",
-    dev = true,
+		"cbochs/grapple.nvim",
+    -- dir = "~/projects/grapple.nvim/wt-main",
+    -- dev = true,
 		enabled = true,
 		keys = {
 			{
-				"<leader>hg",
+				"<leader>hh",
 				function()
 					local actions = require("telescope.actions")
 
@@ -41,7 +41,6 @@ return {
 
 						return require("telescope.finders").new_table({
 							results = results,
-
 							---@param result grapple.telescope.result
 							entry_maker = function(result)
 								local utils = require("telescope.utils")
@@ -51,7 +50,7 @@ return {
 								local entry = {
 									value = result,
 									ordinal = filename,
-									display = utils.transform_path({ path_display = { "tail" } }, filename),
+									display = utils.transform_path({ path_display = { "absolute" } }, filename),
 									filename = filename,
 									lnum = lnum,
 								}
@@ -118,9 +117,12 @@ return {
 
 					require("telescope").extensions.grapple.tags({
 						layout_strategy = "bottom_pane",
-						layout_config = {
-							bottom_pane = { width = 1, height = 0.47, preview_width = 0.40 },
-						},
+            preview = {
+              hide_on_startup = true,
+            },
+						-- layout_config = {
+						-- 	bottom_pane = { width = 1, height = 0.47, preview_width = 0.40 },
+						-- },
 						finder = create_finder(),
 						attach_mappings = function(_, map)
 							local action_set = require("telescope.actions.set")
@@ -134,7 +136,7 @@ return {
 					})
 				end,
 			},
-			{ "<leader>hh", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags window" },
+			{ "<leader>hg", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple open tags window" },
 			{ "<leader>aa", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
 			{ "<leader>S", "<cmd>Grapple toggle_scopes<cr>", desc = "Grappel toggle scopes" },
 			{ "<leader>N", "<cmd>Grapple cycle_tags next<cr>", desc = "Grapple cycle next tag" },

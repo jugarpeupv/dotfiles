@@ -64,7 +64,7 @@ M.attach_lsp_config = function(client, bufnr)
 	end
 
 	keymap.set("n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts) -- go to implementation
-	keymap.set("n", "gH", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+	-- keymap.set("n", "gH", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 
 	-- keymap.set("n", "gR", "<cmd>Trouble lsp_references<cr>", opts)
 	-- keymap.set("n", "gR", "<cmd>lua vim.lsp.buf.references({ context = { includeDeclaration = false } })<cr>", opts)
@@ -159,6 +159,11 @@ M.attach_lsp_config = function(client, bufnr)
 	keymap.set({ "n" }, "gh", function()
 		vim.lsp.buf.signature_help()
 	end, opts)
+
+  keymap.set({ "i" }, "<M-lt>", function()
+    vim.lsp.buf.signature_help()
+  end, opts)
+
 	-- keymap.set({ "n" }, "gh", function()
 	--   require("lsp_signature").toggle_float_win()
 	-- end, opts)

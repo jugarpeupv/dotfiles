@@ -2,6 +2,7 @@ return {
 	{
 		"https://tangled.org/cuducos.me/yaml.nvim",
 		ft = { "yaml", "yml", "yaml.github" }, -- optional
+    enabled = false,
 		dependencies = {
 			"folke/snacks.nvim", -- optional
 		},
@@ -246,13 +247,13 @@ return {
 						condition = { builtin.not_empty },
 						sign = { maxwidth = 1, colwidth = 1, auto = true, fillchar = "", wrap = true },
 					},
-					-- {
-					-- 	text = { "%s" },
-					-- 	-- condition = { line_possible_fold }, -- Only show if line is folded
-					-- 	-- condition = { function(args) return not has_fold(args) end },
-					-- 	condition = { builtin.not_empty },
-					-- 	sign = { namespace = { "diagnostic" }, maxwidth = 1, colwidth = 1, auto = true, fillchar = "" },
-					-- },
+					{
+						text = { "%s" },
+						-- condition = { line_possible_fold }, -- Only show if line is folded
+						-- condition = { function(args) return not has_fold(args) end },
+						condition = { builtin.not_empty },
+						sign = { namespace = { "diagnostic" }, maxwidth = 1, colwidth = 1, auto = true, fillchar = "" },
+					},
 					{ text = { builtin.lnumfunc, " " }, sign = { maxwidth = 1, fillchar = "", colwidth = 2 } },
 					-- {
 					-- 	sign = { name = { ".*" }, maxwidth = 1, colwidth = 1, auto = true },
@@ -601,12 +602,12 @@ return {
 		-- event = { "BufNewFile", "BufReadPost" },
 		event = { "VeryLazy" },
 	},
-	-- {
-	-- 	"vim-scripts/applescript.vim",
-	-- 	ft = { "applescript" },
-	-- },
-	-- { "tpope/vim-bundler", ft = { "ruby", "rake", "gemfile", "gemfilelock" } },
-	-- { "tpope/vim-rails", ft = { "ruby", "rake", "gemfile", "gemfilelock" } },
+	{
+		"vim-scripts/applescript.vim",
+		ft = { "applescript" },
+	},
+	{ "tpope/vim-bundler", ft = { "ruby", "rake", "gemfile", "gemfilelock" } },
+	{ "tpope/vim-rails", ft = { "ruby", "rake", "gemfile", "gemfilelock" } },
 	{
 		"maskudo/devdocs.nvim",
 		enabled = true,

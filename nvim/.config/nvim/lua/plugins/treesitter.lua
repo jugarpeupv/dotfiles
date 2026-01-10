@@ -19,6 +19,10 @@ return {
 		end,
 	},
 	{
+		"Fymyte/mbsync.vim",
+		ft = "mbsync",
+	},
+	{
 		"nvim-treesitter/nvim-treesitter",
 		lazy = true,
 		event = "VeryLazy",
@@ -60,7 +64,7 @@ return {
 						"css",
 						"diff",
 						"fish",
-            "jsonc",
+						"jsonc",
 						"git_config",
 						"git_rebase",
 						"gitcommit",
@@ -116,11 +120,15 @@ return {
 			vim.treesitter.language.register("markdown", "octo")
 			vim.treesitter.language.register("yaml", "yaml.github") -- the someft filetype will use the python parser and queries.
 
-      vim.filetype.add({
-        extension = { zsh = 'bash' },
-        filename = { ['.zshrc'] = 'bash' },
-        pattern = { ['.*/zsh.*'] = 'bash' },
-      })
+			vim.filetype.add({
+				extension = { zsh = "bash" },
+				filename = { [".zshrc"] = "bash" },
+				pattern = { [".*/zsh.*"] = "bash" },
+			})
+
+			vim.filetype.add({
+				pattern = { [".*/isyncrc"] = "mbsync" },
+			})
 
 			vim.filetype.add({
 				pattern = {
@@ -163,34 +171,42 @@ return {
 			local ignore_filetypes = {
 				"checkhealth",
 				"codecompanion",
-        "codediff-explorer",
-        "grug-far",
-        "notmuch-hello",
-        "opencode",
-        "git",
-        "snacks_picker_preview",
-        "fyler",
-        "bufferize",
-        "snacks_picker_list",
-        "snacks_picker_input",
-        "snacks_layout_box",
-        "oil_preview",
+				"codediff-explorer",
+				"grug-far",
+				"notmuch-hello",
+				"compilation",
+				"oil-progress",
+				"qf",
+				"opencode",
+				"git",
+				"snacks_picker_preview",
+				"fyler",
+				"bufferize",
+				"snacks_picker_list",
+				"snacks_picker_input",
+				"snacks_layout_box",
+				"oil_preview",
 				"lazy",
 				"mason",
-        "NvimTree",
-        "conf",
-        "opencode_footer",
-        "TelescopePrompt",
-        "fidget",
-        "DiffviewFiles",
-        "blink-cmp-menu",
-        "oil",
+				"NvimTree",
+				"conf",
+				"opencode_footer",
+				"TelescopePrompt",
+				"applescript",
+				"DiffviewFileHistory",
+				"oil_progress",
+				"fidget",
+				"grapple",
+				"DiffviewFiles",
+				"blink-cmp-menu",
+				"oil",
+        "mbsync",
 				"snacks_dashboard",
-        "TelescopeResults",
+				"TelescopeResults",
 				"snacks_notif",
-        "text",
+				"text",
 				"snacks_win",
-        "bigfile"
+				"bigfile",
 			}
 
 			-- Auto-install parsers and enable highlighting on FileType
@@ -476,14 +492,14 @@ return {
 		-- ft = { "json", "jsonc", "yaml", "yml", "yaml.github", "javascript", "typescript", "lua" },
 		event = { "LspAttach" },
 		keys = {
-      {
-        mode = { "n" },
-        "<leader>ce",
-        function()
-          require("treesitter-context").toggle()
-        end,
-        { silent = true },
-      },
+			{
+				mode = { "n" },
+				"<leader>ce",
+				function()
+					require("treesitter-context").toggle()
+				end,
+				{ silent = true },
+			},
 			{
 				mode = { "n" },
 				"<leader>co",
@@ -511,7 +527,7 @@ return {
 				mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
 				-- separator = nil,
 				-- separator = "–",
-        separator = "",
+				separator = "",
 			})
 		end,
 	},

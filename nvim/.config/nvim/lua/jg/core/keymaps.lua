@@ -1880,3 +1880,10 @@ end, { desc = "Yank absolute file path to clipboard" })
 -- vim.keymap.set('x', 'in', function()
 --   vim.lsp.buf.selection_range('inner')
 -- end, { desc = "vim.lsp.buf.selection_range('inner')" })
+
+-- vim.keymap.set("v", "·", "%", { silent = true })
+-- vim.keymap.set("n", "·", "%", { silent = true })
+
+vim.keymap.set("n", "L", "$", { silent = true })
+vim.keymap.set("v", "<Enter>", "%", { silent = true })
+vim.keymap.set("n", "<Enter>", "%", { silent = true })

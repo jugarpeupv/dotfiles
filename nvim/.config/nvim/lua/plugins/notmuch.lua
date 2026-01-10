@@ -1,12 +1,15 @@
 return {
 	{
-		-- "yousefakbar/notmuch.nvim",
-		dir = "~/projects/notmuch.nvim/wt-upstream-feat-compose-attachments",
-		dev = true,
+		"yousefakbar/notmuch.nvim",
+		-- dir = "~/projects/notmuch.nvim/wt-upstream-feat-compose-attachments",
+		-- dev = true,
 		enabled = true,
 		opts = {
 			notmuch_db_path = os.getenv("HOME") .. "/Mail",
-			maildir_sync_cmd = "mbsync izertis-channel",
+      maildir_sync_cmd = "mbsync izertis-channel",
+      sync = {
+        sync_mode = "terminal",
+      },
 			keymaps = {
 				sendmail = "S",
 				compose = "C",

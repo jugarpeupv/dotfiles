@@ -108,6 +108,7 @@ require("lazy").setup("plugins", {
 	},
 })
 
+
 -- require("jg.core.autocommands")
 -- require("jg.core.keymaps")
 

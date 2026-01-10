@@ -68,6 +68,26 @@ return {
 			},
 		},
 		config = function()
+      _G.oil_winbar_label = function()
+        local oil = require("oil")
+        local dir = oil.get_current_dir()
+
+        if dir and dir ~= "" then
+          local home = vim.loop.os_homedir()
+          if home and home ~= "" then
+            dir = dir:gsub("^" .. vim.pesc(home), "~")
+          end
+          return dir
+        end
+
+        local bufname = vim.api.nvim_buf_get_name(0)
+        if bufname == "" then
+          return "[No Name]"
+        end
+
+        return bufname
+      end
+
 			require("oil").setup({
 				-- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
 				-- Set to false if you want some other plugin (e.g. netrw) to open when you edit directories.
@@ -87,7 +107,7 @@ return {
 				},
 				-- Window-local options to use for oil buffers
 				win_options = {
-					winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+					winbar = "%#NvimTreeRootFolder#%{v:lua.oil_winbar_label()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 					-- winbar = "%#@attribute.builtin#%{v:lua.get_winbar()} %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 					-- wrap = false,
 					-- signcolumn = "no",
@@ -109,7 +129,7 @@ return {
 				-- Oil will automatically delete hidden buffers after this delay
 				-- You can set the delay to false to disable cleanup entirely
 				-- Note that the cleanup process only starts when none of the oil buffers are currently displayed
-				cleanup_delay_ms = 30000,
+				cleanup_delay_ms = false,
 				-- cleanup_delay_ms = false,
 				lsp_file_methods = {
 					enabled = true,
@@ -422,6 +442,7 @@ return {
 				},
 				-- Extra arguments to pass to SCP when moving/copying files over SSH
 				extra_scp_args = {},
+        extra_s3_args = { "--profile=mar-dev" },
 				-- EXPERIMENTAL support for performing file operations with git
 				-- git = {
 				--   -- Return true to automatically git add/mv/rm files

@@ -16,7 +16,7 @@ return {
 				default_integrations = false,
 				color_overrides = {
 					all = {
-						yellow = "#89ddff",
+            yellow = "#89ddff",
 						green = "#94E2D5",
 						maroon = "#FAB387",
 					},
@@ -50,7 +50,7 @@ return {
 					neotree = false,
 					octo = true,
 					lsp_saga = false,
-					mason = false,
+					mason = true,
 					dap = false,
 					navic = {
 						enabled = false,
