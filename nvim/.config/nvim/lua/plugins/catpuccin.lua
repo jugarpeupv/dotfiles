@@ -437,6 +437,8 @@ return {
 						OpencodeDiffAdd = { bg = "#103235" },
 						-- ["@markup.raw.markdown_inline"] = { fg = "#c0caf5", bg = "#1a3754" }
 						["@markup.raw.markdown_inline"] = { fg = "#B4BEFE" },
+            AgenticStatusCompleted = { bg = "#94E2D5", fg = "#000000" },
+            AgenticTitle = { fg = "#c0caf5" },
 					}
 				end,
 			})

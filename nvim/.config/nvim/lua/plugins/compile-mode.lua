@@ -99,7 +99,7 @@ return {
 			pattern = "compilation",
 			callback = function()
 				vim.bo.buflisted = true
-				vim.keymap.set({ "n" }, "<C-a>", function()
+				vim.keymap.set({ "n" }, "<C-q>", function()
 					require("compile-mode").add_to_qflist()
 					print("Added all errors to quickfix list")
 				end, { noremap = true, silent = true, buffer = true })

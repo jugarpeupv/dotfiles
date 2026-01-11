@@ -187,6 +187,74 @@ return {
 					["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 					["gs"] = { "actions.change_sort", mode = "n" },
 
+          ["K"] = {
+            callback = function()
+              local oil = require("oil")
+              local entry = oil.get_cursor_entry()
+              local dir = oil.get_current_dir()
+
+              if not entry or not dir then
+                return
+              end
+
+              local entry_display_name = entry.name
+
+              entry.name = entry.name:gsub(" ", "\\ ")
+              local path = dir .. entry.name
+
+              local spinner_frames = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+              local spinner_index = 1
+              local spinner_timer = vim.loop.new_timer()
+
+              local function render_spinner()
+                vim.api.nvim_echo({ {
+                  string.format("Calculating size for '%s'... %s", path, spinner_frames[spinner_index]),
+                  "None",
+                } }, false, {})
+              end
+
+              local function stop_spinner()
+                if spinner_timer then
+                  spinner_timer:stop()
+                  spinner_timer:close()
+                  spinner_timer = nil
+                end
+                vim.api.nvim_echo({}, false, {})
+              end
+
+              render_spinner()
+
+              if spinner_timer then
+                spinner_timer:start(
+                  0,
+                  120,
+                  vim.schedule_wrap(function()
+                    spinner_index = spinner_index % #spinner_frames + 1
+                    render_spinner()
+                  end)
+                )
+              end
+
+              vim.system({ "du", "-sh", path }, { text = true }, function(obj)
+                local stdout = obj.stdout or ""
+                local improved_size = stdout:match("^[^\t]+") or "unknown"
+
+                vim.schedule(function()
+                  stop_spinner()
+
+                  -- if obj.code ~= 0 then
+                  --   vim.notify(string.format("Failed to get size for '%s'", entry_display_name), vim.log.levels.ERROR)
+                  --   return
+                  -- end
+
+                  local msg = string.format("Size of '%s': %s", path, improved_size)
+                  vim.print(msg)
+                end)
+              end)
+            end,
+            mode = "n",
+          },
+
 					["su"] = {
 						callback = function()
 							local oil = require("oil")

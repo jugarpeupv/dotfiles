@@ -479,7 +479,7 @@ return {
 		-- dev = true,
 		-- dir = "~/work/tmp/opencode.nvim/wt-feature-auto_scroll_config",
 		lazy = true,
-		enabled = true,
+		enabled = false,
 		keys = {
 			{
 				mode = { "n", "v" },
