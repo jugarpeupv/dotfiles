@@ -9,7 +9,7 @@ return {
 		},
 		-- optional: provides snippets for the snippet source
 		dependencies = {
-			"onsails/lspkind.nvim",
+      { "onsails/lspkind.nvim", commit ="3ddd1b4edefa425fda5a9f95a4f25578727c0bb3" },
 			"Kaiser-Yang/blink-cmp-git",
 			"Kaiser-Yang/blink-cmp-avante",
 			"rafamadriz/friendly-snippets",
