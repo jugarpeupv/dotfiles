@@ -1,27 +1,78 @@
 return {
 	{
+		"malewicz1337/oil-git.nvim",
+		dependencies = { "stevearc/oil.nvim" },
+		event = { "VeryLazy" },
+		opts = {
+			debounce_ms = 50,
+			show_file_highlights = false,
+			show_directory_highlights = false,
+			show_file_symbols = true,
+			show_directory_symbols = true,
+			show_ignored_files = true, -- Show ignored file status
+			show_ignored_directories = true, -- Show ignored directory status
+			symbol_position = "eol", -- "eol", "signcolumn", or "none"
+			ignore_gitsigns_update = false, -- Ignore GitSignsUpdate events (fallback for flickering)
+			debug = false, -- false, "minimal", or "verbose"
+			symbols = {
+				file = {
+					added = "+",
+					modified = "!",
+					renamed = "󰕛 ",
+					deleted = "✗",
+					copied = "~",
+					conflict = "",
+					untracked = "?",
+					ignored = " ",
+				},
+				directory = {
+					added = "+",
+					modified = "!",
+					renamed = "󰕛 ",
+					deleted = "✗",
+					copied = "~",
+					conflict = "",
+					untracked = "?",
+					ignored = " ",
+				},
+			},
+
+			-- Colors (only applied if highlight groups don't exist)
+			highlights = {
+				OilGitAdded = { link = "NvimTreeGitStaged" },
+				OilGitModified = { fg = "#f9e2af" },
+				OilGitRenamed = { fg = "#cba6f7" },
+				OilGitDeleted = { fg = "#f38ba8" },
+				OilGitCopied = { fg = "#cba6f7" },
+				OilGitConflict = { fg = "#fab387" },
+				OilGitUntracked = { link = "NvimTreeGitFileNewHL" },
+				OilGitIgnored = { link = "Comment" },
+			},
+		},
+	},
+	{
 		"stevearc/oil.nvim",
 		lazy = false,
 		keys = {
-      {
-        mode = "n",
-        "H",
-        function()
-          local target
-          local buffer = vim.api.nvim_get_current_buf()
+			{
+				mode = "n",
+				"H",
+				function()
+					local target
+					local buffer = vim.api.nvim_get_current_buf()
 
-          if not buffer then
-            return nil
-          end
-          local path = vim.api.nvim_buf_get_name(buffer)
-          if path == "" then
-            target = vim.loop.cwd()
-          end
-          target = vim.fn.fnamemodify(path, ":p:h")
-          require("oil").open(target)
-        end,
-        desc = "Oil: parent directory",
-      },
+					if not buffer then
+						return nil
+					end
+					local path = vim.api.nvim_buf_get_name(buffer)
+					if path == "" then
+						target = vim.loop.cwd()
+					end
+					target = vim.fn.fnamemodify(path, ":p:h")
+					require("oil").open(target)
+				end,
+				desc = "Oil: parent directory",
+			},
 			{
 				"-",
 				function()
@@ -68,25 +119,29 @@ return {
 			},
 		},
 		config = function()
-      _G.oil_winbar_label = function()
-        local oil = require("oil")
-        local dir = oil.get_current_dir()
+			_G.oil_winbar_label = function()
+				local oil = require("oil")
+				local dir = oil.get_current_dir()
 
-        if dir and dir ~= "" then
-          local home = vim.loop.os_homedir()
-          if home and home ~= "" then
-            dir = dir:gsub("^" .. vim.pesc(home), "~")
-          end
-          return dir
-        end
+				if not dir then
+					return ""
+				end
 
-        local bufname = vim.api.nvim_buf_get_name(0)
-        if bufname == "" then
-          return "[No Name]"
-        end
+				if dir and dir ~= "" then
+					local home = vim.loop.os_homedir()
+					if home and home ~= "" then
+						dir = dir:gsub("^" .. vim.pesc(home), "~")
+					end
+					return dir
+				end
 
-        return bufname
-      end
+				local bufname = vim.api.nvim_buf_get_name(0)
+				if bufname == "" then
+					return "[No Name]"
+				end
+				return bufname
+			end
+
 
 			require("oil").setup({
 				-- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
@@ -110,7 +165,8 @@ return {
 					winbar = "%#NvimTreeRootFolder#%{v:lua.oil_winbar_label()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 					-- winbar = "%#@attribute.builtin#%{v:lua.get_winbar()} %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 					-- wrap = false,
-					-- signcolumn = "no",
+					-- signcolumn = "yes:1",
+					-- signcolumn = "yes:2",
 					-- cursorcolumn = false,
 					-- foldcolumn = "0",
 					-- spell = false,
@@ -187,73 +243,80 @@ return {
 					["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 					["gs"] = { "actions.change_sort", mode = "n" },
 
-          ["K"] = {
-            callback = function()
-              local oil = require("oil")
-              local entry = oil.get_cursor_entry()
-              local dir = oil.get_current_dir()
+					["K"] = {
+						callback = function()
+							local oil = require("oil")
+							local entry = oil.get_cursor_entry()
+							local dir = oil.get_current_dir()
 
-              if not entry or not dir then
-                return
-              end
+							if not entry or not dir then
+								return
+							end
 
-              local entry_display_name = entry.name
+							local entry_display_name = entry.name
 
-              entry.name = entry.name:gsub(" ", "\\ ")
-              local path = dir .. entry.name
+							entry.name = entry.name:gsub(" ", "\\ ")
+							local path = dir .. entry.name
 
-              local spinner_frames = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-              local spinner_index = 1
-              local spinner_timer = vim.loop.new_timer()
+							local spinner_frames =
+								{ "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+							local spinner_index = 1
+							local spinner_timer = vim.loop.new_timer()
 
-              local function render_spinner()
-                vim.api.nvim_echo({ {
-                  string.format("Calculating size for '%s'... %s", path, spinner_frames[spinner_index]),
-                  "None",
-                } }, false, {})
-              end
+							local function render_spinner()
+								vim.api.nvim_echo({
+									{
+										string.format(
+											"Calculating size for '%s'... %s",
+											path,
+											spinner_frames[spinner_index]
+										),
+										"None",
+									},
+								}, false, {})
+							end
 
-              local function stop_spinner()
-                if spinner_timer then
-                  spinner_timer:stop()
-                  spinner_timer:close()
-                  spinner_timer = nil
-                end
-                vim.api.nvim_echo({}, false, {})
-              end
+							local function stop_spinner()
+								if spinner_timer then
+									spinner_timer:stop()
+									spinner_timer:close()
+									spinner_timer = nil
+								end
+								vim.api.nvim_echo({}, false, {})
+							end
 
-              render_spinner()
+							render_spinner()
 
-              if spinner_timer then
-                spinner_timer:start(
-                  0,
-                  120,
-                  vim.schedule_wrap(function()
-                    spinner_index = spinner_index % #spinner_frames + 1
-                    render_spinner()
-                  end)
-                )
-              end
+							if spinner_timer then
+								spinner_timer:start(
+									0,
+									120,
+									vim.schedule_wrap(function()
+										spinner_index = spinner_index % #spinner_frames + 1
+										render_spinner()
+									end)
+								)
+							end
 
-              vim.system({ "du", "-sh", path }, { text = true }, function(obj)
-                local stdout = obj.stdout or ""
-                local improved_size = stdout:match("^[^\t]+") or "unknown"
+							vim.system({ "du", "-sh", path }, { text = true }, function(obj)
+								local stdout = obj.stdout or ""
+								local improved_size = stdout:match("^[^\t]+") or "unknown"
 
-                vim.schedule(function()
-                  stop_spinner()
+								vim.schedule(function()
+									stop_spinner()
 
-                  -- if obj.code ~= 0 then
-                  --   vim.notify(string.format("Failed to get size for '%s'", entry_display_name), vim.log.levels.ERROR)
-                  --   return
-                  -- end
+									-- if obj.code ~= 0 then
+									--   vim.notify(string.format("Failed to get size for '%s'", entry_display_name), vim.log.levels.ERROR)
+									--   return
+									-- end
 
-                  local msg = string.format("Size of '%s': %s", path, improved_size)
-                  vim.print(msg)
-                end)
-              end)
-            end,
-            mode = "n",
-          },
+									local msg = string.format("Size of '%s': %s", path, improved_size)
+									vim.print(msg)
+								end)
+							end)
+						end,
+						mode = "n",
+					},
 
 					["su"] = {
 						callback = function()
@@ -507,10 +570,28 @@ return {
 						{ "birthtime", "desc" },
 						{ "name", "asc" },
 					},
+					highlight_filename = function(entry, is_hidden, is_link_target)
+						local bit = bit32 or bit
+						local exec_mask = tonumber("111", 8) -- user/group/other execute bits
+						-- Skip the extra chunks that Oil passes for symlink targets
+						if is_link_target or entry.type ~= "file" then
+							return nil
+						end
+
+						local stat = entry.meta and entry.meta.stat
+						if not (stat and stat.mode) then
+							return nil
+						end
+
+						if bit.band(stat.mode, exec_mask) ~= 0 then
+							return "OilExecutable"
+						end
+						return nil
+					end,
 				},
 				-- Extra arguments to pass to SCP when moving/copying files over SSH
 				extra_scp_args = {},
-        extra_s3_args = { "--profile=mar-dev" },
+				extra_s3_args = { "--profile=mar-dev" },
 				-- EXPERIMENTAL support for performing file operations with git
 				-- git = {
 				--   -- Return true to automatically git add/mv/rm files

@@ -35,7 +35,7 @@ return {
 
       vim.cmd([[call lexima#add_rule({'at': '\S\%#', 'char': "`", 'input': "`"})]])
 			vim.cmd([[call lexima#add_rule({'at': '\%#\S', 'char': "`", 'input': "`"})]])
-			vim.cmd([[call lexima#add_rule({'char': '`', 'at': '``\%#', 'input_after': '``'})]])
+			vim.cmd([[call lexima#add_rule({'char': '`', 'at': '``\%#', 'input_after': '```'})]])
 			vim.cmd([[
         call lexima#add_rule({
         \ 'char': '`',

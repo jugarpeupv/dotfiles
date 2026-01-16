@@ -16,7 +16,7 @@ return {
 				default_integrations = false,
 				color_overrides = {
 					all = {
-            yellow = "#89ddff",
+						yellow = "#89ddff",
 						green = "#94E2D5",
 						maroon = "#FAB387",
 					},
@@ -157,7 +157,8 @@ return {
 						MatchupVirtualText = { fg = "#747ebd" },
 						BlinkCmpGitKindCommit = { fg = "#8ee2cf" },
 						BlinkCmpGitLabelCommitId = { fg = "#8ee2cf" },
-						GitSignsCurrentLineBlame = { fg = "#B4BEFE" },
+						-- GitSignsCurrentLineBlame = { fg = "#B4BEFE" },
+            GitSignsCurrentLineBlame = { fg = "#000000" },
 						FloatBorder = { fg = "#394b70", bg = "" },
 						FloatTitle = { fg = "#394b70", bg = "" },
 						BlinkCmpKindSnippet = { fg = "#747ebd" },
@@ -179,6 +180,7 @@ return {
 						["@lsp.type.enumMember.typescript"] = { fg = "#F5C2E7" },
 						viraDetailsStatusInProgress = { fg = "#F38BA8" },
 						viraDetailsEpic = { fg = "#F5C2E7" },
+            OilExecutable = { fg = "#F5C2E7" },
 						viraDetailsTypeStory = { fg = "#8ee2cf" },
 						viraDetails = { fg = "#89ddff" },
 						viraDetailsDates = { fg = "#89ddff" },
@@ -200,6 +202,10 @@ return {
 						AvanteConflictCurrent = { style = {} },
 						LineNR = { style = {}, fg = "#3b4261" },
 						CursorLineNR = { style = {}, fg = "#737aa2" },
+						-- OilHidden = { fg = "", bg = "", link = "Oil" },
+						-- OilVcsStatusModified = { link = "NvimTreeGitDirty" },
+						-- OilVcsStatusIgnored = { link = "Comment" },
+						-- OilVcsStatusUntracked = { link = "NvimTreeGitNew" },
 						["typescriptImport"] = { link = "Keyword" },
 						["typescriptExport"] = { link = "Keyword" },
 						["@lsp.typemod.method.defaultLibrary.typescript"] = { link = "Function" },
@@ -437,8 +443,6 @@ return {
 						OpencodeDiffAdd = { bg = "#103235" },
 						-- ["@markup.raw.markdown_inline"] = { fg = "#c0caf5", bg = "#1a3754" }
 						["@markup.raw.markdown_inline"] = { fg = "#B4BEFE" },
-            AgenticStatusCompleted = { bg = "#94E2D5", fg = "#000000" },
-            AgenticTitle = { fg = "#c0caf5" },
 					}
 				end,
 			})

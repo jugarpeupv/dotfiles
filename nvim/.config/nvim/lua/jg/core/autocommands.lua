@@ -86,12 +86,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 
 vim.filetype.add({
 	extension = {
-		["http"] = "http",
-	},
-})
-
-vim.filetype.add({
-	extension = {
 		["swcrc"] = "jsonc",
 	},
 })
@@ -489,20 +483,18 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-
-
 vim.api.nvim_create_autocmd("User", {
-  pattern = "GitConflictDetected",
-  group = vim.api.nvim_create_augroup("GitConflictDetected", { clear = true }),
-  callback = function()
-    vim.notify("Conflict detected in " .. vim.fn.expand("<afile>"))
-    vim.keymap.set({ "n", "v" }, "cc", "<Plug>(git-conflict-ours)")
-    vim.keymap.set({ "n", "v" }, "ci", "<Plug>(git-conflict-theirs)")
-    vim.keymap.set({ "n", "v" }, "cb", "<Plug>(git-conflict-both)")
-    vim.keymap.set({ "n", "v" }, "cn", "<Plug>(git-conflict-none)")
-    vim.keymap.set({ "n", "v" }, "ck", "<Plug>(git-conflict-prev-conflict)")
-    vim.keymap.set({ "n", "v" }, "cj", "<Plug>(git-conflict-next-conflict)")
-  end,
+	pattern = "GitConflictDetected",
+	group = vim.api.nvim_create_augroup("GitConflictDetected", { clear = true }),
+	callback = function()
+		vim.notify("Conflict detected in " .. vim.fn.expand("<afile>"))
+		vim.keymap.set({ "n", "v" }, "cc", "<Plug>(git-conflict-ours)")
+		vim.keymap.set({ "n", "v" }, "ci", "<Plug>(git-conflict-theirs)")
+		vim.keymap.set({ "n", "v" }, "cb", "<Plug>(git-conflict-both)")
+		vim.keymap.set({ "n", "v" }, "cn", "<Plug>(git-conflict-none)")
+		vim.keymap.set({ "n", "v" }, "ck", "<Plug>(git-conflict-prev-conflict)")
+		vim.keymap.set({ "n", "v" }, "cj", "<Plug>(git-conflict-next-conflict)")
+	end,
 })
 
 -- vim.api.nvim_create_autocmd("TermOpen", {
@@ -518,3 +510,14 @@ vim.api.nvim_create_autocmd("User", {
 --     vim.keymap.set({ "n" }, "<C-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
 --   end,
 -- })
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "text.kulala_ui",
+	callback = function(event)
+		local ok, parser = pcall(vim.treesitter.get_parser, event.buf, "json")
+		if ok and parser then
+			parser:destroy() -- detaches only the JSON parser
+			-- vim.treesitter.get_parser_cache(event.buf, "json").tree = nil
+		end
+	end,
+})

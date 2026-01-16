@@ -55,31 +55,14 @@ M.get_github_attachment_image = function(url, callback, cookies_path, output_pat
 	local home = os.getenv("HOME")
 	output_path = output_path or os.tmpname()
 	cookies_path = cookies_path or home .. "/Downloads/cookies.txt"
-  -- print('download_image tmp path: ', output_path)
 
 	local Job = require("plenary.job")
 
 	Job
 		:new({
-			-- command = "curl",
-			-- args = {
-			--      "-s",
-			-- 	"-L",
-			-- 	"-b",
-			-- 	cookies_path,
-			-- 	"-o",
-			-- 	output_path,
-			-- 	"-H",
-			-- 	"user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36",
-			-- 	"-H",
-			-- 	"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
-			-- 	"-H",
-			-- 	"referer: https://github.com/",
-			-- 	url,
-			-- },
-      command = "bun",
-      args = { "download.ts", url, output_path },
-      cwd = "/Users/jgarcia/work/tmp/cookies-test",
+      command = os.getenv("HOME") .. "/.config/bin/github_image_download",
+      args = { url, output_path },
+      -- cwd = "/Users/jgarcia/work/tmp/cookies-test",
       -- on_exit = function(j, return_val)
       --   local output = table.concat(j:result(), "\n")
       --   print("Downloaded file path:", output)

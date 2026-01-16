@@ -1,6 +1,8 @@
 return {
 	{
 		"jugarpeupv/barbecue.nvim",
+    -- dir = "~/projects/barbecue",
+    -- dev = true,
 		enabled = true,
 		name = "barbecue",
 		branch = "main",
@@ -388,6 +390,7 @@ return {
 						-- 'NvimTree',
 						statusline = { "alpha", "dashboard", "Outline", "Diffview", "diffview", "intro", "NvimTree" },
 						winbar = {
+              "oil",
 							"help",
 							"startify",
 							"dashboard",

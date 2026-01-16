@@ -35,7 +35,7 @@ return {
 	{
 		"Weissle/persistent-breakpoints.nvim",
 		-- event = { "BufReadPost" },
-    event = { "LspAttach" },
+		event = { "LspAttach" },
 		keys = {
 			-- { "<C-d>" },
 			-- { "<C-u>" },
@@ -169,7 +169,7 @@ return {
 				"<leader>dV",
 				function()
 					local widgets = require("dap.ui.widgets")
-					local my_sidebar = widgets.sidebar(widgets.scopes)
+					local my_sidebar = widgets.sidebar(widgets.scopes, { width = 40 })
 					my_sidebar.open()
 				end,
 				{ "n", "v" },
@@ -582,14 +582,16 @@ return {
 			-- vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#D20F39", bg = "none" })
 			-- vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#af0a27", bg = "none" })
 			vim.api.nvim_set_hl(0, "DapBreakpoint2", { ctermbg = 0, fg = "#89ddff", bg = "none" })
-			vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
-			vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
-			vim.api.nvim_set_hl(0, "DapStoppedText", { ctermbg = 0, fg = "#aa8430", bg = "none" })
+			-- vim.api.nvim_set_hl(0, "DapStopped2", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
+			-- vim.api.nvim_set_hl(0, "DapStopped3", { ctermbg = 0, fg = "none", bg = "#3f4104" })
+			-- vim.api.nvim_set_hl(0, "DapStoppedText", { ctermbg = 0, fg = "#aa8430", bg = "none" })
+      vim.api.nvim_set_hl(0, "DapStoppedText", { ctermbg = 0, fg = "#8ee2cf", bg = "none" })
 			vim.api.nvim_set_hl(0, "DapRejected", { ctermbg = 0, fg = "#89ddff", bg = "none" })
 			-- vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#664f1d" })
 
 			-- vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#1a3754" })
-      vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#3B3120" })
+			-- vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#3B3120" })
+      vim.api.nvim_set_hl(0, "DapDebug1", { ctermbg = 0, fg = "none", bg = "#103235" })
 
 			-- vim.fn.sign_define("DapBreakpointRejected", { text = "⊚", texthl = "", linehl = "", numhl = "" })
 			-- vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint2", linehl = "", numhl = "" })

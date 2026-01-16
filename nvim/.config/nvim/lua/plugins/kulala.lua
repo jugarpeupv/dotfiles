@@ -28,6 +28,7 @@ return {
 			vscode_rest_client_environmentvars = true,
 			winbar = true,
 			ui = {
+        -- max_response_size = 20480,
 				default_winbar_panes = { "body", "headers", "verbose", "script_output", "report" },
         win_opts = { bo = {}, wo = { wrap = true } },
 				pickers = {

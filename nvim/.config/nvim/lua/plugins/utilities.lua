@@ -1,8 +1,12 @@
 return {
 	{
+		"itchyny/calendar.vim",
+		cmd = { "Calendar" },
+	},
+	{
 		"https://tangled.org/cuducos.me/yaml.nvim",
 		ft = { "yaml", "yml", "yaml.github" }, -- optional
-    enabled = false,
+		enabled = false,
 		dependencies = {
 			"folke/snacks.nvim", -- optional
 		},
@@ -199,11 +203,17 @@ return {
 	},
 	{
 		"mogelbrod/vim-jsonpath",
-		ft = { "json", "jsonc" },
+		keys = {
+			{
+        mode = { "n" },
+				"<leader>cp",
+				function()
+					vim.cmd("JsonPath")
+				end,
+			},
+		},
 		config = function()
 			vim.g.jsonpath_register = "*"
-
-			vim.keymap.set("n", "<leader>cp", "<cmd>JsonPath<CR>", {})
 		end,
 	},
 	-- { 'mistweaverco/snap.nvim', opts = {}, cmd = { "Snap" } },

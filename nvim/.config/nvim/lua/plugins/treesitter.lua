@@ -29,218 +29,330 @@ return {
 		branch = "main",
 		build = ":TSUpdate",
 		config = function()
-			local ts = require("nvim-treesitter")
-
-			-- State tracking for async parser loading
-			local parsers_loaded = {}
-			local parsers_pending = {}
-			local parsers_failed = {}
-
-			local ns = vim.api.nvim_create_namespace("treesitter.async")
-
-			-- Helper to start highlighting and indentation
-			local function start(buf, lang)
-				local ok = pcall(vim.treesitter.start, buf, lang)
-				if ok then
-					vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("treesitter-enabled-filetype", { clear = true }),
+				pattern = {
+          "octo",
+          "opencode_output",
+          "opencode",
+					"kitty",
+					"http",
+					"rest",
+					"java",
+					"go",
+					"copilot-chat",
+					"yaml",
+					"yml",
+					"yaml.github",
+					"jsonc",
+					"sh",
+					"dosini",
+					-- "editorconfig",
+					"typescript",
+					-- "kulala_http",
+					"javascript",
+					"markdown",
+					"gitcommit",
+          "http",
+					"hurl",
+					"jproperties",
+					"properties",
+					"codecompanion",
+					"bash",
+					"html",
+					"htmlangular",
+					"scss",
+					"css",
+					"groovy",
+					"Avante",
+					"dockerfile",
+					"regex",
+					"lua",
+				},
+				callback = function()
+					-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 					vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
 					vim.wo[0][0].foldmethod = "expr"
-					-- vim.schedule(function ()
-					--   vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-					--   vim.wo[0][0].foldmethod = "expr"
-					-- end)
-				end
-				return ok
-			end
-
-			-- Install core parsers after lazy.nvim finishes loading all plugins
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "LazyDone",
-				once = true,
-				callback = function()
-					ts.install({
-						"bash",
-						"comment",
-						"css",
-						"diff",
-						"fish",
-						"jsonc",
-						"git_config",
-						"git_rebase",
-						"gitcommit",
-						"gitignore",
-						"html",
-						"javascript",
-						"json",
-						"latex",
-						"lua",
-						"luadoc",
-						"make",
-						"markdown",
-						"markdown_inline",
-						"norg",
-						"python",
-						"query",
-						"regex",
-						"scss",
-						"svelte",
-						"toml",
-						"tsx",
-						"typescript",
-						"typst",
-						"vim",
-						"vimdoc",
-						"vue",
-						"xml",
-					}, {
-						max_jobs = 8,
-					})
+					vim.treesitter.start()
 				end,
 			})
 
-			-- Decoration provider for async parser loading
-			vim.api.nvim_set_decoration_provider(ns, {
-				on_start = vim.schedule_wrap(function()
-					if #parsers_pending == 0 then
-						return false
-					end
-					for _, data in ipairs(parsers_pending) do
-						if vim.api.nvim_buf_is_valid(data.buf) then
-							if start(data.buf, data.lang) then
-								parsers_loaded[data.lang] = true
-							else
-								parsers_failed[data.lang] = true
-							end
-						end
-					end
-					parsers_pending = {}
-				end),
-			})
+      vim.treesitter.language.register("markdown", "opencode")
+      vim.treesitter.language.register("markdown", "octo")
+      vim.treesitter.language.register("yaml", "yaml.github") -- the someft filetype will use the python parser and queries.
 
-			vim.treesitter.language.register("markdown", "octo")
-			vim.treesitter.language.register("yaml", "yaml.github") -- the someft filetype will use the python parser and queries.
+      vim.filetype.add({
+      	extension = { zsh = "bash" },
+      	filename = { [".zshrc"] = "bash" },
+      	pattern = { [".*/zsh.*"] = "bash" },
+      })
 
-			vim.filetype.add({
-				extension = { zsh = "bash" },
-				filename = { [".zshrc"] = "bash" },
-				pattern = { [".*/zsh.*"] = "bash" },
-			})
+      vim.filetype.add({
+      	pattern = { [".*/isyncrc"] = "mbsync" },
+      })
 
-			vim.filetype.add({
-				pattern = { [".*/isyncrc"] = "mbsync" },
-			})
+      vim.filetype.add({
+      	pattern = {
+      		[".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
+      	},
+      })
 
-			vim.filetype.add({
-				pattern = {
-					[".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
-				},
-			})
+      require("jg.custom.incremental_selection").setup({
+      	incr_key = "<tab>", -- increment selection key
+      	decr_key = "<s-tab>", -- decrement selection key
+      })
 
-			require("jg.custom.incremental_selection").setup({
-				incr_key = "<tab>", -- increment selection key
-				decr_key = "<s-tab>", -- decrement selection key
-			})
+      vim.filetype.add({
+      	extension = {
+      		["http"] = "http",
+      	},
+      })
 
-			vim.filetype.add({
-				extension = {
-					["http"] = "http",
-				},
-			})
+      vim.api.nvim_create_autocmd("User", {
+      	group = vim.api.nvim_create_augroup("TSUpdateTreesitter", { clear = true }),
+      	pattern = "TSUpdate",
+      	callback = function()
+      		require("nvim-treesitter.parsers").ghactions = {
+      			install_info = {
+      				url = "https://github.com/rmuir/tree-sitter-ghactions",
+      				queries = "queries",
+      			},
+      		}
 
-			vim.api.nvim_create_autocmd("User", {
-				group = vim.api.nvim_create_augroup("TSUpdateTreesitter", { clear = true }),
-				pattern = "TSUpdate",
-				callback = function()
-					require("nvim-treesitter.parsers").ghactions = {
-						install_info = {
-							url = "https://github.com/rmuir/tree-sitter-ghactions",
-							queries = "queries",
-						},
-					}
+      		require("nvim-treesitter.parsers").lua_patterns = {
+      			install_info = {
+      				url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns",
+      			},
+      		}
+      	end,
+      })
 
-					require("nvim-treesitter.parsers").lua_patterns = {
-						install_info = {
-							url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns",
-						},
-					}
-				end,
-			})
 
-			local group = vim.api.nvim_create_augroup("TreesitterSetup", { clear = true })
 
-			local ignore_filetypes = {
-				"checkhealth",
-				"codecompanion",
-				"codediff-explorer",
-				"grug-far",
-				"notmuch-hello",
-				"compilation",
-				"oil-progress",
-				"qf",
-				"opencode",
-				"git",
-				"snacks_picker_preview",
-				"fyler",
-				"bufferize",
-				"snacks_picker_list",
-				"snacks_picker_input",
-				"snacks_layout_box",
-				"oil_preview",
-				"lazy",
-				"mason",
-				"NvimTree",
-				"conf",
-        "AgenticTodos",
-        "AgenticCode",
-        "AgenticFiles",
-        "AgenticInput",
-				"opencode_footer",
-				"TelescopePrompt",
-				"applescript",
-				"DiffviewFileHistory",
-				"oil_progress",
-				"fidget",
-				"grapple",
-				"DiffviewFiles",
-				"blink-cmp-menu",
-				"oil",
-        "mbsync",
-				"snacks_dashboard",
-				"TelescopeResults",
-				"snacks_notif",
-				"text",
-				"snacks_win",
-				"bigfile",
-			}
 
-			-- Auto-install parsers and enable highlighting on FileType
-			vim.api.nvim_create_autocmd("FileType", {
-				group = group,
-				desc = "Enable treesitter highlighting and indentation (non-blocking)",
-				callback = function(event)
-					if vim.tbl_contains(ignore_filetypes, event.match) then
-						return
-					end
-
-					local lang = vim.treesitter.language.get_lang(event.match) or event.match
-					local buf = event.buf
-
-					if parsers_failed[lang] then
-						return
-					end
-
-					if parsers_loaded[lang] then
-						-- Parser already loaded, start immediately (fast path)
-						start(buf, lang)
-					else
-						-- Queue for async loading
-						table.insert(parsers_pending, { buf = buf, lang = lang })
-					end
-
-					-- Auto-install missing parsers (async, no-op if already installed)
-					ts.install({ lang })
-				end,
-			})
+      -- OLD async
+			-- local ts = require("nvim-treesitter")
+			--
+			-- -- State tracking for async parser loading
+			-- local parsers_loaded = {}
+			-- local parsers_pending = {}
+			-- local parsers_failed = {}
+			--
+			-- local ns = vim.api.nvim_create_namespace("treesitter.async")
+			--
+			-- -- Helper to start highlighting and indentation
+			-- local function start(buf, lang)
+			-- 	local ok = pcall(vim.treesitter.start, buf, lang)
+			-- 	if ok then
+			-- 		vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+			-- 		vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+			-- 		vim.wo[0][0].foldmethod = "expr"
+			-- 		-- vim.schedule(function ()
+			-- 		--   vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+			-- 		--   vim.wo[0][0].foldmethod = "expr"
+			-- 		-- end)
+			-- 	end
+			-- 	return ok
+			-- end
+			--
+			-- -- Install core parsers after lazy.nvim finishes loading all plugins
+			-- vim.api.nvim_create_autocmd("User", {
+			-- 	pattern = "LazyDone",
+			-- 	once = true,
+			-- 	callback = function()
+			-- 		ts.install({
+			-- 			"dap_repl",
+			-- 			"bash",
+			-- 			"comment",
+			-- 			"css",
+			-- 			"diff",
+			-- 			"fish",
+			-- 			"jsonc",
+			-- 			"git_config",
+			-- 			"git_rebase",
+			-- 			"gitcommit",
+			-- 			"gitignore",
+			-- 			"html",
+			-- 			"javascript",
+			-- 			"json",
+			-- 			"latex",
+			-- 			"lua",
+			-- 			"luadoc",
+			-- 			"make",
+			-- 			"markdown",
+			-- 			"markdown_inline",
+			-- 			"norg",
+			-- 			"python",
+			-- 			"query",
+			-- 			"regex",
+			-- 			"scss",
+			-- 			"svelte",
+			-- 			"toml",
+			-- 			"tsx",
+			-- 			"typescript",
+			-- 			"typst",
+			-- 			"vim",
+			-- 			"vimdoc",
+			-- 			"vue",
+			-- 			"xml",
+			-- 		}, {
+			-- 			max_jobs = 8,
+			-- 		})
+			-- 	end,
+			-- })
+			--
+			-- -- Decoration provider for async parser loading
+			-- vim.api.nvim_set_decoration_provider(ns, {
+			-- 	on_start = vim.schedule_wrap(function()
+			-- 		if #parsers_pending == 0 then
+			-- 			return false
+			-- 		end
+			-- 		for _, data in ipairs(parsers_pending) do
+			-- 			if vim.api.nvim_buf_is_valid(data.buf) then
+			-- 				if start(data.buf, data.lang) then
+			-- 					parsers_loaded[data.lang] = true
+			-- 				else
+			-- 					parsers_failed[data.lang] = true
+			-- 				end
+			-- 			end
+			-- 		end
+			-- 		parsers_pending = {}
+			-- 	end),
+			-- })
+			--
+			-- vim.treesitter.language.register("markdown", "octo")
+			-- vim.treesitter.language.register("yaml", "yaml.github") -- the someft filetype will use the python parser and queries.
+			--
+			-- vim.filetype.add({
+			-- 	extension = { zsh = "bash" },
+			-- 	filename = { [".zshrc"] = "bash" },
+			-- 	pattern = { [".*/zsh.*"] = "bash" },
+			-- })
+			--
+			-- vim.filetype.add({
+			-- 	pattern = { [".*/isyncrc"] = "mbsync" },
+			-- })
+			--
+			-- vim.filetype.add({
+			-- 	pattern = {
+			-- 		[".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
+			-- 	},
+			-- })
+			--
+			-- require("jg.custom.incremental_selection").setup({
+			-- 	incr_key = "<tab>", -- increment selection key
+			-- 	decr_key = "<s-tab>", -- decrement selection key
+			-- })
+			--
+			-- vim.filetype.add({
+			-- 	extension = {
+			-- 		["http"] = "http",
+			-- 	},
+			-- })
+			--
+			-- vim.api.nvim_create_autocmd("User", {
+			-- 	group = vim.api.nvim_create_augroup("TSUpdateTreesitter", { clear = true }),
+			-- 	pattern = "TSUpdate",
+			-- 	callback = function()
+			-- 		require("nvim-treesitter.parsers").ghactions = {
+			-- 			install_info = {
+			-- 				url = "https://github.com/rmuir/tree-sitter-ghactions",
+			-- 				queries = "queries",
+			-- 			},
+			-- 		}
+			--
+			-- 		require("nvim-treesitter.parsers").lua_patterns = {
+			-- 			install_info = {
+			-- 				url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns",
+			-- 			},
+			-- 		}
+			-- 	end,
+			-- })
+			--
+			-- local group = vim.api.nvim_create_augroup("TreesitterSetup", { clear = true })
+			--
+			-- local ignore_filetypes = {
+			-- 	"checkhealth",
+			-- 	"codecompanion",
+			-- 	"codediff-explorer",
+			-- 	"grug-far",
+			-- 	"notmuch-hello",
+			-- 	"compilation",
+			-- 	"oil-progress",
+			-- 	"qf",
+			-- 	"opencode",
+			-- 	"git",
+			-- 	"snacks_picker_preview",
+			-- 	"fyler",
+			-- 	"bufferize",
+			-- 	"snacks_picker_list",
+			-- 	"snacks_picker_input",
+			-- 	"snacks_layout_box",
+			-- 	"oil_preview",
+			-- 	"lazy",
+			-- 	"mason",
+			-- 	"NvimTree",
+			-- 	"conf",
+			-- 	"AgenticTodos",
+			-- 	"AgenticCode",
+			-- 	"AgenticFiles",
+			-- 	"AgenticInput",
+			-- 	"opencode_footer",
+			-- 	"TelescopePrompt",
+			-- 	"applescript",
+			-- 	"DiffviewFileHistory",
+			-- 	"oil_progress",
+			-- 	"fidget",
+			-- 	"grapple",
+			-- 	"DiffviewFiles",
+			-- 	"blink-cmp-menu",
+			-- 	"oil",
+			-- 	"mbsync",
+			-- 	"snacks_dashboard",
+			-- 	"TelescopeResults",
+			-- 	"snacks_notif",
+			-- 	"text",
+			-- 	"snacks_win",
+			-- 	"bigfile",
+			-- 	"OverseerOutput",
+			-- 	"dap-repl",
+			-- 	"dapui_console",
+			-- 	"dapui_scopes",
+			-- 	"dapui_breakpoints",
+			-- 	"dapui_stacks",
+			-- 	"dapui_watches",
+			-- 	"dapui_hover",
+			-- }
+			--
+			-- -- Auto-install parsers and enable highlighting on FileType
+			-- vim.api.nvim_create_autocmd("FileType", {
+			-- 	group = group,
+			-- 	desc = "Enable treesitter highlighting and indentation (non-blocking)",
+			-- 	callback = function(event)
+			-- 		if vim.tbl_contains(ignore_filetypes, event.match) then
+			-- 			return
+			-- 		end
+			--
+			-- 		local lang = vim.treesitter.language.get_lang(event.match) or event.match
+			-- 		local buf = event.buf
+			--
+			-- 		if parsers_failed[lang] then
+			-- 			return
+			-- 		end
+			--
+			-- 		if parsers_loaded[lang] then
+			-- 			-- Parser already loaded, start immediately (fast path)
+			-- 			start(buf, lang)
+			-- 		else
+			-- 			-- Queue for async loading
+			-- 			table.insert(parsers_pending, { buf = buf, lang = lang })
+			-- 		end
+			--
+			-- 		-- Auto-install missing parsers (async, no-op if already installed)
+			-- 		ts.install({ lang })
+			-- 	end,
+			-- })
 		end,
 	},
 	-- {

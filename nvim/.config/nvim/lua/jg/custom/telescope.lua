@@ -14,7 +14,6 @@ local function clear_workspace_cache_for(path)
 	workspace_cache[get_workspace_key(path)] = nil
 end
 
-
 local function branch_name()
 	local branch = vim.fn.system("git branch --show-current 2> /dev/null | tr -d '\n'")
 	if branch ~= "" then
@@ -22,6 +21,151 @@ local function branch_name()
 	else
 		return ""
 	end
+end
+
+M.find_directory_in_oil_and_focus = function()
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  local remove_dir = function(prompt_bufnr)
+    local selection = action_state.get_selected_entry()
+    actions.close(prompt_bufnr)
+    if not selection then
+      print("No directory selected!")
+      return
+    end
+
+    local function trash_path(path)
+      vim.fn.jobstart("trash" .. " " .. vim.fn.shellescape(path), {
+        detach = true,
+        on_exit = function(_, exit_code)
+          if exit_code == 0 then
+            require("nvim-tree.api").tree.reload()
+          else
+            print("Failed to move to trash: ", path)
+          end
+        end,
+      })
+    end
+    local full_path = vim.loop.cwd() .. "/" .. selection.value
+    trash_path(full_path)
+  end
+
+  local function open_oil_tree(prompt_bufnr, map)
+    actions.select_default:replace(function()
+      actions.close(prompt_bufnr)
+      local selection = action_state.get_selected_entry()
+      require("oil").open(selection.value)
+    end)
+
+    map("n", "<C-x>", remove_dir)
+    map("i", "<C-x>", remove_dir)
+
+    return true
+  end
+
+  require("telescope.builtin").find_files({
+    prompt_title = "Open directory in nvim tree",
+    find_command = {
+      "fd",
+      "--type",
+      "directory",
+      "--hidden",
+      "--no-ignore",
+      "--exclude",
+      ".git/*",
+      "--exclude",
+      "node_modules/*",
+      "--exclude",
+      "node_modules",
+    },
+    attach_mappings = open_oil_tree,
+    entry_maker = function(entry)
+      return {
+        value = entry,
+        display = function()
+          local display_string = " " .. entry
+          return display_string, { { { 0, 1 }, "Directory" } }
+        end,
+        ordinal = entry,
+      }
+    end,
+  })
+end
+
+
+M.find_directory_in_nvim_tree_and_focus = function()
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+
+	local remove_dir = function(prompt_bufnr)
+		local selection = action_state.get_selected_entry()
+		actions.close(prompt_bufnr)
+		if not selection then
+			print("No directory selected!")
+			return
+		end
+
+		local function trash_path(path)
+			vim.fn.jobstart("trash" .. " " .. vim.fn.shellescape(path), {
+				detach = true,
+				on_exit = function(_, exit_code)
+					if exit_code == 0 then
+						-- print("Moved to trash: " .. path)
+						require("nvim-tree.api").tree.reload()
+					else
+						print("Failed to move to trash: ", path)
+					end
+				end,
+			})
+		end
+		local full_path = vim.loop.cwd() .. "/" .. selection.value
+		trash_path(full_path)
+	end
+
+	local function open_nvim_tree(prompt_bufnr, map)
+		actions.select_default:replace(function()
+			local api = require("nvim-tree.api")
+			actions.close(prompt_bufnr)
+			local selection = action_state.get_selected_entry()
+			api.tree.open()
+			-- api.tree.find_file(selection.cwd .. "/" .. selection.value)
+			api.tree.find_file(selection.value)
+		end)
+
+		map("n", "<C-x>", remove_dir)
+		map("i", "<C-x>", remove_dir)
+
+		return true
+	end
+
+	require("telescope.builtin").find_files({
+		prompt_title = "Open directory in nvim tree",
+		find_command = {
+			"fd",
+			"--type",
+			"directory",
+			"--hidden",
+			"--no-ignore",
+			"--exclude",
+			".git/*",
+			"--exclude",
+			"node_modules/*",
+			"--exclude",
+			"node_modules",
+		},
+		attach_mappings = open_nvim_tree,
+		entry_maker = function(entry)
+			return {
+				value = entry,
+				display = function()
+					local display_string = " " .. entry
+					return display_string, { { { 0, 1 }, "Directory" } }
+				end,
+				ordinal = entry,
+			}
+		end,
+	})
 end
 
 M.set_upstream = function(prompt_bufnr)
@@ -699,7 +843,7 @@ M.telescope_file_picker_in_workspace = function(path, no_ignore)
 		telescope_builtin.find_files({
 			hidden = true,
 			cwd = dir,
-      prompt_title = "Find files in: " .. dir,
+			prompt_title = "Find files in: " .. dir,
 			find_command = {
 				"rg",
 				"--files",
@@ -1329,8 +1473,8 @@ M.notmuch_picker = function(opts)
 	local function getaddresses()
 		local file =
 			io.popen("notmuch address --format=json --deduplicate=address '*' | jq -r '.[] | .[\"name-addr\"]'")
-    --   io.popen("notmuch address --format=json --deduplicate=address -- 'tag:izertis' | jq -r '.[] | .[\"name-addr\"]'")
-    -- io.popen("notmuch address --format=json --deduplicate=address -- 'tag:personal' | jq -r '.[] | .[\"name-addr\"]'")
+		--   io.popen("notmuch address --format=json --deduplicate=address -- 'tag:izertis' | jq -r '.[] | .[\"name-addr\"]'")
+		-- io.popen("notmuch address --format=json --deduplicate=address -- 'tag:personal' | jq -r '.[] | .[\"name-addr\"]'")
 		local addresses = {}
 
 		if file == nil then
@@ -1414,19 +1558,19 @@ M.show_global_npm_packages = function()
 		return { display = display, value = pkg_path }
 	end
 
-  function flatten_table(t)
-    local result = {}
-    for k, v in pairs(t) do
-      if type(v) == "table" then
-        for subk, subv in pairs(v) do
-          result[subk] = subv
-        end
-      else
-        result[k] = v
-      end
-    end
-    return result
-  end
+	function flatten_table(t)
+		local result = {}
+		for k, v in pairs(t) do
+			if type(v) == "table" then
+				for subk, subv in pairs(v) do
+					result[subk] = subv
+				end
+			else
+				result[k] = v
+			end
+		end
+		return result
+	end
 
 	local function collect_packages(pkg_root)
 		local results = {}
@@ -1437,13 +1581,13 @@ M.show_global_npm_packages = function()
 					-- Scoped packages
 					for subentry in vim.fs.dir(entry_path) do
 						local sub_path = entry_path .. "/" .. subentry
-            local populated_entry = read_package_info(sub_path, entry .. "/" .. subentry)
-            table.insert(populated_entry, { original_pkg_root = pkg_root })
+						local populated_entry = read_package_info(sub_path, entry .. "/" .. subentry)
+						table.insert(populated_entry, { original_pkg_root = pkg_root })
 						table.insert(results, flatten_table(populated_entry))
 					end
 				else
-          local populated_entry =  read_package_info(entry_path, entry)
-          table.insert(populated_entry, { original_pkg_root = pkg_root })
+					local populated_entry = read_package_info(entry_path, entry)
+					table.insert(populated_entry, { original_pkg_root = pkg_root })
 					table.insert(results, flatten_table(populated_entry))
 				end
 			end
@@ -1468,7 +1612,7 @@ M.show_global_npm_packages = function()
 							value = entry.value,
 							display = entry.display,
 							ordinal = entry.display,
-              original_pkg_root = entry.original_pkg_root
+							original_pkg_root = entry.original_pkg_root,
 						}
 					end,
 				}),

@@ -143,10 +143,9 @@ return {
 				"<leader>pI",
 				function()
 					local Job = require("plenary.job")
+          -- TODO: https://github.com/richardpenman/browsercookie
 					Job:new({
-						command = "bun",
-						args = { "upload.ts" },
-						cwd = "/Users/jgarcia/work/tmp/cookies-test",
+            command = os.getenv("HOME") .. "/.config/bin/github_upload_image",
 						on_exit = function(j, return_val)
 							if return_val == 0 then
 								local href = table.concat(j:result(), "\n"):gsub("%s+$", "")

@@ -73,7 +73,7 @@ return {
 							return
 						end
 						local command = "sp | e " .. worktree_path .. "/" .. relpath
-						print("Executing command: ", command)
+						-- print("Executing command: ", command)
 
 						vim.cmd(command)
 					end
@@ -92,7 +92,7 @@ return {
 						end
 
 						local command = "vsp | e " .. worktree_path .. "/" .. relpath
-						print("Executing command: ", command)
+						-- print("Executing command: ", command)
 
 						vim.cmd(command)
 					end

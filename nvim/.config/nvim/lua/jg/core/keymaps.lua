@@ -704,8 +704,6 @@ vim.keymap.set("n", "<leader>ww", function()
 	require("hop").hint_words()
 end, opts)
 
--- JsonPath
-keymap("n", "<leader>cp", "<cmd>JsonPath<CR>", opts)
 
 -- Reformat file
 keymap("n", "<leader>cw", ":e ++ff=dos<CR> | :set ff=unix<CR>", opts)
@@ -780,6 +778,15 @@ vim.keymap.set("n", "<leader>ct", function()
 	require("terminal").run("", {
 		cwd = vim.fn.expand("%:p:h"),
 	})
+end)
+
+vim.keymap.set("n", "<leader>bb", function()
+	local btop = require("terminal").terminal:new({
+		layout = { open_cmd = "enew" },
+		cmd = { "btop" },
+		autoclose = false,
+	})
+	btop:toggle(nil, true)
 end)
 
 -- vim.keymap.set({ "i", "s" }, "<C-e>", function()
@@ -909,81 +916,9 @@ vim.keymap.set({ "n" }, "<leader>se", function()
 	end
 end, opts)
 
-local function find_directory_and_focus()
-	local actions = require("telescope.actions")
-	local action_state = require("telescope.actions.state")
+vim.keymap.set("n", "<leader>fl", require("jg.custom.telescope").find_directory_in_oil_and_focus, opts)
 
-	local remove_dir = function(prompt_bufnr)
-		local selection = action_state.get_selected_entry()
-		actions.close(prompt_bufnr)
-		if not selection then
-			print("No directory selected!")
-			return
-		end
-
-		local function trash_path(path)
-			vim.fn.jobstart("trash" .. " " .. vim.fn.shellescape(path), {
-				detach = true,
-				on_exit = function(_, exit_code)
-					if exit_code == 0 then
-						-- print("Moved to trash: " .. path)
-						require("nvim-tree.api").tree.reload()
-					else
-						print("Failed to move to trash: ", path)
-					end
-				end,
-			})
-		end
-		local full_path = vim.loop.cwd() .. "/" .. selection.value
-		trash_path(full_path)
-	end
-
-	local function open_nvim_tree(prompt_bufnr, map)
-		actions.select_default:replace(function()
-			local api = require("nvim-tree.api")
-			actions.close(prompt_bufnr)
-			local selection = action_state.get_selected_entry()
-			api.tree.open()
-			-- api.tree.find_file(selection.cwd .. "/" .. selection.value)
-			api.tree.find_file(selection.value)
-		end)
-
-		map("n", "<C-x>", remove_dir)
-		map("i", "<C-x>", remove_dir)
-
-		return true
-	end
-
-	require("telescope.builtin").find_files({
-		prompt_title = "Open directory in nvim tree",
-		find_command = {
-			"fd",
-			"--type",
-			"directory",
-			"--hidden",
-			"--no-ignore",
-			"--exclude",
-			".git/*",
-			"--exclude",
-			"node_modules/*",
-			"--exclude",
-			"node_modules",
-		},
-		attach_mappings = open_nvim_tree,
-		entry_maker = function(entry)
-			return {
-				value = entry,
-				display = function()
-					local display_string = " " .. entry
-					return display_string, { { { 0, 1 }, "Directory" } }
-				end,
-				ordinal = entry,
-			}
-		end,
-	})
-end
-
-vim.keymap.set("n", "<leader>fd", find_directory_and_focus, opts)
+vim.keymap.set("n", "<leader>fd", require("jg.custom.telescope").find_directory_in_nvim_tree_and_focus, opts)
 
 local function find_in_node_modules()
 	local actions = require("telescope.actions")
@@ -1872,7 +1807,6 @@ vim.keymap.set("n", "gy", function()
 	vim.notify("Copied: " .. path)
 end, { desc = "Yank absolute file path to clipboard" })
 
-
 -- vim.keymap.set('x', 'an', function()
 --   vim.lsp.buf.selection_range('outer')
 -- end, { desc = "vim.lsp.buf.selection_range('outer')" })
@@ -1885,5 +1819,5 @@ end, { desc = "Yank absolute file path to clipboard" })
 -- vim.keymap.set("n", "·", "%", { silent = true })
 
 vim.keymap.set("n", "L", "$", { silent = true })
-vim.keymap.set("v", "<Enter>", "%", { silent = true })
-vim.keymap.set("n", "<Enter>", "%", { silent = true })
+vim.keymap.set("v", "<S-CR>", "%", { silent = true })
+vim.keymap.set("n", "<S-CR>", "%", { silent = true })

@@ -403,7 +403,7 @@ return {
 						show_settings = false,
 						fold_reasoning = true,
 						show_reasoning = true,
-						fold_context = true,
+						fold_context = false,
 						auto_scroll = false,
 						show_tools_processing = true,
 						show_header_separator = true, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
@@ -468,7 +468,9 @@ return {
 				mode = { "v" },
 				"ga",
 				function()
-					vim.cmd("CodeCompanionChat Add")
+					-- vim.cmd("CodeCompanionChat Add")
+          local command = ":CodeCompanionChat Add<cr>"
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(command, true, false, true), "n", true)
 					vim.cmd("normal! zz")
 				end,
 			},

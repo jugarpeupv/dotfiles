@@ -105,6 +105,12 @@ else
     },
   }
 end
+-- local clipboard = vim.opt.clipboard
+-- vim.opt.clipboard = "" -- PERF: reset
+-- vim.schedule(function()
+-- 	-- load later to avoid bad performance for "xsel" and "pbcopy"
+-- 	vim.opt.clipboard = clipboard
+-- end)
 
 -- split windows
 opt.splitright = true -- split vertical window to the right
@@ -122,6 +128,7 @@ opt.conceallevel = 0
 -- opt.laststatus = 0
 
 -- opt.winbar ="%=%m %f"
+-- opt.winbar =""
 
 -- vim.cmd[[set diffopt+=linematch:60]]
 
@@ -140,16 +147,16 @@ opt.list = true
 
 local space = "·"
 opt.listchars:append({
-  -- tab = "» ",
-  tab = "  ",
-  -- multispace = "␣",
-  -- multispace = space,
-  -- lead = space,
-  -- trail = "󱁐",
-  -- trail = "␣",
-  trail = space,
-  -- trail = "»",
-  nbsp = "&",
+	-- tab = "» ",
+	tab = "  ",
+	-- multispace = "␣",
+	-- multispace = space,
+	-- lead = space,
+	-- trail = "󱁐",
+	-- trail = "␣",
+	trail = space,
+	-- trail = "»",
+	nbsp = "&",
 })
 -- opt.listchars:append("trail:.")
 -- opt.listchars:append("eol:↴")
@@ -176,23 +183,23 @@ vim.opt.foldmethod = "expr"
 vim.o.numberwidth = 2
 
 local arrows = {
-  right = "",
-  left = "",
-  up = "",
-  down = "",
+	right = "",
+	left = "",
+	up = "",
+	down = "",
 }
 
 vim.opt.fillchars = {
-  fold = " ",
-  -- foldinner = ' ',
-  foldsep = " ",
-  -- foldclose = arrows.down,
-  -- foldclose = "",
-  foldclose = "",
-  -- foldclose = "",
-  foldopen = "",
-  -- foldopen = arrows.right,
-  diff = "╱",
+	fold = " ",
+	-- foldinner = ' ',
+	foldsep = " ",
+	-- foldclose = arrows.down,
+	-- foldclose = "",
+	foldclose = "",
+	-- foldclose = "",
+	foldopen = "",
+	-- foldopen = arrows.right,
+	diff = "╱",
 }
 
 -- opt.fillchars = opt.fillchars + "diff:╱"
