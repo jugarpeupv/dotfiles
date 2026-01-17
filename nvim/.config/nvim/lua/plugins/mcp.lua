@@ -1,20 +1,26 @@
 return {
 	"ravitemer/mcphub.nvim",
-  enabled = true,
+	enabled = function()
+		local is_headless = #vim.api.nvim_list_uis() == 0
+		if is_headless then
+			return false
+		end
+		return true
+	end,
 	dependencies = {
 		{ "nvim-lua/plenary.nvim" }, -- Required for Job and HTTP requests
 	},
 	ft = { "copilot-chat", "codecompanion" },
 	cmd = "MCPHub", -- lazy load by default
-  build = "bundled_build.lua",
+	build = "bundled_build.lua",
 	opts = {
-    use_bundled_binary = true,
-    global_env = function(_context)
-      return {
-        GH_MCP_TOKEN = os.getenv("GH_MCP_TOKEN") or "",
-        TAVILY_API_KEY = os.getenv("TAVILY_API_KEY") or "",
-      }
-    end,
+		use_bundled_binary = true,
+		global_env = function(_context)
+			return {
+				GH_MCP_TOKEN = os.getenv("GH_MCP_TOKEN") or "",
+				TAVILY_API_KEY = os.getenv("TAVILY_API_KEY") or "",
+			}
+		end,
 		log = {
 			level = vim.log.levels.DEBUG,
 			to_file = true,

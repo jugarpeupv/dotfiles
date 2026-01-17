@@ -450,7 +450,8 @@ return {
 			-- setup must be called before loading
 			vim.cmd.colorscheme("catppuccin")
 
-			vim.g.terminal_color_0 = "#1E1E2E"
+			-- vim.g.terminal_color_0 = "#1E1E2E"
+      vim.g.terminal_color_0 = "#585B70"
 			vim.g.terminal_color_8 = "#585B70"
 
 			vim.g.terminal_color_1 = "#F38BA8"

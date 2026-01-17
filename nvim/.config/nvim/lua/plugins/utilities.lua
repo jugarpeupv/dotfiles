@@ -1,7 +1,44 @@
 return {
 	{
+		"jrop/tuis.nvim",
+    enabled = true,
+		dependencies = { "folke/snacks.nvim" },
+		keys = {
+			{
+				mode = { "n" },
+				"<leader>tu",
+				function()
+					require("tuis").choose()
+				end,
+			},
+			{
+				mode = { "n" },
+				"<leader>up",
+				function()
+					require("tuis").run("processes")
+				end,
+			},
+			{
+				mode = { "n" },
+				"<leader>ul",
+				function()
+					require("tuis").run("lsof")
+				end,
+			},
+			{
+				mode = { "n" },
+				"<leader>ud",
+				function()
+					require("tuis").run("docker")
+				end,
+			},
+		},
+	},
+
+	{
 		"itchyny/calendar.vim",
 		cmd = { "Calendar" },
+    enabled = false,
 	},
 	{
 		"https://tangled.org/cuducos.me/yaml.nvim",
@@ -22,7 +59,7 @@ return {
 	},
 	{
 		"Avi-D-coder/whisper.nvim",
-		enabled = true,
+		enabled = false,
 		config = function()
 			require("whisper").setup({
 				model = "base.en",
@@ -205,7 +242,7 @@ return {
 		"mogelbrod/vim-jsonpath",
 		keys = {
 			{
-        mode = { "n" },
+				mode = { "n" },
 				"<leader>cp",
 				function()
 					vim.cmd("JsonPath")

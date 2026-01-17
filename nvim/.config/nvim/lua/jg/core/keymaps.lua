@@ -664,7 +664,7 @@ keymap("n", "<leader>gB", "<cmd>Git branch -vv<cr>", opts)
 -- end, opts)
 
 -- Sniprun
-keymap("n", "<leader>sr", "<cmd>%SnipRun<cr>", opts)
+keymap("n", "<leader>sR", "<cmd>%SnipRun<cr>", opts)
 
 -- Git blame
 keymap("n", "<leader>bl", "<cmd>lua require 'gitsigns'.blame_line()<cr>", opts)
@@ -780,13 +780,18 @@ vim.keymap.set("n", "<leader>ct", function()
 	})
 end)
 
+local btop_term
+
 vim.keymap.set("n", "<leader>bb", function()
-	local btop = require("terminal").terminal:new({
-		layout = { open_cmd = "enew" },
-		cmd = { "btop" },
-		autoclose = false,
-	})
-	btop:toggle(nil, true)
+  if not btop_term then
+     btop_term = require("terminal").terminal:new({
+      layout = { open_cmd = "enew" },
+      cmd = { "btop" },
+      autoclose = false,
+    })
+  end
+
+  btop_term:toggle(nil, true)
 end)
 
 -- vim.keymap.set({ "i", "s" }, "<C-e>", function()

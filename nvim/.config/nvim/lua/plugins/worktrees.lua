@@ -8,24 +8,31 @@ return {
 	-- "jugarpeupv/git-worktree.nvim",
 	-- version = "^2",
 	"jugarpeupv/git-worktree.nvim",
-	dir = "~/projects/git-worktree.nvim",
-	dev = true,
+	enabled = function()
+		local is_headless = #vim.api.nvim_list_uis() == 0
+		if is_headless then
+			return false
+		end
+		return true
+	end,
+	-- dir = "~/projects/git-worktree.nvim",
+	-- dev = true,
 	-- branch = "main",
 	-- dependencies = { "nvim-lua/plenary.nvim" },
 	keys = {
 		{
 			"<leader>wt",
 			function()
-        local git_path = vim.fn.getcwd() .. "/.git"
-        if vim.fn.isdirectory(git_path) == 1 then
-          vim.notify("Not in a bare repo", vim.log.levels.INFO)
-        elseif vim.fn.filereadable(git_path) == 1 then
-          require("telescope").extensions.git_worktree.git_worktree()
-        elseif vim.fn.filereadable(vim.fn.getcwd() .. "HEAD") then
-          require("telescope").extensions.git_worktree.git_worktree()
-        else
-          vim.notify(".git not found", vim.log.levels.WARN)
-        end
+				local git_path = vim.fn.getcwd() .. "/.git"
+				if vim.fn.isdirectory(git_path) == 1 then
+					vim.notify("Not in a bare repo", vim.log.levels.INFO)
+				elseif vim.fn.filereadable(git_path) == 1 then
+					require("telescope").extensions.git_worktree.git_worktree()
+				elseif vim.fn.filereadable(vim.fn.getcwd() .. "HEAD") then
+					require("telescope").extensions.git_worktree.git_worktree()
+				else
+					vim.notify(".git not found", vim.log.levels.WARN)
+				end
 			end,
 			{
 				noremap = true,
@@ -36,17 +43,16 @@ return {
 			mode = { "n" },
 			"<leader>wc",
 			function()
-        local git_path = vim.fn.getcwd() .. "/.git"
-        if vim.fn.isdirectory(git_path) == 1 then
-          vim.notify("Not in a bare repo", vim.log.levels.INFO)
-        elseif vim.fn.filereadable(git_path) == 1 then
-          require("telescope").extensions.git_worktree.create_git_worktree()
-        elseif vim.fn.filereadable(vim.fn.getcwd() .. "HEAD") then
-          require("telescope").extensions.git_worktree.create_git_worktree()
-        else
-          vim.notify(".git not found", vim.log.levels.WARN)
-        end
-
+				local git_path = vim.fn.getcwd() .. "/.git"
+				if vim.fn.isdirectory(git_path) == 1 then
+					vim.notify("Not in a bare repo", vim.log.levels.INFO)
+				elseif vim.fn.filereadable(git_path) == 1 then
+					require("telescope").extensions.git_worktree.create_git_worktree()
+				elseif vim.fn.filereadable(vim.fn.getcwd() .. "HEAD") then
+					require("telescope").extensions.git_worktree.create_git_worktree()
+				else
+					vim.notify(".git not found", vim.log.levels.WARN)
+				end
 			end,
 			{ noremap = true, silent = true },
 		},
@@ -160,14 +166,12 @@ return {
 			}
 			file_utils.write_bps(file_utils.get_bps_path(wt_root_dir_with_ending), my_table)
 
-
-
 			-- Update current file opened
 			local current_buffer_filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-      if current_buffer_filetype == 'oil' then
-        require("oil").open(path)
-        return
-      end
+			if current_buffer_filetype == "oil" then
+				require("oil").open(path)
+				return
+			end
 			if current_buffer_filetype == "NvimTree" then
 				return
 			else

@@ -526,7 +526,7 @@ return {
 		},
 		{
 			-- "<leader><space>",
-			"<leader>rs",
+			"<leader>sr",
 			function()
 				Snacks.picker.resume({
 					-- layout = {

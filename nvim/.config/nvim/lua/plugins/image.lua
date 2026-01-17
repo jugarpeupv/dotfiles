@@ -1,62 +1,75 @@
 vim.g.image_rendered = false
 
 return {
-  {
-    "HakonHarnes/img-clip.nvim",
-    -- keys = { "<leader>pi" },
-    opts = {
-      filetypes = {
-        codecompanion = {
-          prompt_for_file_name = false,
-          template = "[Image]($FILE_PATH)",
-          use_absolute_path = true,
-        },
-      },
-      default = {
-        verbose = false,
-        embed_image_as_base64 = false,
-        prompt_for_file_name = false,
-        drag_and_drop = {
-          insert_mode = true,
-        },
-        -- required for Windows users
-        use_absolute_path = true,
-        show_dir_path_in_prompt = true,
-        dir_path = function()
-          -- return "assets/imgs" .. vim.fn.expand("%:t:r")
-          return "assets/imgs"
-        end,
-      },
-      -- filetypes = {
-      --   markdown = {
-      --     -- relative_to_current_file = true,
-      --   },
-      -- },
-      -- add options here
-      -- or leave it empty to use the default settings
-    },
-    keys = {
-      -- suggested keymap
-      -- { "<leader>pi", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
-      {
-        "<leader>pi",
-        function()
-          require("img-clip").paste_image({ use_absolute_path = false })
-        end,
-        desc = "Paste image from system clipboard",
-      },
-    },
-  },
+	{
+		"HakonHarnes/img-clip.nvim",
+		-- keys = { "<leader>pi" },
+		enabled = function()
+			local is_headless = #vim.api.nvim_list_uis() == 0
+			if is_headless then
+				return false
+			end
+			return true
+		end,
+		opts = {
+			filetypes = {
+				codecompanion = {
+					prompt_for_file_name = false,
+					template = "[Image]($FILE_PATH)",
+					use_absolute_path = true,
+				},
+			},
+			default = {
+				verbose = false,
+				embed_image_as_base64 = false,
+				prompt_for_file_name = false,
+				drag_and_drop = {
+					insert_mode = true,
+				},
+				-- required for Windows users
+				use_absolute_path = true,
+				show_dir_path_in_prompt = true,
+				dir_path = function()
+					-- return "assets/imgs" .. vim.fn.expand("%:t:r")
+					return "assets/imgs"
+				end,
+			},
+			-- filetypes = {
+			--   markdown = {
+			--     -- relative_to_current_file = true,
+			--   },
+			-- },
+			-- add options here
+			-- or leave it empty to use the default settings
+		},
+		keys = {
+			-- suggested keymap
+			-- { "<leader>pi", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+			{
+				"<leader>pi",
+				function()
+					require("img-clip").paste_image({ use_absolute_path = false })
+				end,
+				desc = "Paste image from system clipboard",
+			},
+		},
+	},
 	{
 		"3rd/image.nvim",
-		enabled = true,
+		enabled = function()
+			local is_headless = #vim.api.nvim_list_uis() == 0
+			if is_headless then
+				return false
+			end
+			return true
+		end,
 		-- commit = "21909e3eb03bc738cce497f45602bf157b396672",
 		branch = "master",
 		-- branch = "main",
 		-- event = "VeryLazy",
 		-- event = { "BufReadPost" },
 		-- ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
-    ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "vimwiki" },
+		ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "vimwiki" },
 		keys = {
 			{
 				mode = { "n", "v" },
@@ -143,9 +156,9 @@ return {
 				"<leader>pI",
 				function()
 					local Job = require("plenary.job")
-          -- TODO: https://github.com/richardpenman/browsercookie
+					-- TODO: https://github.com/richardpenman/browsercookie
 					Job:new({
-            command = os.getenv("HOME") .. "/.config/bin/github_upload_image",
+						command = os.getenv("HOME") .. "/.config/bin/github_upload_image",
 						on_exit = function(j, return_val)
 							if return_val == 0 then
 								local href = table.concat(j:result(), "\n"):gsub("%s+$", "")
@@ -167,7 +180,7 @@ return {
 		config = function()
 			local image = require("image")
 			image.setup({
-        disable = { 'markdown' },
+				disable = { "markdown" },
 				backend = "kitty",
 				integrations = {
 					markdown = {
@@ -238,18 +251,18 @@ return {
 			})
 		end,
 	},
-  {
-    "edluffy/hologram.nvim",
-    enabled = false,
-    config = function()
-      require("hologram").setup({
-        auto_display = true, -- WIP automatic markdown image display, may be prone to breaking
-      })
-    end,
-  },
-  {
-    "kjuq/sixelview.nvim",
-    enabled = false,
-    opts = {},
-  },
+	{
+		"edluffy/hologram.nvim",
+		enabled = false,
+		config = function()
+			require("hologram").setup({
+				auto_display = true, -- WIP automatic markdown image display, may be prone to breaking
+			})
+		end,
+	},
+	{
+		"kjuq/sixelview.nvim",
+		enabled = false,
+		opts = {},
+	},
 }

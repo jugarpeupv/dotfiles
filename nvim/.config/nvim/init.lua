@@ -172,9 +172,9 @@ local function restore_last_worktree()
 	vim.schedule(function()
 		-- require("fyler").open(last_active_wt)
 		vim.cmd.cd(last_active_wt)
-		vim.defer_fn(function()
-			require("oil").open(last_active_wt)
-		end, 100)
+		-- vim.defer_fn(function()
+		-- 	require("oil").open(last_active_wt)
+		-- end, 100)
 	end)
 end
 

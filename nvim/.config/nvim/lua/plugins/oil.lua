@@ -506,7 +506,7 @@ return {
 							vim.notify("Copied path: " .. path, vim.log.levels.INFO)
 						end,
 					},
-					["gt"] = {
+					["gl"] = {
 						callback = function()
 							local oil = require("oil")
 							-- local entry = oil.get_cursor_entry()

@@ -7,7 +7,7 @@ return {
 		{ "<leader>rm", "<cmd>RenderMarkdown toggle<CR>" },
 	},
 	opts = {
-		enabled = false,
+		enabled = true,
 		max_file_size = 100.0,
 		win_options = {
 			-- @see :h 'conceallevel'
@@ -100,12 +100,18 @@ return {
 			-- The 'level' is used to index into the list using a clamp
 			-- Highlight for the heading icon and extends through the entire line
 			backgrounds = {
-				"RenderMarkdownH1Bg",
-				"RenderMarkdownH2Bg",
-				"RenderMarkdownH3Bg",
-				"RenderMarkdownH4Bg",
-				"RenderMarkdownH5Bg",
-				"RenderMarkdownH6Bg",
+				-- "RenderMarkdownH1Bg",
+				-- "RenderMarkdownH2Bg",
+				-- "RenderMarkdownH3Bg",
+				-- "RenderMarkdownH4Bg",
+				-- "RenderMarkdownH5Bg",
+				-- "RenderMarkdownH6Bg",
+        "RenderMarkdownH1Bg2",
+        "RenderMarkdownH2Bg2",
+        "RenderMarkdownH3Bg2",
+        "RenderMarkdownH4Bg2",
+        "RenderMarkdownH5Bg2",
+        "RenderMarkdownH6Bg2",
 			},
 			-- The 'level' is used to index into the list using a clamp
 			-- Highlight for the heading and sign icons
@@ -139,7 +145,7 @@ return {
 			-- If a floating point value < 1 is provided it is treated as a percentage of the available window space
 			language_pad = 0,
 			-- Whether to include the language name next to the icon
-			language_name = false,
+			language_name = true,
 			-- A list of language names for which background highlighting will be disabled
 			-- Likely because that language has background highlights itself
 			-- Or a boolean to make behavior apply to all languages

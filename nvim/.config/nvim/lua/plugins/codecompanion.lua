@@ -1,6 +1,7 @@
 return {
 	{
 		"olimorris/codecompanion.nvim",
+    commit = "c265e25786ca0f2d1a07b4ceaa120ecbafcc5204",
 		enabled = function()
 			local is_headless = #vim.api.nvim_list_uis() == 0
 			if is_headless then
@@ -156,9 +157,9 @@ return {
 						-- adapter = {
 						-- 	name = "copilot",
 						-- 	-- model = "gpt-5.1-codex",
-						-- 	model = "claude-opus-4.5",
+						-- 	-- model = "claude-opus-4.5",
 						-- 	-- model = "gpt-5-codex",
-						-- 	-- model = "claude-sonnet-4.5",
+						-- 	model = "claude-sonnet-4.5",
 						-- 	-- model = "gpt-5.1",
 						-- },
 						slash_commands = {
@@ -469,74 +470,11 @@ return {
 				"ga",
 				function()
 					-- vim.cmd("CodeCompanionChat Add")
-          local command = ":CodeCompanionChat Add<cr>"
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(command, true, false, true), "n", true)
+					local command = ":CodeCompanionChat Add<cr>"
+					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(command, true, false, true), "n", true)
 					vim.cmd("normal! zz")
 				end,
 			},
-		},
-	},
-	{
-		"sudo-tee/opencode.nvim",
-		-- dev = true,
-		-- dir = "~/work/tmp/opencode.nvim/wt-feature-auto_scroll_config",
-		lazy = true,
-		enabled = true,
-		keys = {
-			{
-				mode = { "n", "v" },
-				"<C-.>",
-				function()
-					require("opencode.api").toggle()
-				end,
-			},
-		},
-		config = function()
-			-- Default configuration with all available options
-			require("opencode").setup({
-				preferred_picker = "telescope",
-				preferred_completion = "blink",
-				default_global_keymaps = false,
-				default_mode = "build",
-				keymap_prefix = "",
-				keymap = {
-					editor = {
-						["<C-.>"] = { "toggle" }, -- Open opencode. Close if opened
-					},
-					input_window = {
-						["<esc>"] = false, -- Close UI windows
-						["<cr>"] = { "submit_input_prompt", mode = { "n" } }, -- Submit prompt (normal mode and insert mode)
-						["<c-s>"] = { "submit_input_prompt", mode = { "i" } }, -- Submit prompt (normal mode and insert mode)
-					},
-					output_window = {
-						["<esc>"] = false, -- Close UI windows
-					},
-					permission = {
-						accept = "a",
-						accept_all = "A",
-						deny = "D",
-					},
-				},
-				ui = {
-					output = {
-						always_scroll_to_bottom = false,
-					},
-					input = {
-						text = {
-							wrap = true
-						},
-					},
-				},
-			})
-		end,
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			{
-				"MeanderingProgrammer/render-markdown.nvim",
-			},
-			"saghen/blink.cmp",
-
-			"folke/snacks.nvim",
 		},
 	},
 }
