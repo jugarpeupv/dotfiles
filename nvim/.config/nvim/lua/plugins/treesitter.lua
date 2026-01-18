@@ -26,283 +26,282 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		lazy = true,
 		event = "VeryLazy",
-		commit = "9177f2ff061627f0af0f994e3a3c620a84c0c59b",
 		branch = "main",
 		build = ":TSUpdate",
 		config = function()
 			vim.api.nvim_create_autocmd("FileType", {
 				group = vim.api.nvim_create_augroup("treesitter-enabled-filetype", { clear = true }),
 				pattern = {
-					"octo",
-					"opencode_output",
-					"opencode",
-					"kitty",
-					"http",
-					"rest",
-					"java",
-					"go",
-					"copilot-chat",
-					"yaml",
-					"yml",
-					"yaml.github",
-					"jsonc",
-					"sh",
-					"dosini",
-					-- "editorconfig",
-					"typescript",
-					-- "kulala_http",
-					"javascript",
-					"markdown",
-					"gitcommit",
-					"http",
-					"hurl",
-					"jproperties",
-					"properties",
-					"codecompanion",
-					"bash",
-					"html",
-					"htmlangular",
-					"scss",
-					"css",
-					"groovy",
-					"Avante",
-					"dockerfile",
-					"regex",
-					"lua",
-				},
-				callback = function()
-					-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-					vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-					vim.wo[0][0].foldmethod = "expr"
-					vim.treesitter.start()
-				end,
-			})
+          "octo",
+          "opencode_output",
+          "opencode",
+          "kitty",
+          "http",
+          "rest",
+          "java",
+          "go",
+          "copilot-chat",
+          "yaml",
+          "yml",
+          "yaml.github",
+          "jsonc",
+          "sh",
+          "dosini",
+          -- "editorconfig",
+          "typescript",
+          -- "kulala_http",
+          "javascript",
+          "markdown",
+          "gitcommit",
+          "http",
+          "hurl",
+          "jproperties",
+          "properties",
+          "codecompanion",
+          "bash",
+          "html",
+          "htmlangular",
+          "scss",
+          "css",
+          "groovy",
+          "Avante",
+          "dockerfile",
+          "regex",
+          "lua",
+        },
+        callback = function()
+          -- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+          vim.wo[0][0].foldmethod = "expr"
+          vim.treesitter.start()
+        end,
+      })
 
       vim.treesitter.language.register("markdown", "codecompanion")
-			vim.treesitter.language.register("markdown", "opencode")
-			vim.treesitter.language.register("markdown", "octo")
-			vim.treesitter.language.register("yaml", "yaml.github") -- the someft filetype will use the python parser and queries.
+      vim.treesitter.language.register("markdown", "opencode")
+      vim.treesitter.language.register("markdown", "octo")
+      vim.treesitter.language.register("yaml", "yaml.github") -- the someft filetype will use the python parser and queries.
 
-			vim.filetype.add({
-				extension = { zsh = "bash" },
-				filename = { [".zshrc"] = "bash" },
-				pattern = { [".*/zsh.*"] = "bash" },
-			})
+      vim.filetype.add({
+        extension = { zsh = "bash" },
+        filename = { [".zshrc"] = "bash" },
+        pattern = { [".*/zsh.*"] = "bash" },
+      })
 
-			vim.filetype.add({
-				pattern = { [".*/isyncrc"] = "mbsync" },
-			})
+      vim.filetype.add({
+        pattern = { [".*/isyncrc"] = "mbsync" },
+      })
 
-			vim.filetype.add({
-				pattern = {
-					[".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
-				},
-			})
+      vim.filetype.add({
+        pattern = {
+          [".*/%.github[%w/]+workflows[%w/]+.*%.ya?ml"] = "yaml.github",
+        },
+      })
 
-			require("jg.custom.incremental_selection").setup({
-				incr_key = "<tab>", -- increment selection key
-				decr_key = "<s-tab>", -- decrement selection key
-			})
+      require("jg.custom.incremental_selection").setup({
+        incr_key = "<tab>", -- increment selection key
+        decr_key = "<s-tab>", -- decrement selection key
+      })
 
-			vim.filetype.add({
-				extension = {
-					["http"] = "http",
-				},
-			})
+      vim.filetype.add({
+        extension = {
+          ["http"] = "http",
+        },
+      })
 
-			vim.api.nvim_create_autocmd("User", {
-				group = vim.api.nvim_create_augroup("TSUpdateTreesitter", { clear = true }),
-				pattern = "TSUpdate",
-				callback = function()
-					require("nvim-treesitter.parsers").ghactions = {
-						install_info = {
-							url = "https://github.com/rmuir/tree-sitter-ghactions",
-							queries = "queries",
-						},
-					}
+      vim.api.nvim_create_autocmd("User", {
+        group = vim.api.nvim_create_augroup("TSUpdateTreesitter", { clear = true }),
+        pattern = "TSUpdate",
+        callback = function()
+          require("nvim-treesitter.parsers").ghactions = {
+            install_info = {
+              url = "https://github.com/rmuir/tree-sitter-ghactions",
+              queries = "queries",
+            },
+          }
 
-					require("nvim-treesitter.parsers").lua_patterns = {
-						install_info = {
-							url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns",
-						},
-					}
-				end,
-			})
-		end,
-	},
-	{ "wellle/targets.vim", lazy = true, event = { "VeryLazy" }, enabled = true },
-	{
-		"nvim-treesitter/nvim-treesitter-textobjects",
-		branch = "main",
-		event = { "LspAttach" },
-		keys = {
-			{
-				mode = { "x", "o" },
-				"af",
-				function()
-					require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects")
-				end,
-			},
-			{
-				mode = { "x", "o" },
-				"if",
-				function()
-					require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects")
-				end,
-			},
-			{
-				mode = { "x", "o" },
-				"ih",
-				function()
-					require("nvim-treesitter-textobjects.select").select_textobject("@assignment.lhs", "textobjects")
-				end,
-			},
-			{
-				mode = { "x", "o" },
-				"il",
-				function()
-					require("nvim-treesitter-textobjects.select").select_textobject("@assignment.rhs", "textobjects")
-				end,
-			},
-			{
-				mode = { "x", "o" },
-				"ac",
-				function()
-					require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects")
-				end,
-			},
-			{
-				mode = { "x", "o" },
-				"ic",
-				function()
-					require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects")
-				end,
-			},
-			-- Repeat movement with ; and ,
-			-- ensure ; goes forward and , goes backward regardless of the last direction
-			{
-				mode = { "n", "x", "o" },
-				";",
-				function()
-					require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_next()
-				end,
-				{ expr = true },
-			},
-			{
-				mode = { "n", "x", "o" },
-				",",
-				function()
-					require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_previous()
-				end,
-				{ expr = true },
-			},
-		},
-		config = function()
-			-- configuration
-			require("nvim-treesitter-textobjects").setup({
-				select = {
-					enable = true,
-					-- Automatically jump forward to textobj, similar to targets.vim
-					lookahead = true,
-					selection_modes = {
-						["@parameter.outer"] = "v", -- charwise
-						["@function.outer"] = "V", -- linewise
-						["@class.outer"] = "<c-v>", -- blockwise
-					},
-					include_surrounding_whitespace = false,
-				},
-			})
-		end,
-	},
-	{
-		"chrisgrieser/nvim-various-textobjs",
-		event = { "InsertEnter", "LspAttach" },
-		keys = {
-			{ mode = { "o", "x" }, "as", "<cmd>lua require('various-textobjs').subword('outer')<CR>" },
-			{ mode = { "o", "x" }, "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>" },
-		},
-		opts = {
-			keymaps = {
-				useDefaults = true,
-				disabledDefaults = { "L", "in", "an" },
-			},
-		},
-	},
-	{
-		-- "jugarpeupv/nvim-treesitter-context",
-		"nvim-treesitter/nvim-treesitter-context",
-		enabled = true,
-		lazy = true,
-		-- ft = { "json", "jsonc", "yaml", "yml", "yaml.github", "javascript", "typescript", "lua" },
-		event = { "LspAttach" },
-		keys = {
-			{
-				mode = { "n" },
-				"<leader>ce",
-				function()
-					require("treesitter-context").toggle()
-				end,
-				{ silent = true },
-			},
-			{
-				mode = { "n" },
-				"<leader>co",
-				function()
-					require("treesitter-context").go_to_context(vim.v.count1)
-				end,
-				{ silent = true },
-			},
-		},
-		config = function()
-			require("treesitter-context").setup({
-				on_attach = function(buf)
-					local filetype = vim.fn.getbufvar(buf, "&ft")
-					if filetype == "markdown" then
-						return false
-					end
-					return true
-				end, -- (fun(buf: integer): boolean) return false to disable attaching
-				enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-				multiwindow = true, -- Enable multiple floating windows
-				max_lines = 6, -- How many lines the window should span. Values <= 0 mean no limit.
-				trim_scope = "inner", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-				min_window_height = 10, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
-				zindex = 20, -- The Z-index of the context window
-				mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
-				-- separator = nil,
-				-- separator = "–",
-				separator = "",
-			})
-		end,
-	},
-	-- { "keith/xcconfig.vim", ft = { "xcconfig" } },
-	-- { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
-	{
-		"axelvc/template-string.nvim",
-		-- "chrisgrieser/nvim-puppeteer",
-		enabled = false,
-		config = function()
-			require("template-string").setup({
-				filetypes = {
-					"html",
-					"typescript",
-					"javascript",
-					"typescriptreact",
-					"javascriptreact",
-					"vue",
-					"svelte",
-					"python",
-					"cs",
-				}, -- filetypes where the plugin is active
-				jsx_brackets = true, -- must add brackets to JSX attributes
-				remove_template_string = false, -- remove backticks when there are no template strings
-				restore_quotes = {
-					-- quotes used when "remove_template_string" option is enabled
-					normal = [[']],
-					jsx = [["]],
-				},
-			})
-		end,
-	},
+          require("nvim-treesitter.parsers").lua_patterns = {
+            install_info = {
+              url = "https://github.com/OXY2DEV/tree-sitter-lua_patterns",
+            },
+          }
+        end,
+      })
+    end,
+  },
+  { "wellle/targets.vim", lazy = true, event = { "VeryLazy" }, enabled = true },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    event = { "LspAttach" },
+    keys = {
+      {
+        mode = { "x", "o" },
+        "af",
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects")
+        end,
+      },
+      {
+        mode = { "x", "o" },
+        "if",
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects")
+        end,
+      },
+      {
+        mode = { "x", "o" },
+        "ih",
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@assignment.lhs", "textobjects")
+        end,
+      },
+      {
+        mode = { "x", "o" },
+        "il",
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@assignment.rhs", "textobjects")
+        end,
+      },
+      {
+        mode = { "x", "o" },
+        "ac",
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects")
+        end,
+      },
+      {
+        mode = { "x", "o" },
+        "ic",
+        function()
+          require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects")
+        end,
+      },
+      -- Repeat movement with ; and ,
+      -- ensure ; goes forward and , goes backward regardless of the last direction
+      {
+        mode = { "n", "x", "o" },
+        ";",
+        function()
+          require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_next()
+        end,
+        { expr = true },
+      },
+      {
+        mode = { "n", "x", "o" },
+        ",",
+        function()
+          require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_previous()
+        end,
+        { expr = true },
+      },
+    },
+    config = function()
+      -- configuration
+      require("nvim-treesitter-textobjects").setup({
+        select = {
+          enable = true,
+          -- Automatically jump forward to textobj, similar to targets.vim
+          lookahead = true,
+          selection_modes = {
+            ["@parameter.outer"] = "v", -- charwise
+            ["@function.outer"] = "V", -- linewise
+            ["@class.outer"] = "<c-v>", -- blockwise
+          },
+          include_surrounding_whitespace = false,
+        },
+      })
+    end,
+  },
+  {
+    "chrisgrieser/nvim-various-textobjs",
+    event = { "InsertEnter", "LspAttach" },
+    keys = {
+      { mode = { "o", "x" }, "as", "<cmd>lua require('various-textobjs').subword('outer')<CR>" },
+      { mode = { "o", "x" }, "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>" },
+    },
+    opts = {
+      keymaps = {
+        useDefaults = true,
+        disabledDefaults = { "L", "in", "an" },
+      },
+    },
+  },
+  {
+    -- "jugarpeupv/nvim-treesitter-context",
+    "nvim-treesitter/nvim-treesitter-context",
+    enabled = true,
+    lazy = true,
+    -- ft = { "json", "jsonc", "yaml", "yml", "yaml.github", "javascript", "typescript", "lua" },
+    event = { "LspAttach" },
+    keys = {
+      {
+        mode = { "n" },
+        "<leader>ce",
+        function()
+          require("treesitter-context").toggle()
+        end,
+        { silent = true },
+      },
+      {
+        mode = { "n" },
+        "<leader>co",
+        function()
+          require("treesitter-context").go_to_context(vim.v.count1)
+        end,
+        { silent = true },
+      },
+    },
+    config = function()
+      require("treesitter-context").setup({
+        on_attach = function(buf)
+          local filetype = vim.fn.getbufvar(buf, "&ft")
+          if filetype == "markdown" then
+            return false
+          end
+          return true
+        end, -- (fun(buf: integer): boolean) return false to disable attaching
+        enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+        multiwindow = true, -- Enable multiple floating windows
+        max_lines = 6, -- How many lines the window should span. Values <= 0 mean no limit.
+        trim_scope = "inner", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+        min_window_height = 10, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+        zindex = 20, -- The Z-index of the context window
+        mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
+        -- separator = nil,
+        -- separator = "–",
+        separator = "",
+      })
+    end,
+  },
+  -- { "keith/xcconfig.vim", ft = { "xcconfig" } },
+  -- { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
+  {
+    "axelvc/template-string.nvim",
+    -- "chrisgrieser/nvim-puppeteer",
+    enabled = false,
+    config = function()
+      require("template-string").setup({
+        filetypes = {
+          "html",
+          "typescript",
+          "javascript",
+          "typescriptreact",
+          "javascriptreact",
+          "vue",
+          "svelte",
+          "python",
+          "cs",
+        }, -- filetypes where the plugin is active
+        jsx_brackets = true, -- must add brackets to JSX attributes
+        remove_template_string = false, -- remove backticks when there are no template strings
+        restore_quotes = {
+          -- quotes used when "remove_template_string" option is enabled
+          normal = [[']],
+          jsx = [["]],
+        },
+      })
+    end,
+  },
 }

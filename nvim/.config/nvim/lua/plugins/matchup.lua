@@ -6,24 +6,19 @@ return {
 	lazy = true,
 	-- dependencies = { "nvim-treesitter/nvim-treesitter" },
 	event = { "VeryLazy" },
-	-- keys = {
-	-- 	{ "<C-d>" },
-	-- 	{ "<C-u>" },
-	-- },
-	-- event = { "LspAttach" },
-	-- event = { "BufReadPost", "BufNewFile" },
-	-- keys = { { mode = "n", "%" } },
+	keys = {
+		{
+			mode = { "n", "v" },
+			"<F10>",
+			"<Plug>(matchup-hi-surround)",
+			{ silent = true, desc = "Highlight surrounding match" },
+		},
+		{ mode = "n", "%" },
+	},
 	config = function()
-		-- vim.keymap.set(
-		-- 	{ "n", "v" },
-		-- 	"<M-lt>",
-		-- 	"<Plug>(matchup-hi-surround)",
-		-- 	{ silent = true, desc = "Highlight surrounding match" }
-		-- )
-
 		vim.g.matchup_matchparen_enabled = 0
 		-- vim.g.matchup_matchparen_hi_surround_always = 1
-    vim.g.matchup_matchparen_hi_surround_always = 0
+		vim.g.matchup_matchparen_hi_surround_always = 0
 		vim.g.matchup_matchparen_timeout = 100
 		vim.g.matchup_matchparen_insert_timeout = 20
 		-- nmap <silent> <F7> <plug>(matchup-hi-surround)

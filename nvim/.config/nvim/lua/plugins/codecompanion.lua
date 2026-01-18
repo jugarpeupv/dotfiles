@@ -1,7 +1,6 @@
 return {
 	{
 		"olimorris/codecompanion.nvim",
-    commit = "c265e25786ca0f2d1a07b4ceaa120ecbafcc5204",
 		enabled = function()
 			local is_headless = #vim.api.nvim_list_uis() == 0
 			if is_headless then
@@ -58,6 +57,17 @@ return {
 				},
 				adapters = {
 					acp = {
+						copilot_cli = function()
+							return require("codecompanion.adapters").extend("opencode", {
+								commands = {
+									-- The default uses the opencode/config.json value
+									default = {
+										"copilot",
+										"--acp",
+									},
+								},
+							})
+						end,
 						opencode = function()
 							return require("codecompanion.adapters").extend("opencode", {
 								commands = {
@@ -153,7 +163,8 @@ return {
 						opts = {
 							completion_provider = "blink", -- blink|cmp|coc|default
 						},
-						adapter = "opencode",
+						-- adapter = "opencode",
+            adapter = "copilot_cli",
 						-- adapter = {
 						-- 	name = "copilot",
 						-- 	-- model = "gpt-5.1-codex",
@@ -402,9 +413,9 @@ return {
 						-- },
 						-- intro_message = "",
 						show_settings = false,
-						fold_reasoning = true,
+						fold_reasoning = false,
 						show_reasoning = true,
-						fold_context = false,
+						fold_context = true,
 						auto_scroll = false,
 						show_tools_processing = true,
 						show_header_separator = true, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin

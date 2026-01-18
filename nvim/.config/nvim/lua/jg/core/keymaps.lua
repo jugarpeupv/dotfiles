@@ -673,7 +673,7 @@ keymap("n", "<leader>bt", "<cmd>Gitsigns toggle_current_line_blame<cr>", opts)
 keymap("n", "<leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 
 -- Replace
-vim.cmd([[nnoremap <leader>rr :OverCommandLine %s///g<cr><Left><Left><Left>]])
+-- vim.cmd([[nnoremap <leader>rr :OverCommandLine %s///g<cr><Left><Left><Left>]])
 -- vim.cmd([[nnoremap <leader>rr :%s///g<Left><Left><Left>]])
 vim.cmd([[xnoremap <leader>rr :s///g<Left><Left><Left>]])
 vim.cmd([[nnoremap <leader>sw /\<\><Left><Left>]])
@@ -703,7 +703,6 @@ end, opts)
 vim.keymap.set("n", "<leader>ww", function()
 	require("hop").hint_words()
 end, opts)
-
 
 -- Reformat file
 keymap("n", "<leader>cw", ":e ++ff=dos<CR> | :set ff=unix<CR>", opts)
@@ -783,15 +782,15 @@ end)
 local btop_term
 
 vim.keymap.set("n", "<leader>bb", function()
-  if not btop_term then
-     btop_term = require("terminal").terminal:new({
-      layout = { open_cmd = "enew" },
-      cmd = { "btop" },
-      autoclose = false,
-    })
-  end
+	if not btop_term then
+		btop_term = require("terminal").terminal:new({
+			layout = { open_cmd = "enew" },
+			cmd = { "btop" },
+			autoclose = false,
+		})
+	end
 
-  btop_term:toggle(nil, true)
+	btop_term:toggle(nil, true)
 end)
 
 -- vim.keymap.set({ "i", "s" }, "<C-e>", function()
@@ -1824,5 +1823,6 @@ end, { desc = "Yank absolute file path to clipboard" })
 -- vim.keymap.set("n", "·", "%", { silent = true })
 
 vim.keymap.set("n", "L", "$", { silent = true })
-vim.keymap.set("v", "<S-CR>", "%", { silent = true })
-vim.keymap.set("n", "<S-CR>", "%", { silent = true })
+-- vim.keymap.set({ "n", "v" }, "<S-CR>", function()
+-- 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("%", true, false, true), "n", true)
+-- end, { silent = true })

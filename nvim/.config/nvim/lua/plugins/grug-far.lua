@@ -2,6 +2,13 @@
 return {
 	keys = {
 		{
+			mode = { "n" },
+			"<leader>rr",
+			function()
+				require("grug-far").open({ prefills = { paths = vim.fn.expand("%") } })
+			end,
+		},
+		{
 			"<M-f>",
 			mode = { "n", "i", "v" },
 			function()
@@ -16,21 +23,40 @@ return {
 	cmd = { "GrugFar" },
 	"MagicDuck/grug-far.nvim",
 	config = function()
-    -- vim.api.nvim_set_keymap("c", "<CR>", "<C-M>", { noremap = true, silent = true })
+		-- vim.api.nvim_set_keymap("c", "<CR>", "<C-M>", { noremap = true, silent = true })
 		require("grug-far").setup({
-      debounceMs = 200,
-      engines = {
-        ripgrep = {
-          defaults = {
-            search = nil,
-            replacement = nil,
-            filesFilter = "" ,
-            flags = "-i -g !**__template__** -g !**migrations** -g !**spec**",
-            paths = nil,
-          },
-        }
-      },
+			debounceMs = 200,
+			engines = {
+				ripgrep = {
+					defaults = {
+						search = nil,
+						replacement = nil,
+						filesFilter = "",
+						flags = "-i -g !**__template__** -g !**migrations** -g !**spec**",
+						paths = nil,
+					},
+				},
+			},
 			startInInsertMode = true,
+			pathProviders = {
+				-- <buflist> expands to list of files corresponding to opened buffers
+				["buflist"] = function()
+					return require("grug-far.pathProviders").getBuflistFiles()
+				end,
+				-- <buflist-cwd> like <buflist>, but filtered down to files in cwd
+				["buflist-cwd"] = function()
+					return require("grug-far.pathProviders").getBuflistFilesInCWD()
+				end,
+				-- <qflist> expands to list of files corresponding to quickfix list
+				["qflist"] = function()
+					return require("grug-far.pathProviders").getQuickfixListFiles()
+				end,
+				-- <loclist> expands to list of files corresponding to loclist associated with
+				-- window user is in when opening grug-far
+				["loclist"] = function(opts)
+					return require("grug-far.pathProviders").getLoclistFiles(opts.prevWin)
+				end,
+			},
 			-- shortcuts for the actions you see at the top of the buffer
 			-- set to '' or false to unset. Mappings with no normal mode value will be removed from the help header
 			-- you can specify either a string which is then used as the mapping for both normal and insert mode
@@ -65,41 +91,41 @@ return {
 				nextInput = { n = "<tab>" },
 				prevInput = { n = "<s-tab>" },
 			},
-      folding = {
-        -- whether to enable folding
-        enabled = true,
+			folding = {
+				-- whether to enable folding
+				enabled = true,
 
-        -- sets foldlevel, folds with higher level will be closed.
-        -- result matche lines for each file have fold level 1
-        -- set it to 0 if you would like to have the results initially collapsed
-        -- See :h foldlevel
-        foldlevel = 1,
+				-- sets foldlevel, folds with higher level will be closed.
+				-- result matche lines for each file have fold level 1
+				-- set it to 0 if you would like to have the results initially collapsed
+				-- See :h foldlevel
+				foldlevel = 1,
 
-        -- visual indicator of folds, see :h foldcolumn
-        -- set to '0' to disable
-        foldcolumn = '1',
+				-- visual indicator of folds, see :h foldcolumn
+				-- set to '0' to disable
+				foldcolumn = "1",
 
-        -- whether to include file path in the fold, by default, only lines under the file path are included
-        include_file_path = true,
-      },
-      -- specifies the command to run (with `vim.cmd(...)`) in order to create
-      -- the window in which the grug-far buffer will appear
-      -- ex (horizontal bottom right split): 'botright split'
-      -- ex (open new tab): 'tab split'
-      windowCreationCommand = 'vsplit',
-      -- windowCreationCommand = 'edit',
-      -- windowCreationCommand = 'topleft vsplit',
+				-- whether to include file path in the fold, by default, only lines under the file path are included
+				include_file_path = true,
+			},
+			-- specifies the command to run (with `vim.cmd(...)`) in order to create
+			-- the window in which the grug-far buffer will appear
+			-- ex (horizontal bottom right split): 'botright split'
+			-- ex (open new tab): 'tab split'
+			windowCreationCommand = "vsplit",
+			-- windowCreationCommand = 'edit',
+			-- windowCreationCommand = 'topleft vsplit',
 
-      -- buffer line numbers + match line numbers can get a bit visually overwhelming
-      -- turn this off if you still like to see the line numbers
-      disableBufferLineNumbers = true,
+			-- buffer line numbers + match line numbers can get a bit visually overwhelming
+			-- turn this off if you still like to see the line numbers
+			disableBufferLineNumbers = true,
 			wrap = true,
-      helpLine = {
-        enabled = false,
-      },
-      showInputsTopPadding = false,
-      showInputsBottomPadding = true,
-      showCompactInputs = true,
+			helpLine = {
+				enabled = false,
+			},
+			showInputsTopPadding = false,
+			showInputsBottomPadding = true,
+			showCompactInputs = true,
 			resultsHighlight = true,
 			resultLocation = {
 				-- whether to show the result location number label

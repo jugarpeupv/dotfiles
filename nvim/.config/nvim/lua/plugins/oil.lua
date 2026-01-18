@@ -142,7 +142,6 @@ return {
 				return bufname
 			end
 
-
 			require("oil").setup({
 				-- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
 				-- Set to false if you want some other plugin (e.g. netrw) to open when you edit directories.
@@ -504,6 +503,37 @@ return {
 							vim.fn.setreg("+", path)
 							vim.fn.setreg('"', path)
 							vim.notify("Copied path: " .. path, vim.log.levels.INFO)
+						end,
+					},
+					["S"] = {
+						callback = function()
+							local oil = require("oil")
+							local dir = oil.get_current_dir()
+
+							require("telescope").extensions.live_grep_args.live_grep_raw({
+								cwd = dir,
+								disable_coordinates = true,
+								path_display = { "absolute" },
+								theme = "ivy",
+								prompt_title = "Live grep in path: " .. dir,
+								layout_config = { height = 0.47 },
+								preview = {
+									hide_on_startup = true,
+								},
+								vimgrep_arguments = {
+									"rg",
+									"--color=never",
+									"--no-heading",
+									"--with-filename",
+									"--line-number",
+									"--column",
+									"--hidden",
+									"--smart-case",
+									"--glob=!icarSDK.js",
+									"--glob=!package-lock.json",
+									"--glob=!**/.git/**",
+								},
+							})
 						end,
 					},
 					["gl"] = {

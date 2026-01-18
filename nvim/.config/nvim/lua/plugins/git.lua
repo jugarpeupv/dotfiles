@@ -1,59 +1,59 @@
 return {
-  {
-    "esmuellert/vscode-diff.nvim",
-    dependencies = { "MunifTanjim/nui.nvim" },
-    enabled = false,
-    cmd = "CodeDiff",
-    -- keys = {
-    --   { "<leader>gd", mode = "n", "<cmd>CodeDiff<cr>" },
-    --   { "<leader>cc", mode = "n", "<cmd>CodeDiff<cr>" },
-    -- },
-    config = function()
-      require("vscode-diff").setup({
-        -- Diff view behavior
-        diff = {
-          disable_inlay_hints = true, -- Disable inlay hints in diff windows for cleaner view
-          max_computation_time_ms = 5000, -- Maximum time for diff computation (VSCode default)
-        },
+	{
+		"esmuellert/vscode-diff.nvim",
+		dependencies = { "MunifTanjim/nui.nvim" },
+		enabled = false,
+		cmd = "CodeDiff",
+		-- keys = {
+		--   { "<leader>gd", mode = "n", "<cmd>CodeDiff<cr>" },
+		--   { "<leader>cc", mode = "n", "<cmd>CodeDiff<cr>" },
+		-- },
+		config = function()
+			require("vscode-diff").setup({
+				-- Diff view behavior
+				diff = {
+					disable_inlay_hints = true, -- Disable inlay hints in diff windows for cleaner view
+					max_computation_time_ms = 5000, -- Maximum time for diff computation (VSCode default)
+				},
 
-        -- Explorer panel configuration
-        explorer = {
-          position = "left", -- "left" or "bottom"
-          width = 35, -- Width when position is "left" (columns)
-          height = 15, -- Height when position is "bottom" (lines)
-          indent_markers = true, -- Show indent markers in tree view (│, ├, └)
-          icons = {
-            folder_closed = "", -- Nerd Font folder icon (customize as needed)
-            folder_open = "", -- Nerd Font folder-open icon
-          },
-          view_mode = "tree", -- "list" or "tree"
-          file_filter = {
-            ignore = {}, -- Glob patterns to hide (e.g., {"*.lock", "dist/*"})
-          },
-        },
+				-- Explorer panel configuration
+				explorer = {
+					position = "left", -- "left" or "bottom"
+					width = 35, -- Width when position is "left" (columns)
+					height = 15, -- Height when position is "bottom" (lines)
+					indent_markers = true, -- Show indent markers in tree view (│, ├, └)
+					icons = {
+						folder_closed = "", -- Nerd Font folder icon (customize as needed)
+						folder_open = "", -- Nerd Font folder-open icon
+					},
+					view_mode = "tree", -- "list" or "tree"
+					file_filter = {
+						ignore = {}, -- Glob patterns to hide (e.g., {"*.lock", "dist/*"})
+					},
+				},
 
-        -- Keymaps in diff view
-        keymaps = {
-          view = {
-            quit = "q", -- Close diff tab
-            toggle_explorer = "<M-j>", -- Toggle explorer visibility (explorer mode only)
-            next_hunk = "]]", -- Jump to next change
-            prev_hunk = "[[", -- Jump to previous change
-            next_file = "<tab>", -- Next file in explorer mode
-            prev_file = "<s-tab>", -- Previous file in explorer mode
-            diff_get = "do", -- Get change from other buffer (like vimdiff)
-            diff_put = "dp", -- Put change to other buffer (like vimdiff)
-          },
-          explorer = {
-            select = "<CR>", -- Open diff for selected file
-            hover = "K", -- Show file diff preview
-            refresh = "R", -- Refresh git status
-            toggle_view_mode = "i", -- Toggle between 'list' and 'tree' views
-          },
-        },
-      })
-    end,
-  },
+				-- Keymaps in diff view
+				keymaps = {
+					view = {
+						quit = "q", -- Close diff tab
+						toggle_explorer = "<M-j>", -- Toggle explorer visibility (explorer mode only)
+						next_hunk = "]]", -- Jump to next change
+						prev_hunk = "[[", -- Jump to previous change
+						next_file = "<tab>", -- Next file in explorer mode
+						prev_file = "<s-tab>", -- Previous file in explorer mode
+						diff_get = "do", -- Get change from other buffer (like vimdiff)
+						diff_put = "dp", -- Put change to other buffer (like vimdiff)
+					},
+					explorer = {
+						select = "<CR>", -- Open diff for selected file
+						hover = "K", -- Show file diff preview
+						refresh = "R", -- Refresh git status
+						toggle_view_mode = "i", -- Toggle between 'list' and 'tree' views
+					},
+				},
+			})
+		end,
+	},
 	{
 		"akinsho/git-conflict.nvim",
 		dependencies = { "sindrets/diffview.nvim" },
