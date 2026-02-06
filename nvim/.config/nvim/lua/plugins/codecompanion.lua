@@ -31,13 +31,55 @@ return {
 		-- end,
 		config = function()
 			require("codecompanion").setup({
-        prompt_library = {
-          markdown = {
-            dirs = {
-              "~/dotfiles/nvim/.config/nvim/lua/prompts"
-            },
-          },
-        },
+				-- prompt_library = {
+				--   markdown = {
+				--     dirs = {
+				--       "~/dotfiles/nvim/.config/nvim/lua/prompts"
+				--     },
+				--   },
+				-- },
+				prompt_library = {
+					["Commit Message"] = {
+						interaction = "inline",
+						description = "Generate a commit message",
+						opts = {
+							alias = "commit_custom",
+							ignore_system_prompt = true,
+							is_slash_cmd = true,
+							stop_context_insertion = true,
+							auto_submit = true,
+							placement = "before|false",
+						},
+						prompts = {
+							{
+								role = "user",
+								content = function()
+									return string.format(
+										[[You are an expert at following the Conventional Commit specification. Given the git diff listed below, please generate a commit message for me:
+
+```diff
+%s
+```
+
+When unsure about the module names to use in the commit message, you can refer to the last 20 commit messages in this repository:
+
+```
+%s
+```
+
+Output only the commit message without any explanations and follow-up suggestions.
+]],
+										vim.fn.system("git diff --no-ext-diff --staged"),
+										vim.fn.system('git log --pretty=format:"%s" -n 20')
+									)
+								end,
+								opts = {
+									contains_code = true,
+								},
+							},
+						},
+					},
+				},
 				rules = {
 					default = {
 						description = "Collection of common files for all projects",

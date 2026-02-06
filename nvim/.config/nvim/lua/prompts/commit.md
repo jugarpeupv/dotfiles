@@ -1,6 +1,6 @@
 ---
 name: Commit message
-interaction: inline
+interaction: chat
 description: Generate a commit message
 opts:
   alias: commit_custom
@@ -22,6 +22,6 @@ ${commit.diff}
 Surround the generated commit message in
 
 ```gitcommit
-
+<commit message generated>
 ```
 
