@@ -48,7 +48,7 @@ return {
 							is_slash_cmd = true,
 							stop_context_insertion = true,
 							auto_submit = true,
-							placement = "before|false",
+              placement = "new"
 						},
 						prompts = {
 							{
@@ -527,13 +527,13 @@ Output only the commit message without any explanations and follow-up suggestion
 			-- 		require("codecompanion").prompt("commit")
 			-- 	end,
 			-- },
-			{
-				mode = { "n", "v", "t" },
-				"<leader>ci",
-				function()
-					vim.cmd("CodeCompanion /commit_custom")
-				end,
-			},
+			-- {
+			-- 	mode = { "n", "v", "t" },
+			-- 	"<leader>ci",
+			-- 	function()
+			-- 		vim.cmd("CodeCompanion /commit_custom")
+			-- 	end,
+			-- },
 			{
 				mode = { "n", "v", "t" },
 				"<M-m>",

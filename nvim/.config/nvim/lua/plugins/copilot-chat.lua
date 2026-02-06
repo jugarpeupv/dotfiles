@@ -6,14 +6,13 @@ return {
 		"CopilotC-Nvim/CopilotChat.nvim",
 		cmd = { "CopilotChat", "CopilotChatToggle", "CopilotChatCommit" },
 		-- commit = "7e6583c75f1231ea1eac70e06995dd3f97a58478",
-    enabled = false,
-		-- enabled = function()
-		-- 	local is_headless = #vim.api.nvim_list_uis() == 0
-		-- 	if is_headless then
-		-- 		return false
-		-- 	end
-		-- 	return true
-		-- end,
+		enabled = function()
+			local is_headless = #vim.api.nvim_list_uis() == 0
+			if is_headless then
+				return false
+			end
+			return true
+		end,
 		branch = "main",
 		dependencies = {
 			-- { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
