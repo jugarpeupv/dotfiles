@@ -39,13 +39,13 @@ return {
 
 			-- Colors (only applied if highlight groups don't exist)
 			highlights = {
-				OilGitAdded = { link = "NvimTreeGitStaged" },
+				OilGitAdded = { fg = "#8ee2cf" },
 				OilGitModified = { fg = "#f9e2af" },
 				OilGitRenamed = { fg = "#cba6f7" },
 				OilGitDeleted = { fg = "#f38ba8" },
 				OilGitCopied = { fg = "#cba6f7" },
 				OilGitConflict = { fg = "#fab387" },
-				OilGitUntracked = { link = "NvimTreeGitFileNewHL" },
+				OilGitUntracked = { fg = "#89ddff" },
 				OilGitIgnored = { link = "Comment" },
 			},
 		},
@@ -184,7 +184,8 @@ return {
 				-- Oil will automatically delete hidden buffers after this delay
 				-- You can set the delay to false to disable cleanup entirely
 				-- Note that the cleanup process only starts when none of the oil buffers are currently displayed
-				cleanup_delay_ms = false,
+				-- cleanup_delay_ms = false,
+        cleanup_delay_ms = 12000,
 				-- cleanup_delay_ms = false,
 				lsp_file_methods = {
 					enabled = true,
@@ -241,6 +242,28 @@ return {
 					["<BS>"] = { "actions.select", mode = "n" },
 					["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 					["gs"] = { "actions.change_sort", mode = "n" },
+					["F"] = {
+						callback = function()
+							local oil = require("oil")
+
+							local ok, snacks = pcall(require, "snacks")
+							if not ok then
+								vim.notify("Snacks plugin not available", vim.log.levels.ERROR)
+								return
+							end
+							local dir = oil.get_current_dir()
+							snacks.picker.files({
+								dirs = { dir },
+								hidden = true,
+								exclude = {
+									".git",
+									"*__template__*",
+									"*DS_Store*",
+								},
+							})
+						end,
+						mode = "n",
+					},
 
 					["K"] = {
 						callback = function()

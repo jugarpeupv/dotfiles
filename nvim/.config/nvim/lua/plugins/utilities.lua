@@ -1,7 +1,40 @@
 return {
 	{
+		-- "jugarpeupv/processmonitor.nvim",
+		dev = true,
+		dir = "~/projects/processmonitor.nvim",
+		keys = {
+			{ "<leader>ps", "<cmd>PS<cr>" },
+			{ "<leader>ls", "<cmd>Lsof<cr>" },
+		},
+	},
+	{
+		"jugarpeupv/visual-match-paren.nvim",
+		dev = true,
+		dir = "~/projects/visual-match-paren.nvim",
+		keys = {
+			"V",
+		},
+		event = {
+			-- "VeryLazy",
+			-- "ModeChanged *:v", -- character-wise visual
+			"ModeChanged *:V", -- line-wise visual
+			-- "ModeChanged *:\x16", -- block-wise visual
+		},
+		config = function()
+			require("visual-match-paren").setup({
+				-- Optional configuration
+				highlight_group = "MatchParen", -- Highlight group for braces/brackets (default: "MatchParen")
+				scope_highlight_group = "MatchParenVisualLineNr", -- Highlight group for scope line numbers (default: "MatchParen")
+				enabled = true, -- Enable/disable brace/bracket matching (default: true)
+				scope_enabled = true, -- Enable/disable scope highlighting (default: true)
+				scope_textobject = "I", -- Text object for inner scope (default: "I", set to "" to disable)
+			})
+		end,
+	},
+	{
 		"jrop/tuis.nvim",
-    enabled = true,
+		enabled = true,
 		dependencies = { "folke/snacks.nvim" },
 		keys = {
 			{
@@ -38,7 +71,10 @@ return {
 	{
 		"itchyny/calendar.vim",
 		cmd = { "Calendar" },
-    enabled = false,
+		enabled = true,
+		config = function()
+			vim.g.calendar_first_day = "Monday"
+		end,
 	},
 	{
 		"https://tangled.org/cuducos.me/yaml.nvim",
@@ -94,43 +130,70 @@ return {
 	{
 		"necrom4/calcium.nvim",
 		cmd = { "Calcium" },
-		enabled = false,
+		enabled = true,
 		opts = {},
+		keys = {
+			-- example keymap
+			{
+				"<leader>al",
+				":Calcium<CR>",
+				desc = "Calculate",
+				mode = { "n", "v" },
+				silent = true,
+			},
+		},
 	},
 	{
 		"chrisgrieser/nvim-early-retirement",
 		enabled = false,
+		config = true,
 		event = "LspAttach",
 		opts = {
-			retirementAgeMins = 10,
+			-- If a buffer has been inactive for this many minutes, close it.
+			retirementAgeMins = 20,
+
 			-- Filetypes to ignore.
-			ignoredFiletypes = {},
+			ignoredFiletypes = { "octo" },
+
 			-- Ignore files matching this lua pattern; empty string disables this setting.
 			ignoreFilenamePattern = "",
+
 			-- Will not close the alternate file.
 			ignoreAltFile = true,
+
 			-- Minimum number of open buffers for auto-closing to become active. E.g.,
 			-- by setting this to 4, no auto-closing will take place when you have 3
 			-- or fewer open buffers. Note that this plugin never closes the currently
 			-- active buffer, so a number < 2 will effectively disable this setting.
-			minimumBufferNum = 3,
+			minimumBufferNum = 4,
+
 			-- Ignore buffers with unsaved changes. If false, the buffers will
 			-- automatically be written and then closed.
 			ignoreUnsavedChangesBufs = true,
+
 			-- Ignore non-empty buftypes, for example terminal buffers
 			ignoreSpecialBuftypes = true,
+
 			-- Ignore visible buffers. Buffers that are open in a window or in a tab
 			-- are considered visible by vim. ("a" in `:buffers`)
 			ignoreVisibleBufs = true,
+
 			-- ignore unloaded buffers. Session-management plugin often add buffers
 			-- to the buffer list without loading them.
-			ignoreUnloadedBufs = false,
+			ignoreUnloadedBufs = true,
+
 			-- Show notification on closing. Works with plugins like nvim-notify.
 			notificationOnAutoClose = false,
+
 			-- When a file is deleted, for example via an external program, delete the
 			-- associated buffer as well. Requires Neovim >= 0.10.
 			-- (This feature is independent from the automatic closing)
 			deleteBufferWhenFileDeleted = true,
+
+			-- Function to delete the buffer. The argument provided to the function is
+			-- the buffer number. If nothing is provided the plugin will just call
+			-- nvim_buf_delete.
+			deleteFunction = nil,
 		},
 	},
 	{
@@ -254,14 +317,14 @@ return {
 		end,
 	},
 	-- { 'mistweaverco/snap.nvim', opts = {}, cmd = { "Snap" } },
-	{
-		"katonori/ps.vim",
-		cmd = "PS",
-		keys = {
-			{ "<leader>ps", "<cmd>PS<cr>" },
-			{ "<leader>pr", "<cmd>PsRefresh<cr>" },
-		},
-	},
+	-- {
+	-- 	"katonori/ps.vim",
+	-- 	cmd = "PS",
+	-- 	keys = {
+	-- 		{ "<leader>ps", "<cmd>PS<cr>" },
+	-- 		{ "<leader>pr", "<cmd>PsRefresh<cr>" },
+	-- 	},
+	-- },
 	-- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
 	{ "junegunn/gv.vim", enabled = false, dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
 	{

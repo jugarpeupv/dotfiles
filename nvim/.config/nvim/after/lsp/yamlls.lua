@@ -1,5 +1,5 @@
 return {
-  filetypes = { "yaml", "yml" },
+  filetypes = { "yaml", "yml", "yaml.github" },
   cmd = { os.getenv("HOME") .. "/.local/share/nvim/mason/bin/yaml-language-server", "--stdio" },
   editor = {
     formatOnType = false,

@@ -18,25 +18,25 @@ return {
 
 			local nvim_tree_jg_utils = require("jg.custom.nvim-tree-utils")
 
-			local attach_git = function()
-				local should_attach = true
-				local git_dir = vim.fn.finddir(".git", vim.fn.expand("%:p:h"))
-				-- print("git_dir: ", git_dir)
+			-- local attach_git = function()
+			-- 	local should_attach = true
+			-- 	local git_dir = vim.fn.finddir(".git", vim.fn.expand("%:p:h"))
+			-- 	-- print("git_dir: ", git_dir)
+			--
+			-- 	local git_file = vim.fn.findfile(".git", vim.fn.expand("%:p:h"))
+			-- 	-- print("git_file: ", git_file)
+			--
+			-- 	local head_file = vim.fn.findfile("HEAD", vim.fn.expand("%:p:h"))
+			-- 	-- print("head_file: ", head_file)
+			--
+			-- 	if git_dir == "" and head_file == "" and git_file == "" then
+			-- 		should_attach = false
+			-- 	end
+			--
+			-- 	return should_attach
+			-- end
 
-				local git_file = vim.fn.findfile(".git", vim.fn.expand("%:p:h"))
-				-- print("git_file: ", git_file)
-
-				local head_file = vim.fn.findfile("HEAD", vim.fn.expand("%:p:h"))
-				-- print("head_file: ", head_file)
-
-				if git_dir == "" and head_file == "" and git_file == "" then
-					should_attach = false
-				end
-
-				return should_attach
-			end
-
-			local should_attach_git = attach_git()
+			-- local should_attach_git = attach_git()
 
 			vim.keymap.set({ "n" }, "<leader>uR", function()
 				api_nvimtree.tree.open({ find_file = true, update_root = true })
@@ -778,7 +778,7 @@ return {
 						modified_placement = "after",
 						diagnostics_placement = "after",
 						bookmarks_placement = "signcolumn",
-						padding = " ",
+						-- padding = " ",
 						symlink_arrow = " ➛ ",
 						-- symlink_arrow = "  ",
 						show = {
@@ -1039,89 +1039,89 @@ return {
 		},
 		config = function()
 			-- Default config:
-			-- require("nvim-tree-preview").setup({
-			-- 	-- Keymaps for the preview window (does not apply to the tree window).
-			-- 	-- Keymaps can be a string (vimscript command), a function, or a table.
-			-- 	--
-			-- 	-- If a function is provided:
-			-- 	--   When the keymap is invoked, the function is called.
-			-- 	--   It will be passed a single argument, which is a table of the following form:
-			-- 	--     {
-			-- 	--       node: NvimTreeNode|NvimTreeRootNode, -- The tree node under the cursor
-			-- 	--     }
-			-- 	--   See the type definitions in `lua/nvim-tree-preview/types.lua` for a description
-			-- 	--   of the fields in the table.
-			-- 	--
-			-- 	-- If a table, it must contain either an 'action' or 'open' key:
-			-- 	--   Actions:
-			-- 	--     { action = 'close', unwatch? = false, focus_tree? = true }
-			-- 	--     { action = 'toggle_focus' }
-			-- 	--     { action = 'select_node', target: 'next'|'prev' }
-			-- 	--
-			-- 	--   Open modes:
-			-- 	--     { open = 'edit' }
-			-- 	--     { open = 'tab' }
-			-- 	--     { open = 'vertical' }
-			-- 	--     { open = 'horizontal' }
-			-- 	--
-			-- 	-- To disable a default keymap, set it to false.
-			-- 	-- All keymaps are set in normal mode. Other modes are not currently supported.
-			-- 	keymaps = {
-			-- 		["<Esc>"] = { action = "close", unwatch = true },
-			-- 		-- ["<Tab>"] = { action = "toggle_focus" },
-			-- 		["<CR>"] = { open = "edit" },
-			-- 		["<C-t>"] = { open = "tab" },
-			-- 		["<C-v>"] = { open = "vertical" },
-			-- 		["<C-x>"] = { open = "horizontal" },
-			-- 		["<C-n>"] = { action = "select_node", target = "next" },
-			-- 		["<C-p>"] = { action = "select_node", target = "prev" },
-			-- 	},
-			-- 	min_width = 10,
-			-- 	min_height = 5,
-			-- 	max_width = 85,
-			-- 	max_height = 25,
-			-- 	wrap = false, -- Whether to wrap lines in the preview window
-			-- 	border = "rounded", -- Border style for the preview window
-			-- 	zindex = 100, -- Stacking order. Increase if the preview window is shown below other windows.
-			-- 	show_title = true, -- Whether to show the file name as the title of the preview window
-			-- 	title_pos = "top-left", -- top-left|top-center|top-right|bottom-left|bottom-center|bottom-right
-			-- 	title_format = " %s ",
-			-- 	follow_links = true, -- Whether to follow symlinks when previewing files
-			-- 	-- win_position: { row?: number|function, col?: number|function }
-			-- 	-- Position of the preview window relative to the tree window.
-			-- 	-- If not specified, the position is automatically calculated.
-			-- 	-- Functions receive (tree_win, size) parameters and must return a number, where:
-			-- 	--   tree_win: number - tree window handle
-			-- 	--   size: {width: number, height: number} - dimensions of the preview window
-			-- 	-- Example:
-			-- 	--   win_position = {
-			-- 	--    col = function(tree_win, size)
-			-- 	--      local view_side = require('nvim-tree').config.view.side
-			-- 	--      return view_side == 'left' and vim.fn.winwidth(tree_win) + 1 or -size.width - 3
-			-- 	--    end,
-			-- 	--   },
-			-- 	win_position = {},
-			-- 	image_preview = {
-			-- 		enable = true, -- Whether to preview images (for more info see Previewing Images section in README)
-			-- 		patterns = { -- List of Lua patterns matching image file names
-			-- 			".*%.png$",
-			-- 			".*%.jpg$",
-			-- 			".*%.jpeg$",
-			-- 			".*%.gif$",
-			-- 			".*%.webp$",
-			-- 			".*%.avif$",
-			-- 			-- Additional patterns:
-			-- 			-- '.*%.svg$',
-			-- 			-- '.*%.bmp$',
-			-- 			-- '.*%.pdf$', (known to have issues)
-			-- 		},
-			-- 	},
-			-- 	on_open = nil, -- fun(win: number, buf: number) called when the preview window is opened
-			-- 	on_close = nil, -- fun() called when the preview window is closed
-			-- 	watch = {
-			-- 		event = "CursorMoved", -- 'CursorMoved'|'CursorHold'. Event to use to update the preview in watch mode
-			-- 	},
-			-- })
+			require("nvim-tree-preview").setup({
+				-- Keymaps for the preview window (does not apply to the tree window).
+				-- Keymaps can be a string (vimscript command), a function, or a table.
+				--
+				-- If a function is provided:
+				--   When the keymap is invoked, the function is called.
+				--   It will be passed a single argument, which is a table of the following form:
+				--     {
+				--       node: NvimTreeNode|NvimTreeRootNode, -- The tree node under the cursor
+				--     }
+				--   See the type definitions in `lua/nvim-tree-preview/types.lua` for a description
+				--   of the fields in the table.
+				--
+				-- If a table, it must contain either an 'action' or 'open' key:
+				--   Actions:
+				--     { action = 'close', unwatch? = false, focus_tree? = true }
+				--     { action = 'toggle_focus' }
+				--     { action = 'select_node', target: 'next'|'prev' }
+				--
+				--   Open modes:
+				--     { open = 'edit' }
+				--     { open = 'tab' }
+				--     { open = 'vertical' }
+				--     { open = 'horizontal' }
+				--
+				-- To disable a default keymap, set it to false.
+				-- All keymaps are set in normal mode. Other modes are not currently supported.
+				keymaps = {
+					["<Esc>"] = { action = "close", unwatch = true },
+					-- ["<Tab>"] = { action = "toggle_focus" },
+					["<CR>"] = { open = "edit" },
+					["<C-t>"] = { open = "tab" },
+					["<C-v>"] = { open = "vertical" },
+					["<C-x>"] = { open = "horizontal" },
+					["<C-n>"] = { action = "select_node", target = "next" },
+					["<C-p>"] = { action = "select_node", target = "prev" },
+				},
+				min_width = 10,
+				min_height = 5,
+				max_width = 85,
+				max_height = 25,
+				wrap = false, -- Whether to wrap lines in the preview window
+				border = "rounded", -- Border style for the preview window
+				zindex = 100, -- Stacking order. Increase if the preview window is shown below other windows.
+				show_title = true, -- Whether to show the file name as the title of the preview window
+				title_pos = "top-left", -- top-left|top-center|top-right|bottom-left|bottom-center|bottom-right
+				title_format = " %s ",
+				follow_links = true, -- Whether to follow symlinks when previewing files
+				-- win_position: { row?: number|function, col?: number|function }
+				-- Position of the preview window relative to the tree window.
+				-- If not specified, the position is automatically calculated.
+				-- Functions receive (tree_win, size) parameters and must return a number, where:
+				--   tree_win: number - tree window handle
+				--   size: {width: number, height: number} - dimensions of the preview window
+				-- Example:
+				--   win_position = {
+				--    col = function(tree_win, size)
+				--      local view_side = require('nvim-tree').config.view.side
+				--      return view_side == 'left' and vim.fn.winwidth(tree_win) + 1 or -size.width - 3
+				--    end,
+				--   },
+				win_position = {},
+				image_preview = {
+					enable = true, -- Whether to preview images (for more info see Previewing Images section in README)
+					patterns = { -- List of Lua patterns matching image file names
+						".*%.png$",
+						".*%.jpg$",
+						".*%.jpeg$",
+						".*%.gif$",
+						".*%.webp$",
+						".*%.avif$",
+						-- Additional patterns:
+						-- '.*%.svg$',
+						-- '.*%.bmp$',
+						-- '.*%.pdf$', (known to have issues)
+					},
+				},
+				on_open = nil, -- fun(win: number, buf: number) called when the preview window is opened
+				on_close = nil, -- fun() called when the preview window is closed
+				watch = {
+					event = "CursorMoved", -- 'CursorMoved'|'CursorHold'. Event to use to update the preview in watch mode
+				},
+			})
 		end,
 	},
 }

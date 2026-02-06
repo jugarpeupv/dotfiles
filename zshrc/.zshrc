@@ -17,3 +17,6 @@ source $HOME/.config/zshrc/atuin.zsh
 source $HOME/.config/zshrc/evalcache.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# bun completions
+[ -s "/Users/jgarcia/.bun/_bun" ] && source "/Users/jgarcia/.bun/_bun"

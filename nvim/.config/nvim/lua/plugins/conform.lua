@@ -15,25 +15,45 @@ return {
 		-- event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"williamboman/mason.nvim",
+			{
+				"mfussenegger/nvim-lint",
+				config = function()
+					require("lint").linters_by_ft = {
+						["yaml.github"] = { "actionlint" },
+					}
+
+          local lint_group = vim.api.nvim_create_augroup("YamlGithubLint", { clear = true })
+					vim.api.nvim_create_autocmd("BufWritePost", {
+            group = lint_group,
+						pattern = "*",
+						callback = function()
+							if vim.bo.filetype == "yaml.github" then
+								require("lint").try_lint()
+							end
+						end,
+					})
+				end,
+			},
 		},
-    opts = {
-      -- Conform will run the first available formatter
-      formatters = {
-        kulala = {
-          command = "kulala-fmt",
-          args = { "format", "$FILENAME" },
-          stdin = false,
-        },
-      },
-      formatters_by_ft = {
-        javascript = { "prettierd", "prettier", stop_after_first = true },
-        typescript = { "prettierd", "prettier", stop_after_first = true },
-        lua = { "stylua" },
-        xml = { "xmlformatter" },
-        yaml = { "yamlfmt" },
-        http = { "kulala" },
-      }
-    },
+		opts = {
+			-- Conform will run the first available formatter
+			formatters = {
+				kulala = {
+					command = "kulala-fmt",
+					args = { "format", "$FILENAME" },
+					stdin = false,
+				},
+			},
+			formatters_by_ft = {
+				javascript = { "prettierd", "prettier", stop_after_first = true },
+				typescript = { "prettierd", "prettier", stop_after_first = true },
+				lua = { "stylua" },
+				xml = { "xmlformatter" },
+				yaml = { "yamlfmt" },
+				["yaml.github"] = { "yamlfmt" },
+				http = { "kulala" },
+			},
+		},
 		-- opts = function()
 		-- 	local mason_reg = require("mason-registry")
 		--
@@ -109,7 +129,7 @@ return {
 		-- end,
 		keys = {
 			{
-        mode = { "n", "v" },
+				mode = { "n", "v" },
 				"<leader>fo",
 				function()
 					require("conform").format({

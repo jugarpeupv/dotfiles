@@ -99,6 +99,7 @@ local config = {
 
 		vim.api.nvim_create_autocmd("BufWritePost", {
 			pattern = { "*.java" },
+      group = vim.api.nvim_create_augroup('bufwritejavacodelens', { clear = true }),
 			callback = function()
 				local _, _ = pcall(vim.lsp.codelens.refresh)
 			end,

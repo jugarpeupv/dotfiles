@@ -1,10 +1,10 @@
 return {
 	{
 		"sudo-tee/opencode.nvim",
+    enabled = false,
 		-- dev = true,
 		-- dir = "~/work/tmp/opencode.nvim/wt-feature-auto_scroll_config",
 		lazy = true,
-		enabled = true,
 		keys = {
 			{
 				mode = { "n", "v" },

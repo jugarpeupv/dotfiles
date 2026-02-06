@@ -144,7 +144,7 @@ end, opts)
 
 vim.keymap.set({ "n" }, "<leader>.", function()
 	require("telescope.builtin").find_files({
-		prompt_title = "< NvimRC >",
+		prompt_title = "Neovim config files",
 		cwd = "~/dotfiles/nvim/.config/nvim",
 		no_ignore = true,
 		hidden = true,
@@ -152,6 +152,19 @@ vim.keymap.set({ "n" }, "<leader>.", function()
 			hide_on_startup = true,
 		},
 	})
+end, opts)
+
+
+vim.keymap.set({ "n" }, "<leader>,", function()
+  require("telescope.builtin").find_files({
+    prompt_title = "dotfiles",
+    cwd = "~/dotfiles",
+    no_ignore = false,
+    hidden = true,
+    preview = {
+      hide_on_startup = true,
+    },
+  })
 end, opts)
 
 -- keymap("n", "su", "<cmd>Telescope file_browser path=/Users/jgarcia<cr>", opts)
@@ -446,20 +459,6 @@ end, opts)
 -- keymap("t", "<leader>q", "<cmd>q!<CR>", opts)
 keymap("n", "<leader>nh", "<cmd>nohlsearch<CR>", opts)
 
-vim.keymap.set({ "n" }, "<leader>bi", function()
-	Snacks.picker.buffers({ finder = "buffers", hidden = true, title = "< IBuffers >" })
-
-	-- require("telescope.builtin").buffers({
-	-- 	prompt_title = "< IBuffers >",
-	-- 	ignore_current_buffer = false,
-	-- 	show_all_buffers = true,
-	-- 	sort_mru = true,
-	-- 	select_current = true,
-	-- 	-- sort_lastused = true,
-	-- 	-- initial_mode = "normal",
-	-- })
-end, opts)
-
 vim.keymap.set({ "n" }, "<leader>bu", function()
 	require("jg.custom.telescope").normal_buffers({
 		ignore_current_buffer = true,
@@ -676,7 +675,8 @@ keymap("n", "<leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 -- vim.cmd([[nnoremap <leader>rr :OverCommandLine %s///g<cr><Left><Left><Left>]])
 -- vim.cmd([[nnoremap <leader>rr :%s///g<Left><Left><Left>]])
 vim.cmd([[xnoremap <leader>rr :s///g<Left><Left><Left>]])
-vim.cmd([[nnoremap <leader>sw /\<\><Left><Left>]])
+-- vim.cmd([[nnoremap <leader>sw /\<\><Left><Left>]])
+vim.cmd([[nnoremap g/ /\<\><Left><Left>]])
 
 vim.cmd(
 	[[nnoremap <leader>rq :cfdo %s///gc \| update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]]
@@ -708,16 +708,16 @@ end, opts)
 keymap("n", "<leader>cw", ":e ++ff=dos<CR> | :set ff=unix<CR>", opts)
 
 -- The Primeagean
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", opts)
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
 
-vim.keymap.set("n", "J", "mzJ`z")
+vim.keymap.set("n", "J", "mzJ`z", opts)
 -- vim.keymap.set("n", "<C-d>", "<C-d>zz")
 -- vim.keymap.set("n", "<C-u>", "<C-u>zz")
 -- vim.keymap.set('n', "n", "nzzzv")
 -- vim.keymap.set('n', "N", "Nzzzv")
 
-vim.keymap.set("n", "<leader>rc", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+vim.keymap.set("n", "<leader>rc", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", opts)
 
 -- Trouble
 -- vim.keymap.set("n", "<leader>xx", "<cmd>TroubleToggle<cr>", { silent = true, noremap = true })
@@ -738,7 +738,7 @@ vim.cmd([[:tnoremap <C-o> <C-\><C-N><C-o>]])
 
 vim.keymap.set("n", "<leader>ih", function()
 	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-end)
+end, opts)
 
 vim.cmd([[nmap <leader>tw :tabnew %<CR>]])
 vim.cmd([[nmap <leader>tq :tabclose<CR>]])
@@ -777,7 +777,7 @@ vim.keymap.set("n", "<leader>ct", function()
 	require("terminal").run("", {
 		cwd = vim.fn.expand("%:p:h"),
 	})
-end)
+end, opts)
 
 local btop_term
 
@@ -791,7 +791,7 @@ vim.keymap.set("n", "<leader>bb", function()
 	end
 
 	btop_term:toggle(nil, true)
-end)
+end, opts)
 
 -- vim.keymap.set({ "i", "s" }, "<C-e>", function()
 --   local ls = require("luasnip")
@@ -901,8 +901,14 @@ vim.api.nvim_set_keymap("n", "<leader>vf", "<cmd>Vifm .<cr>", { noremap = true, 
 -- clear scrollback buffer in terminal buffer
 -- vim.keymap.set({ "t", "n" }, "<leader>CL", "<C-\\><C-n><cmd>lua vim.bo.scrollback=1<cr>", opts)
 
-vim.keymap.set("n", "<leader>xx", "<cmd>source %<CR>")
-vim.keymap.set({ "n", "v" }, "<leader>xs", ":.lua<CR>")
+vim.keymap.set("n", "<leader>xx", "<cmd>source %<CR>", opts)
+vim.keymap.set({ "n", "v" }, "<leader>xs", ":.lua<CR>", opts)
+
+vim.keymap.set({ "n" }, "<leader>sw", function()
+	-- run this command on modifiable windows
+	--   -- vim.wo.wrap = not vim.wo.wrap
+	vim.cmd([[set wrap!]])
+end, opts)
 
 vim.keymap.set({ "n" }, "<leader>sn", function()
 	-- run this command on modifiable windows
@@ -929,6 +935,10 @@ local function find_in_node_modules()
 	local action_state = require("telescope.actions.state")
 
 	local cwd = vim.loop.cwd()
+	if not cwd then
+		vim.notify("Could not get current working directory", vim.log.levels.ERROR)
+		return
+	end
 	local node_modules_path = cwd .. "/node_modules"
 
 	local function open_nvim_tree(prompt_bufnr, map)
@@ -990,9 +1000,13 @@ local function find_in_node_modules()
 			return {
 				value = entry,
 				display = function()
-					local cwd_dos = vim.loop.cwd():gsub("%-", "%%%-")
+					local cwd_current = vim.loop.cwd()
+					if not cwd_current then
+						return entry
+					end
+					local cwd_dos = cwd_current:gsub("%-", "%%%-")
 					local modified_entry = entry:gsub(cwd_dos .. "/", "")
-					local display_string = "  " .. modified_entry
+					local display_string = "  " .. modified_entry
 					return display_string, { { { 0, 1 }, "Directory" } }
 				end,
 				ordinal = entry,
@@ -1010,7 +1024,6 @@ vim.keymap.set({ "n" }, "<leader>bp", "<cmd>bp<cr>", opts)
 
 vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
 
--- vim.g.compile_command = ""
 vim.keymap.set({ "n" }, "<M-b>", function()
 	-- if vim.g.compile_command ~= "" then
 	-- 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(vim.g.compile_command, true, false, true), "n", true)
@@ -1026,6 +1039,8 @@ vim.keymap.set({ "n" }, "<M-b>", function()
 			return "sh"
 		elseif filetype == "typescript" or filetype == "javascript" then
 			return "bun"
+		elseif filetype == "c" then
+			return "cc"
 		else
 			return "make"
 		end
@@ -1325,6 +1340,9 @@ vim.keymap.set("n", "<leader>gm", function()
 
 	local function get_git_modified_files()
 		local cwd = vim.loop.cwd()
+		if not cwd then
+			return {}
+		end
 		local handle = io.popen("git status --porcelain")
 		if not handle then
 			return {}
@@ -1439,7 +1457,6 @@ vim.keymap.set("n", "<leader>wf", function()
 	local pickers = require("telescope.pickers")
 	local finders = require("telescope.finders")
 	local utils = require("telescope.utils")
-	local action_set = require("telescope.actions.set")
 	local conf = require("telescope.config").values
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
@@ -1461,8 +1478,9 @@ vim.keymap.set("n", "<leader>wf", function()
 		end
 		actions.close(prompt_bufnr)
 
+		local worktree_name = worktree_path:match("([^/]+)$") or "worktree"
 		require("telescope.builtin").find_files({
-			prompt_title = "Select file in worktree: " .. worktree_path:match("([^/]+)$"),
+			prompt_title = "Select file in worktree: " .. worktree_name,
 			cwd = worktree_path,
 			no_ignore = false,
 			hidden = false,
@@ -1554,7 +1572,7 @@ vim.keymap.set("n", "<leader>wf", function()
 				}),
 				sorter = conf.generic_sorter(opts_new),
 				attach_mappings = function()
-					action_set.select:replace(select_worktree)
+					actions.select_default:replace(select_worktree)
 					return true
 				end,
 			})
@@ -1569,7 +1587,6 @@ vim.keymap.set("n", "<leader>we", function()
 	local pickers = require("telescope.pickers")
 	local finders = require("telescope.finders")
 	local utils = require("telescope.utils")
-	local action_set = require("telescope.actions.set")
 	local conf = require("telescope.config").values
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
@@ -1726,7 +1743,7 @@ vim.keymap.set("n", "<leader>we", function()
 				}),
 				sorter = conf.generic_sorter(opts_new),
 				attach_mappings = function(_, map)
-					action_set.select:replace(select_worktree)
+					actions.select_default:replace(select_worktree)
 					map("i", "<C-v>", open_in_vsplit)
 					map("n", "<C-v>", open_in_vsplit)
 					map("i", "<C-s>", open_in_split)
@@ -1797,11 +1814,11 @@ vim.keymap.set("n", "<leader>gn", function()
 	require("jg.custom.telescope").show_global_npm_packages()
 end, { desc = "show global npm packages" })
 
-vim.keymap.set("n", "<S-left>", "zH")
-vim.keymap.set("n", "<S-right>", "zL")
+vim.keymap.set("n", "<S-left>", "zH", opts)
+vim.keymap.set("n", "<S-right>", "zL", opts)
 
-vim.keymap.set("n", "<left>", "10zh")
-vim.keymap.set("n", "<right>", "10zl")
+vim.keymap.set("n", "<left>", "10zh", opts)
+vim.keymap.set("n", "<right>", "10zl", opts)
 
 vim.keymap.set("n", "<C-i>", "<C-i>", { noremap = true })
 
@@ -1819,10 +1836,45 @@ end, { desc = "Yank absolute file path to clipboard" })
 --   vim.lsp.buf.selection_range('inner')
 -- end, { desc = "vim.lsp.buf.selection_range('inner')" })
 
--- vim.keymap.set("v", "·", "%", { silent = true })
--- vim.keymap.set("n", "·", "%", { silent = true })
+-- vim.keymap.set("v", "Ñ", "%", { silent = true })
 
 vim.keymap.set("n", "L", "$", { silent = true })
--- vim.keymap.set({ "n", "v" }, "<S-CR>", function()
--- 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("%", true, false, true), "n", true)
--- end, { silent = true })
+vim.keymap.set({ "n", "v" }, "<S-CR>", function()
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("%", true, false, true), "t", true)
+end, { silent = true })
+
+vim.api.nvim_create_user_command("DecodeJWT", function()
+	local jwt = vim.fn.expand("<cWORD>")
+
+	-- Remove surrounding quotes if present
+	jwt = jwt:gsub("^[\"']", ""):gsub("[\"']$", "")
+
+	-- Write JWT to a temp file to avoid shell escaping issues
+	local tmpfile = os.tmpname()
+	local f = io.open(tmpfile, "w")
+	if not f then
+		vim.notify("Error: Could not create temp file", vim.log.levels.ERROR)
+		return
+	end
+	f:write(jwt)
+	f:close()
+
+	local cmd = string.format("cat %s | jq -R 'split(\".\") | .[0:2] | map(@base64d | fromjson)' 2>&1", tmpfile)
+	local handle = io.popen(cmd)
+	if not handle then
+		os.remove(tmpfile)
+		vim.notify("Error: Could not execute jq command", vim.log.levels.ERROR)
+		return
+	end
+	local result = handle:read("*a")
+	handle:close()
+	os.remove(tmpfile)
+
+	vim.cmd("vnew")
+	if result and result ~= "" then
+		vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(result, "\n"))
+		vim.bo.filetype = "json"
+	else
+		vim.api.nvim_buf_set_lines(0, 0, -1, false, { "Error: Could not decode JWT", "Token: " .. jwt })
+	end
+end, {})

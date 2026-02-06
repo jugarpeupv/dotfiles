@@ -2,13 +2,13 @@ return {
 	{
 		"pwntester/octo.nvim",
 		-- commit = "c96a03d2aa4688f45fb8d58e832fdd37d104f12d",
-		-- dev = true,
-		-- dir = "~/projects/octo.nvim/wt-feature-static_search_config",
+		dev = true,
+		dir = "~/projects/octo.nvim",
 		-- dependencies = {
-		-- 	"nvim-lua/plenary.nvim",
-		-- 	"nvim-telescope/telescope.nvim",
+		-- -- 	"nvim-lua/plenary.nvim",
+		-- -- 	"nvim-telescope/telescope.nvim",
 		-- 	"ibhagwan/fzf-lua",
-		-- 	"nvim-tree/nvim-web-devicons",
+		-- -- 	"nvim-tree/nvim-web-devicons",
 		-- },
 		cmd = { "Octo" },
 		-- "<cmd>Octo search review-requested:GPJULI6_mapfre is:pr involves:GPJULI6_mapfre state:open -team-review-requested:arch-gva-dev -team-review-requested:arch-gva-mnt -team-review-requested:arch-gva-own<cr>",
@@ -69,6 +69,8 @@ return {
 			},
 			mappings = {
 				issue = {
+          set_project_field_type = { lhs = "<localleader>ts", desc = "set project Type field" },
+          set_project_field_status = { lhs = "<localleader>cs", desc = "set project Status field" },
 					close_issue = { lhs = "<localleader>ic", desc = "close issue" },
 					reopen_issue = { lhs = "<localleader>io", desc = "reopen issue" },
 					list_issues = { lhs = "<localleader>il", desc = "list open issues on same repo" },

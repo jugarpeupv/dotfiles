@@ -2,7 +2,10 @@
   "$schema": "https://opencode.ai/config.json",
   // Theme configuration
   "theme": "catppuccin-transparent",
-  "model": "github-copilot/gpt-5.1-codex",
+  "model": "github-copilot/claude-sonnet-4.5",
+  "permission": {
+    "*": "allow"
+  },
   "mcp": {
     "nx": {
       "type": "local",

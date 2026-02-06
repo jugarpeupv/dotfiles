@@ -426,54 +426,54 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "codecompanion",
-	group = augroups.codecompanion,
-	callback = function(args)
-		local bufnr = args.buf
-		local state = {
-			line_count = vim.api.nvim_buf_line_count(bufnr),
-		}
-		vim.b[bufnr].codecompanion_follow_state = state
-
-		local function follow_windows(prev_count, new_count)
-			for _, winid in ipairs(vim.fn.win_findbuf(bufnr)) do
-				local cursor = vim.api.nvim_win_get_cursor(winid)
-				local near_end = cursor[1] >= math.max(prev_count - 1, 1)
-				if near_end then
-					vim.api.nvim_win_call(winid, function()
-						vim.api.nvim_win_set_cursor(0, { new_count, 0 })
-						local height = vim.api.nvim_win_get_height(0)
-						local view = vim.fn.winsaveview()
-						view.topline = math.max(new_count - height + 1, 1)
-						vim.fn.winrestview(view)
-					end)
-				end
-			end
-		end
-
-		vim.api.nvim_create_autocmd("TextChanged", {
-			buffer = bufnr,
-			callback = function()
-				local mode = vim.api.nvim_get_mode().mode
-				if vim.startswith(mode, "i") then
-					state.line_count = vim.api.nvim_buf_line_count(bufnr)
-					return
-				end
-
-				local prev_count = state.line_count or vim.api.nvim_buf_line_count(bufnr)
-				local new_count = vim.api.nvim_buf_line_count(bufnr)
-				if new_count <= prev_count then
-					state.line_count = new_count
-					return
-				end
-
-				follow_windows(prev_count, new_count)
-				state.line_count = new_count
-			end,
-		})
-	end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	pattern = "codecompanion",
+-- 	group = augroups.codecompanion,
+-- 	callback = function(args)
+-- 		local bufnr = args.buf
+-- 		local state = {
+-- 			line_count = vim.api.nvim_buf_line_count(bufnr),
+-- 		}
+-- 		vim.b[bufnr].codecompanion_follow_state = state
+--
+-- 		local function follow_windows(prev_count, new_count)
+-- 			for _, winid in ipairs(vim.fn.win_findbuf(bufnr)) do
+-- 				local cursor = vim.api.nvim_win_get_cursor(winid)
+-- 				local near_end = cursor[1] >= math.max(prev_count - 1, 1)
+-- 				if near_end then
+-- 					vim.api.nvim_win_call(winid, function()
+-- 						vim.api.nvim_win_set_cursor(0, { new_count, 0 })
+-- 						local height = vim.api.nvim_win_get_height(0)
+-- 						local view = vim.fn.winsaveview()
+-- 						view.topline = math.max(new_count - height + 1, 1)
+-- 						vim.fn.winrestview(view)
+-- 					end)
+-- 				end
+-- 			end
+-- 		end
+--
+-- 		vim.api.nvim_create_autocmd("TextChanged", {
+-- 			buffer = bufnr,
+-- 			callback = function()
+-- 				local mode = vim.api.nvim_get_mode().mode
+-- 				if vim.startswith(mode, "i") then
+-- 					state.line_count = vim.api.nvim_buf_line_count(bufnr)
+-- 					return
+-- 				end
+--
+-- 				local prev_count = state.line_count or vim.api.nvim_buf_line_count(bufnr)
+-- 				local new_count = vim.api.nvim_buf_line_count(bufnr)
+-- 				if new_count <= prev_count then
+-- 					state.line_count = new_count
+-- 					return
+-- 				end
+--
+-- 				follow_windows(prev_count, new_count)
+-- 				state.line_count = new_count
+-- 			end,
+-- 		})
+-- 	end,
+-- })
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = { "markdown", "ps" },
@@ -497,22 +497,23 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
--- vim.api.nvim_create_autocmd("TermOpen", {
---   pattern = "*",
---   callback = function(args)
---     local bufnr = args.buf
---
---     -- Utility to move from one prompt to another
---     vim.keymap.set({ "t" }, "<C-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
---     vim.keymap.set({ "t" }, "<C-P>", "<C-\\><C-n>?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
---
---     vim.keymap.set({ "n" }, "<C-N>", "/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
---     vim.keymap.set({ "n" }, "<C-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
---   end,
--- })
+vim.api.nvim_create_autocmd("TermOpen", {
+  pattern = "*",
+  callback = function(args)
+    local bufnr = args.buf
+
+    -- Utility to move from one prompt to another
+    vim.keymap.set({ "t" }, "<C-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+    vim.keymap.set({ "t" }, "<C-P>", "<C-\\><C-n>?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+
+    vim.keymap.set({ "n" }, "<C-N>", "/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+    vim.keymap.set({ "n" }, "<C-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+  end,
+})
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "text.kulala_ui",
+	group = augroups.filetypedetect,
 	callback = function(event)
 		local ok, parser = pcall(vim.treesitter.get_parser, event.buf, "json")
 		if ok and parser then

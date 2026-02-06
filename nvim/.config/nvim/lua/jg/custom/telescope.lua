@@ -65,7 +65,7 @@ M.find_directory_in_oil_and_focus = function()
   end
 
   require("telescope.builtin").find_files({
-    prompt_title = "Open directory in nvim tree",
+    prompt_title = "Open directory in oil",
     find_command = {
       "fd",
       "--type",

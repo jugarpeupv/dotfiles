@@ -117,6 +117,7 @@ return {
 						NvimTreeStatusLine = { fg = "#737aa2", bg = "" },
 						NvimTreeStatusLineNC = { fg = "#737aa2", bg = "" },
 						-- MatchParen = { bg = "#394b70", fg = "#F5E0DC" },
+						MatchParenVisual = { bg = "none", fg = "#27F2F5", style = { "bold" } },
 						MatchParen = { bg = "none", fg = "#F5E0DC", style = { "bold" } },
 						IlluminatedWordText = { bg = "#394b70" },
 						IlluminatedWordRead = { bg = "#394b70" },
@@ -140,6 +141,7 @@ return {
 						["@markup.heading.3.markdown"] = { fg = "#94E2D5" },
 						["@lsp.typemod.interface.defaultLibrary.typescript"] = { fg = "#F38BA8" },
 						["@type.builtin.typescript"] = { fg = "#89ddfe" },
+						-- htmlEndTag = { link = "Function" },
 						["@string.special.url.html"] = { fg = "#F5C2E7", bg = "", style = {} },
 						["@markup.heading.4.markdown"] = { fg = "#B4BEFE" },
 						Ignore = { fg = "#394b70" },
@@ -158,7 +160,7 @@ return {
 						BlinkCmpGitKindCommit = { fg = "#8ee2cf" },
 						BlinkCmpGitLabelCommitId = { fg = "#8ee2cf" },
 						-- GitSignsCurrentLineBlame = { fg = "#B4BEFE" },
-            GitSignsCurrentLineBlame = { fg = "#000000" },
+						GitSignsCurrentLineBlame = { fg = "#000000" },
 						FloatBorder = { fg = "#394b70", bg = "" },
 						FloatTitle = { fg = "#394b70", bg = "" },
 						BlinkCmpKindSnippet = { fg = "#747ebd" },
@@ -180,7 +182,7 @@ return {
 						["@lsp.type.enumMember.typescript"] = { fg = "#F5C2E7" },
 						viraDetailsStatusInProgress = { fg = "#F38BA8" },
 						viraDetailsEpic = { fg = "#F5C2E7" },
-            OilExecutable = { fg = "#F5C2E7" },
+						OilExecutable = { fg = "#F5C2E7" },
 						viraDetailsTypeStory = { fg = "#8ee2cf" },
 						viraDetails = { fg = "#89ddff" },
 						viraDetailsDates = { fg = "#89ddff" },
@@ -201,7 +203,8 @@ return {
 						-- AvanteConflictCurrent = { style = {}, fg = "#394b70" },
 						AvanteConflictCurrent = { style = {} },
 						LineNR = { style = {}, fg = "#3b4261" },
-						CursorLineNR = { style = {}, fg = "#737aa2" },
+						MatchParenVisualLineNr = { fg = "#737aa2", style = {} },
+						-- CursorLineNR = { style = {}, fg = "#737aa2" },
 						-- OilHidden = { fg = "", bg = "", link = "Oil" },
 						-- OilVcsStatusModified = { link = "NvimTreeGitDirty" },
 						-- OilVcsStatusIgnored = { link = "Comment" },
@@ -443,6 +446,28 @@ return {
 						OpencodeDiffAdd = { bg = "#103235" },
 						-- ["@markup.raw.markdown_inline"] = { fg = "#c0caf5", bg = "#1a3754" }
 						["@markup.raw.markdown_inline"] = { fg = "#B4BEFE" },
+
+						-- GitHub Actions - Versions
+						GitHubActionsVersionLatest = { fg = "#94E2D5" }, -- teal: latest/up-to-date
+						GitHubActionsVersionOutdated = { fg = "#F5C2E7" }, -- yellow: needs update
+						GitHubActionsVersionError = { fg = "#F38BA8" }, -- red: error state
+						GitHubActionsIconLatest = { fg = "#94E2D5" }, -- teal icon
+						GitHubActionsIconOutdated = { fg = "#F5C2E7" }, -- yellow icon
+						GitHubActionsIconError = { fg = "#F38BA8" }, -- red icon
+
+						-- GitHub Actions - History
+						GitHubActionsHistorySuccess = { fg = "#94E2D5" }, -- teal: successful runs
+						GitHubActionsHistoryFailure = { fg = "#F38BA8" }, -- red: failed runs
+						GitHubActionsHistoryCancelled = { fg = "#737aa2" }, -- gray: cancelled runs
+						GitHubActionsHistoryRunning = { fg = "#89B4FA" }, -- blue: in-progress runs
+						GitHubActionsHistoryQueued = { fg = "#CDD6F4" }, -- text: queued runs
+						GitHubActionsHistoryRunId = { fg = "#B4BEFE" }, -- lavender: run ID
+						GitHubActionsHistoryBranch = { fg = "#F5C2E7" }, -- pink: branch name
+						GitHubActionsHistoryTime = { fg = "#89ddff" }, -- sky: time information
+						GitHubActionsHistoryHeader = { fg = "#CBA6F7", style = { "bold" } }, -- mauve: header
+						GitHubActionsHistorySeparator = { fg = "#585B70" }, -- surface2: separator
+						-- Github
+						GitHubActionsHistoryJobName = { fg = "#CBA6F7" }, -- surface2: separator
 					}
 				end,
 			})
@@ -451,7 +476,7 @@ return {
 			vim.cmd.colorscheme("catppuccin")
 
 			-- vim.g.terminal_color_0 = "#1E1E2E"
-      vim.g.terminal_color_0 = "#585B70"
+			vim.g.terminal_color_0 = "#585B70"
 			vim.g.terminal_color_8 = "#585B70"
 
 			vim.g.terminal_color_1 = "#F38BA8"

@@ -82,7 +82,7 @@ return {
 			ask_about_save = false,
 			ask_to_interrupt = false,
       use_pseudo_terminal = true,
-      auto_scroll = false,
+      auto_scroll = true,
 			error_regexp_table = {
 				typescript = {
 					-- TypeScript errors take the form
@@ -97,6 +97,7 @@ return {
 
 		vim.api.nvim_create_autocmd("FileType", {
 			pattern = "compilation",
+      group = vim.api.nvim_create_augroup('ftcompilemode', { clear = true }),
 			callback = function()
 				vim.bo.buflisted = true
 				vim.keymap.set({ "n" }, "<C-q>", function()

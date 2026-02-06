@@ -91,6 +91,7 @@ M.find_and_replace = function()
 
       vim.api.nvim_create_autocmd('BufWritePost', {
         desc = 'If lines are changed, apply changes to files',
+        group = vim.api.nvim_create_augroup('find_and_replace_bufwritepost', { clear = true }),
         buffer = buf,
         callback = function()
           local new_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)

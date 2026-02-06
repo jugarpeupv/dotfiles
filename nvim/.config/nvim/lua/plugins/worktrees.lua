@@ -7,7 +7,9 @@ return {
 	-- "polarmutex/git-worktree.nvim",
 	-- "jugarpeupv/git-worktree.nvim",
 	-- version = "^2",
-	"jugarpeupv/git-worktree.nvim",
+	-- "jugarpeupv/git-worktree.nvim",
+  dev = true,
+  dir = "~/projects/git-worktree.nvim",
 	enabled = function()
 		local is_headless = #vim.api.nvim_list_uis() == 0
 		if is_headless then
@@ -46,9 +48,7 @@ return {
 				local git_path = vim.fn.getcwd() .. "/.git"
 				if vim.fn.isdirectory(git_path) == 1 then
 					vim.notify("Not in a bare repo", vim.log.levels.INFO)
-				elseif vim.fn.filereadable(git_path) == 1 then
-					require("telescope").extensions.git_worktree.create_git_worktree()
-				elseif vim.fn.filereadable(vim.fn.getcwd() .. "HEAD") then
+				elseif vim.fn.filereadable(git_path) == 1 or vim.fn.filereadable(vim.fn.getcwd() .. "HEAD") then
 					require("telescope").extensions.git_worktree.create_git_worktree()
 				else
 					vim.notify(".git not found", vim.log.levels.WARN)
@@ -203,6 +203,12 @@ return {
 				last_active_wt = worktree_path,
 			}
 			file_utils.write_bps(file_utils.get_bps_path(original_path), my_table)
+
+			local current_buffer_filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+			if current_buffer_filetype == "oil" then
+				require("oil").open(worktree_path)
+				return
+			end
 		end)
 
 		Hooks.register(Hooks.type.DELETE, function(path)

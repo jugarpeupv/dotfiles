@@ -56,10 +56,10 @@ M.attach_lsp_config = function(client, bufnr)
 
 	if vim.fn.has("nvim-0.12") == 1 then
 		vim.keymap.set({ "o", "x" }, "an", function()
-			vim.lsp.buf.selection_range(true)
+			vim.lsp.buf.selection_range(1)
 		end, opts)
 		vim.keymap.set({ "o", "x" }, "in", function()
-			vim.lsp.buf.selection_range(false)
+			vim.lsp.buf.selection_range(-1)
 		end, opts)
 	end
 
@@ -84,6 +84,7 @@ M.attach_lsp_config = function(client, bufnr)
 		-- in this window I can use normal mode keybindings
 		local cmdId
 		cmdId = vim.api.nvim_create_autocmd({ "CmdlineEnter" }, {
+      group = vim.api.nvim_create_augroup('cmdlineenterlsputils', { clear = true }),
 			callback = function()
 				local key = vim.api.nvim_replace_termcodes("<C-f>", true, false, true)
 				vim.api.nvim_feedkeys(key, "c", false)

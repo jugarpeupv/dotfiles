@@ -40,7 +40,7 @@ return {
 		vim.g.matchup_treesitter_include_match_words = 1
 
 		-- https://github.com/andymass/vim-matchup/issues/416
-		vim.g.matchup_treesitter_disabled = { "markdown" }
+		-- vim.g.matchup_treesitter_disabled = { "markdown" }
 
 		vim.cmd("NoMatchParen")
 		vim.cmd("DoMatchParen")

@@ -100,6 +100,7 @@ return {
 					"javascriptreact",
 					"javascript.jsx",
 					"html",
+          "htmlangular",
 				},
 				bashls = { "sh", "bash", "zsh" },
 				clangd = { "c", "cpp", "objc", "objcpp" },

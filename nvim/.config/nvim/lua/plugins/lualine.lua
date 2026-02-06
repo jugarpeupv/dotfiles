@@ -1,8 +1,8 @@
 return {
 	{
 		"jugarpeupv/barbecue.nvim",
-    -- dir = "~/projects/barbecue",
-    -- dev = true,
+		-- dir = "~/projects/barbecue",
+		-- dev = true,
 		enabled = true,
 		name = "barbecue",
 		branch = "main",
@@ -390,7 +390,7 @@ return {
 						-- 'NvimTree',
 						statusline = { "alpha", "dashboard", "Outline", "Diffview", "diffview", "intro", "NvimTree" },
 						winbar = {
-              "oil",
+							"oil",
 							"help",
 							"startify",
 							"dashboard",
@@ -436,9 +436,9 @@ return {
 					},
 					-- lualine_b = { branch, ahead_behind_indicator },
 					lualine_b = {},
-          lualine_c = { diff_mode },
+					lualine_c = { diff_mode },
 					-- lualine_x = { dirname, "filetype", get_schema },
-					lualine_x = { codecompanion_adapter, "filetype" },
+					lualine_x = { codecompanion_adapter, require("jg.custom.codecompanion_lualine_spinner"), "filetype" },
 					-- lualine_x = {},
 					-- lualine_y = {},
 					lualine_y = { "progress" },

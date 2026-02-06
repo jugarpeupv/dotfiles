@@ -257,6 +257,12 @@ return {
 	},
 	keys = {
 		-- Top Pickers & Explorer
+    {
+      "<leader>bi",
+      function()
+        Snacks.picker.buffers({ finder = "buffers", hidden = true, title = "< IBuffers >" })
+      end,
+    },
 		{
 			"gd",
 			function()
@@ -484,7 +490,7 @@ return {
           hidden = true,
           exclude = {
             ".git",
-            "*__template__*",
+            -- "*__template__*",
             "*DS_Store*",
           },
         })
@@ -547,13 +553,13 @@ return {
 			end,
 			desc = "Smart Find Files",
 		},
-		{
-			"<leader>,",
-			function()
-				Snacks.picker.buffers()
-			end,
-			desc = "Buffers",
-		},
+		-- {
+		-- 	"<leader>,",
+		-- 	function()
+		-- 		Snacks.picker.buffers()
+		-- 	end,
+		-- 	desc = "Buffers",
+		-- },
 		{
 			"<leader>/",
 			function()

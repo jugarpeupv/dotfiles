@@ -32,7 +32,7 @@ return {
 						search = nil,
 						replacement = nil,
 						filesFilter = "",
-						flags = "-i -g !**__template__** -g !**migrations** -g !**spec**",
+						flags = "-. -i -g !**__template__** -g !**migrations** -g !**spec**",
 						paths = nil,
 					},
 				},

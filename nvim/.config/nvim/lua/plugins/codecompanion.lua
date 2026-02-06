@@ -1,6 +1,8 @@
 return {
 	{
-		"olimorris/codecompanion.nvim",
+		-- "olimorris/codecompanion.nvim",
+		"aweis89/codecompanion.nvim",
+		branch = "fix/acp-async-connection",
 		enabled = function()
 			local is_headless = #vim.api.nvim_list_uis() == 0
 			if is_headless then
@@ -29,6 +31,13 @@ return {
 		-- end,
 		config = function()
 			require("codecompanion").setup({
+        prompt_library = {
+          markdown = {
+            dirs = {
+              "~/dotfiles/nvim/.config/nvim/lua/prompts"
+            },
+          },
+        },
 				rules = {
 					default = {
 						description = "Collection of common files for all projects",
@@ -57,13 +66,16 @@ return {
 				},
 				adapters = {
 					acp = {
-						copilot_cli = function()
+						copilot_cli_acp = function()
 							return require("codecompanion.adapters").extend("opencode", {
+								formatted_name = "copilot_cli_acp",
+								name = "copilot_cli_acp",
 								commands = {
 									-- The default uses the opencode/config.json value
 									default = {
 										"copilot",
 										"--acp",
+										"--allow-all",
 									},
 								},
 							})
@@ -163,8 +175,8 @@ return {
 						opts = {
 							completion_provider = "blink", -- blink|cmp|coc|default
 						},
-						-- adapter = "opencode",
-            adapter = "copilot_cli",
+						adapter = "opencode",
+						-- adapter = "copilot_cli_acp",
 						-- adapter = {
 						-- 	name = "copilot",
 						-- 	-- model = "gpt-5.1-codex",
@@ -308,6 +320,12 @@ return {
 							},
 						},
 						keymaps = {
+							options = {
+								modes = { n = "g?" },
+								callback = "keymaps.options",
+								description = "Options",
+								hide = true,
+							},
 							clear = {
 								modes = {
 									n = "cl",
@@ -448,7 +466,7 @@ return {
 					},
 				},
 			})
-			require("jg.custom.codecompanion_spinner"):init()
+			-- require("jg.custom.codecompanion_spinner"):init()
 		end,
 		keys = {
 			-- {
@@ -460,6 +478,20 @@ return {
 			-- 	desc = "Toggle Copilot",
 			-- },
 			-- { mode = { "n", "v", "t" }, "<M-m>", "<cmd>CodeCompanionChat Toggle<CR>" },
+			-- {
+			-- 	mode = { "n", "v", "t" },
+			-- 	"<leader>ci",
+			-- 	function()
+			-- 		require("codecompanion").prompt("commit")
+			-- 	end,
+			-- },
+			{
+				mode = { "n", "v", "t" },
+				"<leader>ci",
+				function()
+					vim.cmd("CodeCompanion /commit_custom")
+				end,
+			},
 			{
 				mode = { "n", "v", "t" },
 				"<M-m>",

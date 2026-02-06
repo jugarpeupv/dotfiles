@@ -47,26 +47,87 @@ local function select_node(node)
 	vim.api.nvim_win_set_cursor(0, { end_row_pos, end_col_pos > 0 and end_col_pos - 1 or 0 })
 end
 
-
 M.setup = function(config)
 	local incr_key = config.incr_key and config.incr_key or "<tab>"
 	local decr_key = config.decr_key and config.decr_key or "<s-tab>"
 
+	local function move_up_in_fugitive()
+		-- Check if there's a fugitive buffer
+		local fugitive_bufnr = nil
+		for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+			if vim.api.nvim_buf_is_loaded(bufnr) then
+				local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+				if ft == "fugitive" then
+					fugitive_bufnr = bufnr
+					break
+				end
+			end
+		end
+
+		if not fugitive_bufnr then
+			return
+		end
+
+		local fugitive_win = vim.fn.bufwinid(fugitive_bufnr)
+
+		if fugitive_win ~= -1 then
+			vim.api.nvim_set_current_win(fugitive_win)
+			-- Feed <Tab> key
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<S-Tab>", true, false, true), "t", false)
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("dv", true, false, true), "t", false)
+		end
+	end
+
+	local function move_down_in_fugitive()
+		-- Check if there's a fugitive buffer
+		local fugitive_bufnr = nil
+		for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+			if vim.api.nvim_buf_is_loaded(bufnr) then
+				local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+				if ft == "fugitive" then
+					fugitive_bufnr = bufnr
+					break
+				end
+			end
+		end
+
+		if not fugitive_bufnr then
+			return
+		end
+
+		-- Focus the fugitive buffer
+		-- vim.api.nvim_set_current_buf(fugitive_bufnr)
+
+		local fugitive_win = vim.fn.bufwinid(fugitive_bufnr)
+
+		if fugitive_win ~= -1 then
+			-- Buffer already visible, just switch to it
+			vim.api.nvim_set_current_win(fugitive_win)
+			-- Feed <Tab> key
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "t", false)
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("dv", true, false, true), "t", false)
+		end
+	end
+
 	vim.keymap.set({ "n" }, incr_key, function()
+		if vim.wo.diff then
+			move_down_in_fugitive()
+			return
+		end
+
 		_G.selected_nodes = {}
 
-
-    local current_buf = vim.api.nvim_get_current_buf()
-    local buftype = vim.fn.getbufvar(current_buf, "&buftype")
-    if buftype == "nofile" or buftype == "terminal" then
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), "n", true)
-      return
-    end
+		local current_buf = vim.api.nvim_get_current_buf()
+		local buftype = vim.fn.getbufvar(current_buf, "&buftype")
+		if buftype == "nofile" or buftype == "terminal" then
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), "n", true)
+			return
+		end
 
 		local current_node = get_node_at_cursor()
 		if not current_node then
 			-- vim.api.nvim_feedkeys("<CR>", "n", true)
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), "n", true)
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), "n", true)
 			return
 		end
 
@@ -75,6 +136,11 @@ M.setup = function(config)
 	end, { desc = "Select treesitter node" })
 
 	vim.keymap.set("x", incr_key, function()
+		if vim.wo.diff then
+			move_down_in_fugitive()
+			return
+		end
+
 		if #_G.selected_nodes == 0 then
 			return
 		end
@@ -131,7 +197,21 @@ M.setup = function(config)
 		end
 	end, { desc = "Increment selection" })
 
+
+  vim.keymap.set("n", decr_key, function()
+    if not vim.wo.diff then
+      return
+    end
+    move_up_in_fugitive()
+
+  end, { silent = true, desc = "Smart Tab for diff mode with fugitive" })
+
 	vim.keymap.set("x", decr_key, function()
+    if vim.wo.diff then
+      move_up_in_fugitive()
+      return
+    end
+
 		if #_G.selected_nodes > 1 then
 			table.remove(_G.selected_nodes)
 			local current_node = _G.selected_nodes[#_G.selected_nodes]
@@ -143,4 +223,3 @@ M.setup = function(config)
 end
 
 return M
-

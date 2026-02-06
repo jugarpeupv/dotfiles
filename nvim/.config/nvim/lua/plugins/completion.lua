@@ -232,7 +232,7 @@ return {
 					-- Delay before showing the completion menu while typing
 					-- auto_show_delay_ms = 100,
 					auto_show = function()
-						return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode" and vim.bo.filetype ~= "octo"
+						return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode"
 					end,
 					border = "rounded",
 					draw = {
@@ -312,7 +312,7 @@ return {
 					["codecompanion"] = { "buffer", "path" },
 					["octo"] = {
 						"git",
-						"lsp",
+						-- "lsp",
 						"path",
 						"buffer",
 						-- "emoji",
@@ -326,7 +326,7 @@ return {
 						"buffer",
 					},
 					-- ["md"] = {},
-					["markdown"] = { "buffer", "lsp" },
+					["markdown"] = { "buffer", "lsp", "path" },
 					["copilot-chat"] = { "buffer" },
 					["AvanteInput"] = { "avante", "lsp", "buffer" },
 				},
@@ -336,7 +336,7 @@ return {
 						name = "Git",
 						-- only enable this source when filetype is gitcommit, markdown, or 'octo'
 						enabled = function()
-							return vim.tbl_contains({ "octo", "gitcommit" }, vim.bo.filetype)
+							return vim.tbl_contains({ "gitcommit", "octo" }, vim.bo.filetype)
 						end,
 						opts = {
 							-- options for the blink-cmp-git

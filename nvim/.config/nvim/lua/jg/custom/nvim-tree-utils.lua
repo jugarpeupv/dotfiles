@@ -55,13 +55,15 @@ local function setup_window(node)
 		}
 	)
 	local winnr = vim.api.nvim_open_win(0, false, open_win_config)
-	current_popup = {
-		winnr = winnr,
-		file_path = node.absolute_path,
-	}
 	local bufnr = vim.api.nvim_create_buf(false, true)
 	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
 	vim.api.nvim_win_set_buf(winnr, bufnr)
+	
+	current_popup = {
+		winnr = winnr,
+		bufnr = bufnr,
+		file_path = node.absolute_path,
+	}
 
 	-- Highlight "permis" and "size" keys
 	for i, line in ipairs(lines) do
@@ -70,12 +72,29 @@ local function setup_window(node)
 			vim.api.nvim_buf_add_highlight(bufnr, -1, "Type", i - 1, s - 1, e)
 		end
 	end
+	
+	-- Set buffer-local keymap to close popup with 'q'
+	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'q', '', {
+		noremap = true,
+		silent = true,
+		callback = close_popup,
+	})
 end
 
 local function close_popup()
 	if current_popup ~= nil then
-		vim.api.nvim_win_close(current_popup.winnr, true)
+		-- Clean up autocmd first
 		vim.cmd("augroup NvimTreeRemoveFilePopup | au! CursorMoved | augroup END")
+		
+		-- Close window if it's still valid
+		if vim.api.nvim_win_is_valid(current_popup.winnr) then
+			vim.api.nvim_win_close(current_popup.winnr, true)
+		end
+		
+		-- Delete buffer if it's still valid
+		if vim.api.nvim_buf_is_valid(current_popup.bufnr) then
+			vim.api.nvim_buf_delete(current_popup.bufnr, { force = true })
+		end
 
 		current_popup = nil
 	end
@@ -86,20 +105,21 @@ local function custom_toggle_file_info(node)
 		return
 	end
 	if current_popup ~= nil then
-		local is_same_node = current_popup.file_path == node.absolute_path
-
-		close_popup()
-
-		if is_same_node then
-			return
-		end
+		-- If popup exists, focus it instead of toggling
+		vim.api.nvim_set_current_win(current_popup.winnr)
+		return
 	end
 
 	setup_window(node)
 
 	vim.api.nvim_create_autocmd("CursorMoved", {
 		group = vim.api.nvim_create_augroup("NvimTreeRemoveFilePopup", {}),
-		callback = close_popup,
+		callback = function()
+			-- Only close if cursor moved and we're NOT in the popup window
+			if current_popup and vim.api.nvim_get_current_win() ~= current_popup.winnr then
+				close_popup()
+			end
+		end,
 	})
 end
 

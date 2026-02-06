@@ -514,7 +514,7 @@ text_composition_strategy 0.5 15
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 18
+font_size 19
 
 #: Font size (in pts)
 
@@ -632,6 +632,10 @@ symbol_map U+DB83 Symbols Nerd Font
 # []
   symbol_map U+E718 Symbols Nerd Font
 
+symbol_map U+D000-U+D21A termicons
+# symbol_map U+D000-U+D21A 1
+
+
 # symbol_map U+23FB-U+23FE,U+2665,U+26A1,U+2B58,U+E000-U+E00A,U+E0A0-U+E0A3,U+E0B0-U+E0D4,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E6AA,U+E700-U+E7C5,U+EA60-U+EBEB,U+F000-U+F2E0,U+F300-U+F32F,U+F400-U+F4A9,U+F500-U+F8FF,U+F0001-U+F1AF0 Symbols Nerd Font Mono
 
 # ⓘ
@@ -654,9 +658,24 @@ symbol_map U+DB83 Symbols Nerd Font
 
 #:     symbol_map codepoints Font Family Name
 
+allow_width_overrides yes
 # narrow_symbols
 # narrow_symbols U+F111,U+F114,U+F115 1
+narrow_symbols U+d157 1
+narrow_symbols U+f0da 1
+# folds
+narrow_symbols U+f48c,U+f4da,U+f42d 1
+# nx.json
+narrow_symbos U+eead 1
+
+# narrow_symbols U+f0820,U+f05a,U+f071,U+f057 1
+# narrow_symbols U+F0820 1
 narrow_symbols U+F111,U+25cf 1
+# narrow_symbols U+D157 0
+narrow_symbols U+D000-U+D21A 1
+narrow_symbols U+d1a1 1
+narrow_symbols U+D040 1
+# narrow_symbols U+D157 1
 # narrow_symbols U+E0A0-U+E0A3,U+E0C0-U+E0C7,U+F111,U+F114 1
 
 #: E.g. narrow_symbols U+E0A0-U+E0A3,U+E0C0-U+E0C7 1
@@ -800,7 +819,7 @@ font_features RecMonoLinear-Regular -ss02 +ss12 +ss03 +ss01
 
 #: Cursor customization {{{
 
-# cursor #cccccc
+cursor #cccccc
 # cursor none
 
 #: Default cursor color. If set to the special value none the cursor
@@ -812,7 +831,7 @@ font_features RecMonoLinear-Regular -ss02 +ss12 +ss03 +ss01
 #: background and foreground colors have very low contrast.
 
 # cursor_text_color #111111
-# cursor_text_color background
+cursor_text_color background
 
 #: The color of text under the cursor. If you want it rendered with
 #: the background color of the cell underneath instead, use the
@@ -838,7 +857,7 @@ cursor_shape block
 
 #: The thickness of the underline cursor (in pts).
 
-# cursor_blink_interval -1
+cursor_blink_interval 0.5
 
 #: The interval to blink the cursor (in seconds). Set to zero to
 #: disable blinking. Negative values mean use system default. Note
@@ -938,7 +957,7 @@ scrollback_pager $SHELL -c 'nvim -c "lua local baleia = require(\"baleia\").setu
 
 #: Mouse {{{
 
-mouse_hide_wait 0.2
+mouse_hide_wait 0.1
 
 #: Hide mouse cursor after the specified number of seconds of the
 #: mouse not being used. Set to zero to disable mouse cursor hiding.
@@ -2138,6 +2157,7 @@ macos_option_as_alt no
 
 map cmd+k no_op
 map cmd+m no_op
+map cmd+f no_op
 
 #:     map kitty_mod+space no_op
 
@@ -2302,7 +2322,11 @@ map cmd+m no_op
 
 #: Browse scrollback buffer in pager
 
-map kitty_mod+h show_scrollback
+# map kitty_mod+h show_scrollback
+map kitty_mod+h no_op
+map kitty_mod+l no_op
+map cmd+shift+h show_scrollback
+
 
 # # kitty-scrollback.nvim Kitten alias
 # action_alias kitty_scrollback_nvim kitten /Users/jgarcia/.local/share/nvim/lazy/kitty-scrollback.nvim/python/kitty_scrollback_nvim.py
@@ -2593,14 +2617,14 @@ map cmd+r no_op
 # map kitty_mod+kp_add change_font_size all +2.0
 # map cmd+plus         change_font_size all +2.0
 # map cmd+equal        change_font_size all +2.0
-map shift+cmd+equal  change_font_size current +2.0
+map shift+cmd+equal  change_font_size current +1.0
 # map shift+cmd+plus  change_font_size current +2.0
 
 #: Decrease font size
 
 # map kitty_mod+minus       change_font_size all -2.0
 # map kitty_mod+kp_subtract change_font_size all -2.0
-map cmd+minus             change_font_size current -2.0
+map cmd+minus             change_font_size current -1.0
 # map shift+cmd+minus       change_font_size current -2.0
 
 #: Reset font size
@@ -2849,17 +2873,26 @@ map shift+enter send_text all \x1b[13;2u
 # map ctrl+i send_text all \x1b[105;6u
 # map ctrl+m send_text all \x1b[109;6u
 
-map ctrl+i send_text all \u001b[105;5u
+
+
+# map ctrl+i send_text all \x1b[105;5u
+# map ctrl+shift+i send_text all \x1b[105;6u
+
+# map ctrl+i send_text all \u001b[105;5u
+# map ctrl+shift+i next_tab
+# map ctrl+i previous_tab
 
 map shift+cmd+7 no_op
 
 map shift+cmd+o no_op
 map shift+cmd+i no_op
 
-# # send <M-e> mapped to yanky cycle history
+# send <M-e> mapped to yanky cycle history
 # map shift+cmd+n send_text all \x1b\x65
 # # send <M-r> mapped to yanky cycle history
 # map shift+cmd+p send_text all \x1b\x72
+
+map shift+alt+p send_text all \x1bP
 
 map shift+ctrl+left no_op
 map shift+ctrl+right no_op
@@ -2962,11 +2995,14 @@ map cmd+up send_text all \x01\x29
 # keymap(cmd+1,2,3,4)
 map cmd+1 send_text all \x01\x31
 map cmd+2 send_text all \x01\x32
-map cmd+3 send_text all \x01\x33
+map cmd+4 send_text all \x01\x33
 map cmd+3 send_text all \x01\x34
 
 map ctrl+shift+plus set_background_opacity +0.1
 map ctrl+shift+minus set_background_opacity -0.1
+
+# map ctrl+shift+u no_op
+map ctrl+shift+u send_text all \x1b[85;6u
 
 #: }}}
 
@@ -3058,14 +3094,31 @@ tab_bar_background      #03142a
 # mark3_background #74C7EC
 
 # The 16 terminal colors
+#
+#
+#
+#
+
+# | Color Name | Normal Index | Bright Index |
+# |------------|--------------|-------------|
+# | Black      | color0       | color8      |
+# | Red        | color1       | color9      |
+# | Green      | color2       | color10     |
+# | Yellow     | color3       | color11     |
+# | Blue       | color4       | color12     |
+# | Magenta    | color5       | color13     |
+# | Cyan       | color6       | color14     |
+# | White      | color7       | color15     |
+
+
 
 # LS_COLORS
 
 # black
-color0 #45475A
+# color0 #c0caf5
+# color0 #1E1E2E
+color0 #585B70
 color8 #585B70
-# # color0 #7C7F93
-# # color8 #7C7F93
 
 # red
 color1 #F38BA8
@@ -3080,11 +3133,12 @@ color3  #F9E2AF
 color11 #F9E2AF
 
 # blue
-color4 #B4BEFE
+color4   #B4BEFE
+# color4   #6c7299
 color12  #89B4FA
 
 # magenta
-color5  #CBA6F7
+color5  #CBA7F7
 color13 #CBA6F7
 
 # cyan
@@ -3093,7 +3147,10 @@ color14 #99ecfd
 
 # white
 color7  #BAC2DE
-color15 #A6ADC8
+color15 #7C7F93
+#
+# color7  #d0d0d0
+# color15 #ffffff
 
 
 # # BEGIN_KITTY_FONTS
@@ -3209,4 +3266,26 @@ adjust_column_width 0
 
 # map kitty_mod+k scroll_page_up
 # map kitty_mod+j scroll_page_down
-shell .
+# shell .
+
+
+# # BEGIN_KITTY_FONTS
+# font_family      family="Code Saver"
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+# # END_KITTY_FONTS
+
+map ctrl+i send_text all \x1b[105;5u
+map ctrl+shift+i send_text all \x1b[73;6u
+map ctrl+. send_text all \x1b[46;5u
+
+
+# BEGIN_KITTY_FONTS
+# font_family      family="Iosevka"
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+# adjust_line_height  4
+# adjust_column_width 1
+# END_KITTY_FONTS
