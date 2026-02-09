@@ -16,10 +16,7 @@ return {
 			"V",
 		},
 		event = {
-			-- "VeryLazy",
-			-- "ModeChanged *:v", -- character-wise visual
-			"ModeChanged *:V", -- line-wise visual
-			-- "ModeChanged *:\x16", -- block-wise visual
+			"ModeChanged *:V"
 		},
 		config = function()
 			require("visual-match-paren").setup({

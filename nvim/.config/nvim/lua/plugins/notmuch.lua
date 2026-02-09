@@ -1,14 +1,14 @@
 return {
 	{
 		"yousefakbar/notmuch.nvim",
-		dir = "~/projects/notmuch.nvim/wt-main",
+		dir = "~/projects/notmuch.nvim/wt-fix-previous_list_messages/",
 		dev = true,
 		enabled = true,
 		opts = {
 			notmuch_db_path = os.getenv("HOME") .. "/Mail",
 			maildir_sync_cmd = "mbsync izertis-channel",
 			sync = {
-				sync_mode = "terminal",
+				sync_mode = "buffer",
 			},
 			keymaps = {
 				sendmail = "S",

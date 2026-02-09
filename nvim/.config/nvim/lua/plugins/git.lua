@@ -1,8 +1,13 @@
 return {
 	{
 		"skanehira/github-actions.nvim",
-		dev = true,
-		dir = "~/projects/github-actions.nvim/wt-main",
+		-- dev = true,
+		-- dir = "~/projects/github-actions.nvim/wt-main",
+		ft = "yaml.github", -- if you want to load for yaml files
+		-- event = {
+		-- 	"BufReadPre .github/workflows/*",
+		-- 	"BufNewFile .github/workflows/*",
+		-- },
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
 			"nvim-telescope/telescope.nvim", -- Optional: for enhanced workflow selection
@@ -10,7 +15,7 @@ return {
 		keys = {
 			{ mode = "n", "<leader>gw", "<cmd>GithubActionsWatch<cr>" },
 			{ mode = "n", "<leader>gi", "<cmd>GithubActionsHistory<cr>" },
-      { mode = "n", "<leader>gD", "<cmd>GithubActionsDispatch<cr>" },
+			{ mode = "n", "<leader>gD", "<cmd>GithubActionsDispatch<cr>" },
 		},
 		-- cmd = { "GithubActionsDispatch", "GithubActionsHistory", "GithubActionsHistoryByPR", "GithubActionsWatch" },
 		config = function()

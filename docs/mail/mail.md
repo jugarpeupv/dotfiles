@@ -1,17 +1,15 @@
 # Mail on the terminal
 
-
-## TUI clients
+## TUI mail clients
 
 - [aerc](https://aerc-mail.org/)
-- [mutt](http://www.mutt.org/)
 - [neomutt](https://neomutt.org/)
 - [himalaya](https://github.com/pimalaya/himalaya)
 
 
 ## Tooling
 
-- [notmuch](https://notmuchmail.org/)                         -- Sending mail
+- [notmuch](https://notmuchmail.org/)                         -- Mail database
 - [mbysinc](https://isync.sourceforge.io/mbsync.html)         -- Receiving mail
 - [smtp](https://man7.org/linux/man-pages/man1/smtp.1.html)   -- Sending mail
 
