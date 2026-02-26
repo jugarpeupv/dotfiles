@@ -6,12 +6,12 @@ return {
 		dependencies = {},
 		-- event = { "VeryLazy" },
 		lazy = true,
-		keys = {
-			{ mode = { "n", "t" }, "<M-k>", "<cmd>NvimTreeFindFile<cr>", { noremap = true, silent = true } },
-			{ mode = { "n", "t" }, "<D-k>", "<cmd>NvimTreeFindFile<cr>", { noremap = true, silent = true } },
-			{ mode = { "i", "t", "n" }, "<M-j>", "<cmd>NvimTreeToggle<cr>", { noremap = true, silent = true } },
-			{ mode = { "i", "t", "n" }, "<D-j>", "<cmd>NvimTreeToggle<cr>", { noremap = true, silent = true } },
-		},
+		-- keys = {
+		-- 	{ mode = { "n", "t" }, "<M-k>", "<cmd>NvimTreeFindFile<cr>", { noremap = true, silent = true } },
+		-- 	{ mode = { "n", "t" }, "<D-k>", "<cmd>NvimTreeFindFile<cr>", { noremap = true, silent = true } },
+		-- 	{ mode = { "i", "t", "n" }, "<M-j>", "<cmd>NvimTreeToggle<cr>", { noremap = true, silent = true } },
+		-- 	{ mode = { "i", "t", "n" }, "<D-j>", "<cmd>NvimTreeToggle<cr>", { noremap = true, silent = true } },
+		-- },
 		config = function()
 			-- require("nvim-tree").setup({})
 			local api_nvimtree = require("nvim-tree.api")
@@ -291,13 +291,14 @@ return {
 							-- disable_devicons = true,
 							vimgrep_arguments = {
 								"rg",
-								"--color=never",
+								-- "--color=never",
 								"--no-heading",
 								"--with-filename",
 								"--line-number",
 								"--column",
 								"--hidden",
 								"--smart-case",
+                "--no-ignore",
 								"--glob=!icarSDK.js",
 								"--glob=!package-lock.json",
 								"--glob=!**/.git/**",
@@ -458,7 +459,7 @@ return {
 				end, opts("Open Oil"))
 
 				-- vim.keymap.set('n', "O", api_nvimtree.node.open.replace_tree_buffer, opts('Open: In Place'))
-				vim.keymap.set("n", "O", function()
+				vim.keymap.set("n", "go", function()
 					vim.cmd("vsplit")
 					-- get current path of nvimtree
 					local path = api_nvimtree.tree.get_node_under_cursor().absolute_path

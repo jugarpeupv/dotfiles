@@ -15,20 +15,30 @@ return {
 		-- lazy = true,
 		-- event = { "BufReadPost", "BufNewFile" },
 		dependencies = {
+			{
+				"nemanjamalesija/ts-expand-hover.nvim",
+        enabled = false,
+				ft = { "typescript", "typescriptreact" },
+				opts = {
+					-- Recommended: avoid conflicts with distros/plugins that already map `K`
+					keymaps = { hover = "K" },
+				},
+			},
+
 			-- {
 			-- 	"hinell/lsp-timeout.nvim",
 			-- 	enabled = false,
 			-- 	dependencies = { "neovim/nvim-lspconfig" },
 			-- },
-			-- {
-			-- 	"zeioth/garbage-day.nvim",
-			-- 	dependencies = "neovim/nvim-lspconfig",
-			-- 	enabled = false,
-			-- 	opts = {
-			-- 		aggressive_mode = true,
-			-- 		notifications = false,
-			-- 	},
-			-- },
+			{
+				"zeioth/garbage-day.nvim",
+				dependencies = "neovim/nvim-lspconfig",
+				enabled = false,
+				opts = {
+					aggressive_mode = false,
+					notifications = false,
+				},
+			},
 			{
 				"b0o/schemastore.nvim",
 				enabled = true,
@@ -100,7 +110,7 @@ return {
 					"javascriptreact",
 					"javascript.jsx",
 					"html",
-          "htmlangular",
+					"htmlangular",
 				},
 				bashls = { "sh", "bash", "zsh" },
 				clangd = { "c", "cpp", "objc", "objcpp" },
@@ -161,7 +171,7 @@ return {
 					callback = function(event)
 						local clients = vim.lsp.get_clients({ bufnr = event.buf, name = server })
 						if #clients > 0 then
-							vim.notify("Already running client " .. server)
+							-- vim.notify("Already running client " .. server)
 							return
 						end
 						local ok, err = pcall(vim.lsp.enable, server)
@@ -177,7 +187,7 @@ return {
 		"igorlfs/nvim-lsp-file-operations",
 		enabled = true,
 		-- keys = { "<C-d>", "<C-u>" },
-    event = { "LspAttach" },
+		event = { "LspAttach" },
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},

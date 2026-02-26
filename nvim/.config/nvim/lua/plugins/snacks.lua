@@ -2,7 +2,7 @@ return {
 	"folke/snacks.nvim",
 	priority = 800,
 	enabled = true,
-  event = { "LspAttach" },
+	event = { "LspAttach" },
 	lazy = true,
 
 	-- event = { "BufReadPost", "BufNewFile", "CmdlineEnter" },
@@ -82,6 +82,16 @@ return {
 			sources = {
 				gh_issue = {},
 				gh_pr = {},
+				icons = {
+					confirm = function(picker, item)
+						picker:close()
+						if item then
+							local icon = item.data or item.icon or item.text
+							vim.fn.setreg("+", icon)
+							-- Snacks.notify(("Copied `%s` to clipboard"):format(icon), { title = "Icons" })
+						end
+					end,
+				},
 			},
 			win = {
 				-- input window
@@ -117,7 +127,7 @@ return {
 						-- ["<c-f>"] = { "preview_scroll_down", mode = { "i", "n" } },
 						["<PageDown>"] = { "preview_scroll_down", mode = { "i", "n" } },
 						-- ["<c-g>"] = { "toggle_live", mode = { "i", "n" } },
-            ["<c-space>"] = { "toggle_live", mode = { "i", "n" } },
+						["<c-space>"] = { "toggle_live", mode = { "i", "n" } },
 						["<c-j>"] = { "list_down", mode = { "i", "n" } },
 						["<c-k>"] = { "list_up", mode = { "i", "n" } },
 						["<c-n>"] = { "list_down", mode = { "i", "n" } },
@@ -257,12 +267,12 @@ return {
 	},
 	keys = {
 		-- Top Pickers & Explorer
-    {
-      "<leader>bi",
-      function()
-        Snacks.picker.buffers({ finder = "buffers", hidden = true, title = "< IBuffers >" })
-      end,
-    },
+		{
+			"<leader>bi",
+			function()
+				Snacks.picker.buffers({ finder = "buffers", hidden = true, title = "< IBuffers >" })
+			end,
+		},
 		{
 			"gd",
 			function()
@@ -283,92 +293,92 @@ return {
 				Snacks.picker.lsp_definitions()
 			end,
 		},
-    {
-      mode = { "n" },
-      "<leader>mp",
-      function()
-        -- require("telescope.builtin").man_pages({
-        --   -- man_cmd = { "sh", "-c", "apropos . | sort | uniq" },
-        --   man_cmd = { "cat", os.getenv("HOME") .. "/.cache/telescope_man_list.txt" },
-        --   -- man_cmd = { "sh", "-c", "find /usr/share/man/man* -type f | sort | uniq" },
-        --   sections = { "ALL" },
-        -- })
+		{
+			mode = { "n" },
+			"<leader>mp",
+			function()
+				-- require("telescope.builtin").man_pages({
+				--   -- man_cmd = { "sh", "-c", "apropos . | sort | uniq" },
+				--   man_cmd = { "cat", os.getenv("HOME") .. "/.cache/telescope_man_list.txt" },
+				--   -- man_cmd = { "sh", "-c", "find /usr/share/man/man* -type f | sort | uniq" },
+				--   sections = { "ALL" },
+				-- })
 
-        -- require("telescope.builtin").man_pages({ section = "1" })
-        -- Snacks.picker.man({ section = { "1" } })
-        -- Snacks.picker.man()
+				-- require("telescope.builtin").man_pages({ section = "1" })
+				-- Snacks.picker.man({ section = { "1" } })
+				-- Snacks.picker.man()
 
-        local items = {}
-        for line in io.lines(os.getenv("HOME") .. "/.cache/telescope_man_list.txt") do
-          local prefix, desc = line:match("^(.-)%s+%-%s+(.*)$")
-          if prefix then
-            local name, section = prefix:match("^([^%(,]+)%((%w+)%)")
-            if name then
-              table.insert(items, {
-                text = line,
-                name = vim.trim(name),
-                section = section,
-                desc = desc,
-              })
-            end
-          end
-        end
+				local items = {}
+				for line in io.lines(os.getenv("HOME") .. "/.cache/telescope_man_list.txt") do
+					local prefix, desc = line:match("^(.-)%s+%-%s+(.*)$")
+					if prefix then
+						local name, section = prefix:match("^([^%(,]+)%((%w+)%)")
+						if name then
+							table.insert(items, {
+								text = line,
+								name = vim.trim(name),
+								section = section,
+								desc = desc,
+							})
+						end
+					end
+				end
 
-        Snacks.picker({
-          title = "Man Pages",
-          format = "text",
-          layout = { preview = false },
-          -- format = function(item, picker)
-          -- 	local ret = {}
-          -- 	-- name(section) - highlighted
-          -- 	ret[#ret + 1] = { item.name, "NvimTreeExecFile" }
-          -- 	ret[#ret + 1] = { "(", "Delimiter" }
-          -- 	ret[#ret + 1] = { item.section, "Number" }
-          -- 	ret[#ret + 1] = { ")", "Delimiter" }
-          -- 	ret[#ret + 1] = { " - ", "Comment" }
-          -- 	ret[#ret + 1] = { item.desc or "", "String" }
-          -- 	return ret
-          -- end,
-          items = items,
-          win = {
-            input = {
-              keys = {
-                ["<C-v>"] = { "vertical", mode = { "i", "n" } },
-                ["<C-x>"] = { "horizontal", mode = { "i", "n" } },
-                ["<C-t>"] = { "tab", mode = { "i", "n" } },
-              },
-            },
-          },
-          actions = {
-            vertical = function(picker, item)
-              picker:close()
-              if item and item.name and item.section then
-                vim.cmd("vert Man " .. item.section .. " " .. item.name)
-              end
-            end,
-            horizontal = function(picker, item)
-              picker:close()
-              if item and item.name and item.section then
-                vim.cmd("Man " .. item.section .. " " .. item.name)
-              end
-            end,
-            tab = function(picker, item)
-              picker:close()
-              if item and item.name and item.section then
-                vim.cmd("tab Man " .. item.section .. " " .. item.name)
-              end
-            end,
-          },
-          confirm = function(picker, item)
-            picker:close()
-            if item and item.name and item.section then
-              vim.cmd("Man " .. item.section .. " " .. item.name)
-            end
-          end,
-        })
-      end,
-      { silent = true },
-    },
+				Snacks.picker({
+					title = "Man Pages",
+					format = "text",
+					layout = { preview = false },
+					-- format = function(item, picker)
+					-- 	local ret = {}
+					-- 	-- name(section) - highlighted
+					-- 	ret[#ret + 1] = { item.name, "NvimTreeExecFile" }
+					-- 	ret[#ret + 1] = { "(", "Delimiter" }
+					-- 	ret[#ret + 1] = { item.section, "Number" }
+					-- 	ret[#ret + 1] = { ")", "Delimiter" }
+					-- 	ret[#ret + 1] = { " - ", "Comment" }
+					-- 	ret[#ret + 1] = { item.desc or "", "String" }
+					-- 	return ret
+					-- end,
+					items = items,
+					win = {
+						input = {
+							keys = {
+								["<C-v>"] = { "vertical", mode = { "i", "n" } },
+								["<C-x>"] = { "horizontal", mode = { "i", "n" } },
+								["<C-t>"] = { "tab", mode = { "i", "n" } },
+							},
+						},
+					},
+					actions = {
+						vertical = function(picker, item)
+							picker:close()
+							if item and item.name and item.section then
+								vim.cmd("vert Man " .. item.section .. " " .. item.name)
+							end
+						end,
+						horizontal = function(picker, item)
+							picker:close()
+							if item and item.name and item.section then
+								vim.cmd("Man " .. item.section .. " " .. item.name)
+							end
+						end,
+						tab = function(picker, item)
+							picker:close()
+							if item and item.name and item.section then
+								vim.cmd("tab Man " .. item.section .. " " .. item.name)
+							end
+						end,
+					},
+					confirm = function(picker, item)
+						picker:close()
+						if item and item.name and item.section then
+							vim.cmd("Man " .. item.section .. " " .. item.name)
+						end
+					end,
+				})
+			end,
+			{ silent = true },
+		},
 		{
 			"<leader>ch",
 			function()
@@ -377,7 +387,7 @@ return {
 			end,
 		},
 		{
-			"<leader>ds",
+			"<leader>dS",
 			function()
 				Snacks.picker.lsp_symbols()
 				-- require("telescope.builtin").oldfiles({ only_cwd = true })
@@ -485,15 +495,15 @@ return {
 				-- 	})
 				-- end
 
-        Snacks.picker.files({
-          -- cmd = "rg",
-          hidden = true,
-          exclude = {
-            ".git",
-            -- "*__template__*",
-            "*DS_Store*",
-          },
-        })
+				Snacks.picker.files({
+					-- cmd = "rg",
+					hidden = true,
+					exclude = {
+						".git",
+						-- "*__template__*",
+						"*DS_Store*",
+					},
+				})
 
 				-- require("telescope.builtin").find_files({
 				--   cwd = vim.loop.cwd(),
@@ -657,7 +667,7 @@ return {
 			if cat == "file" then
 				basename = vim.fn.fnamemodify(name, ":t")
 				-- ext = basename:match("%.([^.]+)$")
-        ext = basename:match("%.([^.]+%.[^.]+)$") or basename:match("%.([^.]+)$")
+				ext = basename:match("%.([^.]+%.[^.]+)$") or basename:match("%.([^.]+)$")
 			end
 			local icon, hl = devicons.get_icon(basename, ext, { default = true })
 			-- Check if we got a default icon by comparing with a known default

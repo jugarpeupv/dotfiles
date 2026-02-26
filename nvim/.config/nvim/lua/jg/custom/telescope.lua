@@ -24,75 +24,157 @@ local function branch_name()
 end
 
 M.find_directory_in_oil_and_focus = function()
-  local actions = require("telescope.actions")
-  local action_state = require("telescope.actions.state")
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
 
-  local remove_dir = function(prompt_bufnr)
-    local selection = action_state.get_selected_entry()
-    actions.close(prompt_bufnr)
-    if not selection then
-      print("No directory selected!")
-      return
-    end
+	local remove_dir = function(prompt_bufnr)
+		local selection = action_state.get_selected_entry()
+		actions.close(prompt_bufnr)
+		if not selection then
+			print("No directory selected!")
+			return
+		end
 
-    local function trash_path(path)
-      vim.fn.jobstart("trash" .. " " .. vim.fn.shellescape(path), {
-        detach = true,
-        on_exit = function(_, exit_code)
-          if exit_code == 0 then
-            require("nvim-tree.api").tree.reload()
-          else
-            print("Failed to move to trash: ", path)
-          end
-        end,
-      })
-    end
-    local full_path = vim.loop.cwd() .. "/" .. selection.value
-    trash_path(full_path)
-  end
+		local function trash_path(path)
+			vim.fn.jobstart("trash" .. " " .. vim.fn.shellescape(path), {
+				detach = true,
+				on_exit = function(_, exit_code)
+					if exit_code == 0 then
+						require("nvim-tree.api").tree.reload()
+					else
+						print("Failed to move to trash: ", path)
+					end
+				end,
+			})
+		end
+		local full_path = vim.loop.cwd() .. "/" .. selection.value
+		trash_path(full_path)
+	end
 
-  local function open_oil_tree(prompt_bufnr, map)
-    actions.select_default:replace(function()
-      actions.close(prompt_bufnr)
-      local selection = action_state.get_selected_entry()
-      require("oil").open(selection.value)
-    end)
+	local function open_oil_tree(prompt_bufnr, map)
+		actions.select_default:replace(function()
+			actions.close(prompt_bufnr)
+			local selection = action_state.get_selected_entry()
+			require("oil").open(selection.value)
+		end)
 
-    map("n", "<C-x>", remove_dir)
-    map("i", "<C-x>", remove_dir)
+		map("n", "<C-x>", remove_dir)
+		map("i", "<C-x>", remove_dir)
 
-    return true
-  end
+		return true
+	end
 
-  require("telescope.builtin").find_files({
-    prompt_title = "Open directory in oil",
-    find_command = {
-      "fd",
-      "--type",
-      "directory",
-      "--hidden",
-      "--no-ignore",
-      "--exclude",
-      ".git/*",
-      "--exclude",
-      "node_modules/*",
-      "--exclude",
-      "node_modules",
-    },
-    attach_mappings = open_oil_tree,
-    entry_maker = function(entry)
-      return {
-        value = entry,
-        display = function()
-          local display_string = " " .. entry
-          return display_string, { { { 0, 1 }, "Directory" } }
-        end,
-        ordinal = entry,
-      }
-    end,
-  })
+	require("telescope.builtin").find_files({
+		prompt_title = "Open directory in oil",
+		find_command = {
+			"fd",
+			"--type",
+			"directory",
+			"--hidden",
+			"--no-ignore",
+			"--exclude",
+			".git/*",
+			"--exclude",
+			"node_modules/*",
+			"--exclude",
+			"node_modules",
+		},
+		attach_mappings = open_oil_tree,
+		entry_maker = function(entry)
+			return {
+				value = entry,
+				display = function()
+					local display_string = " " .. entry
+					return display_string, { { { 0, 1 }, "Directory" } }
+				end,
+				ordinal = entry,
+			}
+		end,
+	})
 end
 
+M.find_directory_in_fyler_and_focus = function()
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+
+	local remove_dir = function(prompt_bufnr)
+		local selection = action_state.get_selected_entry()
+		actions.close(prompt_bufnr)
+		if not selection then
+			print("No directory selected!")
+			return
+		end
+
+		local function trash_path(path)
+			vim.fn.jobstart("trash" .. " " .. vim.fn.shellescape(path), {
+				detach = true,
+				on_exit = function(_, exit_code)
+					if exit_code == 0 then
+						-- print("Moved to trash: " .. path)
+						require("nvim-tree.api").tree.reload()
+					else
+						print("Failed to move to trash: ", path)
+					end
+				end,
+			})
+		end
+		local full_path = vim.loop.cwd() .. "/" .. selection.value
+		trash_path(full_path)
+	end
+
+	local function open_fyler_tree(prompt_bufnr, map)
+		actions.select_default:replace(function()
+			actions.close(prompt_bufnr)
+			local selection = action_state.get_selected_entry()
+			local fyler = require("fyler")
+			local found = false
+			for _, win in ipairs(vim.api.nvim_list_wins()) do
+				local buf = vim.api.nvim_win_get_buf(win)
+				if vim.bo[buf].filetype == "fyler" then
+					vim.api.nvim_set_current_win(win)
+					found = true
+					break
+				end
+			end
+			if not found then
+				fyler.open()
+			end
+			fyler.navigate(selection.value)
+		end)
+
+		map("n", "<C-x>", remove_dir)
+		map("i", "<C-x>", remove_dir)
+		return true
+	end
+
+	require("telescope.builtin").find_files({
+		prompt_title = "Open directory in nvim tree",
+		find_command = {
+			"fd",
+			"--type",
+			"directory",
+			"--hidden",
+			"--no-ignore",
+			"--exclude",
+			".git/*",
+			"--exclude",
+			"node_modules/*",
+			"--exclude",
+			"node_modules",
+		},
+		attach_mappings = open_fyler_tree,
+		entry_maker = function(entry)
+			return {
+				value = entry,
+				display = function()
+					local display_string = " " .. entry
+					return display_string, { { { 0, 1 }, "Directory" } }
+				end,
+				ordinal = entry,
+			}
+		end,
+	})
+end
 
 M.find_directory_in_nvim_tree_and_focus = function()
 	local actions = require("telescope.actions")
@@ -1067,7 +1149,7 @@ M.oil_fzf_dir = function(path, no_ignore)
 		"node_modules",
 		-- "--one-file-system",
 		"--max-depth",
-		"3",
+		"2",
 		"--hidden",
 	}
 
@@ -1519,6 +1601,40 @@ M.show_global_npm_packages = function()
 	local uv = vim.loop
 
 	local function get_nvm_node_version()
+		local nvm_dir = os.getenv("NVM_DIR") or "/Users/jgarcia/.nvm"
+
+		-- Walk up from cwd looking for .nvmrc
+		local nvmrc = vim.fs.find(".nvmrc", {
+			upward = true,
+			path = vim.loop.cwd(),
+			type = "file",
+		})[1]
+
+		if nvmrc then
+			local f = io.open(nvmrc, "r")
+			if f then
+				local requested = f:read("*l"):gsub("%s+", ""):gsub("^v", "")
+				f:close()
+
+				-- Find the best matching installed version
+				local versions_dir = nvm_dir .. "/versions/node"
+				local best_match = nil
+				for entry in vim.fs.dir(versions_dir) do
+					local ver = entry:gsub("^v", "")
+					if ver == requested or ver:find("^" .. vim.pesc(requested) .. "%.") then
+						if not best_match or ver > best_match then
+							best_match = ver
+						end
+					end
+				end
+
+				if best_match then
+					return best_match
+				end
+			end
+		end
+
+		-- Fallback to current node version
 		local handle = io.popen("node -v")
 		if not handle then
 			return
@@ -1558,39 +1674,38 @@ M.show_global_npm_packages = function()
 		return { display = display, value = pkg_path }
 	end
 
-	function flatten_table(t)
-		local result = {}
-		for k, v in pairs(t) do
-			if type(v) == "table" then
-				for subk, subv in pairs(v) do
-					result[subk] = subv
-				end
-			else
-				result[k] = v
-			end
-		end
-		return result
-	end
-
 	local function collect_packages(pkg_root)
 		local results = {}
-		for entry in vim.fs.dir(pkg_root) do
-			if entry ~= ".bin" then
-				local entry_path = pkg_root .. "/" .. entry
-				if entry:sub(1, 1) == "@" then
-					-- Scoped packages
-					for subentry in vim.fs.dir(entry_path) do
-						local sub_path = entry_path .. "/" .. subentry
-						local populated_entry = read_package_info(sub_path, entry .. "/" .. subentry)
-						table.insert(populated_entry, { original_pkg_root = pkg_root })
-						table.insert(results, flatten_table(populated_entry))
+		local ok, err = pcall(function()
+			for entry, entry_type in vim.fs.dir(pkg_root) do
+				if entry ~= ".bin" and entry ~= ".package-lock.json" then
+					local entry_path = pkg_root .. "/" .. entry
+					if entry:sub(1, 1) == "@" then
+						-- Scoped packages: iterate into the scope directory
+						local scope_ok, scope_err = pcall(function()
+							for subentry in vim.fs.dir(entry_path) do
+								local sub_path = entry_path .. "/" .. subentry
+								local populated_entry = read_package_info(sub_path, entry .. "/" .. subentry)
+								populated_entry.original_pkg_root = pkg_root
+								table.insert(results, populated_entry)
+							end
+						end)
+						if not scope_ok then
+							vim.notify(
+								"Error reading scoped packages in " .. entry .. ": " .. tostring(scope_err),
+								vim.log.levels.WARN
+							)
+						end
+					else
+						local populated_entry = read_package_info(entry_path, entry)
+						populated_entry.original_pkg_root = pkg_root
+						table.insert(results, populated_entry)
 					end
-				else
-					local populated_entry = read_package_info(entry_path, entry)
-					table.insert(populated_entry, { original_pkg_root = pkg_root })
-					table.insert(results, flatten_table(populated_entry))
 				end
 			end
+		end)
+		if not ok then
+			vim.notify("Error collecting global npm packages: " .. tostring(err), vim.log.levels.ERROR)
 		end
 		return results
 	end
@@ -1621,8 +1736,10 @@ M.show_global_npm_packages = function()
 						actions.close(prompt_bufnr)
 						local selection = action_state.get_selected_entry()
 						-- vim.cmd("e " .. selection.value)
-						local api = require("nvim-tree.api")
-						api.tree.change_root(selection.original_pkg_root)
+						-- local api = require("nvim-tree.api")
+						-- api.tree.change_root(selection.original_pkg_root)
+
+						require("oil").open(selection.original_pkg_root)
 						-- api.tree.find_file(selection.value)
 					end)
 					return true
@@ -1633,6 +1750,120 @@ M.show_global_npm_packages = function()
 	end
 
 	npm_global_picker()
+end
+
+M.find_in_node_modules = function()
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+
+	local cwd = vim.loop.cwd()
+	if not cwd then
+		vim.notify("Could not get current working directory", vim.log.levels.ERROR)
+		return
+	end
+	local node_modules_path = cwd .. "/node_modules"
+	local bun_node_modules_path = cwd .. "/node_modules/.bun"
+	if vim.fn.isdirectory(bun_node_modules_path) == 1 then
+		node_modules_path = bun_node_modules_path
+	end
+
+	local function open_nvim_tree(prompt_bufnr, map)
+		local function remove_dir(node)
+			local selection = action_state.get_selected_entry()
+			if not selection then
+				print("No directory selected!")
+				return
+			end
+			-- local dir_to_remove = selection.value
+
+			local api_nvimtree = require("nvim-tree.api")
+			api_nvimtree.fs.trash(node)
+			api_nvimtree.tree.reload()
+		end
+
+		local function default_action()
+			actions.close(prompt_bufnr)
+			local selection = action_state.get_selected_entry()
+
+			local fyler = require("fyler")
+			local found = false
+			for _, win in ipairs(vim.api.nvim_list_wins()) do
+				local buf = vim.api.nvim_win_get_buf(win)
+				if vim.bo[buf].filetype == "fyler" then
+					vim.api.nvim_set_current_win(win)
+					found = true
+					break
+				end
+			end
+			if not found then
+				fyler.open()
+			end
+
+			local uv = vim.loop
+
+			if uv.fs_stat(selection.value .. "/package.json") then
+				fyler.navigate(selection.value .. "/package.json")
+			else
+				fyler.navigate(selection.value)
+			end
+
+			-- local api = require("nvim-tree.api")
+			--
+			-- actions.close(prompt_bufnr)
+			-- local selection = action_state.get_selected_entry()
+			-- api.tree.open()
+			--
+			-- local uv = vim.loop
+			--
+			-- if uv.fs_stat(selection.value .. "/package.json") then
+			--   api.tree.find_file(selection.value .. "/package.json")
+			-- else
+			--   api.tree.find_file(selection.value)
+			-- end
+		end
+		actions.select_default:replace(default_action)
+
+		map("n", "<C-x>", remove_dir)
+		map("i", "<C-x>", remove_dir)
+
+		map("n", "<C-v>", default_action)
+		map("i", "<C-v>", default_action)
+		return true
+	end
+
+	require("telescope.builtin").find_files({
+		prompt_title = 'Find dependency in "node_modules"',
+		find_command = {
+			"fd",
+			".",
+			node_modules_path,
+			"--no-ignore",
+			"--type",
+			"dir",
+			"--max-depth",
+			"2",
+			"--exclude",
+			"node_modules/*/node_modules",
+			-- "--prune",
+		},
+		attach_mappings = open_nvim_tree,
+		entry_maker = function(entry)
+			return {
+				value = entry,
+				display = function()
+					local cwd_current = vim.loop.cwd()
+					if not cwd_current then
+						return entry
+					end
+					local cwd_dos = cwd_current:gsub("%-", "%%%-")
+					local modified_entry = entry:gsub(cwd_dos .. "/", "")
+					local display_string = "  " .. modified_entry
+					return display_string, { { { 0, 1 }, "Directory" } }
+				end,
+				ordinal = entry,
+			}
+		end,
+	})
 end
 
 return M

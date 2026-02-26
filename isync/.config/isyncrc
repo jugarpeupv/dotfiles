@@ -22,7 +22,7 @@ Far :izertis-remote:
 Near :izertis-local:
 Create Both
 Expunge Both
-Patterns *
+Patterns INBOX Sent Drafts Archive
 SyncState *
 CopyArrivalDate yes
 Sync All

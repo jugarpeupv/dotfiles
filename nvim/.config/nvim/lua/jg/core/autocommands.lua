@@ -498,17 +498,24 @@ vim.api.nvim_create_autocmd("User", {
 })
 
 vim.api.nvim_create_autocmd("TermOpen", {
-  pattern = "*",
-  callback = function(args)
-    local bufnr = args.buf
+	pattern = "*",
+	callback = function(args)
+		local bufnr = args.buf
 
-    -- Utility to move from one prompt to another
-    vim.keymap.set({ "t" }, "<C-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
-    vim.keymap.set({ "t" }, "<C-P>", "<C-\\><C-n>?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+		-- Utility to move from one prompt to another
+		vim.keymap.set({ "t" }, "<C-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+		vim.keymap.set({ "t" }, "<C-P>", "<C-\\><C-n>?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
 
-    vim.keymap.set({ "n" }, "<C-N>", "/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
-    vim.keymap.set({ "n" }, "<C-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
-  end,
+		vim.keymap.set({ "n" }, "<C-N>", "/\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+		vim.keymap.set({ "n" }, "<C-P>", "?\\|✗<CR>", { noremap = true, silent = true, buffer = bufnr })
+	end,
+})
+
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	pattern = "dap-repl",
+	callback = function()
+		vim.g.baleia.automatically(vim.api.nvim_get_current_buf())
+	end,
 })
 
 vim.api.nvim_create_autocmd("FileType", {

@@ -34,8 +34,9 @@ return {
 			-- ignored. Possible keys are:
 			--  head_icon, head_background, head_border, code_language, code_background, code_border
 			--  dash, bullet, check_icon, check_scope, quote, table_border, callout, link, sign
-			ignore = {},
+			-- ignore = {},
 			-- ignore = {
+			--      table_border = true,
 			--   code_background = true,
 			--   sign = true,
 			-- },
@@ -211,6 +212,15 @@ return {
 			},
 			-- Override for different filetype values, @see :h 'filetype'.
 			filetype = {
+        -- octo = {
+        --   enabled = false,
+        --   heading = {
+        --     enabled = false,
+        --   },
+        --   code = {
+        --     enabled = false,
+        --   }
+        -- }
 				-- codecompanion = {
 				--   heading = {
 				--     enabled = true,

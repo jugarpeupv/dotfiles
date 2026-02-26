@@ -3,7 +3,7 @@ return {
 		"skanehira/github-actions.nvim",
 		-- dev = true,
 		-- dir = "~/projects/github-actions.nvim/wt-main",
-		ft = "yaml.github", -- if you want to load for yaml files
+		-- ft = "yaml.github", -- if you want to load for yaml files
 		-- event = {
 		-- 	"BufReadPre .github/workflows/*",
 		-- 	"BufNewFile .github/workflows/*",
@@ -21,7 +21,7 @@ return {
 		config = function()
 			require("github-actions").setup({
 				actions = {
-					enabled = true, -- Enable version checking (default: true)
+					enabled = false, -- Enable version checking (default: true)
 					icons = {
 						outdated = "", -- Icon for outdated versions (default)
 						latest = "", -- Icon for latest versions (default)

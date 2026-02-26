@@ -183,6 +183,26 @@ return {
 				fmt = dirnameFormatFn,
 			}
 
+			local function json_schema()
+				local clients = vim.lsp.get_clients({ bufnr = 0, name = "jsonls" })
+				if #clients == 0 then
+					return ""
+				end
+				local client = clients[1]
+
+				-- Use the internal matching that jsonls does
+				local params = { uri = vim.uri_from_bufnr(0) }
+				local response = client.request_sync("json/matchingSchemas", params, 1000, 0)
+
+				if response and response.result and #response.result > 0 then
+					local schema = response.result[1].schema
+					local name = schema.title or schema.description or "unknown"
+					return " " .. name
+				end
+
+				return ""
+			end
+
 			local filename = {
 				"filename",
 				file_status = true, -- Displays file status (readonly status, modified status)
@@ -438,7 +458,17 @@ return {
 					lualine_b = {},
 					lualine_c = { diff_mode },
 					-- lualine_x = { dirname, "filetype", get_schema },
-					lualine_x = { codecompanion_adapter, require("jg.custom.codecompanion_lualine_spinner"), "filetype" },
+					lualine_x = {
+						-- {
+						-- 	json_schema,
+						-- 	cond = function()
+						-- 		return vim.tbl_contains({ "json", "jsonc" }, vim.bo.filetype)
+						-- 	end,
+						-- },
+						codecompanion_adapter,
+						require("jg.custom.codecompanion_lualine_spinner"),
+						"filetype",
+					},
 					-- lualine_x = {},
 					-- lualine_y = {},
 					lualine_y = { "progress" },

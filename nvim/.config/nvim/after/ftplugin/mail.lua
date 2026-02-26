@@ -6,6 +6,8 @@
 -- vim.bo.formatoptions = "awq"
 
 -- vim.bo.textwidth = 72
--- vim.cmd([[autocmd FileType mail setlocal nowrap]])
+-- vim.cmd([[autocmd FileType mail setlocal wrap]])
+
+vim.cmd([[setlocal wrap]])
 
 

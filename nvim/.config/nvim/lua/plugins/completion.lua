@@ -9,7 +9,7 @@ return {
 		},
 		-- optional: provides snippets for the snippet source
 		dependencies = {
-      { "onsails/lspkind.nvim", commit ="3ddd1b4edefa425fda5a9f95a4f25578727c0bb3" },
+			{ "onsails/lspkind.nvim", commit = "3ddd1b4edefa425fda5a9f95a4f25578727c0bb3" },
 			"Kaiser-Yang/blink-cmp-git",
 			"Kaiser-Yang/blink-cmp-avante",
 			"rafamadriz/friendly-snippets",
@@ -20,7 +20,7 @@ return {
 
 		-- use a release tag to download pre-built binaries
 		version = "1.*",
-    -- version = "1.7.0",
+		-- version = "1.7.0",
 		-- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
 		-- build = 'cargo build --release',
 		-- If you use nix, you can build from source using latest nightly rust with:
@@ -83,7 +83,27 @@ return {
 				--   "fallback",
 				-- },
 				["<S-Tab>"] = {},
-				["<C-k>"] = { "select_prev", "fallback" },
+				-- ["<C-k>"] = { "select_prev", "fallback" },
+				["<C-k>"] = {
+					function(cmp)
+						if cmp.is_menu_visible() then
+							return cmp.select_prev()
+						else
+							vim.api.nvim_feedkeys(
+								vim.api.nvim_replace_termcodes("<c-k>", true, false, true),
+								"n",
+								false
+							)
+							return
+						end
+					end,
+					"fallback",
+					-- function(cmp)
+					--        print('fallback')
+					-- 	return cmp.fallback()
+					-- end,
+				},
+
 				["<C-j>"] = { "select_next", "fallback" },
 				["<C-l>"] = { "accept", "fallback" },
 				["<Right>"] = {
@@ -143,7 +163,25 @@ return {
 						"fallback",
 					},
 					-- ["<CR>"] = {},
-					["<C-k>"] = { "select_prev", "fallback" },
+					["<C-k>"] = {
+						function(cmp)
+							if cmp.is_menu_visible() then
+								return cmp.select_prev()
+							else
+								vim.api.nvim_feedkeys(
+									vim.api.nvim_replace_termcodes("<c-k>", true, false, true),
+									"n",
+									false
+								)
+								return
+							end
+						end,
+						"fallback",
+						-- function(cmp)
+						--        print('fallback')
+						-- 	return cmp.fallback()
+						-- end,
+					},
 					["<C-j>"] = { "select_next", "fallback" },
 					-- ["<C-l>"] = { "accept", "fallback" },
 					["<C-l>"] = {
@@ -173,9 +211,9 @@ return {
 											end
 										end)
 										if all_next_items_are_files then
-                      cmp.accept()
+											cmp.accept()
 										else
-                      cmp.show()
+											cmp.show()
 										end
 									end, 100) -- 100 ms delay
 								end,
@@ -317,7 +355,7 @@ return {
 						"buffer",
 						-- "emoji",
 						-- "nerdfont",
-						"conventional_commits",
+						-- "conventional_commits",
 					},
 					["gitcommit"] = {
 						"git",
@@ -326,7 +364,7 @@ return {
 						"buffer",
 					},
 					-- ["md"] = {},
-					["markdown"] = { "buffer", "lsp", "path" },
+					["markdown"] = { "lsp", "buffer", "path" },
 					["copilot-chat"] = { "buffer" },
 					["AvanteInput"] = { "avante", "lsp", "buffer" },
 				},

@@ -154,17 +154,16 @@ vim.keymap.set({ "n" }, "<leader>.", function()
 	})
 end, opts)
 
-
 vim.keymap.set({ "n" }, "<leader>,", function()
-  require("telescope.builtin").find_files({
-    prompt_title = "dotfiles",
-    cwd = "~/dotfiles",
-    no_ignore = false,
-    hidden = true,
-    preview = {
-      hide_on_startup = true,
-    },
-  })
+	require("telescope.builtin").find_files({
+		prompt_title = "dotfiles",
+		cwd = "~/dotfiles",
+		no_ignore = false,
+		hidden = true,
+		preview = {
+			hide_on_startup = true,
+		},
+	})
 end, opts)
 
 -- keymap("n", "su", "<cmd>Telescope file_browser path=/Users/jgarcia<cr>", opts)
@@ -179,11 +178,11 @@ vim.keymap.set("n", "<leader>fs", function()
 	require("jg.custom.telescope").telescope_live_grep_in_workspace(vim.fn.expand("~"))
 end, opts)
 
-vim.keymap.set({ "n" }, "so", function()
+vim.keymap.set({ "n" }, "<leader>so", function()
 	require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
 end, opts)
 
-vim.keymap.set({ "n" }, "sh", function()
+vim.keymap.set({ "n" }, "<leader>sH", function()
 	local find_command = {
 		"fd",
 		".",
@@ -218,7 +217,7 @@ vim.keymap.set({ "n" }, "sh", function()
 	})
 end, opts)
 
-vim.keymap.set({ "n" }, "sf", function()
+vim.keymap.set({ "n" }, "<leader>sf", function()
 	local function pick_dir_and_explore_files(cb)
 		local path = vim.fn.expand("~/")
 		local pickers = require("telescope.pickers")
@@ -321,16 +320,16 @@ vim.keymap.set({ "n" }, "sf", function()
 	-- })
 end, opts)
 
-vim.keymap.set("n", "sn", function()
+vim.keymap.set("n", "<leader>sN", function()
 	local jg_telescope = require("jg.custom.telescope")
 	jg_telescope.nvimtree_fzf_dir(vim.fn.expand("~/"))
 end, opts)
 
-vim.keymap.set({ "n" }, "sd", function()
+vim.keymap.set({ "n" }, "<leader>sd", function()
 	require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("%:p:h"), true)
 end, opts)
 
-vim.keymap.set({ "n" }, "se", function()
+vim.keymap.set({ "n" }, "<leader>sE", function()
 	require("telescope").extensions.file_browser.file_browser({
 		grouped = true,
 		depth = 1,
@@ -930,92 +929,9 @@ vim.keymap.set("n", "<leader>fl", require("jg.custom.telescope").find_directory_
 
 vim.keymap.set("n", "<leader>fd", require("jg.custom.telescope").find_directory_in_nvim_tree_and_focus, opts)
 
-local function find_in_node_modules()
-	local actions = require("telescope.actions")
-	local action_state = require("telescope.actions.state")
+vim.keymap.set("n", "<leader>fy", require("jg.custom.telescope").find_directory_in_fyler_and_focus, opts)
 
-	local cwd = vim.loop.cwd()
-	if not cwd then
-		vim.notify("Could not get current working directory", vim.log.levels.ERROR)
-		return
-	end
-	local node_modules_path = cwd .. "/node_modules"
-
-	local function open_nvim_tree(prompt_bufnr, map)
-		local function remove_dir(node)
-			local selection = action_state.get_selected_entry()
-			if not selection then
-				print("No directory selected!")
-				return
-			end
-			-- local dir_to_remove = selection.value
-
-			local api_nvimtree = require("nvim-tree.api")
-			api_nvimtree.fs.trash(node)
-			api_nvimtree.tree.reload()
-		end
-
-		local function default_action()
-			local api = require("nvim-tree.api")
-
-			actions.close(prompt_bufnr)
-			local selection = action_state.get_selected_entry()
-			api.tree.open()
-
-			local uv = vim.loop
-
-			if uv.fs_stat(selection.value .. "/package.json") then
-				api.tree.find_file(selection.value .. "/package.json")
-			else
-				api.tree.find_file(selection.value)
-			end
-		end
-		actions.select_default:replace(default_action)
-
-		map("n", "<C-x>", remove_dir)
-		map("i", "<C-x>", remove_dir)
-
-		map("n", "<C-v>", default_action)
-		map("i", "<C-v>", default_action)
-		return true
-	end
-
-	require("telescope.builtin").find_files({
-		prompt_title = 'Find dependency in "node_modules"',
-		find_command = {
-			"fd",
-			".",
-			node_modules_path,
-			"--no-ignore",
-			"--type",
-			"dir",
-			"--max-depth",
-			"2",
-			"--exclude",
-			"node_modules/*/node_modules",
-			-- "--prune",
-		},
-		attach_mappings = open_nvim_tree,
-		entry_maker = function(entry)
-			return {
-				value = entry,
-				display = function()
-					local cwd_current = vim.loop.cwd()
-					if not cwd_current then
-						return entry
-					end
-					local cwd_dos = cwd_current:gsub("%-", "%%%-")
-					local modified_entry = entry:gsub(cwd_dos .. "/", "")
-					local display_string = "  " .. modified_entry
-					return display_string, { { { 0, 1 }, "Directory" } }
-				end,
-				ordinal = entry,
-			}
-		end,
-	})
-end
-
-vim.keymap.set("n", "<leader>fn", find_in_node_modules, opts)
+vim.keymap.set("n", "<leader>fn", require("jg.custom.telescope").find_in_node_modules, opts)
 
 -- fd . "node_modules" --no-ignore --exclude .git/* --exclude **/node_modules/**
 
@@ -1206,7 +1122,19 @@ vim.cmd([[inoremap <C-l> <C-y>]])
 -- vim.cmd([[cnoremap <C-l> <C-y><C-v>]])
 vim.cmd([[cnoremap <C-l> <C-y><C-v>]])
 -- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
-vim.cmd([[cnoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"]])
+--
+--
+-- vim.keymap.set('c', '<C-k>', '<C-\\>egetcmdline()[:getcmdpos()-2]<CR>', { noremap = true, expr = false })
+
+vim.keymap.set("c", "<C-k>", function()
+	if vim.fn.pumvisible() == 1 then
+		return "<C-p>"
+	else
+		return "<C-\\>egetcmdline()[:getcmdpos()-2]<CR>"
+	end
+end, { expr = true, replace_keycodes = true })
+
+-- vim.cmd([[cnoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"]])
 vim.cmd([[cnoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"]])
 vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
@@ -1391,7 +1319,7 @@ vim.keymap.set("n", "<leader>gm", function()
 	git_modified_files_picker()
 end, opts)
 
-vim.keymap.set("n", "<leader>dv", function()
+vim.keymap.set("n", "<leader>df", function()
 	-- Get the current branch (faster method)
 	local current_branch = vim.fn.system("git symbolic-ref --short HEAD"):gsub("%s+", "")
 
@@ -1817,8 +1745,8 @@ end, { desc = "show global npm packages" })
 vim.keymap.set("n", "<S-left>", "zH", opts)
 vim.keymap.set("n", "<S-right>", "zL", opts)
 
-vim.keymap.set("n", "<left>", "10zh", opts)
-vim.keymap.set("n", "<right>", "10zl", opts)
+-- vim.keymap.set("n", "<left>", "10zh", opts)
+-- vim.keymap.set("n", "<right>", "10zl", opts)
 
 vim.keymap.set("n", "<C-i>", "<C-i>", { noremap = true })
 
@@ -1878,3 +1806,23 @@ vim.api.nvim_create_user_command("DecodeJWT", function()
 		vim.api.nvim_buf_set_lines(0, 0, -1, false, { "Error: Could not decode JWT", "Token: " .. jwt })
 	end
 end, {})
+
+
+vim.keymap.set('i', '<C-k>', '<c-o>D<esc>', { desc = 'Kill to end of line' })
+-- vim.keymap.set('i', '<C-k>', '<Nop>', { desc = 'Kill to end of line' })
+-- vim.keymap.set("i", "<C-k>", function()
+-- 	-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<c-o>D<esc>", true, false, true), "n", false)
+-- 	-- vim.defer_fn(function()
+-- 	-- 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("a", true, false, true), "t", false)
+-- 	-- end, 1)
+-- end, { desc = "Kill to end of line" })
+--
+-- vim.keymap.set('c', '<C-k>', function()
+--   local pos = vim.fn.getcmdpos()
+--   local line = vim.fn.getcmdline()
+--   if pos == 1 then
+--     return ''
+--   else
+--     return line:sub(1, pos - 1)
+--   end
+-- end, { expr = true })

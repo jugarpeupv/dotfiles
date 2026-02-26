@@ -1,5 +1,16 @@
 return {
 	{
+		"junegunn/vim-easy-align",
+		keys = {
+			{ "go", "<Plug>(EasyAlign)", mode = { "x", "n" } },
+		},
+		config = function()
+			vim.cmd([[let g:easy_align_delimiters = {
+      \   '\': { 'pattern': '\\' }
+      \ }]])
+		end,
+	},
+	{
 		-- "jugarpeupv/processmonitor.nvim",
 		dev = true,
 		dir = "~/projects/processmonitor.nvim",
@@ -16,7 +27,7 @@ return {
 			"V",
 		},
 		event = {
-			"ModeChanged *:V"
+			"ModeChanged *:V",
 		},
 		config = function()
 			require("visual-match-paren").setup({
@@ -64,13 +75,26 @@ return {
 			},
 		},
 	},
-
+	{
+		dev = true,
+		dir = "~/projects/calendar.nvim",
+		lazy = false,
+		enabled = false,
+		config = function() end,
+	},
 	{
 		"itchyny/calendar.vim",
+		-- "jugarpeupv/cal.vim",
+		-- dev = true,
+		-- dir = "~/projects/cal.nvim/wt-main",
 		cmd = { "Calendar" },
 		enabled = true,
 		config = function()
 			vim.g.calendar_first_day = "Monday"
+			vim.g.calendar_caldav_calendar = 1
+			vim.g.calendar_caldav_url = "http://localhost:1080/caldav/"
+			vim.g.calendar_caldav_username = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal"
+			vim.g.calendar_caldav_password = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field password --reveal"
 		end,
 	},
 	{
@@ -92,12 +116,12 @@ return {
 	},
 	{
 		"Avi-D-coder/whisper.nvim",
-		enabled = false,
+		enabled = true,
 		config = function()
 			require("whisper").setup({
 				model = "base.en",
 				keybind = "<space><Enter>",
-				manual_trigger_key = "<Enter>",
+				manual_trigger_key = "<space>",
 				modes = { "n" },
 				-- Whisper parameters
 				threads = 8, -- Number of CPU threads
@@ -141,6 +165,24 @@ return {
 		},
 	},
 	{
+		"axkirillov/hbac.nvim",
+		event = "LspAttach",
+		enabled = false,
+		config = function()
+			require("hbac").setup({
+				autoclose = true, -- set autoclose to false if you want to close manually
+				threshold = 6, -- hbac will start closing unedited buffers once that number is reached
+				close_command = function(bufnr)
+					pcall(vim.api.nvim_buf_delete, bufnr, {})
+				end,
+				close_buffers_with_windows = false, -- hbac will close buffers with associated windows if this option is `true`
+				telescope = {
+					-- See #telescope-configuration below
+				},
+			})
+		end,
+	},
+	{
 		"chrisgrieser/nvim-early-retirement",
 		enabled = false,
 		config = true,
@@ -150,7 +192,7 @@ return {
 			retirementAgeMins = 20,
 
 			-- Filetypes to ignore.
-			ignoredFiletypes = { "octo" },
+			ignoredFiletypes = { "octo", "DiffviewFiles" },
 
 			-- Ignore files matching this lua pattern; empty string disables this setting.
 			ignoreFilenamePattern = "",
@@ -190,7 +232,22 @@ return {
 			-- Function to delete the buffer. The argument provided to the function is
 			-- the buffer number. If nothing is provided the plugin will just call
 			-- nvim_buf_delete.
-			deleteFunction = nil,
+			deleteFunction = function(bufnr)
+				-- Check if we're in a diffview tab by looking for diffview windows
+				local current_tab = vim.api.nvim_get_current_tabpage()
+				local windows = vim.api.nvim_tabpage_list_wins(current_tab)
+				for _, win in ipairs(windows) do
+					local buf = vim.api.nvim_win_get_buf(win)
+					local filetype = vim.api.nvim_get_option_value("filetype", { buf = buf })
+					-- Check if any window in the current tab has a diffview filetype
+					if filetype:match("^Diffview") or filetype == "DiffviewFiles" then
+						-- We're in a diffview tab, don't delete the buffer
+						return
+					end
+				end
+				-- Not in a diffview tab, proceed with normal deletion
+				vim.api.nvim_buf_delete(bufnr, { force = false })
+			end,
 		},
 	},
 	{
@@ -283,16 +340,10 @@ return {
 		"m00qek/baleia.nvim",
 		lazy = true,
 		tag = "v1.3.0",
+		ft = { "dap-repl" },
 		config = function()
 			-- local baleia = require("baleia").setup({})
 			vim.g.baleia = require("baleia").setup({})
-			vim.api.nvim_create_autocmd({ "FileType" }, {
-				pattern = "dap-repl",
-				callback = function()
-					vim.g.baleia.automatically(vim.api.nvim_get_current_buf())
-				end,
-			})
-
 			vim.api.nvim_create_user_command("BaleiaColorize", function()
 				vim.g.baleia.once(vim.api.nvim_get_current_buf())
 			end, { bang = true })
@@ -580,7 +631,7 @@ return {
 		-- end,
 		keys = {
 			{
-				"<leader>di",
+				"<leader>dI",
 				function()
 					-- vim.cmd(":e docker://images")
 					-- vim.defer_fn(function()

@@ -391,7 +391,7 @@ return {
 				"nvim-telescope/telescope-file-browser.nvim",
 				dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
 			},
-			-- { "nvim-telescope/telescope-dap.nvim" },
+			{ "nvim-telescope/telescope-dap.nvim" },
 			-- { "tom-anders/telescope-vim-bookmarks.nvim" },
 			{ "gbprod/yanky.nvim" },
 			-- { "Myzel394/jsonfly.nvim" },
@@ -1092,7 +1092,7 @@ return {
 			--   telescope.load_extension("jsonfly")
 			-- end
 
-			-- telescope.load_extension("dap")
+			telescope.load_extension("dap")
 			telescope.load_extension("zf-native")
 			-- telescope.load_extension("ui-select")
 			telescope.load_extension("bookmarks")

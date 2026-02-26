@@ -166,7 +166,7 @@ return {
 				':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l',
 			},
 			{
-				"<leader>dV",
+				"<leader>dv",
 				function()
 					local widgets = require("dap.ui.widgets")
 					local my_sidebar = widgets.sidebar(widgets.scopes, { width = 40 })

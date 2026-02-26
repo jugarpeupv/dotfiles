@@ -47,6 +47,7 @@ opt.mouse = "n"
 opt.swapfile = false
 opt.backup = false
 opt.hidden = true
+opt.digraph = false
 
 opt.formatoptions = opt.formatoptions - "c" - "r" - "o"
 

@@ -3,6 +3,7 @@ return {
 		"malewicz1337/oil-git.nvim",
 		dependencies = { "stevearc/oil.nvim" },
 		event = { "VeryLazy" },
+    -- cmd = { "Oil" },
 		opts = {
 			debounce_ms = 50,
 			show_file_highlights = false,
@@ -53,6 +54,8 @@ return {
 	{
 		"stevearc/oil.nvim",
 		lazy = false,
+    enabled = true,
+    -- cmd = { "Oil" },
 		keys = {
 			{
 				mode = "n",
@@ -185,7 +188,7 @@ return {
 				-- You can set the delay to false to disable cleanup entirely
 				-- Note that the cleanup process only starts when none of the oil buffers are currently displayed
 				-- cleanup_delay_ms = false,
-        cleanup_delay_ms = 12000,
+        cleanup_delay_ms = 1800000,
 				-- cleanup_delay_ms = false,
 				lsp_file_methods = {
 					enabled = true,
@@ -274,8 +277,6 @@ return {
 							if not entry or not dir then
 								return
 							end
-
-							local entry_display_name = entry.name
 
 							entry.name = entry.name:gsub(" ", "\\ ")
 							local path = dir .. entry.name
@@ -532,25 +533,42 @@ return {
 						callback = function()
 							local oil = require("oil")
 							local dir = oil.get_current_dir()
+              local entry = oil.get_cursor_entry()
+
+              if not entry or not dir then
+                return
+              end
+
+              entry.name = entry.name:gsub(" ", "\\ ")
+              local path = dir .. entry.name
+
+
+              local home = os.getenv("HOME")
+              if home then
+                if path then
+                  path = dir:gsub("^" .. home, "~")
+                end
+              end
 
 							require("telescope").extensions.live_grep_args.live_grep_raw({
-								cwd = dir,
+								cwd = path,
 								disable_coordinates = true,
 								path_display = { "absolute" },
 								theme = "ivy",
-								prompt_title = "Live grep in path: " .. dir,
+								prompt_title = "Live grep in path: " .. path,
 								layout_config = { height = 0.47 },
 								preview = {
 									hide_on_startup = true,
 								},
 								vimgrep_arguments = {
 									"rg",
-									"--color=never",
+									-- "--color=never",
 									"--no-heading",
 									"--with-filename",
 									"--line-number",
 									"--column",
 									"--hidden",
+                  "--no-ignore",
 									"--smart-case",
 									"--glob=!icarSDK.js",
 									"--glob=!package-lock.json",

@@ -2,7 +2,8 @@
   "$schema": "https://opencode.ai/config.json",
   // Theme configuration
   "theme": "catppuccin-transparent",
-  "model": "github-copilot/claude-sonnet-4.5",
+  // "model": "github-copilot/claude-sonnet-4.5",
+  "model": "github-copilot/claude-opus-4.6",
   "permission": {
     "*": "allow"
   },
@@ -28,9 +29,28 @@
         "TAVILY_API_KEY": "{env:TAVILY_API_KEY}",
         "npm_config_registry": "https://registry.npmjs.org"
       }
-    }
+    },
+    "chrome-devtools": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "chrome-devtools-mcp@latest"
+      ],
+      "environment": {
+        "npm_config_registry": "https://registry.npmjs.org"
+      },
+    },
+    "github-server": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer {env:GH_MCP_TOKEN}"
+      }
+    },
   },
-  "autoupdate": true,
+  "autoupdate": false,
   "keybinds": {
     "leader": "ctrl+x",
     "editor_open": "<leader>e",

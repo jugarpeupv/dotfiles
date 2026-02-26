@@ -10,3 +10,5 @@ export MANPAGER='nvim +Man!'
 export K9S_CONFIG_DIR="$HOME/.config/k9s"
 export XDG_CONFIG_HOME="$HOME/.config"
 export GPG_TTY=$(tty)
+
+export NX_TUI=false

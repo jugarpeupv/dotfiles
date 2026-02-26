@@ -4,6 +4,7 @@ atuin-setup() {
     return 1
   fi
 
+  # it tells Atuin **not to bind any default keybindings**
   export ATUIN_NOBIND="true"
   fzf-atuin-history-widget() {
     local selected num
@@ -48,6 +49,7 @@ atuin-setup() {
     # autoload -U edit-command-line
     zle -N edit-command-line
     bindkey '^X^E' edit-command-line
+    bindkey '^[d' kill-word
     # bindkey '^p' history-search-backward
     # bindkey '^n' history-search-forward
     # bindkey '^E' _atuin_search_widget

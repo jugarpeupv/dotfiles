@@ -227,6 +227,7 @@ return {
 					vim.schedule(function()
 						vim.wo.conceallevel = 0
             vim.wo.cursorline = true
+            vim.cmd("hi htmlItalic gui=none")
 					end)
 				end,
 			})

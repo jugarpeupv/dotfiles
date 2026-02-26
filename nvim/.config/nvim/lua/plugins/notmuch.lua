@@ -1,7 +1,7 @@
 return {
 	{
 		"yousefakbar/notmuch.nvim",
-		dir = "~/projects/notmuch.nvim/wt-fix-previous_list_messages/",
+		dir = "~/projects/notmuch.nvim/wt-feature-compose_mail",
 		dev = true,
 		enabled = true,
 		opts = {
@@ -27,7 +27,7 @@ return {
 			{
 				mode = { "n" },
 				"<leader>ns",
-				":NmSearch tag:izertis subject:",
+				":NmSearch tag:izertis and subject:",
 				{ noremap = true, silent = true },
 			},
 			{ mode = { "n" }, "<leader><space>", "<cmd>Notmuch<cr>", { silent = true } },
