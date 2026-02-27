@@ -208,6 +208,8 @@ return {
 						LineNR = { style = {}, fg = "#3b4261" },
 						MatchParenVisualLineNr = { fg = "#737aa2", style = {} },
 						-- CursorLineNR = { style = {}, fg = "#737aa2" },
+            OilDirHidden = { link = "Directory" },
+            OilFileHidden = { link = "OilFile" },
 						-- OilHidden = { fg = "", bg = "", link = "Oil" },
 						-- OilVcsStatusModified = { link = "NvimTreeGitDirty" },
 						-- OilVcsStatusIgnored = { link = "Comment" },

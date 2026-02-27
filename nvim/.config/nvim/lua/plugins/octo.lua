@@ -3,7 +3,7 @@ return {
 		"pwntester/octo.nvim",
 		-- commit = "c96a03d2aa4688f45fb8d58e832fdd37d104f12d",
 		dev = true,
-		dir = "~/projects/octo.nvim",
+		dir = "~/projects/octo.nvim/wt-master",
 		-- dependencies = {
 		-- -- 	"nvim-lua/plenary.nvim",
 		-- -- 	"nvim-telescope/telescope.nvim",

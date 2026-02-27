@@ -125,7 +125,6 @@ return {
 
 		Hooks.register(Hooks.type.SWITCH, function(path, prev_path)
 			local wt_utils = require("jg.custom.worktree-utils")
-			local api_nvimtree = require("nvim-tree.api")
 			local prev_node_modules_path = prev_path .. "/node_modules"
 			local prev_node_modules_exists = vim.fn.isdirectory(prev_node_modules_path)
 
@@ -144,7 +143,8 @@ return {
 				end
 			end
 
-			api_nvimtree.tree.reload()
+			--    local api_nvimtree = require("nvim-tree.api")
+			-- api_nvimtree.tree.reload()
 
 			-- update .git/HEAD to the new branch so when you open a new terminal on root parent it shows the corrent branch
 
@@ -193,8 +193,8 @@ return {
 			local prev_node_modules_exists = vim.fn.isdirectory(prev_node_modules_path)
 			if prev_node_modules_exists ~= 0 then
 				os.rename(prev_node_modules_path, destination_path)
-				local api_nvimtree = require("nvim-tree.api")
-				api_nvimtree.tree.reload()
+				-- local api_nvimtree = require("nvim-tree.api")
+				-- api_nvimtree.tree.reload()
 			end
 
 			local file_utils = require("jg.custom.file-utils")
@@ -220,9 +220,9 @@ return {
 					end
 				end
 			end
-			local api_nvimtree = require("nvim-tree.api")
-			api_nvimtree.git.reload()
-			api_nvimtree.tree.reload()
+			-- local api_nvimtree = require("nvim-tree.api")
+			-- api_nvimtree.git.reload()
+			-- api_nvimtree.tree.reload()
 		end)
 	end,
 }

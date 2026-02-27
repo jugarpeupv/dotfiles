@@ -1,5 +1,4 @@
 -- return {}
-
 function _G.FylerWinbarCwd()
 	local ok, fyler = pcall(require, "fyler")
 	if not ok or type(fyler.get_current_dir) ~= "function" then
@@ -34,16 +33,6 @@ return {
 				desc = "Fyler",
 			},
 			{
-				"<leader>EE",
-				function()
-					local fyler = require("fyler")
-					local path = vim.fn.expand("%:p")
-					fyler.open()
-					fyler.navigate(path)
-				end,
-				desc = "Fyler",
-			},
-			{
 				mode = { "n", "t" },
 				"<M-k>",
 				function()
@@ -62,6 +51,9 @@ return {
 						fyler.open()
 					end
 					fyler.navigate(path)
+					-- vim.defer_fn(function ()
+					--   vim.cmd("normal! zz")
+					-- end, 50)
 				end,
 				{ noremap = true, silent = true },
 			},
@@ -141,12 +133,12 @@ return {
 					default_explorer = false,
 					-- Move deleted files/directories to the system trash
 					delete_to_trash = true,
+					columns_order = { "git", "permission" },
 					columns = {
-						permission = { enabled = false },
+						permission = { enabled = true },
 						size = { enabled = false },
 						git = {
 							enabled = true,
-							position = "after_name",
 							symbols = {
 								Untracked = "?",
 								Added = "+",
@@ -159,8 +151,7 @@ return {
 							},
 						},
 						diagnostic = {
-							enabled = true,
-							position = "after_name",
+							enabled = false,
 							symbols = {
 								Error = " ",
 								Warn = " ",
@@ -185,36 +176,184 @@ return {
 					},
 					-- Key mappings
 					mappings = {
+						["K"] = function(view)
+							-- Check if we're already in a hover popup
+							local current_win = vim.api.nvim_get_current_win()
+							local current_buf = vim.api.nvim_win_get_buf(current_win)
+
+							-- Check if current buffer has our hover popup marker
+							local is_in_hover = vim.b[current_buf].fyler_hover_popup == true
+
+							if is_in_hover then
+								-- Close the popup if we press K again from inside it
+								if vim.api.nvim_win_is_valid(current_win) then
+									vim.api.nvim_win_close(current_win, true)
+								end
+								if vim.api.nvim_buf_is_valid(current_buf) then
+									vim.api.nvim_buf_delete(current_buf, { force = true })
+								end
+								return
+							end
+
+							-- Check if there's already a hover popup open in another window
+							local existing_popup_win = nil
+							for _, win in ipairs(vim.api.nvim_list_wins()) do
+								local buf = vim.api.nvim_win_get_buf(win)
+								if vim.b[buf].fyler_hover_popup == true then
+									existing_popup_win = win
+									break
+								end
+							end
+
+							if existing_popup_win and vim.api.nvim_win_is_valid(existing_popup_win) then
+								-- Focus the existing popup window
+								vim.api.nvim_set_current_win(existing_popup_win)
+								return
+							end
+
+							local entry = view:cursor_node_entry()
+							local path = entry.path
+
+							-- Get file stats using vim.uv (luv)
+							local stats = vim.uv.fs_stat(path)
+							if not stats then
+								vim.notify("Cannot retrieve file information for: " .. path, vim.log.levels.ERROR)
+								return
+							end
+
+							local file_permissions = vim.fn.getfperm(path)
+
+							-- Initialize lines with placeholder for size
+							local lines = {
+								" fullpath: " .. path,
+								" permis:   " .. file_permissions,
+								" size:     calculating...",
+								" accessed: " .. os.date("%x %X", stats.atime.sec),
+								" modified: " .. os.date("%x %X", stats.mtime.sec),
+								" created:  " .. os.date("%x %X", stats.birthtime.sec),
+							}
+
+							local max_width = vim.fn.max(vim.tbl_map(function(n)
+								return #n
+							end, lines))
+
+							local open_win_config = {
+								col = 1,
+								row = 1,
+								relative = "cursor",
+								border = "rounded",
+								style = "minimal",
+								width = math.max(max_width + 1, 50), -- Ensure minimum width for size updates
+								height = #lines,
+								noautocmd = true,
+								zindex = 60,
+							}
+
+							local bufnr = vim.api.nvim_create_buf(false, true)
+							local winnr = vim.api.nvim_open_win(bufnr, false, open_win_config)
+							vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+
+							-- Mark this buffer as a hover popup
+							vim.b[bufnr].fyler_hover_popup = true
+
+							-- Highlight keys
+							local function highlight_lines()
+								for i, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)) do
+									local s, e = line:find(".-:")
+									if s and e then
+										vim.api.nvim_buf_add_highlight(bufnr, -1, "Type", i - 1, s - 1, e)
+									end
+								end
+							end
+							highlight_lines()
+
+							-- Close popup on cursor move or 'q' key
+							local close_popup = function()
+								if vim.api.nvim_win_is_valid(winnr) then
+									vim.api.nvim_win_close(winnr, true)
+								end
+								if vim.api.nvim_buf_is_valid(bufnr) then
+									vim.api.nvim_buf_delete(bufnr, { force = true })
+								end
+							end
+
+							vim.api.nvim_buf_set_keymap(bufnr, "n", "q", "", {
+								noremap = true,
+								silent = true,
+								callback = close_popup,
+							})
+
+							vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "", {
+								noremap = true,
+								silent = true,
+								callback = close_popup,
+							})
+
+							vim.api.nvim_create_autocmd("CursorMoved", {
+								once = true,
+								callback = function()
+									if vim.api.nvim_get_current_win() ~= winnr then
+										close_popup()
+									end
+								end,
+							})
+
+							-- Compute size asynchronously
+							vim.system({ "du", "-sh", path }, {}, function(result)
+								vim.schedule(function()
+									-- Check if buffer and window are still valid
+									if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_win_is_valid(winnr) then
+										return
+									end
+
+									local improved_size = result.stdout and result.stdout:match("^[^\t]+") or "unknown"
+									lines[3] = " size:     " .. improved_size
+
+									-- Calculate new width if needed
+									local new_max_width = vim.fn.max(vim.tbl_map(function(n)
+										return #n
+									end, lines))
+
+									-- Update buffer content
+									vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+
+									-- Update window width if size line is longer
+									if new_max_width > open_win_config.width - 1 then
+										open_win_config.width = new_max_width + 1
+										vim.api.nvim_win_set_config(winnr, open_win_config)
+									end
+
+									-- Re-apply highlights
+									vim.api.nvim_buf_clear_namespace(bufnr, -1, 0, -1)
+									highlight_lines()
+								end)
+							end)
+						end,
 						["gx"] = function(view)
 							local entry = view:cursor_node_entry()
 							local path = entry.path
 
-							local home = os.getenv("HOME")
-							if home then
-								path = path:gsub("^" .. home, "~")
+							---Copied from vim.ui.open in Neovim 0.10+
+							---@param my_path string
+							---@return nil|string[] cmd
+							---@return nil|string error
+							local function get_open_cmd(my_path)
+								if vim.fn.has("mac") == 1 then
+									return { "open", my_path }
+								elseif vim.fn.has("win32") == 1 then
+									if vim.fn.executable("rundll32") == 1 then
+										return { "rundll32", "url.dll,FileProtocolHandler", my_path }
+									else
+										return nil, "rundll32 not found"
+									end
+								elseif vim.fn.executable("explorer.exe") == 1 then
+									return { "explorer.exe", my_path }
+								elseif vim.fn.executable("xdg-open") == 1 then
+									return { "xdg-open", my_path }
+								else
+									return nil, "no handler found"
+								end
 							end
-
-              ---Copied from vim.ui.open in Neovim 0.10+
-              ---@param my_path string
-              ---@return nil|string[] cmd
-              ---@return nil|string error
-              local function get_open_cmd(my_path)
-                if vim.fn.has("mac") == 1 then
-                  return { "open", my_path }
-                elseif vim.fn.has("win32") == 1 then
-                  if vim.fn.executable("rundll32") == 1 then
-                    return { "rundll32", "url.dll,FileProtocolHandler", my_path }
-                  else
-                    return nil, "rundll32 not found"
-                  end
-                elseif vim.fn.executable("explorer.exe") == 1 then
-                  return { "explorer.exe", my_path }
-                elseif vim.fn.executable("xdg-open") == 1 then
-                  return { "xdg-open", my_path }
-                else
-                  return nil, "no handler found"
-                end
-              end
 
 							local cmd, err = get_open_cmd(path)
 							if not cmd then
@@ -465,11 +604,12 @@ return {
 		},
 		config = function(_, opts)
 			require("fyler").setup(opts)
-			vim.cmd("hi FylerDiagnosticWarn gui=none guifg=#F9E2AF")
+			vim.cmd("hi FylerGitAdded gui=none guifg=none")
+			vim.cmd("hi FylerGitIconAdded gui=none guifg=#8ee2cf")
 			vim.cmd("hi FylerGitUntracked gui=none guifg=none")
 			vim.cmd("hi FylerGitIconUntracked gui=none guifg=#89ddff")
 			vim.cmd("hi FylerGitModified gui=none guifg=none")
-			vim.cmd("hi FylerGitIconModified gui=none guifg=#F9E2AF")
+			vim.cmd("hi FylerGitIconModified gui=none guifg=#F5E0DC")
 			-- vim.api.nvim_set_hl(0, "FylerGitIconUntracked", { fg = "#ff0000", bold = true })
 			-- vim.api.nvim_set_hl(0, "FylerGitIconModified", { fg = "#ff8800", bold = true })
 			--

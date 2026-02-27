@@ -1,61 +1,66 @@
 return {
 	{
-		"malewicz1337/oil-git.nvim",
-		dependencies = { "stevearc/oil.nvim" },
-		event = { "VeryLazy" },
-    -- cmd = { "Oil" },
-		opts = {
-			debounce_ms = 50,
-			show_file_highlights = false,
-			show_directory_highlights = false,
-			show_file_symbols = true,
-			show_directory_symbols = true,
-			show_ignored_files = true, -- Show ignored file status
-			show_ignored_directories = true, -- Show ignored directory status
-			symbol_position = "eol", -- "eol", "signcolumn", or "none"
-			ignore_gitsigns_update = false, -- Ignore GitSignsUpdate events (fallback for flickering)
-			debug = false, -- false, "minimal", or "verbose"
-			symbols = {
-				file = {
-					added = "+",
-					modified = "!",
-					renamed = "󰕛 ",
-					deleted = "✗",
-					copied = "~",
-					conflict = "",
-					untracked = "?",
-					ignored = " ",
-				},
-				directory = {
-					added = "+",
-					modified = "!",
-					renamed = "󰕛 ",
-					deleted = "✗",
-					copied = "~",
-					conflict = "",
-					untracked = "?",
-					ignored = " ",
-				},
-			},
-
-			-- Colors (only applied if highlight groups don't exist)
-			highlights = {
-				OilGitAdded = { fg = "#8ee2cf" },
-				OilGitModified = { fg = "#f9e2af" },
-				OilGitRenamed = { fg = "#cba6f7" },
-				OilGitDeleted = { fg = "#f38ba8" },
-				OilGitCopied = { fg = "#cba6f7" },
-				OilGitConflict = { fg = "#fab387" },
-				OilGitUntracked = { fg = "#89ddff" },
-				OilGitIgnored = { link = "Comment" },
-			},
-		},
-	},
-	{
 		"stevearc/oil.nvim",
-		lazy = false,
+		-- lazy = false,
     enabled = true,
-    -- cmd = { "Oil" },
+    -- dev = true,
+    -- dir = "~/projects/oil.nvim/wt-master",
+    event = { "CmdlineEnter" },
+    cmd = { "Oil" },
+    dependencies = {
+      {
+        "malewicz1337/oil-git.nvim",
+        -- dependencies = { "stevearc/oil.nvim" },
+        -- event = { "VeryLazy" },
+        -- cmd = { "Oil" },
+        opts = {
+          debounce_ms = 50,
+          show_file_highlights = false,
+          show_directory_highlights = false,
+          show_file_symbols = true,
+          show_directory_symbols = true,
+          show_ignored_files = true, -- Show ignored file status
+          show_ignored_directories = true, -- Show ignored directory status
+          symbol_position = "eol", -- "eol", "signcolumn", or "none"
+          ignore_gitsigns_update = false, -- Ignore GitSignsUpdate events (fallback for flickering)
+          debug = false, -- false, "minimal", or "verbose"
+          symbols = {
+            file = {
+              added = "+",
+              modified = "!",
+              renamed = "󰕛 ",
+              deleted = "✗",
+              copied = "~",
+              conflict = "",
+              untracked = "?",
+              ignored = " ",
+            },
+            directory = {
+              added = "+",
+              modified = "!",
+              renamed = "󰕛 ",
+              deleted = "✗",
+              copied = "~",
+              conflict = "",
+              untracked = "?",
+              ignored = " ",
+            },
+          },
+
+          -- Colors (only applied if highlight groups don't exist)
+          highlights = {
+            OilGitAdded = { fg = "#8ee2cf" },
+            OilGitModified = { fg = "#f9e2af" },
+            OilGitRenamed = { fg = "#cba6f7" },
+            OilGitDeleted = { fg = "#f38ba8" },
+            OilGitCopied = { fg = "#cba6f7" },
+            OilGitConflict = { fg = "#fab387" },
+            OilGitUntracked = { fg = "#89ddff" },
+            OilGitIgnored = { link = "Comment" },
+          },
+        },
+      },
+    },
 		keys = {
 			{
 				mode = "n",
@@ -744,4 +749,57 @@ return {
 			})
 		end,
 	},
+
+  -- {
+  -- 	"malewicz1337/oil-git.nvim",
+  -- 	dependencies = { "stevearc/oil.nvim" },
+  -- 	-- event = { "VeryLazy" },
+  --    -- cmd = { "Oil" },
+  -- 	opts = {
+  -- 		debounce_ms = 50,
+  -- 		show_file_highlights = false,
+  -- 		show_directory_highlights = false,
+  -- 		show_file_symbols = true,
+  -- 		show_directory_symbols = true,
+  -- 		show_ignored_files = true, -- Show ignored file status
+  -- 		show_ignored_directories = true, -- Show ignored directory status
+  -- 		symbol_position = "eol", -- "eol", "signcolumn", or "none"
+  -- 		ignore_gitsigns_update = false, -- Ignore GitSignsUpdate events (fallback for flickering)
+  -- 		debug = false, -- false, "minimal", or "verbose"
+  -- 		symbols = {
+  -- 			file = {
+  -- 				added = "+",
+  -- 				modified = "!",
+  -- 				renamed = "󰕛 ",
+  -- 				deleted = "✗",
+  -- 				copied = "~",
+  -- 				conflict = "",
+  -- 				untracked = "?",
+  -- 				ignored = " ",
+  -- 			},
+  -- 			directory = {
+  -- 				added = "+",
+  -- 				modified = "!",
+  -- 				renamed = "󰕛 ",
+  -- 				deleted = "✗",
+  -- 				copied = "~",
+  -- 				conflict = "",
+  -- 				untracked = "?",
+  -- 				ignored = " ",
+  -- 			},
+  -- 		},
+  --
+  -- 		-- Colors (only applied if highlight groups don't exist)
+  -- 		highlights = {
+  -- 			OilGitAdded = { fg = "#8ee2cf" },
+  -- 			OilGitModified = { fg = "#f9e2af" },
+  -- 			OilGitRenamed = { fg = "#cba6f7" },
+  -- 			OilGitDeleted = { fg = "#f38ba8" },
+  -- 			OilGitCopied = { fg = "#cba6f7" },
+  -- 			OilGitConflict = { fg = "#fab387" },
+  -- 			OilGitUntracked = { fg = "#89ddff" },
+  -- 			OilGitIgnored = { link = "Comment" },
+  -- 		},
+  -- 	},
+  -- },
 }

@@ -912,9 +912,9 @@ return {
 				-- Jump to symbol under cursor.
 				-- It can auto close the outline window when triggered, see
 				-- 'auto_close' option above.
-				goto_location = "<Cr>",
+				goto_location = "<C-Cr>",
 				-- Jump to symbol under cursor but keep focus on outline window.
-				peek_location = "o",
+				peek_location = "<cr>",
 				-- Visit location in code and close outline immediately
 				goto_and_close = "<S-Cr>",
 				-- Change cursor position of outline window to match current location in code.

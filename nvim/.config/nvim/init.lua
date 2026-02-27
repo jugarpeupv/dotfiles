@@ -155,8 +155,9 @@ local function restore_last_worktree()
 	local data = file_utils.load_bps(bps_path)
 	if not data or next(data) == nil or not data.last_active_wt then
 		vim.schedule(function()
-			require("oil").open(cwd)
+			-- require("oil").open(cwd)
 			-- require("fyler").open(cwd)
+      require("fyler").open({ dir = cwd, kind = "replace" })
 		end)
 		return
 	end
@@ -171,7 +172,7 @@ local function restore_last_worktree()
 
 	vim.schedule(function()
 		vim.cmd.cd(last_active_wt)
-    -- require("fyler").open(last_active_wt)
+    require("fyler").open({ dir = last_active_wt, kind = "replace" })
 		-- vim.defer_fn(function()
 		-- 	require("oil").open(last_active_wt)
 		-- end, 100)
@@ -184,4 +185,8 @@ if should_restore_worktree() then
 		once = true,
 		callback = restore_last_worktree,
 	})
+else
+  vim.schedule(function()
+    require("fyler").open({ dir = vim.loop.cwd(), kind = "replace" })
+  end)
 end

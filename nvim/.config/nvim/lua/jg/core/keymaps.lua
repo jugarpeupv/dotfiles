@@ -1826,3 +1826,8 @@ vim.keymap.set('i', '<C-k>', '<c-o>D<esc>', { desc = 'Kill to end of line' })
 --     return line:sub(1, pos - 1)
 --   end
 -- end, { expr = true })
+
+
+vim.keymap.set('n', '<C-w>=', function()
+  vim.cmd('windo wincmd =')
+end, { desc = "Show layout and equalize windows" })
