@@ -1335,7 +1335,7 @@ vim.keymap.set("n", "<leader>df", function()
 	end
 
 	-- Construct the DiffviewOpen command
-	local diffview_command = string.format(":DiffviewOpen %s..%s", default_branch, current_branch)
+	local diffview_command = string.format(":CodeDiff %s...%s", default_branch, current_branch)
 	-- Populate the command line using vim.api.nvim_feedkeys
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
@@ -1828,6 +1828,6 @@ vim.keymap.set('i', '<C-k>', '<c-o>D<esc>', { desc = 'Kill to end of line' })
 -- end, { expr = true })
 
 
-vim.keymap.set('n', '<C-w>=', function()
-  vim.cmd('windo wincmd =')
-end, { desc = "Show layout and equalize windows" })
+-- vim.keymap.set('n', '<C-w>=', function()
+--   vim.cmd('windo wincmd =')
+-- end, { desc = "Show layout and equalize windows" })
