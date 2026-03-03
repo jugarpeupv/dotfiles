@@ -176,6 +176,12 @@ return {
 					},
 					-- Key mappings
 					mappings = {
+            ["gy"] = function(view)
+              local entry = view:cursor_node_entry()
+              local path = entry.path
+              vim.notify("Copied path: " .. path)
+              vim.fn.setreg("+", path)
+            end,
 						["K"] = function(view)
 							-- Check if we're already in a hover popup
 							local current_win = vim.api.nvim_get_current_win()

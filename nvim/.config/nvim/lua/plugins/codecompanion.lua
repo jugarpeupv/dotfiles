@@ -1,8 +1,8 @@
 return {
 	{
-		-- "olimorris/codecompanion.nvim",
-		"aweis89/codecompanion.nvim",
-		branch = "fix/acp-async-connection",
+		"olimorris/codecompanion.nvim",
+		-- "aweis89/codecompanion.nvim",
+		-- branch = "fix/acp-async-connection",
 		enabled = function()
 			local is_headless = #vim.api.nvim_list_uis() == 0
 			if is_headless then
@@ -18,7 +18,8 @@ return {
 		dependencies = {
 			"ravitemer/codecompanion-history.nvim",
 			"j-hui/fidget.nvim", -- Display status
-			"ravitemer/mcphub.nvim",
+			{ "bassamsdata/fs-monitor.nvim" },
+			-- "ravitemer/mcphub.nvim",
 			-- "franco-ruggeri/codecompanion-spinner.nvim",
 			-- { "nvim-lua/plenary.nvim", branch = "master" },
 			-- "folke/snacks.nvim",
@@ -31,6 +32,46 @@ return {
 		-- end,
 		config = function()
 			require("codecompanion").setup({
+				-- mcp = {
+				-- 	servers = {
+				--         github = {
+				--           cmd = {
+				--             "npx", "-y", "mcp-remote",
+				--             "https://api.githubcopilot.com/mcp/",
+				--           },
+				--           env = {
+				--             -- GH_MCP_TOKEN = "GH_MCP_TOKEN",
+				--             GITHUB_PERSONAL_ACCESS_TOKEN = "GH_MCP_TOKEN",
+				--             -- GITHUB_PERSONAL_ACCESS_TOKEN = "cmd:gh auth token",
+				--             -- or hardcode: GITHUB_PERSONAL_ACCESS_TOKEN = "ghp_xxx",
+				--           },
+				--           -- custom_instructions equivalent - passed as server_instructions
+				--           server_instructions = "owner: mapfre-tech\nrepo: arch-mar2-mgmt",
+				--         },
+				--         ["chrome-devtools-mcp"] = {
+				--           cmd = { "npx", "-y", "chrome-devtools-mcp@latest" },
+				--           env = {
+				--             npm_config_registry = "https://registry.npmjs.org",
+				--           },
+				--         },
+				-- 		["nx"] = {
+				-- 			cmd = { "npx", "-y", "nx-mcp@latest" },
+				-- 			env = {
+				-- 				npm_config_registry = "https://registry.npmjs.org",
+				-- 			},
+				-- 		},
+				-- 		["tavily-mcp"] = {
+				-- 			cmd = { "npx", "-y", "tavily-mcp@latest" },
+				-- 			env = {
+				-- 				TAVILY_API_KEY = "TAVILY_API_KEY",
+				-- 			},
+				-- 		},
+				-- 	},
+				-- 	opts = {
+				-- 		default_servers = { "tavily-mcp", "nx", "github" },
+				-- 	},
+				-- },
+
 				-- prompt_library = {
 				--   markdown = {
 				--     dirs = {
@@ -48,7 +89,7 @@ return {
 							is_slash_cmd = true,
 							stop_context_insertion = true,
 							auto_submit = true,
-              placement = "new"
+							placement = "new",
 						},
 						prompts = {
 							{
@@ -156,19 +197,25 @@ Output only the commit message without any explanations and follow-up suggestion
 
 				extensions = {
 					-- spinner = {},
-					mcphub = {
-						callback = "mcphub.extensions.codecompanion",
+					-- mcphub = {
+					-- 	callback = "mcphub.extensions.codecompanion",
+					-- 	opts = {
+					-- 		-- MCP Tools
+					-- 		make_tools = true, -- Make individual tools (@server__tool) and server groups (@server) from MCP servers
+					-- 		show_server_tools_in_chat = true, -- Show individual tools in chat completion (when make_tools=true)
+					-- 		add_mcp_prefix_to_tool_names = false, -- Add mcp__ prefix (e.g `@mcp__github`, `@mcp__neovim__list_issues`)
+					-- 		show_result_in_chat = true, -- Show tool results directly in chat buffer
+					-- 		format_tool = nil, -- function(tool_name:string, tool: CodeCompanion.Agent.Tool) : string Function to format tool names to show in the chat buffer
+					-- 		-- MCP Resources
+					-- 		make_vars = true, -- Convert MCP resources to #variables for prompts
+					-- 		-- MCP Prompts
+					-- 		make_slash_commands = true, -- Add MCP prompts as /slash commands
+					-- 	},
+					-- },
+					fs_monitor = {
+						enabled = true,
 						opts = {
-							-- MCP Tools
-							make_tools = true, -- Make individual tools (@server__tool) and server groups (@server) from MCP servers
-							show_server_tools_in_chat = true, -- Show individual tools in chat completion (when make_tools=true)
-							add_mcp_prefix_to_tool_names = false, -- Add mcp__ prefix (e.g `@mcp__github`, `@mcp__neovim__list_issues`)
-							show_result_in_chat = true, -- Show tool results directly in chat buffer
-							format_tool = nil, -- function(tool_name:string, tool: CodeCompanion.Agent.Tool) : string Function to format tool names to show in the chat buffer
-							-- MCP Resources
-							make_vars = true, -- Convert MCP resources to #variables for prompts
-							-- MCP Prompts
-							make_slash_commands = true, -- Add MCP prompts as /slash commands
+							keymap = "gF", -- Will be changed to `gD` in future releases.
 						},
 					},
 					history = {
@@ -217,8 +264,8 @@ Output only the commit message without any explanations and follow-up suggestion
 						opts = {
 							completion_provider = "blink", -- blink|cmp|coc|default
 						},
-						adapter = "opencode",
-						-- adapter = "copilot_cli_acp",
+						-- adapter = "opencode",
+						adapter = "copilot_cli_acp",
 						-- adapter = {
 						-- 	name = "copilot",
 						-- 	-- model = "gpt-5.1-codex",
@@ -280,11 +327,6 @@ Output only the commit message without any explanations and follow-up suggestion
 									require_cmd_approval = false,
 								},
 							},
-							["list_code_usages"] = {
-								opts = {
-									require_cmd_approval = false,
-								},
-							},
 							["read_file"] = {
 								opts = {
 									require_cmd_approval = false,
@@ -294,9 +336,8 @@ Output only the commit message without any explanations and follow-up suggestion
 								["fagent"] = {
 									description = "A custom agent combining tools",
 									tools = {
-										"full_stack_dev",
+										"agent",
 										"memory",
-										"next_edit_suggestion",
 									},
 									opts = {
 										collapse_tools = true, -- When true, show as a single group reference instead of individual tools
@@ -328,13 +369,11 @@ Output only the commit message without any explanations and follow-up suggestion
 										"delete_file",
 										"fetch_webpage",
 										"file_search",
-										"full_stack_dev",
+										"agent",
 										"get_changed_files",
 										"grep_search",
 										"insert_edit_into_file",
-										"list_code_usages",
 										"memory",
-										"next_edit_suggestion",
 										"read_file",
 										"web_search",
 									},
@@ -345,7 +384,7 @@ Output only the commit message without any explanations and follow-up suggestion
 							},
 							opts = {
 								default_tools = {
-									"full_stack_dev",
+									"agent",
 									"fetch_webpage",
 									"web_search",
 									"memory",
@@ -385,125 +424,6 @@ Output only the commit message without any explanations and follow-up suggestion
 							-- 	index = 1,
 							-- 	description = "Send",
 							-- },
-						},
-					},
-				},
-				display = {
-					action_palette = {
-						provider = "snacks", -- or "telescope", "mini_pick", etc.
-						opts = {
-							-- Configure snacks picker options
-							show_preview = false, -- Disable preview in the picker
-						},
-					},
-					diff = {
-						provider_opts = {
-							inline = {
-								layout = "buffer", -- float|buffer - Where to display the diff
-								opts = {
-									context_lines = 3, -- Number of context lines in hunks
-									dim = 0, -- Background dim level for floating diff (0-100, [100 full transparent], only applies when layout = "float")
-									full_width_removed = true, -- Make removed lines span full width
-									show_keymap_hints = true, -- Show "gda: accept | gdr: reject" hints above diff
-									show_removed = true, -- Show removed lines as virtual text
-								},
-							},
-						},
-					},
-
-					-- diff = {
-					-- 	enabled = true,
-					-- 	-- provider = providers.diff, -- mini_diff|split|inline
-					-- 	provider = "inline",
-					-- 	provider_opts = {
-					-- 		-- Options for inline diff provider
-					-- 		inline = {
-					-- 			layout = "buffer", -- float|buffer - Where to display the diff
-					--
-					-- 			diff_signs = {
-					-- 				signs = {
-					-- 					text = "▌", -- Sign text for normal changes
-					-- 					reject = "✗", -- Sign text for rejected changes in super_diff
-					-- 					highlight_groups = {
-					-- 						addition = "DiagnosticOk",
-					-- 						deletion = "DiagnosticError",
-					-- 						modification = "DiagnosticWarn",
-					-- 					},
-					-- 				},
-					-- 				-- Super Diff options
-					-- 				icons = {
-					-- 					accepted = " ",
-					-- 					rejected = " ",
-					-- 				},
-					-- 				colors = {
-					-- 					accepted = "DiagnosticOk",
-					-- 					rejected = "DiagnosticError",
-					-- 				},
-					-- 			},
-					--
-					-- 			opts = {
-					-- 				context_lines = 3, -- Number of context lines in hunks
-					-- 				dim = 100, -- Background dim level for floating diff (0-100, [100 full transparent], only applies when layout = "float")
-					-- 				full_width_removed = true, -- Make removed lines span full width
-					-- 				show_keymap_hints = true, -- Show "gda: accept | gdr: reject" hints above diff
-					-- 				show_removed = true, -- Show removed lines as virtual text
-					-- 			},
-					-- 		},
-					--
-					-- 		-- Options for the split provider
-					-- 		-- split = {
-					-- 		-- 	close_chat_at = 240, -- Close an open chat buffer if the total columns of your display are less than...
-					-- 		-- 	layout = "vertical", -- vertical|horizontal split
-					-- 		-- 	opts = {
-					-- 		-- 		"internal",
-					-- 		-- 		"filler",
-					-- 		-- 		"closeoff",
-					-- 		-- 		"algorithm:histogram", -- https://adamj.eu/tech/2024/01/18/git-improve-diff-histogram/
-					-- 		-- 		"indent-heuristic", -- https://blog.k-nut.eu/better-git-diffs
-					-- 		-- 		"followwrap",
-					-- 		-- 		"linematch:120",
-					-- 		-- 	},
-					-- 		-- },
-					-- 	},
-					-- },
-					chat = {
-						-- icons = {
-						-- 	chat_context = "📎️", -- You can also apply an icon to the fold
-						-- 	chat_fold = "",
-						-- },
-						-- intro_message = "",
-						show_settings = false,
-						fold_reasoning = false,
-						show_reasoning = true,
-						fold_context = true,
-						auto_scroll = false,
-						show_tools_processing = true,
-						show_header_separator = true, -- Show header separators in the chat buffer? Set this to false if you're using an external markdown formatting plugin
-						start_in_insert_mode = false,
-						separator = "─", -- The separator between the different messages in the chat buffer
-
-						window = {
-							layout = "vertical", -- float|vertical|horizontal|buffer
-							position = "right", -- left|right|top|bottom (nil will default depending on vim.opt.splitright|vim.opt.splitbelow)
-							border = "single",
-							height = 0.8,
-							width = 0.45,
-							relative = "editor",
-							full_height = true, -- when set to false, vsplit will be used to open the chat buffer vs. botright/topleft vsplit
-							sticky = false, -- when set to true and `layout` is not `"buffer"`, the chat buffer will remain opened when switching tabs
-							opts = {
-								breakindent = true,
-								cursorcolumn = false,
-								cursorline = true,
-								foldcolumn = "0",
-								linebreak = true,
-								list = false,
-								number = false,
-								relativenumber = false,
-								signcolumn = "no",
-								spell = false,
-								wrap = true,
-							},
 						},
 					},
 				},

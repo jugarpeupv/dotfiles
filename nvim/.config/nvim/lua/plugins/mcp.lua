@@ -1,12 +1,13 @@
 return {
 	"ravitemer/mcphub.nvim",
-	enabled = function()
-		local is_headless = #vim.api.nvim_list_uis() == 0
-		if is_headless then
-			return false
-		end
-		return true
-	end,
+  enabled = false,
+	-- enabled = function()
+	-- 	local is_headless = #vim.api.nvim_list_uis() == 0
+	-- 	if is_headless then
+	-- 		return false
+	-- 	end
+	-- 	return true
+	-- end,
 	dependencies = {
 		{ "nvim-lua/plenary.nvim" }, -- Required for Job and HTTP requests
 	},

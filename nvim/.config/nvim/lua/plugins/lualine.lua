@@ -6,9 +6,9 @@ return {
 		enabled = true,
 		name = "barbecue",
 		branch = "main",
-		event = "VeryLazy",
+		-- event = "VeryLazy",
 		-- event = "LspAttach",
-		-- event = { "BufReadPost", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		-- event = { "BufWinEnter" },
 		dependencies = {
 			{ "SmiteshP/nvim-navic" },

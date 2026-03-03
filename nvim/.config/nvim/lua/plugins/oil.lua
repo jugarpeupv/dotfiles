@@ -1,12 +1,29 @@
 return {
 	{
 		"stevearc/oil.nvim",
-		-- lazy = false,
+		lazy = true,
     enabled = true,
     -- dev = true,
     -- dir = "~/projects/oil.nvim/wt-master",
-    event = { "CmdlineEnter" },
+    -- event = { "CmdlineEnter" },
     cmd = { "Oil" },
+    -- init = function()
+    --   -- Load oil when neovim opens a directory, even though it's lazy-loaded
+    --   vim.api.nvim_create_autocmd("BufWinEnter", {
+    --     nested = true,
+    --     callback = function(info)
+    --       local path = info.file
+    --       if path == "" then
+    --         return
+    --       end
+    --       -- Only handle directories
+    --       local stat = vim.uv.fs_stat(path)
+    --       if stat and stat.type == "directory" then
+    --         require("oil")
+    --       end
+    --     end,
+    --   })
+    -- end,
     dependencies = {
       {
         "malewicz1337/oil-git.nvim",
@@ -62,25 +79,7 @@ return {
       },
     },
 		keys = {
-			{
-				mode = "n",
-				"H",
-				function()
-					local target
-					local buffer = vim.api.nvim_get_current_buf()
-
-					if not buffer then
-						return nil
-					end
-					local path = vim.api.nvim_buf_get_name(buffer)
-					if path == "" then
-						target = vim.loop.cwd()
-					end
-					target = vim.fn.fnamemodify(path, ":p:h")
-					require("oil").open(target)
-				end,
-				desc = "Oil: parent directory",
-			},
+      { ":" },
 			{
 				"-",
 				function()
@@ -94,7 +93,7 @@ return {
 					if path == "" then
 						target = vim.loop.cwd()
 					end
-					target = vim.fn.fnamemodify(path, ":p:h")
+					-- target = vim.fn.fnamemodify(path, ":p:h")
 					require("oil").open(target)
 				end,
 				desc = "Oil: parent directory",

@@ -1,5 +1,14 @@
 return {
 	{
+		"jugarpeupv/jsregex.nvim",
+    dev = true,
+    dir = "~/projects/jsregex.nvim/",
+    keys = {
+      { "<leader>js", "<cmd>JSRegexSearch<cr>", { silent = true } }
+    },
+    cmd = { "JSRegexSearch", "JSRegexClear"}
+	},
+	{
 		"junegunn/vim-easy-align",
 		keys = {
 			{ "go", "<Plug>(EasyAlign)", mode = { "x", "n" } },
@@ -912,11 +921,11 @@ return {
 				-- Jump to symbol under cursor.
 				-- It can auto close the outline window when triggered, see
 				-- 'auto_close' option above.
-				goto_location = "<C-Cr>",
+				goto_location = "<S-Cr>",
 				-- Jump to symbol under cursor but keep focus on outline window.
 				peek_location = "<cr>",
 				-- Visit location in code and close outline immediately
-				goto_and_close = "<S-Cr>",
+				goto_and_close = "<C-Cr>",
 				-- Change cursor position of outline window to match current location in code.
 				-- 'Opposite' of goto/peek_location.
 				restore_location = "<C-g>",

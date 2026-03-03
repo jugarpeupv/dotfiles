@@ -63,6 +63,14 @@ atuin-setup() {
     # For zsh
     add-zsh-hook chpwd load-nvmrc
     load-nvmrc
+
+    function zvm_after_lazy_keybindings() {
+      zvm_bindkey vicmd 'H' vi-beginning-of-line
+      zvm_bindkey visual 'H' beginning-of-line
+
+      zvm_bindkey vicmd 'L' end-of-line
+      zvm_bindkey visual 'L' vi-end-of-line
+    }
   }
 
   zvm_after_init_commands+=(set_keybindings)

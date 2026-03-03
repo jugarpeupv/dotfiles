@@ -740,7 +740,7 @@ vim.keymap.set("n", "<leader>ih", function()
 end, opts)
 
 vim.cmd([[nmap <leader>tw :tabnew %<CR>]])
-vim.cmd([[nmap <leader>tq :tabclose<CR>]])
+vim.cmd([[nmap <leader>cc :tabclose<CR>]])
 
 vim.keymap.set("n", "<leader>ta", require("jg.custom.telescope").curr_buf, {})
 
@@ -1113,6 +1113,9 @@ vim.api.nvim_set_keymap("v", "L", "$h", { noremap = true, silent = true })
 
 vim.api.nvim_set_keymap("o", "H", "^", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("v", "H", "^", { noremap = true, silent = true })
+
+vim.keymap.set("n", "L", "$", { silent = true })
+vim.keymap.set("n", "H", "^", { silent = true })
 
 vim.keymap.set("n", "<leader>bk", "<cmd>bwipeout!<cr>", opts)
 
@@ -1766,7 +1769,6 @@ end, { desc = "Yank absolute file path to clipboard" })
 
 -- vim.keymap.set("v", "Ñ", "%", { silent = true })
 
-vim.keymap.set("n", "L", "$", { silent = true })
 vim.keymap.set({ "n", "v" }, "<S-CR>", function()
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("%", true, false, true), "t", true)
 end, { silent = true })
