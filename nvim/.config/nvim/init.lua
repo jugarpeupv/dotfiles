@@ -124,6 +124,10 @@ local function should_restore_worktree()
 		return false
 	end
 
+  if not vim.list_contains(vim.v.argv, ".") then
+    return false
+  end
+
 	-- C-x C-e
 	-- { "nvim", "--embed", "-c", "normal! 19go", "--", "/tmp/zshBXRabd.zsh" }
 	if vim.list_contains(vim.v.argv, "--") then
@@ -187,6 +191,7 @@ if should_restore_worktree() then
 	})
 else
   vim.schedule(function()
-    require("fyler").open({ dir = vim.loop.cwd(), kind = "replace" })
+    local path = vim.v.argv[3]
+    require("fyler").open({ dir = path, kind = "replace" })
   end)
 end

@@ -1,8 +1,8 @@
 return {
 	{
-		"olimorris/codecompanion.nvim",
-		-- "aweis89/codecompanion.nvim",
-		-- branch = "fix/acp-async-connection",
+		-- "olimorris/codecompanion.nvim",
+		"aweis89/codecompanion.nvim",
+		branch = "fix/acp-async-connection",
 		enabled = function()
 			local is_headless = #vim.api.nvim_list_uis() == 0
 			if is_headless then
@@ -32,6 +32,39 @@ return {
 		-- end,
 		config = function()
 			require("codecompanion").setup({
+				display = {
+					chat = {
+						icons = {
+							chat_fold = " ",
+						},
+						fold_context = true,
+						fold_reasoning = false,
+						show_reasoning = true,
+						window = {
+							layout = "vertical", -- float|vertical|horizontal|buffer
+							position = "right", -- left|right|top|bottom (nil will default depending on vim.opt.splitright|vim.opt.splitbelow)
+							border = "single",
+							height = 0.8,
+							width = 0.45,
+							relative = "editor",
+							full_height = true, -- when set to false, vsplit will be used to open the chat buffer vs. botright/topleft vsplit
+							sticky = false, -- when set to true and `layout` is not `"buffer"`, the chat buffer will remain opened when switching tabs
+							opts = {
+								breakindent = true,
+								cursorcolumn = false,
+								cursorline = true,
+								foldcolumn = "0",
+								linebreak = true,
+								list = false,
+								number = false,
+								relativenumber = false,
+								signcolumn = "no",
+								spell = false,
+								wrap = true,
+							},
+						},
+					},
+				},
 				-- mcp = {
 				-- 	servers = {
 				--         github = {
@@ -264,8 +297,8 @@ Output only the commit message without any explanations and follow-up suggestion
 						opts = {
 							completion_provider = "blink", -- blink|cmp|coc|default
 						},
-						-- adapter = "opencode",
-						adapter = "copilot_cli_acp",
+						adapter = "opencode",
+						-- adapter = "copilot_cli_acp",
 						-- adapter = {
 						-- 	name = "copilot",
 						-- 	-- model = "gpt-5.1-codex",
@@ -466,6 +499,14 @@ Output only the commit message without any explanations and follow-up suggestion
 					-- vim.schedule(function ()
 					--   vim.cmd('normal! zz')
 					-- end)
+				end,
+			},
+			{
+				mode = { "n", "v", "t" },
+				"<D-m>",
+				function()
+					require("codecompanion").toggle()
+					vim.cmd("normal! zz")
 				end,
 			},
 			-- { mode = { "n", "v" }, "<leader>ca", "<cmd>CodeCompanionChat Toggle<CR>" },

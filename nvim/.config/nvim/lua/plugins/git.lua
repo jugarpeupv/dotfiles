@@ -1,5 +1,20 @@
 return {
 	{
+		"jgarcia/search-github-repos.nvim",
+		dir = "~/projects/search-github-repos.nvim",
+    dev = true,
+		config = function()
+			require("search-github-repos").setup({
+				owner = "mapfre-tech", -- scope searches to this org
+				-- backend = "telescope", -- or "snacks" (auto-detects by default)
+			})
+		end,
+		keys = {
+			{ "<leader>gr", "<cmd>SearchGithubRepos<cr>", desc = "Search GitHub Repos" },
+		},
+	},
+
+	{
 		"skanehira/github-actions.nvim",
 		-- dev = true,
 		-- dir = "~/projects/github-actions.nvim/wt-main",
@@ -107,8 +122,8 @@ return {
 		dependencies = { "sindrets/diffview.nvim" },
 		lazy = true,
 		branch = "main",
-    enabled = false,
-
+		enabled = true,
+    event = { "BufReadPost", "BufNewFile" },
 		config = function()
 			require("git-conflict").setup({
 				default_mappings = false,

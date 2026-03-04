@@ -1119,12 +1119,6 @@ vim.keymap.set("n", "H", "^", { silent = true })
 
 vim.keymap.set("n", "<leader>bk", "<cmd>bwipeout!<cr>", opts)
 
-vim.cmd([[set wildcharm=<C-v>]])
--- vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
-vim.cmd([[inoremap <C-l> <C-y>]])
--- vim.cmd([[cnoremap <C-l> <C-y><C-v>]])
-vim.cmd([[cnoremap <C-l> <C-y><C-v>]])
--- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
 --
 --
 -- vim.keymap.set('c', '<C-k>', '<C-\\>egetcmdline()[:getcmdpos()-2]<CR>', { noremap = true, expr = false })
@@ -1811,6 +1805,20 @@ end, {})
 
 
 vim.keymap.set('i', '<C-k>', '<c-o>D<esc>', { desc = 'Kill to end of line' })
+
+-- vim.keymap.set('i', '<C-k>', function()
+--   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-o>D', true, false, true), 'n', false)
+--   vim.defer_fn(function()
+--     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<esc>', true, false, true), 'n', false)
+--   end, 1000)
+-- end, { desc = 'Kill to end of line' })
+
+-- vim.opt.digraph = false
+-- vim.keymap.set('i', '<C-k>', function()
+--   local col = vim.fn.col('.')
+--   local line = vim.fn.getline('.')
+--   vim.fn.setline('.', line:sub(1, col - 1))
+-- end, { desc = 'Kill to end of line' })
 -- vim.keymap.set('i', '<C-k>', '<Nop>', { desc = 'Kill to end of line' })
 -- vim.keymap.set("i", "<C-k>", function()
 -- 	-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<c-o>D<esc>", true, false, true), "n", false)
@@ -1833,3 +1841,47 @@ vim.keymap.set('i', '<C-k>', '<c-o>D<esc>', { desc = 'Kill to end of line' })
 -- vim.keymap.set('n', '<C-w>=', function()
 --   vim.cmd('windo wincmd =')
 -- end, { desc = "Show layout and equalize windows" })
+
+
+
+-- vim.o.wildcharm = vim.fn.char2nr("<C-v>")  -- or: vim.o.wildcharm = 26
+
+vim.cmd([[set wildcharm=<C-v>]])
+-- vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
+vim.cmd([[inoremap <C-l> <C-y>]])
+-- vim.cmd([[cnoremap <C-l> <C-y><C-v>]])
+-- vim.cmd([[cnoremap <C-l> <C-y><C-z>]])
+vim.keymap.set('c', '<C-l>', function()
+  if vim.fn.pumvisible() == 1 then
+    return '<C-y><C-v>'
+  else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<tab>", true, false, true), "t", false)
+    return
+  end
+end, { expr = true })
+
+-- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
+
+
+-- neovim does not complete entries where there are only .files --> https://github.com/neovim/neovim/issues/35111
+vim.keymap.set("c", "<Tab>", function()
+  if vim.fn.wildmenumode() == 1 then
+    return "<C-v>"
+  end
+
+  local cmdline = vim.fn.getcmdline()
+  local pos = vim.fn.getcmdpos()
+  local expanded = vim.fn.getcompletion(cmdline:sub(1, pos - 1), "cmdline")
+  if #expanded > 0 then
+    return "<C-v>"
+  end
+
+  local new_cmdline_with_dot = cmdline:sub(1, pos - 1) .. "." .. cmdline:sub(pos)
+  -- if there are results with a dot (.) is inserted in the prompt
+  local expanded_with_dot = vim.fn.getcompletion(new_cmdline_with_dot, "cmdline")
+  if #expanded_with_dot > 0 then
+    vim.fn.setcmdline(new_cmdline_with_dot, pos + 1)
+    return "<C-v>"
+  end
+  -- No results — insert a dot and re-trigger completion
+end, { expr = true })

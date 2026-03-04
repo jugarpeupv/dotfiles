@@ -27,6 +27,7 @@ return {
         layout = "side-by-side",
 				cycle_next_hunk = false,
 				disable_inlay_hints = true, -- Disable inlay hints in diff windows for cleaner view
+        jump_to_first_change = false,
 				max_computation_time_ms = 5000, -- Maximum time for diff computation (VSCode default)
 			},
 

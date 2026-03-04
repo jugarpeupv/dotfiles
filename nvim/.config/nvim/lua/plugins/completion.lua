@@ -141,10 +141,12 @@ return {
 				},
 			},
 			cmdline = {
-				enabled = true,
+				enabled = false,
 				-- use 'inherit' to inherit mappings from top level `keymap` config
 				keymap = {
 					preset = "cmdline",
+					-- ["<Tab>"] = {},
+					--      ["<S-Tab>"] = {},
 					["<Right>"] = {},
 					["<Left>"] = {},
 					-- ["<CR>"] = { "accept_and_enter", "fallback" },

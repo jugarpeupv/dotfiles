@@ -6,6 +6,13 @@ function _G.FylerWinbarCwd()
 	end
 	local dir = fyler.get_current_dir() or vim.loop.cwd() or ""
 	return dir:gsub("^" .. vim.env.HOME, "~")
+
+  -- local bufname = vim.api.nvim_buf_get_name(0)
+  -- local dir = bufname:match("^fyler://%d+//(.+)$")
+  -- if not dir then
+  --   dir = vim.loop.cwd() or ""
+  -- end
+  -- return dir:gsub("^" .. vim.env.HOME, "~")
 end
 --
 -- -- return {}
@@ -135,7 +142,7 @@ return {
 					delete_to_trash = true,
 					columns_order = { "git", "permission" },
 					columns = {
-						permission = { enabled = true },
+						permission = { enabled = false },
 						size = { enabled = false },
 						git = {
 							enabled = true,
@@ -149,6 +156,16 @@ return {
 								Conflict = "",
 								Ignored = " ",
 							},
+              -- symbols = {
+              --   Untracked = "",
+              --   Added = "",
+              --   Modified = "",
+              --   Deleted = "",
+              --   Renamed = "",
+              --   Copied = "",
+              --   Conflict = "",
+              --   Ignored = "",
+              -- },
 						},
 						diagnostic = {
 							enabled = false,
