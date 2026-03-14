@@ -146,7 +146,7 @@ return {
 					default_explorer = false,
 					-- Move deleted files/directories to the system trash
 					delete_to_trash = true,
-					columns_order = { "git", "permission" },
+					columns_order = { "git", "link", "permission" },
 					columns = {
 						permission = { enabled = false },
 						size = { enabled = false },
@@ -155,7 +155,8 @@ return {
 							symbols = {
 								Untracked = "?",
 								Added = "+",
-								Modified = "!",
+								Staged = "+",
+								Unstaged = "!",
 								Deleted = "✗",
 								Renamed = "󰕛 ",
 								Copied = "~",
@@ -651,12 +652,14 @@ return {
 		},
 		config = function(_, opts)
 			require("fyler").setup(opts)
-			vim.cmd("hi FylerGitAdded gui=none guifg=none")
-			vim.cmd("hi FylerGitIconAdded gui=none guifg=#8ee2cf")
+			vim.cmd("hi FylerGitStaged gui=none guifg=none")
+			vim.cmd("hi FylerGitIconStaged gui=none guifg=#8ee2cf")
+			vim.cmd("hi link FylerGitAdded FylerGitStaged")
+			vim.cmd("hi link FylerGitIconAdded FylerGitIconStaged")
+			vim.cmd("hi FylerGitUnstaged gui=none guifg=none")
+			vim.cmd("hi FylerGitIconUnstaged gui=none guifg=#F5E0DC")
 			vim.cmd("hi FylerGitUntracked gui=none guifg=none")
 			vim.cmd("hi FylerGitIconUntracked gui=none guifg=#89ddff")
-			vim.cmd("hi FylerGitModified gui=none guifg=none")
-			vim.cmd("hi FylerGitIconModified gui=none guifg=#F5E0DC")
 
 			-- local original_laststatus = vim.o.laststatus
 
