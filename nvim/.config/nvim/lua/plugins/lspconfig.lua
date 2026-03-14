@@ -46,16 +46,6 @@ return {
 			},
 		},
 		config = function()
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false -- https://github.com/neovim/neovim/issues/23291
-
-			local on_attach = require("jg.custom.lsp-utils").attach_lsp_config
-
-			vim.lsp.config("*", {
-				on_attach = on_attach,
-				capabilities = capabilities,
-			})
-
 			local config = {
 				virtual_text = false,
 				signs = {
@@ -162,6 +152,25 @@ return {
 				yamlls = { "yaml", "yaml.github", "yml" },
 			}
 
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false -- https://github.com/neovim/neovim/issues/23291
+
+			local on_attach = require("jg.custom.lsp-utils").attach_lsp_config
+
+			vim.lsp.config("*", {
+				capabilities = capabilities,
+			})
+
+			-- Use LspAttach autocmd for on_attach keymaps (more reliable than vim.lsp.config on_attach)
+			vim.api.nvim_create_autocmd("LspAttach", {
+				callback = function(ev)
+					local client = vim.lsp.get_client_by_id(ev.data.client_id)
+					if client then
+						on_attach(client, ev.buf)
+					end
+				end,
+			})
+
 			local group = vim.api.nvim_create_augroup("lazy_lsp_enable", { clear = true })
 			for server, patterns in pairs(server_filetypes) do
 				vim.api.nvim_create_autocmd("FileType", {
@@ -181,6 +190,16 @@ return {
 					end,
 				})
 			end
+			-- -- Re-trigger FileType for buffers already open before this plugin loaded
+			-- -- (needed because VeryLazy fires after the initial buffer's FileType event)
+			-- for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+			-- 	if vim.api.nvim_buf_is_loaded(buf) then
+			-- 		local ft = vim.bo[buf].filetype
+			-- 		if ft and ft ~= "" then
+			-- 			vim.api.nvim_exec_autocmds("FileType", { group = group, buffer = buf })
+			-- 		end
+			-- 	end
+			-- end
 		end,
 	},
 	{

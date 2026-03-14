@@ -1,18 +1,24 @@
 -- return {}
 function _G.FylerWinbarCwd()
 	local ok, fyler = pcall(require, "fyler")
+	local dir
 	if not ok or type(fyler.get_current_dir) ~= "function" then
-		return (vim.loop.cwd() or ""):gsub("^" .. vim.env.HOME, "~")
+		dir = vim.loop.cwd() or ""
+	else
+		dir = fyler.get_current_dir() or vim.loop.cwd() or ""
 	end
-	local dir = fyler.get_current_dir() or vim.loop.cwd() or ""
+	-- Resolve relative paths (e.g. "." returned before full init) to absolute
+	if dir ~= "" and not vim.startswith(dir, "/") then
+		dir = vim.fn.fnamemodify(dir, ":p"):gsub("/$", "")
+	end
 	return dir:gsub("^" .. vim.env.HOME, "~")
 
-  -- local bufname = vim.api.nvim_buf_get_name(0)
-  -- local dir = bufname:match("^fyler://%d+//(.+)$")
-  -- if not dir then
-  --   dir = vim.loop.cwd() or ""
-  -- end
-  -- return dir:gsub("^" .. vim.env.HOME, "~")
+	-- local bufname = vim.api.nvim_buf_get_name(0)
+	-- local dir = bufname:match("^fyler://%d+//(.+)$")
+	-- if not dir then
+	--   dir = vim.loop.cwd() or ""
+	-- end
+	-- return dir:gsub("^" .. vim.env.HOME, "~")
 end
 --
 -- -- return {}
@@ -135,7 +141,7 @@ return {
 					-- Close explorer when file is selected
 					close_on_select = false,
 					-- Auto-confirm simple file operations
-					confirm_simple = false,
+					confirm_simple = true,
 					-- Replace netrw as default explorer
 					default_explorer = false,
 					-- Move deleted files/directories to the system trash
@@ -155,17 +161,25 @@ return {
 								Copied = "~",
 								Conflict = "",
 								Ignored = " ",
+								-- Untracked = "",
+								-- Added = "",
+								-- Modified = "",
+								-- Deleted = "",
+								-- Renamed = "",
+								-- Copied = "",
+								-- Conflict = "",
+								-- Ignored = "",
 							},
-              -- symbols = {
-              --   Untracked = "",
-              --   Added = "",
-              --   Modified = "",
-              --   Deleted = "",
-              --   Renamed = "",
-              --   Copied = "",
-              --   Conflict = "",
-              --   Ignored = "",
-              -- },
+							-- symbols = {
+							--   Untracked = "",
+							--   Added = "",
+							--   Modified = "",
+							--   Deleted = "",
+							--   Renamed = "",
+							--   Copied = "",
+							--   Conflict = "",
+							--   Ignored = "",
+							-- },
 						},
 						diagnostic = {
 							enabled = false,
@@ -193,12 +207,19 @@ return {
 					},
 					-- Key mappings
 					mappings = {
-            ["gy"] = function(view)
-              local entry = view:cursor_node_entry()
-              local path = entry.path
-              vim.notify("Copied path: " .. path)
-              vim.fn.setreg("+", path)
-            end,
+						["gY"] = function(view)
+							local entry = view:cursor_node_entry()
+							local path = entry.path
+							local relative_path = vim.fn.fnamemodify(path, ":.")
+							vim.notify("Copied path: " .. relative_path)
+							vim.fn.setreg("+", relative_path)
+						end,
+						["gy"] = function(view)
+							local entry = view:cursor_node_entry()
+							local path = entry.path
+							vim.notify("Copied path: " .. path)
+							vim.fn.setreg("+", path)
+						end,
 						["K"] = function(view)
 							-- Check if we're already in a hover popup
 							local current_win = vim.api.nvim_get_current_win()
@@ -554,6 +575,9 @@ return {
 						["#"] = "CollapseAll",
 						-- ["<BS>"] = "CollapseNode",
 						["H"] = "CollapseNode",
+						-- ["gc"] = "SetCwdHere",
+						-- ["gC"] = "SetCwdToParent",
+						-- ["cd"] = "SetCwdToNode",
 					},
 					-- Current file tracking
 					follow_current_file = false,
@@ -633,6 +657,26 @@ return {
 			vim.cmd("hi FylerGitIconUntracked gui=none guifg=#89ddff")
 			vim.cmd("hi FylerGitModified gui=none guifg=none")
 			vim.cmd("hi FylerGitIconModified gui=none guifg=#F5E0DC")
+
+			-- local original_laststatus = vim.o.laststatus
+
+			-- vim.api.nvim_create_autocmd("FileType", {
+			-- 	pattern = "fyler",
+			-- 	callback = function()
+			-- 		vim.opt_local.laststatus = 0 -- Hide statusline globally
+			-- 	end,
+			-- })
+			--
+			-- -- -- Restore when leaving fyler buffer
+			-- vim.api.nvim_create_autocmd("BufLeave", {
+			-- 	pattern = "*",
+			-- 	callback = function()
+			-- 		if vim.bo.filetype == "fyler" then
+			-- 			vim.o.laststatus = original_laststatus -- Restore original value
+			-- 		end
+			-- 	end,
+			-- })
+
 			-- vim.api.nvim_set_hl(0, "FylerGitIconUntracked", { fg = "#ff0000", bold = true })
 			-- vim.api.nvim_set_hl(0, "FylerGitIconModified", { fg = "#ff8800", bold = true })
 			--

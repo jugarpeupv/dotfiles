@@ -408,7 +408,7 @@ return {
 					disabled_filetypes = {
 						-- statusline = { "alpha", "dashboard", "NvimTree", "Outline", "Diffview", "diffview" },
 						-- 'NvimTree',
-						statusline = { "alpha", "dashboard", "Outline", "Diffview", "diffview", "intro", "NvimTree" },
+						statusline = { "alpha", "dashboard", "Outline", "Diffview", "diffview", "intro", "NvimTree", "fyler" },
 						winbar = {
 							"oil",
 							"help",

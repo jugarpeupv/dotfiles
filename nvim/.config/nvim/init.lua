@@ -175,12 +175,21 @@ local function restore_last_worktree()
   -- end)
 
 	vim.schedule(function()
-		vim.cmd.cd(last_active_wt)
-    require("fyler").open({ dir = last_active_wt, kind = "replace" })
+    local success_cd, _ = pcall(vim.cmd.cd, last_active_wt)
+    if not success_cd then
+      vim.cmd.cd(vim.loop.cwd())
+    end
+    -- require("oil").open(last_active_wt)
+    -- require("fyler").open({ dir = last_active_wt, kind = "replace" })
+    local success, _ = pcall(require("fyler").open, { dir = last_active_wt, kind = "replace" })
+    if not success then
+      require("fyler").open({ dir = vim.loop.cwd(), kind = "replace" })
+    end
 		-- vim.defer_fn(function()
 		-- 	require("oil").open(last_active_wt)
 		-- end, 100)
 	end)
+
 end
 
 if should_restore_worktree() then
@@ -192,6 +201,9 @@ if should_restore_worktree() then
 else
   vim.schedule(function()
     local path = vim.v.argv[3]
+    if not path then
+      return
+    end
     require("fyler").open({ dir = path, kind = "replace" })
   end)
 end

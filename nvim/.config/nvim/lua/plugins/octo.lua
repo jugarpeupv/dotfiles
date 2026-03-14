@@ -22,15 +22,21 @@ return {
 			{
 				mode = { "n" },
 				"<leader>or",
-				"<cmd>Octo search is:pr involves:GPJULI6_mapfre state:open<cr>",
+				":Octo search is:pr involves:GPJULI6_mapfre state:open",
 				{ noremap = true, silent = true },
 			},
 			{
 				mode = { "n" },
-				"<leader>op",
-				"<cmd>Octo search author:GPJULI6_mapfre is:pr is:open owner:mapfre-tech<cr>",
+				"<leader>oP",
+				":Octo search author:GPJULI6_mapfre is:pr is:open owner:mapfre-tech",
 				{ noremap = true, silent = true },
 			},
+      {
+        mode = { "n" },
+        "<leader>op",
+        ":Octo pr create",
+        { noremap = true, silent = true },
+      },
 			{
 				mode = { "n" },
 				"<leader>os",
@@ -53,7 +59,7 @@ return {
 			-- picker = "snacks", -- 'telescope' or 'fzf-lua'
 			-- picker = "snacks", -- 'telescope' or 'fzf-lua'
 			-- picker = "fzf-lua", -- 'telescope' or 'fzf-lua'
-			picker = "telescope", -- 'telescope' or 'fzf-lua'
+			picker = "snacks", -- 'telescope' or 'fzf-lua'
 			-- picker = "fzf-lua",
 			default_to_projects_v2 = true,
 			picker_config = {

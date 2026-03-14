@@ -116,7 +116,8 @@ return {
 					"Avante",
 					"dockerfile",
 					"regex",
-					"lua"
+					"lua",
+          "rust"
 				},
 				callback = function()
 					-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
@@ -229,22 +230,22 @@ return {
 			},
 			-- Repeat movement with ; and ,
 			-- ensure ; goes forward and , goes backward regardless of the last direction
-			{
-				mode = { "n", "x", "o" },
-				";",
-				function()
-					require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_next()
-				end,
-				{ expr = true },
-			},
-			{
-				mode = { "n", "x", "o" },
-				",",
-				function()
-					require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_previous()
-				end,
-				{ expr = true },
-			},
+			-- {
+			-- 	mode = { "n", "x", "o" },
+			-- 	";",
+			-- 	function()
+			-- 		require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_next()
+			-- 	end,
+			-- 	{ expr = true },
+			-- },
+			-- {
+			-- 	mode = { "n", "x", "o" },
+			-- 	",",
+			-- 	function()
+			-- 		require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_previous()
+			-- 	end,
+			-- 	{ expr = true },
+			-- },
 		},
 		config = function()
 			-- configuration
@@ -287,7 +288,7 @@ return {
 		keys = {
 			{
 				mode = { "n" },
-				"<leader>ce",
+				"<leader>cE",
 				function()
 					require("treesitter-context").toggle()
 				end,

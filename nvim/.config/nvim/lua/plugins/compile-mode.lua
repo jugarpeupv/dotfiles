@@ -11,8 +11,8 @@ local function jump_to_compilation_buffer()
 				for _, win in ipairs(windows) do
 					if vim.api.nvim_win_get_buf(win) == buf then
 						vim.api.nvim_set_current_win(win)
-            -- require("baleia").setup({}).automatically(buf)
-            -- -- vim.g.baleia.automatically(buf)
+						-- require("baleia").setup({}).automatically(buf)
+						-- -- vim.g.baleia.automatically(buf)
 						return
 					end
 				end
@@ -78,11 +78,15 @@ return {
 		vim.g.compile_mode = {
 			baleia_setup = true,
 			use_diagnostics = false,
-			error_locus_highlight = false,
+			-- error_locus_highlight = false,
+			hidden_buffer = false,
+			focus_compilation_buffer = false,
+			use_circular_error_navigation = false,
 			ask_about_save = false,
+			auto_jump_to_first_error = false,
 			ask_to_interrupt = false,
-      use_pseudo_terminal = true,
-      auto_scroll = true,
+			use_pseudo_terminal = true,
+			auto_scroll = false,
 			error_regexp_table = {
 				typescript = {
 					-- TypeScript errors take the form
@@ -92,29 +96,49 @@ return {
 					row = 2,
 					col = 3,
 				},
+				rust = {
+					-- Rust errors take the form
+					-- "--> path/to/error-file.rs:12:20"
+					regex = "^[[:space:]]*--> \\(.\\+\\):\\([1-9][0-9]*\\):\\([1-9][0-9]*\\)",
+					filename = 1,
+					row = 2,
+					col = 3,
+				},
 			},
 		}
 
 		vim.api.nvim_create_autocmd("FileType", {
 			pattern = "compilation",
-      group = vim.api.nvim_create_augroup('ftcompilemode', { clear = true }),
+			group = vim.api.nvim_create_augroup("ftcompilemode", { clear = true }),
 			callback = function()
-				vim.bo.buflisted = true
-				vim.keymap.set({ "n" }, "<C-q>", function()
-					require("compile-mode").add_to_qflist()
-					print("Added all errors to quickfix list")
-				end, { noremap = true, silent = true, buffer = true })
+				-- vim.bo.buflisted = true
+				-- vim.keymap.set({ "n" }, "<C-q>", function()
+				-- 	require("compile-mode").add_to_qflist()
+				-- 	print("Added all errors to quickfix list")
+				-- end, { noremap = true, silent = true, buffer = true })
 
 				vim.keymap.set({ "n" }, "r", "<Cmd>Recompile<CR>", { noremap = true, silent = true, buffer = true })
+
+				vim.keymap.set({ "n" }, "<c-q>", function()
+					require("compile-mode").send_to_qflist()
+          vim.cmd("copen")
+				end, { noremap = true, silent = true, buffer = true })
+
 				vim.keymap.set(
 					{ "n" },
-					"sn",
+					"<C-S-O>",
+					"<Cmd>CompileGotoError<CR>",
+					{ noremap = true, silent = true, buffer = true }
+				)
+				vim.keymap.set(
+					{ "n" },
+					"<C-S-N>",
 					"<Cmd>CompileNextError<CR>",
 					{ noremap = true, silent = true, buffer = true }
 				)
 				vim.keymap.set(
 					{ "n" },
-					"sp",
+					"<C-S-P>",
 					"<Cmd>CompilePrevError<CR>",
 					{ noremap = true, silent = true, buffer = true }
 				)

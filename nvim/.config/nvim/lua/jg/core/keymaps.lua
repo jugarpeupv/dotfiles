@@ -139,7 +139,8 @@ end, opts)
 vim.keymap.set({ "n" }, "<leader>cd", function()
 	local cwd = vim.fn.expand("%:p:h")
 	-- vim.cmd("lcd " .. cwd)
-	require("nvim-tree.api").tree.change_root(cwd)
+	-- require("nvim-tree.api").tree.change_root(cwd)
+  require("fyler").set_current_dir(cwd)
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>.", function()
@@ -342,7 +343,7 @@ vim.keymap.set({ "n" }, "<leader>sE", function()
 	})
 end, opts)
 
-keymap("n", "<leader>cE", function()
+keymap("n", "<leader>CE", function()
 	require("telescope.builtin").colorscheme()
 end, opts)
 
@@ -718,18 +719,6 @@ vim.keymap.set("n", "J", "mzJ`z", opts)
 
 vim.keymap.set("n", "<leader>rc", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", opts)
 
--- Trouble
--- vim.keymap.set("n", "<leader>xx", "<cmd>TroubleToggle<cr>", { silent = true, noremap = true })
-vim.keymap.set("n", "<leader>xw", "<cmd>Trouble diagnostics toggle<cr>", { silent = true, noremap = true })
-vim.keymap.set("n", "<leader>xd", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", { silent = true, noremap = true })
--- vim.keymap.set("n", "<leader>tl", "<cmd>Trouble loclist toggle<cr>", { silent = true, noremap = true })
-vim.keymap.set("n", "<leader>xq", "<cmd>Trouble qflist toggle<cr>", { silent = true, noremap = true })
-
-vim.keymap.set("n", "<leader>xo", "<cmd>Trouble symbols toggle<cr>", { silent = true, noremap = true })
--- vim.keymap.set("n", "gR", "<cmd>TroubleToggle lsp_references<cr>",
---   { silent = true, noremap = true }
--- )
-
 -- vim.cmd([[tnoremap <C-n> <C-\><C-n>]])
 vim.cmd([[tnoremap <C-Space> <C-\><C-n>]])
 
@@ -739,8 +728,8 @@ vim.keymap.set("n", "<leader>ih", function()
 	vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, opts)
 
-vim.cmd([[nmap <leader>tw :tabnew %<CR>]])
-vim.cmd([[nmap <leader>cc :tabclose<CR>]])
+vim.keymap.set("n", "<leader>tw", "<cmd>tabnew %<cr>", { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>cc", "<cmd>tabclose<cr>", { silent = true, noremap = true })
 
 vim.keymap.set("n", "<leader>ta", require("jg.custom.telescope").curr_buf, {})
 
@@ -753,26 +742,7 @@ vim.keymap.set("n", "<leader>te", function()
 	})
 end, { silent = true })
 
--- vim.api.nvim_set_keymap("n", "gn", "<cmd> lua require('illuminate').goto_next_reference()<cr>", opts)
---
--- vim.api.nvim_set_keymap("n", "gN", "<cmd> lua require('illuminate').goto_prev_reference()<cr>", opts)
-
--- vim.cmd([[nnoremap * /\<<C-R>=expand('<cword>')<CR>\><CR>]])
--- vim.cmd([[nnoremap # ?\<<C-R>=expand('<cword>')<CR>\><CR>]])
-
--- vim.keymap.set("i", "<Tab>", function()
---   if require("copilot.suggestion").is_visible() then
---     require("copilot.suggestion").accept()
---   else
---     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
---   end
--- end, { desc = "Super Tab" })
-
-vim.cmd([[nnoremap <F6> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>Acd $VIM_DIR<CR>]])
-
--- vim.keymap.set("n", "<M-i>", "<cmd>split term://%:p:h//zsh<cr>", opts)
 vim.keymap.set("n", "<leader>ct", function()
-	---@diagnostic disable-next-line: redundant-parameter
 	require("terminal").run("", {
 		cwd = vim.fn.expand("%:p:h"),
 	})
@@ -792,28 +762,8 @@ vim.keymap.set("n", "<leader>bb", function()
 	btop_term:toggle(nil, true)
 end, opts)
 
--- vim.keymap.set({ "i", "s" }, "<C-e>", function()
---   local ls = require("luasnip")
---   if ls.jumpable(-1) then
---     ls.jump(-1)
---   end
--- end, { silent = true })
---
--- vim.keymap.set({ "i", "s" }, "<C-f>", function()
---   local ls = require("luasnip")
---   if ls.expand_or_jumpable() then
---     ls.expand_or_jump()
---   end
--- end, { silent = true })
-
--- using 0 register
--- vim.keymap.set({ "n" }, "<leader><leader>y", [["0yy]])                              -- copy to 0 register
--- vim.keymap.set({ "x" }, "<leader><leader>y", [["0y]])                               -- copy to 0 register
-
 vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true }) -- paste from 0 register
-
 vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
-
 vim.keymap.set({ "n" }, "<leader>bI", ":Bufferize Inspect<cr>", { silent = true }) -- paste from 0 register
 
 -- local function show_documentation()
@@ -881,7 +831,7 @@ vim.keymap.set("n", "K", show_documentation, { silent = true })
 -- vim.keymap.set({ "n" }, "<leader>wd", "<cmd>windo diffthis<cr>", opts) -- copy to 0 register
 vim.keymap.set({ "n" }, "<leader>wd", function()
 	vim.cmd([[highlight DiffDelete guifg=#011528]])
-	vim.cmd("NvimTreeClose")
+	-- vim.cmd("NvimTreeClose")
 	vim.cmd("windo diffthis")
 	require("barbecue.ui").toggle(false)
 end, opts) -- copy to 0 register
@@ -940,12 +890,63 @@ vim.keymap.set({ "n" }, "<leader>bp", "<cmd>bp<cr>", opts)
 
 vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
 
-vim.keymap.set({ "n" }, "<M-b>", function()
-	-- if vim.g.compile_command ~= "" then
-	-- 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(vim.g.compile_command, true, false, true), "n", true)
-	-- 	return
-	-- end
+-- Track the command line content before leaving
+vim.g._last_cmdline = ""
+vim.g._cmdwin_executed = false
 
+vim.api.nvim_create_autocmd("CmdlineChanged", {
+	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = true }),
+	pattern = ":",
+	callback = function()
+		vim.g._last_cmdline = vim.fn.getcmdline()
+	end,
+})
+
+-- Save Compile commands when they're executed from command-line window (C-f)
+-- This fires BEFORE CmdlineLeave, so we set a flag
+vim.api.nvim_create_autocmd("CmdwinLeave", {
+	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = false }),
+	pattern = ":",
+	callback = function()
+		-- Get the line under cursor in the cmdwin buffer before it closes
+		local cmd = vim.fn.getline(".")
+		if cmd and cmd:match("^Compile ") then
+			vim.g._saved_compile_cmd = cmd
+			vim.g._cmdwin_executed = true
+			print("Saved (cmdwin):", vim.g._saved_compile_cmd)
+		end
+	end,
+})
+
+-- Save Compile commands when they're executed from normal command line
+-- Only save if it wasn't already saved from cmdwin
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = false }),
+	pattern = ":",
+	callback = function()
+		-- If we just executed from cmdwin, skip this to avoid overwriting
+		if vim.g._cmdwin_executed then
+			vim.g._cmdwin_executed = false
+			return
+		end
+		local cmd = vim.g._last_cmdline
+		if cmd and cmd:match("^Compile ") then
+			vim.g._saved_compile_cmd = cmd
+			print("Saved (cmdline):", vim.g._saved_compile_cmd)
+		end
+	end,
+})
+
+vim.keymap.set({ "n" }, "<M-b>", function()
+	-- If we have a saved compile command, populate it (without executing)
+	if vim.g._saved_compile_cmd ~= nil and vim.g._saved_compile_cmd ~= "" then
+		print("Restoring:", vim.g._saved_compile_cmd)
+		local cmd_to_feed = ":" .. vim.g._saved_compile_cmd
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd_to_feed, true, false, true), "n", true)
+		return
+	end
+
+	-- Otherwise, generate a new command based on filetype
 	local current_buf_name = vim.fn.expand("%")
 
 	local function get_filetype_alias()
@@ -957,6 +958,8 @@ vim.keymap.set({ "n" }, "<M-b>", function()
 			return "bun"
 		elseif filetype == "c" then
 			return "cc"
+		elseif filetype == "rust" then
+			return "cargo run"
 		else
 			return "make"
 		end
@@ -965,8 +968,13 @@ vim.keymap.set({ "n" }, "<M-b>", function()
 	local executable = get_filetype_alias()
 
 	local command = ":Compile " .. executable .. " " .. current_buf_name
-	vim.g.compile_command = command
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(command, true, false, true), "n", true)
+end, opts)
+
+-- Reset the saved compile command
+vim.keymap.set({ "n" }, "<leader>cb", function()
+	vim.g._saved_compile_cmd = ""
+	print("Compile command memory cleared")
 end, opts)
 
 vim.api.nvim_set_keymap("i", "<C-e>", "<C-o>$", { noremap = true, silent = true })
@@ -1251,7 +1259,9 @@ vim.keymap.set("n", "<leader>TD", toggle_diffopt, { desc = "Toggle diffopt setti
 -- 	require("telescope").extensions.yaml_schema.yaml_schema({})
 -- end, opts)
 
-vim.keymap.set("n", "<leader>gm", function()
+vim.keymap.set("n", "<leader>gm", ":Git merge origin/", { noremap = true })
+
+vim.keymap.set("n", "<leader>gM", function()
 	local pickers = require("telescope.pickers")
 	local finders = require("telescope.finders")
 	local conf = require("telescope.config").values
@@ -1332,18 +1342,12 @@ vim.keymap.set("n", "<leader>df", function()
 	end
 
 	-- Construct the DiffviewOpen command
-	local diffview_command = string.format(":CodeDiff %s...%s", default_branch, current_branch)
+	-- local diffview_command = string.format(":CodeDiff %s...%s", default_branch, current_branch)
+  local diffview_command = string.format(":DiffviewOpen %s..%s", default_branch, current_branch)
 	-- Populate the command line using vim.api.nvim_feedkeys
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
 
--- vim.keymap.set("i", "<C-j>", "<C-n>", { noremap = true })
--- vim.keymap.set("i", "<C-k>", "<C-p>", { noremap = true })
-
--- vim.keymap.set({ "v" }, "<C-x><C-f>", function()
--- 	print("Fuzzy complete path")
--- 	require("fzf-lua").complete_path()
--- end, { silent = true, desc = "Fuzzy complete path" })
 
 vim.keymap.set("n", "<leader>tp", function()
 	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_pendientes.md")
@@ -1803,8 +1807,7 @@ vim.api.nvim_create_user_command("DecodeJWT", function()
 	end
 end, {})
 
-
-vim.keymap.set('i', '<C-k>', '<c-o>D<esc>', { desc = 'Kill to end of line' })
+vim.keymap.set("i", "<C-k>", "<c-o>D<esc>", { desc = "Kill to end of line" })
 
 -- vim.keymap.set('i', '<C-k>', function()
 --   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-o>D', true, false, true), 'n', false)
@@ -1837,12 +1840,9 @@ vim.keymap.set('i', '<C-k>', '<c-o>D<esc>', { desc = 'Kill to end of line' })
 --   end
 -- end, { expr = true })
 
-
 -- vim.keymap.set('n', '<C-w>=', function()
 --   vim.cmd('windo wincmd =')
 -- end, { desc = "Show layout and equalize windows" })
-
-
 
 -- vim.o.wildcharm = vim.fn.char2nr("<C-v>")  -- or: vim.o.wildcharm = 26
 
@@ -1851,37 +1851,36 @@ vim.cmd([[set wildcharm=<C-v>]])
 vim.cmd([[inoremap <C-l> <C-y>]])
 -- vim.cmd([[cnoremap <C-l> <C-y><C-v>]])
 -- vim.cmd([[cnoremap <C-l> <C-y><C-z>]])
-vim.keymap.set('c', '<C-l>', function()
-  if vim.fn.pumvisible() == 1 then
-    return '<C-y><C-v>'
-  else
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<tab>", true, false, true), "t", false)
-    return
-  end
+vim.keymap.set("c", "<C-l>", function()
+	if vim.fn.pumvisible() == 1 then
+		return "<C-y><C-v>"
+	else
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<tab>", true, false, true), "t", false)
+		return
+	end
 end, { expr = true })
 
 -- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
 
-
 -- neovim does not complete entries where there are only .files --> https://github.com/neovim/neovim/issues/35111
 vim.keymap.set("c", "<Tab>", function()
-  if vim.fn.wildmenumode() == 1 then
-    return "<C-v>"
-  end
+	if vim.fn.wildmenumode() == 1 then
+		return "<C-v>"
+	end
 
-  local cmdline = vim.fn.getcmdline()
-  local pos = vim.fn.getcmdpos()
-  local expanded = vim.fn.getcompletion(cmdline:sub(1, pos - 1), "cmdline")
-  if #expanded > 0 then
-    return "<C-v>"
-  end
+	local cmdline = vim.fn.getcmdline()
+	local pos = vim.fn.getcmdpos()
+	local expanded = vim.fn.getcompletion(cmdline:sub(1, pos - 1), "cmdline")
+	if #expanded > 0 then
+		return "<C-v>"
+	end
 
-  local new_cmdline_with_dot = cmdline:sub(1, pos - 1) .. "." .. cmdline:sub(pos)
-  -- if there are results with a dot (.) is inserted in the prompt
-  local expanded_with_dot = vim.fn.getcompletion(new_cmdline_with_dot, "cmdline")
-  if #expanded_with_dot > 0 then
-    vim.fn.setcmdline(new_cmdline_with_dot, pos + 1)
-    return "<C-v>"
-  end
-  -- No results — insert a dot and re-trigger completion
+	local new_cmdline_with_dot = cmdline:sub(1, pos - 1) .. "." .. cmdline:sub(pos)
+	-- if there are results with a dot (.) is inserted in the prompt
+	local expanded_with_dot = vim.fn.getcompletion(new_cmdline_with_dot, "cmdline")
+	if #expanded_with_dot > 0 then
+		vim.fn.setcmdline(new_cmdline_with_dot, pos + 1)
+		return "<C-v>"
+	end
+	-- No results — insert a dot and re-trigger completion
 end, { expr = true })

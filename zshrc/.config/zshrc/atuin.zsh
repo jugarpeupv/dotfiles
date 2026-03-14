@@ -49,6 +49,7 @@ atuin-setup() {
     # autoload -U edit-command-line
     zle -N edit-command-line
     bindkey '^X^E' edit-command-line
+    # **Alt + d** (or **Escape, then d**)
     bindkey '^[d' kill-word
     # bindkey '^p' history-search-backward
     # bindkey '^n' history-search-forward

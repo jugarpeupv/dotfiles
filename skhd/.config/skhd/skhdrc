@@ -7,6 +7,7 @@ shift + alt - return : osascript ~/.config/skhd/Scripts/new-space.scpt
 
 # shift + cmd - n : osascript ~/.config/skhd/Scripts/kitty-original.scpt
 shift + alt - n : osascript ~/.config/skhd/Scripts/kitty-original.scpt
+shift + alt + ctrl - n : osascript ~/.config/skhd/Scripts/kitty-alone.scpt
 # shift + alt - c : osascript ~/.config/skhd/Scripts/new-capcut-window.scpt
 # shift + alt - p : osascript ~/.config/skhd/Scripts/new-brave-window.scpt
 # shift + alt - p : osascript ~/.config/skhd/Scripts/new-chrome-window.scpt

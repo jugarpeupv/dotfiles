@@ -198,7 +198,7 @@ disabled = true
 
 [rust]
 format = "[$symbol$version]($style) "
-style = "bold green"
+style = "#F5C2E7"
 
 [bun]
 disabled = false

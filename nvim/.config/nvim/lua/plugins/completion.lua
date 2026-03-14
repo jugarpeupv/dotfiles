@@ -47,7 +47,7 @@ return {
 				["<C-space>"] = {
 					function(cmp)
 						if cmp.is_menu_visible() then
-							cmp.close()
+							cmp.hide()
 						else
 							cmp.show()
 						end
@@ -272,7 +272,7 @@ return {
 					-- Delay before showing the completion menu while typing
 					-- auto_show_delay_ms = 100,
 					auto_show = function()
-						return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode"
+            return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode"
 					end,
 					border = "rounded",
 					draw = {
@@ -348,7 +348,7 @@ return {
 					-- "conventional_commits",
 				},
 				per_filetype = {
-					["opencode"] = { "buffer", "path" },
+          ["opencode"] = { "buffer", "path", "lsp" },
 					["codecompanion"] = { "buffer", "path" },
 					["octo"] = {
 						"git",

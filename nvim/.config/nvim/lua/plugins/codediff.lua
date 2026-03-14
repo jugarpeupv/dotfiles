@@ -4,7 +4,7 @@ return {
 		dependencies = { "MunifTanjim/nui.nvim" },
     -- dir = "~/projects/codediff.nvim/wt-feature-toggle_layout/",
     -- dev = true,
-		enabled = true,
+		enabled = false,
 		cmd = { "CodeDiff" },
 		keys = {
 			{ "<leader>gd", mode = "n", "<cmd>CodeDiff<cr>" },
@@ -27,7 +27,7 @@ return {
         layout = "side-by-side",
 				cycle_next_hunk = false,
 				disable_inlay_hints = true, -- Disable inlay hints in diff windows for cleaner view
-        jump_to_first_change = false,
+        jump_to_first_change = true,
 				max_computation_time_ms = 5000, -- Maximum time for diff computation (VSCode default)
 			},
 
@@ -35,7 +35,7 @@ return {
 			explorer = {
 				position = "left", -- "left" or "bottom"
 				width = 40, -- Width when position is "left" (columns)
-				height = 20, -- Height when position is "bottom" (lines)
+				height = 15, -- Height when position is "bottom" (lines)
 				indent_markers = true, -- Show indent markers in tree view (│, ├, └)
 				flatten_dirs = false,
 				initial_focus = "modified", -- Initial focus: "explorer", "original", or "modified"
@@ -80,6 +80,7 @@ return {
 					discard_hunk = "<leader>hr", -- Discard hunk under cursor (working tree only)
 					hunk_textobject = "ih", -- Textobject for hunk (vih to select, yih to yank, etc.)
 					show_help = "g?", -- Show floating window with available keymaps
+          toggle_layout = "t"
 				},
 				explorer = {
 					select = "<CR>", -- Open diff for selected file

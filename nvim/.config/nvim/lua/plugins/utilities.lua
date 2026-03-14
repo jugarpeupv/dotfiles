@@ -125,7 +125,7 @@ return {
 	},
 	{
 		"Avi-D-coder/whisper.nvim",
-		enabled = true,
+		enabled = false,
 		config = function()
 			require("whisper").setup({
 				model = "base.en",
@@ -383,7 +383,7 @@ return {
 	-- 	},
 	-- },
 	-- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
-	{ "junegunn/gv.vim", enabled = false, dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
+	{ "junegunn/gv.vim", enabled = true, dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
 	{
 		"alex-popov-tech/store.nvim",
 		-- dependencies = { "OXY2DEV/markview.nvim" },
@@ -1083,10 +1083,24 @@ return {
 			},
 			{
 				mode = { "n" },
-				"<Leader>gl",
+				"<leader>gl",
 				"<cmd>Git log -20<cr>",
 				{ silent = true, noremap = true },
 			},
+      {
+        mode = { "n" },
+        "<leader>gL",
+        function()
+          local cmd_run = ":vertical Git log main -20"
+          local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
+          vim.api.nvim_feedkeys(keys, "c", true)
+
+          local hops =
+          string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), 4)
+          vim.api.nvim_feedkeys(hops, "n", true)
+        end,
+        { silent = true, noremap = true },
+      },
 		},
 	},
 	{ "stsewd/fzf-checkout.vim", keys = { { "<leader>GT", "<cmd>GTags<CR>" } } },

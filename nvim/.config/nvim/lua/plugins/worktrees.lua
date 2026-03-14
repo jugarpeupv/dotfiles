@@ -8,8 +8,8 @@ return {
 	-- "jugarpeupv/git-worktree.nvim",
 	-- version = "^2",
 	-- "jugarpeupv/git-worktree.nvim",
-  dev = true,
-  dir = "~/projects/git-worktree.nvim",
+	dev = true,
+	dir = "~/projects/git-worktree.nvim",
 	enabled = function()
 		local is_headless = #vim.api.nvim_list_uis() == 0
 		if is_headless then
@@ -177,17 +177,24 @@ return {
 			else
 				update_on_switch(path, prev_path)
 			end
+
+			local Path = require("plenary.path")
+			-- vim.schedule(function()
+			-- end)
+			local new_path = Path:new(path):absolute()
+			require("fyler").set_current_dir(new_path)
+			-- require("fyler").navigate(Path:new(path):absolute())
+			-- require("fyler").open({ dir = Path:new(path):absolute(), kind = "replace" })
 		end)
 
 		Hooks.register(Hooks.type.CREATE, function(path, branch, upstream)
-			local relative_path = path
 			local Path = require("plenary.path")
 			local original_path = ""
 			if not Path:new(path):is_absolute() then
-				original_path = Path:new():absolute():gsub("/wt%-[^/]+/?$", "/")
+				original_path = Path:new():absolute()
 			end
-			local prev_node_modules_path = original_path .. "/node_modules"
-			local worktree_path = original_path .. "/" .. relative_path
+			local prev_node_modules_path = original_path .. "node_modules"
+			local worktree_path = Path:new(original_path .. path):absolute()
 			local destination_path = worktree_path .. "/node_modules"
 
 			local prev_node_modules_exists = vim.fn.isdirectory(prev_node_modules_path)
@@ -209,20 +216,23 @@ return {
 				require("oil").open(worktree_path)
 				return
 			end
+
+			if current_buffer_filetype == "fyler" then
+				require("fyler").set_current_dir(worktree_path)
+			end
 		end)
 
 		Hooks.register(Hooks.type.DELETE, function(path)
 			for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
 				if vim.api.nvim_buf_is_loaded(bufnr) then
 					local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
-					if ft ~= "NvimTree" then
+					if ft ~= "NvimTree" and ft ~= "oil" and ft ~= "fyler" then
 						vim.api.nvim_buf_delete(bufnr, { force = true })
 					end
 				end
 			end
-			-- local api_nvimtree = require("nvim-tree.api")
-			-- api_nvimtree.git.reload()
-			-- api_nvimtree.tree.reload()
+			local root_path = path:gsub("/wt%-[^/]+/?$", "/")
+			require("fyler").set_current_dir(root_path)
 		end)
 	end,
 }

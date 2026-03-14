@@ -199,10 +199,12 @@ return {
 		dependencies = {
 			{
 				"igorlfs/nvim-dap-view",
-				enabled = false,
+				enabled = true,
 				---@module 'dap-view'
 				---@type dapview.Config
 				opts = {
+          -- auto_toggle = "keep_terminal",
+          auto_toggle = false,
 					winbar = {
 						show = true,
 						-- You can add a "console" section to merge the terminal with the other views
@@ -228,7 +230,7 @@ return {
 						-- 	console = "[C]",
 						-- },
 						controls = {
-							enabled = false,
+							enabled = true,
 							position = "right",
 							-- buttons = {
 							-- 	"play",
@@ -254,19 +256,19 @@ return {
 							custom_buttons = {},
 						},
 					},
-					windows = {
-						height = 12,
-						terminal = {
-							-- 'left'|'right'|'above'|'below': Terminal position in layout
-							position = "left",
-							-- List of debug adapters for which the terminal should be ALWAYS hidden
-							hide = { "go" },
-							-- Hide the terminal when starting a new session
-							start_hidden = false,
-						},
-					},
+					-- windows = {
+					-- 	-- height = 12,
+					-- 	terminal = {
+					-- 		-- 'left'|'right'|'above'|'below': Terminal position in layout
+					-- 		position = "left",
+					-- 		-- List of debug adapters for which the terminal should be ALWAYS hidden
+					-- 		hide = { "delve" },
+					-- 		-- Hide the terminal when starting a new session
+					-- 		start_hidden = false,
+					-- 	},
+					-- },
 					-- Controls how to jump when selecting a breakpoint or navigating the stack
-					switchbuf = "useopen,usetab",
+					switchbuf = "usevisible,useopen,usetab",
 				},
 			},
 			-- {
@@ -289,6 +291,7 @@ return {
 			},
 			{
 				"rcarriga/nvim-dap-ui",
+        enabled = false,
 				dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
 				config = function()
 					require("dapui").setup()
@@ -352,9 +355,9 @@ return {
 			-- 	args = {'-e'};
 			-- }
 
-			dap.defaults.fallback.terminal_win_cmd = "50split new"
-
-			dap.defaults.fallback.focus_terminal = true
+      dap.defaults.fallback.switchbuf = "usevisible,useopen,usetab" -- See :h dap-defaults to learn more
+			dap.defaults.fallback.terminal_win_cmd = "10split new"
+			dap.defaults.fallback.focus_terminal = false
 
 			if not dap.adapters["pwa-node"] then
 				require("dap").adapters["pwa-node"] = {
@@ -554,11 +557,11 @@ return {
 			-- 	dv.close()
 			-- end
 
-			local dapui = require("dapui")
+			-- local dapui = require("dapui")
 
-			dap.listeners.after.event_initialized["dapui_config"] = function()
-				dapui.open()
-			end
+			-- dap.listeners.after.event_initialized["dapui_config"] = function()
+			-- 	dapui.open()
+			-- end
 
 			-- dap.listeners.before.attach["dapui_config"] = function()
 			--   dapui.open()

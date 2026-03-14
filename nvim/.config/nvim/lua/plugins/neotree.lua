@@ -4,14 +4,18 @@ return {}
 -- 	{
 -- 		"nvim-neo-tree/neo-tree.nvim",
 -- 		branch = "v3.x",
---     enabled = false,
+-- 		enabled = false,
 -- 		dependencies = {
 -- 			"nvim-lua/plenary.nvim",
 -- 			"MunifTanjim/nui.nvim",
 -- 			"nvim-tree/nvim-web-devicons", -- optional, but recommended
 -- 		},
 -- 		lazy = true, -- neo-tree will lazily load itself
---     cmd = { "Neotree" },
+-- 		cmd = { "Neotree" },
+-- 		keys = {
+-- 			{ mode = {"n"}, "<M-k>", "<cmd>Neotree reveal<cr>", { noremap = true, silent = true } },
+-- 			{ mode = {"n"}, "<M-j>", "<cmd>Neotree toggle<cr>", { noremap = true, silent = true } },
+-- 		},
 -- 		config = function()
 -- 			---@type neotree.Config.Base
 -- 			local config = {
@@ -25,7 +29,7 @@ return {}
 -- 					"git_status",
 -- 					-- "document_symbols",
 -- 				},
--- 				add_blank_line_at_top = true, -- Add a blank line at the top of the tree.
+-- 				add_blank_line_at_top = false, -- Add a blank line at the top of the tree.
 -- 				auto_clean_after_session_restore = false, -- Automatically clean up broken neo-tree buffers saved in sessions
 -- 				clipboard = {
 -- 					sync = "universal", -- or "global"/"universal" to share a clipboard for each/all Neovim instance(s), respectively
@@ -252,8 +256,8 @@ return {}
 -- 						highlight = "NeoTreeModified",
 -- 					},
 -- 					name = {
--- 						trailing_slash = false,
--- 						highlight_opened_files = false, -- Requires `enable_opened_markers = true`.
+-- 						trailing_slash = true,
+-- 						highlight_opened_files = true, -- Requires `enable_opened_markers = true`.
 -- 						-- Take values in { false (no highlight), true (only loaded),
 -- 						-- "all" (both loaded and unloaded)}. For more information,
 -- 						-- see the `show_unloaded` config of the `buffers` source.
@@ -297,7 +301,7 @@ return {}
 -- 						--format = require("neo-tree.utils").relative_date, -- enable relative timestamps
 -- 					},
 -- 					created = {
--- 						enabled = false,
+-- 						enabled = true,
 -- 						width = 20, -- width of the column
 -- 						required_width = 120, -- min width of window required to show this column
 -- 						format = "%Y-%m-%d %I:%M %p", -- format string for timestamp (see `:h os.date()`)
@@ -305,7 +309,7 @@ return {}
 -- 						--format = require("neo-tree.utils").relative_date, -- enable relative timestamps
 -- 					},
 -- 					symlink_target = {
--- 						enabled = false,
+-- 						enabled = true,
 -- 						text_format = " ➛ %s", -- %s will be replaced with the symlink target's path.
 -- 					},
 -- 				},
@@ -552,7 +556,7 @@ return {}
 -- 					-- check gitignore status for files/directories when searching.
 -- 					-- setting this to false will speed up searches, but gitignored
 -- 					-- items won't be marked if they are visible.
--- 					check_gitignore_in_search = true,
+-- 					check_gitignore_in_search = false,
 -- 					filtered_items = {
 -- 						visible = false, -- when true, they will just be displayed differently than normal items
 -- 						force_visible_in_empty_folder = false, -- when true, hidden files will be shown if the root folder is otherwise empty
