@@ -1862,6 +1862,32 @@ end, { expr = true })
 
 -- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
 
+vim.keymap.set("n", "<leader>ms", function()
+	vim.notify("Syncing email...", vim.log.levels.INFO)
+	local stderr_lines = {}
+	vim.fn.jobstart("mbsync izertis-channel && notmuch new", {
+		on_stderr = function(_, data)
+			for _, line in ipairs(data) do
+				if line ~= "" then
+					table.insert(stderr_lines, line)
+				end
+			end
+		end,
+		on_exit = function(_, code)
+			if code == 0 then
+				vim.schedule(function()
+					vim.notify("Email synced properly", vim.log.levels.INFO)
+				end)
+			else
+				vim.schedule(function()
+					local reason = #stderr_lines > 0 and ("\n" .. table.concat(stderr_lines, "\n")) or ""
+					vim.notify("Email sync failed (exit code: " .. code .. ")" .. reason, vim.log.levels.ERROR)
+				end)
+			end
+		end,
+	})
+end, { desc = "Sync email (mbsync + notmuch)" })
+
 -- neovim does not complete entries where there are only .files --> https://github.com/neovim/neovim/issues/35111
 vim.keymap.set("c", "<Tab>", function()
 	if vim.fn.wildmenumode() == 1 then

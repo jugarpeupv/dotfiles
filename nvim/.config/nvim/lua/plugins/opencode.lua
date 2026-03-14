@@ -177,7 +177,7 @@ return {
 						always_scroll_to_bottom = false,
 					},
 					questions = {
-						use_vim_ui_select = true, -- If true, render questions with vim.ui.select instead of in the output buffer
+						use_vim_ui_select = false, -- If true, render questions with vim.ui.select instead of in the output buffer
 					},
           input = {
             min_height = 0.30, -- min height of prompt input as percentage of window height

@@ -8,6 +8,7 @@ UserCmd "op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal"
 Pass ""
 TLSType None
 AuthMech LOGIN
+Timeout 100
 
 IMAPStore izertis-remote
 Account izertis
