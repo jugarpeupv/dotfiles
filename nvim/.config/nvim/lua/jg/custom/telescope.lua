@@ -1755,27 +1755,93 @@ end
 M.find_in_node_modules = function()
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local conf = require("telescope.config").values
+	local uv = vim.loop
 
-	local cwd = vim.loop.cwd()
+	local cwd = uv.cwd()
 	if not cwd then
 		vim.notify("Could not get current working directory", vim.log.levels.ERROR)
 		return
 	end
-	local node_modules_path = cwd .. "/node_modules"
-	local bun_node_modules_path = cwd .. "/node_modules/.bun"
-	if vim.fn.isdirectory(bun_node_modules_path) == 1 then
-		node_modules_path = bun_node_modules_path
+
+	-- Collect all node_modules paths to search across.
+	-- In a bun workspace the root node_modules/.bun holds the hoisted flat store,
+	-- but each workspace package may also have its own node_modules.
+	local function collect_node_modules_paths()
+		local paths = {}
+		local seen = {}
+
+		local function add(p)
+			if not seen[p] and vim.fn.isdirectory(p) == 1 then
+				seen[p] = true
+				table.insert(paths, p)
+			end
+		end
+
+		-- Root node_modules (bun symlinks live here with proper package names)
+		add(cwd .. "/node_modules")
+
+		-- Detect bun/npm workspaces by reading root package.json
+		local pkg_json_path = cwd .. "/package.json"
+		local f = io.open(pkg_json_path, "r")
+		if f then
+			local content = f:read("*a")
+			f:close()
+			local ok, pkg = pcall(vim.json.decode, content)
+			if ok and pkg then
+				-- workspaces can be an array or { packages = [...] }
+				local ws_patterns = {}
+				if type(pkg.workspaces) == "table" then
+					if vim.islist(pkg.workspaces) then
+						ws_patterns = pkg.workspaces
+					elseif type(pkg.workspaces.packages) == "table" then
+						ws_patterns = pkg.workspaces.packages
+					end
+				end
+
+				for _, pattern in ipairs(ws_patterns) do
+					-- Expand simple globs: "libs/*" -> iterate libs/
+					local base, glob = pattern:match("^(.-)/%*(.*)$")
+					if base then
+						local base_path = cwd .. "/" .. base
+						local dir = uv.fs_opendir(base_path, nil, 64)
+						if dir then
+							while true do
+								local entries = uv.fs_readdir(dir)
+								if not entries then
+									break
+								end
+								for _, ent in ipairs(entries) do
+									if ent.type == "directory" then
+										local ws_nm = base_path .. "/" .. ent.name .. "/node_modules"
+										add(ws_nm)
+									end
+								end
+							end
+							uv.fs_closedir(dir)
+						end
+					else
+						-- Exact path (no glob)
+						add(cwd .. "/" .. pattern .. "/node_modules")
+					end
+				end
+			end
+		end
+
+		return paths
 	end
 
-	local function open_nvim_tree(prompt_bufnr, map)
+	local node_modules_paths = collect_node_modules_paths()
+
+	local function open_fyler(prompt_bufnr, map)
 		local function remove_dir(node)
 			local selection = action_state.get_selected_entry()
 			if not selection then
 				print("No directory selected!")
 				return
 			end
-			-- local dir_to_remove = selection.value
-
 			local api_nvimtree = require("nvim-tree.api")
 			api_nvimtree.fs.trash(node)
 			api_nvimtree.tree.reload()
@@ -1799,71 +1865,84 @@ M.find_in_node_modules = function()
 				fyler.open()
 			end
 
-			local uv = vim.loop
-
 			if uv.fs_stat(selection.value .. "/package.json") then
 				fyler.navigate(selection.value .. "/package.json")
 			else
 				fyler.navigate(selection.value)
 			end
-
-			-- local api = require("nvim-tree.api")
-			--
-			-- actions.close(prompt_bufnr)
-			-- local selection = action_state.get_selected_entry()
-			-- api.tree.open()
-			--
-			-- local uv = vim.loop
-			--
-			-- if uv.fs_stat(selection.value .. "/package.json") then
-			--   api.tree.find_file(selection.value .. "/package.json")
-			-- else
-			--   api.tree.find_file(selection.value)
-			-- end
 		end
-		actions.select_default:replace(default_action)
 
+		actions.select_default:replace(default_action)
 		map("n", "<C-x>", remove_dir)
 		map("i", "<C-x>", remove_dir)
-
 		map("n", "<C-v>", default_action)
 		map("i", "<C-v>", default_action)
 		return true
 	end
 
-	require("telescope.builtin").find_files({
-		prompt_title = 'Find dependency in "node_modules"',
-		find_command = {
-			"fd",
-			".",
-			node_modules_path,
-			"--no-ignore",
-			"--type",
-			"dir",
-			"--max-depth",
-			"2",
-			"--exclude",
-			"node_modules/*/node_modules",
-			-- "--prune",
-		},
-		attach_mappings = open_nvim_tree,
-		entry_maker = function(entry)
-			return {
-				value = entry,
-				display = function()
-					local cwd_current = vim.loop.cwd()
-					if not cwd_current then
-						return entry
-					end
-					local cwd_dos = cwd_current:gsub("%-", "%%%-")
-					local modified_entry = entry:gsub(cwd_dos .. "/", "")
-					local display_string = "  " .. modified_entry
-					return display_string, { { { 0, 1 }, "Directory" } }
-				end,
-				ordinal = entry,
-			}
-		end,
+	-- Build a single fd command that searches all collected paths.
+	-- fd requires a pattern as first argument; "." matches everything.
+	local find_command = { "fd", "." }
+	for _, p in ipairs(node_modules_paths) do
+		table.insert(find_command, p)
+	end
+	vim.list_extend(find_command, {
+		"--no-ignore",
+		"--type",
+		"dir",
+		"--max-depth",
+		"2",
+		"--follow",
 	})
+
+	-- A valid package entry is either:
+	--   node_modules/pkg          (non-scoped, depth 1)
+	--   node_modules/@scope/pkg   (scoped, depth 2)
+	-- Anything deeper is an internal directory of the package itself.
+	local function is_package_entry(entry)
+		-- Strip trailing slash if present
+		local e = entry:gsub("/$", "")
+		-- Match the last node_modules segment and what follows
+		local after = e:match(".*/node_modules/(.+)$")
+		if not after then
+			return false
+		end
+		if after:sub(1, 1) == "@" then
+			-- scoped: must be exactly @scope/pkg (no further slash)
+			return after:match("^@[^/]+/[^/]+$") ~= nil
+		else
+			-- non-scoped: must be exactly pkg (no slash)
+			return after:match("^[^/]+$") ~= nil
+		end
+	end
+
+	local cwd_escaped = cwd:gsub("%-", "%%%-")
+	local title = #node_modules_paths > 1
+		and string.format('Find dependency across %d node_modules', #node_modules_paths)
+		or 'Find dependency in "node_modules"'
+
+	pickers
+		.new({}, {
+			prompt_title = title,
+			finder = finders.new_oneshot_job(find_command, {
+				entry_maker = function(entry)
+					if not is_package_entry(entry) then
+						return nil
+					end
+					return {
+						value = entry,
+						display = function()
+							local display_string = "  " .. entry:gsub(cwd_escaped .. "/", "")
+							return display_string, { { { 0, 1 }, "Directory" } }
+						end,
+						ordinal = entry,
+					}
+				end,
+			}),
+			sorter = conf.generic_sorter({}),
+			attach_mappings = open_fyler,
+		})
+		:find()
 end
 
 return M
