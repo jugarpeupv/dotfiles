@@ -7,9 +7,9 @@ return {
 	-- "polarmutex/git-worktree.nvim",
 	-- "jugarpeupv/git-worktree.nvim",
 	-- version = "^2",
-	-- "jugarpeupv/git-worktree.nvim",
-	dev = true,
-	dir = "~/projects/git-worktree.nvim",
+	"jugarpeupv/git-worktree.nvim",
+	-- dev = true,
+	-- dir = "~/projects/git-worktree.nvim",
 	enabled = function()
 		local is_headless = #vim.api.nvim_list_uis() == 0
 		if is_headless then
@@ -26,11 +26,12 @@ return {
 			"<leader>wt",
 			function()
 				local git_path = vim.fn.getcwd() .. "/.git"
-				if vim.fn.isdirectory(git_path) == 1 then
+        local head_path = vim.fn.getcwd() .. "/HEAD"
+        local is_on_worktree_root = vim.fn.filereadable(head_path) == 1
+
+				if vim.fn.isdirectory(git_path) == 1 and not is_on_worktree_root then
 					vim.notify("Not in a bare repo", vim.log.levels.INFO)
-				elseif vim.fn.filereadable(git_path) == 1 then
-					require("telescope").extensions.git_worktree.git_worktree()
-				elseif vim.fn.filereadable(vim.fn.getcwd() .. "HEAD") then
+        elseif vim.fn.filereadable(git_path) == 1 or is_on_worktree_root then
 					require("telescope").extensions.git_worktree.git_worktree()
 				else
 					vim.notify(".git not found", vim.log.levels.WARN)
@@ -46,9 +47,12 @@ return {
 			"<leader>wc",
 			function()
 				local git_path = vim.fn.getcwd() .. "/.git"
-				if vim.fn.isdirectory(git_path) == 1 then
+        local head_path = vim.fn.getcwd() .. "/HEAD"
+        local is_on_worktree_root = vim.fn.filereadable(head_path) == 1
+
+				if vim.fn.isdirectory(git_path) == 1 and not is_on_worktree_root then
 					vim.notify("Not in a bare repo", vim.log.levels.INFO)
-				elseif vim.fn.filereadable(git_path) == 1 or vim.fn.filereadable(vim.fn.getcwd() .. "HEAD") then
+				elseif vim.fn.filereadable(git_path) == 1 or is_on_worktree_root then
 					require("telescope").extensions.git_worktree.create_git_worktree()
 				else
 					vim.notify(".git not found", vim.log.levels.WARN)
@@ -184,7 +188,7 @@ return {
 			local new_path = Path:new(path):absolute()
 			require("fyler").set_current_dir(new_path)
 			-- require("fyler").navigate(Path:new(path):absolute())
-			-- require("fyler").open({ dir = Path:new(path):absolute(), kind = "replace" })
+			require("fyler").open({ dir = Path:new(path):absolute(), kind = "replace" })
 		end)
 
 		Hooks.register(Hooks.type.CREATE, function(path, branch, upstream)

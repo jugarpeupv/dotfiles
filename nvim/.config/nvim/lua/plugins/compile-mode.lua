@@ -26,9 +26,12 @@ local function jump_to_compilation_buffer()
 end
 
 return {
-	"ej-shafran/compile-mode.nvim",
+	-- "ej-shafran/compile-mode.nvim",
+	 -- dir = "~/projects/compile-mode.nvim/wt-compile-mode-main/",
+	 -- dev = true,
+  "jugarpeupv/compile-mode.nvim",
 	-- tag = "v5.*",
-	branch = "latest",
+	-- branch = "latest",
 	cmd = {
 		"Compile",
 		"Recompile",
@@ -86,7 +89,7 @@ return {
 			auto_jump_to_first_error = false,
 			ask_to_interrupt = false,
 			use_pseudo_terminal = true,
-			auto_scroll = false,
+			auto_scroll = true,
 			error_regexp_table = {
 				typescript = {
 					-- TypeScript errors take the form

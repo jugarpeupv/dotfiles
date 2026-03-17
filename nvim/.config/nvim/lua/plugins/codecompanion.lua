@@ -490,7 +490,7 @@ Output only the commit message without any explanations and follow-up suggestion
 			-- },
 			{
 				mode = { "n", "v", "t" },
-				"<M-m>",
+				"<C-.>",
 				function()
 					-- vim.cmd("CodeCompanionChat Toggle")
 					require("codecompanion").toggle()
@@ -500,14 +500,6 @@ Output only the commit message without any explanations and follow-up suggestion
 					-- vim.schedule(function ()
 					--   vim.cmd('normal! zz')
 					-- end)
-				end,
-			},
-			{
-				mode = { "n", "v", "t" },
-				"<D-m>",
-				function()
-					require("codecompanion").toggle()
-					vim.cmd("normal! zz")
 				end,
 			},
 			-- { mode = { "n", "v" }, "<leader>ca", "<cmd>CodeCompanionChat Toggle<CR>" },

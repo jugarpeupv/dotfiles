@@ -1,4 +1,3 @@
-# vim:fileencoding=utf-8:foldmethod=marker
 #: Fonts {{{
 
 #: kitty has very powerful font management. You can configure
@@ -514,7 +513,7 @@ text_composition_strategy 0.5 15
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 19
+font_size 21
 
 #: Font size (in pts)
 
@@ -1340,7 +1339,7 @@ mouse_hide_wait 0.1
 #: start_resizing_window. The cells value is used for horizontal
 #: resizing, and the lines value is used for vertical resizing.
 
-window_border_width 8px
+window_border_width 1px
 
 #: The width of window borders. Can be either in pixels (px) or pts
 #: (pt). Values in pts will be rounded to the nearest number of pixels
@@ -1348,14 +1347,14 @@ window_border_width 8px
 #: to be pts. Note that borders are displayed only when more than one
 #: window is visible. They are meant to separate multiple windows.
 
-draw_minimal_borders 10
+draw_minimal_borders yes
 
 #: Draw only the minimum borders needed. This means that only the
 #: borders that separate the inactive window from a neighbor are
 #: drawn. Note that setting a non-zero window_margin_width overrides
 #: this and causes all borders to be drawn.
 
-window_margin_width 10
+window_margin_width 0
 
 #: The window margin (in pts) (blank area outside the border). A
 #: single value sets all four sides. Two values set the vertical and
@@ -2158,6 +2157,7 @@ macos_option_as_alt no
 map cmd+k no_op
 map cmd+m no_op
 map cmd+f no_op
+map cmd+l no_op
 
 #:     map kitty_mod+space no_op
 
@@ -2926,10 +2926,12 @@ map shift+ctrl+j send_text all \x1b\x38
 map shift+ctrl+k send_text all \x1b\x36
 
 
-# keymap("n", "<M-u>", "<cmd>trouble next<cr>", opts)
-map shift+ctrl+n send_text all \x1b\x75
-# keymap("n", "<M-y>", "<cmd>trouble prev<cr>", opts)
-map shift+ctrl+p send_text all \x1b\x79
+map ctrl+return send_text all \x1b[13;5u
+
+map ctrl+shift+o send_text all \x1b[79;6u
+
+map ctrl+shift+n send_text all \x1b[78;6u
+map ctrl+shift+p send_text all \x1b[80;6u
 
 # https://www.physics.udel.edu/~watson/scen103/ascii.html
 # C-a --> x01
@@ -3224,12 +3226,12 @@ color15 #7C7F93
 
 
 # # BEGIN_KITTY_FONTS
-font_family      family="Liga DejaVu Sans Mono"
-bold_font        auto
-italic_font      auto
-bold_italic_font auto
-adjust_line_height  8
-adjust_column_width 0
+# font_family      family="Liga DejaVu Sans Mono"
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+# adjust_line_height  8
+# adjust_column_width 0
 # # END_KITTY_FONTS
 
 
@@ -3281,11 +3283,36 @@ map ctrl+shift+i send_text all \x1b[73;6u
 map ctrl+. send_text all \x1b[46;5u
 
 
+
+window_margin_width 0
+single_window_margin_width 0
+window_padding_width 4 0 0 10
+
+# tab_bar_filter session:~ or session:^$
+# tab_title_template "{session_name} {title}"
+#
+# map f7>s save_as_session --use-foreground-process --base-dir ~/.local/share/kitty/sessions
+#
+# map f7>l goto_session ~/.local/share/kitty/sessions
+#
+#
+# map f7>o send_text normal,application kitty_projects\r
+#
+# map f7>j send_text normal,application pruebas\r
+#
+#
+# map ctrl+shift+p launch --type=overlay --allow-remote-control zsh -ic '~/dotfiles/bin/.config/bin/kitty-sessionizer.sh'
+#
+
+
+
 # BEGIN_KITTY_FONTS
-# font_family      family="Iosevka"
-# bold_font        auto
-# italic_font      auto
-# bold_italic_font auto
-# adjust_line_height  4
-# adjust_column_width 1
+font_family      family=Iosevka postscript_name=Iosevka features=ss04
+bold_font        family=Iosevka style='Medium' features=+ss04
+italic_font      family=Iosevka postscript_name=Iosevka-Italic features=ss04
+bold_italic_font family=Iosevka postscript_name=Iosevka-Italic features=ss04
+adjust_line_height  8
+adjust_column_width 2
 # END_KITTY_FONTS
+#
+font_size 25

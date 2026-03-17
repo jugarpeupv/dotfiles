@@ -2,17 +2,29 @@ return {
 	{
 		"sudo-tee/opencode.nvim",
 		enabled = true,
-		dev = true,
-		dir = "~/projects/opencode.nvim/wt-main",
+		-- dev = true,
+		dir = "~/projects/opencode.nvim/wt-feature-ctrl-w-o/",
 		lazy = true,
 		keys = {
-			{
-				mode = { "n", "v" },
-				"<C-.>",
-				function()
-					require("opencode.api").toggle()
-				end,
-			},
+			-- {
+			-- 	mode = { "n", "v" },
+			-- 	"<C-.>",
+			-- 	function()
+			-- 		require("opencode.api").toggle()
+			-- 	end,
+			-- },
+      {
+        mode = { "v" },
+        "<leader>oa",
+        function()
+          local start_pos = vim.fn.getpos("'<")
+          local end_pos = vim.fn.getpos("'>")
+          require("opencode.api").add_visual_selection_inline({ open_input = true}, {
+            start = start_pos[2],
+            stop = end_pos[2],
+          })
+        end,
+      },
 			{
 				mode = { "n", "v" },
 				"<M-m>",
@@ -31,15 +43,40 @@ return {
 		config = function()
 			-- Default configuration with all available options
 			require("opencode").setup({
-				preferred_picker = "snacks",
+				preferred_picker = "telescope",
 				preferred_completion = "blink",
 				default_global_keymaps = false,
 				default_mode = "build",
 				keymap_prefix = "<leader>o",
         -- server = false,
+        hooks = {
+          on_done_thinking = function()
+            -- Custom logic when thinking is done
+            print("Done thinking!")
+          end,
+        },
 				keymap = {
+          session_picker = {
+            rename_session = { '<C-r>' }, -- Rename selected session in the session picker
+            delete_session = { '<C-d>' }, -- Delete selected session in the session picker
+            new_session = { '<C-s>' }, -- Create and switch to a new session in the session picker
+          },
+          timeline_picker = {
+            undo = { '<C-u>', mode = { 'i', 'n' } }, -- Undo to selected message in timeline picker
+            fork = { '<C-f>', mode = { 'i', 'n' } }, -- Fork from selected message in timeline picker
+          },
+          history_picker = {
+            delete_entry = { '<C-d>', mode = { 'i', 'n' } }, -- Delete selected entry in the history picker
+            clear_all = { '<C-X>', mode = { 'i', 'n' } }, -- Clear all entries in the history picker
+          },
+          model_picker = {
+            toggle_favorite = { '<C-f>', mode = { 'i', 'n' } },
+          },
+          mcp_picker = {
+            toggle_connection = { '<C-t>', mode = { 'i', 'n' } }, -- Toggle MCP server connection in the MCP picker
+          },
 					editor = {
-						["<C-.>"] = { "toggle" }, -- Open opencode. Close if opened
+						-- ["<C-.>"] = { "toggle" }, -- Open opencode. Close if opened
 						["<M-m>"] = { "toggle" }, -- Open opencode. Close if opened
 						["<D-m>"] = { "toggle" }, -- Open opencode. Close if opened
             ['<leader>og'] = false,
@@ -53,7 +90,9 @@ return {
             ['<leader>oR'] = { 'rename_session' }, -- Rename current session
             ['<leader>oP'] = { 'configure_provider' }, -- Quick provider and model switch from predefined list
             ['<leader>oV'] = { 'configure_variant' }, -- Switch model variant for the current model
-            ['ga'] = { 'add_visual_selection', mode = {'v'} },
+            -- ['ga'] = { 'add_visual_selection', mode = {'v'} },
+            ['<leader>oa'] =  { 'add_visual_selection_inline',  mode = { 'v' },      desc = 'Insert visual selection inline into input' },
+            -- ['<leader>oa'] = { 'add_visual_selection_inline', { open_input = false }, mode = {'v'} },
             ['<leader>oz'] = { 'toggle_zoom' }, -- Zoom in/out on the Opencode windows
             ['<leader>ov'] = { 'paste_image'}, -- Paste image from clipboard into current session
             ['<leader>od'] = { 'diff_open' }, -- Opens a diff tab of a modified file since the last opencode prompt
@@ -162,6 +201,16 @@ return {
 					},
 				},
 				ui = {
+          enable_treesitter_markdown = true, -- Use Treesitter for markdown rendering in the output window (default: true).
+          position = 'right', -- 'right' (default), 'left' or 'current'. Position of the UI split. 'current' uses the current window for the output.
+          input_position = 'bottom', -- 'bottom' (default) or 'top'. Position of the input window
+          window_width = 0.45, -- Width as percentage of editor width
+          zoom_width = 0.8, -- Zoom width as percentage of editor width
+          display_model = true, -- Display model name on top winbar
+          display_context_size = true, -- Display context size in the footer
+          display_cost = true, -- Display cost in the footer
+          -- window_highlight = 'Normal:OpencodeBackground,FloatBorder:OpencodeBorder', -- Highlight group for the opencode window
+          persist_state = true, -- Keep buffers when toggling/closing UI so window state restores quickly
           buflisted = true,  -- OpenCode buffers won't be closed by :only
 					output = {
 						rendering = {
@@ -172,7 +221,7 @@ return {
 						},
 						tools = {
 							show_output = true,
-							show_reasoning_output = true,
+							show_reasoning_output = false,
 						},
 						always_scroll_to_bottom = false,
 					},
@@ -187,10 +236,7 @@ return {
               cursorline   = true,
               number       = false,
               relativenumber = false,
-              -- conceallevel = 0,
               foldcolumn   = '0',
-              -- statuscolumn = '',
-              -- any other :h window-variable option
             },
             text = {
               wrap = true, -- Wraps text inside input window
@@ -199,6 +245,36 @@ return {
             auto_hide = false,
           },
 				},
+        context = {
+          enabled = true, -- Enable automatic context capturing
+          cursor_data = {
+            enabled = false, -- Include cursor position and line content in the context
+            context_lines = 5, -- Number of lines before and after cursor to include in context
+          },
+          diagnostics = {
+            info = false, -- Include diagnostics info in the context (default to false
+            warning = false, -- Include diagnostics warnings in the context
+            error = true, -- Include diagnostics errors in the context
+            only_closest = false, -- If true, only diagnostics for cursor/selection
+          },
+          current_file = {
+            enabled = true, -- Include current file path and content in the context
+            show_full_path = true,
+          },
+          files = {
+            enabled = false,
+            show_full_path = true,
+          },
+          selection = {
+            enabled = true, -- Include selected text in the context
+          },
+          buffer = {
+            enabled = false, -- Disable entire buffer context by default, only used in quick chat
+          },
+          git_diff = {
+            enabled = false,
+          },
+        },
 			})
 		end,
 		dependencies = {

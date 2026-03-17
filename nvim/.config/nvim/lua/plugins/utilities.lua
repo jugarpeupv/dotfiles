@@ -1060,7 +1060,7 @@ return {
 			{
 				mode = { "n" },
 				"<leader>gF",
-				"<cmd>Git! fetch --all --tags -v --force<cr>",
+				":Git! fetch --all --tags -v --prune --force",
 				{ silent = true, noremap = true },
 			},
 			{
@@ -1091,7 +1091,7 @@ return {
         mode = { "n" },
         "<leader>gL",
         function()
-          local cmd_run = ":vertical Git log main -20"
+          local cmd_run = ":vertical Git log develop -20"
           local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
           vim.api.nvim_feedkeys(keys, "c", true)
 

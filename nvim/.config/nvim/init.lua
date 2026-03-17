@@ -124,9 +124,9 @@ local function should_restore_worktree()
 		return false
 	end
 
-  if not vim.list_contains(vim.v.argv, ".") then
-    return false
-  end
+	if not vim.list_contains(vim.v.argv, ".") then
+		return false
+	end
 
 	-- C-x C-e
 	-- { "nvim", "--embed", "-c", "normal! 19go", "--", "/tmp/zshBXRabd.zsh" }
@@ -145,6 +145,23 @@ local function should_restore_worktree()
 	return true
 end
 
+local function find_buffer_by_path(target_path)
+	-- Normalize the target path
+	local normalized = vim.fn.fnamemodify(target_path, ":p")
+
+	for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+		-- Only consider loaded/valid buffers
+		if vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted then
+			local bufname = vim.api.nvim_buf_get_name(bufnr)
+			if vim.fn.fnamemodify(bufname, ":p") == normalized then
+				return bufnr
+			end
+		end
+	end
+
+	return nil
+end
+
 local function restore_last_worktree()
 	local cwd = vim.loop.cwd()
 	if not cwd then
@@ -161,35 +178,53 @@ local function restore_last_worktree()
 		vim.schedule(function()
 			-- require("oil").open(cwd)
 			-- require("fyler").open(cwd)
-      require("fyler").open({ dir = cwd, kind = "replace" })
+			local fyler = require("fyler")
+			-- fyler.open({ dir = cwd, kind = "replace" })
+      fyler.open({ dir = cwd })
 		end)
 		return
 	end
 	local last_active_wt = data.last_active_wt
 
-  -- local api_nvimtree = require("nvim-tree.api")
-  -- api_nvimtree.events.subscribe(api_nvimtree.events.Event.Ready, function()
-  --   vim.wo.statusline = " "
-  --   vim.opt.laststatus = 3
-  --   api_nvimtree.tree.change_root(last_active_wt)
-  -- end)
+	-- local api_nvimtree = require("nvim-tree.api")
+	-- api_nvimtree.events.subscribe(api_nvimtree.events.Event.Ready, function()
+	--   vim.wo.statusline = " "
+	--   vim.opt.laststatus = 3
+	--   api_nvimtree.tree.change_root(last_active_wt)
+	-- end)
 
 	vim.schedule(function()
-    local success_cd, _ = pcall(vim.cmd.cd, last_active_wt)
-    if not success_cd then
-      vim.cmd.cd(vim.loop.cwd())
-    end
-    -- require("oil").open(last_active_wt)
-    -- require("fyler").open({ dir = last_active_wt, kind = "replace" })
-    local success, _ = pcall(require("fyler").open, { dir = last_active_wt, kind = "replace" })
-    if not success then
-      require("fyler").open({ dir = vim.loop.cwd(), kind = "replace" })
-    end
+		local cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
+		-- vim.cmd("bwipeout " .. cwd_buffer_nr)
+		local success_cd, _ = pcall(vim.cmd.cd, last_active_wt)
+		if not success_cd then
+			vim.cmd.cd(vim.loop.cwd())
+		end
+
+		-- require("oil").open(last_active_wt)
+		-- require("fyler").open({ dir = last_active_wt, kind = "replace" })
+		local fyler = require("fyler")
+
+		-- local ok = pcall(fyler.open, { dir = last_active_wt, kind = "replace" })
+    local ok = pcall(fyler.open, { dir = last_active_wt })
+		if not ok then
+			-- fyler.open({ dir = vim.loop.cwd(), kind = "replace" })
+      fyler.open({ dir = vim.loop.cwd()  })
+		end
+
+		local win = vim.fn.bufwinid(cwd_buffer_nr)
+		if win ~= -1 and #vim.api.nvim_tabpage_list_wins(0) > 1 then
+			vim.api.nvim_win_close(win, true)
+		end
+		-- Then wipe the buffer
+		if not cwd_buffer_nr then
+			return
+		end
+		vim.api.nvim_buf_delete(cwd_buffer_nr, { force = true })
 		-- vim.defer_fn(function()
 		-- 	require("oil").open(last_active_wt)
 		-- end, 100)
 	end)
-
 end
 
 if should_restore_worktree() then
@@ -199,11 +234,28 @@ if should_restore_worktree() then
 		callback = restore_last_worktree,
 	})
 else
-  vim.schedule(function()
-    local path = vim.v.argv[3]
-    if not path then
-      return
-    end
-    require("fyler").open({ dir = path, kind = "replace" })
-  end)
+	vim.schedule(function()
+		local path = vim.v.argv[3]
+		if not path then
+			return
+		end
+
+		if vim.fn.isdirectory(path) == 1 then
+			local fyler = require("fyler")
+			-- fyler.open({ dir = path, kind = "replace" })
+      fyler.open({ dir = path  })
+			local cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
+			local win = vim.fn.bufwinid(cwd_buffer_nr)
+			if win ~= -1 then
+				vim.api.nvim_win_close(win, true)
+			end
+			-- Then wipe the buffer
+			if not cwd_buffer_nr then
+				return
+			end
+			vim.api.nvim_buf_delete(cwd_buffer_nr, { force = true })
+		else
+			return
+		end
+	end)
 end

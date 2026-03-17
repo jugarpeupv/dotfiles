@@ -13,26 +13,16 @@ function _G.FylerWinbarCwd()
 	end
 	return dir:gsub("^" .. vim.env.HOME, "~")
 
-	-- local bufname = vim.api.nvim_buf_get_name(0)
-	-- local dir = bufname:match("^fyler://%d+//(.+)$")
-	-- if not dir then
-	--   dir = vim.loop.cwd() or ""
-	-- end
-	-- return dir:gsub("^" .. vim.env.HOME, "~")
 end
---
--- -- return {}
 return {
 	{
 		-- "A7Lavinraj/fyler.nvim",
+    "jugarpeupv/fyler.nvim",
 		dir = "~/projects/fyler.nvim/wt-main",
 		dev = true,
 		enabled = true,
-		lazy = true,
+		lazy = false,
 		cmd = { "Fyler" },
-		-- event = { "VeryLazy" },
-		-- branch = "stable",
-		-- branch = "main",
 		dependencies = {
 			{ "nvim-tree/nvim-web-devicons" },
 		},
@@ -154,7 +144,6 @@ return {
 							enabled = true,
 							symbols = {
 								Untracked = "?",
-								Added = "+",
 								Staged = "+",
 								Unstaged = "!",
 								Deleted = "✗",
@@ -624,7 +613,7 @@ return {
 								width = "30%",
 							},
 							split_left_most = {
-								width = "30%",
+								width = "25%",
 							},
 							split_right = {
 								width = "30%",
@@ -654,40 +643,10 @@ return {
 			require("fyler").setup(opts)
 			vim.cmd("hi FylerGitStaged gui=none guifg=none")
 			vim.cmd("hi FylerGitIconStaged gui=none guifg=#8ee2cf")
-			vim.cmd("hi link FylerGitAdded FylerGitStaged")
-			vim.cmd("hi link FylerGitIconAdded FylerGitIconStaged")
 			vim.cmd("hi FylerGitUnstaged gui=none guifg=none")
 			vim.cmd("hi FylerGitIconUnstaged gui=none guifg=#F5E0DC")
 			vim.cmd("hi FylerGitUntracked gui=none guifg=none")
 			vim.cmd("hi FylerGitIconUntracked gui=none guifg=#89ddff")
-
-			-- local original_laststatus = vim.o.laststatus
-
-			-- vim.api.nvim_create_autocmd("FileType", {
-			-- 	pattern = "fyler",
-			-- 	callback = function()
-			-- 		vim.opt_local.laststatus = 0 -- Hide statusline globally
-			-- 	end,
-			-- })
-			--
-			-- -- -- Restore when leaving fyler buffer
-			-- vim.api.nvim_create_autocmd("BufLeave", {
-			-- 	pattern = "*",
-			-- 	callback = function()
-			-- 		if vim.bo.filetype == "fyler" then
-			-- 			vim.o.laststatus = original_laststatus -- Restore original value
-			-- 		end
-			-- 	end,
-			-- })
-
-			-- vim.api.nvim_set_hl(0, "FylerGitIconUntracked", { fg = "#ff0000", bold = true })
-			-- vim.api.nvim_set_hl(0, "FylerGitIconModified", { fg = "#ff8800", bold = true })
-			--
-			-- -- Or make the filename dimmer while keeping the icon bright
-			-- vim.api.nvim_set_hl(0, "FylerGitUntracked", { fg = "#888888" })
-			-- -- FylerGitIconUntracked still links to the original cyan by default,
-			-- -- but since the link target changed, you'd set it explicitly:
-			-- vim.api.nvim_set_hl(0, "FylerGitIconUntracked", { fg = "#00cccc" })
 		end,
 	},
 }
