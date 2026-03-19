@@ -3,7 +3,7 @@ return {
 		-- "olimorris/codecompanion.nvim",
 		"aweis89/codecompanion.nvim",
 		branch = "fix/acp-async-connection",
-    enabled = false,
+    enabled = true,
 		-- enabled = function()
 		-- 	local is_headless = #vim.api.nvim_list_uis() == 0
 		-- 	if is_headless then

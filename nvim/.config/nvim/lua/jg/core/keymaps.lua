@@ -859,6 +859,12 @@ vim.keymap.set({ "n" }, "<leader>sw", function()
 	vim.cmd([[set wrap!]])
 end, opts)
 
+vim.keymap.set({ "n" }, "<leader>sW", function()
+  -- run this command on modifiable windows
+  --   -- vim.wo.wrap = not vim.wo.wrap
+  vim.cmd([[set nowrap!]])
+end, opts)
+
 vim.keymap.set({ "n" }, "<leader>sn", function()
 	-- run this command on modifiable windows
 	--   -- vim.wo.wrap = not vim.wo.wrap

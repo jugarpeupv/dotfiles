@@ -1,12 +1,12 @@
 return {
 	{
 		"jugarpeupv/jsregex.nvim",
-    dev = true,
-    dir = "~/projects/jsregex.nvim/",
-    keys = {
-      { "<leader>js", "<cmd>JSRegexSearch<cr>", { silent = true } }
-    },
-    cmd = { "JSRegexSearch", "JSRegexClear"}
+		dev = true,
+		dir = "~/projects/jsregex.nvim/",
+		keys = {
+			{ "<leader>js", "<cmd>JSRegexSearch<cr>", { silent = true } },
+		},
+		cmd = { "JSRegexSearch", "JSRegexClear" },
 	},
 	{
 		"junegunn/vim-easy-align",
@@ -1087,20 +1087,19 @@ return {
 				"<cmd>Git log -20<cr>",
 				{ silent = true, noremap = true },
 			},
-      {
-        mode = { "n" },
-        "<leader>gL",
-        function()
-          local cmd_run = ":vertical Git log develop -20"
-          local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
-          vim.api.nvim_feedkeys(keys, "c", true)
+			{
+				mode = { "n" },
+				"<leader>gL",
+				function()
+					local cmd_run = ":vertical Git log develop -20"
+					local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
+					vim.api.nvim_feedkeys(keys, "c", true)
 
-          local hops =
-          string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), 4)
-          vim.api.nvim_feedkeys(hops, "n", true)
-        end,
-        { silent = true, noremap = true },
-      },
+					local hops = string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), 4)
+					vim.api.nvim_feedkeys(hops, "n", true)
+				end,
+				{ silent = true, noremap = true },
+			},
 		},
 	},
 	{ "stsewd/fzf-checkout.vim", keys = { { "<leader>GT", "<cmd>GTags<CR>" } } },

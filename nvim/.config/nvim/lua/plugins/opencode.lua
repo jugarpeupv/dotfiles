@@ -52,19 +52,13 @@ return {
 				hooks = {
 					on_done_thinking = function(session)
 						local cwd = session and session.workspace or vim.fn.getcwd()
-						-- local repo = vim.fn.fnamemodify(cwd, ":t")
 						local parts = vim.split(cwd, "/")
 						local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
-						local msg = "Opencode finished thinking"
+						local time = os.date("%H:%M")
+						local msg = time .. " Opencode finished "
 						if repo ~= "" then
-							msg = "OpenCode finished in:\n" .. repo
+							msg = msg .. " in:\n" .. repo
 						end
-						-- vim.fn.jobstart({
-						-- 	"osascript",
-						-- 	"-e",
-						-- 	string.format('display notification "%s" with title "Neovim"', msg),
-						-- }, { detach = true })
-
 						vim.fn.jobstart({
 							"terminal-notifier",
 							"-title",
@@ -270,37 +264,36 @@ return {
 						auto_hide = false,
 					},
 				},
-				context = {
-					enabled = true, -- Enable automatic context capturing
-					cursor_data = {
-						enabled = false, -- Include cursor position and line content in the context
-						context_lines = 5, -- Number of lines before and after cursor to include in context
-					},
-					diagnostics = {
-						info = false, -- Include diagnostics info in the context (default to false
-						warning = false, -- Include diagnostics warnings in the context
-						error = true, -- Include diagnostics errors in the context
-						only_closest = false, -- If true, only diagnostics for cursor/selection
-					},
-					current_file = {
-						enabled = true, -- Include current file path and content in the context
-						show_full_path = true,
-					},
-					files = {
-						enabled = false,
-						show_full_path = true,
-					},
-					selection = {
-						enabled = true, -- Include selected text in the context
-					},
-					buffer = {
-						enabled = false, -- Disable entire buffer context by default, only used in quick chat
-					},
-					git_diff = {
-						enabled = false,
-					},
-				},
 			})
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'OpencodeEvent:question.asked',
+        callback = function(args)
+          -- args.data.event.properties.questions
+          local questions = args.data.event.properties.questions
+          local session = args.data.event.properties.session
+          local workspace = (session and session.workspace) or vim.fn.getcwd()
+          local parts = vim.split(workspace, "/")
+          local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
+          local questions_text = ""
+          local time = os.date("%H:%M")
+          if questions then
+            local lines = {}
+            for _, q in ipairs(questions) do
+              table.insert(lines, q.question)
+            end
+            questions_text = "\n" .. table.concat(lines, "\n")
+          end
+          vim.fn.jobstart({
+            "terminal-notifier",
+            "-title",
+            "Neovim",
+            "-message",
+            time .. " OpenCode needs input in " .. repo .. ":" .. questions_text,
+            "-contentImage",
+            vim.fn.expand("~/.config/nvim/nvim.png"),
+          }, { detach = true })
+        end,
+      })
 		end,
 		dependencies = {
 			"nvim-lua/plenary.nvim",

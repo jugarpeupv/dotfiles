@@ -645,7 +645,7 @@ return {
 			vim.cmd("hi FylerGitIconStaged gui=none guifg=#8ee2cf")
 			vim.cmd("hi FylerGitUnstaged gui=none guifg=none")
 			vim.cmd("hi FylerGitIconUnstaged gui=none guifg=#F5E0DC")
-			vim.cmd("hi FylerGitUntracked gui=none guifg=none")
+			vim.cmd("hi FylerGitUntracked gui=none guifg=#89b4fa")
 			vim.cmd("hi FylerGitIconUntracked gui=none guifg=#89ddff")
 		end,
 	},

@@ -66,6 +66,28 @@ return {
 			end,
 			{ noremap = true, silent = true },
 		},
+		-- Global: jump to next/prev error from any buffer.
+		-- Opens the compilation buffer in a split if not visible,
+		-- moves the compilation cursor to the error, then jumps to source.
+		{
+			mode = { "n" },
+			"<C-S-N>",
+			"<Cmd>NextError<CR>",
+			{ noremap = true, silent = true, desc = "Next compile error" },
+		},
+		{
+			mode = { "n" },
+			"<C-S-P>",
+			"<Cmd>PrevError<CR>",
+			{ noremap = true, silent = true, desc = "Prev compile error" },
+		},
+		-- Global: recompile from any buffer.
+		{
+			mode = { "n" },
+			"<leader>ro",
+			"<Cmd>Recompile<CR>",
+			{ noremap = true, silent = true, desc = "Recompile" },
+		},
 	},
 	-- you can just use the latest version:
 	-- branch = "latest",
@@ -81,11 +103,11 @@ return {
 		vim.g.compile_mode = {
 			baleia_setup = true,
 			use_diagnostics = false,
-			-- error_locus_highlight = false,
+      error_locus_highlight = 500,
 			hidden_buffer = false,
-			focus_compilation_buffer = false,
-			use_circular_error_navigation = false,
-			ask_about_save = false,
+			focus_compilation_buffer = true,
+			use_circular_error_navigation = true,
+			ask_about_save = true,
 			auto_jump_to_first_error = false,
 			ask_to_interrupt = false,
 			use_pseudo_terminal = true,
@@ -102,10 +124,11 @@ return {
 				rust = {
 					-- Rust errors take the form
 					-- "--> path/to/error-file.rs:12:20"
-					regex = "^[[:space:]]*--> \\(.\\+\\):\\([1-9][0-9]*\\):\\([1-9][0-9]*\\)",
+					regex = "^[[:space:]]*--> \\([^:]*\\):\\([1-9][0-9]*\\):\\([1-9][0-9]*\\)",
 					filename = 1,
 					row = 2,
 					col = 3,
+					priority = 10,
 				},
 			},
 		}
