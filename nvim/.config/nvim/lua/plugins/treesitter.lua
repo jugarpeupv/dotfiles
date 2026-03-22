@@ -117,7 +117,8 @@ return {
 					"dockerfile",
 					"regex",
 					"lua",
-          "rust"
+          "rust",
+          "rust-docs"
 				},
 				callback = function()
 					-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
@@ -128,6 +129,7 @@ return {
 				end,
 			})
 
+      vim.treesitter.language.register("markdown", "rust-docs")
 			vim.treesitter.language.register("markdown", "codecompanion")
 			vim.treesitter.language.register("markdown", "opencode")
 			vim.treesitter.language.register("markdown", "octo")

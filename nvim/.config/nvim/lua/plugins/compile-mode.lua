@@ -12,7 +12,7 @@ local function jump_to_compilation_buffer()
 					if vim.api.nvim_win_get_buf(win) == buf then
 						vim.api.nvim_set_current_win(win)
 						-- require("baleia").setup({}).automatically(buf)
-						-- -- vim.g.baleia.automatically(buf)
+						-- vim.g.baleia.automatically(buf)
 						return
 					end
 				end
@@ -27,8 +27,8 @@ end
 
 return {
 	-- "ej-shafran/compile-mode.nvim",
-	 -- dir = "~/projects/compile-mode.nvim/wt-compile-mode-main/",
-	 -- dev = true,
+	-- dir = "~/projects/compile-mode.nvim/wt-compile-mode-main/",
+	-- dev = true,
   "jugarpeupv/compile-mode.nvim",
 	-- tag = "v5.*",
 	-- branch = "latest",
@@ -105,7 +105,7 @@ return {
 			use_diagnostics = false,
       error_locus_highlight = 500,
 			hidden_buffer = false,
-			focus_compilation_buffer = true,
+			focus_compilation_buffer = false,
 			use_circular_error_navigation = true,
 			ask_about_save = true,
 			auto_jump_to_first_error = false,

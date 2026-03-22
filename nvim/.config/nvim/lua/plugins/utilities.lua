@@ -1,5 +1,28 @@
 return {
 	{
+		"jugarpeupv/rust-docs.nvim",
+		dev = true,
+		dir = "~/projects/rust-docs.nvim",
+		lazy = true,
+		keys = {
+			{ mode = { "n" }, "<leader>rd", ":RustDocs<cr>" },
+		},
+		dependencies = {
+			-- Pick one:
+			"nvim-telescope/telescope.nvim",
+			-- or "folke/snacks.nvim",
+		},
+		opts = {
+			open_mode = "split",
+			keymaps = {
+				open = "<leader>rd", -- global keymap to open picker
+				section_next = ")", -- buffer-local: next section
+				section_prev = "(", -- buffer-local: prev section
+				open_browser = "gx", -- buffer-local: open in browser
+			},
+		}, -- uses defaults; see Configuration below
+	},
+	{
 		"jugarpeupv/jsregex.nvim",
 		dev = true,
 		dir = "~/projects/jsregex.nvim/",
@@ -886,7 +909,7 @@ return {
 		lazy = true,
 		cmd = { "Outline", "OutlineOpen" },
 		keys = { -- Example mapping to toggle outline
-			{ "<leader>ot", "<cmd>Outline<CR>", desc = "Toggle outline" },
+			{ "<leader>ol", "<cmd>Outline<CR>", desc = "Toggle outline" },
 		},
 		opts = {
 			outline_window = {

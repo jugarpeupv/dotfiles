@@ -19,7 +19,7 @@ return {
 		dependencies = {
 			"ravitemer/codecompanion-history.nvim",
 			"j-hui/fidget.nvim", -- Display status
-			{ "bassamsdata/fs-monitor.nvim" },
+			-- { "bassamsdata/fs-monitor.nvim" },
 			-- "ravitemer/mcphub.nvim",
 			-- "franco-ruggeri/codecompanion-spinner.nvim",
 			-- { "nvim-lua/plenary.nvim", branch = "master" },

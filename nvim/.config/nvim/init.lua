@@ -5,6 +5,10 @@ vim.g.maplocalleader = ","
 vim.g.loaded_matchit = 1
 -- vim.g.python3_host_prog = vim.fn.expand("~/.nvim-venv/bin/python3")
 
+if vim.fn.has("nvim-0.12") == 1 then
+  require"vim._core.ui2".enable{}
+end
+
 if vim.env.TERM == "xterm-kitty" then
 	-- request csi mode 2
 	vim.cmd([[autocmd UIEnter * call chansend(v:stderr, "\x1b[>4;2m")]])

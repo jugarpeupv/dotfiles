@@ -111,28 +111,39 @@ vim.keymap.set({ "n" }, "<leader>gt", function()
 		:find()
 end, opts)
 
-vim.keymap.set({ "n", "t" }, "<D-p>", function()
-	require("telescope.builtin").find_files({
-		hidden = true,
-		find_command = {
-			"rg",
-			"--files",
-			"--color",
-			"never",
-			"--glob=!.git",
-			"--glob=!*__template__",
-			"--glob=!*DS_Store",
-		},
-	})
-	-- local builtin = require("telescope.builtin")
-	--
-	-- local themes = require("telescope.themes")
-	-- local opts_ivy = {
-	--   layout_config = { height = 0.5 },
-	--   hidden = true,
-	--   find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
-	-- }
-	-- builtin.find_files(themes.get_ivy(opts_ivy))
+-- vim.keymap.set({ "n", "t" }, "<D-p>", function()
+-- 	require("telescope.builtin").find_files({
+-- 		hidden = true,
+-- 		find_command = {
+-- 			"rg",
+-- 			"--files",
+-- 			"--color",
+-- 			"never",
+-- 			"--glob=!.git",
+-- 			"--glob=!*__template__",
+-- 			"--glob=!*DS_Store",
+-- 		},
+-- 	})
+-- 	-- local builtin = require("telescope.builtin")
+-- 	--
+-- 	-- local themes = require("telescope.themes")
+-- 	-- local opts_ivy = {
+-- 	--   layout_config = { height = 0.5 },
+-- 	--   hidden = true,
+-- 	--   find_command = { "rg", "--files", "--color", "never", "--glob=!.git", "--glob=!*__template__" },
+-- 	-- }
+-- 	-- builtin.find_files(themes.get_ivy(opts_ivy))
+-- end, opts)
+
+
+vim.keymap.set({ "n" }, "<leader>ot", function()
+  local buffer_cwd = vim.fn.expand("%:p:h")
+  local myterm = require("terminal").terminal:new({
+    cwd = buffer_cwd,
+    layout = { open_cmd = "botright new" },
+    autoclose = false,
+  })
+  myterm:open()
 end, opts)
 
 -- cd into dir of the current buffer
@@ -862,7 +873,7 @@ end, opts)
 vim.keymap.set({ "n" }, "<leader>sW", function()
   -- run this command on modifiable windows
   --   -- vim.wo.wrap = not vim.wo.wrap
-  vim.cmd([[set nowrap!]])
+  vim.cmd([[set wrap!]])
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>sn", function()
@@ -1916,3 +1927,17 @@ vim.keymap.set("c", "<Tab>", function()
 	end
 	-- No results — insert a dot and re-trigger completion
 end, { expr = true })
+
+-- Markdown heading navigation: ) = next heading, ( = prev heading
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "markdown" },
+	callback = function(ev)
+		local map_opts = { noremap = true, silent = true, buffer = ev.buf }
+		vim.keymap.set("n", ")", function()
+			vim.fn.search("^#\\+ ", "W")
+		end, map_opts)
+		vim.keymap.set("n", "(", function()
+			vim.fn.search("^#\\+ ", "bW")
+		end, map_opts)
+	end,
+})
