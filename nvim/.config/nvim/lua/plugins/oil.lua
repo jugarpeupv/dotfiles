@@ -79,7 +79,7 @@ return {
       },
     },
 		keys = {
-      { ":" },
+      -- { ":" },
 			{
 				"-",
 				function()
@@ -242,7 +242,7 @@ return {
 					-- ["<C-l>"] = "",
 					["R"] = "actions.refresh",
 					["-"] = { "actions.parent", mode = "n" },
-					["_"] = { "actions.open_cwd", mode = "n" },
+					["="] = { "actions.open_cwd", mode = "n" },
 					-- ["<BS>"] = { "actions.cd", mode = "n" },
 					["L"] = { "actions.select", mode = "n" },
 					["H"] = { "actions.parent", mode = "n" },
@@ -666,7 +666,7 @@ return {
 				},
 				-- Extra arguments to pass to SCP when moving/copying files over SSH
 				extra_scp_args = {},
-				extra_s3_args = { "--profile=mar-dev" },
+				extra_s3_args = {},
 				-- EXPERIMENTAL support for performing file operations with git
 				-- git = {
 				--   -- Return true to automatically git add/mv/rm files

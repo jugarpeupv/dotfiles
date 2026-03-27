@@ -4,8 +4,10 @@ vim.g.chat_title = nil
 return {
 	{
 		"CopilotC-Nvim/CopilotChat.nvim",
-		cmd = { "CopilotChat", "CopilotChatToggle", "CopilotChatCommit" },
+		-- cmd = { "CopilotChat", "CopilotChatToggle", "CopilotChatCommit" },
 		-- commit = "7e6583c75f1231ea1eac70e06995dd3f97a58478",
+    -- commit = "02c5cf3a6e030ec81795f16ab5e4f3a8861736db",
+    commit = "ce485330c76a5b63ccfb02b7dd18890a748ca558",
 		enabled = function()
 			local is_headless = #vim.api.nvim_list_uis() == 0
 			if is_headless then

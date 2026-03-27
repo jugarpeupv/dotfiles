@@ -247,7 +247,7 @@ Output only the commit message without any explanations and follow-up suggestion
 					-- 	},
 					-- },
 					fs_monitor = {
-						enabled = true,
+						enabled = false,
 						opts = {
 							keymap = "gF", -- Will be changed to `gD` in future releases.
 						},

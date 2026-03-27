@@ -8,6 +8,7 @@ return {
 		branch = "main",
 		-- event = "VeryLazy",
 		-- event = "LspAttach",
+    lazy = true,
 		event = { "BufReadPost", "BufNewFile" },
 		-- event = { "BufWinEnter" },
 		dependencies = {
@@ -408,7 +409,7 @@ return {
 					disabled_filetypes = {
 						-- statusline = { "alpha", "dashboard", "NvimTree", "Outline", "Diffview", "diffview" },
 						-- 'NvimTree',
-						statusline = { "alpha", "dashboard", "Outline", "Diffview", "diffview", "intro", "NvimTree", "fyler" },
+						statusline = { "alpha", "dashboard", "Outline", "Diffview", "diffview", "intro", "NvimTree" },
 						winbar = {
 							"oil",
 							"help",

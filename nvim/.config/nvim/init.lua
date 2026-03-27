@@ -6,7 +6,7 @@ vim.g.loaded_matchit = 1
 -- vim.g.python3_host_prog = vim.fn.expand("~/.nvim-venv/bin/python3")
 
 if vim.fn.has("nvim-0.12") == 1 then
-  require"vim._core.ui2".enable{}
+	require("vim._core.ui2").enable({})
 end
 
 if vim.env.TERM == "xterm-kitty" then
@@ -120,6 +120,15 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
+local function should_restore_session()
+	-- Returns true when nvim is opened without a specific readable file argument.
+	-- Mirrors the guard in utilities.lua persistence init.
+	local argc = vim.fn.argc()
+	local arg = argc == 1 and tostring(vim.fn.argv(0)) or ""
+	local is_file = arg ~= "" and vim.fn.isdirectory(arg) == 0 and vim.fn.filereadable(arg) == 1
+	return not is_file
+end
+
 local function should_restore_worktree()
 	if vim.fn.argc() == 0 and vim.fn.line2byte("$") == -1 then
 		return false
@@ -179,64 +188,65 @@ local function restore_last_worktree()
 	local bps_path = file_utils.get_bps_path(key)
 	local data = file_utils.load_bps(bps_path)
 	if not data or next(data) == nil or not data.last_active_wt then
-		vim.schedule(function()
-			-- require("oil").open(cwd)
-			-- require("fyler").open(cwd)
-			local fyler = require("fyler")
-			-- fyler.open({ dir = cwd, kind = "replace" })
-      fyler.open({ dir = cwd })
-		end)
+		-- require("oil").open(cwd)
+    print('No worktree data, opening cwd in fyler')
+
+    require("fyler").open({ dir = cwd })
+
+    local cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
+    local win = vim.fn.bufwinid(cwd_buffer_nr)
+    if win ~= -1 and #vim.api.nvim_tabpage_list_wins(0) > 1 then
+      vim.api.nvim_win_close(win, true)
+    end
+    -- Then wipe the buffer
+    if not cwd_buffer_nr then
+      return
+    end
+    pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
+
 		return
 	end
 	local last_active_wt = data.last_active_wt
 
-	-- local api_nvimtree = require("nvim-tree.api")
-	-- api_nvimtree.events.subscribe(api_nvimtree.events.Event.Ready, function()
-	--   vim.wo.statusline = " "
-	--   vim.opt.laststatus = 3
-	--   api_nvimtree.tree.change_root(last_active_wt)
-	-- end)
+	-- vim.cmd("bwipeout " .. cwd_buffer_nr)
+	pcall(vim.cmd.cd, last_active_wt)
 
-	vim.schedule(function()
-		local cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
-		-- vim.cmd("bwipeout " .. cwd_buffer_nr)
-		local success_cd, _ = pcall(vim.cmd.cd, last_active_wt)
-		if not success_cd then
-			vim.cmd.cd(vim.loop.cwd())
-		end
-
-		-- require("oil").open(last_active_wt)
-		-- require("fyler").open({ dir = last_active_wt, kind = "replace" })
-		local fyler = require("fyler")
-
-		-- local ok = pcall(fyler.open, { dir = last_active_wt, kind = "replace" })
-    local ok = pcall(fyler.open, { dir = last_active_wt })
-		if not ok then
-			-- fyler.open({ dir = vim.loop.cwd(), kind = "replace" })
-      fyler.open({ dir = vim.loop.cwd()  })
-		end
-
-		local win = vim.fn.bufwinid(cwd_buffer_nr)
-		if win ~= -1 and #vim.api.nvim_tabpage_list_wins(0) > 1 then
-			vim.api.nvim_win_close(win, true)
-		end
-		-- Then wipe the buffer
-		if not cwd_buffer_nr then
-			return
-		end
-		vim.api.nvim_buf_delete(cwd_buffer_nr, { force = true })
-		-- vim.defer_fn(function()
-		-- 	require("oil").open(last_active_wt)
-		-- end, 100)
-	end)
+	-- require("oil").open(last_active_wt)
+	require("fyler").open({ dir = last_active_wt, kind = "replace" })
+	-- pcall(require("fyler").open, { dir = last_active_wt })
+  local cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
+  if not cwd_buffer_nr then
+    return
+  end
+	local win = vim.fn.bufwinid(cwd_buffer_nr)
+	if win ~= -1 and #vim.api.nvim_tabpage_list_wins(0) > 1 then
+		vim.api.nvim_win_close(win, true)
+	end
+	-- Then wipe the buffer
+	pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
+  -- pcall(vim.api.nvim_buf_delete, cwd_buffer_nr)
+	-- vim.api.nvim_buf_delete(cwd_buffer_nr, { force = true })
 end
 
+-- if should_restore_worktree() then
+-- 	restore_last_worktree()
+-- end
+
+-- Load the persistence session after any worktree cd has settled.
+-- We schedule so that lazy.nvim has finished its setup and persistence is available.
+-- if false and should_restore_session() then
+-- 	vim.schedule(function()
+-- 		require("persistence").load()
+-- 	end)
+-- end
+
 if should_restore_worktree() then
-	vim.api.nvim_create_autocmd("User", {
-		pattern = "VeryLazy",
-		once = true,
-		callback = restore_last_worktree,
-	})
+	restore_last_worktree()
+	-- vim.api.nvim_create_autocmd("User", {
+	-- 	pattern = "VeryLazy",
+	-- 	once = true,
+	-- 	callback = restore_last_worktree,
+	-- })
 else
 	vim.schedule(function()
 		local path = vim.v.argv[3]
@@ -247,7 +257,7 @@ else
 		if vim.fn.isdirectory(path) == 1 then
 			local fyler = require("fyler")
 			-- fyler.open({ dir = path, kind = "replace" })
-      fyler.open({ dir = path  })
+			fyler.open({ dir = path })
 			local cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
 			local win = vim.fn.bufwinid(cwd_buffer_nr)
 			if win ~= -1 then

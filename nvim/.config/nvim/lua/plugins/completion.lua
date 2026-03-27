@@ -2,7 +2,7 @@ return {
 	{
 		"saghen/blink.cmp",
 		enabled = true,
-		event = { "InsertEnter" },
+		event = { "InsertEnter", "CmdlineEnter" },
 		keys = {
 			"?",
 			"/",
@@ -25,6 +25,14 @@ return {
 		-- build = 'cargo build --release',
 		-- If you use nix, you can build from source using latest nightly rust with:
 		-- build = 'nix run .#build-plugin',
+
+		-- Switch to Lua fuzzy in cmdline so that an empty keyword (e.g. after typing
+		-- a trailing '/') still returns all path items.  Frizbee (Rust) returns zero
+		-- matches for an empty needle; the Lua implementation returns every item with
+		-- score 0 when the needle is empty, which is exactly what we need here.
+		config = function(_, opts)
+			require("blink.cmp").setup(opts)
+		end,
 
 		---@module 'blink.cmp'
 		---@type blink.cmp.Config
@@ -141,12 +149,45 @@ return {
 				},
 			},
 			cmdline = {
-				enabled = false,
+				enabled = true,
 				-- use 'inherit' to inherit mappings from top level `keymap` config
 				keymap = {
 					preset = "cmdline",
-					-- ["<Tab>"] = {},
-					--      ["<S-Tab>"] = {},
+				-- Tab: if menu open → select next; if closed → open blink menu
+				["<Tab>"] = {
+					function(cmp)
+						if cmp.is_menu_visible() then
+							return cmp.select_next()
+						end
+						-- Menu not open: show it (same open pattern as <C-l>)
+						local trigger = require("blink.cmp.completion.trigger")
+						local menu = require("blink.cmp.completion.windows.menu")
+						local before = vim.fn.getcmdline():sub(1, vim.fn.getcmdpos() - 1)
+						local expanded = vim.fn.getcompletion(before, "cmdline")
+						if #expanded == 0 then
+							return false -- nothing to show, let native handle it
+						end
+						menu.force_auto_show()
+						trigger.show({ force = true, trigger_kind = "manual", initial_selected_item_idx = 1 })
+						vim.schedule(function()
+							if trigger.context == nil then return end
+							menu.force_auto_show()
+							menu.open()
+							menu.update_position()
+						end)
+						return true
+					end,
+					"fallback",
+				},
+				-- S-Tab: if menu open → select prev; otherwise fallback
+				["<S-Tab>"] = {
+					function(cmp)
+						if cmp.is_menu_visible() then
+							return cmp.select_prev()
+						end
+					end,
+					"fallback",
+				},
 					["<Right>"] = {},
 					["<Left>"] = {},
 					-- ["<CR>"] = { "accept_and_enter", "fallback" },
@@ -186,53 +227,81 @@ return {
 					},
 					["<C-j>"] = { "select_next", "fallback" },
 					-- ["<C-l>"] = { "accept", "fallback" },
+					-- ["<C-v>"] = false,
+					-- ["<C-l>"] = false,
 					["<C-l>"] = {
 						function(cmp)
-							cmp.accept({
-								callback = function()
-									local items = cmp.get_items() or {}
-									local items_are_zero = #items <= 0
-									if items_are_zero then
-										return
-									end
+							local trigger = require("blink.cmp.completion.trigger")
+							local menu = require("blink.cmp.completion.windows.menu")
 
-									local function every(tbl, predicate)
-										for k, v in pairs(tbl) do -- use ipairs for sequential arrays
-											if not predicate(v, k, tbl) then
-												return false
-											end
-										end
+							if not cmp.is_menu_visible() then
+								local cmdline = vim.fn.getcmdline()
+								local pos = vim.fn.getcmdpos()
+								local before = cmdline:sub(1, pos - 1)
+								local expanded = vim.fn.getcompletion(before, "cmdline")
+								if #expanded == 0 then
+									local with_dot = before .. "."
+									local expanded_dot = vim.fn.getcompletion(with_dot, "cmdline")
+									if #expanded_dot > 0 then
+										vim.api.nvim_feedkeys(".", "t", false)
 										return true
 									end
+									-- No completions available at all — do nothing
+									return false
+								end
+								menu.force_auto_show()
+								trigger.show({ force = true, trigger_kind = "manual", initial_selected_item_idx = 1 })
+								vim.schedule(function()
+									if trigger.context == nil then
+										return
+									end
+									menu.force_auto_show()
+									menu.open()
+									menu.update_position()
+								end)
+								return true
+							end
 
-									vim.defer_fn(function()
-										local all_next_items_are_files = false
-										all_next_items_are_files = every(items, function(value)
-											if value.filterText:sub(-1) ~= "/" then
-												return true
-											end
-										end)
-										if all_next_items_are_files then
-											cmp.accept()
-										else
-											cmp.show()
-										end
-									end, 100) -- 100 ms delay
-								end,
-							})
+							local selected = cmp.get_selected_item() or (cmp.get_items() or {})[1]
+							if not selected then
+								return cmp.select_next()
+							end
+
+							-- Accept the item
+							cmp.accept({ index = selected.idx })
+
+							-- If item is a directory (label ends in '/'), reopen the menu for its contents
+							if vim.endswith(selected.label, "/") then
+								menu.force_auto_show()
+								trigger.show({
+									force = true,
+									trigger_kind = "trigger_character",
+									trigger_character = "/",
+								})
+								vim.schedule(function()
+									if trigger.context == nil then
+										return
+									end
+									menu.force_auto_show()
+									menu.open()
+									menu.update_position()
+								end)
+							end
 						end,
 					},
 				},
 				sources = function()
 					local type = vim.fn.getcmdtype()
-					-- Search forward and backward
+					-- Search forward and backward: use blink with buffer source
 					if type == "/" or type == "?" then
 						return { "buffer" }
 					end
-					-- Commands
-					if type == ":" or type == "@" then
-						return { "cmdline" }
-					end
+					-- Commands: return nothing so Neovim's built-in wildmenu handles completion
+
+				-- Commands
+				if type == ":" or type == "@" then
+					return { "cmdline", "path" }
+				end
 					return {}
 				end,
 				completion = {
@@ -249,11 +318,11 @@ return {
 						},
 					},
 					-- Whether to automatically show the window when new completion items are available
-					menu = {
-						auto_show = function()
-							return vim.fn.getcmdtype() == "?" or vim.fn.getcmdtype() == "/"
-						end,
-					},
+					-- menu = {
+					-- 	auto_show = function()
+					-- 		return vim.fn.getcmdtype() == "?" or vim.fn.getcmdtype() == "/"
+					-- 	end,
+					-- },
 					-- Displays a preview of the selected item on the current line
 					ghost_text = { enabled = false },
 				},
@@ -272,7 +341,7 @@ return {
 					-- Delay before showing the completion menu while typing
 					-- auto_show_delay_ms = 100,
 					auto_show = function()
-            return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode"
+						return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode"
 					end,
 					border = "rounded",
 					draw = {
@@ -288,38 +357,63 @@ return {
 							label_description = {
 								width = { max = 100 },
 							},
-							kind_icon = {
-								text = function(ctx)
-									local lspkind = require("lspkind")
-									local icon = ctx.kind_icon
-									if vim.tbl_contains({ "Path" }, ctx.source_name) then
+						kind_icon = {
+							text = function(ctx)
+								local lspkind = require("lspkind")
+								local icon = ctx.kind_icon
+								if vim.tbl_contains({ "Path" }, ctx.source_name) then
+									-- Path source: kind is set correctly as Folder/File
+								if ctx.kind == "Folder" then
+                    icon = ""
+								else
 										local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
 										if dev_icon then
 											icon = dev_icon
 										end
-									else
-										icon = lspkind.symbolic(ctx.kind, {
-											mode = "symbol",
-										})
 									end
+								elseif ctx.source_name == "Cmdline" then
+								-- Cmdline source: detect folder by trailing slash
+								if ctx.label:sub(-1) == "/" then
+                    icon = ""
+								else
+										local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
+										if dev_icon then
+											icon = dev_icon
+										else
+											icon = lspkind.symbolic("File", { mode = "symbol" })
+										end
+									end
+								else
+									icon = lspkind.symbolic(ctx.kind, {
+										mode = "symbol",
+									})
+								end
 
-									return icon .. ctx.icon_gap
-								end,
+								return icon .. ctx.icon_gap
+							end,
 
-								-- Optionally, use the highlight groups from nvim-web-devicons
-								-- You can also add the same function for `kind.highlight` if you want to
-								-- keep the highlight groups in sync with the icons.
-								highlight = function(ctx)
-									local hl = ctx.kind_hl
-									if vim.tbl_contains({ "Path" }, ctx.source_name) then
+							highlight = function(ctx)
+								local hl = ctx.kind_hl
+								if vim.tbl_contains({ "Path" }, ctx.source_name) then
+									if ctx.kind ~= "Folder" then
 										local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
 										if dev_icon then
 											hl = dev_hl
 										end
 									end
-									return hl
-								end,
-							},
+								elseif ctx.source_name == "Cmdline" then
+									if ctx.label:sub(-1) ~= "/" then
+										local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
+										if dev_icon then
+											hl = dev_hl
+										end
+									else
+										hl = "BlinkCmpKindFolder"
+									end
+								end
+								return hl
+							end,
+						},
 						},
 					},
 				},
@@ -348,7 +442,7 @@ return {
 					-- "conventional_commits",
 				},
 				per_filetype = {
-          ["opencode"] = { "buffer", "path", "lsp" },
+					["opencode"] = { "buffer", "path", "lsp" },
 					["codecompanion"] = { "buffer", "path" },
 					["octo"] = {
 						"git",
@@ -580,9 +674,46 @@ return {
 					-- 		)
 					-- 	end,
 					-- },
-					cmdline = {
-						-- ignores cmdline completions when executing shell commands
-						enabled = function()
+				path = {
+						-- In cmdline mode, only surface dotfiles (items starting with '.').
+						-- Regular files/dirs are already covered by the cmdline source.
+						-- In normal insert mode, pass everything through unchanged.
+						transform_items = function(_, items)
+							if vim.api.nvim_get_mode().mode ~= "c" then
+								return items
+							end
+							return vim.tbl_filter(function(item)
+								return item.label:sub(1, 1) == "."
+							end, items)
+						end,
+						-- Only activate for path-type completions in cmdline mode,
+						-- and only when the last path component doesn't already start with '.'
+						-- (in that case cmdline source already returns the dotfiles).
+						should_show_items = function()
+							if vim.api.nvim_get_mode().mode ~= "c" then
+								return true
+							end
+							local compltype = vim.fn.getcmdcompltype()
+							local path_types =
+								{ "file", "dir", "file_in_path", "dir_in_path", "runtime", "shellcmd" }
+							if not vim.tbl_contains(path_types, compltype) then
+								return false
+							end
+							-- If the user has already typed a '.' prefix after the last slash,
+							-- cmdline source will surface those dotfiles — don't duplicate them.
+							local cmdline = vim.fn.getcmdline()
+							local pos = vim.fn.getcmdpos()
+							local before = cmdline:sub(1, pos - 1)
+							local last_component = before:match("[^/]*$") or ""
+							return last_component:sub(1, 1) ~= "."
+						end,
+						opts = {
+							show_hidden_files_by_default = true,
+						},
+					},
+				cmdline = {
+					-- ignores cmdline completions when executing shell commands
+					enabled = function()
 							-- return vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!") and not vim.fn.getcmdline():match("^:w")
 							if vim.fn.getcmdline():match("^w") then
 								return false
@@ -596,7 +727,8 @@ return {
 							-- return vim.fn.getcmdtype() ~= ":" or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
 						end,
 						min_keyword_length = function(ctx)
-							-- when typing a command, only show when the keyword is 3 characters or longer
+							-- Only require a keyword when completing a bare command name (no space yet).
+							-- For arguments (paths etc.) always allow empty keyword so dotfiles show up.
 							if ctx.mode == "cmdline" and string.find(ctx.line, " ") == nil then
 								return 1
 							end

@@ -1,4 +1,64 @@
 return {
+	-- Lua
+	{
+		"folke/persistence.nvim",
+		enabled = false,
+		-- Not lazy on BufReadPre: we need the plugin available at VimEnter so
+		-- init.lua can call persistence.load() after the worktree cd has settled.
+		lazy = true,
+		event = { "BufReadPre" },
+		opts = {
+			-- add any custom options here
+		},
+		config = function(_, opts)
+			require("persistence").setup(opts)
+
+			-- PersistenceSavePre: wipe buffers that :mksession cannot restore cleanly.
+			-- fyler uses buftype=acwrite which mksession writes as a blank entry; wipe it
+			-- before saving so the session file stays clean.
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "PersistenceSavePre",
+				callback = function()
+					local excluded_ft = { "fyler", "neo-tree", "NvimTree", "mail", "notmuch-hello", "notmuch-threads", "opencode", "opencode_output" }
+					for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+						if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) then
+							local ft = vim.bo[buf].filetype
+							local bt = vim.bo[buf].buftype
+							if vim.tbl_contains(excluded_ft, ft) then
+								pcall(vim.api.nvim_buf_delete, buf, { force = true })
+							end
+						end
+					end
+				end,
+			})
+
+			-- PersistenceLoadPost: clean up any stray fyler/nofile buffers that slipped
+			-- through mksession, then re-trigger BufReadPost on every normal file buffer
+			-- so that treesitter and syntax highlighting attach properly.
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "PersistenceLoadPost",
+				callback = function()
+					-- Re-trigger BufReadPost on every normal file buffer so treesitter /
+					-- syntax highlighting attach. :mksession restores buffers but does not
+					-- fire BufReadPost, so treesitter never gets a chance to highlight them.
+					vim.schedule(function()
+						for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+							if
+								vim.api.nvim_buf_is_valid(buf)
+								and vim.api.nvim_buf_is_loaded(buf)
+								and vim.bo[buf].buftype == ""
+								and vim.api.nvim_buf_get_name(buf) ~= ""
+							then
+								vim.api.nvim_buf_call(buf, function()
+									vim.cmd("silent! doautocmd BufReadPost")
+								end)
+							end
+						end
+					end)
+				end,
+			})
+		end,
+	},
 	{
 		"jugarpeupv/rust-docs.nvim",
 		dev = true,
@@ -188,7 +248,7 @@ return {
 		keys = {
 			-- example keymap
 			{
-				"<leader>al",
+				"<leader>aL",
 				":Calcium<CR>",
 				desc = "Calculate",
 				mode = { "n", "v" },

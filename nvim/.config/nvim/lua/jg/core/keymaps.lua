@@ -1788,11 +1788,23 @@ vim.keymap.set({ "n", "v" }, "<S-CR>", function()
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("%", true, false, true), "t", true)
 end, { silent = true })
 
-vim.api.nvim_create_user_command("DecodeJWT", function()
-	local jwt = vim.fn.expand("<cWORD>")
+vim.api.nvim_create_user_command("DecodeJWT", function(cmd_opts)
+	local jwt
 
-	-- Remove surrounding quotes if present
-	jwt = jwt:gsub("^[\"']", ""):gsub("[\"']$", "")
+	-- Check if called with a range (visual mode selection)
+	if cmd_opts.range > 0 then
+		local start_line = cmd_opts.line1
+		local end_line = cmd_opts.line2
+		local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+		jwt = table.concat(lines, "")
+		-- Strip surrounding quotes and escape sequences
+		jwt = jwt:gsub("^[\"']", ""):gsub("[\"']$", "")
+		jwt = jwt:gsub("\\n", ""):gsub("\\r", "")
+	else
+		jwt = vim.fn.expand("<cWORD>")
+		-- Remove surrounding quotes if present
+		jwt = jwt:gsub("^[\"']", ""):gsub("[\"']$", "")
+	end
 
 	-- Write JWT to a temp file to avoid shell escaping issues
 	local tmpfile = os.tmpname()
@@ -1816,13 +1828,22 @@ vim.api.nvim_create_user_command("DecodeJWT", function()
 	os.remove(tmpfile)
 
 	vim.cmd("vnew")
+	vim.api.nvim_buf_set_name(0, "jwt_decoded_" .. os.time() .. ".json")
+	vim.bo.buftype = "nofile"
+	vim.bo.bufhidden = "hide"
+	vim.bo.swapfile = false
+	vim.bo.buflisted = true
 	if result and result ~= "" then
 		vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(result, "\n"))
 		vim.bo.filetype = "json"
 	else
 		vim.api.nvim_buf_set_lines(0, 0, -1, false, { "Error: Could not decode JWT", "Token: " .. jwt })
 	end
-end, {})
+end, { range = true })
+
+vim.keymap.set({ "n", "v" }, "<leader>jw", function()
+  vim.cmd("DecodeJWT")
+end, { silent = true })
 
 vim.keymap.set("i", "<C-k>", "<c-o>D<esc>", { desc = "Kill to end of line" })
 
@@ -1906,27 +1927,27 @@ vim.keymap.set("n", "<leader>ms", function()
 end, { desc = "Sync email (mbsync + notmuch)" })
 
 -- neovim does not complete entries where there are only .files --> https://github.com/neovim/neovim/issues/35111
-vim.keymap.set("c", "<Tab>", function()
-	if vim.fn.wildmenumode() == 1 then
-		return "<C-v>"
-	end
-
-	local cmdline = vim.fn.getcmdline()
-	local pos = vim.fn.getcmdpos()
-	local expanded = vim.fn.getcompletion(cmdline:sub(1, pos - 1), "cmdline")
-	if #expanded > 0 then
-		return "<C-v>"
-	end
-
-	local new_cmdline_with_dot = cmdline:sub(1, pos - 1) .. "." .. cmdline:sub(pos)
-	-- if there are results with a dot (.) is inserted in the prompt
-	local expanded_with_dot = vim.fn.getcompletion(new_cmdline_with_dot, "cmdline")
-	if #expanded_with_dot > 0 then
-		vim.fn.setcmdline(new_cmdline_with_dot, pos + 1)
-		return "<C-v>"
-	end
-	-- No results — insert a dot and re-trigger completion
-end, { expr = true })
+-- vim.keymap.set("c", "<Tab>", function()
+-- 	if vim.fn.wildmenumode() == 1 then
+-- 		return "<C-v>"
+-- 	end
+--
+-- 	local cmdline = vim.fn.getcmdline()
+-- 	local pos = vim.fn.getcmdpos()
+-- 	local expanded = vim.fn.getcompletion(cmdline:sub(1, pos - 1), "cmdline")
+-- 	if #expanded > 0 then
+-- 		return "<C-v>"
+-- 	end
+--
+-- 	local new_cmdline_with_dot = cmdline:sub(1, pos - 1) .. "." .. cmdline:sub(pos)
+-- 	-- if there are results with a dot (.) is inserted in the prompt
+-- 	local expanded_with_dot = vim.fn.getcompletion(new_cmdline_with_dot, "cmdline")
+-- 	if #expanded_with_dot > 0 then
+-- 		vim.fn.setcmdline(new_cmdline_with_dot, pos + 1)
+-- 		return "<C-v>"
+-- 	end
+-- 	-- No results — insert a dot and re-trigger completion
+-- end, { expr = true })
 
 -- Markdown heading navigation: ) = next heading, ( = prev heading
 vim.api.nvim_create_autocmd("FileType", {
@@ -1941,3 +1962,8 @@ vim.api.nvim_create_autocmd("FileType", {
 		end, map_opts)
 	end,
 })
+
+
+vim.keymap.set("n", "<leader>ra", function()
+  vim.cmd("restart")
+end, {})

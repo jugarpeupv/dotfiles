@@ -72,7 +72,22 @@ parse_params() {
 		shift
 	done
 
-	args=("$@")
+	args=()
+	local skip_next=0
+	for arg in "$@"; do
+		if [[ $skip_next -eq 1 ]]; then
+			git_clone_flags+=("$arg")
+			skip_next=0
+		elif [[ "$arg" =~ ^- ]]; then
+			git_clone_flags+=("$arg")
+			# if flag does not contain = it likely takes a separate value next
+			if [[ ! "$arg" =~ = ]]; then
+				skip_next=1
+			fi
+		else
+			args+=("$arg")
+		fi
+	done
 
 	# check required params and arguments
 	# [[ -z "${param-}" ]] && die "Missing required parameter: param"

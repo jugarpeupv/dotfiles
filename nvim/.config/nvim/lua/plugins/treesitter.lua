@@ -25,7 +25,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		lazy = true,
-		event = "VeryLazy",
+    event = "VeryLazy",
 		branch = "main",
 		build = ":TSUpdate",
 		config = function()

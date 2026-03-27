@@ -62,7 +62,19 @@ return {
 				"<M-l>",
 				mode = { "n", "t" },
 				function()
-					vim.cmd("wa")
+					for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+						if
+							vim.api.nvim_buf_is_loaded(buf)
+							and vim.bo[buf].modified
+							and vim.api.nvim_buf_get_name(buf) ~= ""
+							and vim.bo[buf].buftype == ""
+						then
+							vim.api.nvim_buf_call(buf, function()
+								vim.cmd("write")
+							end)
+						end
+					end
+
 					local win_ids = vim.api.nvim_list_wins()
 					for _, win_id in ipairs(win_ids) do
 						require("barbecue.ui").update(win_id)
@@ -96,6 +108,9 @@ return {
 				function()
 					local term = require("terminal")
 					local index = term.current_term_index()
+          if not index then
+            return
+          end
 					term.set_target(index)
 				end,
 			},

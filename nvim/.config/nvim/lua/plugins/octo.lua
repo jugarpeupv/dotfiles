@@ -1,7 +1,36 @@
+-- Open a GitHub issue/PR URL under the cursor in an Octo buffer
+-- Supports: github.com/{owner}/{repo}/issues/{n}
+--           github.com/{owner}/{repo}/pull/{n}
+local function open_github_url()
+	local line = vim.api.nvim_get_current_line()
+	-- Strip common URL-terminating markdown/punctuation chars before matching
+	line = line:gsub("[%)%]>\"']", " ")
+	local owner, repo, number = line:match("github%.com/([^/]+)/([^/]+)/issues/(%d+)")
+	local cmd = "issue"
+	if not owner then
+		owner, repo, number = line:match("github%.com/([^/]+)/([^/]+)/pull/(%d+)")
+		cmd = "pr"
+	end
+	if not owner or not number then
+		vim.notify(
+			string.format(
+				"No GitHub issue/PR URL found on current line (got: %s %s %s)",
+				tostring(owner),
+				tostring(repo),
+				tostring(number)
+			),
+			vim.log.levels.WARN
+		)
+		return
+	end
+	local final_cmd = string.format("Octo %s edit %s %s/%s", cmd, number, owner, repo)
+	vim.cmd(final_cmd)
+end
+
 return {
 	{
-    -- "pwntester/octo.nvim",
-    "jugarpeupv/octo.nvim",
+		-- "pwntester/octo.nvim",
+		"jugarpeupv/octo.nvim",
 		-- dev = true,
 		-- dir = "~/projects/octo.nvim/wt-master",
 		-- dependencies = {
@@ -13,6 +42,14 @@ return {
 		cmd = { "Octo" },
 		-- "<cmd>Octo search review-requested:GPJULI6_mapfre is:pr involves:GPJULI6_mapfre state:open -team-review-requested:arch-gva-dev -team-review-requested:arch-gva-mnt -team-review-requested:arch-gva-own<cr>",
 		keys = {
+			{
+				mode = { "n" },
+				"<leader>og",
+				function()
+					open_github_url()
+				end,
+				{ noremap = true, silent = true },
+			},
 			{
 				mode = { "n" },
 				"<leader>oc",
@@ -31,12 +68,12 @@ return {
 				":Octo search author:GPJULI6_mapfre is:pr is:open owner:mapfre-tech",
 				{ noremap = true, silent = true },
 			},
-      {
-        mode = { "n" },
-        "<leader>op",
-        ":Octo pr create",
-        { noremap = true, silent = true },
-      },
+			{
+				mode = { "n" },
+				"<leader>op",
+				":Octo pr create",
+				{ noremap = true, silent = true },
+			},
 			{
 				mode = { "n" },
 				"<leader>os",
@@ -75,8 +112,8 @@ return {
 			},
 			mappings = {
 				issue = {
-          set_project_field_type = { lhs = "<localleader>ts", desc = "set project Type field" },
-          set_project_field_status = { lhs = "<localleader>cs", desc = "set project Status field" },
+					set_project_field_type = { lhs = "<localleader>ts", desc = "set project Type field" },
+					set_project_field_status = { lhs = "<localleader>cs", desc = "set project Status field" },
 					close_issue = { lhs = "<localleader>ic", desc = "close issue" },
 					reopen_issue = { lhs = "<localleader>io", desc = "reopen issue" },
 					list_issues = { lhs = "<localleader>il", desc = "list open issues on same repo" },
@@ -226,14 +263,35 @@ return {
 		},
 		config = function(_, opts)
 			require("octo").setup(opts)
+
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = "octo",
 				group = vim.api.nvim_create_augroup("octo_filetypedetect", { clear = true }),
 				callback = function()
 					vim.schedule(function()
+
+            function _G.MarkdownFold()
+              local line = vim.fn.getline(vim.v.lnum)
+              local level = line:match("^(#+)%s")
+              if level then
+                return ">" .. #level -- ">" means "start a fold of this level"
+              end
+              return "=" -- "=" means "same fold level as previous line"
+            end
+
+            function _G.MarkdownFoldText()
+              local first_line = vim.fn.getline(vim.v.foldstart)
+              local line_count = vim.v.foldend - vim.v.foldstart
+              return first_line .. " - " .. line_count .. " lines folded"
+            end
+
 						vim.wo.conceallevel = 0
-            vim.wo.cursorline = true
-            vim.cmd("hi htmlItalic gui=none")
+						vim.wo.cursorline = true
+            vim.opt_local.foldmethod = "expr"
+            vim.opt_local.foldexpr = "v:lua.MarkdownFold()"
+            vim.opt_local.foldlevel = 99 -- open all folds by default
+            vim.opt_local.foldtext = "v:lua.MarkdownFoldText()"
+						vim.cmd("hi htmlItalic gui=none")
 					end)
 				end,
 			})

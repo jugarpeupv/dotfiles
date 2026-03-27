@@ -126,7 +126,6 @@ return {
 						["<leader>orR"] = false,
 						["<leader>ox"] = false,
 						["<leader>ott"] = false,
-						["<leader>otr"] = false,
 						["<leader>o/"] = false,
 						-- ['<leader>og'] = { 'toggle' }, -- Open opencode. Close if opened
 						-- ['<leader>oi'] = { 'open_input' }, -- Opens and focuses on input window on insert mode
@@ -154,7 +153,7 @@ return {
 						-- ['<leader>orR'] = { 'diff_restore_snapshot_all' }, -- Restore all files to a restore point
 						-- ['<leader>ox'] = { 'swap_position' }, -- Swap Opencode pane left/right
 						-- ['<leader>ott'] = { 'toggle_tool_output' }, -- Toggle tools output (diffs, cmd output, etc.)
-						-- ['<leader>otr'] = { 'toggle_reasoning_output' }, -- Toggle reasoning output (thinking steps)
+						['<leader>oE'] = { 'toggle_reasoning_output' }, -- Toggle reasoning output (thinking steps)
 						-- ['<leader>o/'] = { 'quick_chat', mode = { 'n', 'x' } }, -- Open quick chat input with selection context in visual mode or current line context in normal mode
 					},
 					input_window = {
@@ -163,8 +162,10 @@ return {
 						["<c-s>"] = { "submit_input_prompt", mode = { "i" } }, -- Submit prompt (normal mode and insert mode)
 						["<S-cr>"] = false,
 						["<C-c>"] = { "cancel" }, -- Cancel opencode request while it is running
-						["~"] = { "mention_file", mode = "i" }, -- Pick a file and add to context. See File Mentions section
-						["@"] = { "mention", mode = "i" }, -- Insert mention (file/agent)
+						-- ["~"] = { "mention_file", mode = "i" }, -- Pick a file and add to context. See File Mentions section
+						-- ["@"] = { "mention", mode = "i" }, -- Insert mention (file/agent)
+            ["~"] = false, -- Pick a file and add to context. See File Mentions section
+            ["@"] = false, -- Insert mention (file/agent)
 						["/"] = { "slash_commands", mode = "i" }, -- Pick a command to run in the input window
 						["#"] = { "context_items", mode = "i" }, -- Manage context items (current file, selection, diagnostics, mentioned files)
 						["<M-v>"] = { "paste_image", mode = "i" }, -- Paste image from clipboard as attachment
@@ -224,7 +225,7 @@ return {
 					position = "right", -- 'right' (default), 'left' or 'current'. Position of the UI split. 'current' uses the current window for the output.
 					input_position = "bottom", -- 'bottom' (default) or 'top'. Position of the input window
 					window_width = 0.45, -- Width as percentage of editor width
-					zoom_width = 0.8, -- Zoom width as percentage of editor width
+					zoom_width = 0.7, -- Zoom width as percentage of editor width
 					display_model = true, -- Display model name on top winbar
 					display_context_size = true, -- Display context size in the footer
 					display_cost = true, -- Display cost in the footer
@@ -240,7 +241,7 @@ return {
 						},
 						tools = {
 							show_output = true,
-							show_reasoning_output = false,
+							show_reasoning_output = true,
 						},
 						always_scroll_to_bottom = false,
 					},

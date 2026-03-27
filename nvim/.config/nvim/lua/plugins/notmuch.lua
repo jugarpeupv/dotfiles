@@ -1,7 +1,7 @@
 return {
 	{
 		"yousefakbar/notmuch.nvim",
-		dir = "~/projects/notmuch.nvim/wt-feature-compose_mail",
+		dir = "~/projects/notmuch.nvim/wt-main",
 		dev = true,
 		enabled = true,
 		opts = {
