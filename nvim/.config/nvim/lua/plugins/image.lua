@@ -4,13 +4,6 @@ return {
 	{
 		"HakonHarnes/img-clip.nvim",
 		-- keys = { "<leader>pi" },
-		enabled = function()
-			local is_headless = #vim.api.nvim_list_uis() == 0
-			if is_headless then
-				return false
-			end
-			return true
-		end,
 		opts = {
 			filetypes = {
 				codecompanion = {
@@ -56,15 +49,11 @@ return {
 	},
 	{
 		"3rd/image.nvim",
-		enabled = function()
-			local is_headless = #vim.api.nvim_list_uis() == 0
-			if is_headless then
-				return false
-			end
-			return true
-		end,
 		-- commit = "21909e3eb03bc738cce497f45602bf157b396672",
+		-- commit = "446a8a5cc7a3eae3185ee0c697732c32a5547a0b",
 		branch = "master",
+    -- dev = true,
+    -- dir = "~/projects/image.nvim/wt-master",
 		-- branch = "main",
 		-- event = "VeryLazy",
 		-- event = { "BufReadPost" },
@@ -103,8 +92,9 @@ return {
 					local image_util = require("jg.custom.image-utils")
 					if image_util.image_rendered and image_util.loaded_image_under_cursor then
 						-- vim.g.image_object:clear() -- remove the image if it is already rendered
-						image_util.loaded_image_under_cursor:clear() -- remove the image if it is already rendered
-						image_util.image_rendered = false
+					image_util.loaded_image_under_cursor:clear() -- remove the image if it is already rendered
+          vim.cmd('redraw')
+					image_util.image_rendered = false
 						-- vim.g.image_object = nil
 						image_util.loaded_image_under_cursor = nil
 						return
@@ -118,7 +108,6 @@ return {
 
 					-- Get the file path under the cursor
 					local line = vim.api.nvim_buf_get_lines(current_buffer, cursor_row, cursor_row + 1, false)[1]
-					-- print("line", line)
 
 					local file_path
 
@@ -133,7 +122,6 @@ return {
 					else
 						-- Fallback to your existing logic
 						local extracted_content = string.match(line, "%[%[(.-)%]%]")
-						-- print("extracted_content", extracted_content)
 
 						if extracted_content then
 							file_path = extracted_content.gsub(extracted_content, "|.*", "")
@@ -178,8 +166,7 @@ return {
 		},
 		-- branch = "feat/toggle-rendering",
 		config = function()
-			local image = require("image")
-			image.setup({
+			require("image").setup({
 				disable = { "markdown" },
 				backend = "kitty",
 				integrations = {

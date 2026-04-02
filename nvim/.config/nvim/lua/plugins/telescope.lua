@@ -12,6 +12,7 @@ return {
 		branch = "master",
 		lazy = true,
 		dependencies = {
+			"jugarpeupv/git-worktree.nvim",
 			{
 				"zigotica/telescope-docker-commands.nvim",
 				dependencies = {
@@ -395,21 +396,12 @@ return {
 			-- { "tom-anders/telescope-vim-bookmarks.nvim" },
 			{ "gbprod/yanky.nvim" },
 			-- { "Myzel394/jsonfly.nvim" },
-			{ "jugarpeupv/git-worktree.nvim" },
 			{
 				"nvim-telescope/telescope-fzf-native.nvim",
-				enabled = function()
-					local is_headless = #vim.api.nvim_list_uis() == 0
-					if is_headless then
-						return false
-					end
-					return true
-				end,
 				build = "make",
 				-- build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
-				cmd = { "Telescope" },
 			},
-			{ "natecraddock/telescope-zf-native.nvim", cmd = { "Telescope" } },
+			{ "natecraddock/telescope-zf-native.nvim" },
 			-- {
 			-- 	"mosheavni/yaml-companion.nvim",
 			-- 	branch = "chore/remove-deprecated-apis",
@@ -518,8 +510,8 @@ return {
 					})
 				end,
 			},
-			{ "nvim-telescope/telescope-smart-history.nvim", cmd = { "Telescope" } },
-			{ "nvim-telescope/telescope-live-grep-args.nvim", cmd = { "Telescope" } },
+			{ "nvim-telescope/telescope-smart-history.nvim"  },
+			{ "nvim-telescope/telescope-live-grep-args.nvim" },
 			-- {
 			-- 	"nvim-telescope/telescope-ui-select.nvim",
 			-- 	dependencies = { "prochri/telescope-all-recent.nvim" },
@@ -1096,15 +1088,18 @@ return {
 			telescope.load_extension("zf-native")
 			-- telescope.load_extension("ui-select")
 			telescope.load_extension("bookmarks")
-			telescope.load_extension("git_worktree")
 			telescope.load_extension("file_browser")
 			telescope.load_extension("git_file_history")
 			-- telescope.load_extension("frecency")
 			telescope.load_extension("fzf")
 			telescope.load_extension("before")
 			telescope.load_extension("recent_files")
-			telescope.load_extension("nx")
-			telescope.load_extension("docker_commands")
+
+			-- Extensions from plugins with conditional `enabled` — may not be loaded
+			local optional_extensions = { "git_worktree", "nx", "docker_commands" }
+			for _, ext in ipairs(optional_extensions) do
+				pcall(telescope.load_extension, ext)
+			end
 			-- require("telescope").load_extension("persisted")
 			-- telescope.load_extension("jsonfly")
 			-- telescope.load_extension("media_files")

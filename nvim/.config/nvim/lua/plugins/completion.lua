@@ -116,7 +116,10 @@ return {
 				["<C-l>"] = { "accept", "fallback" },
 				["<Right>"] = {
 					function()
-						local copilot = require("copilot.suggestion")
+						local copilot_available, copilot = pcall(require, "copilot.suggestion")
+            if not copilot_available then
+              return
+            end
 						if copilot.is_visible() then
 							copilot.accept()
 							return

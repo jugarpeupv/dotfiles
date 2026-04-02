@@ -1,7 +1,7 @@
 -- return {}
 return {
 	"zbirenbaum/copilot.lua",
-	enabled = true,
+	enabled = false,
 	event = { "LspAttach" },
 	cmd = "Copilot",
 	-- event = "InsertEnter",
@@ -91,6 +91,8 @@ return {
 				},
 			},
 			filetypes = {
+        opencode = false,
+        opencode_output = false,
 				lua = false,
 				yaml = false,
 				markdown = false,

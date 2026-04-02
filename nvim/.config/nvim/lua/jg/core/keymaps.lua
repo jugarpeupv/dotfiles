@@ -894,9 +894,10 @@ end, opts)
 
 vim.keymap.set("n", "<leader>fl", require("jg.custom.telescope").find_directory_in_oil_and_focus, opts)
 
-vim.keymap.set("n", "<leader>fd", require("jg.custom.telescope").find_directory_in_nvim_tree_and_focus, opts)
+-- vim.keymap.set("n", "<leader>fd", require("jg.custom.telescope").find_directory_in_nvim_tree_and_focus, opts)
 
-vim.keymap.set("n", "<leader>fy", require("jg.custom.telescope").find_directory_in_fyler_and_focus, opts)
+-- vim.keymap.set("n", "<leader>fy", require("jg.custom.telescope").find_directory_in_fyler_and_focus, opts)
+vim.keymap.set("n", "<leader>fd", require("jg.custom.telescope").find_directory_in_fyler_and_focus, opts)
 
 vim.keymap.set("n", "<leader>fn", require("jg.custom.telescope").find_in_node_modules, opts)
 
@@ -957,8 +958,15 @@ vim.api.nvim_create_autocmd("CmdlineLeave", {
 vim.keymap.set({ "n" }, "<M-b>", function()
 	-- If we have a saved compile command, populate it (without executing)
 	if vim.g._saved_compile_cmd ~= nil and vim.g._saved_compile_cmd ~= "" then
-		print("Restoring:", vim.g._saved_compile_cmd)
-		local cmd_to_feed = ":" .. vim.g._saved_compile_cmd
+		-- local cmd = vim.g._saved_compile_cmd
+		-- -- Ensure any unquoted path argument (the last whitespace-containing token
+		-- -- after the subcommand) is shell-escaped so spaces in filenames work.
+		-- -- Pattern: "Compile <subcmd> <path with spaces>" → quote the path.
+		-- cmd = cmd:gsub("^(Compile%s+%S+%s+)([^'\"].* .+)$", function(prefix, path)
+		-- 	return prefix .. vim.fn.shellescape(path)
+		-- end)
+		-- local cmd_to_feed = ":" .. cmd
+    local cmd_to_feed = ":" .. vim.g._saved_compile_cmd
 		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd_to_feed, true, false, true), "n", true)
 		return
 	end
@@ -984,7 +992,8 @@ vim.keymap.set({ "n" }, "<M-b>", function()
 
 	local executable = get_filetype_alias()
 
-	local command = ":Compile " .. executable .. " " .. current_buf_name
+	-- local command = ":Compile " .. executable .. " " .. vim.fn.shellescape(current_buf_name)
+  local command = ":Compile " .. executable .. " " .. current_buf_name
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(command, true, false, true), "n", true)
 end, opts)
 
@@ -1788,22 +1797,40 @@ vim.keymap.set({ "n", "v" }, "<S-CR>", function()
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("%", true, false, true), "t", true)
 end, { silent = true })
 
+-- Storage for visual selection passed to DecodeJWT without going through marks
+vim.g._decode_jwt_selection = nil
+
 vim.api.nvim_create_user_command("DecodeJWT", function(cmd_opts)
 	local jwt
 
-	-- Check if called with a range (visual mode selection)
-	if cmd_opts.range > 0 then
-		local start_line = cmd_opts.line1
-		local end_line = cmd_opts.line2
-		local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
-		jwt = table.concat(lines, "")
-		-- Strip surrounding quotes and escape sequences
-		jwt = jwt:gsub("^[\"']", ""):gsub("[\"']$", "")
-		jwt = jwt:gsub("\\n", ""):gsub("\\r", "")
+	-- Extract a JWT pattern (base64url.base64url.base64url) from arbitrary text
+	local function extract_jwt(text)
+		-- base64url alphabet: A-Z a-z 0-9 - _ and optional = padding
+		return text:match("[A-Za-z0-9_%-]+%.[A-Za-z0-9_%-]+%.[A-Za-z0-9_%-]*")
+	end
+
+	if vim.g._decode_jwt_selection and vim.g._decode_jwt_selection ~= "" then
+		-- Text captured directly from visual mapping — no mark caching possible
+		local text = vim.g._decode_jwt_selection
+		vim.g._decode_jwt_selection = nil
+		jwt = extract_jwt(text)
+		if not jwt then
+			vim.notify("No JWT token found in selection", vim.log.levels.WARN)
+			return
+		end
 	else
-		jwt = vim.fn.expand("<cWORD>")
-		-- Remove surrounding quotes if present
-		jwt = jwt:gsub("^[\"']", ""):gsub("[\"']$", "")
+		-- Normal mode: try WORD under cursor, then whole current line
+		local cword = vim.fn.expand("<cWORD>"):gsub("^[\"',]+", ""):gsub("[\"',]+$", "")
+		if extract_jwt(cword) then
+			jwt = extract_jwt(cword)
+		else
+			local line = vim.api.nvim_get_current_line()
+			jwt = extract_jwt(line)
+		end
+		if not jwt then
+			vim.notify("No JWT token found under cursor or on current line", vim.log.levels.WARN)
+			return
+		end
 	end
 
 	-- Write JWT to a temp file to avoid shell escaping issues
@@ -1839,10 +1866,28 @@ vim.api.nvim_create_user_command("DecodeJWT", function(cmd_opts)
 	else
 		vim.api.nvim_buf_set_lines(0, 0, -1, false, { "Error: Could not decode JWT", "Token: " .. jwt })
 	end
-end, { range = true })
+end, { range = false })
 
-vim.keymap.set({ "n", "v" }, "<leader>jw", function()
+vim.keymap.set("n", "<leader>jw", function()
   vim.cmd("DecodeJWT")
+end, { silent = true })
+
+vim.keymap.set("v", "<leader>jw", function()
+	-- Capture selection immediately in Lua — never rely on cached '< '> marks
+	local start_pos = vim.fn.getpos("v")
+	local end_pos = vim.fn.getpos(".")
+	-- Normalise so start <= end
+	if start_pos[2] > end_pos[2] or (start_pos[2] == end_pos[2] and start_pos[3] > end_pos[3]) then
+		start_pos, end_pos = end_pos, start_pos
+	end
+	local lines = vim.api.nvim_buf_get_text(
+		0,
+		start_pos[2] - 1, start_pos[3] - 1,
+		end_pos[2] - 1, end_pos[3],
+		{}
+	)
+	vim.g._decode_jwt_selection = table.concat(lines, "")
+	vim.cmd("DecodeJWT")
 end, { silent = true })
 
 vim.keymap.set("i", "<C-k>", "<c-o>D<esc>", { desc = "Kill to end of line" })

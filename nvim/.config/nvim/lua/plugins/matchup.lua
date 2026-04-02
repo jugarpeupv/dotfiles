@@ -5,12 +5,12 @@ return {
 	enabled = true,
 	lazy = true,
 	-- dependencies = { "nvim-treesitter/nvim-treesitter" },
-	-- event = { "VeryLazy" },
-  event = { "BufReadPost", "BufNewFile" },
+	event = { "VeryLazy" },
+  -- event = { "BufReadPost", "BufNewFile" },
 	keys = {
 		{
 			mode = { "n", "v" },
-			"<F10>",
+			"<leader><space>",
 			"<Plug>(matchup-hi-surround)",
 			{ silent = true, desc = "Highlight surrounding match" },
 		},

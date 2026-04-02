@@ -30,9 +30,9 @@ end
 return {
 	{
 		-- "pwntester/octo.nvim",
-		"jugarpeupv/octo.nvim",
-		-- dev = true,
-		-- dir = "~/projects/octo.nvim/wt-master",
+		-- "jugarpeupv/octo.nvim",
+		dev = true,
+		dir = "~/projects/octo.nvim/wt-master",
 		-- dependencies = {
 		-- -- 	"nvim-lua/plenary.nvim",
 		-- -- 	"nvim-telescope/telescope.nvim",

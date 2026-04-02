@@ -118,7 +118,9 @@ return {
 					"regex",
 					"lua",
           "rust",
-          "rust-docs"
+          "rust-docs",
+          "devtools-storage",
+          "devtools-detail",
 				},
 				callback = function()
 					-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
@@ -130,6 +132,17 @@ return {
 			})
 
       vim.treesitter.language.register("markdown", "rust-docs")
+      vim.treesitter.language.register("markdown", "devtools-storage")
+      vim.treesitter.language.register("markdown", "devtools-detail")
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("devtools-detail-folds", { clear = true }),
+        pattern = "devtools-detail",
+        callback = function()
+          vim.wo[0][0].foldmethod = "expr"
+          vim.wo[0][0].foldexpr   = "v:lua.vim.treesitter.foldexpr()"
+          vim.wo[0][0].foldlevel  = 1   -- # REQUEST / # RESPONSE open, sub-sections folded
+        end,
+      })
 			vim.treesitter.language.register("markdown", "codecompanion")
 			vim.treesitter.language.register("markdown", "opencode")
 			vim.treesitter.language.register("markdown", "octo")
@@ -162,6 +175,7 @@ return {
 				},
 			})
 
+			---@diagnostic disable-next-line: param-type-mismatch
 			vim.api.nvim_create_autocmd("User", {
 				group = vim.api.nvim_create_augroup("TSUpdateTreesitter", { clear = true }),
 				pattern = "TSUpdate",
@@ -298,7 +312,7 @@ return {
 			},
 			{
 				mode = { "n" },
-				"<leader>co",
+				"<leader>cO",
 				function()
 					require("treesitter-context").go_to_context(vim.v.count1)
 				end,

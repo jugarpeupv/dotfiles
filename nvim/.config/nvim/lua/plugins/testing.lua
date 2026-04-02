@@ -113,7 +113,7 @@ return {
 		keys = {
 			{
 
-				"<leader>no",
+				"<leader>To",
 				function()
 					require("neotest").output_panel.toggle()
 					local win = vim.fn.bufwinid("Neotest Output Panel")

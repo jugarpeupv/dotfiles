@@ -397,7 +397,7 @@ return {
 							local jid = vim.fn.jobstart(cmd, { detach = true })
 							assert(jid > 0, "Failed to start job")
 						end,
-						["<M-b>"] = function(view)
+						["<leader>cr"] = function(view)
 							local entry = view:cursor_node_entry()
 							local path = entry.path
 
@@ -405,13 +405,16 @@ return {
 							if home then
 								path = path:gsub("^" .. home, "~")
 							end
+							-- local escaped_path = vim.fn.shellescape(path)
 
-							local cmd_run = string.format(":Compile  %s", path)
+							-- local cmd_run = string.format(":Compile  %s", escaped_path)
+              local cmd_run = string.format(":Compile  %s", path)
 							local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
 							vim.api.nvim_feedkeys(keys, "c", true)
 
 							local hops =
-								string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
+								-- string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #escaped_path + 1)
+                string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
 							vim.api.nvim_feedkeys(hops, "n", true)
 						end,
 						["S"] = function(view)
@@ -577,6 +580,7 @@ return {
 					},
 					-- Window configuration
 					win = {
+            min_width = 35,
 						border = vim.o.winborder == "" and "single" or vim.o.winborder,
 						buf_opts = {
 							filetype = "fyler",
@@ -645,7 +649,7 @@ return {
 			vim.cmd("hi FylerGitIconStaged gui=none guifg=#8ee2cf")
 			vim.cmd("hi FylerGitUnstaged gui=none guifg=none")
 			vim.cmd("hi FylerGitIconUnstaged gui=none guifg=#F5E0DC")
-			vim.cmd("hi FylerGitUntracked gui=none guifg=#89b4fa")
+			vim.cmd("hi FylerGitUntracked gui=none guifg=none")
 			vim.cmd("hi FylerGitIconUntracked gui=none guifg=#89ddff")
 		end,
 	},

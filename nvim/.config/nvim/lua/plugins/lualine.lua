@@ -62,8 +62,6 @@ return {
 					"dashboard",
 					"fugitive",
 					"diffview",
-					" ",
-					"",
 					"DiffviewFiles",
 					"startify",
 					"dashboard",
@@ -99,8 +97,8 @@ return {
 		"nvim-lualine/lualine.nvim",
 		-- enabled = true,
 		-- event = "VeryLazy",
-		event = "LspAttach",
-		-- event = { "BufReadPost", "BufNewFile" },
+		-- event = "LspAttach",
+		event = { "VeryLazy" },
 		ft = { "DiffviewFiles" },
 		lazy = true,
 		-- dependencies = { "catppuccin/nvim" },
@@ -409,7 +407,7 @@ return {
 					disabled_filetypes = {
 						-- statusline = { "alpha", "dashboard", "NvimTree", "Outline", "Diffview", "diffview" },
 						-- 'NvimTree',
-						statusline = { "alpha", "dashboard", "Outline", "Diffview", "diffview", "intro", "NvimTree" },
+						statusline = {  "Diffview", "diffview" },
 						winbar = {
 							"oil",
 							"help",

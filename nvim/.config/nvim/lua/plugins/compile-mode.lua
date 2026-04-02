@@ -26,7 +26,7 @@ local function jump_to_compilation_buffer()
 end
 
 return {
-	-- "ej-shafran/compile-mode.nvim",
+	"ej-shafran/compile-mode.nvim",
 	-- dir = "~/projects/compile-mode.nvim/wt-compile-mode-main/",
 	-- dev = true,
   "jugarpeupv/compile-mode.nvim",
@@ -124,7 +124,19 @@ return {
 				rust = {
 					-- Rust errors take the form
 					-- "--> path/to/error-file.rs:12:20"
-					regex = "^[[:space:]]*--> \\([^:]*\\):\\([1-9][0-9]*\\):\\([1-9][0-9]*\\)",
+          -- regex = "^[[:space:]]*--> \\([^:]*\\):\\([1-9][0-9]*\\):\\([1-9][0-9]*\\)",
+          --
+          -- Exclude absolute paths (stdlib/toolchain internals like /private/tmp/...)
+					regex = "^[[:space:]]*--> \\([^/:][^:]*\\):\\([1-9][0-9]*\\):\\([1-9][0-9]*\\)",
+					filename = 1,
+					row = 2,
+					col = 3,
+					priority = 10,
+				},
+				rust_panic = {
+					-- Rust panic lines take the form
+					-- "thread 'main' panicked at src/main.rs:10:5:"
+					regex = "^thread '.*' panicked at \\([^:]*\\):\\([1-9][0-9]*\\):\\([1-9][0-9]*\\)",
 					filename = 1,
 					row = 2,
 					col = 3,

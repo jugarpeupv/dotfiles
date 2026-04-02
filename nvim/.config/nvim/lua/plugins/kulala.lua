@@ -106,7 +106,6 @@ return {
 						require("kulala.ui").toggle_filter()
 					end,
 				},
-
 				-- ["Send WS message"] = {
 				-- 	"<S-CR>",
 				-- 	function()

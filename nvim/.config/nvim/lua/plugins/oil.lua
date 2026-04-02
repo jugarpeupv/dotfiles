@@ -79,7 +79,7 @@ return {
       },
     },
 		keys = {
-      -- { ":" },
+      { ":" },
 			{
 				"-",
 				function()
@@ -401,7 +401,7 @@ return {
 						end,
 						mode = "n",
 					},
-					["<M-b>"] = {
+					["<leader>cr"] = {
 						callback = function()
 							local oil = require("oil")
 							local entry = oil.get_cursor_entry()
@@ -411,15 +411,17 @@ return {
 								return
 							end
 
-							entry.name = entry.name:gsub(" ", "\\ ")
-							local path = dir .. entry.name
+						local path = dir .. entry.name
+							-- local escaped_path = vim.fn.shellescape(path)
 
-							local cmd_run = string.format(":Compile  %s", path)
+							-- local cmd_run = string.format(":Compile  %s", escaped_path)
+              local cmd_run = string.format(":Compile  %s", path)
 							local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
 							vim.api.nvim_feedkeys(keys, "c", true)
 
 							local hops =
-								string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
+								-- string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #escaped_path + 1)
+                string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
 							vim.api.nvim_feedkeys(hops, "n", true)
 
 							-- vim.ui.input({ prompt = "Command to run on " .. entry.name .. ": " }, function(cmd)

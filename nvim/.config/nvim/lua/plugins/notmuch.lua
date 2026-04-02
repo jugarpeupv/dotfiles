@@ -30,7 +30,7 @@ return {
 				":NmSearch tag:izertis and subject:",
 				{ noremap = true, silent = true },
 			},
-			{ mode = { "n" }, "<leader><space>", "<cmd>Notmuch<cr>", { silent = true } },
+			{ mode = { "n" }, "<leader>no", "<cmd>Notmuch<cr>", { silent = true } },
 
 			{
 				mode = { "n" },

@@ -1,6 +1,22 @@
 return {
 	-- Lua
 	{
+		"jugarpeupv/devtools.nvim",
+		dev = true,
+		dir = "~/projects/devtools.nvim",
+		lazy = false,
+		cmd = { "DevTools" },
+		keys = {
+			{ mode = { "n" }, "<leader>co", "<cmd>DevTools<cr>" },
+		},
+		config = function()
+			require("devtools").setup({
+				proxy_port = 8080, -- proxy listens here
+				target_port = 4200, -- your dev server
+			})
+		end,
+	},
+	{
 		"folke/persistence.nvim",
 		enabled = false,
 		-- Not lazy on BufReadPre: we need the plugin available at VimEnter so
@@ -19,7 +35,16 @@ return {
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "PersistenceSavePre",
 				callback = function()
-					local excluded_ft = { "fyler", "neo-tree", "NvimTree", "mail", "notmuch-hello", "notmuch-threads", "opencode", "opencode_output" }
+					local excluded_ft = {
+						"fyler",
+						"neo-tree",
+						"NvimTree",
+						"mail",
+						"notmuch-hello",
+						"notmuch-threads",
+						"opencode",
+						"opencode_output",
+					}
 					for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 						if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) then
 							local ft = vim.bo[buf].filetype

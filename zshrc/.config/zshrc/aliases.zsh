@@ -30,3 +30,16 @@ alias gop='git open'
 alias cat='bat --paging=never'
 alias k='kubectl'
 alias dc='docker-compose'
+
+# chrome-dev: opens Chrome with CDP enabled for devtools.nvim.
+# Chrome blocks --remote-debugging-port on the default user-data-dir (security
+# restriction since Chrome ~115), so a separate data dir is required.
+# Data is stored in ~/.chrome-dev so it persists across reboots. Sign into your
+# Google account once and Chrome Sync will pull down your extensions/bookmarks.
+alias chrome-dev='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+--remote-debugging-port=9222 \
+--user-data-dir="$HOME/.chrome-dev" \
+--no-first-run \
+--no-default-browser-check \
+"http://localhost:4200" \
+&>/dev/null & disown'
