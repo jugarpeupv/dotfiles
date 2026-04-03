@@ -2,63 +2,17 @@ vim.g.image_rendered = false
 
 return {
 	{
-		"HakonHarnes/img-clip.nvim",
-		-- keys = { "<leader>pi" },
-		opts = {
-			filetypes = {
-				codecompanion = {
-					prompt_for_file_name = false,
-					template = "[Image]($FILE_PATH)",
-					use_absolute_path = true,
-				},
-			},
-			default = {
-				verbose = false,
-				embed_image_as_base64 = false,
-				prompt_for_file_name = false,
-				drag_and_drop = {
-					insert_mode = true,
-				},
-				-- required for Windows users
-				use_absolute_path = true,
-				show_dir_path_in_prompt = true,
-				dir_path = function()
-					-- return "assets/imgs" .. vim.fn.expand("%:t:r")
-					return "assets/imgs"
-				end,
-			},
-			-- filetypes = {
-			--   markdown = {
-			--     -- relative_to_current_file = true,
-			--   },
-			-- },
-			-- add options here
-			-- or leave it empty to use the default settings
-		},
-		keys = {
-			-- suggested keymap
-			-- { "<leader>pi", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
-			{
-				"<leader>pi",
-				function()
-					require("img-clip").paste_image({ use_absolute_path = false })
-				end,
-				desc = "Paste image from system clipboard",
-			},
-		},
-	},
-	{
 		"3rd/image.nvim",
 		-- commit = "21909e3eb03bc738cce497f45602bf157b396672",
 		-- commit = "446a8a5cc7a3eae3185ee0c697732c32a5547a0b",
-		branch = "master",
-    -- dev = true,
-    -- dir = "~/projects/image.nvim/wt-master",
+		-- branch = "master",
+		-- dev = true,
+		-- dir = "~/projects/image.nvim/wt-master",
 		-- branch = "main",
 		-- event = "VeryLazy",
 		-- event = { "BufReadPost" },
-		-- ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
-		ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "vimwiki" },
+		ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
+		-- ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "vimwiki" },
 		keys = {
 			{
 				mode = { "n", "v" },
@@ -89,16 +43,21 @@ return {
 						return full_path
 					end
 
-					local image_util = require("jg.custom.image-utils")
-					if image_util.image_rendered and image_util.loaded_image_under_cursor then
-						-- vim.g.image_object:clear() -- remove the image if it is already rendered
+				local image_util = require("jg.custom.image-utils")
+				if image_util.image_rendered and image_util.loaded_image_under_cursor then
+					-- vim.g.image_object:clear() -- remove the image if it is already rendered
 					image_util.loaded_image_under_cursor:clear() -- remove the image if it is already rendered
-          vim.cmd('redraw')
-					image_util.image_rendered = false
-						-- vim.g.image_object = nil
-						image_util.loaded_image_under_cursor = nil
-						return
+					local _ok, _ui2 = pcall(require, "vim._core.ui2")
+					if _ok and vim.api.nvim_win_is_valid(_ui2.wins and _ui2.wins.cmd or -1) then
+						vim.schedule(function()
+							pcall(vim.api.nvim__redraw, { flush = true })
+						end)
 					end
+					image_util.image_rendered = false
+					-- vim.g.image_object = nil
+					image_util.loaded_image_under_cursor = nil
+					return
+				end
 
 					local current_window = vim.api.nvim_get_current_win()
 					local current_buffer = vim.api.nvim_get_current_buf()
@@ -227,9 +186,9 @@ return {
 				max_height = 2000,
 				max_width_window_percentage = 80,
 				max_height_window_percentage = 80,
-				window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
+				window_overlap_clear_enabled = false, -- toggles images when windows are overlapped
 				scale_factor = 3, -- scales the window size up or down
-				window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
+				window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "", "cmd", "msg", "pager", "dialog" },
 				editor_only_render_when_focused = true, -- auto show/hide images when the editor gains/looses focus
 				tmux_show_only_in_active_window = true, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
 				-- hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" }, -- render image files as images when opened
@@ -237,6 +196,52 @@ return {
 				hijack_file_patterns = {}, -- render image files as images when opened
 			})
 		end,
+	},
+	{
+		"HakonHarnes/img-clip.nvim",
+		-- keys = { "<leader>pi" },
+		opts = {
+			filetypes = {
+				codecompanion = {
+					prompt_for_file_name = false,
+					template = "[Image]($FILE_PATH)",
+					use_absolute_path = true,
+				},
+			},
+			default = {
+				verbose = false,
+				embed_image_as_base64 = false,
+				prompt_for_file_name = false,
+				drag_and_drop = {
+					insert_mode = true,
+				},
+				-- required for Windows users
+				use_absolute_path = true,
+				show_dir_path_in_prompt = true,
+				dir_path = function()
+					-- return "assets/imgs" .. vim.fn.expand("%:t:r")
+					return "assets/imgs"
+				end,
+			},
+			-- filetypes = {
+			--   markdown = {
+			--     -- relative_to_current_file = true,
+			--   },
+			-- },
+			-- add options here
+			-- or leave it empty to use the default settings
+		},
+		keys = {
+			-- suggested keymap
+			-- { "<leader>pi", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+			{
+				"<leader>pi",
+				function()
+					require("img-clip").paste_image({ use_absolute_path = false })
+				end,
+				desc = "Paste image from system clipboard",
+			},
+		},
 	},
 	{
 		"edluffy/hologram.nvim",

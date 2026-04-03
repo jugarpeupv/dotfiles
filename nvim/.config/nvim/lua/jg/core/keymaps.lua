@@ -684,8 +684,8 @@ keymap("n", "<leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 
 -- Replace
 -- vim.cmd([[nnoremap <leader>rr :OverCommandLine %s///g<cr><Left><Left><Left>]])
--- vim.cmd([[nnoremap <leader>rr :%s///g<Left><Left><Left>]])
-vim.cmd([[xnoremap <leader>rr :s///g<Left><Left><Left>]])
+vim.cmd([[nnoremap <leader>rr :%s///gc<Left><Left><Left><Left>]])
+vim.cmd([[xnoremap <leader>rr :s///gc<Left><Left><Left><Left>]])
 -- vim.cmd([[nnoremap <leader>sw /\<\><Left><Left>]])
 vim.cmd([[nnoremap g/ /\<\><Left><Left>]])
 

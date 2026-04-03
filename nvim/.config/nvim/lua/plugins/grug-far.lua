@@ -3,7 +3,7 @@ return {
 	keys = {
 		{
 			mode = { "n" },
-			"<leader>rr",
+			"<leader>rR",
 			function()
 				require("grug-far").open({ prefills = { paths = vim.fn.expand("%") } })
 			end,

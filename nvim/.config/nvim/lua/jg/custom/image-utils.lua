@@ -3,6 +3,26 @@ local M = {}
 M.loaded_image_under_cursor = nil
 M.image_rendered = false
 
+-- When the experimental ui2 renderer is active (require('vim._core.ui2').enable()
+-- has been called), the kitty backend routes writes through nvim_ui_send(), which
+-- buffers data in the UI event queue. Without an explicit flush the render/clear
+-- is invisible until some unrelated redraw fires.
+-- We detect ui2 being active by checking that its internal cmd window is valid —
+-- that window is only created after enable() has run successfully.
+-- The flush is wrapped in vim.schedule so it fires after the full render() call
+-- stack has unwound — including nvim_buf_set_extmark() calls that happen inside
+-- Image:render() after backend.render() returns.  Flushing before those extmark
+-- operations settle causes the subsequent Neovim screen redraw to overwrite the
+-- kitty graphics data.
+local function flush_if_ui2_active()
+	local ok, ui2 = pcall(require, "vim._core.ui2")
+	if ok and vim.api.nvim_win_is_valid(ui2.wins and ui2.wins.cmd or -1) then
+		vim.schedule(function()
+			pcall(vim.api.nvim__redraw, { flush = true })
+		end)
+	end
+end
+
 --- @param file_path string Required
 --- @param window integer Required
 --- @param buffer integer Required
@@ -12,6 +32,7 @@ M.toggle_image_under_cursor = function(file_path, window, buffer, row)
 	if M.image_rendered and M.loaded_image_under_cursor then
 		-- vim.g.image_object:clear() -- remove the image if it is already rendered
 		M.loaded_image_under_cursor:clear() -- remove the image if it is already rendered
+		flush_if_ui2_active()
 		M.image_rendered = false
 		-- vim.g.image_object = nil
 		M.loaded_image_under_cursor = nil
@@ -41,6 +62,7 @@ M.toggle_image_under_cursor = function(file_path, window, buffer, row)
 		end
 
 		M.loaded_image_under_cursor:render()
+		flush_if_ui2_active()
 		M.image_rendered = true
 	end
 end
