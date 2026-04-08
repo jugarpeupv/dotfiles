@@ -2,8 +2,9 @@ return {
 	{
 		"sudo-tee/opencode.nvim",
 		enabled = true,
+    commit = "ed0c07815e867f3b71f4e012de4781cc24fb29e5",
 		-- dev = true,
-		dir = "~/projects/opencode.nvim/wt-feature-ctrl-w-o/",
+		-- dir = "~/projects/opencode.nvim/wt-feature-ctrl-w-o/",
 		lazy = true,
 		keys = {
 			-- {
@@ -92,6 +93,7 @@ return {
 					},
 					editor = {
 						-- ["<C-.>"] = { "toggle" }, -- Open opencode. Close if opened
+            ["<C-.>"] = false,
 						["<M-m>"] = { "toggle" }, -- Open opencode. Close if opened
 						["<D-m>"] = { "toggle" }, -- Open opencode. Close if opened
 						["<leader>og"] = false,
@@ -220,6 +222,36 @@ return {
 						deny = "D",
 					},
 				},
+        context = {
+          enabled = true, -- Enable automatic context capturing
+          cursor_data = {
+            enabled = false, -- Include cursor position and line content in the context
+            context_lines = 5, -- Number of lines before and after cursor to include in context
+          },
+          diagnostics = {
+            info = false, -- Include diagnostics info in the context (default to false
+            warning = false, -- Include diagnostics warnings in the context
+            error = false, -- Include diagnostics errors in the context
+            only_closest = false, -- If true, only diagnostics for cursor/selection
+          },
+          current_file = {
+            enabled = false, -- Include current file path and content in the context
+            show_full_path = false,
+          },
+          files = {
+            enabled = false,
+            show_full_path = true,
+          },
+          selection = {
+            enabled = true, -- Include selected text in the context
+          },
+          buffer = {
+            enabled = false, -- Disable entire buffer context by default, only used in quick chat
+          },
+          git_diff = {
+            enabled = false,
+          },
+        },
 				ui = {
 					enable_treesitter_markdown = true, -- Use Treesitter for markdown rendering in the output window (default: true).
 					position = "right", -- 'right' (default), 'left' or 'current'. Position of the UI split. 'current' uses the current window for the output.

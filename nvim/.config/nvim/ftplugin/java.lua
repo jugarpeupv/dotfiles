@@ -1,5 +1,30 @@
 local home = os.getenv("HOME")
 
+-- Resolve java binary: prefer JAVA_HOME (set by worktree-repo-init from .sdkmanrc),
+-- then SDKMAN current, then fall back to whatever is on PATH.
+local function resolve_java_bin()
+	local java_home = vim.env.JAVA_HOME
+	if java_home and java_home ~= "" then
+		local bin = java_home .. "/bin/java"
+		if vim.fn.executable(bin) == 1 then
+			return bin
+		end
+	end
+	local sdkman_dir = vim.env.SDKMAN_DIR or (home .. "/.sdkman")
+	local current = sdkman_dir .. "/candidates/java/current/bin/java"
+	if vim.fn.executable(current) == 1 then
+		return current
+	end
+	return "java"
+end
+
+local java_bin = resolve_java_bin()
+
+-- DYLD_LIBRARY_PATH (set in shell dotfiles for tools like zathura/girara) causes
+-- Homebrew's libzip to shadow the JDK's own libzip.dylib, breaking JNI native loading.
+-- Clear it so Java child processes use their own bundled native libraries.
+vim.env.DYLD_LIBRARY_PATH = nil
+
 local mason_root_path = os.getenv("HOME") .. "/.local/share/nvim/mason"
 local bundles = {}
 
@@ -101,7 +126,7 @@ local config = {
 			pattern = { "*.java" },
       group = vim.api.nvim_create_augroup('bufwritejavacodelens', { clear = true }),
 			callback = function()
-				local _, _ = pcall(vim.lsp.codelens.refresh)
+				local _, _ = pcall(vim.lsp.codelens.enable, true)
 			end,
 		})
 
@@ -111,7 +136,7 @@ local config = {
 		})
 	end,
 	cmd = {
-		"java",
+		java_bin,
 		"-Declipse.application=org.eclipse.jdt.ls.core.id1",
 		"-Dosgi.bundles.defaultStartLevel=4",
 		"-Declipse.product=org.eclipse.jdt.ls.core.product",

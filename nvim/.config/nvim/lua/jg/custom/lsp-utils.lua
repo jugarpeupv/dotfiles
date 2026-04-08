@@ -86,7 +86,7 @@ M.attach_lsp_config = function(client, bufnr)
 		cmdId = vim.api.nvim_create_autocmd({ "CmdlineEnter" }, {
       group = vim.api.nvim_create_augroup('cmdlineenterlsputils', { clear = true }),
 			callback = function()
-				local key = vim.api.nvim_replace_termcodes("<C-f>", true, false, true)
+				local key = vim.api.nvim_replace_termcodes("<C-o>", true, false, true)
 				vim.api.nvim_feedkeys(key, "c", false)
 				vim.api.nvim_feedkeys("0", "n", false)
 				-- autocmd was triggered and so we can remove the ID and return true to delete the autocmd
@@ -121,8 +121,8 @@ M.attach_lsp_config = function(client, bufnr)
 
 	-- keymap.set("n", "<leader>d", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts) -- show diagnostics for cursor
 
-	keymap.set("n", "<leader>gk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", opts) -- jump to previous diagnostic in buffer
-	keymap.set("n", "<leader>gj", "<cmd>lua vim.diagnostic.goto_next()<cr>", opts) -- jump to previous diagnostic in buffer
+  keymap.set("n", "<leader>gk", function() vim.diagnostic.jump({ count = -1, float = true }) end, opts)
+  keymap.set("n", "<leader>gj", function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
 
 	-- keymap.set("n", "<leader>gk", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to previous diagnostic in buffer
 	-- keymap.set("n", "<leader>gj", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer

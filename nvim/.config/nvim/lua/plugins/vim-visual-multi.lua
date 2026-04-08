@@ -73,6 +73,13 @@ return {
 					require("multicursor-nvim").toggleCursor()
 				end,
 			},
+      {
+        mode = { "n", "x" },
+        "Q",
+        function()
+          require("multicursor-nvim").toggleCursor()
+        end,
+      },
 		},
 		config = function()
 			local mc = require("multicursor-nvim")

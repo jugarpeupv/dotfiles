@@ -1,8 +1,8 @@
 return {
 	{
-		-- "olimorris/codecompanion.nvim",
-		"aweis89/codecompanion.nvim",
-		branch = "fix/acp-async-connection",
+		"olimorris/codecompanion.nvim",
+		-- "aweis89/codecompanion.nvim",
+		-- branch = "fix/acp-async-connection",
     enabled = true,
 		-- enabled = function()
 		-- 	local is_headless = #vim.api.nvim_list_uis() == 0
@@ -18,7 +18,7 @@ return {
 		-- end,
 		dependencies = {
 			"ravitemer/codecompanion-history.nvim",
-			"j-hui/fidget.nvim", -- Display status
+			-- "j-hui/fidget.nvim", -- Display status
 			-- { "bassamsdata/fs-monitor.nvim" },
 			-- "ravitemer/mcphub.nvim",
 			-- "franco-ruggeri/codecompanion-spinner.nvim",

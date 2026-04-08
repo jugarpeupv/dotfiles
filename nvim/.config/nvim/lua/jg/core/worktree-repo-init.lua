@@ -89,6 +89,22 @@ local function restore_last_worktree()
 	-- vim.cmd("bwipeout " .. cwd_buffer_nr)
 	pcall(vim.cmd.cd, last_active_wt)
 
+	-- Apply .sdkmanrc if present in the worktree
+	local sdkmanrc = last_active_wt .. "/.sdkmanrc"
+	if vim.fn.filereadable(sdkmanrc) == 1 then
+		local sdkman_dir = vim.env.SDKMAN_DIR or (vim.env.HOME .. "/.sdkman")
+		for line in io.lines(sdkmanrc) do
+			local version = line:match("^java=(.+)$")
+			if version then
+				local java_home = sdkman_dir .. "/candidates/java/" .. version
+				if vim.fn.isdirectory(java_home) == 1 then
+					vim.env.JAVA_HOME = java_home
+					vim.env.PATH = java_home .. "/bin:" .. (vim.env.PATH or "")
+				end
+			end
+		end
+	end
+
 	-- require("oil").open(last_active_wt)
 	require("fyler").open({ dir = last_active_wt, kind = "replace" })
 	-- pcall(require("fyler").open, { dir = last_active_wt })

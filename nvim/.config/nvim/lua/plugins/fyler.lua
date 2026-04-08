@@ -197,14 +197,14 @@ return {
 					},
 					-- Key mappings
 					mappings = {
-						["gY"] = function(view)
+						["gy"] = function(view)
 							local entry = view:cursor_node_entry()
 							local path = entry.path
 							local relative_path = vim.fn.fnamemodify(path, ":.")
 							vim.notify("Copied path: " .. relative_path)
 							vim.fn.setreg("+", relative_path)
 						end,
-						["gy"] = function(view)
+						["gY"] = function(view)
 							local entry = view:cursor_node_entry()
 							local path = entry.path
 							vim.notify("Copied path: " .. path)

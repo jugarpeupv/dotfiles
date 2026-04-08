@@ -594,7 +594,7 @@ return {
 		-- event = { "Lazy" },
 		config = function()
 			vim.api.nvim_del_keymap("i", "<C-X><C-A>")
-			vim.api.nvim_del_keymap("c", "<C-f>")
+			-- vim.api.nvim_del_keymap("c", "<C-f>")
 			-- vim.api.nvim_del_keymap("i", "<C-f>")
 			-- vim.api.nvim_del_keymap("i", "<C-b>")
 			-- vim.api.nvim_set_keymap("i", "<C-f>", "<S-Right>", { noremap = true, silent = true })

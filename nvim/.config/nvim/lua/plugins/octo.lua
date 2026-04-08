@@ -78,7 +78,7 @@ return {
 				mode = { "n" },
 				"<leader>os",
 				-- "<cmd>Octo search assignee:GPJULI6_mapfre is:issue is:open label:task type:issue repo:mapfre-tech/arch-mar2-mgmt<cr>",
-				":Octo search is:issue repo:mapfre-tech/arch-mar2-mgmt assignee:GPJULI6_mapfre is:open",
+				":Octo search is:issue assignee:GPJULI6_mapfre is:open",
 				-- ":Octo search assignee:GPJULI6_mapfre is:issue is:open",
 				-- ":Octo search assignee:GPJULI6_mapfre is:issue is:open repo:mapfre-tech/arch-mar2-mgmt",
 				{ noremap = true, silent = true },

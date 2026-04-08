@@ -76,7 +76,7 @@ return {
     },
     config = function()
       local springboot_nvim = require("springboot-nvim")
-      springboot_nvim.setup()
+      springboot_nvim.setup({})
     end,
   },
   {
@@ -138,7 +138,21 @@ return {
       -- jdtls opts.ls_path:  /Users/jgarcia/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server
       -- opts.ls_path = "/home/sangram/.vscode/extensions/vmware.vscode-spring-boot-1.55.1"
       -- vim.notify("spring boot ls path : " .. opts.ls_path, vim.log.levels.INFO, {title = "Spring boot"})
-      opts.java_cmd = "java"
+      opts.java_cmd = (function()
+        local java_home = vim.env.JAVA_HOME
+        if java_home and java_home ~= "" then
+          local bin = java_home .. "/bin/java"
+          if vim.fn.executable(bin) == 1 then
+            return bin
+          end
+        end
+        local sdkman_dir = vim.env.SDKMAN_DIR or (os.getenv("HOME") .. "/.sdkman")
+        local current = sdkman_dir .. "/candidates/java/current/bin/java"
+        if vim.fn.executable(current) == 1 then
+          return current
+        end
+        return "java"
+      end)()
       -- opts.exploded_ls_jar_data = true
       opts.jdtls_name = "jdtls"
       opts.log_file = home .. "/.local/state/nvim/spring-boot-ls.log"

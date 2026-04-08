@@ -431,6 +431,7 @@ return {
 				[".zshenv"] = { icon = "", color = "#73daca", name = "zshenv" },
 				[".vimrc"] = { icon = "", color = "#73daca", name = "vimrc2323" },
 
+        ["vitest.config.js"] = { icon = "", color = "#73daca", name = "vitest_config_js" },
 				["Fastfile"] = { icon = "", color = "#f38bad", name = "fastfile" },
 				["Gymfile"] = { icon = "", color = "#f38bad", name = "fastfile" },
 				-- ["package.json"] = { icon = "", color = "#73daca", name = "PackageJson" },

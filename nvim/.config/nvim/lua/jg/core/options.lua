@@ -53,7 +53,7 @@ opt.formatoptions = opt.formatoptions - "c" - "r" - "o"
 
 -- opt.diffopt = { "iwhiteall", "internal", "filler", "closeoff", "hiddenoff", "algorithm:minimal", "followwrap" }
 -- opt.diffopt="iwhiteall,internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram"
-opt.diffopt = "iwhiteall,internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:patience"
+opt.diffopt = "iwhiteall,internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:patience,inline:char"
 
 opt.pumblend = 0
 opt.pumheight = 10

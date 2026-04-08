@@ -25,7 +25,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		lazy = true,
-    event = "VeryLazy",
+		event = "VeryLazy",
 		branch = "main",
 		build = ":TSUpdate",
 		config = function()
@@ -66,7 +66,7 @@ return {
 				"toml",
 				"tsx",
 				"typescript",
-        "angular",
+				"angular",
 				"vim",
 				"vimdoc",
 				"yaml",
@@ -117,32 +117,32 @@ return {
 					"dockerfile",
 					"regex",
 					"lua",
-          "rust",
-          "rust-docs",
-          "devtools-storage",
-          "devtools-detail",
+					"rust",
+					"rust-docs",
+					"devtools-storage",
+					"devtools-detail",
 				},
 				callback = function()
 					-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 					vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
 					vim.wo[0][0].foldmethod = "expr"
-          pcall(vim.treesitter.start)
+					pcall(vim.treesitter.start)
 				end,
 			})
 
-      vim.treesitter.language.register("markdown", "rust-docs")
-      vim.treesitter.language.register("markdown", "devtools-storage")
-      vim.treesitter.language.register("markdown", "devtools-detail")
-      vim.api.nvim_create_autocmd("FileType", {
-        group = vim.api.nvim_create_augroup("devtools-detail-folds", { clear = true }),
-        pattern = "devtools-detail",
-        callback = function()
-          vim.wo[0][0].foldmethod = "expr"
-          vim.wo[0][0].foldexpr   = "v:lua.vim.treesitter.foldexpr()"
-          vim.wo[0][0].foldlevel  = 1   -- # REQUEST / # RESPONSE open, sub-sections folded
-        end,
-      })
+			vim.treesitter.language.register("markdown", "rust-docs")
+			vim.treesitter.language.register("markdown", "devtools-storage")
+			vim.treesitter.language.register("markdown", "devtools-detail")
+			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("devtools-detail-folds", { clear = true }),
+				pattern = "devtools-detail",
+				callback = function()
+					vim.wo[0][0].foldmethod = "expr"
+					vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+					vim.wo[0][0].foldlevel = 1 -- # REQUEST / # RESPONSE open, sub-sections folded
+				end,
+			})
 			vim.treesitter.language.register("markdown", "codecompanion")
 			vim.treesitter.language.register("markdown", "opencode")
 			vim.treesitter.language.register("markdown", "octo")
@@ -164,10 +164,10 @@ return {
 				},
 			})
 
-			require("jg.custom.incremental_selection").setup({
-				incr_key = "<tab>", -- increment selection key
-				decr_key = "<s-tab>", -- decrement selection key
-			})
+			-- require("jg.custom.incremental_selection").setup({
+			-- 	incr_key = "<tab>", -- increment selection key
+			-- 	decr_key = "<s-tab>", -- decrement selection key
+			-- })
 
 			vim.filetype.add({
 				extension = {

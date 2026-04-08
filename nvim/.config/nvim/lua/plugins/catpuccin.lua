@@ -93,6 +93,7 @@ return {
 						-- remove bold from gui, use style = {}
 						Boolean = { fg = "#F38BA8" },
 						Number = { fg = "#F38BA8" },
+            OkMsg = { fg = "#89ddff" },
 						NormalFloat = { fg = "", bg = "" },
 						GitHeader = { bg = "" },
 						GitFooter = { bg = "" },

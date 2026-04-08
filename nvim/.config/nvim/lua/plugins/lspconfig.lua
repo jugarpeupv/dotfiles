@@ -131,7 +131,8 @@ return {
 				gopls = { "go", "gomod", "gowork" },
 				groovyls = { "groovy" },
 				html = { "html" },
-				jdtls = { "java" },
+				-- jdtls is managed by nvim-jdtls in ftplugin/java.lua, not here
+				-- jdtls = { "java" },
 				jsonls = { "json", "jsonc" },
 				kulala_ls = { "http" },
 				lua_ls = { "lua" },
@@ -216,7 +217,7 @@ return {
 	},
 	{
 		"j-hui/fidget.nvim",
-		enabled = true,
+		enabled = false,
 		-- event = { 'BufReadPost', "BufNewFile" },
 		lazy = true,
 		opts = {

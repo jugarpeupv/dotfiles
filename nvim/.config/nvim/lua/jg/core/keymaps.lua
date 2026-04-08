@@ -1005,7 +1005,13 @@ end, opts)
 
 vim.api.nvim_set_keymap("i", "<C-e>", "<C-o>$", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<C-a>", "<C-o>^", { noremap = true, silent = true })
-vim.cmd([[cnoremap <C-a> <C-b>]])
+vim.api.nvim_set_keymap("i", "<M-f>", "<C-Right>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("i", "<M-b>", "<C-Left>", { noremap = true, silent = true })
+-- vim.cmd([[cnoremap <C-a> <C-b>]])
+-- vim.cmd([[cnoremap <M-f> <C-Right>]])
+-- vim.cmd([[cnoremap <M-b> <C-Left>]])
+
+
 -- vim.api.nvim_set_keymap("c", "<c-k>", [[ wildmenumode() ? "c-k>" : "<up>" ]], { noremap = true, expr = true }) -- expr mapping
 -- vim.api.nvim_set_keymap("c", "<c-j>", [[ wildmenumode() ? "c-j>" : "<down>" ]], { noremap = true, expr = true }) -- expr mapping
 -- vim.cmd("cnoremap <expr> <C-K> wildmenumode() ? '<C-P>' : '<Up>'")
@@ -1778,9 +1784,15 @@ vim.keymap.set("n", "<S-right>", "zL", opts)
 vim.keymap.set("n", "<C-i>", "<C-i>", { noremap = true })
 
 vim.keymap.set("n", "gy", function()
-	local path = vim.fn.expand("%:p")
+	local path = vim.fn.fnamemodify(vim.fn.expand("%:p"), ":~:.")
 	vim.fn.setreg("+", path)
 	vim.notify("Copied: " .. path)
+end, { desc = "Yank absolut file path to clipboard" })
+
+vim.keymap.set("n", "gY", function()
+  local path = vim.fn.expand("%:p")
+  vim.fn.setreg("+", path)
+  vim.notify("Copied: " .. path)
 end, { desc = "Yank absolute file path to clipboard" })
 
 -- vim.keymap.set('x', 'an', function()
@@ -2012,3 +2024,9 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.keymap.set("n", "<leader>ra", function()
   vim.cmd("restart")
 end, {})
+
+
+vim.cmd([[inoremap <C-b> <Left>]])
+vim.cmd([[cnoremap <C-o> <C-f>]])
+vim.cmd([[inoremap <C-f> <Right>]])
+vim.cmd([[cnoremap <C-f> <Right>]])

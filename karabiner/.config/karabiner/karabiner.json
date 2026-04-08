@@ -143,6 +143,35 @@
                         ]
                     },
                     {
+                        "description": "Ctrl+W › Ctrl+Delete (delete word forward) in browsers",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com\\.google\\.Chrome$",
+                                            "^org\\.mozilla\\.firefox$",
+                                            "^com\\.apple\\.Safari$",
+                                            "^com\\.microsoft\\.edgemac$"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "w",
+                                    "modifiers": { "mandatory": ["left_control"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "delete_or_backspace",
+                                        "modifiers": ["left_control"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "CAPS+A › CAPS",
                         "manipulators": [
                             {
@@ -187,6 +216,10 @@
             "selected": true,
             "simple_modifications": [
                 {
+                    "from": { "key_code": "grave_accent_and_tilde" },
+                    "to": [{ "key_code": "non_us_backslash" }]
+                },
+                {
                     "from": { "key_code": "keypad_equal_sign" },
                     "to": [{ "key_code": "keypad_slash" }]
                 },
@@ -195,20 +228,16 @@
                     "to": [{ "key_code": "keypad_equal_sign" }]
                 },
                 {
+                    "from": { "key_code": "non_us_backslash" },
+                    "to": [{ "key_code": "grave_accent_and_tilde" }]
+                },
+                {
                     "from": { "key_code": "right_command" },
                     "to": [{ "key_code": "right_option" }]
                 },
                 {
                     "from": { "key_code": "right_option" },
                     "to": [{ "key_code": "right_command" }]
-                },
-                {
-                    "from": { "key_code": "non_us_backslash" },
-                    "to": [{ "key_code": "grave_accent_and_tilde" }]
-                },
-                {
-                    "from": { "key_code": "grave_accent_and_tilde" },
-                    "to": [{ "key_code": "non_us_backslash" }]
                 }
             ],
             "virtual_hid_keyboard": {
