@@ -1,10 +1,10 @@
 return {
 	{
 		"sudo-tee/opencode.nvim",
-		enabled = true,
-    commit = "ed0c07815e867f3b71f4e012de4781cc24fb29e5",
-		-- dev = true,
-		-- dir = "~/projects/opencode.nvim/wt-feature-ctrl-w-o/",
+		-- enabled = true,
+    -- commit = "ed0c07815e867f3b71f4e012de4781cc24fb29e5",
+		dev = true,
+		dir = "~/projects/opencode.nvim/wt-main/",
 		lazy = true,
 		keys = {
 			-- {
@@ -239,7 +239,7 @@ return {
             show_full_path = false,
           },
           files = {
-            enabled = false,
+            enabled = true,
             show_full_path = true,
           },
           selection = {
@@ -265,6 +265,11 @@ return {
 					persist_state = true, -- Keep buffers when toggling/closing UI so window state restores quickly
 					buflisted = true, -- OpenCode buffers won't be closed by :only
 					output = {
+            win_options = {
+              cursorline = true,
+              number = false,
+              relativenumber = false,
+            },
 						rendering = {
 							markdown_debounce_ms = 250,
 							on_data_rendered = nil,

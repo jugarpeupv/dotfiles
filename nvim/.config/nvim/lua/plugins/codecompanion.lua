@@ -3,7 +3,7 @@ return {
 		"olimorris/codecompanion.nvim",
 		-- "aweis89/codecompanion.nvim",
 		-- branch = "fix/acp-async-connection",
-    enabled = true,
+		enabled = true,
 		-- enabled = function()
 		-- 	local is_headless = #vim.api.nvim_list_uis() == 0
 		-- 	if is_headless then
@@ -18,6 +18,7 @@ return {
 		-- end,
 		dependencies = {
 			"ravitemer/codecompanion-history.nvim",
+			-- 'mrjones2014/codecompanion-ui.nvim',
 			-- "j-hui/fidget.nvim", -- Display status
 			-- { "bassamsdata/fs-monitor.nvim" },
 			-- "ravitemer/mcphub.nvim",
@@ -35,6 +36,7 @@ return {
 			require("codecompanion").setup({
 				display = {
 					chat = {
+						-- auto_scroll = false,
 						icons = {
 							chat_fold = " ",
 						},
@@ -230,6 +232,62 @@ Output only the commit message without any explanations and follow-up suggestion
 				},
 
 				extensions = {
+					-- ui = {
+					--   enabled = false,
+					--   -- the default settings are shown here;
+					--   -- you only need to specify non-default options
+					--   opts = {
+					--     input = {
+					--       height = 10,
+					--       -- Placeholder shown when the input buffer is empty
+					--       placeholder = 'Type your message...',
+					--       -- set to `{}` to disable,
+					--       -- see `./lua/codecompanion-ui/components.lua`
+					--       -- for built in components and their options.
+					--       -- feel free to put up a PR with more components!
+					--       winbar = {
+					--         {
+					--           component = 'mode',
+					--           display_names = {},
+					--           icons = {
+					--             default = '󰺴',
+					--             acceptEdits = '󱐋',
+					--             plan = '󰙬',
+					--             dontAsk = '󰝟',
+					--             bypassPermissions = '',
+					--           },
+					--         },
+					--         { component = 'adapter' },
+					--         { component = 'model' },
+					--         {
+					--           component = 'spinner',
+					--           interval_ms = 100,
+					--           frames = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
+					--           text = 'Processing...',
+					--         },
+					--         '%=',
+					--         -- shows some status messages from the plugin briefly
+					--         -- I recommend keeping this enabled
+					--         { component = 'messages' },
+					--       },
+					--     },
+					--     chat = {
+					--       -- Chat window width as a fraction of the screen (0.0-1.0)
+					--       width = 0.35,
+					--       -- Winbar for the chat (output) window.
+					--       -- Same format as input.winbar.
+					--       winbar = {
+					--         winbar = {
+					--           {
+					--             component = 'chat_title',
+					--             icon = '󰭹',
+					--             default = '[No Title]',
+					--           },
+					--         },
+					--       },
+					--     },
+					--   },
+					-- },
 					-- spinner = {},
 					-- mcphub = {
 					-- 	callback = "mcphub.extensions.codecompanion",
@@ -294,6 +352,21 @@ Output only the commit message without any explanations and follow-up suggestion
 				-- },
 
 				interactions = {
+					background = {
+            adapter = {
+              name = "copilot",
+              model = "claude-sonnet-4.5",
+            },
+						chat = {
+							callbacks = {
+								["on_ready"] = {
+									actions = {
+										"interactions.background.builtin.chat_make_title",
+									}, -- Enable "on_ready" callback which contains the title generation action enabled = true, }, }
+								},
+							},
+						},
+					},
 					chat = {
 						opts = {
 							completion_provider = "blink", -- blink|cmp|coc|default

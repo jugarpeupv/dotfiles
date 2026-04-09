@@ -24,7 +24,8 @@ shift + alt - r : osascript ~/.config/skhd/Scripts/new-finder-window.scpt
 shift + alt - z : osascript ~/.config/skhd/Scripts/new-msword-window.scpt
 shift + alt - y : osascript ~/.config/skhd/Scripts/new-obs-window.scpt
 # shift + alt - u : osascript ~/.config/skhd/Scripts/new-onepassword-window.scpt
-shift + alt - u : osascript ~/.config/skhd/Scripts/new-zathura-window.scpt
+# shift + alt - u : osascript ~/.config/skhd/Scripts/new-zathura-window.scpt
+shift + alt - u : osascript ~/.config/skhd/Scripts/new-sioyek-window.scpt
 
 
 shift + alt - 7 : osascript ~/.config/skhd/Scripts/new-android-studio-window.scpt

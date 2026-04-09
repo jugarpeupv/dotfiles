@@ -351,13 +351,13 @@ return {
 			}
 
 			-- CodeCompanion adapter component
-			local codecompanion_adapter = {
-				require("jg.custom.codecompanion_lualine"),
-				color = { fg = colors.blue },
-				cond = function()
-					return vim.bo.filetype == "codecompanion"
-				end,
-			}
+			-- local codecompanion_adapter = {
+			-- 	require("jg.custom.codecompanion_lualine"),
+			-- 	color = { fg = colors.blue },
+			-- 	cond = function()
+			-- 		return vim.bo.filetype == "codecompanion"
+			-- 	end,
+			-- }
 
 			-- local diff = {
 			-- 	"diff",
@@ -464,8 +464,8 @@ return {
 						-- 		return vim.tbl_contains({ "json", "jsonc" }, vim.bo.filetype)
 						-- 	end,
 						-- },
-						codecompanion_adapter,
-						require("jg.custom.codecompanion_lualine_spinner"),
+						-- codecompanion_adapter,
+						-- require("jg.custom.codecompanion_lualine_spinner"),
 						"filetype",
 					},
 					-- lualine_x = {},
