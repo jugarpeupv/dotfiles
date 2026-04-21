@@ -12,12 +12,11 @@ function _G.FylerWinbarCwd()
 		dir = vim.fn.fnamemodify(dir, ":p"):gsub("/$", "")
 	end
 	return dir:gsub("^" .. vim.env.HOME, "~")
-
 end
 return {
 	{
 		-- "A7Lavinraj/fyler.nvim",
-    "jugarpeupv/fyler.nvim",
+		"jugarpeupv/fyler.nvim",
 		dir = "~/projects/fyler.nvim/wt-main",
 		dev = true,
 		enabled = true,
@@ -197,6 +196,20 @@ return {
 					},
 					-- Key mappings
 					mappings = {
+            ["gP"]  = "PasteEntry",
+            ["x"] = "VisualCutEntries",   -- visual mode
+            ["y"]  = "VisualYankEntries",  -- bound in visual (x) mode
+            ["<leader>fp"] = "TogglePermissions",
+            ["."] = function(view)
+              local entry = view:cursor_node_entry()
+              local path = entry.path
+							local cmd_run = string.format(":Compile  %s", path)
+							local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
+							vim.api.nvim_feedkeys(keys, "c", true)
+							local hops =
+								string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
+							vim.api.nvim_feedkeys(hops, "n", true)
+            end,
 						["gy"] = function(view)
 							local entry = view:cursor_node_entry()
 							local path = entry.path
@@ -408,13 +421,13 @@ return {
 							-- local escaped_path = vim.fn.shellescape(path)
 
 							-- local cmd_run = string.format(":Compile  %s", escaped_path)
-              local cmd_run = string.format(":Compile  %s", path)
+							local cmd_run = string.format(":Compile  %s", path)
 							local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
 							vim.api.nvim_feedkeys(keys, "c", true)
 
 							local hops =
 								-- string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #escaped_path + 1)
-                string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
+								string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
 							vim.api.nvim_feedkeys(hops, "n", true)
 						end,
 						["S"] = function(view)
@@ -568,6 +581,30 @@ return {
 						["#"] = "CollapseAll",
 						-- ["<BS>"] = "CollapseNode",
 						["H"] = "CollapseNode",
+            -- ["="] = function()
+            --   local ok, fyler = pcall(require, "fyler")
+            --   local dir
+            --   if ok and type(fyler.get_current_dir) == "function" then
+            --     dir = fyler.get_current_dir()
+            --   end
+            --   if not dir or dir == "" then
+            --     dir = vim.fn.expand("%:p:h")
+            --   end
+            --   fyler.navigate(dir)
+            --   vim.notify("cwd: " .. dir)
+            -- end,
+						["<leader>cd"] = function()
+							local ok, fyler = pcall(require, "fyler")
+							local dir
+							if ok and type(fyler.get_current_dir) == "function" then
+								dir = fyler.get_current_dir()
+							end
+							if not dir or dir == "" then
+								dir = vim.fn.expand("%:p:h")
+							end
+							vim.cmd("cd " .. vim.fn.fnameescape(dir))
+							vim.notify("cwd: " .. dir)
+						end,
 						-- ["gc"] = "SetCwdHere",
 						-- ["gC"] = "SetCwdToParent",
 						-- ["cd"] = "SetCwdToNode",
@@ -580,7 +617,7 @@ return {
 					},
 					-- Window configuration
 					win = {
-            min_width = 35,
+						min_width = 35,
 						border = vim.o.winborder == "" and "single" or vim.o.winborder,
 						buf_opts = {
 							filetype = "fyler",

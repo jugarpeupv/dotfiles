@@ -963,7 +963,7 @@ M.telescope_file_picker_in_workspace = function(path, no_ignore)
 			"--exclude",
 			"node_modules",
 			"--max-depth",
-			"3",
+			"4",
 			"--hidden",
 		}
 
@@ -1149,7 +1149,7 @@ M.oil_fzf_dir = function(path, no_ignore)
 		"node_modules",
 		-- "--one-file-system",
 		"--max-depth",
-		"2",
+		"3",
 		"--hidden",
 	}
 

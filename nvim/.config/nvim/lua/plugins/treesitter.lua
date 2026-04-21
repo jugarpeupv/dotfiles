@@ -341,8 +341,8 @@ return {
 			})
 		end,
 	},
-	-- { "keith/xcconfig.vim", ft = { "xcconfig" } },
-	-- { "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
+	{ "keith/xcconfig.vim", ft = { "xcconfig" } },
+	{ "cfdrake/vim-pbxproj", ft = { "pbxproj" } },
 	{
 		"axelvc/template-string.nvim",
 		-- "chrisgrieser/nvim-puppeteer",

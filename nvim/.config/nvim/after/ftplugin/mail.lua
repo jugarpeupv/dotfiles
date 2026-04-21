@@ -9,5 +9,6 @@
 -- vim.cmd([[autocmd FileType mail setlocal wrap]])
 
 vim.cmd([[setlocal wrap]])
+vim.cmd([[setlocal signcolumn=no]])
 
 

@@ -103,6 +103,9 @@ return {
 				"<leader>pI",
 				function()
 					local Job = require("plenary.job")
+          -- arch-ram-frontend-ops-cli/wt-main on  main [!] via  v20.19.5  sqlite3 ~/Library/Application\ Suppo
+          --   rt/qutebrowser/webengine/Cookies \
+          -- "SELECT host_key, name, value FROM cookies;"
 					-- TODO: https://github.com/richardpenman/browsercookie
 					Job:new({
 						command = os.getenv("HOME") .. "/.config/bin/github_upload_image",

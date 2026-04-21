@@ -5,10 +5,26 @@
 // blurb: All natural pine, faux fur and a bit of soho vibes for the classy minimalist
 
 const hintsCss =
-  "font-size: 13pt; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; border: 0px; color: #e0def4 !important; background: #232136; background-color: #232136";
+  "font-size: 20pt; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; border: 0px; color: #e0def4 !important; background: #232136; background-color: #232136";
 
 // api.Hints.style(hintsCss);
 // api.Hints.style(hintsCss, "text");
+
+api.cmap('<Ctrl-j>', '<ArrowDown>');
+api.cmap('<Ctrl-k>', '<ArrowUp>');
+
+const style = document.createElement('style');
+style.textContent = `
+  div.surfingkeys_match_mark {
+    background-color: #F38BA8 !important;
+  }
+  div.surfingkeys_cursor {
+    // background-color: #ff6600 !important;
+    background-color: yellow !important;
+    color: white !important;
+  }
+`;
+document.head.appendChild(style);
 
 settings.theme = `
   .sk_theme {
@@ -32,7 +48,8 @@ settings.theme = `
     background: #2a273f;
   }
   .sk_theme .omnibar_highlight {
-    color: #44415a;
+    color: #89B4FA;
+    font-weight: bold;
   }
   .sk_theme .omnibar_folder {
     color: #e0def4;
@@ -56,7 +73,7 @@ settings.theme = `
     margin: 0;
 
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 12px;
+    font-size: 20px;
   }
   #sk_omnibar {
     overflow: hidden;
@@ -131,8 +148,11 @@ settings.theme = `
     overflow-y: auto;
   }
   .sk_theme #sk_omnibarSearchResult>ul>li:nth-child(odd) {
-    background: #2a273f;
+    background: #232136;
   }
+  // .sk_theme #sk_omnibarSearchResult>ul>li:nth-child(odd) {
+  //   background: #2a273f;
+  // }
   .sk_theme #sk_omnibarSearchResult>ul>li.focused {
     background: #393552;
   }
@@ -178,7 +198,7 @@ settings.theme = `
     padding: 4px 8px 0 8px;
     border-radius: 4px 4px 0px 0px;
     border: 1px solid #56526e;
-    font-size: 12px;
+    font-size: 20px;
   }
   #sk_status>span {
     line-height: 16px;
@@ -256,7 +276,7 @@ settings.theme = `
     line-height: 22px;
   }
   #sk_usage * {
-    font-size: 10pt;
+    font-size: 15pt;
   }
   kbd {
     white-space: nowrap;
@@ -324,7 +344,7 @@ settings.theme = `
     width: 150px;
     display: inline-block;
     vertical-align: middle;
-    font-size: 10pt;
+    font-size: 15pt;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -332,7 +352,7 @@ settings.theme = `
     color: #e0def4;
   }
   div.sk_tab_url {
-    font-size: 10pt;
+    font-size: 15pt;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -341,7 +361,7 @@ settings.theme = `
   div.sk_tab_hint {
     display: inline-block;
     float:right;
-    font-size: 10pt;
+    font-size: 15pt;
     font-weight: bold;
     padding: 0px 2px 0px 2px;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#232136), color-stop(100%,#232136));
@@ -366,7 +386,7 @@ settings.theme = `
     color: #e0def4;
     background-color: #232136;
     z-index: 2147483000;
-    font-size: 14px;
+    font-size: 15px;
   }
   #sk_bubble .sk_bubble_content {
     overflow-y: scroll;

@@ -1,6 +1,9 @@
 return {
 	{
-		"sindrets/diffview.nvim",
+		-- "sindrets/diffview.nvim",
+		"dlyongemallo/diffview.nvim",
+		-- version = "*",
+		branch = "main",
 		-- event = "VeryLazy",
 		cmd = { "DiffviewOpen" },
 		enabled = true,
@@ -26,10 +29,12 @@ return {
 			local actions = require("diffview.actions")
 
 			require("diffview").setup({
-				diff_binaries = false, -- Show diffs for binaries
+				diff_binaries = true, -- Show diffs for binaries
 				enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
+				clean_up_buffers = true, -- Delete file buffers created by diffview on close.
 				git_cmd = { "git" }, -- The git executable followed by default args.
 				use_icons = true, -- Requires nvim-web-devicons
+				large_file_threshold = 5000, -- Line count above which treesitter is disabled on non-LOCAL diff buffers. 0 = disabled.
 				watch_index = true, -- Update views and index buffers when the git index changes.
 				icons = { -- Only applies when use_icons is true.
 					folder_closed = "",
@@ -47,14 +52,20 @@ return {
 				view = {
 					default = {
 						layout = "diff2_horizontal",
+						-- layout = "diff1_inline",
 					},
 					merge_tool = {
 						layout = "diff1_plain",
 						disable_diagnostics = true, -- Temporarily disable diagnostics for conflict buffers while in the view.
 					},
+					cycle_layouts = {
+						default = { "diff1_inline", "diff2_horizontal" },
+						merge_tool = { "diff4_mixed", "diff3_mixed", "diff3_horizontal", "diff1_plain" },
+					},
 					file_history = {
 						-- Config for changed files in file history views.
 						layout = "diff2_horizontal",
+						-- layout = "diff1_inline",
 					},
 				},
 				file_panel = {
@@ -151,11 +162,36 @@ return {
 						["cs"] = actions.conflict_choose("base"), -- Choose the BASE version of a conflict
 						["cb"] = actions.conflict_choose("all"), -- Choose all the versions of a conflict
 						["cn"] = actions.conflict_choose("none"), -- Delete the conflict region
-            { "n", "<leader>cC",     actions.conflict_choose_all("ours"),    { desc = "Choose the OURS version of a conflict for the whole file" } },
-            { "n", "<leader>cI",     actions.conflict_choose_all("theirs"),  { desc = "Choose the THEIRS version of a conflict for the whole file" } },
-            { "n", "<leader>cS",     actions.conflict_choose_all("base"),    { desc = "Choose the BASE version of a conflict for the whole file" } },
-            { "n", "<leader>cB",     actions.conflict_choose_all("all"),     { desc = "Choose all the versions of a conflict for the whole file" } },
-            { "n", "<leader>cN",     actions.conflict_choose_all("none"),    { desc = "Delete the conflict region for the whole file" } },
+						{
+							"n",
+							"<leader>cC",
+							actions.conflict_choose_all("ours"),
+							{ desc = "Choose the OURS version of a conflict for the whole file" },
+						},
+						{
+							"n",
+							"<leader>cI",
+							actions.conflict_choose_all("theirs"),
+							{ desc = "Choose the THEIRS version of a conflict for the whole file" },
+						},
+						{
+							"n",
+							"<leader>cS",
+							actions.conflict_choose_all("base"),
+							{ desc = "Choose the BASE version of a conflict for the whole file" },
+						},
+						{
+							"n",
+							"<leader>cB",
+							actions.conflict_choose_all("all"),
+							{ desc = "Choose all the versions of a conflict for the whole file" },
+						},
+						{
+							"n",
+							"<leader>cN",
+							actions.conflict_choose_all("none"),
+							{ desc = "Delete the conflict region for the whole file" },
+						},
 					},
 					diff1 = { --[[ Mappings in single window diff layouts ]]
 					},
@@ -202,11 +238,36 @@ return {
 						["<BS>"] = actions.cycle_layout,
 						["[x"] = actions.prev_conflict,
 						["]x"] = actions.next_conflict,
-            { "n", "<leader>cC",     actions.conflict_choose_all("ours"),    { desc = "Choose the OURS version of a conflict for the whole file" } },
-            { "n", "<leader>cI",     actions.conflict_choose_all("theirs"),  { desc = "Choose the THEIRS version of a conflict for the whole file" } },
-            { "n", "<leader>cS",     actions.conflict_choose_all("base"),    { desc = "Choose the BASE version of a conflict for the whole file" } },
-            { "n", "<leader>cB",     actions.conflict_choose_all("all"),     { desc = "Choose all the versions of a conflict for the whole file" } },
-            { "n", "<leader>cN",     actions.conflict_choose_all("none"),    { desc = "Delete the conflict region for the whole file" } },
+						{
+							"n",
+							"<leader>cC",
+							actions.conflict_choose_all("ours"),
+							{ desc = "Choose the OURS version of a conflict for the whole file" },
+						},
+						{
+							"n",
+							"<leader>cI",
+							actions.conflict_choose_all("theirs"),
+							{ desc = "Choose the THEIRS version of a conflict for the whole file" },
+						},
+						{
+							"n",
+							"<leader>cS",
+							actions.conflict_choose_all("base"),
+							{ desc = "Choose the BASE version of a conflict for the whole file" },
+						},
+						{
+							"n",
+							"<leader>cB",
+							actions.conflict_choose_all("all"),
+							{ desc = "Choose all the versions of a conflict for the whole file" },
+						},
+						{
+							"n",
+							"<leader>cN",
+							actions.conflict_choose_all("none"),
+							{ desc = "Delete the conflict region for the whole file" },
+						},
 					},
 					file_history_panel = {
 						["g!"] = actions.options, -- Open the option panel

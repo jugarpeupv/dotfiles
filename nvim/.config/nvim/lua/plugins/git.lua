@@ -1,11 +1,13 @@
 return {
 	{
 		"jugarpeupv/search-github-repos.nvim",
-		-- dir = "~/projects/search-github-repos.nvim",
-		--   dev = true,
+		dir = "~/projects/search-github-repos.nvim",
+		dev = true,
 		config = function()
 			require("search-github-repos").setup({
 				owner = "mapfre-tech", -- scope searches to this org
+				limit = 15, -- max results from gh CLI
+				ssh_alias = "mar",
 				-- backend = "telescope", -- or "snacks" (auto-detects by default)
 			})
 		end,
@@ -119,14 +121,14 @@ return {
 	},
 	{
 		-- "akinsho/git-conflict.nvim",
-    "jugarpeupv/git-conflict.nvim",
-    -- dev = true,
-    -- dir = "~/projects/git-conflict.nvim/wt-main",
+		"jugarpeupv/git-conflict.nvim",
+		-- dev = true,
+		-- dir = "~/projects/git-conflict.nvim/wt-main",
 		-- dependencies = { "sindrets/diffview.nvim" },
 		lazy = true,
 		branch = "main",
 		enabled = true,
-    event = { "BufReadPost", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		config = function()
 			require("git-conflict").setup({
 				default_mappings = false,

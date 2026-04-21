@@ -6,6 +6,8 @@
   "permission": {
     "*": "allow"
   },
+  "snapshot": false,
+  "autoupdate": true,
   "mcp": {
     "nx": {
       "type": "local",
@@ -29,17 +31,28 @@
         "npm_config_registry": "https://registry.npmjs.org"
       }
     },
-    "chrome-devtools": {
-      "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "chrome-devtools-mcp@latest"
-      ],
-      "environment": {
-        "npm_config_registry": "https://registry.npmjs.org"
-      },
-    },
+    // "browsermcp": {
+    //   "type": "local",
+    //   "command": [
+    //     "npx",
+    //     "-y",
+    //     "@browsermcp/mcp@latest"
+    //   ],
+    //   "environment": {
+    //     "npm_config_registry": "https://registry.npmjs.org"
+    //   },
+    // },
+    // "chrome-devtools": {
+    //   "type": "local",
+    //   "command": [
+    //     "npx",
+    //     "-y",
+    //     "chrome-devtools-mcp@latest"
+    //   ],
+    //   "environment": {
+    //     "npm_config_registry": "https://registry.npmjs.org"
+    //   },
+    // },
     "github-server": {
       "type": "remote",
       "url": "https://api.githubcopilot.com/mcp/",
@@ -49,5 +62,4 @@
       }
     },
   },
-  "autoupdate": true
 }

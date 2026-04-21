@@ -23,7 +23,8 @@ Far :izertis-remote:
 Near :izertis-local:
 Create Both
 Expunge Both
-Patterns INBOX Sent Drafts Archive
+Patterns INBOX Sent Drafts Archive Github-notifications
+# Patterns *
 SyncState *
 CopyArrivalDate yes
 Sync All

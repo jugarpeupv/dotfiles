@@ -135,15 +135,14 @@ end, opts)
 -- 	-- builtin.find_files(themes.get_ivy(opts_ivy))
 -- end, opts)
 
-
 vim.keymap.set({ "n" }, "<leader>ot", function()
-  local buffer_cwd = vim.fn.expand("%:p:h")
-  local myterm = require("terminal").terminal:new({
-    cwd = buffer_cwd,
-    layout = { open_cmd = "botright new" },
-    autoclose = false,
-  })
-  myterm:open()
+	local buffer_cwd = vim.fn.expand("%:p:h")
+	local myterm = require("terminal").terminal:new({
+		cwd = buffer_cwd,
+		layout = { open_cmd = "botright new" },
+		autoclose = false,
+	})
+	myterm:open()
 end, opts)
 
 -- cd into dir of the current buffer
@@ -151,7 +150,7 @@ vim.keymap.set({ "n" }, "<leader>cd", function()
 	local cwd = vim.fn.expand("%:p:h")
 	-- vim.cmd("lcd " .. cwd)
 	-- require("nvim-tree.api").tree.change_root(cwd)
-  require("fyler").set_current_dir(cwd)
+	require("fyler").set_current_dir(cwd)
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>.", function()
@@ -774,8 +773,34 @@ vim.keymap.set("n", "<leader>bb", function()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true }) -- paste from 0 register
-vim.keymap.set({ "n" }, "<leader>bm", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
-vim.keymap.set({ "n" }, "<leader>bI", ":Bufferize Inspect<cr>", { silent = true }) -- paste from 0 register
+vim.keymap.set({ "n" }, "<leader>bM", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
+vim.keymap.set("n", "<leader>bm", function()
+  local ui2 = require("vim._core.ui2")
+  local win = vim.api.nvim_get_current_win()  -- save before :messages steals focus
+  vim.cmd("messages")
+  pcall(vim.api.nvim_win_close, ui2.wins.pager, true)
+  ui2.check_targets()
+  vim.schedule(function()
+    vim.api.nvim_set_current_win(win)
+    vim.cmd("split")
+    vim.api.nvim_win_set_height(0, 15)
+    vim.api.nvim_set_current_buf(ui2.bufs.pager)
+  end)
+end)
+-- vim.keymap.set({ "n" }, "<leader>bI", ":Bufferize Inspect<cr>", { silent = true }) -- paste from 0 register
+vim.keymap.set("n", "<leader>bI", function()
+  local ui2 = require("vim._core.ui2")
+  local win = vim.api.nvim_get_current_win()  -- save before :messages steals focus
+  vim.cmd("Inspect")
+  pcall(vim.api.nvim_win_close, ui2.wins.cmd, true)
+  -- ui2.check_targets()
+  vim.schedule(function()
+    vim.api.nvim_set_current_win(win)
+    vim.cmd("split")
+    vim.api.nvim_win_set_height(0, 15)
+    vim.api.nvim_set_current_buf(ui2.bufs.cmd)
+  end)
+end)
 
 -- local function show_documentation()
 --   local filetype = vim.bo.filetype
@@ -871,9 +896,9 @@ vim.keymap.set({ "n" }, "<leader>sw", function()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>sW", function()
-  -- run this command on modifiable windows
-  --   -- vim.wo.wrap = not vim.wo.wrap
-  vim.cmd([[set wrap!]])
+	-- run this command on modifiable windows
+	--   -- vim.wo.wrap = not vim.wo.wrap
+	vim.cmd([[set wrap!]])
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>sn", function()
@@ -966,7 +991,7 @@ vim.keymap.set({ "n" }, "<M-b>", function()
 		-- 	return prefix .. vim.fn.shellescape(path)
 		-- end)
 		-- local cmd_to_feed = ":" .. cmd
-    local cmd_to_feed = ":" .. vim.g._saved_compile_cmd
+		local cmd_to_feed = ":" .. vim.g._saved_compile_cmd
 		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd_to_feed, true, false, true), "n", true)
 		return
 	end
@@ -993,7 +1018,7 @@ vim.keymap.set({ "n" }, "<M-b>", function()
 	local executable = get_filetype_alias()
 
 	-- local command = ":Compile " .. executable .. " " .. vim.fn.shellescape(current_buf_name)
-  local command = ":Compile " .. executable .. " " .. current_buf_name
+	local command = ":Compile " .. executable .. " " .. current_buf_name
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(command, true, false, true), "n", true)
 end, opts)
 
@@ -1010,7 +1035,6 @@ vim.api.nvim_set_keymap("i", "<M-b>", "<C-Left>", { noremap = true, silent = tru
 -- vim.cmd([[cnoremap <C-a> <C-b>]])
 -- vim.cmd([[cnoremap <M-f> <C-Right>]])
 -- vim.cmd([[cnoremap <M-b> <C-Left>]])
-
 
 -- vim.api.nvim_set_keymap("c", "<c-k>", [[ wildmenumode() ? "c-k>" : "<up>" ]], { noremap = true, expr = true }) -- expr mapping
 -- vim.api.nvim_set_keymap("c", "<c-j>", [[ wildmenumode() ? "c-j>" : "<down>" ]], { noremap = true, expr = true }) -- expr mapping
@@ -1375,11 +1399,10 @@ vim.keymap.set("n", "<leader>df", function()
 
 	-- Construct the DiffviewOpen command
 	-- local diffview_command = string.format(":CodeDiff %s...%s", default_branch, current_branch)
-  local diffview_command = string.format(":DiffviewOpen %s..%s", default_branch, current_branch)
+	local diffview_command = string.format(":DiffviewOpen %s..%s", default_branch, current_branch)
 	-- Populate the command line using vim.api.nvim_feedkeys
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
-
 
 vim.keymap.set("n", "<leader>tp", function()
 	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_pendientes.md")
@@ -1790,9 +1813,9 @@ vim.keymap.set("n", "gy", function()
 end, { desc = "Yank absolut file path to clipboard" })
 
 vim.keymap.set("n", "gY", function()
-  local path = vim.fn.expand("%:p")
-  vim.fn.setreg("+", path)
-  vim.notify("Copied: " .. path)
+	local path = vim.fn.expand("%:p")
+	vim.fn.setreg("+", path)
+	vim.notify("Copied: " .. path)
 end, { desc = "Yank absolute file path to clipboard" })
 
 -- vim.keymap.set('x', 'an', function()
@@ -1881,7 +1904,7 @@ vim.api.nvim_create_user_command("DecodeJWT", function(cmd_opts)
 end, { range = false })
 
 vim.keymap.set("n", "<leader>jw", function()
-  vim.cmd("DecodeJWT")
+	vim.cmd("DecodeJWT")
 end, { silent = true })
 
 vim.keymap.set("v", "<leader>jw", function()
@@ -1892,12 +1915,7 @@ vim.keymap.set("v", "<leader>jw", function()
 	if start_pos[2] > end_pos[2] or (start_pos[2] == end_pos[2] and start_pos[3] > end_pos[3]) then
 		start_pos, end_pos = end_pos, start_pos
 	end
-	local lines = vim.api.nvim_buf_get_text(
-		0,
-		start_pos[2] - 1, start_pos[3] - 1,
-		end_pos[2] - 1, end_pos[3],
-		{}
-	)
+	local lines = vim.api.nvim_buf_get_text(0, start_pos[2] - 1, start_pos[3] - 1, end_pos[2] - 1, end_pos[3], {})
 	vim.g._decode_jwt_selection = table.concat(lines, "")
 	vim.cmd("DecodeJWT")
 end, { silent = true })
@@ -1972,6 +1990,14 @@ vim.keymap.set("n", "<leader>ms", function()
 			if code == 0 then
 				vim.schedule(function()
 					vim.notify("Email synced properly", vim.log.levels.INFO)
+          local time = os.date("%H:%M")
+					vim.fn.jobstart({
+						"terminal-notifier",
+						"-title",
+						"Mail",
+						"-message",
+						time ..  " Email synced properly",
+					}, { detach = true })
 				end)
 			else
 				vim.schedule(function()
@@ -2020,13 +2046,46 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-
 vim.keymap.set("n", "<leader>ra", function()
-  vim.cmd("restart")
-end, {})
+	-- close fyler buffers before saving session
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		if vim.bo[buf].filetype == "fyler" then
+			vim.api.nvim_buf_delete(buf, { force = true })
+		end
+	end
 
+	local session = vim.fn.stdpath("state") .. "/restart_session.vim"
+	vim.cmd("mksession! " .. vim.fn.fnameescape(session))
+	vim.cmd("restart source " .. vim.fn.fnameescape(session))
+end, { desc = "Restart Neovim" })
 
 vim.cmd([[inoremap <C-b> <Left>]])
 vim.cmd([[cnoremap <C-o> <C-f>]])
 vim.cmd([[inoremap <C-f> <Right>]])
 vim.cmd([[cnoremap <C-f> <Right>]])
+
+vim.keymap.set("n", "gh", function() -- cmdOutput open (or close) (requires vim._core.ui2 nvim0.12)
+  local ui2 = require("vim._core.ui2")
+  vim.cmd("split")
+  vim.api.nvim_win_set_height(0, 15)
+  vim.api.nvim_set_current_buf(ui2.bufs.cmd)
+end)
+
+-- vim.keymap.set("n", "g<", function() -- cmdOutput open (or close) (requires vim._core.ui2 nvim0.12)
+--   local pagerbuf = require("vim._core.ui2").bufs.pager
+--   vim.cmd("split")
+--   vim.api.nvim_win_set_height(0, 15)
+--   vim.api.nvim_set_current_buf(pagerbuf)
+-- end)
+
+-- vim.keymap.set("n", "gC", function() -- cmdOutput clear (x)
+-- 	local ui2 = require("vim._core.ui2")
+-- 	local cmdbuf = ui2.bufs.cmd
+-- 	if cmdbuf then
+-- 		vim.api.nvim_buf_set_lines(cmdbuf, 0, -1, false, {})
+-- 		vim.api.nvim_buf_clear_namespace(cmdbuf, ui2.ns, 0, -1)
+-- 	end
+-- 	if vim.api.nvim_get_current_buf() == cmdbuf then
+-- 		vim.api.nvim_set_current_buf(lastbuf)
+-- 	end
+-- end)

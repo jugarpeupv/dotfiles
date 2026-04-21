@@ -7,7 +7,7 @@ return {
 		opts = {
 			notmuch_db_path = os.getenv("HOME") .. "/Mail",
 			maildir_sync_cmd = "mbsync izertis-channel",
-      render_html_body = true,
+      render_html_body = false,
 			sync = {
 				sync_mode = "buffer",
 			},

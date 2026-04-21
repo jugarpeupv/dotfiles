@@ -30,17 +30,17 @@ M.attach_lsp_config = function(client, bufnr)
 		-- 		vim.cmd("normal! zz")
 		-- 	end
 		-- end)
-    Snacks.picker.lsp_definitions()
+		Snacks.picker.lsp_definitions()
 	end, opts)
 
 	vim.keymap.set({ "n" }, "gv", function()
 		vim.cmd("vsp")
-    Snacks.picker.lsp_definitions()
+		Snacks.picker.lsp_definitions()
 	end, opts)
 
 	vim.keymap.set({ "n" }, "gs", function()
 		vim.cmd("sp")
-    Snacks.picker.lsp_definitions()
+		Snacks.picker.lsp_definitions()
 	end, opts)
 
 	-- vim.keymap.set({ "n" }, "gv", function()
@@ -79,12 +79,13 @@ M.attach_lsp_config = function(client, bufnr)
 	-- keymap.set("n", "<Leader>re", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 
 	vim.keymap.set("n", "<leader>re", function()
+		-- vim.lsp.buf.rename()
 		-- when rename opens the prompt, this autocommand will trigger
 		-- it will "press" CTRL-F to enter the command-line window `:h cmdwin`
 		-- in this window I can use normal mode keybindings
 		local cmdId
 		cmdId = vim.api.nvim_create_autocmd({ "CmdlineEnter" }, {
-      group = vim.api.nvim_create_augroup('cmdlineenterlsputils', { clear = true }),
+			group = vim.api.nvim_create_augroup("cmdlineenterlsputils", { clear = true }),
 			callback = function()
 				local key = vim.api.nvim_replace_termcodes("<C-o>", true, false, true)
 				vim.api.nvim_feedkeys(key, "c", false)
@@ -121,8 +122,12 @@ M.attach_lsp_config = function(client, bufnr)
 
 	-- keymap.set("n", "<leader>d", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts) -- show diagnostics for cursor
 
-  keymap.set("n", "<leader>gk", function() vim.diagnostic.jump({ count = -1, float = true }) end, opts)
-  keymap.set("n", "<leader>gj", function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
+	keymap.set("n", "<leader>gk", function()
+		vim.diagnostic.jump({ count = -1, float = true })
+	end, opts)
+	keymap.set("n", "<leader>gj", function()
+		vim.diagnostic.jump({ count = 1, float = true })
+	end, opts)
 
 	-- keymap.set("n", "<leader>gk", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts) -- jump to previous diagnostic in buffer
 	-- keymap.set("n", "<leader>gj", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts) -- jump to next diagnostic in buffer
@@ -157,13 +162,14 @@ M.attach_lsp_config = function(client, bufnr)
 	--   end, -- show hint inline in current line
 	-- }, bufnr)
 
-	keymap.set({ "n" }, "gh", function()
+	-- keymap.set({ "n" }, "gh", function()
+	-- 	vim.lsp.buf.signature_help()
+	-- end, opts)
+
+	-- Ctrl+shift+space
+	keymap.set({ "i" }, "<M-lt>", function()
 		vim.lsp.buf.signature_help()
 	end, opts)
-
-  keymap.set({ "i" }, "<M-lt>", function()
-    vim.lsp.buf.signature_help()
-  end, opts)
 
 	-- keymap.set({ "n" }, "gh", function()
 	--   require("lsp_signature").toggle_float_win()
@@ -234,7 +240,7 @@ local function fetch_github_repo(repo_name, token, org, workspace_path)
 
 	local repo_info = {
 		-- id = data.id,
-    id = '1344400112',
+		id = "1344400112",
 		owner = org,
 		name = repo_name,
 		workspaceUri = "file://" .. workspace_path,
@@ -266,11 +272,11 @@ M.get_gh_actions_init_options = function(org, workspace_path, session_token)
 		result = result:gsub("%s+$", "")
 		-- Extract repo name from URL
 		-- local repo = result:match("([^/:]+)%.git$")
-    local owner, repo = result:match("[/:]([%w%-_]+)/([%w%-_]+)%.git$")
-    if owner and repo then
-      return { owner = owner, repo = repo }
-    end
-    return nil
+		local owner, repo = result:match("[/:]([%w%-_]+)/([%w%-_]+)%.git$")
+		if owner and repo then
+			return { owner = owner, repo = repo }
+		end
+		return nil
 	end
 	local repo = get_repo_owner_and_name()
 

@@ -4,7 +4,7 @@ return {
 		"jugarpeupv/devtools.nvim",
 		dev = true,
 		dir = "~/projects/devtools.nvim",
-		lazy = false,
+		lazy = true,
 		cmd = { "DevTools" },
 		keys = {
 			{ mode = { "n" }, "<leader>co", "<cmd>DevTools<cr>" },

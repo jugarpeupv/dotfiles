@@ -1,85 +1,87 @@
 return {
 	{
 		"stevearc/oil.nvim",
+		-- "barrettruth/canola.nvim",
 		lazy = true,
-    enabled = true,
-    -- dev = true,
-    -- dir = "~/projects/oil.nvim/wt-master",
-    -- event = { "CmdlineEnter" },
-    cmd = { "Oil" },
-    -- init = function()
-    --   -- Load oil when neovim opens a directory, even though it's lazy-loaded
-    --   vim.api.nvim_create_autocmd("BufWinEnter", {
-    --     nested = true,
-    --     callback = function(info)
-    --       local path = info.file
-    --       if path == "" then
-    --         return
-    --       end
-    --       -- Only handle directories
-    --       local stat = vim.uv.fs_stat(path)
-    --       if stat and stat.type == "directory" then
-    --         require("oil")
-    --       end
-    --     end,
-    --   })
-    -- end,
-    dependencies = {
-      {
-        "malewicz1337/oil-git.nvim",
-        -- dependencies = { "stevearc/oil.nvim" },
-        -- event = { "VeryLazy" },
-        -- cmd = { "Oil" },
-        opts = {
-          debounce_ms = 50,
-          show_file_highlights = false,
-          show_directory_highlights = false,
-          show_file_symbols = true,
-          show_directory_symbols = true,
-          show_ignored_files = true, -- Show ignored file status
-          show_ignored_directories = true, -- Show ignored directory status
-          symbol_position = "eol", -- "eol", "signcolumn", or "none"
-          ignore_gitsigns_update = false, -- Ignore GitSignsUpdate events (fallback for flickering)
-          debug = false, -- false, "minimal", or "verbose"
-          symbols = {
-            file = {
-              added = "+",
-              modified = "!",
-              renamed = "󰕛 ",
-              deleted = "✗",
-              copied = "~",
-              conflict = "",
-              untracked = "?",
-              ignored = " ",
-            },
-            directory = {
-              added = "+",
-              modified = "!",
-              renamed = "󰕛 ",
-              deleted = "✗",
-              copied = "~",
-              conflict = "",
-              untracked = "?",
-              ignored = " ",
-            },
-          },
+		enabled = true,
+		-- dev = true,
+		-- dir = "~/projects/oil.nvim/wt-master",
+		-- event = { "CmdlineEnter" },
+		cmd = { "Oil" },
+		-- init = function()
+		--   -- Load oil when neovim opens a directory, even though it's lazy-loaded
+		--   vim.api.nvim_create_autocmd("BufWinEnter", {
+		--     nested = true,
+		--     callback = function(info)
+		--       local path = info.file
+		--       if path == "" then
+		--         return
+		--       end
+		--       -- Only handle directories
+		--       local stat = vim.uv.fs_stat(path)
+		--       if stat and stat.type == "directory" then
+		--         require("oil")
+		--       end
+		--     end,
+		--   })
+		-- end,
+		dependencies = {
+			{
+				"malewicz1337/oil-git.nvim",
+        enabled = false,
+				-- dependencies = { "stevearc/oil.nvim" },
+				-- event = { "VeryLazy" },
+				-- cmd = { "Oil" },
+				opts = {
+					debounce_ms = 50,
+					show_file_highlights = false,
+					show_directory_highlights = false,
+					show_file_symbols = true,
+					show_directory_symbols = true,
+					show_ignored_files = true, -- Show ignored file status
+					show_ignored_directories = true, -- Show ignored directory status
+					symbol_position = "eol", -- "eol", "signcolumn", or "none"
+					ignore_gitsigns_update = false, -- Ignore GitSignsUpdate events (fallback for flickering)
+					debug = false, -- false, "minimal", or "verbose"
+					symbols = {
+						file = {
+							added = "+",
+							modified = "!",
+							renamed = "󰕛 ",
+							deleted = "✗",
+							copied = "~",
+							conflict = "",
+							untracked = "?",
+							ignored = " ",
+						},
+						directory = {
+							added = "+",
+							modified = "!",
+							renamed = "󰕛 ",
+							deleted = "✗",
+							copied = "~",
+							conflict = "",
+							untracked = "?",
+							ignored = " ",
+						},
+					},
 
-          -- Colors (only applied if highlight groups don't exist)
-          highlights = {
-            OilGitAdded = { fg = "#8ee2cf" },
-            OilGitModified = { fg = "#f9e2af" },
-            OilGitRenamed = { fg = "#cba6f7" },
-            OilGitDeleted = { fg = "#f38ba8" },
-            OilGitCopied = { fg = "#cba6f7" },
-            OilGitConflict = { fg = "#fab387" },
-            OilGitUntracked = { fg = "#89ddff" },
-            OilGitIgnored = { link = "Comment" },
-          },
-        },
-      },
-    },
+					-- Colors (only applied if highlight groups don't exist)
+					highlights = {
+						OilGitAdded = { fg = "#8ee2cf" },
+						OilGitModified = { fg = "#f9e2af" },
+						OilGitRenamed = { fg = "#cba6f7" },
+						OilGitDeleted = { fg = "#f38ba8" },
+						OilGitCopied = { fg = "#cba6f7" },
+						OilGitConflict = { fg = "#fab387" },
+						OilGitUntracked = { fg = "#89ddff" },
+						OilGitIgnored = { link = "Comment" },
+					},
+				},
+			},
+		},
 		keys = {
-      { ":" },
+			{ ":" },
 			{
 				"-",
 				function()
@@ -192,7 +194,7 @@ return {
 				-- You can set the delay to false to disable cleanup entirely
 				-- Note that the cleanup process only starts when none of the oil buffers are currently displayed
 				-- cleanup_delay_ms = false,
-        cleanup_delay_ms = 1800000,
+				cleanup_delay_ms = 1800000,
 				-- cleanup_delay_ms = false,
 				lsp_file_methods = {
 					enabled = true,
@@ -247,7 +249,7 @@ return {
 					["L"] = { "actions.select", mode = "n" },
 					["H"] = { "actions.parent", mode = "n" },
 					["<BS>"] = { "actions.select", mode = "n" },
-					["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+					["<leader>cd"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 					["gs"] = { "actions.change_sort", mode = "n" },
 					["F"] = {
 						callback = function()
@@ -411,17 +413,17 @@ return {
 								return
 							end
 
-						local path = dir .. entry.name
+							local path = dir .. entry.name
 							-- local escaped_path = vim.fn.shellescape(path)
 
 							-- local cmd_run = string.format(":Compile  %s", escaped_path)
-              local cmd_run = string.format(":Compile  %s", path)
+							local cmd_run = string.format(":Compile  %s", path)
 							local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
 							vim.api.nvim_feedkeys(keys, "c", true)
 
 							local hops =
 								-- string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #escaped_path + 1)
-                string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
+								string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
 							vim.api.nvim_feedkeys(hops, "n", true)
 
 							-- vim.ui.input({ prompt = "Command to run on " .. entry.name .. ": " }, function(cmd)
@@ -539,22 +541,21 @@ return {
 						callback = function()
 							local oil = require("oil")
 							local dir = oil.get_current_dir()
-              local entry = oil.get_cursor_entry()
+							local entry = oil.get_cursor_entry()
 
-              if not entry or not dir then
-                return
-              end
+							if not entry or not dir then
+								return
+							end
 
-              entry.name = entry.name:gsub(" ", "\\ ")
-              local path = dir .. entry.name
+							entry.name = entry.name:gsub(" ", "\\ ")
+							local path = dir .. entry.name
 
-
-              local home = os.getenv("HOME")
-              if home then
-                if path then
-                  path = dir:gsub("^" .. home, "~")
-                end
-              end
+							local home = os.getenv("HOME")
+							if home then
+								if path then
+									path = dir:gsub("^" .. home, "~")
+								end
+							end
 
 							require("telescope").extensions.live_grep_args.live_grep_raw({
 								cwd = path,
@@ -574,7 +575,7 @@ return {
 									"--line-number",
 									"--column",
 									"--hidden",
-                  "--no-ignore",
+									"--no-ignore",
 									"--smart-case",
 									"--glob=!icarSDK.js",
 									"--glob=!package-lock.json",
@@ -751,56 +752,56 @@ return {
 		end,
 	},
 
-  -- {
-  -- 	"malewicz1337/oil-git.nvim",
-  -- 	dependencies = { "stevearc/oil.nvim" },
-  -- 	-- event = { "VeryLazy" },
-  --    -- cmd = { "Oil" },
-  -- 	opts = {
-  -- 		debounce_ms = 50,
-  -- 		show_file_highlights = false,
-  -- 		show_directory_highlights = false,
-  -- 		show_file_symbols = true,
-  -- 		show_directory_symbols = true,
-  -- 		show_ignored_files = true, -- Show ignored file status
-  -- 		show_ignored_directories = true, -- Show ignored directory status
-  -- 		symbol_position = "eol", -- "eol", "signcolumn", or "none"
-  -- 		ignore_gitsigns_update = false, -- Ignore GitSignsUpdate events (fallback for flickering)
-  -- 		debug = false, -- false, "minimal", or "verbose"
-  -- 		symbols = {
-  -- 			file = {
-  -- 				added = "+",
-  -- 				modified = "!",
-  -- 				renamed = "󰕛 ",
-  -- 				deleted = "✗",
-  -- 				copied = "~",
-  -- 				conflict = "",
-  -- 				untracked = "?",
-  -- 				ignored = " ",
-  -- 			},
-  -- 			directory = {
-  -- 				added = "+",
-  -- 				modified = "!",
-  -- 				renamed = "󰕛 ",
-  -- 				deleted = "✗",
-  -- 				copied = "~",
-  -- 				conflict = "",
-  -- 				untracked = "?",
-  -- 				ignored = " ",
-  -- 			},
-  -- 		},
-  --
-  -- 		-- Colors (only applied if highlight groups don't exist)
-  -- 		highlights = {
-  -- 			OilGitAdded = { fg = "#8ee2cf" },
-  -- 			OilGitModified = { fg = "#f9e2af" },
-  -- 			OilGitRenamed = { fg = "#cba6f7" },
-  -- 			OilGitDeleted = { fg = "#f38ba8" },
-  -- 			OilGitCopied = { fg = "#cba6f7" },
-  -- 			OilGitConflict = { fg = "#fab387" },
-  -- 			OilGitUntracked = { fg = "#89ddff" },
-  -- 			OilGitIgnored = { link = "Comment" },
-  -- 		},
-  -- 	},
-  -- },
+	-- {
+	-- 	"malewicz1337/oil-git.nvim",
+	-- 	dependencies = { "stevearc/oil.nvim" },
+	-- 	-- event = { "VeryLazy" },
+	--    -- cmd = { "Oil" },
+	-- 	opts = {
+	-- 		debounce_ms = 50,
+	-- 		show_file_highlights = false,
+	-- 		show_directory_highlights = false,
+	-- 		show_file_symbols = true,
+	-- 		show_directory_symbols = true,
+	-- 		show_ignored_files = true, -- Show ignored file status
+	-- 		show_ignored_directories = true, -- Show ignored directory status
+	-- 		symbol_position = "eol", -- "eol", "signcolumn", or "none"
+	-- 		ignore_gitsigns_update = false, -- Ignore GitSignsUpdate events (fallback for flickering)
+	-- 		debug = false, -- false, "minimal", or "verbose"
+	-- 		symbols = {
+	-- 			file = {
+	-- 				added = "+",
+	-- 				modified = "!",
+	-- 				renamed = "󰕛 ",
+	-- 				deleted = "✗",
+	-- 				copied = "~",
+	-- 				conflict = "",
+	-- 				untracked = "?",
+	-- 				ignored = " ",
+	-- 			},
+	-- 			directory = {
+	-- 				added = "+",
+	-- 				modified = "!",
+	-- 				renamed = "󰕛 ",
+	-- 				deleted = "✗",
+	-- 				copied = "~",
+	-- 				conflict = "",
+	-- 				untracked = "?",
+	-- 				ignored = " ",
+	-- 			},
+	-- 		},
+	--
+	-- 		-- Colors (only applied if highlight groups don't exist)
+	-- 		highlights = {
+	-- 			OilGitAdded = { fg = "#8ee2cf" },
+	-- 			OilGitModified = { fg = "#f9e2af" },
+	-- 			OilGitRenamed = { fg = "#cba6f7" },
+	-- 			OilGitDeleted = { fg = "#f38ba8" },
+	-- 			OilGitCopied = { fg = "#cba6f7" },
+	-- 			OilGitConflict = { fg = "#fab387" },
+	-- 			OilGitUntracked = { fg = "#89ddff" },
+	-- 			OilGitIgnored = { link = "Comment" },
+	-- 		},
+	-- 	},
+	-- },
 }
