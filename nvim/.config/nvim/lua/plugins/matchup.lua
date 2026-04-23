@@ -8,12 +8,12 @@ return {
 	event = { "VeryLazy" },
   -- event = { "BufReadPost", "BufNewFile" },
 	keys = {
-		{
-			mode = { "n", "v" },
-			"<leader><space>",
-			"<Plug>(matchup-hi-surround)",
-			{ silent = true, desc = "Highlight surrounding match" },
-		},
+		-- {
+		-- 	mode = { "n", "v" },
+		-- 	"<leader><space>",
+		-- 	"<Plug>(matchup-hi-surround)",
+		-- 	{ silent = true, desc = "Highlight surrounding match" },
+		-- },
 		{ mode = "n", "%" },
 	},
 	config = function()

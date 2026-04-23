@@ -323,13 +323,21 @@ return {
 			require("treesitter-context").setup({
 				on_attach = function(buf)
 					local filetype = vim.fn.getbufvar(buf, "&ft")
-					if filetype == "markdown" then
-						return false
-					end
+          local ignored_filetypes = {
+            "markdown",
+            "opencode_output",
+            "opencode",
+            "opencode_footer"
+          }
+          for ft in ipairs(ignored_filetypes) do
+            if filetype == ft then
+              return false
+            end
+          end
 					return true
 				end, -- (fun(buf: integer): boolean) return false to disable attaching
 				enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
-				multiwindow = true, -- Enable multiple floating windows
+				multiwindow = false, -- Enable multiple floating windows
 				max_lines = 6, -- How many lines the window should span. Values <= 0 mean no limit.
 				trim_scope = "inner", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
 				min_window_height = 10, -- Minimum editor window height to enable context. Values <= 0 mean no limit.

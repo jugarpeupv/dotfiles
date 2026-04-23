@@ -446,6 +446,7 @@ return {
 				},
 				per_filetype = {
 					["opencode"] = { "buffer", "path", "lsp" },
+          ["opencode_output"] = { "buffer", "path", "lsp" },
 					["codecompanion"] = { "buffer", "path" },
 					["octo"] = {
 						"git",

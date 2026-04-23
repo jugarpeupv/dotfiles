@@ -1553,8 +1553,12 @@ M.notmuch_picker = function(opts)
 	local action_state = require("telescope.actions.state")
 
 	local function getaddresses()
-		local file =
-			io.popen("notmuch address --format=json --deduplicate=address '*' | jq -r '.[] | .[\"name-addr\"]'")
+		-- local file =
+		-- 	io.popen("notmuch address --format=json --output=recipients --deduplicate=address '*' | jq -r '.[] | .[\"name-addr\"]'")
+      -- io.popen("notmuch address --format=text --output=recipients --deduplicate=address '*'")
+
+    local file = io.open(os.getenv("HOME") .. "/.cache/notmuch-addresses", "r")
+
 		--   io.popen("notmuch address --format=json --deduplicate=address -- 'tag:izertis' | jq -r '.[] | .[\"name-addr\"]'")
 		-- io.popen("notmuch address --format=json --deduplicate=address -- 'tag:personal' | jq -r '.[] | .[\"name-addr\"]'")
 		local addresses = {}

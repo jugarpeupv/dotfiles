@@ -10,5 +10,6 @@
 
 vim.cmd([[setlocal wrap]])
 vim.cmd([[setlocal signcolumn=no]])
+vim.bo.textwidth = 120
 
 

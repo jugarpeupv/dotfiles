@@ -1408,6 +1408,10 @@ vim.keymap.set("n", "<leader>tp", function()
 	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_pendientes.md")
 end, opts)
 
+vim.keymap.set("n", "<leader>tP", function()
+  vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_personales.md")
+end, opts)
+
 ---@diagnostic disable-next-line: unused-local
 local function smart_move(direction, _tmux_cmd)
 	-- local curwin = vim.api.nvim_get_current_win()

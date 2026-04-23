@@ -73,7 +73,7 @@ settings.theme = `
     margin: 0;
 
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 20px;
+    font-size: 15px;
   }
   #sk_omnibar {
     overflow: hidden;
@@ -98,7 +98,7 @@ settings.theme = `
   }
   #sk_omnibarSearchArea .prompt, #sk_omnibarSearchArea .resultPage {
     display: inline-block;
-    font-size: 20px;
+    font-size: 15px;
     width: auto;
   }
   #sk_omnibarSearchArea>input {
