@@ -17,9 +17,9 @@ return {
 	},
 
 	{
-		-- "skanehira/github-actions.nvim",
-		dev = true,
-		dir = "~/projects/github-actions.nvim/wt-main",
+		"skanehira/github-actions.nvim",
+		-- dev = true,
+		-- dir = "~/projects/github-actions.nvim/wt-main",
 		-- ft = "yaml.github", -- if you want to load for yaml files
 		-- event = {
 		-- 	"BufReadPre .github/workflows/*",

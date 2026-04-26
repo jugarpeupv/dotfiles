@@ -3,8 +3,8 @@ return {
 		"sudo-tee/opencode.nvim",
 		-- enabled = true,
     -- commit = "ed0c07815e867f3b71f4e012de4781cc24fb29e5",
-		dev = true,
-		dir = "~/projects/opencode.nvim/wt-main/",
+		-- dev = true,
+		-- dir = "~/projects/opencode.nvim/wt-main/",
 		lazy = true,
 		keys = {
 			-- {

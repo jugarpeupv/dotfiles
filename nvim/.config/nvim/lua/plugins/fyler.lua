@@ -1,18 +1,18 @@
 -- return {}
-function _G.FylerWinbarCwd()
-	local ok, fyler = pcall(require, "fyler")
-	local dir
-	if not ok or type(fyler.get_current_dir) ~= "function" then
-		dir = vim.loop.cwd() or ""
-	else
-		dir = fyler.get_current_dir() or vim.loop.cwd() or ""
-	end
-	-- Resolve relative paths (e.g. "." returned before full init) to absolute
-	if dir ~= "" and not vim.startswith(dir, "/") then
-		dir = vim.fn.fnamemodify(dir, ":p"):gsub("/$", "")
-	end
-	return dir:gsub("^" .. vim.env.HOME, "~")
-end
+-- function _G.FylerWinbarCwd()
+-- 	local ok, fyler = pcall(require, "fyler")
+-- 	local dir
+-- 	if not ok or type(fyler.get_current_dir) ~= "function" then
+-- 		dir = vim.loop.cwd() or ""
+-- 	else
+-- 		dir = fyler.get_current_dir() or vim.loop.cwd() or ""
+-- 	end
+-- 	-- Resolve relative paths (e.g. "." returned before full init) to absolute
+-- 	if dir ~= "" and not vim.startswith(dir, "/") then
+-- 		dir = vim.fn.fnamemodify(dir, ":p"):gsub("/$", "")
+-- 	end
+-- 	return dir:gsub("^" .. vim.env.HOME, "~")
+-- end
 return {
 	{
 		-- "A7Lavinraj/fyler.nvim",
@@ -135,8 +135,9 @@ return {
 					default_explorer = false,
 					-- Move deleted files/directories to the system trash
 					delete_to_trash = true,
-					columns_order = { "git", "link", "permission" },
+					columns_order = { "git", "link", "permission", "creation_time" },
 					columns = {
+            creation_time = { enabled = false },
 						permission = { enabled = false },
 						size = { enabled = false },
 						git = {
@@ -577,6 +578,7 @@ return {
 						["<C-s>"] = "SelectSplit",
 						["-"] = "GotoParent",
 						["="] = "GotoCwd",
+            ["gw"] = "GotoCwdOriginal",
 						["<BS>"] = "GotoNode",
 						["#"] = "CollapseAll",
 						-- ["<BS>"] = "CollapseNode",
@@ -617,7 +619,6 @@ return {
 					},
 					-- Window configuration
 					win = {
-						min_width = 35,
 						border = vim.o.winborder == "" and "single" or vim.o.winborder,
 						buf_opts = {
 							filetype = "fyler",
@@ -627,45 +628,19 @@ return {
 							expandtab = true,
 							shiftwidth = 2,
 						},
-						-- kind = "split_right_most",
-						-- kind = "replace",
-						kind = "split_left_most",
+						kind = "sidebar",
 						kinds = {
-							float = {
-								height = "70%",
-								width = "70%",
-								top = "10%",
-								left = "15%",
-							},
-							replace = {},
-							split_above = {
-								height = "70%",
-							},
-							split_above_all = {
-								height = "70%",
-							},
-							split_below = {
-								height = "70%",
-							},
-							split_below_all = {
-								height = "70%",
-							},
-							split_left = {
-								width = "30%",
-							},
-							split_left_most = {
-								width = "25%",
-							},
-							split_right = {
-								width = "30%",
-							},
-							split_right_most = {
-								width = "30%",
+							sidebar = {
+								width = 40,
+								win_opts = {
+									winfixwidth = true,
+								},
 							},
 						},
 						win_opts = {
 							-- winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.vim.fn.getcwd(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
-							winbar = "%#NvimTreeRootFolder#%{v:lua.FylerWinbarCwd()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+							-- winbar = "%#NvimTreeRootFolder#%{v:lua.FylerWinbarCwd()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+              -- winbar = "%#NvimTreeRootFolder#%{v:lua.FylerWinbarCwd()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 							-- winbar = "%#NvimTreeRootFolder#%{substitute(v:lua.require('oil').get_current_dir(), '^' . $HOME, '~', '')}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 							concealcursor = "nvic",
 							-- conceallevel = 3,

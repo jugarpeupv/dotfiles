@@ -347,6 +347,7 @@ return {
 						InclineNormalNC = { bg = "#292e42", fg = "#7C7F93" },
 						Winbar = { fg = "#bbc2e0" },
 						WinbarNC = { fg = "#7C7F93" },
+            FylerFSDirectoryIgnored = { fg = "#a9b1d6" },
 						TreesitterContextLineNumber = { bg = "#00122e", fg = "#737aa2" },
 						-- TreesitterContextLineNumber = { fg = "#737aa2" },
 						WinSeparator = { fg = "#292e42" },
