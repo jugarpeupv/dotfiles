@@ -164,6 +164,12 @@ return {
 			file_utils.write_bps(file_utils.get_bps_path(wt_root_dir_with_ending), my_table)
 
 			-- Update current file opened
+      local Path = require("plenary.path")
+      -- vim.schedule(function()
+      -- end)
+      local new_path = Path:new(path):absolute()
+      require("fyler").set_current_dir(new_path)
+
 			local current_buffer_filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
 			if current_buffer_filetype == "oil" then
 				require("oil").open(path)
@@ -175,13 +181,12 @@ return {
 				update_on_switch(path, prev_path)
 			end
 
-			local Path = require("plenary.path")
-			-- vim.schedule(function()
-			-- end)
-			local new_path = Path:new(path):absolute()
-			require("fyler").set_current_dir(new_path)
+      if current_buffer_filetype == "fyler" then
+        require("fyler").open({ dir = Path:new(path):absolute(), kind = "replace" })
+        return
+      end
+
 			-- require("fyler").navigate(Path:new(path):absolute())
-			require("fyler").open({ dir = Path:new(path):absolute(), kind = "replace" })
 		end)
 
 		Hooks.register(Hooks.type.CREATE, function(path, branch, upstream)

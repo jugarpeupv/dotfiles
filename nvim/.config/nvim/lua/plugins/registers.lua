@@ -1,6 +1,6 @@
 return {
   {
-    "tversteeg/registers.nvim",
+    "https://codeberg.org/fosk/registers.nvim",
     cmd = "Registers",
     keys = {
       { '"',     mode = { "n", "v" } },

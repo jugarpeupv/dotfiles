@@ -121,11 +121,11 @@ local function restore_last_worktree()
 	-- require("oil").open(last_active_wt)
 	require("fyler").open({ dir = last_active_wt, kind = "replace" })
 	-- pcall(require("fyler").open, { dir = last_active_wt })
-	local cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
+	cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
 	if not cwd_buffer_nr then
 		return
 	end
-	local win = vim.fn.bufwinid(cwd_buffer_nr)
+	win = vim.fn.bufwinid(cwd_buffer_nr)
 	if win ~= -1 and #vim.api.nvim_tabpage_list_wins(0) > 1 then
 		vim.api.nvim_win_close(win, true)
 	end

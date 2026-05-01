@@ -17,6 +17,23 @@ return {
 		},
 		build = "make tiktoken", -- Only on MacOS or Linux
 		opts = {
+-- 			prompts = {
+-- 				Commit = {
+-- 					prompt = [[
+-- Write a commit message following the Conventional Commits specification.
+-- Use the format: <type>(<scope>): <short description>
+--
+-- After the first line, use `-` to list additional points if needed:
+-- - Explain what changed and why
+-- - Mention any breaking changes
+-- - Reference issues if applicable
+--
+-- Types: feat, fix, docs, style, refactor, test, chore.
+-- Use the imperative mood ("add" not "added").
+-- #gitdiff:staged
+-- 					]],
+-- 				},
+-- 			},
 			-- callback = function(_response, _source)
 			-- 	local chat = require("CopilotChat")
 			-- 	if vim.g.chat_title then

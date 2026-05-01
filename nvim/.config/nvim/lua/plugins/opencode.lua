@@ -1,8 +1,9 @@
 return {
 	{
-		"sudo-tee/opencode.nvim",
+		-- "sudo-tee/opencode.nvim",
 		-- enabled = true,
-    -- commit = "ed0c07815e867f3b71f4e012de4781cc24fb29e5",
+    -- commit = "92ad9bf550f10ac24c0076dd564fa5b424ce4fab",
+    "jugarpeupv/opencode.nvim",
 		-- dev = true,
 		-- dir = "~/projects/opencode.nvim/wt-main/",
 		lazy = true,
@@ -170,6 +171,7 @@ return {
             ["@"] = false, -- Insert mention (file/agent)
 						["/"] = { "slash_commands", mode = "i" }, -- Pick a command to run in the input window
 						["#"] = { "context_items", mode = "i" }, -- Manage context items (current file, selection, diagnostics, mentioned files)
+            ["<C-b>"] = { "context_items", mode = { "n", "i" }  }, -- Manage context items (current file, selection, diagnostics, mentioned files)
 						["<M-v>"] = { "paste_image", mode = "i" }, -- Paste image from clipboard as attachment
 						["<tab>"] = { "switch_mode" },
 						["<up>"] = { "prev_prompt_history", mode = { "n", "i" } }, -- Navigate to previous prompt in history
@@ -249,7 +251,7 @@ return {
             enabled = false, -- Disable entire buffer context by default, only used in quick chat
           },
           git_diff = {
-            enabled = false,
+            enabled = true,
           },
         },
 				ui = {
@@ -278,6 +280,7 @@ return {
 						},
 						tools = {
 							show_output = true,
+              use_folds = false,
 							show_reasoning_output = true,
 						},
 						always_scroll_to_bottom = false,

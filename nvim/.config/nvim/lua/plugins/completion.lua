@@ -344,7 +344,8 @@ return {
 					-- Delay before showing the completion menu while typing
 					-- auto_show_delay_ms = 100,
 					auto_show = function()
-						return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode"
+						-- return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode"
+            return vim.bo.filetype ~= "codecompanion"
 					end,
 					border = "rounded",
 					draw = {

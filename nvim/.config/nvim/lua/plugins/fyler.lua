@@ -17,8 +17,8 @@ return {
 	{
 		-- "A7Lavinraj/fyler.nvim",
 		"jugarpeupv/fyler.nvim",
-		dir = "~/projects/fyler.nvim/wt-main",
-		dev = true,
+		-- dir = "~/projects/fyler.nvim/wt-main",
+		-- dev = true,
 		enabled = true,
 		lazy = false,
 		cmd = { "Fyler" },
@@ -197,9 +197,11 @@ return {
 					},
 					-- Key mappings
 					mappings = {
+            ["J"]  = function()
+            end,
             ["gP"]  = "PasteEntry",
-            ["x"] = "VisualCutEntries",   -- visual mode
-            ["y"]  = "VisualYankEntries",  -- bound in visual (x) mode
+            ["gX"] = "VisualCutEntries",   -- visual mode
+            ["gY"]  = "VisualYankEntries",  -- bound in visual (x) mode
             ["<leader>fp"] = "TogglePermissions",
             ["."] = function(view)
               local entry = view:cursor_node_entry()
@@ -211,14 +213,14 @@ return {
 								string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
 							vim.api.nvim_feedkeys(hops, "n", true)
             end,
-						["gy"] = function(view)
+						["C"] = function(view)
 							local entry = view:cursor_node_entry()
 							local path = entry.path
 							local relative_path = vim.fn.fnamemodify(path, ":.")
 							vim.notify("Copied path: " .. relative_path)
 							vim.fn.setreg("+", relative_path)
 						end,
-						["gY"] = function(view)
+						["gy"] = function(view)
 							local entry = view:cursor_node_entry()
 							local path = entry.path
 							vim.notify("Copied path: " .. path)
@@ -546,6 +548,7 @@ return {
 							local term_found
 
 							modified_path = modified_path:gsub("^/Users/jgarcia", "~")
+							modified_path = modified_path:gsub(" ", "\\ ")
 							print(modified_path)
 
 							for _, term in pairs(all_terms or {}) do
@@ -623,7 +626,6 @@ return {
 						buf_opts = {
 							filetype = "fyler",
 							syntax = "fyler",
-							buflisted = false,
 							buftype = "acwrite",
 							expandtab = true,
 							shiftwidth = 2,

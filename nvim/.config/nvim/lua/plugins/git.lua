@@ -1,5 +1,46 @@
 return {
 	{
+		-- "aweis89/ai-commit-msg.nvim",
+    dev = true,
+    dir = "~/projects/ai-commit-msg.nvim/wt-main",
+		ft = "gitcommit",
+    enabled = false,
+		config = true,
+		opts = {
+			-- your configuration options here
+			-- Enable/disable the plugin
+			enabled = true,
+
+			-- AI provider to use ("gemini", "openai", "anthropic", or "copilot")
+			provider = "gemini",
+
+			-- Whether to prompt for push after commit
+			auto_push_prompt = false,
+			-- Pull-before-push behavior (helps avoid rejected pushes)
+			pull_before_push = {
+				enabled = false, -- run a pull before pushing
+				args = { "--rebase", "--autostash" }, -- arguments passed to `git pull`
+			},
+
+			-- Show spinner while generating
+			spinner = true,
+
+			-- Show notifications
+			notifications = false,
+
+			-- Number of surrounding lines to include in git diff (default: 5)
+			context_lines = 0,
+
+			-- Cost display format ("compact", "verbose", or false to disable)
+			cost_display = "compact",
+
+			-- Keymaps for commit buffer
+			keymaps = {
+				quit = "q", -- Set to false to disable
+			},
+		},
+	},
+	{
 		"jugarpeupv/search-github-repos.nvim",
 		dir = "~/projects/search-github-repos.nvim",
 		dev = true,

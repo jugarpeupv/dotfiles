@@ -252,6 +252,8 @@ return {
 			},
 			{
 				"jugarpeupv/nx.nvim",
+        -- dev = true,
+        -- dir = "~/projects/nx.nvim/",
 				enabled = function()
 					local is_headless = #vim.api.nvim_list_uis() == 0
 					if is_headless then
@@ -277,6 +279,8 @@ return {
 								-- print('vim.g.nx_loaded is: ', vim.inspect(vim.g.nx_loaded))
 								require("telescope").extensions.nx.actions()
 							end
+
+              -- require("telescope").extensions.nx.actions()
 						end,
 						desc = "nx actions",
 					},

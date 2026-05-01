@@ -148,7 +148,7 @@ M.find_directory_in_fyler_and_focus = function()
 	end
 
 	require("telescope.builtin").find_files({
-		prompt_title = "Open directory in nvim tree",
+		prompt_title = "Open directory in Fyler",
 		find_command = {
 			"fd",
 			"--type",

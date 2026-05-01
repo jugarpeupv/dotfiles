@@ -73,7 +73,7 @@ settings.theme = `
     margin: 0;
 
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 15px;
+    font-size: 20px;
   }
   #sk_omnibar {
     overflow: hidden;
@@ -98,7 +98,7 @@ settings.theme = `
   }
   #sk_omnibarSearchArea .prompt, #sk_omnibarSearchArea .resultPage {
     display: inline-block;
-    font-size: 15px;
+    font-size: 20px;
     width: auto;
   }
   #sk_omnibarSearchArea>input {
@@ -276,7 +276,7 @@ settings.theme = `
     line-height: 22px;
   }
   #sk_usage * {
-    font-size: 15pt;
+    font-size: 20pt;
   }
   kbd {
     white-space: nowrap;
@@ -302,6 +302,7 @@ settings.theme = `
     border-top-style: none;
     text-align: center;
     background: #232136;
+    color: #c4a7e7;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -344,7 +345,7 @@ settings.theme = `
     width: 150px;
     display: inline-block;
     vertical-align: middle;
-    font-size: 15pt;
+    font-size: 20pt;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -352,7 +353,7 @@ settings.theme = `
     color: #e0def4;
   }
   div.sk_tab_url {
-    font-size: 15pt;
+    font-size: 20pt;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -361,7 +362,7 @@ settings.theme = `
   div.sk_tab_hint {
     display: inline-block;
     float:right;
-    font-size: 15pt;
+    font-size: 20pt;
     font-weight: bold;
     padding: 0px 2px 0px 2px;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#232136), color-stop(100%,#232136));
@@ -386,7 +387,7 @@ settings.theme = `
     color: #e0def4;
     background-color: #232136;
     z-index: 2147483000;
-    font-size: 15px;
+    font-size: 20px;
   }
   #sk_bubble .sk_bubble_content {
     overflow-y: scroll;
