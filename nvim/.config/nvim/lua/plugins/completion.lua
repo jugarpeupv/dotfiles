@@ -344,8 +344,8 @@ return {
 					-- Delay before showing the completion menu while typing
 					-- auto_show_delay_ms = 100,
 					auto_show = function()
-						-- return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode"
-            return vim.bo.filetype ~= "codecompanion"
+						return vim.bo.filetype ~= "codecompanion" and vim.bo.filetype ~= "opencode"
+            -- return vim.bo.filetype ~= "codecompanion"
 					end,
 					border = "rounded",
 					draw = {
@@ -785,7 +785,7 @@ return {
 			fuzzy = {
 				implementation = "rust",
 				max_typos = function()
-					return 0
+					return 1
 				end,
 				use_proximity = true,
 			},

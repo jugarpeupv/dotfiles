@@ -137,6 +137,8 @@ return {
 				kulala_ls = { "http" },
 				lua_ls = { "lua" },
 				marksman = { "markdown" },
+        -- vscode_markdown = { "markdown" },  -- or whatever you name it
+        -- markdown_oxide = { "markdown" },  -- or whatever you name it
 				pyright = { "python" },
 				ruby_lsp = { "ruby" },
 				rust_analyzer = { "rust" },

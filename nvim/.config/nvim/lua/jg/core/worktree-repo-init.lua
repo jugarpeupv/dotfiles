@@ -86,18 +86,21 @@ local function restore_last_worktree()
 	end
 	local last_active_wt = data.last_active_wt
 
-
-  local cwd_buffer_nr = find_buffer_by_path(cwd:gsub("/$", ""))
-  local win = vim.fn.bufwinid(cwd_buffer_nr)
-  if win ~= -1 and #vim.api.nvim_tabpage_list_wins(0) > 1 then
-    vim.api.nvim_win_close(win, true)
-  end
-  -- Then wipe the buffer
-  if not cwd_buffer_nr then
-    return
-  end
-  pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
-
+	local cwd_buffer_nr = find_buffer_by_path(cwd:gsub("/$", ""))
+	local win = vim.fn.bufwinid(cwd_buffer_nr)
+	if win ~= -1 then
+		local normal_wins = vim.tbl_filter(function(w)
+			return vim.api.nvim_win_get_config(w).relative == ""
+		end, vim.api.nvim_tabpage_list_wins(0))
+		if #normal_wins > 1 then
+			pcall(vim.api.nvim_win_close, win, true)
+		end
+	end
+	-- Then wipe the buffer
+	if not cwd_buffer_nr then
+		return
+	end
+	pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
 
 	-- vim.cmd("bwipeout " .. cwd_buffer_nr)
 	pcall(vim.cmd.cd, last_active_wt)

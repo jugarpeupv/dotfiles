@@ -503,10 +503,10 @@ vim.api.nvim_create_autocmd("TermOpen", {
 		local bufnr = args.buf
 
 		-- Utility to move from one prompt to another
-		vim.keymap.set({ "t" }, "<C-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = false, silent = true, buffer = bufnr })
+		-- vim.keymap.set({ "t" }, "<C-N>", "<C-\\><C-n>/\\|✗<CR>", { noremap = false, silent = true, buffer = bufnr })
 		vim.keymap.set({ "t" }, "<C-P>", "<C-\\><C-n>?\\|✗<CR>", { noremap = false, silent = true, buffer = bufnr })
 
-		vim.keymap.set({ "n" }, "<C-N>", "/\\|✗<CR>", { noremap = false, silent = true, buffer = bufnr })
+		-- vim.keymap.set({ "n" }, "<C-N>", "/\\|✗<CR>", { noremap = false, silent = true, buffer = bufnr })
 		vim.keymap.set({ "n" }, "<C-P>", "?\\|✗<CR>", { noremap = false, silent = true, buffer = bufnr })
 	end,
 })

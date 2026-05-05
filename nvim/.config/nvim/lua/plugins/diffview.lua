@@ -159,7 +159,8 @@ return {
 						-- tabpage is a Diffview.
 						["<tab>"] = actions.select_next_entry, -- Open the diff for the next file
 						["<s-tab>"] = actions.select_prev_entry, -- Open the diff for the previous file
-						["gf"] = actions.goto_file, -- Open the file in a new split in the previous tabpage
+						-- ["gf"] = actions.goto_file, -- Open the file in a new split in the previous tabpage
+            ["gf"] = actions.goto_file_edit_close, -- Open the file in a new split in the previous tabpage
 						["<C-w><C-f>"] = actions.goto_file_split, -- Open the file in a new split
 						["<C-w>gf"] = actions.goto_file_tab, -- Open the file in a new tabpage
 						["<M-k>"] = actions.focus_files, -- Bring focus to the file panel
@@ -241,7 +242,8 @@ return {
 						["<c-f>"] = actions.scroll_view(0.25), -- Scroll the view down
 						["<tab>"] = actions.select_next_entry,
 						["<s-tab>"] = actions.select_prev_entry,
-						["gf"] = actions.goto_file,
+						-- ["gf"] = actions.goto_file,
+            ["gf"] = actions.goto_file_edit_close,
 						["<C-w><C-f>"] = actions.goto_file_split,
 						["<C-w>gf"] = actions.goto_file_tab,
 						["i"] = actions.listing_style, -- Toggle between 'list' and 'tree' views
@@ -301,7 +303,8 @@ return {
 						["<c-f>"] = actions.scroll_view(0.25),
 						["<tab>"] = actions.select_next_entry,
 						["<s-tab>"] = actions.select_prev_entry,
-						["gf"] = actions.goto_file,
+						-- ["gf"] = actions.goto_file,
+            ["gf"] = actions.goto_file_edit_close,
 						["<C-w><C-f>"] = actions.goto_file_split,
 						["<C-w>gf"] = actions.goto_file_tab,
 						["<M-k>"] = actions.focus_files, -- Bring focus to the file panel

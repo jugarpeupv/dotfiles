@@ -251,28 +251,45 @@ return {
 					["<BS>"] = { "actions.select", mode = "n" },
 					["<leader>cd"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 					["gs"] = { "actions.change_sort", mode = "n" },
-					["F"] = {
-						callback = function()
-							local oil = require("oil")
+				["F"] = {
+					callback = function()
+						local oil = require("oil")
 
-							local ok, snacks = pcall(require, "snacks")
-							if not ok then
-								vim.notify("Snacks plugin not available", vim.log.levels.ERROR)
-								return
-							end
-							local dir = oil.get_current_dir()
-							snacks.picker.files({
-								dirs = { dir },
-								hidden = true,
-								exclude = {
-									".git",
-									"*__template__*",
-									"*DS_Store*",
-								},
-							})
-						end,
-						mode = "n",
-					},
+						local ok, snacks = pcall(require, "snacks")
+						if not ok then
+							vim.notify("Snacks plugin not available", vim.log.levels.ERROR)
+							return
+						end
+						local dir = oil.get_current_dir()
+						snacks.picker.files({
+							dirs = { dir },
+							hidden = true,
+							exclude = {
+								".git",
+								"*__template__*",
+								"*DS_Store*",
+							},
+						})
+					end,
+					mode = "n",
+				},
+				-- ["<M-p>"] = {
+				-- 	callback = function()
+				-- 		local oil = require("oil")
+				--
+				-- 		local ok, snacks = pcall(require, "snacks")
+				-- 		if not ok then
+				-- 			vim.notify("Snacks plugin not available", vim.log.levels.ERROR)
+				-- 			return
+				-- 		end
+				-- 		local dir = oil.get_current_dir()
+				-- 		snacks.picker.files({
+				-- 			cwd = dir,
+				-- 		})
+				-- 	end,
+				-- 	desc = "Snacks picker: files in oil cwd",
+				-- 	mode = "n",
+				-- },
 
 					["K"] = {
 						callback = function()
