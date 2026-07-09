@@ -1,5 +1,17 @@
 return {
 	{
+		"Mirsmog/real-icons.nvim",
+    enabled = false,
+		build = ":RealIconsInstallPack material",
+		opts = {
+			pack = "material",
+			integrations = {
+				telescope = true,
+        oil = true
+			},
+		},
+	},
+	{
 		"nvim-tree/nvim-web-devicons",
 		lazy = true,
 		opts = {
@@ -431,7 +443,7 @@ return {
 				[".zshenv"] = { icon = "", color = "#73daca", name = "zshenv" },
 				[".vimrc"] = { icon = "", color = "#73daca", name = "vimrc2323" },
 
-        ["vitest.config.js"] = { icon = "", color = "#73daca", name = "vitest_config_js" },
+				["vitest.config.js"] = { icon = "", color = "#73daca", name = "vitest_config_js" },
 				["Fastfile"] = { icon = "", color = "#f38bad", name = "fastfile" },
 				["Gymfile"] = { icon = "", color = "#f38bad", name = "fastfile" },
 				-- ["package.json"] = { icon = "", color = "#73daca", name = "PackageJson" },
@@ -455,7 +467,7 @@ return {
 				["jenkinsfilecd"] = { icon = "", name = "Jenkins4", color = "#c0caf5" },
 				["JenkinsfileCD"] = { icon = "", name = "Jenkins5", color = "#c0caf5" },
 				["JenkinsfileCI"] = { icon = "", name = "Jenkins7", color = "#c0caf5" },
-        ["jest.config.cts"] = { icon = "", name = "jenkinsconfigcts1", color = "#f38bad" },
+				["jest.config.cts"] = { icon = "", name = "jenkinsconfigcts1", color = "#f38bad" },
 				["jest.config.ts"] = { icon = "", name = "jenkinsconfig1", color = "#f38bad" },
 				["jest.config.app.ts"] = { icon = "", name = "jenkinsconfigapp1", color = "#f38bad" },
 				["jest.config.js"] = { icon = "", name = "jenkinsconfig2", color = "#f38bad" },

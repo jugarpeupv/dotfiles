@@ -76,36 +76,54 @@ M.attach_lsp_config = function(client, bufnr)
 	end, opts)
 	-- keymap.set("n", "<leader>fo", "<cmd>lua vim.lsp.buf.format({ async = true})<cr>", opts)
 	keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-	-- keymap.set("n", "<Leader>re", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 
-	vim.keymap.set("n", "<leader>re", function()
-		-- vim.lsp.buf.rename()
-		-- when rename opens the prompt, this autocommand will trigger
-		-- it will "press" CTRL-F to enter the command-line window `:h cmdwin`
-		-- in this window I can use normal mode keybindings
-		local cmdId
-		cmdId = vim.api.nvim_create_autocmd({ "CmdlineEnter" }, {
-			group = vim.api.nvim_create_augroup("cmdlineenterlsputils", { clear = true }),
+	local lsp_priority = {
+		rename = {
+      "vtsls",
+      "angularls",
+			"tsls",
+		},
+	}
+
+	local function get_lsp_clients_supporting_rename()
+		local client_names = {}
+		local attached_clients = vim.lsp.get_clients({ bufnr = 0 })
+		for _, client in ipairs(attached_clients) do
+			if client.server_capabilities.renameProvider then
+				table.insert(client_names, client.name)
+			end
+		end
+		return client_names
+	end
+
+	local function lsp_buf_rename_with_client(client_name)
+		local cmdId = vim.api.nvim_create_autocmd("CmdlineEnter", {
+			once = true,
 			callback = function()
 				local key = vim.api.nvim_replace_termcodes("<C-o>", true, false, true)
 				vim.api.nvim_feedkeys(key, "c", false)
 				vim.api.nvim_feedkeys("0", "n", false)
-				-- autocmd was triggered and so we can remove the ID and return true to delete the autocmd
-				cmdId = nil
-				return true
 			end,
 		})
-		vim.lsp.buf.rename()
-		-- vim.cmd(":IncRename " .. vim.fn.expand("<cword>"))
-
-		-- if LPS couldn't trigger rename on the symbol, clear the autocmd
+		vim.lsp.buf.rename(nil, { name = client_name })
 		vim.defer_fn(function()
-			-- the cmdId is not nil only if the LSP failed to rename
-			if cmdId then
-				vim.api.nvim_del_autocmd(cmdId)
-			end
+			pcall(vim.api.nvim_del_autocmd, cmdId)
 		end, 500)
-	end, opts)
+	end
+
+	local function lsp_buf_rename_use_priority()
+		local client_names = get_lsp_clients_supporting_rename()
+		for _, priority_name in ipairs(lsp_priority.rename) do
+			for _, client_name in ipairs(client_names) do
+				if priority_name == client_name then
+					lsp_buf_rename_with_client(client_name)
+					return true
+				end
+			end
+		end
+	end
+
+	vim.keymap.set("n", "<leader>re", lsp_buf_rename_use_priority, opts)
 
 	-- keymap.set("n", "<Leader>re", "<cmd>lua require('renamer').rename()<CR>", opts)
 	-- keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)

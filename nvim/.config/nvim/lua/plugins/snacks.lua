@@ -276,19 +276,22 @@ return {
 		},
 		{
 			"gd",
+      mode = { "n" },
 			function()
 				Snacks.picker.lsp_definitions()
 			end,
 		},
-		{
-			"gv",
-			function()
-				vim.cmd("vsp")
-				Snacks.picker.lsp_definitions()
-			end,
-		},
+		-- {
+		-- 	"gv",
+		--     mode = { "n" },
+		-- 	function()
+		-- 		vim.cmd("vsp")
+		-- 		Snacks.picker.lsp_definitions()
+		-- 	end,
+		-- },
 		{
 			"gs",
+      mode = { "n" },
 			function()
 				vim.cmd("sp")
 				Snacks.picker.lsp_definitions()

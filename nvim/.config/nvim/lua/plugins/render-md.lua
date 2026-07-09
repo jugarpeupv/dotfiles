@@ -242,6 +242,10 @@ return {
 		},
 	},
 	dependencies = { "nvim-treesitter/nvim-treesitter" }, -- if you use the mini.nvim suite
+  config = function(_, opts)
+    require("render-markdown").setup(opts)
+    vim.cmd("hi DevIconJsonc guifg=#F5C2E7")
+  end
 	-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
 	-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
 }

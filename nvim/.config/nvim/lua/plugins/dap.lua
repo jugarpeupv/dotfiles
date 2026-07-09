@@ -144,7 +144,7 @@ return {
 				':lua require"dap".down()<CR>zz',
 			},
 			{
-				"<leader>dt",
+				"<leader>dT",
 				function()
 					require("dap").terminate()
 				end,

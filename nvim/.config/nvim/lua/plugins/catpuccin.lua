@@ -242,7 +242,6 @@ return {
 						RenderMarkdown_Inverse_RenderMarkdownCode = { fg = "#394b70" },
 						RenderMarkdown_DevIconBash_RenderMarkdownSign = { fg = "#94E2D5" },
 						["@ibl.scope.underline.1"] = { sp = "#737aa2" },
-						DevIconJsonc = { fg = "#F5C2E7" },
 						["@ibl.indent.char.1"] = { fg = "#3b4251" },
 						["@ibl.whitespace.char.1"] = { fg = "#3b4251" },
 						["@ibl.scope.char.1"] = { fg = "#737aa2" },

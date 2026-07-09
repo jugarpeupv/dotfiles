@@ -175,18 +175,13 @@ return {
 				require("oil").open(path)
 				return
 			end
-			if current_buffer_filetype == "NvimTree" then
-				return
-			else
-				update_on_switch(path, prev_path)
-			end
 
       if current_buffer_filetype == "fyler" then
-        require("fyler").open({ dir = Path:new(path):absolute(), kind = "replace" })
+        require("fyler").open({ dir = new_path, kind = "replace" })
         return
       end
 
-			-- require("fyler").navigate(Path:new(path):absolute())
+      update_on_switch(path, prev_path)
 		end)
 
 		Hooks.register(Hooks.type.CREATE, function(path, branch, upstream)

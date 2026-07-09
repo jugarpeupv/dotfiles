@@ -158,41 +158,6 @@ return {
 		end,
 	},
 	{
-		"jrop/tuis.nvim",
-		enabled = true,
-		dependencies = { "folke/snacks.nvim" },
-		keys = {
-			{
-				mode = { "n" },
-				"<leader>tu",
-				function()
-					require("tuis").choose()
-				end,
-			},
-			{
-				mode = { "n" },
-				"<leader>up",
-				function()
-					require("tuis").run("processes")
-				end,
-			},
-			{
-				mode = { "n" },
-				"<leader>ul",
-				function()
-					require("tuis").run("lsof")
-				end,
-			},
-			{
-				mode = { "n" },
-				"<leader>ud",
-				function()
-					require("tuis").run("docker")
-				end,
-			},
-		},
-	},
-	{
 		dev = true,
 		dir = "~/projects/calendar.nvim",
 		lazy = false,
@@ -491,7 +456,7 @@ return {
 	-- 	},
 	-- },
 	-- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
-	{ "junegunn/gv.vim", enabled = true, dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
+	{ "junegunn/gv.vim", enabled = false, dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
 	{
 		"alex-popov-tech/store.nvim",
 		-- dependencies = { "OXY2DEV/markview.nvim" },
@@ -625,29 +590,6 @@ return {
 			require("string-breaker").setup()
 		end,
 	},
-	{
-		"yelog/i18n.nvim",
-		enabled = false,
-		dependencies = {
-			"ibhagwan/fzf-lua",
-			"nvim-treesitter/nvim-treesitter",
-		},
-		config = function()
-			require("i18n").setup({
-				-- Locales to parse; first is the default locale
-				-- Use I18nNextLocale command to switch the default locale in real time
-				locales = { "en", "es" },
-				-- sources can be string or table { pattern = "...", prefix = "..." }
-				sources = {
-					-- "src/locales/{locales}.json",
-					--      "src/assets/i18n/{locales}.json",
-					{ pattern = "src/assets/i18n/additional-coverages/{locales}.json" },
-					-- { pattern = "src/locales/lang/{locales}/{module}.ts",            prefix = "{module}." },
-					-- { pattern = "src/views/{bu}/locales/lang/{locales}/{module}.ts", prefix = "{bu}.{module}." },
-				},
-			})
-		end,
-	},
 	-- Lazy
 	{
 		"NMAC427/guess-indent.nvim",
@@ -730,93 +672,6 @@ return {
 	--     end
 	--   end,
 	-- },
-	{
-		-- "skanehira/denops-docker.vim",
-		"jugarpeupv/denops-docker.vim",
-		enabled = false,
-		dependencies = {
-			{ "vim-denops/denops.vim" },
-		},
-		dir = "~/projects/denops-docker.vim/wt-feature-fixes",
-		dev = true,
-		-- cmd = { "Docker", "DockerContainers", "DockerImages" },
-		-- event = { "BufReadPost", "BufNewFile" },
-		event = { "CmdlineEnter" },
-		lazy = true,
-		-- config = function ()
-		--   vim.keymap.set("n", "<leader>dt", "<cmd>DockerContainers<cr>", { desc = "Docker Containers" })
-		-- end,
-		keys = {
-			{
-				"<leader>dI",
-				function()
-					-- vim.cmd(":e docker://images")
-					-- vim.defer_fn(function()
-					--   vim.cmd(":e")
-					--   vim.g.docker_denops_loaded = true
-					-- end, 500)
-
-					vim.cmd(":e docker://images")
-
-					-- vim.defer_fn(function()
-					--    vim.cmd(":e docker://images")
-					-- end, 200)
-
-					-- if vim.g.docker_denops_loaded then
-					-- 	vim.cmd(":e docker://images")
-					-- 	return
-					-- else
-					-- 	vim.cmd(":e docker://images")
-					-- 	vim.defer_fn(function()
-					-- 		vim.cmd(":e")
-					-- 		vim.g.docker_denops_loaded = true
-					-- 	end, 500)
-					-- end
-				end,
-				desc = "Docker Images",
-			},
-			{
-				"<leader>dc",
-				-- "<cmd>DockerContainers<cr>",
-				function()
-					vim.cmd(":e docker://containers")
-
-					-- vim.defer_fn(function()
-					--   vim.cmd(":e docker://containers")
-					-- end, 200)
-					-- vim.defer_fn(function()
-					--   vim.cmd(":e")
-					-- end, 500)
-
-					-- if vim.g.docker_denops_loaded then
-					-- 	vim.cmd(":e docker://containers")
-					-- else
-					-- 	vim.cmd(":e docker://containers")
-					-- 	vim.defer_fn(function()
-					-- 		vim.cmd(":e docker://containers")
-					-- 	end, 500)
-					-- end
-
-					-- vim.schedule(function() vim.cmd(":e docker://containers") end)
-					-- Execute the DockerContainers command
-					-- vim.cmd("DockerContainers")
-				end,
-				desc = "Docker Containers",
-			},
-		},
-	},
-	{
-		"kkvh/vim-docker-tools",
-		cmd = { "DockerToolsToggle" },
-		enabled = true,
-		keys = {
-			{
-				"<leader>DT",
-				"<cmd>DockerToolsToggle<cr>",
-				desc = "Toggle Docker Tools",
-			},
-		},
-	},
 	{
 		"jfryy/keytrail.nvim",
 		ft = { "json", "jsonc", "yaml" },

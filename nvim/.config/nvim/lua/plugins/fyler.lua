@@ -16,9 +16,11 @@
 return {
 	{
 		-- "A7Lavinraj/fyler.nvim",
-		-- "jugarpeupv/fyler.nvim",
-		dir = "~/projects/fyler.nvim/wt-main",
+		"jugarpeupv/fyler.nvim",
+		-- dir = "~/projects/fyler.nvim/wt-main",
 		dev = true,
+    dir = "~/projects/fyler.nvim/wt-fyler-origin-main/",
+    -- dev = true,
 		enabled = true,
 		lazy = false,
 		cmd = { "Fyler" },
@@ -646,7 +648,6 @@ return {
 							cursorline = true,
 							number = true,
 							relativenumber = true,
-							winfixbuf = true,
 							winhighlight = "Normal:FylerNormal",
 							wrap = false,
 						},

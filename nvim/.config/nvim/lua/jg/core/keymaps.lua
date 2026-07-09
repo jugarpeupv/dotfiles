@@ -399,6 +399,23 @@ end, opts)
 -- keymap("n", "<leader>sy", function()
 -- 	require("telescope.builtin").lsp_document_symbols()
 -- end, opts)
+
+vim.api.nvim_create_user_command("LspRestart", function()
+	local clients = vim.lsp.get_clients({ bufnr = 0 })
+	for _, client in ipairs(clients) do
+		local bufs = vim.tbl_keys(client.attached_buffers)
+		client:stop()
+		vim.defer_fn(function()
+			local client_id = vim.lsp.start(client.config)
+			if client_id then
+				for _, buf in ipairs(bufs) do
+					vim.lsp.buf_attach_client(buf, client_id)
+				end
+			end
+		end, 500)
+	end
+end, { desc = "Restart LSP clients for current buffer" })
+
 keymap("n", "<leader>lr", "<cmd>LspRestart<cr>", opts)
 
 -- vim.keymap.set("n", "<D-j>", function()
@@ -449,7 +466,6 @@ keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
 -- Utilities
 keymap("n", "<BS>", "<C-^>", opts)
 keymap("o", "<BS>", "^", opts)
-keymap("n", "<leader><BS>", "<cmd>qa!<CR>", opts)
 -- keymap("n", "<leader>q", "<cmd>q!<CR>", opts)
 -- keymap("n", "<leader>q", "<C-w>c", opts)
 vim.keymap.set({ "n" }, "<leader>q", function()
@@ -537,7 +553,7 @@ vim.keymap.set({ "n", "v" }, "<leader>f.", function()
 	require("telescope").extensions.live_grep_args.live_grep_raw({
 		disable_coordinates = true,
 		cwd = cwd,
-		prompt_title = "Find files in " .. cwd,
+		prompt_title = "Live grep in " .. cwd,
 		theme = "ivy",
 		layout_config = { height = 0.40 },
 		-- group_by = "filename",
@@ -683,8 +699,8 @@ keymap("n", "<leader>bf", "<cmd>GitBlameOpenCommitURL<cr>", opts)
 
 -- Replace
 -- vim.cmd([[nnoremap <leader>rr :OverCommandLine %s///g<cr><Left><Left><Left>]])
-vim.cmd([[nnoremap <leader>rr :%s///gc<Left><Left><Left><Left>]])
-vim.cmd([[xnoremap <leader>rr :s///gc<Left><Left><Left><Left>]])
+vim.cmd([[nnoremap <leader>rr :%s,,,gc<Left><Left><Left><Left>]])
+vim.cmd([[xnoremap <leader>rr :s,,,gc<Left><Left><Left><Left>]])
 -- vim.cmd([[nnoremap <leader>sw /\<\><Left><Left>]])
 vim.cmd([[nnoremap g/ /\<\><Left><Left>]])
 
@@ -775,31 +791,31 @@ end, opts)
 vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true }) -- paste from 0 register
 vim.keymap.set({ "n" }, "<leader>bM", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
 vim.keymap.set("n", "<leader>bm", function()
-  local ui2 = require("vim._core.ui2")
-  local win = vim.api.nvim_get_current_win()  -- save before :messages steals focus
-  vim.cmd("messages")
-  pcall(vim.api.nvim_win_close, ui2.wins.pager, true)
-  ui2.check_targets()
-  vim.schedule(function()
-    vim.api.nvim_set_current_win(win)
-    vim.cmd("split")
-    vim.api.nvim_win_set_height(0, 15)
-    vim.api.nvim_set_current_buf(ui2.bufs.pager)
-  end)
+	local ui2 = require("vim._core.ui2")
+	local win = vim.api.nvim_get_current_win() -- save before :messages steals focus
+	vim.cmd("messages")
+	pcall(vim.api.nvim_win_close, ui2.wins.pager, true)
+	ui2.check_targets()
+	vim.schedule(function()
+		vim.api.nvim_set_current_win(win)
+		vim.cmd("split")
+		vim.api.nvim_win_set_height(0, 15)
+		vim.api.nvim_set_current_buf(ui2.bufs.pager)
+	end)
 end)
 -- vim.keymap.set({ "n" }, "<leader>bI", ":Bufferize Inspect<cr>", { silent = true }) -- paste from 0 register
 vim.keymap.set("n", "<leader>bI", function()
-  local ui2 = require("vim._core.ui2")
-  local win = vim.api.nvim_get_current_win()  -- save before :messages steals focus
-  vim.cmd("Inspect")
-  pcall(vim.api.nvim_win_close, ui2.wins.cmd, true)
-  -- ui2.check_targets()
-  vim.schedule(function()
-    vim.api.nvim_set_current_win(win)
-    vim.cmd("split")
-    vim.api.nvim_win_set_height(0, 15)
-    vim.api.nvim_set_current_buf(ui2.bufs.cmd)
-  end)
+	local ui2 = require("vim._core.ui2")
+	local win = vim.api.nvim_get_current_win() -- save before :messages steals focus
+	vim.cmd("Inspect")
+	pcall(vim.api.nvim_win_close, ui2.wins.cmd, true)
+	-- ui2.check_targets()
+	vim.schedule(function()
+		vim.api.nvim_set_current_win(win)
+		vim.cmd("split")
+		vim.api.nvim_win_set_height(0, 15)
+		vim.api.nvim_set_current_buf(ui2.bufs.cmd)
+	end)
 end)
 
 -- local function show_documentation()
@@ -1409,7 +1425,7 @@ vim.keymap.set("n", "<leader>tp", function()
 end, opts)
 
 vim.keymap.set("n", "<leader>tP", function()
-  vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_personales.md")
+	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_personales.md")
 end, opts)
 
 ---@diagnostic disable-next-line: unused-local
@@ -1982,7 +1998,21 @@ end, { expr = true })
 vim.keymap.set("n", "<leader>ms", function()
 	vim.notify("Syncing email...", vim.log.levels.INFO)
 	local stderr_lines = {}
-	vim.fn.jobstart("mbsync izertis-channel && notmuch new", {
+
+	local function print_line(line)
+		if line == "" then return end
+		vim.api.nvim_echo({ { line, "Comment" } }, true, {})
+	end
+
+	vim.fn.jobstart({ "sh", "-c", "mbsync izertis-channel && notmuch new" }, {
+		pty = true, -- force line-buffered output from mbsync
+		on_stdout = function(_, data)
+			vim.schedule(function()
+				for _, line in ipairs(data) do
+					print_line(line)
+				end
+			end)
+		end,
 		on_stderr = function(_, data)
 			for _, line in ipairs(data) do
 				if line ~= "" then
@@ -1994,13 +2024,13 @@ vim.keymap.set("n", "<leader>ms", function()
 			if code == 0 then
 				vim.schedule(function()
 					vim.notify("Email synced properly", vim.log.levels.INFO)
-          local time = os.date("%H:%M")
+					local time = os.date("%H:%M")
 					vim.fn.jobstart({
 						"terminal-notifier",
 						"-title",
 						"Mail",
 						"-message",
-						time ..  " Email synced properly",
+						time .. " Email synced properly",
 					}, { detach = true })
 				end)
 			else
@@ -2069,10 +2099,10 @@ vim.cmd([[inoremap <C-f> <Right>]])
 vim.cmd([[cnoremap <C-f> <Right>]])
 
 vim.keymap.set("n", "gh", function() -- cmdOutput open (or close) (requires vim._core.ui2 nvim0.12)
-  local ui2 = require("vim._core.ui2")
-  vim.cmd("split")
-  vim.api.nvim_win_set_height(0, 15)
-  vim.api.nvim_set_current_buf(ui2.bufs.cmd)
+	local ui2 = require("vim._core.ui2")
+	vim.cmd("split")
+	vim.api.nvim_win_set_height(0, 15)
+	vim.api.nvim_set_current_buf(ui2.bufs.cmd)
 end)
 
 -- vim.keymap.set("n", "g<", function() -- cmdOutput open (or close) (requires vim._core.ui2 nvim0.12)
@@ -2093,6 +2123,5 @@ end)
 -- 		vim.api.nvim_set_current_buf(lastbuf)
 -- 	end
 -- end)
-
 
 vim.api.nvim_create_user_command("LspInfo", "checkhealth vim.lsp", { desc = "Show LSP Info" })

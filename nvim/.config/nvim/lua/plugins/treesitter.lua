@@ -102,6 +102,7 @@ return {
 					-- "kulala_http",
 					"javascript",
 					"markdown",
+          "git",
 					"gitcommit",
 					"hurl",
 					"jproperties",
@@ -117,6 +118,7 @@ return {
 					"dockerfile",
 					"regex",
 					"lua",
+          "python",
 					"rust",
 					"rust-docs",
 					"devtools-storage",
@@ -296,7 +298,9 @@ return {
 	},
 	{
 		-- "jugarpeupv/nvim-treesitter-context",
-		"nvim-treesitter/nvim-treesitter-context",
+    "nvim-treesitter/nvim-treesitter-context",
+    -- dev = true,
+    -- dir = "~/projects/nvim-treesitter-context/wt-master/",
 		enabled = true,
 		lazy = true,
 		-- ft = { "json", "jsonc", "yaml", "yml", "yaml.github", "javascript", "typescript", "lua" },
@@ -324,12 +328,11 @@ return {
 				on_attach = function(buf)
 					local filetype = vim.fn.getbufvar(buf, "&ft")
           local ignored_filetypes = {
-            "markdown",
             "opencode_output",
             "opencode",
             "opencode_footer"
           }
-          for ft in ipairs(ignored_filetypes) do
+          for _,ft in ipairs(ignored_filetypes) do
             if filetype == ft then
               return false
             end

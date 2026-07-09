@@ -3,12 +3,21 @@ vim.g.chat_title = nil
 
 return {
 	{
+		"ray-x/copilot-agent.nvim",
+		enabled = false,
+		build = ":CopilotAgentInstall",
+		config = function()
+			require("copilot_agent").setup({})
+			require("copilot_agent").start_lsp()
+		end,
+	},
+	{
 		"CopilotC-Nvim/CopilotChat.nvim",
 		-- cmd = { "CopilotChat", "CopilotChatToggle", "CopilotChatCommit" },
 		-- commit = "7e6583c75f1231ea1eac70e06995dd3f97a58478",
-    -- commit = "02c5cf3a6e030ec81795f16ab5e4f3a8861736db",
-    -- commit = "ce485330c76a5b63ccfb02b7dd18890a748ca558",
-    enabled = true,
+		-- commit = "02c5cf3a6e030ec81795f16ab5e4f3a8861736db",
+		-- commit = "ce485330c76a5b63ccfb02b7dd18890a748ca558",
+		enabled = false,
 		branch = "main",
 		dependencies = {
 			-- { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
@@ -17,23 +26,23 @@ return {
 		},
 		build = "make tiktoken", -- Only on MacOS or Linux
 		opts = {
--- 			prompts = {
--- 				Commit = {
--- 					prompt = [[
--- Write a commit message following the Conventional Commits specification.
--- Use the format: <type>(<scope>): <short description>
---
--- After the first line, use `-` to list additional points if needed:
--- - Explain what changed and why
--- - Mention any breaking changes
--- - Reference issues if applicable
---
--- Types: feat, fix, docs, style, refactor, test, chore.
--- Use the imperative mood ("add" not "added").
--- #gitdiff:staged
--- 					]],
--- 				},
--- 			},
+			-- 			prompts = {
+			-- 				Commit = {
+			-- 					prompt = [[
+			-- Write a commit message following the Conventional Commits specification.
+			-- Use the format: <type>(<scope>): <short description>
+			--
+			-- After the first line, use `-` to list additional points if needed:
+			-- - Explain what changed and why
+			-- - Mention any breaking changes
+			-- - Reference issues if applicable
+			--
+			-- Types: feat, fix, docs, style, refactor, test, chore.
+			-- Use the imperative mood ("add" not "added").
+			-- #gitdiff:staged
+			-- 					]],
+			-- 				},
+			-- 			},
 			-- callback = function(_response, _source)
 			-- 	local chat = require("CopilotChat")
 			-- 	if vim.g.chat_title then
@@ -58,7 +67,7 @@ return {
 			-- 	-- print("vim.g.chat_title", vim.g.chat_title)
 			-- 	chat.save(vim.g.chat_title)
 			-- end,
-			default = { "copilot" },
+			default = { "gemini" },
 			-- tools = { "nx", "github", "tavily", "neovim" },
 			tools = {
 				"tavily",
@@ -115,10 +124,58 @@ return {
 			-- 	-- 	or require("CopilotChat.select").line(source)
 			-- 	-- 	or require("CopilotChat.select").buffer(source)
 			-- end,
+			-- model = "claude-sonnet-4.6",
+			model = "gemini-2.0-flash-lite",
+      -- model = "auto",
 			providers = {
 				copilot = {
 					-- see config.lua for implementation
 				},
+				gemini = {
+					prepare_input = function(inputs, opts)
+						return require("CopilotChat.config.providers").copilot.prepare_input(inputs, opts)
+					end,
+					prepare_output = function(output, opts)
+						return require("CopilotChat.config.providers").copilot.prepare_output(output, opts)
+					end,
+
+					get_headers = function()
+						local api_key = assert(os.getenv("GEMINI_API_KEY"), "GEMINI_API_KEY env not set")
+						return {
+							Authorization = "Bearer " .. api_key,
+							["Content-Type"] = "application/json",
+						}
+					end,
+
+					get_models = function(headers)
+						local response, err = require("CopilotChat.utils").curl_get(
+							"https://generativelanguage.googleapis.com/v1beta/openai/models",
+							{
+								headers = headers,
+								json_response = true,
+							}
+						)
+
+						if err then
+							error(err)
+						end
+
+						return vim.tbl_map(function(model)
+							local id = model.id:gsub("^models/", "")
+							return {
+								id = id,
+								name = id,
+								streaming = true,
+								tools = true,
+							}
+						end, response.body.data)
+					end,
+
+					get_url = function()
+						return "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+					end,
+				},
+
 				github_models = {
 					disabled = true,
 				},

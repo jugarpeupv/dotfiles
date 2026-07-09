@@ -49,6 +49,13 @@ return {
 						-- not direct functions, allowing for easier customization.
 						actions = {
 							-- Actions are categorized by main pickers
+              images = {
+                -- Each action is referenced by a "key" action name, so it is easier to remap.
+                -- You can also add new key actions
+                remove = {
+                  key = "<C-x>"
+                },
+              },
 							containers = {
 								-- Each action is referenced by a "key" action name, so it is easier to remap.
 								-- Example: Customize the 'logs' action
@@ -58,6 +65,9 @@ return {
 									desc = "Container lo[G]s", -- this will be shown in telescope keymaps help
 									-- You dont need to modify all table
 								},
+                remove = {
+                  key = "<C-b>",
+                },
 								-- You can also add new key actions
 								kill = {
 									key = "<C-x>",

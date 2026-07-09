@@ -30,9 +30,9 @@ end
 return {
 	{
 		-- "pwntester/octo.nvim",
-		"jugarpeupv/octo.nvim",
-		-- dev = true,
-		-- dir = "~/projects/octo.nvim/wt-master",
+		-- "jugarpeupv/octo.nvim",
+		dev = true,
+		dir = "~/projects/octo.nvim/wt-master",
 		-- dependencies = {
 		-- -- 	"nvim-lua/plenary.nvim",
 		-- -- 	"nvim-telescope/telescope.nvim",
@@ -58,13 +58,13 @@ return {
 			},
 			{
 				mode = { "n" },
-				"<leader>or",
+				"<leader>oR",
 				":Octo search is:pr involves:GPJULI6_mapfre state:open",
 				{ noremap = true, silent = true },
 			},
 			{
 				mode = { "n" },
-				"<leader>oP",
+				"<leader>or",
 				":Octo search author:GPJULI6_mapfre is:pr is:open owner:mapfre-tech",
 				{ noremap = true, silent = true },
 			},

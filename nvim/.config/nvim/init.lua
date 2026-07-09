@@ -1,7 +1,9 @@
+
 vim.loader.enable()
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
+vim.keymap.set("n", "<leader><BS>", "<cmd>qa!<CR>", { noremap = true, silent = true })
 vim.g.loaded_matchit = 1
 -- vim.g.python3_host_prog = vim.fn.expand("~/.nvim-venv/bin/python3")
 
@@ -24,6 +26,7 @@ if vim.env.DEBUG then
 end
 
 require("jg.core.options")
+require("jg.core.keymaps")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
@@ -115,7 +118,5 @@ vim.api.nvim_create_autocmd("User", {
 	pattern = "VeryLazy",
 	callback = function()
 		require("jg.core.autocommands")
-		require("jg.core.keymaps")
 	end,
 })
-

@@ -47,10 +47,9 @@ return {
 					end
 					return label
 				end,
-				exclude_filetypes = {
-					"netrw",
-					"mail",
-					"grug-far",
+			exclude_filetypes = {
+				"netrw",
+				"grug-far",
 					"toggleterm",
 					"copilot-chat",
 					"copilot-diff",

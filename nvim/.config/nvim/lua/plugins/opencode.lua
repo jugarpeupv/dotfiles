@@ -1,12 +1,12 @@
 return {
 	{
-		-- "sudo-tee/opencode.nvim",
+		"sudo-tee/opencode.nvim",
 		-- enabled = true,
-    -- commit = "92ad9bf550f10ac24c0076dd564fa5b424ce4fab",
-    "jugarpeupv/opencode.nvim",
+		-- commit = "92ad9bf550f10ac24c0076dd564fa5b424ce4fab",
+		-- "jugarpeupv/opencode.nvim",
 		-- dev = true,
-		-- dir = "~/projects/opencode.nvim/wt-main/",
-		lazy = true,
+		-- dir = "~/projects/opencode.nvim/wt-opencode-origin-main/",
+		-- lazy = true,
 		keys = {
 			-- {
 			-- 	mode = { "n", "v" },
@@ -15,6 +15,22 @@ return {
 			-- 		require("opencode.api").toggle()
 			-- 	end,
 			-- },
+			{
+				mode = { "n" },
+				"<leader>ci",
+				function()
+					local diff = vim.fn.system("git diff --cached")
+					if diff == "" then
+						vim.notify("No staged changes found", vim.log.levels.WARN)
+						return
+					end
+					local prompt = "Write a commit message for the following staged changes following Conventional Commits convention. Keep the title under 50 characters and wrap body at 72 characters.\n\n```diff\n"
+						.. diff
+						.. "\n```\n\nFormat as a gitcommit code block like so ```gitcommit <the-git-commit-message> ```"
+					require("opencode.api").run(prompt)
+				end,
+				desc = "Opencode - Generate commit message from staged changes",
+			},
 			{
 				mode = { "v" },
 				"<leader>oa",
@@ -94,7 +110,7 @@ return {
 					},
 					editor = {
 						-- ["<C-.>"] = { "toggle" }, -- Open opencode. Close if opened
-            ["<C-.>"] = false,
+						["<C-.>"] = false,
 						["<M-m>"] = { "toggle" }, -- Open opencode. Close if opened
 						["<D-m>"] = { "toggle" }, -- Open opencode. Close if opened
 						["<leader>og"] = false,
@@ -156,7 +172,61 @@ return {
 						-- ['<leader>orR'] = { 'diff_restore_snapshot_all' }, -- Restore all files to a restore point
 						-- ['<leader>ox'] = { 'swap_position' }, -- Swap Opencode pane left/right
 						-- ['<leader>ott'] = { 'toggle_tool_output' }, -- Toggle tools output (diffs, cmd output, etc.)
-						['<leader>oE'] = { 'toggle_reasoning_output' }, -- Toggle reasoning output (thinking steps)
+						["<leader>oE"] = { "toggle_reasoning_output" }, -- Toggle reasoning output (thinking steps)
+						["<C-b>"] = {
+							function()
+								local buf = vim.api.nvim_get_current_buf()
+								local cursor = vim.api.nvim_win_get_cursor(0)
+								local row = cursor[1] - 1
+								local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+
+								local in_block = false
+								local block_start = nil
+								local is_gitcommit = false
+
+								for i, line in ipairs(lines) do
+									local line_idx = i - 1
+									if line:match("^```") then
+										if not in_block then
+											in_block = true
+											block_start = line_idx
+											is_gitcommit = line:match("^```gitcommit") ~= nil
+										else
+											in_block = false
+											if row > block_start and row < line_idx and is_gitcommit then
+												local content = {}
+												for j = block_start + 1, line_idx - 1 do
+													table.insert(content, lines[j + 1])
+												end
+												local text = table.concat(content, "\n")
+
+												local current_win = vim.api.nvim_get_current_win()
+												local wins = vim.api.nvim_list_wins()
+												local prev_win = nil
+												for idx, win in ipairs(wins) do
+													if win == current_win and idx > 1 then
+														prev_win = wins[idx - 1]
+														break
+													end
+												end
+
+												if prev_win then
+													vim.api.nvim_set_current_win(prev_win)
+													vim.api.nvim_paste(text, true, -1)
+												else
+													vim.notify("No previous window found", vim.log.levels.WARN)
+												end
+												return
+											end
+										end
+									end
+								end
+
+								-- Fallback: call context_items if not in a gitcommit block
+								require("opencode.api").context_items()
+							end,
+							mode = { "n", "i" },
+						},
 						-- ['<leader>o/'] = { 'quick_chat', mode = { 'n', 'x' } }, -- Open quick chat input with selection context in visual mode or current line context in normal mode
 					},
 					input_window = {
@@ -167,11 +237,10 @@ return {
 						["<C-c>"] = { "cancel" }, -- Cancel opencode request while it is running
 						-- ["~"] = { "mention_file", mode = "i" }, -- Pick a file and add to context. See File Mentions section
 						-- ["@"] = { "mention", mode = "i" }, -- Insert mention (file/agent)
-            ["~"] = false, -- Pick a file and add to context. See File Mentions section
-            ["@"] = false, -- Insert mention (file/agent)
+						["~"] = false, -- Pick a file and add to context. See File Mentions section
+						["@"] = false, -- Insert mention (file/agent)
 						["/"] = { "slash_commands", mode = "i" }, -- Pick a command to run in the input window
 						["#"] = { "context_items", mode = "i" }, -- Manage context items (current file, selection, diagnostics, mentioned files)
-            ["<C-b>"] = { "context_items", mode = { "n", "i" }  }, -- Manage context items (current file, selection, diagnostics, mentioned files)
 						["<M-v>"] = { "paste_image", mode = "i" }, -- Paste image from clipboard as attachment
 						["<tab>"] = { "switch_mode" },
 						["<up>"] = { "prev_prompt_history", mode = { "n", "i" } }, -- Navigate to previous prompt in history
@@ -224,36 +293,36 @@ return {
 						deny = "D",
 					},
 				},
-        context = {
-          enabled = true, -- Enable automatic context capturing
-          cursor_data = {
-            enabled = false, -- Include cursor position and line content in the context
-            context_lines = 5, -- Number of lines before and after cursor to include in context
-          },
-          diagnostics = {
-            info = false, -- Include diagnostics info in the context (default to false
-            warning = false, -- Include diagnostics warnings in the context
-            error = false, -- Include diagnostics errors in the context
-            only_closest = false, -- If true, only diagnostics for cursor/selection
-          },
-          current_file = {
-            enabled = false, -- Include current file path and content in the context
-            show_full_path = false,
-          },
-          files = {
-            enabled = true,
-            show_full_path = true,
-          },
-          selection = {
-            enabled = true, -- Include selected text in the context
-          },
-          buffer = {
-            enabled = false, -- Disable entire buffer context by default, only used in quick chat
-          },
-          git_diff = {
-            enabled = true,
-          },
-        },
+				context = {
+					enabled = true, -- Enable automatic context capturing
+					cursor_data = {
+						enabled = false, -- Include cursor position and line content in the context
+						context_lines = 5, -- Number of lines before and after cursor to include in context
+					},
+					diagnostics = {
+						info = false, -- Include diagnostics info in the context (default to false
+						warning = false, -- Include diagnostics warnings in the context
+						error = false, -- Include diagnostics errors in the context
+						only_closest = false, -- If true, only diagnostics for cursor/selection
+					},
+					current_file = {
+						enabled = false, -- Include current file path and content in the context
+						show_full_path = false,
+					},
+					files = {
+						enabled = true,
+						show_full_path = true,
+					},
+					selection = {
+						enabled = true, -- Include selected text in the context
+					},
+					buffer = {
+						enabled = false, -- Disable entire buffer context by default, only used in quick chat
+					},
+					git_diff = {
+						enabled = true,
+					},
+				},
 				ui = {
 					enable_treesitter_markdown = true, -- Use Treesitter for markdown rendering in the output window (default: true).
 					position = "right", -- 'right' (default), 'left' or 'current'. Position of the UI split. 'current' uses the current window for the output.
@@ -267,11 +336,11 @@ return {
 					persist_state = true, -- Keep buffers when toggling/closing UI so window state restores quickly
 					buflisted = true, -- OpenCode buffers won't be closed by :only
 					output = {
-            win_options = {
-              cursorline = true,
-              number = false,
-              relativenumber = false,
-            },
+						win_options = {
+							cursorline = true,
+							number = false,
+							relativenumber = false,
+						},
 						rendering = {
 							markdown_debounce_ms = 250,
 							on_data_rendered = nil,
@@ -280,8 +349,8 @@ return {
 						},
 						tools = {
 							show_output = true,
-              use_folds = false,
-							show_reasoning_output = true,
+							use_folds = false,
+							show_reasoning_output = false,
 						},
 						always_scroll_to_bottom = false,
 					},
@@ -306,35 +375,35 @@ return {
 					},
 				},
 			})
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'OpencodeEvent:question.asked',
-        callback = function(args)
-          -- args.data.event.properties.questions
-          local questions = args.data.event.properties.questions
-          local session = args.data.event.properties.session
-          local workspace = (session and session.workspace) or vim.fn.getcwd()
-          local parts = vim.split(workspace, "/")
-          local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
-          local questions_text = ""
-          local time = os.date("%H:%M")
-          if questions then
-            local lines = {}
-            for _, q in ipairs(questions) do
-              table.insert(lines, q.question)
-            end
-            questions_text = "\n" .. table.concat(lines, "\n")
-          end
-          vim.fn.jobstart({
-            "terminal-notifier",
-            "-title",
-            "Neovim",
-            "-message",
-            time .. " OpenCode needs input in " .. repo .. ":" .. questions_text,
-            "-contentImage",
-            vim.fn.expand("~/.config/nvim/nvim.png"),
-          }, { detach = true })
-        end,
-      })
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "OpencodeEvent:question.asked",
+				callback = function(args)
+					-- args.data.event.properties.questions
+					local questions = args.data.event.properties.questions
+					local session = args.data.event.properties.session
+					local workspace = (session and session.workspace) or vim.fn.getcwd()
+					local parts = vim.split(workspace, "/")
+					local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
+					local questions_text = ""
+					local time = os.date("%H:%M")
+					if questions then
+						local lines = {}
+						for _, q in ipairs(questions) do
+							table.insert(lines, q.question)
+						end
+						questions_text = "\n" .. table.concat(lines, "\n")
+					end
+					vim.fn.jobstart({
+						"terminal-notifier",
+						"-title",
+						"Neovim",
+						"-message",
+						time .. " OpenCode needs input in " .. repo .. ":" .. questions_text,
+						"-contentImage",
+						vim.fn.expand("~/.config/nvim/nvim.png"),
+					}, { detach = true })
+				end,
+			})
 		end,
 		dependencies = {
 			"nvim-lua/plenary.nvim",

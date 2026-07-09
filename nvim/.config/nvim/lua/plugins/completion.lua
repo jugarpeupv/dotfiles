@@ -167,9 +167,15 @@ return {
 						local menu = require("blink.cmp.completion.windows.menu")
 						local before = vim.fn.getcmdline():sub(1, vim.fn.getcmdpos() - 1)
 						local expanded = vim.fn.getcompletion(before, "cmdline")
-						if #expanded == 0 then
-							return false -- nothing to show, let native handle it
-						end
+					if #expanded == 0 then
+						-- No blink completions; trigger native wildmenu via wildcharm (<C-v>)
+						vim.api.nvim_feedkeys(
+							vim.api.nvim_replace_termcodes("<C-v>", true, false, true),
+							"t",
+							false
+						)
+						return true
+					end
 						menu.force_auto_show()
 						trigger.show({ force = true, trigger_kind = "manual", initial_selected_item_idx = 1 })
 						vim.schedule(function()
