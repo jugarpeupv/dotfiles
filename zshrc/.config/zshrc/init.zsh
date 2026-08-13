@@ -2,10 +2,13 @@ source $HOME/.config/zshrc/oh-my-zsh/install.zsh
 
 export ZSH="$HOME/.oh-my-zsh"
 source $HOME/.config/zshrc/oh-my-zsh/zsh-syntax-highlighting.zsh
-export NVM_LAZY_LOAD_EXTRA_COMMANDS=('nvim')
-export NVM_LAZY_LOAD=true
+# source $HOME/.config/zshrc/oh-my-zsh/fnm.zsh
+# export NVM_LAZY_LOAD_EXTRA_COMMANDS=('nvim')
+# export NVM_LAZY_LOAD=true
 
-plugins=(zsh-nvm evalcache git-open fzf-tab zsh-syntax-highlighting zsh-vi-mode zsh-autosuggestions ohmyzsh-full-autoupdate)
+
+# plugins=(zsh-nvm evalcache git-open fzf-tab zsh-syntax-highlighting zsh-vi-mode zsh-autosuggestions ohmyzsh-full-autoupdate)
+plugins=(evalcache git-open fzf-tab zsh-syntax-highlighting zsh-vi-mode zsh-autosuggestions ohmyzsh-full-autoupdate)
 
 # This line is needed for fzf-tab to pick right colors
 source $HOME/.config/zshrc/ls-colors.zsh

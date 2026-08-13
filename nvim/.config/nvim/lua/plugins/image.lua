@@ -3,16 +3,7 @@ vim.g.image_rendered = false
 return {
 	{
 		"3rd/image.nvim",
-		-- commit = "21909e3eb03bc738cce497f45602bf157b396672",
-		-- commit = "446a8a5cc7a3eae3185ee0c697732c32a5547a0b",
-		-- branch = "master",
-		-- dev = true,
-		-- dir = "~/projects/image.nvim/wt-master",
-		-- branch = "main",
-		-- event = "VeryLazy",
-		-- event = { "BufReadPost" },
 		ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "markdown", "vimwiki" },
-		-- ft = { "png", "jpg", "jpeg", "gif", "webp", "md", "vimwiki" },
 		keys = {
 			{
 				mode = { "n", "v" },

@@ -49,12 +49,11 @@ return {
 	{
 		-- "skanehira/denops-docker.vim",
 		"jugarpeupv/denops-docker.vim",
+    branch = "feature/fixes",
 		enabled = false,
 		dependencies = {
 			{ "vim-denops/denops.vim" },
 		},
-		dir = "~/projects/denops-docker.vim/wt-feature-fixes",
-		dev = true,
 		-- cmd = { "Docker", "DockerContainers", "DockerImages" },
 		-- event = { "BufReadPost", "BufNewFile" },
 		event = { "CmdlineEnter" },

@@ -2,18 +2,7 @@
 return {
 	--Create local branch to track remote branch
 	-- git branch --track feature/mytest origin/feature/mytest
-
-	-- "ThePrimeagen/git-worktree.nvim",
-	-- "polarmutex/git-worktree.nvim",
-	-- "jugarpeupv/git-worktree.nvim",
-	-- version = "^2",
 	"jugarpeupv/git-worktree.nvim",
-	-- dev = true,
-	-- dir = "~/projects/git-worktree.nvim",
-	-- dir = "~/projects/git-worktree.nvim",
-	-- dev = true,
-	-- branch = "main",
-	-- dependencies = { "nvim-lua/plenary.nvim" },
 	keys = {
 		{
 			"<leader>wt",
@@ -121,6 +110,10 @@ return {
 		end
 
 		Hooks.register(Hooks.type.SWITCH, function(path, prev_path)
+			-- vim.notify(
+			-- 	"SWITCH hook: path=" .. tostring(path) .. " | prev_path=" .. tostring(prev_path),
+			-- 	vim.log.levels.INFO
+			-- )
 			local wt_utils = require("jg.custom.worktree-utils")
 			local prev_node_modules_path = prev_path .. "/node_modules"
 			local prev_node_modules_exists = vim.fn.isdirectory(prev_node_modules_path)
@@ -163,12 +156,17 @@ return {
 			}
 			file_utils.write_bps(file_utils.get_bps_path(wt_root_dir_with_ending), my_table)
 
-			-- Update current file opened
+      -- Update current file opened
       local Path = require("plenary.path")
-      -- vim.schedule(function()
-      -- end)
-      local new_path = Path:new(path):absolute()
-      require("fyler").set_current_dir(new_path)
+      local new_path = vim.fn.resolve(path)
+      local dir_exists = vim.fn.isdirectory(new_path) == 1
+      -- vim.notify(
+      --   "SWITCH hook: set_current_dir(" .. new_path .. ") exists=" .. tostring(dir_exists),
+      --   vim.log.levels.INFO
+      -- )
+      if dir_exists then
+        require("fyler").set_current_dir(new_path)
+      end
 
 			local current_buffer_filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
 			if current_buffer_filetype == "oil" then
@@ -177,7 +175,7 @@ return {
 			end
 
       if current_buffer_filetype == "fyler" then
-        require("fyler").open({ dir = new_path, kind = "replace" })
+        require("fyler").open({ root_path = new_path, kind = "replace" })
         return
       end
 
@@ -190,8 +188,10 @@ return {
 			if not Path:new(path):is_absolute() then
 				original_path = Path:new():absolute()
 			end
+			local raw_path = original_path .. path
+			local worktree_path = vim.fn.resolve(raw_path)
+
 			local prev_node_modules_path = original_path .. "node_modules"
-			local worktree_path = Path:new(original_path .. path):absolute()
 			local destination_path = worktree_path .. "/node_modules"
 
 			local prev_node_modules_exists = vim.fn.isdirectory(prev_node_modules_path)
@@ -215,11 +215,15 @@ return {
 			end
 
 			if current_buffer_filetype == "fyler" then
-				require("fyler").set_current_dir(worktree_path)
+				local dir_exists = vim.fn.isdirectory(worktree_path) == 1
+				if dir_exists then
+					require("fyler").set_current_dir(worktree_path)
+				end
 			end
 		end)
 
 		Hooks.register(Hooks.type.DELETE, function(path)
+			-- vim.notify("DELETE hook: path=" .. tostring(path), vim.log.levels.INFO)
 			for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
 				if vim.api.nvim_buf_is_loaded(bufnr) then
 					local ft = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
@@ -229,7 +233,14 @@ return {
 				end
 			end
 			local root_path = path:gsub("/wt%-[^/]+/?$", "/")
-			require("fyler").set_current_dir(root_path)
+			local dir_exists = vim.fn.isdirectory(root_path) == 1
+			-- vim.notify(
+			-- 	"DELETE hook: set_current_dir(" .. root_path .. ") exists=" .. tostring(dir_exists),
+			-- 	vim.log.levels.INFO
+			-- )
+			if dir_exists then
+				require("fyler").set_current_dir(root_path)
+			end
 		end)
 	end,
 }

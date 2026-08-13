@@ -2,8 +2,6 @@ return {
 	{
 		"esmuellert/codediff.nvim",
 		dependencies = { "MunifTanjim/nui.nvim" },
-    -- dir = "~/projects/codediff.nvim/wt-feature-toggle_layout/",
-    -- dev = true,
 		enabled = false,
 		cmd = { "CodeDiff" },
 		keys = {

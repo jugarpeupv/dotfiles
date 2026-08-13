@@ -16,12 +16,5 @@ source $HOME/.config/zshrc/sdkman.zsh
 source $HOME/.config/zshrc/atuin.zsh
 source $HOME/.config/zshrc/evalcache.zsh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# pnpm
-export PNPM_HOME="/Users/jgarcia/.pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
-esac
-# pnpm end
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

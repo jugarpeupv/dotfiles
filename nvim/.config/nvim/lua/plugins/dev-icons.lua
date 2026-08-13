@@ -1,13 +1,13 @@
 return {
 	{
 		"Mirsmog/real-icons.nvim",
-    enabled = false,
+		enabled = false,
 		build = ":RealIconsInstallPack material",
 		opts = {
 			pack = "material",
 			integrations = {
 				telescope = true,
-        oil = true
+				oil = true,
 			},
 		},
 	},
@@ -101,6 +101,11 @@ return {
 					name = "rake",
 					color = "#f38bad",
 				},
+        gem = {
+          icon = "",
+          name = "gem",
+          color = "#f38bad",
+        },
 				gemspec = {
 					icon = "",
 					name = "gemspec",
@@ -111,6 +116,11 @@ return {
 					name = "rb",
 					color = "#f38bad",
 				},
+        ["ruby-version"] = {
+          icon = "",
+          name = "rubyversion",
+          color = "#f38bad",
+        },
 				ruby = {
 					icon = "",
 					name = "ruby",
@@ -308,6 +318,11 @@ return {
 					icon = "",
 					color = "#F5E0DC",
 					name = "Cjs",
+				},
+				["rspec"] = {
+					icon = "",
+					color = "#F38BA8",
+					name = "rspec",
 				},
 				["mjs"] = {
 					icon = "",
@@ -616,6 +631,11 @@ return {
 					color = "#73daca",
 					name = "nvmrcfile",
 				},
+        [".env.dev"] = {
+          icon = "",
+          color = "#F2CDCD",
+          name = "Env25",
+        },
 				[".env"] = {
 					icon = "",
 					color = "#F2CDCD",

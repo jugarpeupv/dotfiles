@@ -789,10 +789,11 @@ return {
 			--
 			-- See the fuzzy documentation for more information
 			fuzzy = {
-				implementation = "rust",
-				max_typos = function()
-					return 1
-				end,
+				implementation = "lua",
+        max_typos = 1,
+				-- max_typos = function()
+				-- 	return 1
+				-- end,
 				use_proximity = true,
 			},
 		},

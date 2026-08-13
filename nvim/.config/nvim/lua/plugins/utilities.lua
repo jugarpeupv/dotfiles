@@ -1,9 +1,7 @@
 return {
 	-- Lua
 	{
-		"jugarpeupv/devtools.nvim",
-		dev = true,
-		dir = "~/projects/devtools.nvim",
+		"jugarpeupv/chrome-devtools.nvim",
 		lazy = true,
 		cmd = { "DevTools" },
 		keys = {
@@ -86,8 +84,7 @@ return {
 	},
 	{
 		"jugarpeupv/rust-docs.nvim",
-		dev = true,
-		dir = "~/projects/rust-docs.nvim",
+    enabled = false,
 		lazy = true,
 		keys = {
 			{ mode = { "n" }, "<leader>rd", ":RustDocs<cr>" },
@@ -109,8 +106,6 @@ return {
 	},
 	{
 		"jugarpeupv/jsregex.nvim",
-		dev = true,
-		dir = "~/projects/jsregex.nvim/",
 		keys = {
 			{ "<leader>js", "<cmd>JSRegexSearch<cr>", { silent = true } },
 		},
@@ -128,9 +123,7 @@ return {
 		end,
 	},
 	{
-		-- "jugarpeupv/processmonitor.nvim",
-		dev = true,
-		dir = "~/projects/processmonitor.nvim",
+		"jugarpeupv/processmonitor.nvim",
 		keys = {
 			{ "<leader>ps", "<cmd>PS<cr>" },
 			{ "<leader>ls", "<cmd>Lsof<cr>" },
@@ -138,8 +131,6 @@ return {
 	},
 	{
 		"jugarpeupv/visual-match-paren.nvim",
-		dev = true,
-		dir = "~/projects/visual-match-paren.nvim",
 		keys = {
 			"V",
 		},
@@ -156,13 +147,6 @@ return {
 				scope_textobject = "I", -- Text object for inner scope (default: "I", set to "" to disable)
 			})
 		end,
-	},
-	{
-		dev = true,
-		dir = "~/projects/calendar.nvim",
-		lazy = false,
-		enabled = false,
-		config = function() end,
 	},
 	{
 		"itchyny/calendar.vim",

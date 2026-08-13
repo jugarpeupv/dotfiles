@@ -85,8 +85,6 @@ return {
 				-- "osyo-manga/vim-over",
 				"jugarpeupv/vim-over",
 				enabled = false,
-				dev = true,
-				dir = "~/projects/vim-over/wt-master",
 				cmd = { "OverCommandLine" },
 			},
 			{
@@ -198,8 +196,6 @@ return {
 				enabled = false,
 				"jugarpeupv/recall.nvim",
 				dependencies = { "nvim-telescope/telescope.nvim" },
-				-- dir = "~/projects/recall.nvim",
-				-- dev = true,
 				version = "*",
 				-- event = { "BufReadPre", "BufNewFile" },
 				keys = {
@@ -271,8 +267,6 @@ return {
 					end
 					return true
 				end,
-				-- dir = "~/projects/nx.nvim",
-				-- dev = true,
 				dependencies = {
 					"nvim-telescope/telescope.nvim",
 				},
@@ -690,24 +684,41 @@ return {
 								-- ["<C-o>"] = require("telescope.actions.layout").toggle_preview,
 								-- ["<C-t>"] = trouble.open_with_trouble,
 
-								-- ["<C-u>"] = actions.preview_scrolling_up,
-								-- ["<C-d>"] = actions.preview_scrolling_down,
-
-								-- ["<C-u>"] = actions.results_scrolling_up,
-								-- ["<C-d>"] = actions.results_scrolling_down,
 								["<C-u>"] = function(prompt_bufnr)
-									for _ = 1, 5 do
-										actions.move_selection_previous(prompt_bufnr)
+									local action_state = require("telescope.actions.state")
+									local picker = action_state.get_current_picker(prompt_bufnr)
+									if picker then
+										vim.api.nvim_buf_set_lines(prompt_bufnr, 0, 1, false, { "" })
+										pcall(vim.api.nvim_win_set_cursor, picker.prompt_win, { 1, 0 })
 									end
+									return true
 								end,
-								["<C-d>"] = function(prompt_bufnr)
-									for _ = 1, 5 do
-										actions.move_selection_next(prompt_bufnr)
-									end
-								end,
+								["<C-d>"] = false,
 
-								["<PageUp>"] = actions.preview_scrolling_up,
-								["<PageDown>"] = actions.preview_scrolling_down,
+                ["<PageUp>"] = function(prompt_bufnr)
+                  for _ = 1, 5 do
+                    actions.move_selection_previous(prompt_bufnr)
+                  end
+                end,
+                ["<PageDown>"] = function(prompt_bufnr)
+                  for _ = 1, 5 do
+                    actions.move_selection_next(prompt_bufnr)
+                  end
+                end,
+
+								-- ["<C-u>"] = function(prompt_bufnr)
+								-- 	for _ = 1, 5 do
+								-- 		actions.move_selection_previous(prompt_bufnr)
+								-- 	end
+								-- end,
+								-- ["<C-d>"] = function(prompt_bufnr)
+								-- 	for _ = 1, 5 do
+								-- 		actions.move_selection_next(prompt_bufnr)
+								-- 	end
+								-- end,
+
+								-- ["<PageUp>"] = actions.preview_scrolling_up,
+								-- ["<PageDown>"] = actions.preview_scrolling_down,
 
 								["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
 								["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,

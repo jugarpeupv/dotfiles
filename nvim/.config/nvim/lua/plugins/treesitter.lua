@@ -297,13 +297,9 @@ return {
 		},
 	},
 	{
-		-- "jugarpeupv/nvim-treesitter-context",
     "nvim-treesitter/nvim-treesitter-context",
-    -- dev = true,
-    -- dir = "~/projects/nvim-treesitter-context/wt-master/",
 		enabled = true,
 		lazy = true,
-		-- ft = { "json", "jsonc", "yaml", "yml", "yaml.github", "javascript", "typescript", "lua" },
 		event = { "LspAttach" },
 		keys = {
 			{

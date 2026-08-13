@@ -55,15 +55,16 @@ atuin-setup() {
     # bindkey '^n' history-search-forward
     # bindkey '^E' _atuin_search_widget
 
-    autoload -U add-zsh-hook # Only for zsh, skip for bash
-    load-nvmrc() {
-      if [ -f .nvmrc ]; then
-        nvm use
-      fi
-    }
+    ## nvm
+    # autoload -U add-zsh-hook # Only for zsh, skip for bash
+    # load-nvmrc() {
+    #   if [ -f .nvmrc ]; then
+    #     nvm use
+    #   fi
+    # }
     # For zsh
-    add-zsh-hook chpwd load-nvmrc
-    load-nvmrc
+    # add-zsh-hook chpwd load-nvmrc
+    # load-nvmrc
 
     function zvm_after_lazy_keybindings() {
       zvm_bindkey vicmd 'H' vi-beginning-of-line

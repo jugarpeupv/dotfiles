@@ -27,11 +27,6 @@ end
 
 return {
 	"ej-shafran/compile-mode.nvim",
-	-- dir = "~/projects/compile-mode.nvim/wt-compile-mode-main/",
-	-- dev = true,
-  -- "jugarpeupv/compile-mode.nvim",
-	-- tag = "v5.*",
-	-- branch = "latest",
 	cmd = {
 		"Compile",
 		"Recompile",

@@ -1,8 +1,6 @@
 return {
 	{
 		"jugarpeupv/barbecue.nvim",
-		-- dir = "~/projects/barbecue",
-		-- dev = true,
 		enabled = true,
 		name = "barbecue",
 		branch = "main",
@@ -212,7 +210,8 @@ return {
 				-- shorting_target = 100, -- Shortens path to leave 40 spaces in the window
 				-- for other components. (terrible name, any suggestions?)
 				symbols = {
-					modified = "[!]", -- Text to show when the file is modified.
+					-- modified = "[!]", -- Text to show when the file is modified.
+          modified = "⏺",
 					-- readonly = "󰔉",    -- Text to show when the file is non-modifiable or readonly.
 					readonly = "󰦝",
 					unnamed = "󰔉", -- Text to show for unnamed buffers.

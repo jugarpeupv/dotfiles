@@ -455,3 +455,86 @@ settings.theme = `
     }
   }
 `;
+
+
+
+
+// ============================================================================
+// DEFAULT SURFINGKEYS MAPPINGS
+// Reference of the built-in default keys (from the `?` help page).
+// To customize, uncomment a `map(...)` / `unmap(...)` line below and change
+// the key to your liking, or copy the syntax into the active section of this
+// file. Full docs: https://github.com/brookhong/Surfingkeys
+// ============================================================================
+
+// --- Scrolling ---
+api.map('d', 'Scroll half page down');
+api.map('u', 'Scroll half page up');
+api.map('j', 'Scroll down');
+api.map('k', 'Scroll up');
+api.map('gg', 'Scroll to the top of the page');
+api.map('G', 'Scroll to the bottom of the page');
+api.map('h', 'Scroll left');
+api.map('l', 'Scroll right');
+api.map('0', 'Scroll all the way to the left');
+api.map('$', 'Scroll all the way to the right');
+api.map('/', 'Find in current page');
+api.map('n', 'Next found text');
+api.map('N', 'Previous found text');
+
+// --- Tabs ---
+api.map('R', 'Go one tab right');
+api.map('E', 'Go one tab left');
+api.unmap('K');
+api.unmap('J');
+api.map('K', 'R');
+api.map('J', 'E');
+api.map('x', 'Close current tab');
+api.map('X', 'Restore closed tab');
+api.map('yt', 'Duplicate current tab');
+api.map('C', 'Open a link in non-active new tab');
+api.map('on', 'Open newtab');
+api.map('W', 'Move current tab to another window');
+api.map('g0', 'Go to the first tab');
+api.map('g$', 'Go to the last tab');
+api.map('<Ctrl-6>', 'Go to last used tab');
+api.map('cf', 'Open multiple links in a new tab');
+api.map('B', 'Go one tab history back');
+api.map('F', 'Go one tab history forward');
+
+// --- History / Navigation ---
+api.unmap('H');
+api.unmap('L');
+api.map('S', 'Go back in history');
+api.map('F', 'Go forward in history');
+api.map('H', 'S');  // Go back in history
+api.map('L', 'D');  // Go forward in history
+api.map('gU', 'Go to root of current URL hierarchy');
+api.map('w', 'Switch frames');
+api.map('cs', 'Change scroll target');
+
+// --- Links / URLs ---
+api.map('f', 'Open a link (SHIFT flips overlapped hints, SPACE hides hints)');
+api.map('cc', 'Open selected link or link from clipboard');
+api.map('t', 'Open a URL');
+api.map('b', 'Open a bookmark');
+api.map('om', 'Open URL from vim-like marks');
+api.map('yy', "Copy current page's URL");
+api.map('ya', 'Copy a link URL to the clipboard');
+api.map('yv', 'Yank text of an element');
+api.map('yf', 'Copy form data in JSON on current page');
+api.map('yg', 'Capture current page');
+api.map('v', 'Toggle visual mode');
+api.map('i', 'Go to edit box');
+
+// --- Omnibar ---
+api.map('og', 'Open Omnibar for Search, google');
+api.map('ob', 'Open Omnibar for Search, baidu');
+api.map('ow', 'Open Omnibar for Search, bing');
+api.map('oh', 'Open Omnibar for History');
+api.map('sg', 'Search selected with google');
+
+// --- Misc ---
+api.map('r', 'Reload the page');
+api.map(';e', 'Edit Settings');
+api.map(';j', 'Close Downloads Shelf');

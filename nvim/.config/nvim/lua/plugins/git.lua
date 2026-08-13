@@ -1,8 +1,6 @@
 return {
 	-- {
 	-- 	-- "aweis89/ai-commit-msg.nvim",
-	-- 	dev = true,
-	-- 	dir = "~/projects/ai-commit-msg.nvim/wt-main",
 	-- 	ft = "gitcommit",
 	-- 	enabled = false,
 	-- 	config = true,
@@ -44,8 +42,6 @@ return {
 	{
 		-- "akinsho/git-conflict.nvim",
 		"jugarpeupv/git-conflict.nvim",
-		-- dev = true,
-		-- dir = "~/projects/git-conflict.nvim/wt-main",
 		-- dependencies = { "sindrets/diffview.nvim" },
 		lazy = true,
 		branch = "main",

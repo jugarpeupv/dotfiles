@@ -353,9 +353,12 @@ Output only the commit message without any explanations and follow-up suggestion
 
 				interactions = {
 					background = {
+            -- adapter = {
+            --   name = "copilot",
+            --   model = "claude-sonnet-4.5",
+            -- },
             adapter = {
-              name = "copilot",
-              model = "claude-sonnet-4.5",
+              name = "opencode",
             },
 						chat = {
 							callbacks = {

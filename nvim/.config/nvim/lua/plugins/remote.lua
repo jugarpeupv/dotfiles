@@ -1,8 +1,5 @@
 return {
-	-- "amitds1997/remote-nvim.nvim",
   "jugarpeupv/remote-nvim.nvim",
-	-- dev = true,
-	-- dir = "~/projects/remote-nvim.nvim",
 	version = "*", -- Pin to GitHub releases
 	enabled = function()
 		local is_headless = #vim.api.nvim_list_uis() == 0

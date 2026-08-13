@@ -55,8 +55,8 @@ return {
     dependencies = {
       "folke/snacks.nvim"
     },
-		dev = true,
-		dir = "~/projects/aws.nvim/",
+		-- dev = true,
+		-- dir = "~/projects/aws.nvim/",
 		lazy = true,
 		keys = {
 			{

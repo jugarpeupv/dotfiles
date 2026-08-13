@@ -110,8 +110,8 @@ M.find_directory_in_fyler_and_focus = function()
 				detach = true,
 				on_exit = function(_, exit_code)
 					if exit_code == 0 then
-						-- print("Moved to trash: " .. path)
-						require("nvim-tree.api").tree.reload()
+						print("Moved to trash: " .. path)
+						-- require("nvim-tree.api").tree.reload()
 					else
 						print("Failed to move to trash: ", path)
 					end
@@ -1771,8 +1771,8 @@ M.find_in_node_modules = function()
 	end
 
 	-- Collect all node_modules paths to search across.
-	-- In a bun workspace the root node_modules/.bun holds the hoisted flat store,
-	-- but each workspace package may also have its own node_modules.
+	-- Handles pnpm (pnpm-workspace.yaml), npm/yarn/bun (package.json workspaces),
+	-- and mixed workspaces. Uses fd to properly expand glob patterns.
 	local function collect_node_modules_paths()
 		local paths = {}
 		local seen = {}
@@ -1784,53 +1784,88 @@ M.find_in_node_modules = function()
 			end
 		end
 
-		-- Root node_modules (bun symlinks live here with proper package names)
 		add(cwd .. "/node_modules")
 
-		-- Detect bun/npm workspaces by reading root package.json
+		local workspace_patterns = {}
+
+		-- 1. pnpm-workspace.yaml
+		local yaml_path = cwd .. "/pnpm-workspace.yaml"
+		local f = io.open(yaml_path, "r")
+		if f then
+			local content = f:read("*a")
+			f:close()
+			local in_packages = false
+			for line in content:gmatch("([^\r\n]+)") do
+				if line:match("^packages:") then
+					in_packages = true
+				elseif in_packages then
+					local pattern = line:match("^%s*-%s*(.*)$")
+					if pattern then
+						pattern = pattern:gsub("^['\"]", ""):gsub("['\"]$", "")
+						table.insert(workspace_patterns, pattern)
+					else
+						in_packages = false
+					end
+				end
+			end
+		end
+
+		-- 2. package.json workspaces
 		local pkg_json_path = cwd .. "/package.json"
-		local f = io.open(pkg_json_path, "r")
+		f = io.open(pkg_json_path, "r")
 		if f then
 			local content = f:read("*a")
 			f:close()
 			local ok, pkg = pcall(vim.json.decode, content)
 			if ok and pkg then
-				-- workspaces can be an array or { packages = [...] }
-				local ws_patterns = {}
+				local ws = {}
 				if type(pkg.workspaces) == "table" then
 					if vim.islist(pkg.workspaces) then
-						ws_patterns = pkg.workspaces
+						ws = pkg.workspaces
 					elseif type(pkg.workspaces.packages) == "table" then
-						ws_patterns = pkg.workspaces.packages
+						ws = pkg.workspaces.packages
 					end
 				end
+				for _, pattern in ipairs(ws) do
+					table.insert(workspace_patterns, pattern)
+				end
+			end
+		end
 
-				for _, pattern in ipairs(ws_patterns) do
-					-- Expand simple globs: "libs/*" -> iterate libs/
-					local base, glob = pattern:match("^(.-)/%*(.*)$")
-					if base then
-						local base_path = cwd .. "/" .. base
-						local dir = uv.fs_opendir(base_path, nil, 64)
-						if dir then
-							while true do
-								local entries = uv.fs_readdir(dir)
-								if not entries then
-									break
-								end
-								for _, ent in ipairs(entries) do
-									if ent.type == "directory" then
-										local ws_nm = base_path .. "/" .. ent.name .. "/node_modules"
-										add(ws_nm)
-									end
-								end
-							end
-							uv.fs_closedir(dir)
+		local exclude_patterns = {}
+		local include_patterns = {}
+		for _, pattern in ipairs(workspace_patterns) do
+			if pattern:sub(1, 1) == "!" then
+				table.insert(exclude_patterns, pattern:sub(2))
+			else
+				table.insert(include_patterns, pattern)
+			end
+		end
+
+		for _, pattern in ipairs(include_patterns) do
+			local cmd
+			if pattern:match("^/") then
+				cmd = string.format('setopt nonomatch 2>/dev/null; ls -1d "%s" 2>/dev/null', pattern)
+			else
+				cmd = string.format('setopt nonomatch 2>/dev/null; ls -1d "%s"/%s 2>/dev/null', cwd, pattern)
+			end
+			local handle = io.popen(cmd)
+			if handle then
+				for dir in handle:lines() do
+					dir = dir:gsub("/$", "")
+					local excluded = false
+					for _, ex in ipairs(exclude_patterns) do
+						local escaped_ex = ex:gsub("%*%*", ".*"):gsub("%*", "[^/]*"):gsub("?", ".")
+						if dir:match(escaped_ex) then
+							excluded = true
+							break
 						end
-					else
-						-- Exact path (no glob)
-						add(cwd .. "/" .. pattern .. "/node_modules")
+					end
+					if not excluded then
+						add(dir .. "/node_modules")
 					end
 				end
+				handle:close()
 			end
 		end
 
@@ -1899,23 +1934,40 @@ M.find_in_node_modules = function()
 		"--follow",
 	})
 
-	-- A valid package entry is either:
-	--   node_modules/pkg          (non-scoped, depth 1)
-	--   node_modules/@scope/pkg   (scoped, depth 2)
-	-- Anything deeper is an internal directory of the package itself.
+	-- A valid package entry is at the top level of some node_modules/:
+	--   node_modules/pkg              (non-scoped)
+	--   node_modules/@scope/pkg       (scoped)
+	--   apps/web/node_modules/pkg     (workspace package's own node_modules)
+	--   apps/web/node_modules/@scope/pkg
+	-- Paths with multiple node_modules segments (like .pnpm/store/...)
+	-- are internal to the package manager and excluded.
 	local function is_package_entry(entry)
-		-- Strip trailing slash if present
 		local e = entry:gsub("/$", "")
-		-- Match the last node_modules segment and what follows
+		-- Count /node_modules/ segments
+		local nm_count = 0
+		local pos = 1
+		while true do
+			local s, e2 = e:find("/node_modules/", pos)
+			if not s then break end
+			nm_count = nm_count + 1
+			pos = e2 + 1
+		end
+		-- Also check if the path ends with /node_modules itself (count = 0 here)
+		-- A valid package entry has exactly 1 node_modules segment.
+		if nm_count ~= 1 then
+			return false
+		end
 		local after = e:match(".*/node_modules/(.+)$")
 		if not after then
 			return false
 		end
+		-- Reject .pnpm and .bun internal stores
+		if after:sub(1, 1) == "." then
+			return false
+		end
 		if after:sub(1, 1) == "@" then
-			-- scoped: must be exactly @scope/pkg (no further slash)
 			return after:match("^@[^/]+/[^/]+$") ~= nil
 		else
-			-- non-scoped: must be exactly pkg (no slash)
 			return after:match("^[^/]+$") ~= nil
 		end
 	end
@@ -1926,7 +1978,9 @@ M.find_in_node_modules = function()
 		or 'Find dependency in "node_modules"'
 
 	pickers
-		.new({}, {
+		.new({
+      default_text = "node_modules/",
+    }, {
 			prompt_title = title,
 			finder = finders.new_oneshot_job(find_command, {
 				entry_maker = function(entry)

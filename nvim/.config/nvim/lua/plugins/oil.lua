@@ -1,11 +1,13 @@
 return {
 	{
-		"stevearc/oil.nvim",
+		-- "stevearc/oil.nvim",
 		-- "barrettruth/canola.nvim",
+    "jugarpeupv/oil.nvim",
+    branch = "local/canola/main",
 		lazy = true,
 		enabled = true,
 		-- dev = true,
-		-- dir = "~/projects/oil.nvim/wt-master",
+		-- dir = "~/projects/oil.nvim/wt-canola-main",
 		-- event = { "CmdlineEnter" },
 		cmd = { "Oil" },
 		-- init = function()
@@ -170,7 +172,8 @@ return {
 				},
 				-- Window-local options to use for oil buffers
 				win_options = {
-					winbar = "%#NvimTreeRootFolder#%{v:lua.oil_winbar_label()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+					-- winbar = "%#NvimTreeRootFolder#%{v:lua.oil_winbar_label()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+          -- winbar = "%#NvimTreeRootFolder#%{%&modified ? '⏺' : ''%}",
 					-- winbar = "%#@attribute.builtin#%{v:lua.get_winbar()} %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 					-- wrap = false,
 					-- signcolumn = "yes:1",
@@ -233,6 +236,8 @@ return {
 					--   local img_clip = require("img-clip")
 					--   img_clip.paste_image({}, dir .. filename)
 					-- end,
+          ["gY"] = "actions.copy_to_system_clipboard",
+          ["gP"] = "actions.paste_from_system_clipboard",
 					["<CR>"] = "actions.select",
 					["<C-v>"] = { "actions.select", opts = { vertical = true } },
 					["<C-s>"] = { "actions.select", opts = { horizontal = true } },
@@ -637,6 +642,7 @@ return {
 					--   end,
 					--   mode = "n"
 					-- },
+          ["gh"] = "actions.toggle_header",
 					["g."] = { "actions.toggle_hidden", mode = "n" },
 					["g\\"] = { "actions.toggle_trash", mode = "n" },
 				},
@@ -683,6 +689,11 @@ return {
 						end
 						return nil
 					end,
+				},
+				-- Show the cwd of the oil buffer as the first line
+				header = {
+					cwd = true,
+					format = "short", -- "short" = ~/..., "full" = absolute path
 				},
 				-- Extra arguments to pass to SCP when moving/copying files over SSH
 				extra_scp_args = {},

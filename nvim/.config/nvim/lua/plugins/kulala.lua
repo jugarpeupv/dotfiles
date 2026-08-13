@@ -5,7 +5,7 @@ return {
     branch = "develop",
 		ft = { "http", "rest" },
 		opts = {
-      default_env = "pre",
+      default_env = "snd",
       lsp = {
         enable = true,
         filetypes = { "http", "rest", "json", "yaml", "bruno" },
@@ -29,6 +29,7 @@ return {
 			winbar = true,
 			ui = {
         -- max_response_size = 20480,
+        -- max_response_size = 50 * 1024 * 1024, -- 50 MiB
 				default_winbar_panes = { "body", "headers", "verbose", "script_output", "report" },
         win_opts = { bo = {}, wo = { wrap = true } },
 				pickers = {

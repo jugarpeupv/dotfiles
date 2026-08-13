@@ -185,6 +185,7 @@ return {
 						["@lsp.type.enumMember.typescript"] = { fg = "#F5C2E7" },
 						viraDetailsStatusInProgress = { fg = "#F38BA8" },
 						viraDetailsEpic = { fg = "#F5C2E7" },
+            OilHeader = { fg = "#b4beff" },
 						OilExecutable = { fg = "#F5C2E7" },
 						viraDetailsTypeStory = { fg = "#8ee2cf" },
             Label = { fg = "#89ddff" },

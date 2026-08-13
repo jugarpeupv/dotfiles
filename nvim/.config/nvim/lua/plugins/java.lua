@@ -33,8 +33,6 @@ return {
   },
   {
     "jugarpeupv/springboot-nvim",
-    -- dir = "~/projects/springboot-nvim",
-    -- dev = true,
     ft = { "java" },
     enabled = function()
       local is_headless = #vim.api.nvim_list_uis() == 0

@@ -2,8 +2,6 @@ return {
 
 	{
 		"jugarpeupv/search-github-repos.nvim",
-		dir = "~/projects/search-github-repos.nvim",
-		dev = true,
 		config = function()
 			require("search-github-repos").setup({
 				owner = "mapfre-tech", -- scope searches to this org
@@ -20,13 +18,6 @@ return {
 
 	{
 		"skanehira/github-actions.nvim",
-		-- dev = true,
-		-- dir = "~/projects/github-actions.nvim/wt-main",
-		-- ft = "yaml.github", -- if you want to load for yaml files
-		-- event = {
-		-- 	"BufReadPre .github/workflows/*",
-		-- 	"BufNewFile .github/workflows/*",
-		-- },
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
 			"nvim-telescope/telescope.nvim", -- Optional: for enhanced workflow selection

@@ -1,9 +1,7 @@
 return {
 	{
 		-- "yousefakbar/notmuch.nvim",
-    -- "jugarpeupv/notmuch.nvim",
-		dir = "~/projects/notmuch.nvim/wt-notmuch-origin-main/",
-		dev = true,
+    "jugarpeupv/notmuch.nvim",
 		enabled = true,
 		opts = {
 			notmuch_db_path = os.getenv("HOME") .. "/Mail",

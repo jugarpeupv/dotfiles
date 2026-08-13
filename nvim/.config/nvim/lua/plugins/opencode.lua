@@ -1,11 +1,99 @@
+local function opencode_snapshot_picker()
+  local snap_git_dir = require("opencode.config_file").get_workspace_snapshot_path():wait()
+  if not snap_git_dir or snap_git_dir == "" then
+    vim.notify("No opencode snapshot path for this workspace", vim.log.levels.ERROR)
+    return
+  end
+
+  local state = require("opencode.state")
+  if not state.active_session then
+    vim.notify("No active opencode session", vim.log.levels.WARN)
+    return
+  end
+
+  local session = require("opencode.session")
+  local seen = {}
+  local items = {}
+
+  for _, msg in ipairs(state.messages or {}) do
+    local snapshots = session.get_message_snapshot_ids(msg)
+    if snapshots then
+      local created = msg.info and msg.info.time and msg.info.time.created
+      if created and created > 1e10 then
+        created = created / 1000
+      end
+      local time_str = created and os.date("%Y-%m-%d %H:%M:%S", created) or "?"
+      local role = (msg.info and msg.info.role) or "unknown"
+      for _, hash in ipairs(snapshots) do
+        if not seen[hash] then
+          seen[hash] = true
+          local r = vim.system({
+            "git", "--git-dir", snap_git_dir, "cat-file", "-t", hash
+          }, { text = true }):wait()
+          if r.code == 0 then
+            table.insert(items, {
+              hash = hash,
+              time = created or 0,
+              time_str = time_str,
+              role = role,
+              display = string.format("%s  %s  %s", hash:sub(1, 8), time_str, role),
+            })
+          end
+        end
+      end
+    end
+  end
+
+  if #items == 0 then
+    vim.notify("No valid snapshots found", vim.log.levels.WARN)
+    return
+  end
+
+  table.sort(items, function(a, b) return a.time > b.time end)
+
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+
+  pickers.new({}, {
+    prompt_title = "Snapshots",
+    finder = finders.new_table {
+      results = items,
+      entry_maker = function(item)
+        return {
+          value = item,
+          display = item.display,
+          ordinal = item.time_str .. " " .. item.hash,
+        }
+      end,
+    },
+    sorter = conf.generic_sorter({}),
+    attach_mappings = function(prompt_bufnr, _)
+      actions.select_default:replace(function()
+        local selection = action_state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        if selection then
+          local cmd = 'DiffviewOpen "-C=' .. snap_git_dir .. '"' .. " " .. selection.value.hash
+          print('cmd: ', cmd)
+          vim.cmd(cmd)
+        end
+      end)
+      return true
+    end,
+  }):find()
+end
+
 return {
 	{
-		"sudo-tee/opencode.nvim",
+		-- "sudo-tee/opencode.nvim",
 		-- enabled = true,
 		-- commit = "92ad9bf550f10ac24c0076dd564fa5b424ce4fab",
-		-- "jugarpeupv/opencode.nvim",
+		"jugarpeupv/opencode.nvim",
+    branch = "feature/upstream-main",
 		-- dev = true,
-		-- dir = "~/projects/opencode.nvim/wt-opencode-origin-main/",
+		-- dir = "~/projects/opencode.nvim/wt-feature-upstream-main/",
 		-- lazy = true,
 		keys = {
 			-- {
@@ -15,6 +103,11 @@ return {
 			-- 		require("opencode.api").toggle()
 			-- 	end,
 			-- },
+			{
+				"<leader>oF",
+				opencode_snapshot_picker,
+				desc = "pick and diff against a snapshot",
+			},
 			{
 				mode = { "n" },
 				"<leader>ci",
@@ -110,7 +203,7 @@ return {
 					},
 					editor = {
 						-- ["<C-.>"] = { "toggle" }, -- Open opencode. Close if opened
-						["<C-.>"] = false,
+						-- ["<C-.>"] = false,
 						["<M-m>"] = { "toggle" }, -- Open opencode. Close if opened
 						["<D-m>"] = { "toggle" }, -- Open opencode. Close if opened
 						["<leader>og"] = false,
@@ -133,7 +226,7 @@ return {
 						-- ['<leader>oa'] = { 'add_visual_selection_inline', { open_input = false }, mode = {'v'} },
 						["<leader>oz"] = { "toggle_zoom" }, -- Zoom in/out on the Opencode windows
 						["<leader>ov"] = { "paste_image" }, -- Paste image from clipboard into current session
-						["<leader>od"] = { "diff_open" }, -- Opens a diff tab of a modified file since the last opencode prompt
+						["<leader>oD"] = { "diff_open" }, -- Opens a diff tab of a modified file since the last opencode prompt
 						["<leader>o]"] = { "diff_next" }, -- Navigate to next file diff
 						["<leader>o["] = { "diff_prev" }, -- Navigate to previous file diff
 						["<leader>oC"] = { "diff_close" }, -- Close diff view tab and return to normal editing
@@ -223,13 +316,14 @@ return {
 								end
 
 								-- Fallback: call context_items if not in a gitcommit block
-								require("opencode.api").context_items()
+								-- require("opencode.api").context_items()
 							end,
 							mode = { "n", "i" },
 						},
 						-- ['<leader>o/'] = { 'quick_chat', mode = { 'n', 'x' } }, -- Open quick chat input with selection context in visual mode or current line context in normal mode
 					},
 					input_window = {
+            ["<leader>oD"] = { "diff_open" }, -- Opens a diff tab of a modified file since the last opencode prompt
 						["<esc>"] = false, -- Close UI windows
 						["<cr>"] = { "submit_input_prompt", mode = { "n" } }, -- Submit prompt (normal mode and insert mode)
 						["<c-s>"] = { "submit_input_prompt", mode = { "i" } }, -- Submit prompt (normal mode and insert mode)
@@ -263,6 +357,7 @@ return {
 						-- ['<M-r>'] = { 'cycle_variant', mode = { 'n', 'i' } }, -- Cycle through available model variants
 					},
 					output_window = {
+            ["<leader>oD"] = { "diff_open" }, -- Opens a diff tab of a modified file since the last opencode prompt
 						["<esc>"] = false, -- Close UI windows
 						["<C-c>"] = { "cancel" }, -- Cancel opencode request while it is running
 						["]]"] = { "next_message" }, -- Navigate to next message in the conversation
@@ -271,7 +366,6 @@ return {
 						["i"] = false,
 						["<M-r>"] = false,
 						["<leader>oS"] = false, -- Select and load a child session
-						["<leader>oD"] = false, -- Open raw message in new buffer for debugging
 						["<leader>oO"] = false, -- Open raw output in new buffer for debugging
 						["<leader>ods"] = false, -- Open raw session in new buffer for debugging
 
@@ -328,7 +422,7 @@ return {
 					position = "right", -- 'right' (default), 'left' or 'current'. Position of the UI split. 'current' uses the current window for the output.
 					input_position = "bottom", -- 'bottom' (default) or 'top'. Position of the input window
 					window_width = 0.45, -- Width as percentage of editor width
-					zoom_width = 0.7, -- Zoom width as percentage of editor width
+					zoom_width = 0.9, -- Zoom width as percentage of editor width
 					display_model = true, -- Display model name on top winbar
 					display_context_size = true, -- Display context size in the footer
 					display_cost = true, -- Display cost in the footer

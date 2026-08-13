@@ -1,16 +1,9 @@
 return {
 	{
-		-- "sindrets/diffview.nvim",
-		-- "dlyongemallo/diffview.nvim",
-    "jugarpeupv/diffview.nvim",
-    -- dev = true,
-    -- dir = "~/projects/diffview.nvim/wt-main",
-		-- version = "*",
+		"dlyongemallo/diffview-plus.nvim",
 		branch = "main",
-		-- event = "VeryLazy",
 		cmd = { "DiffviewOpen" },
 		enabled = true,
-		-- event = { "BufReadPost", "BufNewFile" },
 		dependencies = {
 			"junegunn/fzf",
 			"nvim-telescope/telescope.nvim",
@@ -31,12 +24,12 @@ return {
 			-- Lua
 			local actions = require("diffview.actions")
 
-      -- Overleaf inline diff highlights: line background for modified lines
-      -- and a brighter background for the removed characters (strikethrough).
-      -- These override the plugin defaults (which inherit from DiffDelete)
-      -- to provide more contrast.
-      vim.api.nvim_set_hl(0, "DiffviewDiffDeleteLine", { bg = "#3F2D3D" })
-      vim.api.nvim_set_hl(0, "DiffviewDiffDeleteInline", { bg = "#7b3038", strikethrough = true })
+			-- Overleaf inline diff highlights: line background for modified lines
+			-- and a brighter background for the removed characters (strikethrough).
+			-- These override the plugin defaults (which inherit from DiffDelete)
+			-- to provide more contrast.
+			vim.api.nvim_set_hl(0, "DiffviewDiffDeleteLine", { bg = "#3F2D3D" })
+			vim.api.nvim_set_hl(0, "DiffviewDiffDeleteInline", { bg = "#7b3038", strikethrough = true })
 
 			require("diffview").setup({
 				diff_binaries = true, -- Show diffs for binaries
@@ -60,9 +53,9 @@ return {
 					-- folder_open = "",
 				},
 				view = {
-          inline = {
-            style = "overleaf"
-          },
+					inline = {
+						style = "overleaf",
+					},
 					default = {
 						layout = "diff2_horizontal",
 						-- layout = "diff1_inline",
@@ -73,7 +66,7 @@ return {
 					},
 					cycle_layouts = {
 						-- default = { "diff1_inline", "diff2_horizontal", "diff2_vertical" },
-            default = { "diff1_inline", "diff2_horizontal" },
+						default = { "diff1_inline", "diff2_horizontal" },
 						merge_tool = { "diff4_mixed", "diff3_mixed", "diff3_horizontal", "diff1_plain" },
 					},
 					file_history = {
@@ -160,7 +153,7 @@ return {
 						["<tab>"] = actions.select_next_entry, -- Open the diff for the next file
 						["<s-tab>"] = actions.select_prev_entry, -- Open the diff for the previous file
 						-- ["gf"] = actions.goto_file, -- Open the file in a new split in the previous tabpage
-            ["gf"] = actions.goto_file_edit_close, -- Open the file in a new split in the previous tabpage
+						["gf"] = actions.goto_file_edit_close, -- Open the file in a new split in the previous tabpage
 						["<C-w><C-f>"] = actions.goto_file_split, -- Open the file in a new split
 						["<C-w>gf"] = actions.goto_file_tab, -- Open the file in a new tabpage
 						["<M-k>"] = actions.focus_files, -- Bring focus to the file panel
@@ -243,7 +236,7 @@ return {
 						["<tab>"] = actions.select_next_entry,
 						["<s-tab>"] = actions.select_prev_entry,
 						-- ["gf"] = actions.goto_file,
-            ["gf"] = actions.goto_file_edit_close,
+						["gf"] = actions.goto_file_edit_close,
 						["<C-w><C-f>"] = actions.goto_file_split,
 						["<C-w>gf"] = actions.goto_file_tab,
 						["i"] = actions.listing_style, -- Toggle between 'list' and 'tree' views
@@ -304,7 +297,7 @@ return {
 						["<tab>"] = actions.select_next_entry,
 						["<s-tab>"] = actions.select_prev_entry,
 						-- ["gf"] = actions.goto_file,
-            ["gf"] = actions.goto_file_edit_close,
+						["gf"] = actions.goto_file_edit_close,
 						["<C-w><C-f>"] = actions.goto_file_split,
 						["<C-w>gf"] = actions.goto_file_tab,
 						["<M-k>"] = actions.focus_files, -- Bring focus to the file panel
