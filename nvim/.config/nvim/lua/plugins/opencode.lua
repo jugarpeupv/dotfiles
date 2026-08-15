@@ -183,7 +183,7 @@ return {
 				},
 				keymap = {
 					session_picker = {
-						rename_session = { "<C-r>" }, -- Rename selected session in the session picker
+						rename_session = { "<C-q>" }, -- Rename selected session in the session picker
 						delete_session = { "<C-d>" }, -- Delete selected session in the session picker
 						new_session = { "<C-s>" }, -- Create and switch to a new session in the session picker
 					},
@@ -341,6 +341,10 @@ return {
 						["<down>"] = { "next_prompt_history", mode = { "n", "i" } }, -- Navigate to next prompt in history
 						["<M-m>"] = false,
 						["<M-r>"] = { "cycle_variant", mode = { "n", "i" } }, -- Cycle through available model variants
+            ['<leader>oS'] = { 'select_child_session' }, -- Select and load a child session
+            ["<leader>oR"] = { "rename_session" }, -- Rename current session
+            ["<leader>oP"] = { "configure_provider" }, -- Quick provider and model switch from predefined list
+            ["<leader>oV"] = { "configure_variant" }, -- Switch model variant for the current model
 
 						-- ['<S-cr>'] = { 'submit_input_prompt', mode = { 'n', 'i' } }, -- Submit prompt (normal mode and insert mode)
 						-- ['<esc>'] = { 'close' }, -- Close UI windows

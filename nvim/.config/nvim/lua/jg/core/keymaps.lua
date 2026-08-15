@@ -1768,24 +1768,114 @@ end, opts)
 -- vim.keymap.set("n", "<C-I>", "<C-I>", { noremap = true })
 -- vim.keymap.set("n", "<C-M>", "<C-M>", { noremap = true })
 
+-- vim.keymap.set("n", "<leader>to", function()
+-- 	local found = false
+-- 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+-- 		if vim.api.nvim_buf_is_loaded(buf) then
+-- 			local name = vim.api.nvim_buf_get_name(buf)
+-- 			if name:match("term://.*copilot") then
+-- 				found = true
+-- 				-- vim.cmd('split') -- open horizontal split
+-- 				vim.api.nvim_set_current_buf(buf)
+-- 				break
+-- 			end
+-- 		end
+-- 	end
+-- 	if not found then
+-- 		-- vim.cmd('split | term copilot')
+-- 		vim.cmd("term copilot")
+-- 	end
+-- end, { desc = "Toggle Copilot terminal in split" })
+
 vim.keymap.set("n", "<leader>to", function()
-	local found = false
-	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-		if vim.api.nvim_buf_is_loaded(buf) then
-			local name = vim.api.nvim_buf_get_name(buf)
-			if name:match("term://.*copilot") then
-				found = true
-				-- vim.cmd('split') -- open horizontal split
-				vim.api.nvim_set_current_buf(buf)
-				break
-			end
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local conf = require("telescope.config").values
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+
+	local home = vim.fn.expand("~")
+
+	local find_command = {
+		"fd",
+		".",
+		home,
+		"--type",
+		"d",
+		"--exclude",
+		".git",
+		"--exclude",
+		"node_modules",
+		-- "--one-file-system",
+		"--max-depth",
+		"3",
+		"--hidden",
+	}
+
+	local dirs = {}
+	local seen = {}
+
+	local function add_dir(dir)
+		if dir and dir ~= "" and not seen[dir] then
+			seen[dir] = true
+			table.insert(dirs, dir)
 		end
 	end
-	if not found then
-		-- vim.cmd('split | term copilot')
-		vim.cmd("term copilot")
+
+	-- first: directory of the current buffer
+	add_dir(vim.fn.expand("%:p:h"))
+	-- second: current working directory
+	add_dir(vim.loop.cwd())
+
+	-- rest: directories under home
+	local handle = io.popen(table.concat(vim.tbl_map(vim.fn.shellescape, find_command), " "))
+	if handle then
+		for line in handle:lines() do
+			add_dir(line)
+		end
+		handle:close()
 	end
-end, { desc = "Toggle Copilot terminal in split" })
+
+	local function escape_pattern(text)
+		return text:gsub("([^%w])", "%%%1")
+	end
+
+	local escaped_home = escape_pattern(home)
+
+	pickers
+		.new({}, {
+			prompt_title = 'Select a directory to open a terminal in: "~"',
+			finder = finders.new_table({
+				results = dirs,
+				entry_maker = function(entry)
+					local entry_substituted = entry:gsub(escaped_home, ""):gsub("^/", "")
+					return {
+						value = entry,
+						display = function()
+							local display_string = "  ~/" .. entry_substituted
+							return display_string, { { { 0, 1 }, "Directory" } }
+						end,
+						ordinal = entry,
+					}
+				end,
+			}),
+			sorter = conf.generic_sorter({}),
+			attach_mappings = function(prompt_bufnr)
+				actions.select_default:replace(function()
+					local selection = action_state.get_selected_entry()
+					actions.close(prompt_bufnr)
+					local myterm = require("terminal").terminal:new({
+						cwd = selection.value,
+						layout = { open_cmd = "botright new" },
+						autoclose = false,
+					})
+					myterm:open()
+				end)
+				return true
+			end,
+		})
+		:find()
+end, { desc = "Open terminal in selected directory" })
 
 -- vim.api.nvim_set_keymap('i', '<C-n>', '<C-o>j', { noremap = true, silent = true })
 -- vim.api.nvim_set_keymap('i', '<C-p>', '<C-o>k', { noremap = true, silent = true })
@@ -1982,7 +2072,9 @@ vim.keymap.set("n", "<leader>ms", function()
 	local stderr_lines = {}
 
 	local function print_line(line)
-		if line == "" then return end
+		if line == "" then
+			return
+		end
 		vim.api.nvim_echo({ { line, "Comment" } }, true, {})
 	end
 
