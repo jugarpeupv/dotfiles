@@ -2,7 +2,7 @@ return {
 	{
 		"mistweaverco/kulala.nvim",
 		enabled = true,
-    branch = "develop",
+    branch = "main",
 		ft = { "http", "rest" },
 		opts = {
       default_env = "snd",
