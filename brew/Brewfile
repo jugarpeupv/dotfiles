@@ -7,11 +7,12 @@ tap "asmvik/formulae", "https://github.com/asmvik/homebrew-formulae.git"
 # apple pass word manager (apw)
 tap "bendews/tap", trusted: true
 tap "gentleman-programming/tap", "https://github.com/Gentleman-Programming/homebrew-tap", trusted: true
-tap "homebrew/core"
 tap "oven-sh/bun"
 tap "powershell/tap"
 tap "teamookla/speedtest"
 tap "thezoraiz/ascii-image-converter"
+# tmux git status bar
+brew "gitmux"
 # Run your GitHub Actions locally
 brew "act"
 # Core application library for C
@@ -332,8 +333,6 @@ brew "xcbeautify"
 brew "xclip"
 # Build server protocol implementation for integrating Xcode with sourcekit-lsp
 brew "xcode-build-server"
-# JavaScript package manager
-brew "yarn"
 # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
 # Tracks most-used directories to make cd smarter
@@ -410,8 +409,6 @@ cask "postman"
 cask "rectangle"
 # Plugin for AWS CLI to start and end sessions that connect to managed instances
 cask "session-manager-plugin"
-# PDF viewer designed for reading research papers and technical books
-cask "sioyek"
 # Music streaming service
 cask "spotify"
 # Dictation tool including LLM reformatting
