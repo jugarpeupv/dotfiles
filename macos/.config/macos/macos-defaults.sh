@@ -13,6 +13,8 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 27 "<dic
 defaults write -g KeyRepeat -int 2
 defaults write -g InitialKeyRepeat -int 15
 
+defaults write com.apple.finder AppleShowAllFiles -bool true
+
 # Scroll direction: disable natural scrolling
 defaults write -g com.apple.swipescrolldirection -bool false
 
