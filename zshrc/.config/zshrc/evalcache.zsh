@@ -1,14 +1,24 @@
-_evalcache direnv hook zsh
-# _evalcache zoxide init zsh
-_evalcache starship init zsh
-_evalcache rbenv init -
-_evalcache atuin init zsh
-# _evalcache fnm env --corepack-enabled --version-file-strategy=recursive --shell zsh
-# _evalcache mise activate zsh
-# _evalcache fnm env --use-on-cd --shell zsh
-# _evalcache pyenv init --path
+# Lazy-initialize evalcache tools on the FIRST prompt, not at shell startup.
+# direnv/starship/atuin only register precmd/chpwd hooks — nothing their init
+# output sets up is needed until the shell is actually used, so deferring them
+# shaves ~20ms off startup. Ran first in precmd_functions so their hooks register
+# before the prompt renders.
+function _evalcache_lazy_precmd() {
+  (( $+_EVALCACHE_LAZY_DONE )) && return 0
+  _EVALCACHE_LAZY_DONE=1
+  _evalcache direnv hook zsh
+  # _evalcache zoxide init zsh
+  _evalcache starship init zsh
+  # _evalcache rbenv init -
+  _evalcache atuin init zsh
+  # _evalcache fnm env --corepack-enabled --version-file-strategy=recursive --shell zsh
+  # _evalcache mise activate zsh
+  # _evalcache fnm env --use-on-cd --shell zsh
+  # _evalcache pyenv init --path
 
-# eval "$(mise activate zsh)"
+  # eval "$(mise activate zsh)"
+}
+precmd_functions+=(_evalcache_lazy_precmd)
 
 
 # Override fnm's --use-on-cd hook: auto-install the version from .nvmrc

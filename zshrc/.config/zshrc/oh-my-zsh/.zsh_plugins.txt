@@ -1,0 +1,10 @@
+# Plugin load order is significant (preserved from the old omz plugins=(...)
+# array). fzf-tab MUST load before zsh-syntax-highlighting and
+# zsh-autosuggestions so it can snapshot the completion widget before they
+# wrap it.
+mroth/evalcache
+paulirish/git-open
+Aloxaf/fzf-tab
+zsh-users/zsh-syntax-highlighting
+jeffreytse/zsh-vi-mode
+zsh-users/zsh-autosuggestions
