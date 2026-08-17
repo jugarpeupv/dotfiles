@@ -112,15 +112,22 @@ return {
 				mode = { "n" },
 				"<leader>ci",
 				function()
-					local diff = vim.fn.system("git diff --cached")
-					if diff == "" then
-						vim.notify("No staged changes found", vim.log.levels.WARN)
-						return
-					end
-					local prompt = "Write a commit message for the following staged changes following Conventional Commits convention. Keep the title under 50 characters and wrap body at 72 characters.\n\n```diff\n"
-						.. diff
-						.. "\n```\n\nFormat as a gitcommit code block like so ```gitcommit <the-git-commit-message> ```"
-					require("opencode.api").run(prompt)
+					-- local diff = vim.fn.system("git diff --cached")
+					-- if diff == "" then
+					-- 	vim.notify("No staged changes found", vim.log.levels.WARN)
+					-- 	return
+					-- end
+					-- local prompt = "Write a commit message for the following staged changes following Conventional Commits convention. Keep the title under 50 characters and wrap body at 72 characters.\n\n```diff\n"
+					-- 	.. diff
+					-- 	.. "\n```\n\nFormat as a gitcommit code block like so ```gitcommit <the-git-commit-message> ```"
+					-- require("opencode.api").run(prompt)
+
+          local prompt = "Write a commit message for the current staged changes, following "
+          .. "Conventional Commits convention. Keep the title under 50 characters and "
+          .. "wrap the body at 72 characters. Run git diff --cached yourself to inspect "
+          .. "the staged changes, then output the result as a ```gitcommit <the-git-commit-message> ``` "
+          .. "containing the commit message with its body on the following lines."
+          require("opencode.api").run(prompt)
 				end,
 				desc = "Opencode - Generate commit message from staged changes",
 			},
@@ -341,7 +348,6 @@ return {
 						["<down>"] = { "next_prompt_history", mode = { "n", "i" } }, -- Navigate to next prompt in history
 						["<M-m>"] = false,
 						["<M-r>"] = { "cycle_variant", mode = { "n", "i" } }, -- Cycle through available model variants
-            ['<leader>oS'] = { 'select_child_session' }, -- Select and load a child session
             ["<leader>oR"] = { "rename_session" }, -- Rename current session
             ["<leader>oP"] = { "configure_provider" }, -- Quick provider and model switch from predefined list
             ["<leader>oV"] = { "configure_variant" }, -- Switch model variant for the current model
@@ -369,9 +375,9 @@ return {
 						["<tab>"] = false,
 						["i"] = false,
 						["<M-r>"] = false,
-						["<leader>oS"] = false, -- Select and load a child session
 						["<leader>oO"] = false, -- Open raw output in new buffer for debugging
 						["<leader>ods"] = false, -- Open raw session in new buffer for debugging
+            ['<leader>oS'] = { 'select_child_session' }, -- Select and load a child session
 
 						-- ['<esc>'] = { 'close' }, -- Close UI windows
 						-- ['<C-c>'] = { 'cancel' }, -- Cancel opencode request while it is running
@@ -443,7 +449,7 @@ return {
 							markdown_debounce_ms = 250,
 							on_data_rendered = nil,
 							event_throttle_ms = 40,
-							event_collapsing = true,
+							event_collapsing = false,
 						},
 						tools = {
 							show_output = true,
