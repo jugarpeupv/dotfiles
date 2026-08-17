@@ -131,6 +131,8 @@ return {
 	},
 	{
 		"jugarpeupv/visual-match-paren.nvim",
+    dev = true,
+    dir = "~/projects/visual-match-paren.nvim/",
 		keys = {
 			"V",
 		},
@@ -981,20 +983,20 @@ return {
 			},
 			{
 				mode = { "n" },
-				"<Leader>gS",
+				"<leader>gS",
 				"<cmd>Git stash<cr>",
 				{ silent = true, noremap = true },
 			},
 			{
 				mode = { "n" },
-				"<Leader>gO",
+				"<leader>gO",
 				"<cmd>Git! stash pop<cr>",
 				{ silent = true, noremap = true },
 			},
 
 			{
 				mode = { "n" },
-				"<Leader>gP",
+				"<leader>gP",
 				"<cmd>Git! push<cr>",
 				{ silent = true, noremap = true },
 			},
@@ -1012,22 +1014,57 @@ return {
 			},
 			{
 				mode = { "n" },
-				"<Leader>gp",
+				"<leader>gp",
 				"<cmd>Git! fetch --all | Git! pull<cr>",
 				{ silent = true, noremap = true },
 			},
 			{
 				mode = { "n" },
-				"<Leader>gy",
+				"<leader>gy",
 				"<cmd>Git! tag -l --format '%(refname:short) --> %(objectname)'<cr>",
 				{ silent = true, noremap = true },
 			},
 			{
 				mode = { "n" },
 				"<leader>gC",
-				"<cmd>Git checkout . | Git clean -fd<cr>",
+				":Git checkout . | Git clean -fd",
 				{ silent = true, noremap = true },
 			},
+      {
+        mode = { "n" },
+        "<leader>gN",
+        function()
+          local cmd = vim.fn.input("Execute command async: ", "git clean -fxd")
+          if cmd ~= "" then
+            vim.print("Executing command: " .. cmd)
+            local output = {}
+            vim.fn.jobstart(cmd, {
+              on_stdout = function(_, data, _)
+                if data then
+                  for _, line in ipairs(data) do
+                    if line ~= "" then
+                      table.insert(output, line)
+                    end
+                  end
+                end
+              end,
+              on_exit = function(_, _, _)
+                vim.schedule(function()
+                  if #output == 0 then
+                    print(cmd .. ": nothing was done")
+                  else
+                    for _, line in ipairs(output) do
+                      print(line)
+                    end
+                    print("Finished command: " .. cmd)
+                  end
+                end)
+              end,
+            })
+          end
+        end,
+        { silent = true, noremap = true },
+      },
 			{
 				mode = { "n" },
 				"<leader>gl",

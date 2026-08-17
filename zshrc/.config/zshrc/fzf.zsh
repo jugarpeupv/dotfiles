@@ -4,6 +4,7 @@ export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git --exclude
 export FZF_CTRL_T_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git --exclude node_modules'
 export FZF_DEFAULT_OPTS="--reverse \
   --no-info \
+  --gutter=' ' \
   --prompt=' ' \
   --pointer='' \
   --marker=' ' \

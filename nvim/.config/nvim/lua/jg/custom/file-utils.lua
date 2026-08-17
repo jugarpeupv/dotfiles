@@ -51,8 +51,8 @@ M.write_bps = function(path, bps)
     "Last worktree data should be stored in a table. Usually it is not the user's problem if you did not call the write_bps function explicitly."
   )
 
-  if vim.fn.isdirectory(cfg.save_dir) ~= 0 then
-    -- print('Creating save directory: ' .. cfg.save_dir)
+  if vim.fn.isdirectory(cfg.save_dir) == 0 then
+    print('Creating worktree save directory: ' .. cfg.save_dir)
     M.create_path(cfg.save_dir)
   end
 

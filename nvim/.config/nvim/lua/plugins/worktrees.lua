@@ -3,6 +3,8 @@ return {
 	--Create local branch to track remote branch
 	-- git branch --track feature/mytest origin/feature/mytest
 	"jugarpeupv/git-worktree.nvim",
+  -- dev = true,
+  -- dir = "~/projects/git-worktree.nvim/wt-main/",
 	keys = {
 		{
 			"<leader>wt",
@@ -70,7 +72,6 @@ return {
 
 		local Hooks = require("git-worktree.hooks")
 		local update_on_switch = Hooks.builtins.update_current_buffer_on_switch
-		-- local config = require("git-worktree.config")
 
 		local send_cmd_to_all_terms = function(cmd_text)
 			local function get_all_terminals()
