@@ -31,6 +31,7 @@ M.attach_lsp_config = function(client, bufnr)
 		-- 	end
 		-- end)
 		Snacks.picker.lsp_definitions()
+    -- vim.lsp.buf.definition()
 	end, opts)
 
 	vim.keymap.set({ "n" }, "gv", function()

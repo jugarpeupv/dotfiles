@@ -72,4 +72,42 @@ return {
       -- })
     end,
   },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    lazy = true,
+    cmd = { "MasonToolsInstall", "MasonToolsUpdate" },
+    dependencies = { "williamboman/mason.nvim" },
+    enabled = function()
+      local is_headless = #vim.api.nvim_list_uis() == 0
+      if is_headless then
+        return false
+      end
+      return true
+    end,
+    opts = {
+      ensure_installed = {
+        -- LSP servers
+        "angular-language-server",
+        "bash-language-server",
+        "eslint-lsp",
+        "gh-actions-language-server",
+        "jdtls",
+        "json-lsp",
+        "lua-language-server",
+        "nxls",
+        "ruby-lsp",
+        "vtsls",
+        -- Non-LSP / java tooling
+        "actionlint",
+        "java-debug-adapter",
+        "java-test",
+        "lombok-nightly",
+        "spring-boot-tools",
+        "vscode-java-dependency",
+        "vscode-spring-boot-tools",
+      },
+      auto_update = false,
+      run_on_start = true,
+    },
+  },
 }
