@@ -377,7 +377,7 @@ return {
 						["<M-r>"] = false,
 						["<leader>oO"] = false, -- Open raw output in new buffer for debugging
 						["<leader>ods"] = false, -- Open raw session in new buffer for debugging
-            ['<leader>oS'] = { 'select_child_session' }, -- Select and load a child session
+            -- ['<leader>oS'] = { 'select_child_session' }, -- Select and load a child session
 
 						-- ['<esc>'] = { 'close' }, -- Close UI windows
 						-- ['<C-c>'] = { 'cancel' }, -- Cancel opencode request while it is running

@@ -499,7 +499,22 @@ M.old_api_opts = {
         ["J"] = function() end,
         ["gP"] = "PasteEntry",
         ["gX"] = "VisualCutEntries",
-        ["gY"] = "VisualYankEntries",
+        ["gY"] = {
+          n = function(view)
+            local entry = view:cursor_node_entry()
+            local path = entry.path
+            vim.notify("Copied path: " .. path)
+            vim.fn.setreg("+", path)
+          end,
+          x = "VisualYankEntries",
+        },
+        ["gy"] = function(view)
+          local entry = view:cursor_node_entry()
+          local path = entry.path
+          path = vim.fn.fnamemodify(path, ":~:.")
+          vim.notify("Copied path: " .. path)
+          vim.fn.setreg("+", path)
+        end,
         ["<leader>fp"] = "TogglePermissions",
         ["."] = function(view)
           local entry = view:cursor_node_entry()
@@ -516,12 +531,6 @@ M.old_api_opts = {
           local relative_path = vim.fn.fnamemodify(path, ":.")
           vim.notify("Copied path: " .. relative_path)
           vim.fn.setreg("+", relative_path)
-        end,
-        ["gy"] = function(view)
-          local entry = view:cursor_node_entry()
-          local path = entry.path
-          vim.notify("Copied path: " .. path)
-          vim.fn.setreg("+", path)
         end,
         ["K"] = function(view)
           local entry = view:cursor_node_entry()
@@ -777,9 +786,9 @@ M.old_api_opts = {
 return {
   {
     "jugarpeupv/fyler.nvim",
-    -- dev = true,
     -- branch = "main",
-    -- dir = "~/projects/fyler.nvim/wt-feature-with-upstream-performance-changes/",
+    -- dev = true,
+    -- dir = "~/projects/fyler.nvim/wt-fyler-main/",
     -- dir = "~/projects/fyler.nvim/wt-fyler-origin-main/",
     enabled = true,
     lazy = false,

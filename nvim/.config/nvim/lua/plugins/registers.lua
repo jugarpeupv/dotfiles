@@ -104,4 +104,138 @@ return {
       })
     end,
   },
+  {
+    -- Ctrl-R in the command line has no preview by default (registers.nvim
+    -- only supports the popup in normal/visual/insert). Replace the cmdline
+    -- <C-R> with a snacks registers picker: abort the current cmdline, pick a
+    -- register in a floating window, then re-enter the cmdline with the
+    -- register content inserted at the original cursor position.
+    "folke/snacks.nvim",
+    keys = {
+      {
+        "<C-R>",
+        function()
+          local cmd = vim.fn.getcmdline()
+          local pos = vim.fn.getcmdpos()
+          local ctype = vim.fn.getcmdtype()
+
+          local function replace_cmdline(content)
+            -- Re-enter the cmdline with the content inserted at the
+            -- position where the cursor was when <C-R> was pressed.
+            local head, tail = vim.fn.strpart(cmd, 0, pos - 1), vim.fn.strpart(cmd, pos - 1)
+            vim.api.nvim_feedkeys(ctype .. head .. content .. tail, "nt", true)
+            if #tail > 0 then
+              vim.api.nvim_feedkeys(
+                string.rep(
+                  vim.api.nvim_replace_termcodes("<Left>", true, true, true),
+                  vim.fn.strchars(tail)
+                ),
+                "nt",
+                true
+              )
+            end
+          end
+
+          local function open_picker()
+            -- Telescope yank_history (yanky.nvim) picker
+            local actions = require("telescope.actions")
+            local action_state = require("telescope.actions.state")
+            require("telescope").extensions.yank_history.yank_history({
+              initial_mode = "insert",
+              attach_mappings = function(_, _)
+                actions.select_default:replace(function(bufnr)
+                  local selection = action_state.get_selected_entry()
+                  actions.close(bufnr)
+                  if selection then
+                    -- Strip tabs/newlines from linewise yanks: a trailing \n
+                    -- acts as <CR> and executes the re-entered cmdline, and
+                    -- leading \t mangles the text. We are also striping leading whitespace
+                    local content = (selection.value.regcontents or "")
+                      :gsub("[\t\n\r]", "")
+                      :gsub("\\n", "")
+                      :gsub("^%s+", "")
+
+                    -- Schedule so telescope fully closes first; otherwise the
+                    -- <cr> that confirmed the picker is still pending and would
+                    -- execute the re-entered cmdline immediately.
+                    vim.schedule(function()
+                      replace_cmdline(content)
+                    end)
+                  end
+                end)
+                return true
+              end,
+            })
+          end
+
+          -- Abort the in-progress command line, then open the picker on the
+          -- next tick so the <esc> has fully processed and mode is back to
+          -- normal. Opening the picker synchronously (or feeding <esc> with
+          -- "x") leaves the cmdline active, so telescope's <ESC>A insert-mode
+          -- key lands in the cmdline (":e A") and the prompt never gains focus.
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, true, true), "n", true)
+          vim.schedule(open_picker)
+        end,
+        mode = "c",
+        desc = "Insert register into command line",
+      },
+      {
+        "<C-S>",
+        function()
+          local cmd = vim.fn.getcmdline()
+          local pos = vim.fn.getcmdpos()
+          local ctype = vim.fn.getcmdtype()
+
+          local function replace_cmdline(content)
+            -- Re-enter the cmdline with the content inserted at the
+            -- position where the cursor was when <C-R> was pressed.
+            local head, tail = vim.fn.strpart(cmd, 0, pos - 1), vim.fn.strpart(cmd, pos - 1)
+            vim.api.nvim_feedkeys(ctype .. head .. content .. tail, "nt", true)
+            if #tail > 0 then
+              vim.api.nvim_feedkeys(
+                string.rep(
+                  vim.api.nvim_replace_termcodes("<Left>", true, true, true),
+                  vim.fn.strchars(tail)
+                ),
+                "nt",
+                true
+              )
+            end
+          end
+
+          local function open_picker()
+            require("snacks").picker.registers({
+              actions = {
+                confirm = function(picker, item)
+                  picker:close()
+                  local reg = vim.fn.getreg(item.reg)
+                  reg = (reg or "")
+                    :gsub("[\t\n\r]", "")
+                    :gsub("\\n", "")
+                    :gsub("^%s+", "")
+
+                  -- Schedule so telescope fully closes first; otherwise the
+                  -- <cr> that confirmed the picker is still pending and would
+                  -- execute the re-entered cmdline immediately.
+                  vim.schedule(function()
+                    replace_cmdline(reg)
+                  end)
+                end,
+              },
+            })
+          end
+
+          -- Abort the in-progress command line, then open the picker on the
+          -- next tick so the <esc> has fully processed and mode is back to
+          -- normal. Opening the picker synchronously (or feeding <esc> with
+          -- "x") leaves the cmdline active, so telescope's <ESC>A insert-mode
+          -- key lands in the cmdline (":e A") and the prompt never gains focus.
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, true, true), "n", true)
+          vim.schedule(open_picker)
+        end,
+        mode = "c",
+        desc = "Insert register into command line",
+      },
+    },
+  },
 }

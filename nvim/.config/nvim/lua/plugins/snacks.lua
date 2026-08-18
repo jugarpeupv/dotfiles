@@ -422,7 +422,8 @@ return {
 		},
 		{
 			mode = { "c" },
-			"<C-r><C-r>",
+			-- "<C-r><C-r>",
+      "<C-c>",
 			function()
 				local cmd = vim.fn.getcmdline()
 				if cmd == "" then

@@ -1013,28 +1013,29 @@ vim.keymap.set({ "n" }, "<M-b>", function()
 	end
 
 	-- Otherwise, generate a new command based on filetype
-	local current_buf_name = vim.fn.expand("%")
-
-	local function get_filetype_alias()
-		local filetype = vim.bo.filetype
-
-		if filetype == "sh" or filetype == "bash" then
-			return "sh"
-		elseif filetype == "typescript" or filetype == "javascript" then
-			return "bun"
-		elseif filetype == "c" then
-			return "cc"
-		elseif filetype == "rust" then
-			return "cargo run"
-		else
-			return "make"
-		end
-	end
-
-	local executable = get_filetype_alias()
+	-- local current_buf_name = vim.fn.expand("%")
+	--
+	-- local function get_filetype_alias()
+	-- 	local filetype = vim.bo.filetype
+	--
+	-- 	if filetype == "sh" or filetype == "bash" then
+	-- 		return "sh"
+	-- 	elseif filetype == "typescript" or filetype == "javascript" then
+	-- 		return "bun"
+	-- 	elseif filetype == "c" then
+	-- 		return "cc"
+	-- 	elseif filetype == "rust" then
+	-- 		return "cargo run"
+	-- 	else
+	-- 		return "make"
+	-- 	end
+	-- end
+	--
+	-- local executable = get_filetype_alias()
 
 	-- local command = ":Compile " .. executable .. " " .. vim.fn.shellescape(current_buf_name)
-	local command = ":Compile " .. executable .. " " .. current_buf_name
+	-- local command = ":Compile " .. executable .. " " .. current_buf_name
+  local command = ":Compile "
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(command, true, false, true), "n", true)
 end, opts)
 

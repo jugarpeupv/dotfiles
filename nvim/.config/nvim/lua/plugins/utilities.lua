@@ -407,7 +407,9 @@ return {
 	{
 		"m00qek/baleia.nvim",
 		lazy = true,
-		tag = "v1.3.0",
+    submodules = false,
+    version = "*",
+		-- tag = "v1.3.0",
 		ft = { "dap-repl" },
 		config = function()
 			-- local baleia = require("baleia").setup({})
@@ -970,7 +972,7 @@ return {
 	{
 		"junegunn/fzf",
 		dependencies = { "junegunn/fzf.vim" },
-		build = "./install --all",
+		build = "./install --all --no-update-rc",
 		-- event = { "BufReadPost" },
 		-- cmd = { "Git" },
 		keys = {
