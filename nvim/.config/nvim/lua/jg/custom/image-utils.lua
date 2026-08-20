@@ -86,9 +86,9 @@ M.get_github_attachment_image = function(url, callback, cookies_path, output_pat
       args = { url, output_path },
       -- command = "bun",
       -- args = { "download.ts", url, output_path },
-      -- cwd = "/Users/jgarcia/work/tmp/cookies-test",
+      -- cwd = "~/work/tmp/cookies-test",
 
-      -- cwd = "/Users/jgarcia/work/tmp/cookies-test",
+      -- cwd = "~/work/tmp/cookies-test",
       -- on_exit = function(j, return_val)
       --   local output = table.concat(j:result(), "\n")
       --   print("Downloaded file path:", output)

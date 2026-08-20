@@ -1605,7 +1605,7 @@ M.show_global_npm_packages = function()
 	local uv = vim.loop
 
 	local function get_nvm_node_version()
-		local nvm_dir = os.getenv("NVM_DIR") or "/Users/jgarcia/.nvm"
+		local nvm_dir = os.getenv("NVM_DIR") or "~/.nvm"
 
 		-- Walk up from cwd looking for .nvmrc
 		local nvmrc = vim.fs.find(".nvmrc", {
@@ -1716,7 +1716,7 @@ M.show_global_npm_packages = function()
 
 	local function npm_global_picker()
 		local node_version = get_nvm_node_version()
-		local nvm_dir = os.getenv("NVM_DIR") or "/Users/jgarcia/.nvm"
+		local nvm_dir = os.getenv("NVM_DIR") or "~/.nvm"
 		local pkg_path = nvm_dir .. "/versions/node/v" .. node_version .. "/lib/node_modules"
 		local packages = collect_packages(pkg_path)
 		local actions = require("telescope.actions")

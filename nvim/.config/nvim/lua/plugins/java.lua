@@ -128,12 +128,12 @@ return {
       -- spring-boot.nvim resolves the language server jar automatically via
       -- mason-registry (get_ls_from_mason), tracking package renames and version
       -- bumps. Leave ls_path unset unless you need to pin a specific jar.
-      -- /Users/jgarcia/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server/spring-boot-language-server-1.59.0-SNAPSHOT-exec.jar
+      -- ~/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server/spring-boot-language-server-1.59.0-SNAPSHOT-exec.jar
       -- opts.ls_path = os.getenv("MASON")
       -- .. "/packages/spring-boot-tools/extension/language-server/spring-boot-language-server-1.59.0-SNAPSHOT-exec.jar"
 
 
-      -- jdtls opts.ls_path:  /Users/jgarcia/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server
+      -- jdtls opts.ls_path:  ~/.local/share/nvim/mason/packages/spring-boot-tools/extension/language-server
       -- opts.ls_path = "/home/sangram/.vscode/extensions/vmware.vscode-spring-boot-1.55.1"
       -- vim.notify("spring boot ls path : " .. opts.ls_path, vim.log.levels.INFO, {title = "Spring boot"})
       opts.java_cmd = (function()

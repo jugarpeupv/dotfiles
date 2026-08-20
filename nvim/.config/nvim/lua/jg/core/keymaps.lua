@@ -177,7 +177,7 @@ vim.keymap.set({ "n" }, "<leader>,", function()
 	})
 end, opts)
 
--- keymap("n", "su", "<cmd>Telescope file_browser path=/Users/jgarcia<cr>", opts)
+-- keymap("n", "su", "<cmd>Telescope file_browser path=~<cr>", opts)
 -- keymap("n", "sf", "<cmd>Telescope file_browser<cr>", opts)
 -- keymap("n", "sb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", opts)
 
@@ -1295,7 +1295,7 @@ end, opts)
 -- 	[[inoremap <C-G>  <C-O>:!whisper.nvim<CR><C-O>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^[[:space:\]\]*//'")<CR><C-R>an]]
 -- )
 -- vim.cmd(
--- 	[[nnoremap <C-G>       :!/Users/jgarcia/bin/whisper.nvim<CR>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^\[\[:space:\]\]*//'")<CR>"ap]]
+-- 	[[nnoremap <C-G>       :!~/bin/whisper.nvim<CR>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^\[\[:space:\]\]*//'")<CR>"ap]]
 -- )
 -- vim.cmd(
 -- 	[[vnoremap <C-G> c<C-O>:!whisper.nvim<CR><C-O>:let @a = system("cat /tmp/whisper.nvim \| tail -n 1 \| xargs -0 \| tr -d '\\n' \| sed -e 's/^[[:space:\]\]*//'")<CR><C-R>a]]
@@ -1422,7 +1422,7 @@ vim.keymap.set("n", "<leader>df", function()
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
 
 vim.keymap.set("n", "<leader>tp", function()
-	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_pendientes.md")
+	vim.cmd("e ~/work/obsvault-okode/wt-main/RAM/tareas_pendientes.md")
 end, opts)
 
 vim.keymap.set("n", "<leader>tP", function()

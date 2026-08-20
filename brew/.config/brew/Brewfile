@@ -11,6 +11,9 @@ tap "oven-sh/bun"
 tap "powershell/tap"
 tap "teamookla/speedtest"
 tap "thezoraiz/ascii-image-converter"
+
+# uv python env manager etc
+brew "uv"
 # tmux git status bar
 brew "gitmux"
 # Run your GitHub Actions locally
@@ -261,12 +264,6 @@ brew "pngpaste"
 brew "poppler"
 # Cross-platform library for audio I/O
 brew "portaudio"
-# Modern API client that lives in your terminal
-brew "posting"
-# Python version management
-brew "pyenv"
-# Pyenv plugin to manage virtualenv
-brew "pyenv-virtualenv"
 # Simple and easy-to-use library to learn videogames programming
 brew "raylib"
 # Ruby version manager
@@ -355,8 +352,8 @@ brew "zsh-syntax-highlighting"
 brew "zsh-vi-mode"
 # Simple hotkey-daemon for macOS.
 brew "asmvik/formulae/skhd", trusted: true
-# CLI for Apple Passwords (also known as iCloud Keychain)
-brew "bendews/tap/apw", trusted: true
+# pass manager
+brew "pass"
 # Persistent memory for AI coding agents. Agent-agnostic, single binary, zero dependencies.
 brew "gentleman-programming/tap/engram", trusted: true
 # Gentle-AI — Ecosystem, Frameworks, Workflows for AI coding agents.

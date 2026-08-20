@@ -35,4 +35,4 @@ fi
 
 tmux switch-client -t $selected
 
-tmux run-shell "/Users/jgarcia/.local/share/nvim/site/pack/packer/start/harpoon/scripts/tmux/switch-back-to-nvim >/dev/null || true"
+# tmux run-shell "~/.local/share/nvim/site/pack/packer/start/harpoon/scripts/tmux/switch-back-to-nvim >/dev/null || true"

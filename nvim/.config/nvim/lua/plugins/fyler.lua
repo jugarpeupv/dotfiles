@@ -374,7 +374,7 @@ M.new_api_opts = {
           end
 
           local term_found
-          modified_path = modified_path:gsub("^/Users/jgarcia", "~")
+          modified_path = modified_path:gsub("^~", "~")
           modified_path = modified_path:gsub(" ", "\\ ")
           print(modified_path)
 
@@ -722,7 +722,7 @@ M.old_api_opts = {
           for _, term in pairs(all_terms or {}) do term.title = vim.api.nvim_buf_get_var(term.buffer, "term_title") end
 
           local term_found
-          modified_path = modified_path:gsub("^/Users/jgarcia", "~"):gsub(" ", "\\ ")
+          modified_path = modified_path:gsub("^~", "~"):gsub(" ", "\\ ")
           print(modified_path)
 
           for _, term in pairs(all_terms or {}) do

@@ -14,11 +14,11 @@ display-name = "Izertis"
 default = true
 email = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal"
 display-name = "Izertis"
-signature = "/Users/jgarcia/.config/aerc/signatures/izertis-signature.txt"
+signature = "~/.config/aerc/signatures/izertis-signature.txt"
 
 
 backend.type = "maildir"
-backend.root-dir = "/Users/jgarcia/Mail/izertis"
+backend.root-dir = "~/Mail/izertis"
 # backend.host = "localhost"
 # backend.port = 1143
 # backend.encryption.type = "none"

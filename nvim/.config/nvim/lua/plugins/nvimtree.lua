@@ -517,7 +517,7 @@ return {}
 --
 -- 					local term_found
 --
--- 					modified_path = modified_path:gsub("^/Users/jgarcia", "~")
+-- 					modified_path = modified_path:gsub("^~", "~")
 -- 					print(modified_path)
 --
 -- 					for _, term in pairs(all_terms or {}) do
@@ -935,7 +935,7 @@ return {}
 -- 					enable = true,
 -- 					show_on_dirs = true,
 -- 					show_on_open_dirs = false,
--- 					disable_for_dirs = { "node_modules", "/node_modules", "/Users/jgarcia/", "/Users/jgarcia", "/dist" },
+-- 					disable_for_dirs = { "node_modules", "/node_modules", "~/", "~", "/dist" },
 -- 					-- timeout = 2000,
 -- 					-- timeout = 200,
 -- 					cygwin_support = false,
@@ -962,7 +962,7 @@ return {}
 -- 						"/.angular",
 -- 						".nx",
 -- 						"/.nx",
--- 						"/Users/jgarcia",
+-- 						"~",
 -- 						"cdk.out",
 -- 						"/cdk.out",
 -- 						"coverage",

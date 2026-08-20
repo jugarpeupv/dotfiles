@@ -14,8 +14,8 @@
 # the database location (in a subdirectory called ".notmuch").
 #
 [database]
-; mail_root=/Users/jgarcia/Mail
-path=/Users/jgarcia/Mail
+; mail_root=Mail
+path=Mail
 # User configuration
 #
 # Here is where you can let notmuch know how you would like to be

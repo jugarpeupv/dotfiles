@@ -144,7 +144,7 @@ return {
 				end,
 			},
 			{
-				mode = { "n", "v" },
+				mode = { "n", "v", "t" },
 				"<M-m>",
 				function()
 					require("opencode.api").toggle()

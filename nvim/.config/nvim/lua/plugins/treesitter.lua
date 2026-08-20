@@ -63,6 +63,7 @@ return {
 				"sql",
 				"terraform",
 				"typst",
+        "fennel",
 				"toml",
 				"tsx",
 				"typescript",

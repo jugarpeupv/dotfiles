@@ -2,7 +2,7 @@ tell application "System Events"
     set zathuraProcList to (every process whose name is "zathura")
     if (count of zathuraProcList) = 0 then
         tell application "Terminal"
-            do script "nohup zathura '/Users/jgarcia/Documents/ebook angular.pdf' &"
+            do script "nohup zathura '~/Documents/ebook angular.pdf' &"
             delay 1 -- wait for the process to start
         end tell
     end if

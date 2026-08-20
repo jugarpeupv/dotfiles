@@ -32,7 +32,7 @@ return {
 			-- Add this only if you want to change the path where the Neovim releases are downloaded/located.
 			-- Default location is the output of :lua= vim.fn.stdpath("cache") .. "/remote-nvim.nvim/version_cache"
 			cache_dir = vim.fn.stdpath("cache") .. "/remote-nvim.nvim/version_cache",
-			-- /Users/jgarcia/.cache/nvim/remote-nvim.nvim/version_cache
+			-- ~/.cache/nvim/remote-nvim.nvim/version_cache
 			-- cache_dir = <custom-path>,
 		},
 		remote = {
@@ -41,7 +41,7 @@ return {
 			copy_dirs = {
 				-- What to copy to remote's Neovim config directory
 				config = {
-					base = "/Users/jgarcia/dotfiles/nvim/.config/nvim",
+					base = "~/dotfiles/nvim/.config/nvim",
 					dirs = "*", -- Directories that should be copied over. "*" means all directories. To specify a subset, use a list like {"lazy", "mason"} where "lazy", "mason" are subdirectories}
 					compression = {
 						enabled = true,

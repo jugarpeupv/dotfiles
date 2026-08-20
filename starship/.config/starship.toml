@@ -92,7 +92,7 @@ disabled = true
 # command="""
 # cwd=$(pwd)
 #
-# if [[ "$cwd" = "/Users/jgarcia" ]]; then
+# if [[ "$cwd" = "~" ]]; then
 #   echo "~"
 #   return
 # fi

@@ -23,7 +23,7 @@ export FZF_CTRL_R_OPTS="
 
 export FZF_CTRL_T_OPTS="
 --walker-skip .git,node_modules
---preview '/Users/jgarcia/.local/share/nvim/lazy/fzf/bin/fzf-preview.sh {}'
+--preview '~/.local/share/nvim/lazy/fzf/bin/fzf-preview.sh {}'
 --height 50%
 --bind='ctrl-y:become:nvim {} >/dev/tty'
 --bind 'ctrl-/:change-preview-window(down|hidden|)'"

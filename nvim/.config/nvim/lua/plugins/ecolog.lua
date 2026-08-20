@@ -60,7 +60,7 @@ return {
 				"environments/*",
 				-- "*.zshrc",
 				-- ".config/zshrc/*.zshrc",
-				-- "/Users/jgarcia/.config/zshrc/.zshrc",
+				-- "~/.config/zshrc/.zshrc",
 				-- ".config/zshrc/.zshrc",
 				".config/zshrc/.env.*",
 				os.getenv("HOME") .. "/dotfiles/zshrc/.config/zshrc/.env",
@@ -74,7 +74,7 @@ return {
 			--   ".+%.zsh$",
 			--   ".+%.zshrc$",
 			--   "^.config/zshrc/.+%.zshrc$",
-			--   "/Users/jgarcia/.config/zshrc/.zshrc",
+			--   "~/.config/zshrc/.zshrc",
 			--   "^%.config/zshrc/%.zshrc$", -- Matches .config/zshrc/.zshrc
 			--   "^.config/zshrc/^%.env%.%w+$", -- Matches config/env.development, config/env.production, etc.
 			-- },
@@ -116,7 +116,7 @@ return {
 		--     ".+%.zsh$",
 		--     ".+%.zshrc$",
 		--     "^.config/zshrc/.+%.zshrc$",
-		--     "/Users/jgarcia/.config/zshrc/.zshrc",
+		--     "~/.config/zshrc/.zshrc",
 		--     "^%.config/zshrc/%.zshrc$", -- Matches .config/zshrc/.zshrc
 		--     "^.config/zshrc/^%.env%.%w+$",  -- Matches config/env.development, config/env.production, etc.
 		--   },

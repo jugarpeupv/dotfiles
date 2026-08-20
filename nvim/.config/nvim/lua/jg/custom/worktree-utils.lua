@@ -143,7 +143,7 @@ M.get_ignored_root_files = function(worktree_path, worktree_git_path)
 		"--deduplicate",
 	})
 		:wait().stdout
-	-- git --work-tree=/Users/jgarcia/private/micro-arch/wt-main --git-dir=/Users/jgarcia/private/micro-arch/wt-main/.git ls-files --ignored --exclude-standard --others --directory
+	-- git --work-tree=~/private/micro-arch/wt-main --git-dir=~/private/micro-arch/wt-main/.git ls-files --ignored --exclude-standard --others --directory
 
 	-- print("ignored_files", vim.inspect(ignored_files))
 

@@ -1,4 +1,8 @@
-#!/Users/jgarcia/.config/neomutt/python-envs/neomutt/bin/python
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.8"
+# dependencies = ["vobject"]
+# ///
 
 import sys
 import warnings
