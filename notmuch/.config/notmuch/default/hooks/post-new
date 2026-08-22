@@ -1,0 +1,3 @@
+#!/bin/sh
+notmuch tag +izertis -- 'path:izertis/**'
+notmuch tag +gmail-personal -- 'path:gmail-personal/**'

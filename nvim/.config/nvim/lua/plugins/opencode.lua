@@ -445,12 +445,12 @@ return {
 							number = false,
 							relativenumber = false,
 						},
-						rendering = {
-							markdown_debounce_ms = 250,
-							on_data_rendered = nil,
-							event_throttle_ms = 40,
-							event_collapsing = false,
-						},
+						-- rendering = {
+						-- 	markdown_debounce_ms = 250,
+						-- 	on_data_rendered = nil,
+						-- 	event_throttle_ms = 40,
+						-- 	event_collapsing = true,
+						-- },
 						tools = {
 							show_output = true,
 							use_folds = false,

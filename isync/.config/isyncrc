@@ -27,16 +27,38 @@ Patterns INBOX Sent Drafts Archive Github-notifications
 # Patterns *
 SyncState *
 CopyArrivalDate yes
-Sync All
+# Sync All
+Sync New
 
 # Gmail personal account
 IMAPAccount gmail-personal
 Host imap.gmail.com
 Port 993
 TLSType IMAPS
-UserCmd "op item get v3hyvpc4e7oapibxqso4rferiy --field username --reveal"
+UserCmd "pass gmail_personal_account"
 AuthMechs XOAUTH2
-PassCmd "mutt_oauth2.py ~/.config/mbsync/personal@gmail.com.tokens --provider google --format token"
+# AuthMechs OAUTHBEARER
+PassCmd "mutt_oauth2.py ~/.config/personal.gmail.com.tokens --provider google --format token"
+
+# Run this first
+# mutt_oauth2.py ~/.config/personal.gmail.com.tokens \
+#     --provider google \
+#     --authorize \
+#     --email "$(pass gmail_personal_account)" \
+#     --client-id "$(pass gmail_personal_client_id)" \
+#     --client-secret "$(pass gmail_personal_client_secret)" \
+#     --authflow authcode
+
+# Then install cyrus-sasl-xoauth2
+# brew install autoconf automake libtool pkg-config
+# git clone https://github.com/moriyoshi/cyrus-sasl-xoauth2.git
+# cd cyrus-sasl-xoauth2
+#
+# Change in autogen.sh "libtoolize" --> "glibtoolize"
+# ./autogen.sh
+# ./configure --with-cyrus-sasl=/opt/homebrew/opt/cyrus-sasl
+# make
+# sudo make install
 
 IMAPStore gmail-personal-remote
 Account gmail-personal
@@ -51,8 +73,10 @@ Far :gmail-personal-remote:
 Near :gmail-personal-local:
 Create Both
 Expunge Both
-Patterns *
+# Patterns *
+Patterns INBOX Trash Enviados Borradores
 SyncState *
 CopyArrivalDate yes
-Sync All
+# Sync All
+Sync New
 

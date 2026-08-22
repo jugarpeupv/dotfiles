@@ -314,26 +314,32 @@ return {
 				-- Snacks.picker.man({ section = { "1" } })
 				-- Snacks.picker.man()
 
+				local cache = os.getenv("HOME") .. "/.cache/telescope_man_list.txt"
 				local items = {}
-				for line in io.lines(os.getenv("HOME") .. "/.cache/telescope_man_list.txt") do
-					local prefix, desc = line:match("^(.-)%s+%-%s+(.*)$")
-					if prefix then
-						local name, section = prefix:match("^([^%(,]+)%((%w+)%)")
-						if name then
-							table.insert(items, {
-								text = line,
-								name = vim.trim(name),
-								section = section,
-								desc = desc,
-							})
+				local f = io.open(cache, "r")
+				if f then
+					for line in f:lines() do
+						local prefix, desc = line:match("^(.-)%s+%-%s+(.*)$")
+						if prefix then
+							local name, section = prefix:match("^([^%(,]+)%((%w+)%)")
+							if name then
+								table.insert(items, {
+									text = line,
+									name = vim.trim(name),
+									section = section,
+									desc = desc,
+								})
+							end
 						end
 					end
+					f:close()
 				end
 
-				Snacks.picker({
-					title = "Man Pages",
-					format = "text",
-					layout = { preview = false },
+				if #items > 0 then
+					Snacks.picker({
+						title = "Man Pages",
+						format = "text",
+						layout = { preview = false },
 					-- format = function(item, picker)
 					-- 	local ret = {}
 					-- 	-- name(section) - highlighted
@@ -382,6 +388,9 @@ return {
 						end
 					end,
 				})
+				else
+					Snacks.picker.man()
+				end
 			end,
 			{ silent = true },
 		},

@@ -12,6 +12,8 @@ tap "powershell/tap"
 tap "teamookla/speedtest"
 tap "thezoraiz/ascii-image-converter"
 
+# gpg passphrase dialog for mac
+brew "pinentry-mac"
 # uv python env manager etc
 brew "uv"
 # tmux git status bar
