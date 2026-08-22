@@ -2,12 +2,12 @@ return {
 	{
 		-- "stevearc/oil.nvim",
 		-- "barrettruth/canola.nvim",
-    "jugarpeupv/oil.nvim",
-    branch = "local/canola/main",
-		lazy = true,
+		"jugarpeupv/oil.nvim",
+		-- branch = "local/canola/main",
+		-- lazy = true,
 		enabled = true,
 		-- dev = true,
-		-- dir = "~/projects/oil.nvim/wt-canola-main",
+		-- dir = "~/projects/oil.nvim/wt-local-canola-main",
 		-- event = { "CmdlineEnter" },
 		cmd = { "Oil" },
 		-- init = function()
@@ -30,7 +30,7 @@ return {
 		dependencies = {
 			{
 				"malewicz1337/oil-git.nvim",
-        enabled = false,
+				enabled = false,
 				-- dependencies = { "stevearc/oil.nvim" },
 				-- event = { "VeryLazy" },
 				-- cmd = { "Oil" },
@@ -173,7 +173,7 @@ return {
 				-- Window-local options to use for oil buffers
 				win_options = {
 					-- winbar = "%#NvimTreeRootFolder#%{v:lua.oil_winbar_label()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
-          -- winbar = "%#NvimTreeRootFolder#%{%&modified ? '⏺' : ''%}",
+					-- winbar = "%#NvimTreeRootFolder#%{%&modified ? '⏺' : ''%}",
 					-- winbar = "%#@attribute.builtin#%{v:lua.get_winbar()} %#ModeMsg#%{%&modified ? '⏺' : ''%}",
 					-- wrap = false,
 					-- signcolumn = "yes:1",
@@ -236,8 +236,8 @@ return {
 					--   local img_clip = require("img-clip")
 					--   img_clip.paste_image({}, dir .. filename)
 					-- end,
-          ["gY"] = "actions.copy_to_system_clipboard",
-          ["gP"] = "actions.paste_from_system_clipboard",
+					["gY"] = "actions.copy_to_system_clipboard",
+					["gP"] = "actions.paste_from_system_clipboard",
 					["<CR>"] = "actions.select",
 					["<C-v>"] = { "actions.select", opts = { vertical = true } },
 					["<C-s>"] = { "actions.select", opts = { horizontal = true } },
@@ -256,45 +256,45 @@ return {
 					["<BS>"] = { "actions.select", mode = "n" },
 					["<leader>cd"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 					["gs"] = { "actions.change_sort", mode = "n" },
-				["F"] = {
-					callback = function()
-						local oil = require("oil")
+					["F"] = {
+						callback = function()
+							local oil = require("oil")
 
-						local ok, snacks = pcall(require, "snacks")
-						if not ok then
-							vim.notify("Snacks plugin not available", vim.log.levels.ERROR)
-							return
-						end
-						local dir = oil.get_current_dir()
-						snacks.picker.files({
-							dirs = { dir },
-							hidden = true,
-							exclude = {
-								".git",
-								"*__template__*",
-								"*DS_Store*",
-							},
-						})
-					end,
-					mode = "n",
-				},
-				-- ["<M-p>"] = {
-				-- 	callback = function()
-				-- 		local oil = require("oil")
-				--
-				-- 		local ok, snacks = pcall(require, "snacks")
-				-- 		if not ok then
-				-- 			vim.notify("Snacks plugin not available", vim.log.levels.ERROR)
-				-- 			return
-				-- 		end
-				-- 		local dir = oil.get_current_dir()
-				-- 		snacks.picker.files({
-				-- 			cwd = dir,
-				-- 		})
-				-- 	end,
-				-- 	desc = "Snacks picker: files in oil cwd",
-				-- 	mode = "n",
-				-- },
+							local ok, snacks = pcall(require, "snacks")
+							if not ok then
+								vim.notify("Snacks plugin not available", vim.log.levels.ERROR)
+								return
+							end
+							local dir = oil.get_current_dir()
+							snacks.picker.files({
+								dirs = { dir },
+								hidden = true,
+								exclude = {
+									".git",
+									"*__template__*",
+									"*DS_Store*",
+								},
+							})
+						end,
+						mode = "n",
+					},
+					-- ["<M-p>"] = {
+					-- 	callback = function()
+					-- 		local oil = require("oil")
+					--
+					-- 		local ok, snacks = pcall(require, "snacks")
+					-- 		if not ok then
+					-- 			vim.notify("Snacks plugin not available", vim.log.levels.ERROR)
+					-- 			return
+					-- 		end
+					-- 		local dir = oil.get_current_dir()
+					-- 		snacks.picker.files({
+					-- 			cwd = dir,
+					-- 		})
+					-- 	end,
+					-- 	desc = "Snacks picker: files in oil cwd",
+					-- 	mode = "n",
+					-- },
 
 					["K"] = {
 						callback = function()
@@ -620,7 +620,52 @@ return {
 							myterm:open()
 						end,
 					},
-					["gx"] = "actions.open_external",
+					-- ["gx"] = "actions.open_external",
+					["gx"] = {
+						callback = function()
+							local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+							local dir = require("oil").get_current_dir()
+							if not dir then
+								return
+							end
+
+							---Copied from vim.ui.open in Neovim 0.10+
+							---@param path string
+							---@return nil|string[] cmd
+							---@return nil|string error
+							local function get_open_cmd(path)
+								if vim.fn.has("mac") == 1 then
+									return { "open", path }
+								elseif vim.fn.has("win32") == 1 then
+									if vim.fn.executable("rundll32") == 1 then
+										return { "rundll32", "url.dll,FileProtocolHandler", path }
+									else
+										return nil, "rundll32 not found"
+									end
+								elseif vim.fn.executable("explorer.exe") == 1 then
+									return { "explorer.exe", path }
+								elseif vim.fn.executable("xdg-open") == 1 then
+									return { "xdg-open", path }
+								else
+									return nil, "no handler found"
+								end
+							end
+
+							if cursor_line == 1 then
+								local cmd, err = get_open_cmd(dir)
+								if not cmd then
+									vim.notify(string.format("Could not open %s: %s", dir, err), vim.log.levels.ERROR)
+									return
+								end
+								local jid = vim.fn.jobstart(cmd, { detach = true })
+								assert(jid > 0, "Failed to start job")
+							else
+								require("oil.actions").open_external.callback()
+							end
+						end,
+						mode = "n",
+					},
+
 					-- ["gz"] = {
 					--   callback = function()
 					--     local oil = require("oil")
@@ -642,7 +687,7 @@ return {
 					--   end,
 					--   mode = "n"
 					-- },
-          ["gh"] = "actions.toggle_header",
+					["gh"] = "actions.toggle_header",
 					["g."] = { "actions.toggle_hidden", mode = "n" },
 					["g\\"] = { "actions.toggle_trash", mode = "n" },
 				},
