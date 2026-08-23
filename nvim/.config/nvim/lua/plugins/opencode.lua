@@ -122,12 +122,16 @@ return {
 					-- 	.. "\n```\n\nFormat as a gitcommit code block like so ```gitcommit <the-git-commit-message> ```"
 					-- require("opencode.api").run(prompt)
 
-          local prompt = "Write a commit message for the current staged changes, following "
-          .. "Conventional Commits convention. Keep the title under 50 characters and "
-          .. "wrap the body at 72 characters. Run git diff --cached yourself to inspect "
-          .. "the staged changes, then output the result as a ```gitcommit <the-git-commit-message>``` "
-          .. "containing the commit message with its body on the following lines. Important, the gitcommit block should have ```gitcommit in the same line then \n with the git commit block"
-          require("opencode.api").run(prompt)
+          local prompt = "Write a Conventional Commits message for the current staged "
+          .. "changes: title under 50 chars, body wrapped at 72. Reply with ONLY a "
+          .. "gitcommit block, opening fence alone on its line, message starting "
+          .. "on the next line:\n"
+          .. "```gitcommit\n"
+          .. "feat(scope): short title\n\n"
+          .. "Body wrapped at 72 characters.\n"
+          .. "```"
+          -- require("opencode.api").run(prompt)
+          require("opencode.api").run(prompt, { context = { git_diff = { enabled = true } } })
 				end,
 				desc = "Opencode - Generate commit message from staged changes",
 			},

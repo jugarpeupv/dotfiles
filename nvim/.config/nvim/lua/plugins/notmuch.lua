@@ -8,6 +8,7 @@ return {
 		opts = {
       -- from = vim.trim(vim.fn.system('pass izertis_username')),
       from_cmd = 'pass izertis_username', -- prints "Name <you@example.com>"
+      -- draft_dir = '~/.local/share/nvim/notmuch/drafts',
 			notmuch_db_path = os.getenv("HOME") .. "/Mail",
 			maildir_sync_cmd = "mbsync izertis-channel",
       render_html_body = false,
