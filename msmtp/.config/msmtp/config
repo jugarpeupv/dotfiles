@@ -6,14 +6,13 @@ tls_starttls   off
 tls_certcheck  off
 logfile        ~/.config/msmtp/msmtp.log
 
+
 account        izertis
 host           localhost
 port           1025
-eval echo user $(op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal)
-eval echo from $(op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal)
-passwordeval   op item get u6k3e4k4gzbmxl76zbxphtutyi --field password --reveal
-
-account default : izertis
+eval echo user $(pass izertis_username)
+eval echo from $(pass izertis_username)
+passwordeval   pass izertis_password
 
 
 
@@ -23,6 +22,9 @@ port           587
 auth           oauthbearer
 tls            on
 tls_starttls   on
-eval echo user $(op item get v3hyvpc4e7oapibxqso4rferiy --field username --reveal)
-eval echo from $(op item get v3hyvpc4e7oapibxqso4rferiy --field username --reveal)
+eval echo user $(pass gmail_personal_account)
+eval echo from $(pass gmail_personal_account)
 passwordeval   mutt_oauth2.py ~/.config/personal.gmail.com.tokens --provider google --format token
+
+
+account default : izertis

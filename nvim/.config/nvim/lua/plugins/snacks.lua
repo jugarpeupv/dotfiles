@@ -34,7 +34,7 @@ return {
 		--   end,
 		-- },
 		bigfile = {
-      enabled = true,
+			enabled = true,
 			notify = false, -- show notification when big file detected
 			size = 0.7 * 1024 * 1024, -- 1.5MB
 			line_length = 1000, -- average line length (useful for minified files)
@@ -123,10 +123,10 @@ return {
 						["<a-w>"] = { "cycle_win", mode = { "i", "n" } },
 						["<c-a>"] = { "select_all", mode = { "n", "i" } },
 						-- ["<c-b>"] = { "preview_scroll_up", mode = { "i", "n" } },
-            ["<c-d>"] = false,
-            ["<c-u>"] = false,
+						["<c-d>"] = false,
+						["<c-u>"] = false,
 						["<PageDown>"] = { "list_scroll_down", mode = { "i", "n" } },
-            ["<PageUp>"] = { "list_scroll_up", mode = { "i", "n" } },
+						["<PageUp>"] = { "list_scroll_up", mode = { "i", "n" } },
 						-- ["<c-f>"] = { "preview_scroll_down", mode = { "i", "n" } },
 						--       ["<PageUp>"] = { "preview_scroll_up", mode = { "i", "n" } },
 						-- ["<PageDown>"] = { "preview_scroll_down", mode = { "i", "n" } },
@@ -269,6 +269,200 @@ return {
 		},
 	},
 	keys = {
+		{
+			"<leader>ms",
+			function()
+				local function run_email_sync(channel)
+					vim.notify("Syncing email (" .. channel .. ")...", vim.log.levels.INFO)
+					local stderr_lines = {}
+
+					local function print_line(line)
+						if line == "" then
+							return
+						end
+						vim.api.nvim_echo({ { line, "Comment" } }, true, {})
+					end
+
+					vim.fn.jobstart({ "sh", "-c", "mbsync " .. channel .. " && notmuch new" }, {
+						pty = true, -- force line-buffered output from mbsync
+						on_stdout = function(_, data)
+							vim.schedule(function()
+								for _, line in ipairs(data) do
+									print_line(line)
+								end
+							end)
+						end,
+						on_stderr = function(_, data)
+							for _, line in ipairs(data) do
+								if line ~= "" then
+									table.insert(stderr_lines, line)
+								end
+							end
+						end,
+						on_exit = function(_, code)
+							if code == 0 then
+								vim.schedule(function()
+									vim.notify("Email synced properly", vim.log.levels.INFO)
+									local time = os.date("%H:%M")
+									vim.fn.jobstart({
+										"terminal-notifier",
+										"-title",
+										"Mail",
+										"-message",
+										time .. " Email synced properly",
+									}, { detach = true })
+								end)
+							else
+								vim.schedule(function()
+									local reason = #stderr_lines > 0 and ("\n" .. table.concat(stderr_lines, "\n"))
+										or ""
+									vim.notify(
+										"Email sync failed (exit code: " .. code .. ")" .. reason,
+										vim.log.levels.ERROR
+									)
+								end)
+							end
+						end,
+					})
+				end
+
+				local channels = { "izertis-channel", "gmail-personal-channel" }
+				vim.ui.select(channels, {
+					prompt = "Sync email channel:",
+					format_item = function(item)
+						return item
+					end,
+				}, function(choice)
+					if not choice then
+						vim.notify("Email sync cancelled", vim.log.levels.WARN)
+						return
+					end
+					run_email_sync(choice)
+				end)
+			end,
+		},
+
+		{
+			"<C-R>",
+			function()
+				local cmd = vim.fn.getcmdline()
+				local pos = vim.fn.getcmdpos()
+				local ctype = vim.fn.getcmdtype()
+
+				local function replace_cmdline(content)
+					-- Re-enter the cmdline with the content inserted at the
+					-- position where the cursor was when <C-R> was pressed.
+					local head, tail = vim.fn.strpart(cmd, 0, pos - 1), vim.fn.strpart(cmd, pos - 1)
+					vim.api.nvim_feedkeys(ctype .. head .. content .. tail, "nt", true)
+					if #tail > 0 then
+						vim.api.nvim_feedkeys(
+							string.rep(
+								vim.api.nvim_replace_termcodes("<Left>", true, true, true),
+								vim.fn.strchars(tail)
+							),
+							"nt",
+							true
+						)
+					end
+				end
+
+				local function open_picker()
+					-- Telescope yank_history (yanky.nvim) picker
+					local actions = require("telescope.actions")
+					local action_state = require("telescope.actions.state")
+					require("telescope").extensions.yank_history.yank_history({
+						initial_mode = "insert",
+						attach_mappings = function(_, _)
+							actions.select_default:replace(function(bufnr)
+								local selection = action_state.get_selected_entry()
+								actions.close(bufnr)
+								if selection then
+									-- Strip tabs/newlines from linewise yanks: a trailing \n
+									-- acts as <CR> and executes the re-entered cmdline, and
+									-- leading \t mangles the text. We are also striping leading whitespace
+									local content = (selection.value.regcontents or "")
+										:gsub("[\t\n\r]", "")
+										:gsub("\\n", "")
+										:gsub("^%s+", "")
+
+									-- Schedule so telescope fully closes first; otherwise the
+									-- <cr> that confirmed the picker is still pending and would
+									-- execute the re-entered cmdline immediately.
+									vim.schedule(function()
+										replace_cmdline(content)
+									end)
+								end
+							end)
+							return true
+						end,
+					})
+				end
+
+				-- Abort the in-progress command line, then open the picker on the
+				-- next tick so the <esc> has fully processed and mode is back to
+				-- normal. Opening the picker synchronously (or feeding <esc> with
+				-- "x") leaves the cmdline active, so telescope's <ESC>A insert-mode
+				-- key lands in the cmdline (":e A") and the prompt never gains focus.
+				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, true, true), "n", true)
+				vim.schedule(open_picker)
+			end,
+			mode = "c",
+			desc = "Insert register into command line",
+		},
+		{
+			"<C-S>",
+			function()
+				local cmd = vim.fn.getcmdline()
+				local pos = vim.fn.getcmdpos()
+				local ctype = vim.fn.getcmdtype()
+
+				local function replace_cmdline(content)
+					-- Re-enter the cmdline with the content inserted at the
+					-- position where the cursor was when <C-R> was pressed.
+					local head, tail = vim.fn.strpart(cmd, 0, pos - 1), vim.fn.strpart(cmd, pos - 1)
+					vim.api.nvim_feedkeys(ctype .. head .. content .. tail, "nt", true)
+					if #tail > 0 then
+						vim.api.nvim_feedkeys(
+							string.rep(
+								vim.api.nvim_replace_termcodes("<Left>", true, true, true),
+								vim.fn.strchars(tail)
+							),
+							"nt",
+							true
+						)
+					end
+				end
+
+				local function open_picker()
+					require("snacks").picker.registers({
+						actions = {
+							confirm = function(picker, item)
+								picker:close()
+								local reg = vim.fn.getreg(item.reg)
+								reg = (reg or ""):gsub("[\t\n\r]", ""):gsub("\\n", ""):gsub("^%s+", "")
+
+								-- Schedule so telescope fully closes first; otherwise the
+								-- <cr> that confirmed the picker is still pending and would
+								-- execute the re-entered cmdline immediately.
+								vim.schedule(function()
+									replace_cmdline(reg)
+								end)
+							end,
+						},
+					})
+				end
+
+				-- Abort the in-progress command line, then open the picker on the
+				-- next tick so the <esc> has fully processed and mode is back to
+				-- normal. Opening the picker synchronously (or feeding <esc> with
+				-- "x") leaves the cmdline active, so telescope's <ESC>A insert-mode
+				-- key lands in the cmdline (":e A") and the prompt never gains focus.
+				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, true, true), "n", true)
+				vim.schedule(open_picker)
+			end,
+			mode = "c",
+			desc = "Insert register into command line",
+		},
 		-- Top Pickers & Explorer
 		{
 			"<leader>bi",
@@ -278,7 +472,7 @@ return {
 		},
 		{
 			"gd",
-      mode = { "n" },
+			mode = { "n" },
 			function()
 				Snacks.picker.lsp_definitions()
 			end,
@@ -293,7 +487,7 @@ return {
 		-- },
 		{
 			"gs",
-      mode = { "n" },
+			mode = { "n" },
 			function()
 				vim.cmd("sp")
 				Snacks.picker.lsp_definitions()
@@ -340,54 +534,54 @@ return {
 						title = "Man Pages",
 						format = "text",
 						layout = { preview = false },
-					-- format = function(item, picker)
-					-- 	local ret = {}
-					-- 	-- name(section) - highlighted
-					-- 	ret[#ret + 1] = { item.name, "NvimTreeExecFile" }
-					-- 	ret[#ret + 1] = { "(", "Delimiter" }
-					-- 	ret[#ret + 1] = { item.section, "Number" }
-					-- 	ret[#ret + 1] = { ")", "Delimiter" }
-					-- 	ret[#ret + 1] = { " - ", "Comment" }
-					-- 	ret[#ret + 1] = { item.desc or "", "String" }
-					-- 	return ret
-					-- end,
-					items = items,
-					win = {
-						input = {
-							keys = {
-								["<C-v>"] = { "vertical", mode = { "i", "n" } },
-								["<C-x>"] = { "horizontal", mode = { "i", "n" } },
-								["<C-t>"] = { "tab", mode = { "i", "n" } },
+						-- format = function(item, picker)
+						-- 	local ret = {}
+						-- 	-- name(section) - highlighted
+						-- 	ret[#ret + 1] = { item.name, "NvimTreeExecFile" }
+						-- 	ret[#ret + 1] = { "(", "Delimiter" }
+						-- 	ret[#ret + 1] = { item.section, "Number" }
+						-- 	ret[#ret + 1] = { ")", "Delimiter" }
+						-- 	ret[#ret + 1] = { " - ", "Comment" }
+						-- 	ret[#ret + 1] = { item.desc or "", "String" }
+						-- 	return ret
+						-- end,
+						items = items,
+						win = {
+							input = {
+								keys = {
+									["<C-v>"] = { "vertical", mode = { "i", "n" } },
+									["<C-x>"] = { "horizontal", mode = { "i", "n" } },
+									["<C-t>"] = { "tab", mode = { "i", "n" } },
+								},
 							},
 						},
-					},
-					actions = {
-						vertical = function(picker, item)
-							picker:close()
-							if item and item.name and item.section then
-								vim.cmd("vert Man " .. item.section .. " " .. item.name)
-							end
-						end,
-						horizontal = function(picker, item)
+						actions = {
+							vertical = function(picker, item)
+								picker:close()
+								if item and item.name and item.section then
+									vim.cmd("vert Man " .. item.section .. " " .. item.name)
+								end
+							end,
+							horizontal = function(picker, item)
+								picker:close()
+								if item and item.name and item.section then
+									vim.cmd("Man " .. item.section .. " " .. item.name)
+								end
+							end,
+							tab = function(picker, item)
+								picker:close()
+								if item and item.name and item.section then
+									vim.cmd("tab Man " .. item.section .. " " .. item.name)
+								end
+							end,
+						},
+						confirm = function(picker, item)
 							picker:close()
 							if item and item.name and item.section then
 								vim.cmd("Man " .. item.section .. " " .. item.name)
 							end
 						end,
-						tab = function(picker, item)
-							picker:close()
-							if item and item.name and item.section then
-								vim.cmd("tab Man " .. item.section .. " " .. item.name)
-							end
-						end,
-					},
-					confirm = function(picker, item)
-						picker:close()
-						if item and item.name and item.section then
-							vim.cmd("Man " .. item.section .. " " .. item.name)
-						end
-					end,
-				})
+					})
 				else
 					Snacks.picker.man()
 				end
@@ -432,7 +626,7 @@ return {
 		{
 			mode = { "c" },
 			-- "<C-r><C-r>",
-      "<C-c>",
+			"<C-c>",
 			function()
 				local cmd = vim.fn.getcmdline()
 				if cmd == "" then

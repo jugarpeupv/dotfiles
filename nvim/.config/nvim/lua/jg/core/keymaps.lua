@@ -2052,6 +2052,21 @@ vim.keymap.set("i", "<C-k>", "<c-o>D<esc>", { desc = "Kill to end of line" })
 
 -- vim.o.wildcharm = vim.fn.char2nr("<C-v>")  -- or: vim.o.wildcharm = 26
 
+
+vim.keymap.set("c", "<C-v>", function()
+  local cmd = vim.fn.getcmdline()
+  local path = cmd:match("^e!?%s+(.+)$") or cmd:match("^edit!?%s+(.+)$")
+  if not path or path == "" then
+    return "<CR>"
+  end
+  vim.schedule(function()
+    vim.cmd("vsp | edit " .. vim.fn.fnameescape(path))
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
+  end)
+end, { silent = true })
+
+
+
 vim.cmd([[set wildcharm=<C-v>]])
 -- vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
 vim.cmd([[inoremap <C-l> <C-y>]])
@@ -2067,56 +2082,6 @@ vim.keymap.set("c", "<C-l>", function()
 end, { expr = true })
 
 -- vim.cmd([[cnoremap <C-l> <Space><BS><Right><C-z>]])
-
-vim.keymap.set("n", "<leader>ms", function()
-	vim.notify("Syncing email...", vim.log.levels.INFO)
-	local stderr_lines = {}
-
-	local function print_line(line)
-		if line == "" then
-			return
-		end
-		vim.api.nvim_echo({ { line, "Comment" } }, true, {})
-	end
-
-	vim.fn.jobstart({ "sh", "-c", "mbsync izertis-channel && notmuch new" }, {
-		pty = true, -- force line-buffered output from mbsync
-		on_stdout = function(_, data)
-			vim.schedule(function()
-				for _, line in ipairs(data) do
-					print_line(line)
-				end
-			end)
-		end,
-		on_stderr = function(_, data)
-			for _, line in ipairs(data) do
-				if line ~= "" then
-					table.insert(stderr_lines, line)
-				end
-			end
-		end,
-		on_exit = function(_, code)
-			if code == 0 then
-				vim.schedule(function()
-					vim.notify("Email synced properly", vim.log.levels.INFO)
-					local time = os.date("%H:%M")
-					vim.fn.jobstart({
-						"terminal-notifier",
-						"-title",
-						"Mail",
-						"-message",
-						time .. " Email synced properly",
-					}, { detach = true })
-				end)
-			else
-				vim.schedule(function()
-					local reason = #stderr_lines > 0 and ("\n" .. table.concat(stderr_lines, "\n")) or ""
-					vim.notify("Email sync failed (exit code: " .. code .. ")" .. reason, vim.log.levels.ERROR)
-				end)
-			end
-		end,
-	})
-end, { desc = "Sync email (mbsync + notmuch)" })
 
 -- neovim does not complete entries where there are only .files --> https://github.com/neovim/neovim/issues/35111
 -- vim.keymap.set("c", "<Tab>", function()

@@ -289,7 +289,7 @@
       "type": "local"
     }
   },
-  "model": "opencode/nemotron-3.5-lightning-free",
+  "model": "opencode/x-preview-f-free",
   "permission": {
     "*": "allow",
     "bash": {

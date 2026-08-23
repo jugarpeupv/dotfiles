@@ -27,8 +27,8 @@ Patterns INBOX Sent Drafts Archive Github-notifications
 # Patterns *
 SyncState *
 CopyArrivalDate yes
-# Sync All
-Sync New
+Sync All
+# Sync New
 
 # Gmail personal account
 IMAPAccount gmail-personal
@@ -74,9 +74,9 @@ Near :gmail-personal-local:
 Create Both
 Expunge Both
 # Patterns *
-Patterns INBOX Trash Enviados Borradores
+Patterns INBOX [Gmail]/Enviados [Gmail]/Borradores
 SyncState *
 CopyArrivalDate yes
-# Sync All
-Sync New
+Sync All
+# Sync New
 

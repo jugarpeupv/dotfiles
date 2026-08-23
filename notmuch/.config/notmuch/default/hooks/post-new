@@ -1,3 +1,6 @@
 #!/bin/sh
 notmuch tag +izertis -- 'path:izertis/**'
+notmuch tag +github -- 'path:izertis/Github-notifications/**'
 notmuch tag +gmail-personal -- 'path:gmail-personal/**'
+notmuch tag +sent -- 'path:gmail-personal/[Gmail]/Enviados/**'
+notmuch tag +sent -- 'path:izertis/Sent/**'

@@ -1557,18 +1557,32 @@ M.notmuch_picker = function(opts)
 		-- 	io.popen("notmuch address --format=json --output=recipients --deduplicate=address '*' | jq -r '.[] | .[\"name-addr\"]'")
       -- io.popen("notmuch address --format=text --output=recipients --deduplicate=address '*'")
 
-    local file = io.open(os.getenv("HOME") .. "/.cache/notmuch-addresses", "r")
-
-		--   io.popen("notmuch address --format=json --deduplicate=address -- 'tag:izertis' | jq -r '.[] | .[\"name-addr\"]'")
-		-- io.popen("notmuch address --format=json --deduplicate=address -- 'tag:personal' | jq -r '.[] | .[\"name-addr\"]'")
 		local addresses = {}
+		local cache_path = os.getenv("HOME") .. "/.cache/notmuch-addresses"
+		local output
 
-		if file == nil then
-			return addresses
+		local file = io.open(cache_path, "r")
+		if file then
+			output = file:read("*a")
+			file:close()
+		else
+			vim.fn.mkdir(vim.fs.dirname(cache_path), "p")
+			local handle =
+				io.popen("notmuch address --format=json --deduplicate=address -- 'tag:izertis' | jq -r '.[] | .[\"name-addr\"]'")
+			if not handle then
+				return addresses
+			end
+			output = handle:read("*a")
+			handle:close()
+
+			if output ~= "" then
+				local cache = io.open(cache_path, "w")
+				if cache then
+					cache:write(output)
+					cache:close()
+				end
+			end
 		end
-
-		local output = file:read("*a")
-		file:close()
 
 		for address in string.gmatch(output, "([^'\n']+)") do
 			table.insert(addresses, address)
