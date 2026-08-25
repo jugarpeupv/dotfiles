@@ -166,8 +166,7 @@ else
 
 		if vim.fn.isdirectory(path) == 1 then
 			local fyler = require("fyler")
-			-- fyler.open({ dir = path, kind = "replace" })
-			fyler.open({ dir = path })
+			fyler.open({ dir = path, kind = "replace" })
 			local cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
 			local win = vim.fn.bufwinid(cwd_buffer_nr)
 			if win ~= -1 then

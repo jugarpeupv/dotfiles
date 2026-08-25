@@ -337,7 +337,6 @@ M.old_api_opts = {
             require("oil").open(path)
             return
           end
-          print(vim.inspect(entry))
 					local path = entry.path
 					if vim.fn.isdirectory(path) == 0 then
 						path = vim.fn.fnamemodify(path, ":h")
