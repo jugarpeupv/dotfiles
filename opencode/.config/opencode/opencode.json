@@ -289,7 +289,7 @@
       "type": "local"
     }
   },
-  "model": "opencode/x-preview-f-free",
+  "model": "opencode/muse-spark-1.2-contributor-free",
   "permission": {
     "*": "allow",
     "bash": {

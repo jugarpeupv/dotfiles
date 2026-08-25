@@ -1130,6 +1130,106 @@ M.telescope_live_grep_in_workspace = function(path, no_ignore)
 	end
 end
 
+
+
+M.fyler_telescope_dir = function(path, no_ignore)
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  local find_command = {
+    "fd",
+    ".",
+    path,
+    "--type",
+    "d",
+    "--exclude",
+    ".git",
+    "--exclude",
+    "node_modules",
+    -- "--one-file-system",
+    "--max-depth",
+    "3",
+    "--hidden",
+  }
+
+  if no_ignore then
+    table.insert(find_command, "--no-ignore")
+  end
+
+  -- Function to escape special characters in a string for use in a pattern
+  local function escape_pattern(text)
+    return text:gsub("([^%w])", "%%%1")
+  end
+
+  local escaped_path = escape_pattern(path)
+
+  local commands = function(opts)
+    opts = opts or {}
+    pickers
+      .new(opts, {
+        prompt_title = 'Open a directory from "' .. path:gsub(os.getenv("HOME"), "~") .. '" in Fyler',
+        finder = finders.new_oneshot_job(find_command, {
+          entry_maker = function(entry)
+            local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
+            return {
+              value = entry,
+              -- display = "  ~/" .. entry_substituted,
+
+              display = function()
+                local display_string
+                if string.find(path, os.getenv("HOME")) then
+                  display_string = "  ~/" .. entry_substituted
+                else
+                  display_string = "  " .. entry_substituted
+                end
+                return display_string, { { { 0, 1 }, "Directory" } }
+              end,
+              -- { { {1, 3}, hl_group } }
+              ordinal = entry,
+            }
+          end,
+        }),
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(prompt_bufnr)
+          actions.select_default:replace(function()
+            local selection = action_state.get_selected_entry()
+            actions.close(prompt_bufnr)
+            require("fyler").open({ dir = selection.value, kind = "replace" })
+          end)
+
+          actions.select_vertical:replace(function()
+            local selection = action_state.get_selected_entry()
+            require("telescope.actions").close(prompt_bufnr)
+            vim.cmd("vsplit")
+            require("fyler").open({ dir = selection.value, kind = "replace" })
+          end)
+
+          actions.select_horizontal:replace(function()
+            local selection = action_state.get_selected_entry()
+            require("telescope.actions").close(prompt_bufnr)
+            vim.cmd("split")
+            require("fyler").open({ dir = selection.value, kind = "replace" })
+          end)
+
+          -- map("i", "<C-v>", function()
+          --   require("telescope.actions").close(prompt_bufnr)
+          --   vim.cmd("vsplit")
+          --   require("oil").open(selection.value)
+          -- end)
+
+          return true
+        end,
+      })
+      :find()
+  end
+
+  commands()
+end
+
+
 M.oil_fzf_dir = function(path, no_ignore)
 	local pickers = require("telescope.pickers")
 	local finders = require("telescope.finders")

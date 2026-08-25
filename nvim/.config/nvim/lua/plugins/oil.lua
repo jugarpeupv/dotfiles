@@ -3,30 +3,12 @@ return {
 		-- "stevearc/oil.nvim",
 		-- "barrettruth/canola.nvim",
 		"jugarpeupv/oil.nvim",
-		-- branch = "local/canola/main",
-		-- lazy = true,
+		branch = "local/canola/main",
 		enabled = true,
 		-- dev = true,
 		-- dir = "~/projects/oil.nvim/wt-local-canola-main",
 		-- event = { "CmdlineEnter" },
 		cmd = { "Oil" },
-		-- init = function()
-		--   -- Load oil when neovim opens a directory, even though it's lazy-loaded
-		--   vim.api.nvim_create_autocmd("BufWinEnter", {
-		--     nested = true,
-		--     callback = function(info)
-		--       local path = info.file
-		--       if path == "" then
-		--         return
-		--       end
-		--       -- Only handle directories
-		--       local stat = vim.uv.fs_stat(path)
-		--       if stat and stat.type == "directory" then
-		--         require("oil")
-		--       end
-		--     end,
-		--   })
-		-- end,
 		dependencies = {
 			{
 				"malewicz1337/oil-git.nvim",
@@ -84,6 +66,24 @@ return {
 		},
 		keys = {
 			{ ":" },
+      {
+        "<C-V>",
+        mode = "c",
+        function()
+          local cmd = vim.fn.getcmdline()
+          local path = cmd:match("^e!?%s+(.+)$") or cmd:match("^edit!?%s+(.+)$")
+          if not path or path == "" then
+            -- fall back to wildcharm behavior (your wildcharm is <C-v>)
+            return vim.api.nvim_replace_termcodes("<C-v>", true, false, true)
+          end
+          -- cancel the current cmdline, then open in a right-side vertical split
+          vim.schedule(function()
+            vim.cmd("botright vsplit | edit " .. vim.fn.fnameescape(vim.fn.expand(path)))
+            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
+          end)
+          return vim.api.nvim_replace_termcodes("<esc>", true, false, true)
+        end,
+      },
 			{
 				"-",
 				function()

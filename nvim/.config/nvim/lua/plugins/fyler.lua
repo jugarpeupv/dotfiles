@@ -325,6 +325,19 @@ M.old_api_opts = {
 				end,
 				["go"] = function(view)
 					local entry = view:cursor_node_entry()
+          if not entry then
+            local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+            local path
+            if cursor_line == 1 then
+              path = vim.fn.expand(vim.api.nvim_get_current_line())
+            else
+              path = vim.uv.cwd()
+            end
+            vim.cmd("vsplit")
+            require("oil").open(path)
+            return
+          end
+          print(vim.inspect(entry))
 					local path = entry.path
 					if vim.fn.isdirectory(path) == 0 then
 						path = vim.fn.fnamemodify(path, ":h")

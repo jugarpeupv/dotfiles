@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleIdentifier</key>
+	<string>org.sil.ukelele.keyboardlayout.unsavedukeleledocument</string>
+	<key>CFBundleName</key>
+	<string>Unsaved Ukelele Document</string>
+	<key>CFBundleVersion</key>
+	<string></string>
+	<key>KLInfo_Spanish copy 2</key>
+	<dict>
+		<key>TICapsLockLanguageSwitchCapable</key>
+		<false/>
+		<key>TISIconIsTemplate</key>
+		<false/>
+		<key>TISInputSourceID</key>
+		<string>org.sil.ukelele.keyboardlayout.unsavedukeleledocument.spanishcopy2</string>
+		<key>TISIntendedLanguage</key>
+		<string>es</string>
+	</dict>
+	<key>KLInfo_es.no.dead.key</key>
+	<dict>
+		<key>TICapsLockLanguageSwitchCapable</key>
+		<false/>
+		<key>TISIconIsTemplate</key>
+		<false/>
+		<key>TISInputSourceID</key>
+		<string>org.sil.ukelele.keyboardlayout.unsavedukeleledocument.es.no.dead.key</string>
+		<key>TISIntendedLanguage</key>
+		<string>es</string>
+	</dict>
+</dict>
+</plist>

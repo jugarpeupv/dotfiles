@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# Disable Mission Control / Spaces Ctrl+Arrow shortcuts
+# Disable Mission Control / Spaces Ctrl+Arrow shortcuts (34/35) and Input Sources (60/61)
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 34 "<dict><key>enabled</key><false/></dict>"
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 35 "<dict><key>enabled</key><false/></dict>"
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "<dict><key>enabled</key><false/></dict>"
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "<dict><key>enabled</key><false/></dict>"
+# Unbind Input Sources: 60 = Select previous input source, 61 = Select next source in Input menu
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/></dict>"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dict><key>enabled</key><false/></dict>"
 
 
 # Do not store gpg info in keychain
@@ -24,6 +27,12 @@ defaults write com.apple.finder AppleShowAllFiles -bool true
 defaults write -g com.apple.swipescrolldirection -bool false
 
 # Apply shortcut changes without restarting
-/System/Library/PrivateFrameworks/SystemAdministration.framework/Versions/A/Resources/activateSettings
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Versions/A/Resources/activateSettings -u 2>/dev/null || \
+  /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u 2>/dev/null || true
+# Flush prefs cache so `defaults read` and System Settings see the change
+killall cfprefsd 2>/dev/null || true
+# Close System Settings so it re-reads on next open (otherwise UI shows stale state)
+osascript -e 'tell application "System Settings" to quit' 2>/dev/null || true
+killall "System Settings" 2>/dev/null || true
 
-echo "macOS defaults applied. Some settings may require logging out and back in."
+echo "macOS defaults applied. Quit and reopen System Settings to verify; some shortcuts need log-out/in."

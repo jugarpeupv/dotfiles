@@ -189,9 +189,20 @@ vim.keymap.set("n", "<leader>fs", function()
 	require("jg.custom.telescope").telescope_live_grep_in_workspace(vim.fn.expand("~"))
 end, opts)
 
-vim.keymap.set({ "n" }, "<leader>so", function()
-	require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
+vim.keymap.set({ "n" }, "<leader>sf", function()
+	require("jg.custom.telescope").fyler_telescope_dir(vim.fn.expand("~"))
 end, opts)
+
+vim.keymap.set({ "n" }, "<leader>so", function()
+  require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
+end, opts)
+
+
+vim.keymap.set("n", "<leader>sN", function()
+  local jg_telescope = require("jg.custom.telescope")
+  jg_telescope.nvimtree_fzf_dir(vim.fn.expand("~"))
+end, opts)
+
 
 vim.keymap.set({ "n" }, "<leader>sH", function()
 	local find_command = {
@@ -228,7 +239,7 @@ vim.keymap.set({ "n" }, "<leader>sH", function()
 	})
 end, opts)
 
-vim.keymap.set({ "n" }, "<leader>sf", function()
+vim.keymap.set({ "n" }, "<leader>sF", function()
 	local function pick_dir_and_explore_files(cb)
 		local path = vim.fn.expand("~/")
 		local pickers = require("telescope.pickers")
@@ -2051,20 +2062,6 @@ vim.keymap.set("i", "<C-k>", "<c-o>D<esc>", { desc = "Kill to end of line" })
 -- end, { desc = "Show layout and equalize windows" })
 
 -- vim.o.wildcharm = vim.fn.char2nr("<C-v>")  -- or: vim.o.wildcharm = 26
-
-
-vim.keymap.set("c", "<C-v>", function()
-  local cmd = vim.fn.getcmdline()
-  local path = cmd:match("^e!?%s+(.+)$") or cmd:match("^edit!?%s+(.+)$")
-  if not path or path == "" then
-    return "<CR>"
-  end
-  vim.schedule(function()
-    vim.cmd("vsp | edit " .. vim.fn.fnameescape(path))
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
-  end)
-end, { silent = true })
-
 
 
 vim.cmd([[set wildcharm=<C-v>]])
