@@ -251,6 +251,7 @@
       "url": "https://mcp.context7.com/mcp"
     },
     "engram": {
+      "enabled": false,
       "command": [
         "/opt/homebrew/bin/engram",
         "mcp",
@@ -291,9 +292,8 @@
   },
   "model": "opencode/muse-spark-1.2-contributor-free",
   "permission": {
-    "*": "allow",
     "bash": {
-      "*": "allow",
+      "*": "ask",
       "git commit *": "ask",
       "git push": "ask",
       "git push *": "ask",

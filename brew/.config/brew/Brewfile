@@ -1,16 +1,11 @@
 # opencode
-tap "anomalyco/tap"
+tap "anomalyco/tap", trusted: true
 # gitmux
-tap "arl/arl"
+tap "arl/arl", trusted: true
 # yabai
-tap "asmvik/formulae", "https://github.com/asmvik/homebrew-formulae.git"
-# apple pass word manager (apw)
-tap "bendews/tap", trusted: true
+tap "asmvik/formulae", "https://github.com/asmvik/homebrew-formulae.git", trusted: true
+# engram, gga, gentle-ai
 tap "gentleman-programming/tap", "https://github.com/Gentleman-Programming/homebrew-tap", trusted: true
-tap "oven-sh/bun"
-tap "powershell/tap"
-tap "teamookla/speedtest"
-tap "thezoraiz/ascii-image-converter"
 
 # gpg passphrase dialog for mac
 brew "pinentry-mac"
@@ -66,8 +61,6 @@ brew "bat"
 brew "bitwarden-cli"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
-# Watches over your Cargo project's source
-brew "cargo-watch"
 # Insanely fast image printing in your terminal
 brew "catimg"
 # CD/DVD/Blu-ray premastering and recording software
@@ -78,8 +71,6 @@ brew "certbot"
 brew "gdk-pixbuf"
 # OpenType text shaping engine
 brew "harfbuzz"
-# C/C++ and Java libraries for Unicode and globalization
-brew "icu4c@77"
 # Library for encoding and decoding .avif files
 brew "libavif"
 # Framework for layout and rendering of i18n text
@@ -106,8 +97,6 @@ brew "cyrus-sasl"
 brew "davmail"
 # Load/unload environment variables based on $PWD
 brew "direnv"
-# Pack, ship and run any application as a lightweight container
-brew "docker", link: false
 # Isolated development environments using Docker
 brew "docker-compose"
 # Text processing system for reStructuredText
@@ -240,10 +229,6 @@ brew "openblas"
 brew "ripgrep"
 # AI coding agent, built for the terminal
 brew "opencode"
-# Development kit for the Java programming language
-brew "openjdk@11"
-# Development kit for the Java programming language
-brew "openjdk@17"
 # Tools and libraries for smart cards
 brew "opensc"
 # C library to read whole-slide images (a.k.a. virtual slides)

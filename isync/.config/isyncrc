@@ -4,11 +4,11 @@
 IMAPAccount izertis
 Host localhost
 Port 1143
-UserCmd "op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal"
+UserCmd "pass izertis_username"
 Pass ""
 TLSType None
 AuthMech LOGIN
-Timeout 60
+Timeout 120
 
 IMAPStore izertis-remote
 Account izertis
