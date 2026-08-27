@@ -242,7 +242,7 @@
         "serve",
         "--mcp"
       ],
-      "enabled": false,
+      "enabled": true,
       "type": "local"
     },
     "context7": {
@@ -260,7 +260,7 @@
       "type": "local"
     },
     "github-server": {
-      "enabled": false,
+      "enabled": true,
       "headers": {
         "Authorization": "Bearer {env:GH_ACTIONS_PAT}"
       },
@@ -313,6 +313,12 @@
   },
   "model": "opencode/muse-spark-1.2-contributor-free",
   "permission": {
+    "external_directory": {
+      "*": "ask",
+      "/tmp/**":"allow",
+      "**/dotfiles/**": "allow",
+      "**/.local/share/**": "allow"
+    },
     "bash": {
       "*": "allow",
       "pass *": "deny",

@@ -6,6 +6,7 @@ return {
     -- dir = "~/projects/notmuch.nvim/wt-notmuch-main/",
 		enabled = true,
 		opts = {
+      signature_file = "~/dotfiles/msmtp/.config/msmtp/signatures/izertis-signature.html",
       -- from = vim.trim(vim.fn.system('pass izertis_username')),
       -- from_cmd = 'pass izertis_username', -- prints "Name <you@example.com>"
       from_cmd = "pass izertis_login | awk -F: '/^username:/{print $2}'",
