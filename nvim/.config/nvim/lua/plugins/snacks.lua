@@ -337,7 +337,92 @@ return {
 						vim.notify("Email sync cancelled", vim.log.levels.WARN)
 						return
 					end
-					run_email_sync(choice)
+					if choice ~= "izertis-channel" then
+						run_email_sync(choice)
+						return
+					end
+					-- izertis-channel: verify davmail oauth token before sync
+					-- single source of truth: davmail/.davmail.properties:73 davmail.oauth.tokenFilePath
+					local function get_davmail_token_path()
+						local prop_files = {
+							vim.fn.expand("~/.davmail.properties"),
+							vim.fn.expand("~/dotfiles/davmail/.davmail.properties"),
+							vim.fn.expand("~/.config/davmail/davmail.properties"),
+						}
+						for _, f in ipairs(prop_files) do
+							if vim.fn.filereadable(f) == 1 then
+								local v = vim.fn.system("grep -E '^davmail\\.oauth\\.tokenFilePath=' " .. vim.fn.shellescape(f) .. " | cut -d= -f2- | tr -d ' \\r\\n' | xargs"):gsub("%s+", "")
+								if v ~= "" then
+									v = v:gsub("^~", vim.fn.expand("~"))
+									return v
+								end
+							end
+						end
+						-- return vim.fn.expand("~/.config/davmail/oauth_tokens.env")
+					end
+					local token_path = get_davmail_token_path()
+					vim.notify("Davmail token_path resolved: " .. token_path, vim.log.levels.INFO)
+					local function run_davmail_token(on_done)
+						vim.notify("Running davmail-token (O365Interactive)...", vim.log.levels.WARN)
+						vim.fn.jobstart({ "zsh", "-ic", "davmail-token" }, {
+							pty = true,
+							on_exit = function(_, code)
+								vim.schedule(function()
+									if code == 0 then
+										vim.notify("davmail-token succeeded, syncing...", vim.log.levels.INFO)
+										on_done()
+									else
+										vim.notify("davmail-token failed (exit " .. code .. ")", vim.log.levels.ERROR)
+									end
+								end)
+							end,
+						})
+					end
+					local function probe_token(email, cb)
+						local cmd = string.format(
+							[[timeout 7 python3 - << 'PY'
+import imaplib,socket
+socket.setdefaulttimeout(5)
+try:
+    m=imaplib.IMAP4('localhost',1143)
+    m.login('%s','')
+    m.logout()
+    print('ok')
+except Exception as e:
+    print(e)
+    exit(1)
+PY
+]],
+							email:gsub("'", "'\\''")
+						)
+						vim.fn.jobstart({ "bash", "-c", cmd }, {
+							on_exit = function(_, code)
+								cb(code == 0)
+							end,
+						})
+					end
+					-- if file missing/empty -> need token immediately
+					if vim.fn.filereadable(token_path) ~= 1 or vim.fn.getfsize(token_path) < 10 then
+						run_davmail_token(function()
+							run_email_sync(choice)
+						end)
+						return
+					end
+					-- file exists -> quick IMAP probe ( <7s, no heavy sync)
+					vim.notify("Verifying davmail token...", vim.log.levels.INFO)
+					local email = vim.fn.system("grep -v '^#' " .. vim.fn.shellescape(token_path) .. " | cut -d= -f1 | head -1 | tr -d ' \\n\\r'"):gsub("%s+", "")
+					probe_token(email, function(ok)
+						vim.schedule(function()
+							if ok then
+								run_email_sync(choice)
+							else
+								vim.notify("Davmail token invalid/expired, refreshing...", vim.log.levels.WARN)
+								run_davmail_token(function()
+									run_email_sync(choice)
+								end)
+							end
+						end)
+					end)
 				end)
 			end,
 		},

@@ -4,15 +4,16 @@ protocol        smtp
 tls            off
 tls_starttls   off
 tls_certcheck  off
-logfile        ~/.config/msmtp/msmtp.log
+logfile        ~/msmtp.log
 
 
 account        izertis
 host           localhost
 port           1025
-eval echo user $(pass izertis_username)
-eval echo from $(pass izertis_username)
-passwordeval   pass izertis_password
+
+eval pass izertis_login | awk -F: '/^username:/{print "user " $2}' | xargs
+eval pass izertis_login | awk -F: '/^username:/{print "from " $2}' | xargs
+passwordeval "pass izertis_login | head -1"
 
 
 
@@ -24,7 +25,7 @@ tls            on
 tls_starttls   on
 eval echo user $(pass gmail_personal_account)
 eval echo from $(pass gmail_personal_account)
-passwordeval   mutt_oauth2.py ~/.config/personal.gmail.com.tokens --provider google --format token
+passwordeval   mutt_oauth2.py $GMAIL_OAUTH_TOKENS_FILE --provider google --format token
 
 
 account default : izertis

@@ -4,7 +4,8 @@
 IMAPAccount izertis
 Host localhost
 Port 1143
-UserCmd "pass izertis_username"
+# UserCmd "pass izertis_username"
+UserCmd "pass izertis_login | awk -F: '/^username:/{print $2}'"
 Pass ""
 TLSType None
 AuthMech LOGIN
@@ -38,10 +39,10 @@ TLSType IMAPS
 UserCmd "pass gmail_personal_account"
 AuthMechs XOAUTH2
 # AuthMechs OAUTHBEARER
-PassCmd "mutt_oauth2.py ~/.config/personal.gmail.com.tokens --provider google --format token"
+PassCmd "mutt_oauth2.py $GMAIL_OAUTH_TOKENS_FILE --provider google --format token"
 
 # Run this first
-# mutt_oauth2.py ~/.config/personal.gmail.com.tokens \
+# mutt_oauth2.py $GMAIL_OAUTH_TOKENS_FILE \
 #     --provider google \
 #     --authorize \
 #     --email "$(pass gmail_personal_account)" \

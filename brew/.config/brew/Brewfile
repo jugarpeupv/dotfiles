@@ -367,8 +367,6 @@ cask "docker-desktop"
 cask "drawio"
 # Web browser
 cask "google-chrome"
-# Tools to protect your emails and files
-cask "gpg-suite"
 # Keyboard customiser
 cask "karabiner-elements"
 # Free and Open Source Video Editor

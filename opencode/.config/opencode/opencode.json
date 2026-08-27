@@ -242,11 +242,11 @@
         "serve",
         "--mcp"
       ],
-      "enabled": true,
+      "enabled": false,
       "type": "local"
     },
     "context7": {
-      "enabled": true,
+      "enabled": false,
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
     },
@@ -260,7 +260,7 @@
       "type": "local"
     },
     "github-server": {
-      "enabled": true,
+      "enabled": false,
       "headers": {
         "Authorization": "Bearer {env:GH_ACTIONS_PAT}"
       },
@@ -268,6 +268,7 @@
       "url": "https://api.githubcopilot.com/mcp/"
     },
     "nx": {
+      "enabled": false,
       "command": [
         "npx",
         "nx-mcp@latest"
@@ -290,10 +291,33 @@
       "type": "local"
     }
   },
+  "provider": {
+    "lmstudio": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LM Studio (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:1234/v1"
+      },
+      "models": {
+        "qwen3.5-9b": {
+          "name": "Qwen3.5 9B (local)"
+        },
+        "google/gemma-3-4b": {
+          "name": "Gemma 3 4B (local)"
+        },
+        "qwen/qwen3-4b": {
+          "name": "Qwen3 4B (local)"
+        }
+      }
+    }
+  },
   "model": "opencode/muse-spark-1.2-contributor-free",
   "permission": {
     "bash": {
       "*": "allow",
+      "pass *": "deny",
+      "op *": "deny",
+      "bw *": "deny",
       "mv *": "ask",
       "rm *": "ask",
       "git *": "ask",

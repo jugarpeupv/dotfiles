@@ -9,7 +9,7 @@ function _evalcache_lazy_precmd() {
   _evalcache direnv hook zsh
   # _evalcache zoxide init zsh
   _evalcache starship init zsh
-  # _evalcache rbenv init -
+  _evalcache rbenv init -
   _evalcache atuin init zsh
   # _evalcache fnm env --corepack-enabled --version-file-strategy=recursive --shell zsh
   # _evalcache mise activate zsh
