@@ -1,8 +1,64 @@
 return {
-	-- Lua
+	{
+		"atiladefreitas/bloocky",
+		keys = {
+			{ "<leader>tb" },
+			{ "<leader>tB" },
+		},
+		cmd = {
+			"Bloocky",
+			"BloockyToggle",
+			"BloockyAdd",
+			"BloockySidebar",
+			"BloockySync",
+			"BloockySyncStatus",
+			"BloockySyncReport",
+			"BloockySyncRestore",
+			"BloockySyncAuth",
+			"BloockySyncRevoke",
+			"BloockySyncReset",
+		},
+		config = function()
+			local username = vim.fn.system("pass izertis_login | awk -F: '/^username:/{print $2}'"):gsub("%s+", "")
+			require("bloocky").setup({
+				window = {
+					-- Width per view: fraction of the editor width (or absolute columns if > 1),
+					-- or "full" for everything the editor has. A single value applies to
+					-- every view. Floating mode only.
+					width = "full",
+					-- width = {
+					--   month = "full",
+					--   week = 0.6,
+					--   day = 46,
+					-- },
+
+					-- Height per view: "auto" fits the window to its content, "full" takes
+					-- every row available, a number is a fraction of the editor height (or
+					-- absolute rows if > 1). Anything but "auto" stretches the grid to fill
+					-- the window. A single value applies to every view.
+					height = "full",
+				},
+				sync = {
+					enabled = true,
+					sync_on_open = false, -- pull when the calendar opens
+					accounts = {
+						{
+							id = "izertis",
+							provider = "caldav",
+							url = "http://localhost:1080/", -- base DAV URL, discovery finds calendar-home
+							username = username,
+							password_cmd = "pass izertis_login | head -1",
+						},
+					},
+					-- optional: calendars = { { name="Calendar", mode="rw", default=true } } -- omit to sync all
+				},
+			})
+		end,
+	},
 	{
 		"jugarpeupv/chrome-devtools.nvim",
 		lazy = true,
+		enabled = false,
 		cmd = { "DevTools" },
 		keys = {
 			{ mode = { "n" }, "<leader>co", "<cmd>DevTools<cr>" },
@@ -84,7 +140,7 @@ return {
 	},
 	{
 		"jugarpeupv/rust-docs.nvim",
-    enabled = false,
+		enabled = false,
 		lazy = true,
 		keys = {
 			{ mode = { "n" }, "<leader>rd", ":RustDocs<cr>" },
@@ -131,8 +187,8 @@ return {
 	},
 	{
 		"jugarpeupv/visual-match-paren.nvim",
-    dev = true,
-    dir = "~/projects/visual-match-paren.nvim/",
+		dev = true,
+		dir = "~/projects/visual-match-paren.nvim/",
 		keys = {
 			"V",
 		},
@@ -407,8 +463,8 @@ return {
 	{
 		"m00qek/baleia.nvim",
 		lazy = true,
-    submodules = false,
-    version = "*",
+		submodules = false,
+		version = "*",
 		-- tag = "v1.3.0",
 		ft = { "dap-repl" },
 		config = function()
@@ -1032,41 +1088,41 @@ return {
 				":Git checkout . | Git clean -fd",
 				{ silent = true, noremap = true },
 			},
-      {
-        mode = { "n" },
-        "<leader>gN",
-        function()
-          local cmd = vim.fn.input("Execute command async: ", "git clean -fxd")
-          if cmd ~= "" then
-            vim.print("Executing command: " .. cmd)
-            local output = {}
-            vim.fn.jobstart(cmd, {
-              on_stdout = function(_, data, _)
-                if data then
-                  for _, line in ipairs(data) do
-                    if line ~= "" then
-                      table.insert(output, line)
-                    end
-                  end
-                end
-              end,
-              on_exit = function(_, _, _)
-                vim.schedule(function()
-                  if #output == 0 then
-                    print(cmd .. ": nothing was done")
-                  else
-                    for _, line in ipairs(output) do
-                      print(line)
-                    end
-                    print("Finished command: " .. cmd)
-                  end
-                end)
-              end,
-            })
-          end
-        end,
-        { silent = true, noremap = true },
-      },
+			{
+				mode = { "n" },
+				"<leader>gN",
+				function()
+					local cmd = vim.fn.input("Execute command async: ", "git clean -fxd")
+					if cmd ~= "" then
+						vim.print("Executing command: " .. cmd)
+						local output = {}
+						vim.fn.jobstart(cmd, {
+							on_stdout = function(_, data, _)
+								if data then
+									for _, line in ipairs(data) do
+										if line ~= "" then
+											table.insert(output, line)
+										end
+									end
+								end
+							end,
+							on_exit = function(_, _, _)
+								vim.schedule(function()
+									if #output == 0 then
+										print(cmd .. ": nothing was done")
+									else
+										for _, line in ipairs(output) do
+											print(line)
+										end
+										print("Finished command: " .. cmd)
+									end
+								end)
+							end,
+						})
+					end
+				end,
+				{ silent = true, noremap = true },
+			},
 			{
 				mode = { "n" },
 				"<leader>gl",

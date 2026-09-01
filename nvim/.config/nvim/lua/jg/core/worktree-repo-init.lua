@@ -55,7 +55,7 @@ end
 
 local function restore_last_worktree()
 	local cwd = vim.loop.cwd()
-	if not cwd then
+	if not cwd or vim.fn.isdirectory(cwd) == 0 then
 		return
 	end
 	local has_file_utils, file_utils = pcall(require, "jg.custom.file-utils")
@@ -65,26 +65,28 @@ local function restore_last_worktree()
 	local key = vim.fn.fnamemodify(cwd, ":p")
 	local bps_path = file_utils.get_bps_path(key)
 	local data = file_utils.load_bps(bps_path)
-	if not data or next(data) == nil or not data.last_active_wt then
-		-- require("oil").open(cwd)
-		print("No worktree data, opening cwd in fyler")
 
-		require("fyler").open({ dir = cwd })
+	local last_active_wt = (data and data.last_active_wt and vim.fn.isdirectory(data.last_active_wt) == 1)
+			and data.last_active_wt
+		or nil
 
-		local cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
-		local win = vim.fn.bufwinid(cwd_buffer_nr)
-		if win ~= -1 and #vim.api.nvim_tabpage_list_wins(0) > 1 then
-			vim.api.nvim_win_close(win, true)
+	if not last_active_wt then
+		local has_fyler, fyler = pcall(require, "fyler")
+		if has_fyler and vim.fn.isdirectory(cwd) == 1 then
+			pcall(fyler.open, { dir = cwd })
 		end
-		-- Then wipe the buffer
-		if not cwd_buffer_nr then
-			return
+
+		local cwd_buffer_nr = find_buffer_by_path(cwd:gsub("/$", ""))
+		if cwd_buffer_nr then
+			local win = vim.fn.bufwinid(cwd_buffer_nr)
+			if win ~= -1 and #vim.api.nvim_tabpage_list_wins(0) > 1 then
+				pcall(vim.api.nvim_win_close, win, true)
+			end
+			pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
 		end
-		pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
 
 		return
 	end
-	local last_active_wt = data.last_active_wt
 
 	local cwd_buffer_nr = find_buffer_by_path(cwd:gsub("/$", ""))
 	local win = vim.fn.bufwinid(cwd_buffer_nr)
@@ -97,10 +99,9 @@ local function restore_last_worktree()
 		end
 	end
 	-- Then wipe the buffer
-	if not cwd_buffer_nr then
-		return
+	if cwd_buffer_nr then
+		pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
 	end
-	pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
 
 	-- vim.cmd("bwipeout " .. cwd_buffer_nr)
 	pcall(vim.cmd.cd, last_active_wt)
@@ -121,21 +122,22 @@ local function restore_last_worktree()
 		end
 	end
 
-	-- require("oil").open(last_active_wt)
-	require("fyler").open({ dir = last_active_wt, kind = "replace" })
-	-- pcall(require("fyler").open, { dir = last_active_wt })
-	cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
-	if not cwd_buffer_nr then
-		return
+	local has_fyler, fyler = pcall(require, "fyler")
+	if has_fyler and vim.fn.isdirectory(last_active_wt) == 1 then
+		pcall(fyler.open, { dir = last_active_wt, kind = "replace" })
 	end
-	win = vim.fn.bufwinid(cwd_buffer_nr)
-	if win ~= -1 and #vim.api.nvim_tabpage_list_wins(0) > 1 then
-		vim.api.nvim_win_close(win, true)
+
+	local current_cwd = vim.loop.cwd()
+	if current_cwd then
+		cwd_buffer_nr = find_buffer_by_path(current_cwd:gsub("/$", ""))
+		if cwd_buffer_nr then
+			win = vim.fn.bufwinid(cwd_buffer_nr)
+			if win ~= -1 and #vim.api.nvim_tabpage_list_wins(0) > 1 then
+				pcall(vim.api.nvim_win_close, win, true)
+			end
+			pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
+		end
 	end
-	-- Then wipe the buffer
-	pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
-	-- pcall(vim.api.nvim_buf_delete, cwd_buffer_nr)
-	-- vim.api.nvim_buf_delete(cwd_buffer_nr, { force = true })
 end
 
 -- if should_restore_worktree() then
@@ -165,18 +167,21 @@ else
 		end
 
 		if vim.fn.isdirectory(path) == 1 then
-			local fyler = require("fyler")
-			fyler.open({ dir = path, kind = "replace" })
-			local cwd_buffer_nr = find_buffer_by_path(vim.loop.cwd():gsub("/$", ""))
-			local win = vim.fn.bufwinid(cwd_buffer_nr)
-			if win ~= -1 then
-				vim.api.nvim_win_close(win, true)
+			local has_fyler, fyler = pcall(require, "fyler")
+			if has_fyler then
+				pcall(fyler.open, { dir = path, kind = "replace" })
 			end
-			-- Then wipe the buffer
-			if not cwd_buffer_nr then
-				return
+			local cwd_val = vim.loop.cwd()
+			if cwd_val then
+				local cwd_buffer_nr = find_buffer_by_path(cwd_val:gsub("/$", ""))
+				if cwd_buffer_nr then
+					local win = vim.fn.bufwinid(cwd_buffer_nr)
+					if win ~= -1 then
+						pcall(vim.api.nvim_win_close, win, true)
+					end
+					pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
+				end
 			end
-			vim.api.nvim_buf_delete(cwd_buffer_nr, { force = true })
 		else
 			return
 		end

@@ -254,7 +254,7 @@ local function open_dir_history()
 end
 
 -- Map the function to a key
-vim.keymap.set("n", "<leader>ee", function()
+vim.keymap.set("n", "<leader>EE", function()
 	open_dir_history()
 end, { noremap = true, silent = true })
 

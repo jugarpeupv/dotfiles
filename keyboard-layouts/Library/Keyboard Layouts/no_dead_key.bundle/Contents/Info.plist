@@ -3,30 +3,30 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>org.sil.ukelele.keyboardlayout.unsavedukeleledocument</string>
+	<string>org.sil.ukelele.keyboardlayout.no_dead_key</string>
 	<key>CFBundleName</key>
-	<string>Unsaved Ukelele Document</string>
+	<string>no_dead_key</string>
 	<key>CFBundleVersion</key>
 	<string></string>
-	<key>KLInfo_Spanish copy 2</key>
+	<key>KLInfo_Spanish copy</key>
 	<dict>
 		<key>TICapsLockLanguageSwitchCapable</key>
 		<false/>
 		<key>TISIconIsTemplate</key>
 		<false/>
 		<key>TISInputSourceID</key>
-		<string>org.sil.ukelele.keyboardlayout.unsavedukeleledocument.spanishcopy2</string>
+		<string>org.sil.ukelele.keyboardlayout.no_dead_key.spanishcopy</string>
 		<key>TISIntendedLanguage</key>
 		<string>es</string>
 	</dict>
-	<key>KLInfo_es.no.dead.key</key>
+	<key>KLInfo_no_dead_key</key>
 	<dict>
 		<key>TICapsLockLanguageSwitchCapable</key>
 		<false/>
 		<key>TISIconIsTemplate</key>
 		<false/>
 		<key>TISInputSourceID</key>
-		<string>org.sil.ukelele.keyboardlayout.unsavedukeleledocument.es.no.dead.key</string>
+		<string>org.sil.ukelele.keyboardlayout.no_dead_key.no_dead_key</string>
 		<key>TISIntendedLanguage</key>
 		<string>es</string>
 	</dict>

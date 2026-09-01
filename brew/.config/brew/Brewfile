@@ -403,6 +403,9 @@ cask "tunnelblick"
 cask "ukelele"
 # Multimedia player
 cask "vlc"
+# Install and switch xcode version
+cask "xcodes-app"
+
 go "github.com/arl/gitmux"
 go "github.com/lemonade-command/lemonade"
 npm "corepack"
