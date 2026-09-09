@@ -123,15 +123,27 @@ return {
 					-- require("opencode.api").run(prompt)
 
           local prompt = "Write a Conventional Commits message for the current staged "
-          .. "changes: title under 50 chars, body wrapped at 72. Reply with ONLY a "
-          .. "gitcommit block, opening fence alone on its line, message starting "
-          .. "on the next line:\n"
-          .. "```gitcommit\n"
-          .. "feat(scope): short title\n\n"
-          .. "Body wrapped at 72 characters.\n"
-          .. "```"
-          -- require("opencode.api").run(prompt)
-          require("opencode.api").run(prompt, { context = { git_diff = { enabled = true } } })
+            .. "changes: title under 50 chars, body wrapped at 72. Reply with ONLY a "
+            .. "gitcommit block, opening fence alone on its line, message starting "
+            .. "on the next line:\n"
+            .. "```gitcommit\n"
+            .. "feat(scope): short title\n\n"
+            .. "Body wrapped at 72 characters.\n"
+            .. "```"
+          -- git_diff only: clear stale mentions and disable every other
+          -- context key (files/selection leak via chat_context.lua:544 otherwise)
+          require("opencode.context").clear_files()
+          require("opencode.context").clear_selections()
+          require("opencode.api").run(prompt, {
+            context = {
+              current_file = { enabled = false },
+              selection = { enabled = false },
+              diagnostics = { enabled = false },
+              cursor_data = { enabled = false },
+              buffer = { enabled = false },
+              git_diff = { enabled = true },
+            },
+          })
 				end,
 				desc = "Opencode - Generate commit message from staged changes",
 			},
