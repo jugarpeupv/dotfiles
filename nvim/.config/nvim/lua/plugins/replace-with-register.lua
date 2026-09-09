@@ -62,6 +62,48 @@ return {
 				mode = { "i", "x", "n", "c" },
 				desc = "Open Yank History",
 			},
+      {
+        "<leader>cL", -- dump vs <leader>cl (picker) - markdown with injections
+        function()
+          local history = require("yanky.history").all()
+          if #history == 0 then
+            vim.notify("yank history empty", vim.log.levels.INFO)
+            return
+          end
+          vim.cmd("enew")
+          vim.bo.buftype = "nofile"
+          vim.bo.bufhidden = "wipe"
+          vim.bo.buflisted = true
+          vim.bo.swapfile = false
+          vim.bo.filetype = "markdown"
+          local lines = {}
+          for i, item in ipairs(history) do
+            local content = item.regcontents or ""
+            local ft = item.filetype and vim.trim(item.filetype) or ""
+            -- normalize ft: yanky stores empty or real ft, fallback to text
+            if ft == "" then
+              ft = "text"
+            end
+            local type_str = item.regtype == "V" and "[line]" or item.regtype == "\22" and "[block]" or "[char]"
+            local header = string.format("# --- %03d %s ft=%s ---", i, type_str, ft)
+            vim.list_extend(lines, { header, "", "```" .. ft })
+            vim.list_extend(lines, vim.split(content, "\n", { plain = true }))
+            vim.list_extend(lines, { "```", "" })
+          end
+          -- remove last blank
+          if #lines > 0 and lines[#lines] == "" then
+            table.remove(lines)
+          end
+          vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+          vim.bo.modifiable = false
+          vim.bo.modified = false
+          -- ensure treesitter markdown + injections are active
+          -- vim.treesitter.start()
+          vim.cmd("normal! gg")
+        end,
+        mode = { "n", "x" },
+        desc = "Dump Yank History to buffer",
+      },
 			{
 				"<leader>cl",
 				function()

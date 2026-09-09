@@ -124,7 +124,7 @@ local function restore_last_worktree()
 
 	local has_fyler, fyler = pcall(require, "fyler")
 	if has_fyler and vim.fn.isdirectory(last_active_wt) == 1 then
-		pcall(fyler.open, { dir = last_active_wt, kind = "replace" })
+		pcall(fyler.open, { dir = last_active_wt })
 	end
 
 	local current_cwd = vim.loop.cwd()

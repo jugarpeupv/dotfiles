@@ -6,7 +6,7 @@ return {
 		branch = "main",
 		-- event = "VeryLazy",
 		-- event = "LspAttach",
-    lazy = true,
+		lazy = true,
 		event = { "BufReadPost", "BufNewFile" },
 		-- event = { "BufWinEnter" },
 		dependencies = {
@@ -45,9 +45,10 @@ return {
 					end
 					return label
 				end,
-			exclude_filetypes = {
-				"netrw",
-				"grug-far",
+				exclude_filetypes = {
+					"netrw",
+          "bloocky",
+					"grug-far",
 					"toggleterm",
 					"copilot-chat",
 					"copilot-diff",
@@ -211,7 +212,7 @@ return {
 				-- for other components. (terrible name, any suggestions?)
 				symbols = {
 					-- modified = "[!]", -- Text to show when the file is modified.
-          modified = "⏺",
+					modified = "⏺",
 					-- readonly = "󰔉",    -- Text to show when the file is non-modifiable or readonly.
 					readonly = "󰦝",
 					unnamed = "󰔉", -- Text to show for unnamed buffers.
@@ -405,7 +406,7 @@ return {
 					disabled_filetypes = {
 						-- statusline = { "alpha", "dashboard", "NvimTree", "Outline", "Diffview", "diffview" },
 						-- 'NvimTree',
-						statusline = {  "Diffview", "diffview" },
+						statusline = { "Diffview", "diffview" },
 						winbar = {
 							"oil",
 							"help",

@@ -1432,10 +1432,6 @@ vim.keymap.set("n", "<leader>df", function()
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(diffview_command, true, false, true), "n", true)
 end, { noremap = true, silent = true, desc = "Fill cmdline with DiffviewOpen command" })
 
-vim.keymap.set("n", "<leader>tp", function()
-	vim.cmd("e ~/work/obsvault-okode/wt-main/RAM/tareas_pendientes.md")
-end, opts)
-
 vim.keymap.set("n", "<leader>tP", function()
 	vim.cmd("e ~/work/Okode/ObsVault/RAM/tareas_personales.md")
 end, opts)
@@ -1957,7 +1953,7 @@ end, { silent = true })
 -- Storage for visual selection passed to DecodeJWT without going through marks
 vim.g._decode_jwt_selection = nil
 
-vim.api.nvim_create_user_command("DecodeJWT", function(cmd_opts)
+vim.api.nvim_create_user_command("JwtDecode", function(cmd_opts)
 	local jwt
 
 	-- Extract a JWT pattern (base64url.base64url.base64url) from arbitrary text
@@ -2026,7 +2022,7 @@ vim.api.nvim_create_user_command("DecodeJWT", function(cmd_opts)
 end, { range = false })
 
 vim.keymap.set("n", "<leader>jw", function()
-	vim.cmd("DecodeJWT")
+	vim.cmd("JwtDecode")
 end, { silent = true })
 
 vim.keymap.set("v", "<leader>jw", function()
@@ -2039,7 +2035,7 @@ vim.keymap.set("v", "<leader>jw", function()
 	end
 	local lines = vim.api.nvim_buf_get_text(0, start_pos[2] - 1, start_pos[3] - 1, end_pos[2] - 1, end_pos[3], {})
 	vim.g._decode_jwt_selection = table.concat(lines, "")
-	vim.cmd("DecodeJWT")
+	vim.cmd("JwtDecode")
 end, { silent = true })
 vim.keymap.set("i", "<C-k>", "<c-o>D<esc>", { desc = "Kill to end of line" })
 -- 	-- vim.defer_fn(function()
