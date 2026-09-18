@@ -1,5 +1,102 @@
 local M = {}
 
+function M.opencode_snapshot_picker()
+  local snap_git_dir = require("opencode.config_file").get_workspace_snapshot_path():wait()
+  if not snap_git_dir or snap_git_dir == "" then
+    vim.notify("No opencode snapshot path for this workspace", vim.log.levels.ERROR)
+    return
+  end
+
+  local state = require("opencode.state")
+  if not state.active_session then
+    vim.notify("No active opencode session", vim.log.levels.WARN)
+    return
+  end
+
+  local session = require("opencode.session")
+  local seen = {}
+  local items = {}
+
+  for _, msg in ipairs(state.messages or {}) do
+    local snapshots = session.get_message_snapshot_ids(msg)
+    if snapshots then
+      local created = msg.info and msg.info.time and msg.info.time.created
+      if created and created > 1e10 then
+        created = created / 1000
+      end
+      local time_str = created and os.date("%Y-%m-%d %H:%M:%S", created) or "?"
+      local role = (msg.info and msg.info.role) or "unknown"
+      for _, hash in ipairs(snapshots) do
+        if not seen[hash] then
+          seen[hash] = true
+          local r = vim.system({
+            "git",
+            "--git-dir",
+            snap_git_dir,
+            "cat-file",
+            "-t",
+            hash,
+          }, { text = true }):wait()
+          if r.code == 0 then
+            table.insert(items, {
+              hash = hash,
+              time = created or 0,
+              time_str = time_str,
+              role = role,
+              display = string.format("%s  %s  %s", hash:sub(1, 8), time_str, role),
+            })
+          end
+        end
+      end
+    end
+  end
+
+  if #items == 0 then
+    vim.notify("No valid snapshots found", vim.log.levels.WARN)
+    return
+  end
+
+  table.sort(items, function(a, b)
+    return a.time > b.time
+  end)
+
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+
+  pickers
+    .new({}, {
+      prompt_title = "Snapshots",
+      finder = finders.new_table({
+        results = items,
+        entry_maker = function(item)
+          return {
+            value = item,
+            display = item.display,
+            ordinal = item.time_str .. " " .. item.hash,
+          }
+        end,
+      }),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(prompt_bufnr, _)
+        actions.select_default:replace(function()
+          local selection = action_state.get_selected_entry()
+          actions.close(prompt_bufnr)
+          if selection then
+            local cmd = 'DiffviewOpen "-C=' .. snap_git_dir .. '"' .. " " .. selection.value.hash
+            print("cmd: ", cmd)
+            vim.cmd(cmd)
+          end
+        end)
+        return true
+      end,
+    })
+    :find()
+end
+
+
 ---Ensure that the table path is a table in `t`.
 ---@param t table
 ---@param table_path string|string[] Either a `.` separated string of table keys, or a list.

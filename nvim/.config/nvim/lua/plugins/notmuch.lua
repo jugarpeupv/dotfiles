@@ -9,7 +9,7 @@ return {
       signature_file = "~/dotfiles/msmtp/.config/msmtp/signatures/izertis-signature.html",
       -- from = vim.trim(vim.fn.system('pass izertis_username')),
       -- from_cmd = 'pass izertis_username', -- prints "Name <you@example.com>"
-      from_cmd = "pass izertis_login | awk -F: '/^username:/{print $2}'",
+      from_cmd = "pass work_login | awk -F: '/^username:/{print $2}'",
       -- draft_dir = '~/.local/share/nvim/notmuch/drafts',
 			notmuch_db_path = os.getenv("HOME") .. "/Mail",
 			maildir_sync_cmd = "mbsync izertis-channel",

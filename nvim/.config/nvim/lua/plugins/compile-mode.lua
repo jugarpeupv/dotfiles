@@ -27,6 +27,8 @@ end
 
 return {
 	"ej-shafran/compile-mode.nvim",
+  -- dev = true,
+  -- dir = "~/projects/compile-mode.nvim/wt-main/",
 	cmd = {
 		"Compile",
 		"Recompile",
@@ -79,7 +81,7 @@ return {
 		-- Global: recompile from any buffer.
 		{
 			mode = { "n" },
-			"<leader>ro",
+			"<leader>co",
 			"<Cmd>Recompile<CR>",
 			{ noremap = true, silent = true, desc = "Recompile" },
 		},

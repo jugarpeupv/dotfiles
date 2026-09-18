@@ -12,3 +12,5 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export GPG_TTY=$(tty)
 
 export NX_TUI=false
+
+PROMPT_EOL_MARK='⏎'

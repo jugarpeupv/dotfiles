@@ -260,10 +260,10 @@ M.old_api_opts = {
 					else
 						-- Other lines: cursor on a file/directory entry
 						local entry = view:cursor_node_entry()
-            if not entry then
-              return
-            end
-            cwd = entry.path
+						if not entry then
+							return
+						end
+						cwd = entry.path
 					end
 
 					local cmd, err = get_open_cmd(cwd)
@@ -275,32 +275,50 @@ M.old_api_opts = {
 					assert(jid > 0, "Failed to start job")
 				end,
 				["<leader>cr"] = function(view)
-				  local entry = view:cursor_node_entry()
-				  local path = entry.path
-				  local home = os.getenv("HOME")
-				  if home then path = path:gsub("^" .. home, "~") end
-				  local cmd_run = string.format(":Compile  %s", path)
-				  local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
-				  vim.api.nvim_feedkeys(keys, "c", true)
-				  local hops = string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
-				  vim.api.nvim_feedkeys(hops, "n", true)
+					local entry = view:cursor_node_entry()
+					local path = entry.path
+					local home = os.getenv("HOME")
+					if home then
+						path = path:gsub("^" .. home, "~")
+					end
+					local cmd_run = string.format(":Compile  %s", path)
+					local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
+					vim.api.nvim_feedkeys(keys, "c", true)
+					local hops = string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), #path + 1)
+					vim.api.nvim_feedkeys(hops, "n", true)
 				end,
 				["S"] = function(view)
-				  local entry = view:cursor_node_entry()
-				  local path = entry.path
-				  if vim.fn.isdirectory(path) == 0 then path = vim.fn.fnamemodify(path, ":h") end
-				  local home = os.getenv("HOME")
-				  if home then path = path:gsub("^" .. home, "~") end
-				  require("telescope").extensions.live_grep_args.live_grep_raw({
-				    cwd = path, disable_coordinates = true, path_display = { "absolute" },
-				    theme = "ivy", prompt_title = "Live grep in path: " .. path,
-				    layout_config = { height = 0.47 }, preview = { hide_on_startup = true },
-				    vimgrep_arguments = {
-				      "rg", "--no-heading", "--with-filename", "--line-number", "--column",
-				      "--hidden", "--smart-case", "--no-ignore", "--glob=!icarSDK.js",
-				      "--glob=!package-lock.json", "--glob=!**/.git/**",
-				    },
-				  })
+					local entry = view:cursor_node_entry()
+					local path = entry.path
+					if vim.fn.isdirectory(path) == 0 then
+						path = vim.fn.fnamemodify(path, ":h")
+					end
+					local home = os.getenv("HOME")
+					if home then
+						path = path:gsub("^" .. home, "~")
+					end
+					require("telescope").extensions.live_grep_args.live_grep_raw({
+						cwd = path,
+						disable_coordinates = true,
+						path_display = { "absolute" },
+						theme = "ivy",
+						prompt_title = "Live grep in path: " .. path,
+						layout_config = { height = 0.47 },
+						preview = { hide_on_startup = true },
+						vimgrep_arguments = {
+							"rg",
+							"--no-heading",
+							"--with-filename",
+							"--line-number",
+							"--column",
+							"--hidden",
+							"--smart-case",
+							"--no-ignore",
+							"--glob=!icarSDK.js",
+							"--glob=!package-lock.json",
+							"--glob=!**/.git/**",
+						},
+					})
 				end,
 				["F"] = function(view)
 					local entry = view:cursor_node_entry()
@@ -325,18 +343,18 @@ M.old_api_opts = {
 				end,
 				["go"] = function(view)
 					local entry = view:cursor_node_entry()
-          if not entry then
-            local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
-            local path
-            if cursor_line == 1 then
-              path = vim.fn.expand(vim.api.nvim_get_current_line())
-            else
-              path = vim.uv.cwd()
-            end
-            vim.cmd("vsplit")
-            require("oil").open(path)
-            return
-          end
+					if not entry then
+						local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+						local path
+						if cursor_line == 1 then
+							path = vim.fn.expand(vim.api.nvim_get_current_line())
+						else
+							path = vim.uv.cwd()
+						end
+						vim.cmd("vsplit")
+						require("oil").open(path)
+						return
+					end
 					local path = entry.path
 					if vim.fn.isdirectory(path) == 0 then
 						path = vim.fn.fnamemodify(path, ":h")
@@ -456,12 +474,21 @@ M.old_api_opts = {
 }
 
 return {
+	-- {
+	-- 	"FylerOrg/fyler.nvim",
+	-- 	opts = {
+	-- 		extensions = { "git", "watcher", "trash" },
+	-- 		integrations = {
+	-- 			-- Use nvim-web-devicons as the icon provider
+	-- 			icon = "nvim_web_devicons",
+	-- 		},
+	-- 	},
+	-- 	lazy = false,
+	-- 	cmd = { "Fyler" },
+	-- },
 	{
 		"jugarpeupv/fyler.nvim",
 		-- branch = "main",
-		-- dev = true,
-		-- dir = "~/projects/fyler.nvim/wt-fyler-main/",
-		enabled = true,
 		lazy = false,
 		cmd = { "Fyler" },
 		dependencies = {
@@ -543,6 +570,145 @@ return {
 			return M.old_api_opts
 		end,
 		config = function(_, opts)
+			-- ── <M-y> async command on fyler path (mirrors <M-b> Compile flow) ──
+			vim.g._fyler_async_cmdline_active = false
+			vim.g._fyler_async_path = nil
+			local _fyler_hint_win, _fyler_hint_buf ---@type integer|nil, integer|nil
+
+			local function _close_fyler_hint()
+				local win, buf = _fyler_hint_win, _fyler_hint_buf
+				_fyler_hint_win, _fyler_hint_buf = nil, nil
+				if win and vim.api.nvim_win_is_valid(win) then
+					local ok, err = pcall(vim.api.nvim_win_close, win, true)
+					if not ok and err and err:match("E565") then
+						-- CmdlineLeave / expr-mapping: not allowed synchronously
+						vim.schedule(function()
+							if vim.api.nvim_win_is_valid(win) then
+								pcall(vim.api.nvim_win_close, win, true)
+							end
+						end)
+					end
+				end
+				if buf and vim.api.nvim_buf_is_valid(buf) then
+					local ok, err = pcall(vim.api.nvim_buf_delete, buf, { force = true })
+					if not ok and err and err:match("E565") then
+						vim.schedule(function()
+							if vim.api.nvim_buf_is_valid(buf) then
+								pcall(vim.api.nvim_buf_delete, buf, { force = true })
+							end
+						end)
+					end
+				end
+			end
+
+			local function _show_fyler_hint(path)
+				_close_fyler_hint()
+				_fyler_hint_buf = vim.api.nvim_create_buf(false, true)
+				local rel = vim.fn.fnamemodify(path, ":~:.")
+				if rel == "" then
+					rel = path
+				end
+				local line1 = " Async command "
+				local line2 = " ! on " .. rel .. " "
+				local w = math.max(#line1, #line2) + 2
+				vim.api.nvim_buf_set_lines(_fyler_hint_buf, 0, -1, false, { line1, line2 })
+				_fyler_hint_win = vim.api.nvim_open_win(_fyler_hint_buf, false, {
+					relative = "editor",
+					width = w,
+					height = 2,
+					row = vim.o.lines - 5,
+					col = 0,
+					style = "minimal",
+					border = "rounded",
+					title = " Fyler async ",
+					title_pos = "left",
+					focusable = false,
+					zindex = 40,
+				})
+				vim.api.nvim_buf_add_highlight(_fyler_hint_buf, -1, "Title", 0, 0, -1)
+			end
+
+			local function _run_fyler_async(user_cmd, path)
+				if not user_cmd or user_cmd:match("^%s*$") then
+					return
+				end
+				local full_cmd = user_cmd .. " " .. vim.fn.shellescape(path)
+				vim.system({ "sh", "-c", full_cmd }, { text = true }, function(obj)
+					vim.schedule(function()
+						local stdout = obj.stdout or ""
+						local stderr = obj.stderr or ""
+						local code = obj.code or 0
+						local lines = {}
+						table.insert(lines, "```bash")
+						table.insert(lines, full_cmd)
+						table.insert(lines, "```")
+						table.insert(lines, "")
+						-- single status marker for whole command
+						if code == 0 then
+							table.insert(lines, "  exit 0")
+						else
+							table.insert(lines, "  exit " .. code)
+						end
+						table.insert(lines, "")
+						if stdout ~= "" then
+							for _, l in ipairs(vim.split(stdout:gsub("\n$", ""), "\n")) do
+								table.insert(lines, l)
+							end
+						end
+						if stderr ~= "" then
+							if stdout ~= "" then
+								table.insert(lines, "")
+							end
+							for _, l in ipairs(vim.split(stderr:gsub("\n$", ""), "\n")) do
+								table.insert(lines, l)
+							end
+						end
+						if stdout == "" and stderr == "" then
+							table.insert(lines, "(no output)")
+						end
+						vim.cmd("botright split")
+						local buf = vim.api.nvim_create_buf(true, false)
+						vim.api.nvim_win_set_buf(0, buf)
+						vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+						vim.bo[buf].buflisted = true
+						vim.bo[buf].bufhidden = ""
+						vim.bo[buf].buftype = ""
+						vim.bo[buf].filetype = "markdown"
+						vim.bo[buf].modifiable = false
+						vim.bo[buf].modified = false
+						vim.api.nvim_buf_set_name(buf, "async:" .. full_cmd)
+					end)
+				end)
+			end
+
+			local function fyler_get_path(view)
+				local cursor_row = vim.api.nvim_win_get_cursor(view.win.winid)[1]
+				local line = vim.api.nvim_get_current_line()
+				if cursor_row == 1 then
+					return vim.fn.fnamemodify(line, ":p")
+				elseif cursor_row == 2 then
+					return vim.fn.fnamemodify(view:getcwd(), ":h")
+				else
+					local entry = view:cursor_node_entry()
+					if entry and entry.path then
+						return entry.path
+					end
+					return view:getcwd()
+				end
+			end
+
+			-- inject <M-y> into fyler's view mappings BEFORE setup so view:cursor_node_entry() works
+			if opts.views and opts.views.finder and opts.views.finder.mappings then
+				opts.views.finder.mappings["<M-y>"] = function(view)
+					local path = fyler_get_path(view)
+					path = vim.fn.fnamemodify(path, ":p"):gsub("/$", "")
+					vim.g._fyler_async_path = path
+					vim.g._fyler_async_cmdline_active = true
+					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":", true, false, true), "n", true)
+					_show_fyler_hint(path)
+				end
+			end
+
 			require("fyler").setup(opts)
 
 			local ok, fyler = pcall(require, "fyler")
@@ -567,6 +733,80 @@ return {
 				vim.cmd("hi FylerGitUntracked gui=none guifg=none")
 				vim.cmd("hi FylerGitIconUntracked gui=none guifg=#89ddff")
 			end
+
+			-- intercept <CR> in cmdline for fyler async (override keymaps.lua's mapping to handle both)
+			vim.keymap.set("c", "<CR>", function()
+				if vim.g._fyler_async_cmdline_active then
+					local cmd = vim.fn.getcmdline()
+					vim.g._fyler_async_cmdline_active = false
+					local path = vim.g._fyler_async_path
+					vim.g._fyler_async_path = nil
+					_close_fyler_hint()
+					if cmd == nil or cmd:match("^%s*$") then
+						return vim.api.nvim_replace_termcodes("<C-c>", true, false, true)
+					end
+					vim.schedule(function()
+						_run_fyler_async(cmd, path)
+					end)
+					return vim.api.nvim_replace_termcodes("<C-c>", true, false, true)
+				end
+				if vim.g._compile_cmdline_active then
+					local cmd = vim.fn.getcmdline()
+					vim.g._compile_cmdline_active = false
+					if cmd == nil or cmd:match("^%s*$") then
+						return vim.api.nvim_replace_termcodes("<C-c>", true, false, true)
+					end
+					local function _compile_args_from_cmd(c)
+						if not c then
+							return nil
+						end
+						local args = c:match("^Compile%s+(.*)$")
+						if args ~= nil then
+							return args
+						end
+						if c:match("^Compile%s*$") then
+							return ""
+						end
+						return nil
+					end
+					local args = _compile_args_from_cmd(cmd) or cmd
+					vim.schedule(function()
+						if args:match("^%s*$") then
+							return
+						end
+						vim.g._saved_compile_args = args
+						vim.g._saved_compile_cmd = args ~= "" and ("Compile " .. args) or "Compile"
+						vim.cmd("Compile " .. args)
+					end)
+					return vim.api.nvim_replace_termcodes("<C-c>", true, false, true)
+				end
+				local ok2, cmp = pcall(require, "blink.cmp")
+				if ok2 and cmp.accept_and_enter and cmp.accept_and_enter() then
+					return ""
+				end
+				return vim.api.nvim_replace_termcodes("<CR>", true, false, true)
+			end, { noremap = true, expr = true, silent = true, desc = "Fyler async + Compile <CR> intercept" })
+
+			vim.api.nvim_create_autocmd("CmdlineLeave", {
+				pattern = ":",
+				callback = function()
+					if vim.g._fyler_async_cmdline_active then
+						vim.g._fyler_async_cmdline_active = false
+						vim.g._fyler_async_path = nil
+					end
+					_close_fyler_hint()
+				end,
+			})
+			vim.api.nvim_create_autocmd("CmdwinEnter", {
+				pattern = ":",
+				callback = function()
+					if vim.g._fyler_async_cmdline_active then
+						vim.g._fyler_async_cmdline_active = false
+						vim.g._fyler_async_path = nil
+					end
+					_close_fyler_hint()
+				end,
+			})
 		end,
 	},
 }

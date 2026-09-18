@@ -31,6 +31,7 @@ return {
 		config = function()
 			local parsers = {
 				"bash",
+        -- "kulala_http",
 				"comment",
 				"css",
 				"diff",

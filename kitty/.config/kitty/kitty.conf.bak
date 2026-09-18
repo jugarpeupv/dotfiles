@@ -513,7 +513,7 @@ text_composition_strategy 0.5 15
 # bold_italic_font Liga Hack
 # bold_italic_font JetBrainsMono Nerd Font Mono Regular
 
-font_size 22
+font_size 20
 
 #: Font size (in pts)
 
@@ -663,8 +663,13 @@ narrow_symbols U+d157 1
 narrow_symbols U+f0da 1
 # folds
 narrow_symbols U+f48c,U+f4da,U+f42d 1
+# narrow_symbols U+f115 1
 # nx.json
-narrow_symbos U+eead 1
+# narrow_symbols U+eead 1
+
+#  
+narrow_symmbols U+f007 1
+narrow_symmbols U+f0c0,U+edca,U+000f0b58 1
 
 # narrow_symbols U+f0820,U+f05a,U+f071,U+f057 1
 # narrow_symbols U+F0820 1
@@ -673,6 +678,8 @@ narrow_symbols U+F111,U+25cf 1
 narrow_symbols U+D000-U+D21A 1
 narrow_symbols U+d1a1 1
 narrow_symbols U+D040 1
+# 
+narrow_symbols U+F474 1
 # narrow_symbols U+D157 1
 # narrow_symbols U+E0A0-U+E0A3,U+E0C0-U+E0C7,U+F111,U+F114 1
 
@@ -1113,6 +1120,11 @@ mouse_hide_wait 0.1
 #: .. note::
 #:     Once a selection is started, releasing the button that started it will
 #:     automatically end it and no release event will be dispatched.
+
+# Disable secure keyboard entry shortcut (interferes with skhd)
+map opt+cmd+s no_op
+
+secure_input no
 
 # clear_all_mouse_actions no
 
@@ -3225,12 +3237,10 @@ color15 #7C7F93
 
 
 # # BEGIN_KITTY_FONTS
-font_family      family="Liga DejaVu Sans Mono"
-bold_font        auto
-italic_font      auto
-bold_italic_font auto
-adjust_line_height  8
-adjust_column_width 0
+# font_family      family="Liga DejaVu Sans Mono"
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
 # # END_KITTY_FONTS
 
 
@@ -3305,13 +3315,24 @@ window_padding_width 4 0 0 10
 
 
 
-# BEGIN_KITTY_FONTS
-# font_family      family='Iosevka Nerd Font Mono' features=+ss04
-# bold_font        auto
-# italic_font      auto
-# bold_italic_font auto
-# END_KITTY_FONTS
 #
 # font_size 25
 # adjust_line_height  0
 # adjust_column_width 0
+
+
+# # BEGIN_KITTY_FONTS
+# font_family      family="Iosevka Term"
+# bold_font        auto
+# italic_font      family='Iosevka Term' style=Oblique
+# bold_italic_font family='Iosevka Term' style='Semibold Oblique'
+# # END_KITTY_FONTS
+
+
+adjust_line_height  0
+adjust_column_width 0
+
+font_family      family="Iosevka Term"
+bold_font        family='Iosevka Term' style=Bold
+italic_font      family='Iosevka Term' style=Oblique
+bold_italic_font family='Iosevka Term' style='Semibold Oblique'

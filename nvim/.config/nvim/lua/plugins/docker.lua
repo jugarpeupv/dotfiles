@@ -1,8 +1,66 @@
 return {
 	{
+		-- "emrearmagan/dockyard.nvim",
+    "jugarpeupv/dockyard.nvim",
+    -- dev = true,
+    -- dir = "~/projects/dockyard.nvim/wt-main",
+		cmd = { "Dockyard", "DockyardFloat" },
+		keys = {
+			{
+				"<leader>dt",
+				"<cmd>Dockyard<cr>",
+			},
+		},
+		lazy = true,
+		config = function()
+			require("dockyard").setup({
+        display = { open_strategy = "current" },
+				keymaps = {
+					ui = {
+						help = "g?",
+						close = "q", -- false would disable it
+						refresh = "R",
+						next_view = { "<Tab>", "]" }, -- list adds aliases
+						prev_view = { "<S-Tab>", "[" },
+						toggle_node = "<CR>",
+						open_details = "K",
+						open_panel = "p",
+					},
+					containers = {
+						toggle_start_stop = "S",
+						stop = "s",
+						restart = "r",
+						remove = "X",
+						open_terminal = "T",
+						open_logs = "L",
+					},
+					images = {
+						remove = "X",
+						prune = "P",
+					},
+					networks = {
+						remove = "X",
+					},
+					volumes = {
+						remove = "X",
+					},
+					loglens = {
+						close = "q",
+						toggle_follow = "f",
+						toggle_raw = "r",
+						filter = "g/",
+						clear_filter = "C",
+						open_detail = { "<CR>", "K" },
+						help = "g?",
+					},
+				},
+			})
+		end,
+	},
+	{
 		"kkvh/vim-docker-tools",
 		cmd = { "DockerToolsToggle" },
-		enabled = true,
+		enabled = false,
 		keys = {
 			{
 				"<leader>dt",
@@ -13,7 +71,7 @@ return {
 	},
 	{
 		"jrop/tuis.nvim",
-		enabled = true,
+		enabled = false,
 		dependencies = { "folke/snacks.nvim" },
 		keys = {
 			{
@@ -49,7 +107,7 @@ return {
 	{
 		-- "skanehira/denops-docker.vim",
 		"jugarpeupv/denops-docker.vim",
-    branch = "feature/fixes",
+		branch = "feature/fixes",
 		enabled = false,
 		dependencies = {
 			{ "vim-denops/denops.vim" },

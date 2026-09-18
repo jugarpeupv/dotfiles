@@ -464,10 +464,6 @@ keymap("n", "<leader>d", "<Nop>", opts)
 --   api.tree.find_file({ winid = vim.api.nvim_get_current_win(), focus = true })
 -- end, { noremap = true, silent = true })
 
--- this could be remapped
-keymap("n", "<M-u>", "<cmd> lua require('trouble').next({skip_groups = true, jump = true})<cr>", opts)
-keymap("n", "<M-y>", "<cmd> lua require('trouble').prev({skip_groups = true, jump = true})<cr>", opts)
-
 -- vim.keymap.set({ "n" }, "<M-o>", "<cmd>bp<cr>", opts)
 -- vim.keymap.set({ "n" }, "<M-i>", "<cmd>bn<cr>", opts)
 
@@ -773,7 +769,7 @@ vim.keymap.set("n", "<leader>ta", require("jg.custom.telescope").curr_buf, {})
 vim.keymap.set("n", "<leader>te", function()
 	require("jg.custom.telescope").term_buffers({
 		show_all_buffers = true,
-		ignore_current_buffer = false,
+		ignore_current_buffer = true,
 		only_cwd = false,
 		cwd_only = false,
 	})
@@ -964,6 +960,96 @@ vim.keymap.set({ "n" }, "<leader>bd", "<cmd>bdelete<cr>", opts)
 vim.g._last_cmdline = ""
 vim.g._cmdwin_executed = false
 
+-- Memory holds only the args (without the "Compile " prefix).
+local function _compile_args_from_cmd(cmd)
+	if not cmd then
+		return nil
+	end
+	local args = cmd:match("^Compile%s+(.*)$")
+	if args ~= nil then
+		return args
+	end
+	if cmd:match("^Compile%s*$") then
+		return ""
+	end
+	return nil
+end
+
+local function _save_compile_args(args)
+	vim.g._saved_compile_args = args
+	-- keep legacy full form in sync for anything reading it
+	vim.g._saved_compile_cmd = args ~= "" and ("Compile " .. args) or "Compile"
+end
+
+-- <M-b> compile flow: open a bare ":" cmdline; the c-<CR> mapping below
+-- routes whatever is typed to :Compile instead of executing it raw.
+-- Real cmdline => blink cmdline completion (Tab, paths) works as usual.
+vim.g._compile_cmdline_active = false
+
+local _compile_hint_win, _compile_hint_buf ---@type integer|nil, integer|nil
+
+local function _close_compile_hint()
+	if _compile_hint_win and vim.api.nvim_win_is_valid(_compile_hint_win) then
+		vim.api.nvim_win_close(_compile_hint_win, true)
+	end
+	_compile_hint_win = nil
+	if _compile_hint_buf and vim.api.nvim_buf_is_valid(_compile_hint_buf) then
+		vim.api.nvim_buf_delete(_compile_hint_buf, { force = true })
+	end
+	_compile_hint_buf = nil
+end
+
+-- Small float above the cmdline so it's obvious <CR> runs via :Compile.
+-- focusable=false: never steals focus from the cmdline or blink's menu.
+local function _show_compile_hint()
+	_close_compile_hint()
+	_compile_hint_buf = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_buf_set_lines(_compile_hint_buf, 0, -1, false, { "⏵ <CR> runs via :Compile    <Esc> cancels" })
+	_compile_hint_win = vim.api.nvim_open_win(_compile_hint_buf, false, {
+		relative = "editor",
+		width = 44,
+		height = 1,
+		row = vim.o.lines - 5,
+		col = 0,
+		style = "minimal",
+		border = "rounded",
+		title = " Compile mode ",
+		title_pos = "left",
+		focusable = false,
+		zindex = 40,
+	})
+end
+
+-- Intercept <CR> in cmdline mode while the compile flow is active.
+-- Ordering vs blink's own c-<CR> (accept_and_enter + fallback) is safe
+-- either way: blink's fallback looks up the current non-blink mapping at
+-- call time (ours), and our fallback branch replicates accept_and_enter,
+-- so plain ":" behavior is unchanged when the flow is inactive.
+vim.keymap.set("c", "<CR>", function()
+	if vim.g._compile_cmdline_active then
+		local cmd = vim.fn.getcmdline()
+		vim.g._compile_cmdline_active = false
+		if cmd == nil or cmd:match("^%s*$") then
+			return vim.api.nvim_replace_termcodes("<C-c>", true, false, true)
+		end
+		-- tolerate an explicit "Compile ..." (avoids "Compile Compile ...")
+		local args = _compile_args_from_cmd(cmd) or cmd
+		vim.schedule(function()
+			if args:match("^%s*$") then
+				return
+			end
+			_save_compile_args(args)
+			vim.cmd("Compile " .. args)
+		end)
+		return vim.api.nvim_replace_termcodes("<C-c>", true, false, true)
+	end
+	local ok, cmp = pcall(require, "blink.cmp")
+	if ok and cmp.accept_and_enter and cmp.accept_and_enter() then
+		return ""
+	end
+	return vim.api.nvim_replace_termcodes("<CR>", true, false, true)
+end, { noremap = true, expr = true, silent = true, desc = "Compile-flow <CR> intercept" })
+
 vim.api.nvim_create_autocmd("CmdlineChanged", {
 	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = true }),
 	pattern = ":",
@@ -980,8 +1066,9 @@ vim.api.nvim_create_autocmd("CmdwinLeave", {
 	callback = function()
 		-- Get the line under cursor in the cmdwin buffer before it closes
 		local cmd = vim.fn.getline(".")
-		if cmd and cmd:match("^Compile ") then
-			vim.g._saved_compile_cmd = cmd
+		local args = _compile_args_from_cmd(cmd)
+		if args ~= nil and args ~= "" then
+			_save_compile_args(args)
 			vim.g._cmdwin_executed = true
 			print("Saved (cmdwin):", vim.g._saved_compile_cmd)
 		end
@@ -994,64 +1081,45 @@ vim.api.nvim_create_autocmd("CmdlineLeave", {
 	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = false }),
 	pattern = ":",
 	callback = function()
+		-- End of an <M-b> flow that didn't go through the <CR> intercept
+		-- (e.g. aborted with <Esc>/<C-c>): disarm it.
+		vim.g._compile_cmdline_active = false
+		_close_compile_hint()
 		-- If we just executed from cmdwin, skip this to avoid overwriting
 		if vim.g._cmdwin_executed then
 			vim.g._cmdwin_executed = false
 			return
 		end
-		local cmd = vim.g._last_cmdline
-		if cmd and cmd:match("^Compile ") then
-			vim.g._saved_compile_cmd = cmd
+		local args = _compile_args_from_cmd(vim.g._last_cmdline)
+		if args ~= nil and args ~= "" then
+			_save_compile_args(args)
 			print("Saved (cmdline):", vim.g._saved_compile_cmd)
 		end
 	end,
 })
 
+-- Leaving for the cmdline window (C-f) mid-flow: disarm, the cmdwin
+-- <CR> executes raw Ex commands and can't be intercepted the same way.
+vim.api.nvim_create_autocmd("CmdwinEnter", {
+	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = false }),
+	pattern = ":",
+	callback = function()
+		vim.g._compile_cmdline_active = false
+		_close_compile_hint()
+	end,
+})
+
 vim.keymap.set({ "n" }, "<M-b>", function()
-	-- If we have a saved compile command, populate it (without executing)
-	if vim.g._saved_compile_cmd ~= nil and vim.g._saved_compile_cmd ~= "" then
-		-- local cmd = vim.g._saved_compile_cmd
-		-- -- Ensure any unquoted path argument (the last whitespace-containing token
-		-- -- after the subcommand) is shell-escaped so spaces in filenames work.
-		-- -- Pattern: "Compile <subcmd> <path with spaces>" → quote the path.
-		-- cmd = cmd:gsub("^(Compile%s+%S+%s+)([^'\"].* .+)$", function(prefix, path)
-		-- 	return prefix .. vim.fn.shellescape(path)
-		-- end)
-		-- local cmd_to_feed = ":" .. cmd
-		local cmd_to_feed = ":" .. vim.g._saved_compile_cmd
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd_to_feed, true, false, true), "n", true)
-		return
-	end
-
-	-- Otherwise, generate a new command based on filetype
-	-- local current_buf_name = vim.fn.expand("%")
-	--
-	-- local function get_filetype_alias()
-	-- 	local filetype = vim.bo.filetype
-	--
-	-- 	if filetype == "sh" or filetype == "bash" then
-	-- 		return "sh"
-	-- 	elseif filetype == "typescript" or filetype == "javascript" then
-	-- 		return "bun"
-	-- 	elseif filetype == "c" then
-	-- 		return "cc"
-	-- 	elseif filetype == "rust" then
-	-- 		return "cargo run"
-	-- 	else
-	-- 		return "make"
-	-- 	end
-	-- end
-	--
-	-- local executable = get_filetype_alias()
-
-	-- local command = ":Compile " .. executable .. " " .. vim.fn.shellescape(current_buf_name)
-	-- local command = ":Compile " .. executable .. " " .. current_buf_name
-  local command = ":Compile "
-	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(command, true, false, true), "n", true)
+	vim.g._compile_cmdline_active = true
+	-- prefill last args (no "Compile " prefix); <CR> routes it to :Compile
+	local cmd_to_feed = ":" .. (vim.g._saved_compile_args or "")
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd_to_feed, true, false, true), "n", true)
+	_show_compile_hint()
 end, opts)
 
 -- Reset the saved compile command
 vim.keymap.set({ "n" }, "<leader>cb", function()
+	vim.g._saved_compile_args = ""
 	vim.g._saved_compile_cmd = ""
 	print("Compile command memory cleared")
 end, opts)
@@ -1912,7 +1980,7 @@ vim.keymap.set({ "n" }, "<C-S-L>", function()
 	end
 end, opts)
 
-vim.keymap.set("n", "<leader>gn", function()
+vim.keymap.set("n", "<leader>gN", function()
 	require("jg.custom.telescope").show_global_npm_packages()
 end, { desc = "show global npm packages" })
 

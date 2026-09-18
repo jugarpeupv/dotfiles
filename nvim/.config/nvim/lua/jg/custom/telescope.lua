@@ -1176,18 +1176,9 @@ M.fyler_telescope_dir = function(path, no_ignore)
             local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
             return {
               value = entry,
-              -- display = "  ~/" .. entry_substituted,
-
               display = function()
-                local display_string
-                if string.find(path, os.getenv("HOME")) then
-                  display_string = "  ~/" .. entry_substituted
-                else
-                  display_string = "  " .. entry_substituted
-                end
-                return display_string, { { { 0, 1 }, "Directory" } }
+                return "  " .. entry_substituted, { { { 0, 1 }, "Directory" } }
               end,
-              -- { { {1, 3}, hl_group } }
               ordinal = entry,
             }
           end,
@@ -1274,18 +1265,9 @@ M.oil_fzf_dir = function(path, no_ignore)
 						local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
 						return {
 							value = entry,
-							-- display = "  ~/" .. entry_substituted,
-
 							display = function()
-								local display_string
-								if string.find(path, os.getenv("HOME")) then
-									display_string = "  ~/" .. entry_substituted
-								else
-									display_string = "  " .. entry_substituted
-								end
-								return display_string, { { { 0, 1 }, "Directory" } }
+								return "  " .. entry_substituted, { { { 0, 1 }, "Directory" } }
 							end,
-							-- { { {1, 3}, hl_group } }
 							ordinal = entry,
 						}
 					end,
@@ -1718,36 +1700,71 @@ M.show_global_npm_packages = function()
 	-- local conf = require("telescope.config").values
 	local uv = vim.loop
 
-	local function get_nvm_node_version()
-		local nvm_dir = os.getenv("NVM_DIR") or "~/.nvm"
+	local function expand_home(path)
+		if path:sub(1, 1) == "~" then
+			return (os.getenv("HOME") or "") .. path:sub(2)
+		end
+		return path
+	end
 
-		-- Walk up from cwd looking for .nvmrc
-		local nvmrc = vim.fs.find(".nvmrc", {
-			upward = true,
-			path = vim.loop.cwd(),
-			type = "file",
-		})[1]
+	local function detect_node_manager()
+		if os.getenv("FNM_DIR") then
+			return "fnm"
+		end
+		local handle = io.popen("which node 2>/dev/null")
+		if handle then
+			local node_path = handle:read("*l") or ""
+			handle:close()
+			if node_path:find("fnm", 1, true) then
+				return "fnm"
+			end
+			if node_path:find(".nvm", 1, true) then
+				return "nvm"
+			end
+		end
+		if os.getenv("NVM_DIR") then
+			return "nvm"
+		end
+		if (uv.fs_stat(expand_home("~/.local/share/fnm/node-versions")) or {}).type == "directory" then
+			return "fnm"
+		end
+		return "nvm"
+	end
 
-		if nvmrc then
-			local f = io.open(nvmrc, "r")
-			if f then
-				local requested = f:read("*l"):gsub("%s+", ""):gsub("^v", "")
-				f:close()
-
-				-- Find the best matching installed version
-				local versions_dir = nvm_dir .. "/versions/node"
-				local best_match = nil
-				for entry in vim.fs.dir(versions_dir) do
-					local ver = entry:gsub("^v", "")
-					if ver == requested or ver:find("^" .. vim.pesc(requested) .. "%.") then
-						if not best_match or ver > best_match then
-							best_match = ver
-						end
-					end
+	local function find_best_match(versions_dir, requested)
+		local best_match = nil
+		for entry in vim.fs.dir(versions_dir) do
+			local ver = entry:gsub("^v", "")
+			if ver == requested or ver:find("^" .. vim.pesc(requested) .. "%.") then
+				if not best_match or ver > best_match then
+					best_match = ver
 				end
+			end
+		end
+		return best_match
+	end
 
-				if best_match then
-					return best_match
+	local function get_node_version(versions_dir)
+		-- Walk up from cwd looking for .nvmrc / .node-version
+		-- (both are honored by fnm and nvm)
+		if (uv.fs_stat(versions_dir) or {}).type == "directory" then
+			local version_file = vim.fs.find({ ".nvmrc", ".node-version" }, {
+				upward = true,
+				path = vim.loop.cwd(),
+				type = "file",
+			})[1]
+
+			if version_file then
+				local f = io.open(version_file, "r")
+				if f then
+					local requested = f:read("*l"):gsub("%s+", ""):gsub("^v", "")
+					f:close()
+
+					-- Find the best matching installed version
+					local best_match = find_best_match(versions_dir, requested)
+					if best_match then
+						return best_match
+					end
 				end
 			end
 		end
@@ -1829,39 +1846,82 @@ M.show_global_npm_packages = function()
 	end
 
 	local function npm_global_picker()
-		local node_version = get_nvm_node_version()
-		local nvm_dir = os.getenv("NVM_DIR") or "~/.nvm"
-		local pkg_path = nvm_dir .. "/versions/node/v" .. node_version .. "/lib/node_modules"
+		local pkg_path
+		if detect_node_manager() == "fnm" then
+			local versions_dir = expand_home(os.getenv("FNM_DIR") or "~/.local/share/fnm") .. "/node-versions"
+			local node_version = get_node_version(versions_dir) or ""
+			pkg_path = versions_dir .. "/v" .. node_version .. "/installation/lib/node_modules"
+		else
+			local versions_dir = expand_home(os.getenv("NVM_DIR") or "~/.nvm") .. "/versions/node"
+			local node_version = get_node_version(versions_dir) or ""
+			pkg_path = versions_dir .. "/v" .. node_version .. "/lib/node_modules"
+		end
 		local packages = collect_packages(pkg_path)
 		local actions = require("telescope.actions")
 		local action_state = require("telescope.actions.state")
-		require("telescope.pickers")
-			.new({}, {
-				prompt_title = "Global npm Packages",
-				finder = require("telescope.finders").new_table({
-					results = packages,
-					entry_maker = function(entry)
-						return {
-							value = entry.value,
-							display = entry.display,
-							ordinal = entry.display,
-							original_pkg_root = entry.original_pkg_root,
-						}
-					end,
-				}),
-				attach_mappings = function(prompt_bufnr)
-					actions.select_default:replace(function()
-						actions.close(prompt_bufnr)
-						local selection = action_state.get_selected_entry()
-						-- vim.cmd("e " .. selection.value)
-						-- local api = require("nvim-tree.api")
-						-- api.tree.change_root(selection.original_pkg_root)
+			local function entry_maker(entry)
+				return {
+					value = entry.value,
+					display = entry.display,
+					ordinal = entry.display,
+					original_pkg_root = entry.original_pkg_root,
+				}
+			end
+			require("telescope.pickers")
+				.new({}, {
+					prompt_title = "Global npm Packages (" .. pkg_path:gsub("^" .. vim.pesc(os.getenv("HOME") or ""), "~") .. ")",
+					finder = require("telescope.finders").new_table({
+						results = packages,
+						entry_maker = entry_maker,
+					}),
+					attach_mappings = function(prompt_bufnr, map)
+						actions.select_default:replace(function()
+							actions.close(prompt_bufnr)
+							local selection = action_state.get_selected_entry()
+							-- vim.cmd("e " .. selection.value)
+							-- local api = require("nvim-tree.api")
+							-- api.tree.change_root(selection.original_pkg_root)
 
-						require("oil").open(selection.original_pkg_root)
-						-- api.tree.find_file(selection.value)
-					end)
-					return true
-				end,
+							require("oil").open(selection.original_pkg_root)
+							-- api.tree.find_file(selection.value)
+						end)
+						-- <C-x>: remove (uninstall) the selected package directory
+						local function remove_selection()
+							local selection = action_state.get_selected_entry()
+							if not selection or not selection.value then
+								return
+							end
+							local target = selection.value
+							if target == pkg_path or not vim.startswith(target, pkg_path .. "/") then
+								vim.notify("Refusing to remove outside of " .. pkg_path, vim.log.levels.WARN)
+								return
+							end
+							local choice =
+								vim.fn.confirm("Remove global package directory?\n" .. target, "&Yes\n&No", 1)
+							if choice ~= 1 then
+								return
+							end
+							if vim.fn.delete(target, "rf") ~= 0 or vim.fn.isdirectory(target) == 1 then
+								vim.notify("Failed to remove " .. target, vim.log.levels.ERROR)
+								return
+							end
+							vim.notify("Removed " .. target, vim.log.levels.INFO)
+							for i, pkg in ipairs(packages) do
+								if pkg.value == target then
+									table.remove(packages, i)
+									break
+								end
+							end
+							local picker = action_state.get_current_picker(prompt_bufnr)
+							picker:refresh(require("telescope.finders").new_table({
+								results = packages,
+								entry_maker = entry_maker,
+							}), { reset_prompt = true })
+						end
+						map("n", "<C-x>", remove_selection)
+						map("i", "<C-x>", remove_selection)
+						return true
+					end,
 				sorter = require("telescope.config").values.generic_sorter({}),
 			})
 			:find()

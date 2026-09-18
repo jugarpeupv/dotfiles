@@ -295,10 +295,18 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
 
 		for _, id in ipairs(writable_win_ids) do
 			local buf = vim.api.nvim_win_get_buf(id)
-			vim.api.nvim_buf_call(buf, function()
+			local ok, err = pcall(vim.api.nvim_buf_call, buf, function()
 				vim.cmd("w")
 			end)
-			require("barbecue.ui").update(id)
+			if not ok then
+				local name = vim.api.nvim_buf_get_name(buf)
+				if name == "" then
+					name = "[buf " .. buf .. "]"
+				end
+				vim.notify("Autosave: Could not write " .. name .. ": " .. tostring(err), vim.log.levels.DEBUG)
+			else
+				require("barbecue.ui").update(id)
+			end
 		end
 	end,
 })

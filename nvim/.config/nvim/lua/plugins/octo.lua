@@ -29,8 +29,8 @@ end
 
 return {
 	{
-		-- "pwntester/octo.nvim",
-		"jugarpeupv/octo.nvim",
+		"pwntester/octo.nvim",
+		-- "jugarpeupv/octo.nvim",
     branch = "master",
 		-- dev = true,
 		-- dir = "~/projects/octo.nvim/wt-master",

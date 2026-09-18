@@ -69,9 +69,16 @@ return {
 							and vim.api.nvim_buf_get_name(buf) ~= ""
 							and vim.bo[buf].buftype == ""
 						then
-							vim.api.nvim_buf_call(buf, function()
+							local ok, err = pcall(vim.api.nvim_buf_call, buf, function()
 								vim.cmd("write")
 							end)
+							if not ok then
+								local name = vim.api.nvim_buf_get_name(buf)
+								if name == "" then
+									name = "[buf " .. buf .. "]"
+								end
+								vim.notify("Could not write " .. name .. ": " .. tostring(err), vim.log.levels.WARN)
+							end
 						end
 					end
 
@@ -108,9 +115,9 @@ return {
 				function()
 					local term = require("terminal")
 					local index = term.current_term_index()
-          if not index then
-            return
-          end
+					if not index then
+						return
+					end
 					term.set_target(index)
 				end,
 			},

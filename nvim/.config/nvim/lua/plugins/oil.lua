@@ -142,6 +142,71 @@ return {
 			},
 		},
 		config = function()
+			-- ── <M-y> async command on oil path (mirrors fyler's <M-y>) ──
+			local _oil_hint_win, _oil_hint_buf ---@type integer|nil, integer|nil
+			local function _close_oil_hint()
+				local win, buf = _oil_hint_win, _oil_hint_buf
+				_oil_hint_win, _oil_hint_buf = nil, nil
+				if win and vim.api.nvim_win_is_valid(win) then
+					local ok, err = pcall(vim.api.nvim_win_close, win, true)
+					if not ok and err and err:match("E565") then
+						vim.schedule(function()
+							if vim.api.nvim_win_is_valid(win) then
+								pcall(vim.api.nvim_win_close, win, true)
+							end
+						end)
+					end
+				end
+				if buf and vim.api.nvim_buf_is_valid(buf) then
+					local ok, err = pcall(vim.api.nvim_buf_delete, buf, { force = true })
+					if not ok and err and err:match("E565") then
+						vim.schedule(function()
+							if vim.api.nvim_buf_is_valid(buf) then
+								pcall(vim.api.nvim_buf_delete, buf, { force = true })
+							end
+						end)
+					end
+				end
+			end
+			local function _show_oil_hint(path)
+				_close_oil_hint()
+				_oil_hint_buf = vim.api.nvim_create_buf(false, true)
+				local rel = vim.fn.fnamemodify(path, ":~:.")
+				if rel == "" then
+					rel = path
+				end
+				local line1 = " Async command "
+				local line2 = " ! on " .. rel .. " "
+				local w = math.max(#line1, #line2) + 2
+				vim.api.nvim_buf_set_lines(_oil_hint_buf, 0, -1, false, { line1, line2 })
+				_oil_hint_win = vim.api.nvim_open_win(_oil_hint_buf, false, {
+					relative = "editor",
+					width = w,
+					height = 2,
+					row = vim.o.lines - 5,
+					col = 0,
+					style = "minimal",
+					border = "rounded",
+					title = " Oil async ",
+					title_pos = "left",
+					focusable = false,
+					zindex = 40,
+				})
+				vim.api.nvim_buf_add_highlight(_oil_hint_buf, -1, "Title", 0, 0, -1)
+			end
+			vim.api.nvim_create_autocmd("CmdlineLeave", {
+				pattern = ":",
+				callback = function()
+					_close_oil_hint()
+				end,
+			})
+			vim.api.nvim_create_autocmd("CmdwinEnter", {
+				pattern = ":",
+				callback = function()
+					_close_oil_hint()
+				end,
+			})
+
 			_G.oil_winbar_label = function()
 				local oil = require("oil")
 				local dir = oil.get_current_dir()
@@ -699,6 +764,43 @@ return {
 					--   end,
 					--   mode = "n"
 					-- },
+					["<M-y>"] = {
+						callback = function()
+							local oil = require("oil")
+							local dir = oil.get_current_dir()
+							if not dir then
+								return
+							end
+							local entry = oil.get_cursor_entry()
+							local path
+							if entry then
+								path = dir .. entry.name
+							else
+								path = dir
+							end
+							path = vim.fn.fnamemodify(path, ":p"):gsub("/$", "")
+							-- reuse fyler's async cmdline globals so the existing
+							-- c:<CR> handler in fyler.lua executes the command
+							vim.g._fyler_async_path = path
+							vim.g._fyler_async_cmdline_active = true
+							vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":", true, false, true), "n", true)
+							_show_oil_hint(path)
+						end,
+						mode = "n",
+						desc = "Async command on oil entry",
+					},
+					["<leader>fl"] = {
+						callback = function()
+							local oil = require("oil")
+							local dir = oil.get_current_dir()
+							if not dir then
+								return
+							end
+							require("jg.custom.telescope").oil_fzf_dir(dir)
+						end,
+						mode = "n",
+						desc = "Oil: telescope directories under cwd -> oil",
+					},
 					["gh"] = "actions.toggle_header",
 					["g."] = { "actions.toggle_hidden", mode = "n" },
 					["g\\"] = { "actions.toggle_trash", mode = "n" },

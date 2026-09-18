@@ -669,6 +669,7 @@ PY
 					})
 				else
 					Snacks.picker.man()
+          -- Snacks.picker.man({ section = { "1" } })
 				end
 			end,
 			{ silent = true },

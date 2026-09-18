@@ -77,6 +77,7 @@ return {
 				show_basename = true,
 				symbols = {
 					modified = "⏺",
+          separator = ">",
 				},
 				theme = {
 					normal = { fg = "#c0caf5" },

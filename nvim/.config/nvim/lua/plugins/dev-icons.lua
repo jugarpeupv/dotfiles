@@ -297,8 +297,9 @@ return {
 					color = "#9CDCFE",
 				},
 				c = {
-					-- icon = "󰙱",
-					icon = "",
+					icon = "󰙱",
+          -- icon = "",
+					-- icon = "",
 					name = "c",
 					color = "#9CDCFE",
 				},

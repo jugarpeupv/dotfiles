@@ -11,9 +11,9 @@ account        izertis
 host           localhost
 port           1025
 
-eval pass izertis_login | awk -F: '/^username:/{print "user " $2}' | xargs
-eval pass izertis_login | awk -F: '/^username:/{print "from " $2}' | xargs
-passwordeval "pass izertis_login | head -1"
+eval pass work_login | awk -F: '/^username:/{print "user " $2}' | xargs
+eval pass work_login | awk -F: '/^username:/{print "from " $2}' | xargs
+passwordeval "pass work_login | head -1"
 
 
 
