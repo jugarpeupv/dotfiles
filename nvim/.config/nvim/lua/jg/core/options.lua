@@ -236,3 +236,12 @@ vim.g.suda_smart_edit = 1
 
 vim.g.zoomwintab_remap = false
 vim.g.zoomwintab_remap = 0
+
+-- macOS: /usr/include is not a real directory (headers live inside the SDK)
+-- so `gf` on `#include <sys/socket.h>` fails with E447 without this.
+if vim.fn.has("mac") == 1 then
+	local sdk = vim.fn.system("xcrun --show-sdk-path 2>/dev/null"):gsub("%s+$", "")
+	if sdk ~= "" and vim.fn.isdirectory(sdk .. "/usr/include") == 1 then
+		opt.path:append(sdk .. "/usr/include")
+	end
+end

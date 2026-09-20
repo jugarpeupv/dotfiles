@@ -3329,10 +3329,12 @@ window_padding_width 4 0 0 10
 # # END_KITTY_FONTS
 
 
-adjust_line_height  0
+adjust_line_height  2
 adjust_column_width 0
+# font_family      family="Iosevka Term"
+# bold_font        family='Iosevka Term' style=Bold
+# italic_font      family='Iosevka Term' style=Oblique
+# bold_italic_font family='Iosevka Term' style='Semibold Oblique'
 
-font_family      family="Iosevka Term"
-bold_font        family='Iosevka Term' style=Bold
-italic_font      family='Iosevka Term' style=Oblique
-bold_italic_font family='Iosevka Term' style='Semibold Oblique'
+
+font_size 24
