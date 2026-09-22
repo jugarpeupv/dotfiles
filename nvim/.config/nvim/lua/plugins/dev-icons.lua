@@ -1,13 +1,20 @@
 return {
 	{
 		"Mirsmog/real-icons.nvim",
+    lazy = false,
 		enabled = false,
 		build = ":RealIconsInstallPack material",
 		opts = {
 			pack = "material",
+      size = {
+        cols = 1,
+        rows = 1,
+        pixels = 64,
+        padding = 0,
+        trim = true,
+      },
 			integrations = {
-				telescope = true,
-				oil = true,
+				telescope = true
 			},
 		},
 	},

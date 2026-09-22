@@ -2,8 +2,8 @@ return {
 	{
 		-- "emrearmagan/dockyard.nvim",
     "jugarpeupv/dockyard.nvim",
-    -- dev = true,
-    -- dir = "~/projects/dockyard.nvim/wt-main",
+    dev = true,
+    dir = "~/projects/dockyard.nvim/wt-main",
 		cmd = { "Dockyard", "DockyardFloat" },
 		keys = {
 			{

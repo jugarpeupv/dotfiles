@@ -866,19 +866,30 @@ PY
 				if #items > 0 then
 					Snacks.picker({
 						title = "Man Pages",
-						format = "text",
 						layout = { preview = false },
-						-- format = function(item, picker)
-						-- 	local ret = {}
-						-- 	-- name(section) - highlighted
-						-- 	ret[#ret + 1] = { item.name, "NvimTreeExecFile" }
-						-- 	ret[#ret + 1] = { "(", "Delimiter" }
-						-- 	ret[#ret + 1] = { item.section, "Number" }
-						-- 	ret[#ret + 1] = { ")", "Delimiter" }
-						-- 	ret[#ret + 1] = { " - ", "Comment" }
-						-- 	ret[#ret + 1] = { item.desc or "", "String" }
-						-- 	return ret
-						-- end,
+						format = function(item, picker)
+							local ret = {}
+							-- mimic Snacks.picker.man highlight: name(section) - desc
+							ret[#ret + 1] = { item.name or "", "CompileModeCommandOutput" }
+							ret[#ret + 1] = { "(", "Delimiter" }
+							ret[#ret + 1] = { item.section or "", "Number" }
+							ret[#ret + 1] = { ")", "Delimiter" }
+							ret[#ret + 1] = { " - ", "Comment" }
+							ret[#ret + 1] = { item.desc or "", "markdownH1Delimiter" }
+							return ret
+						end,
+						matcher = {
+							fuzzy = true,
+							smartcase = true,
+							ignorecase = true,
+							-- boost exact name match so "shutdown" ranks before libssh2_..._shutdown
+							on_match = function(matcher, item)
+								if item.name and matcher.pattern and item.name:lower() == matcher.pattern:lower() then
+									item.score = item.score + 100
+								end
+							end,
+						},
+						-- sort = { fields = { "score:desc", "idx" } },
 						items = items,
 						win = {
 							input = {

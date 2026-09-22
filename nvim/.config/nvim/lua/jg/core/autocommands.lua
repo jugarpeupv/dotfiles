@@ -90,6 +90,14 @@ vim.filetype.add({
 	},
 })
 
+vim.filetype.add({
+  pattern = {
+    [".*/msmtp/config"] = "msmtp", -- or "ini"
+  },
+})
+
+vim.treesitter.language.register("bash", "msmtp") -- or "comment"
+
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	pattern = { "*.env", ".env.*" },
 	group = augroups.env,

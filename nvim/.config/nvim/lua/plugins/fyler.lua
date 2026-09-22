@@ -1,5 +1,31 @@
 local M = {}
 
+-- Reuse an empty [No Name] buffer in place instead of splitting beside
+-- it, so no leftover empty window stays next to the new buffer.
+local function is_empty_buffer(buf)
+	return vim.api.nvim_buf_get_name(buf) == ""
+		and vim.bo[buf].buftype == ""
+		and not vim.bo[buf].modified
+		and vim.api.nvim_buf_line_count(buf) == 1
+		and vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] == ""
+end
+
+local function edit_or_split(target, path, split_cmd)
+	vim.api.nvim_set_current_win(target)
+	if is_empty_buffer(vim.api.nvim_win_get_buf(target)) then
+		vim.cmd.edit({ args = { path }, mods = { keepalt = false } })
+	else
+		vim.cmd[split_cmd]({ args = { path }, mods = { keepalt = false } })
+	end
+end
+
+local function is_usable_win(winid, fyler_win)
+	return vim.api.nvim_win_is_valid(winid)
+		and winid ~= fyler_win
+		and vim.api.nvim_win_get_config(winid).relative == ""
+		and not vim.wo[winid].winfixbuf
+end
+
 M.old_api_opts = {
 	hooks = {
 		on_delete = nil,
@@ -7,6 +33,7 @@ M.old_api_opts = {
 	},
 	integrations = {
 		icon = "nvim_web_devicons",
+    -- icon = "real_icons",
 	},
 	views = {
 		finder = {
@@ -420,11 +447,125 @@ M.old_api_opts = {
 					myterm:send("cd " .. modified_path)
 				end,
 				["q"] = "CloseView",
-				["<CR>"] = "Select",
+				["<CR>"] = function(view)
+					-- always open files in a window on the right side of
+					-- fyler (never inside it): reuse the adjacent window,
+					-- creating it if fyler is the only window open
+					local entry = view:cursor_node_entry()
+					if not entry or not entry.path then
+						view:action_call("n_select")
+						return
+					end
+					if vim.fn.isdirectory(entry.path) == 1 then
+						view:action_call("n_select")
+						return
+					end
+					local fyler_win = vim.api.nvim_get_current_win()
+					local fpos = vim.api.nvim_win_get_position(fyler_win)
+					local fheight = vim.api.nvim_win_get_height(fyler_win)
+					local right_edge = fpos[2] + vim.api.nvim_win_get_width(fyler_win)
+					local target = nil
+					local best_col = nil
+					for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+						if is_usable_win(winid, fyler_win) then
+							local wpos = vim.api.nvim_win_get_position(winid)
+							local wheight = vim.api.nvim_win_get_height(winid)
+							if wpos[1] < fpos[1] + fheight and fpos[1] < wpos[1] + wheight then
+								if wpos[2] >= right_edge and (best_col == nil or wpos[2] < best_col) then
+									target = winid
+									best_col = wpos[2]
+								end
+							end
+						end
+					end
+					local path = vim.fn.fnameescape(entry.path)
+					if not target then
+						-- fyler is the only window: open the file in a new
+						-- vsplit taking 60% of the width, fyler keeps the rest
+						local new_buf = vim.api.nvim_create_buf(false, true)
+						target = vim.api.nvim_open_win(new_buf, true, {
+							split = "right",
+							win = fyler_win,
+							width = math.floor(vim.o.columns * 0.8),
+						})
+					end
+					vim.api.nvim_set_current_win(target)
+					local ok, err = pcall(vim.cmd.edit, { args = { path }, mods = { keepalt = false } })
+					if not ok then
+						vim.notify("Could not open file: " .. tostring(err), vim.log.levels.ERROR)
+					end
+				end,
 				["L"] = "Select",
 				["<C-t>"] = "SelectTab",
-				["<C-v>"] = "SelectVSplit",
-				["<C-s>"] = "SelectSplit",
+        ["<C-v>"] = "SelectVSplit",
+				-- ["<C-v>"] = function(view)
+				-- 	-- vsplit that reuses an empty [No Name] buffer in the target
+				-- 	-- window instead of splitting beside it, so no leftover
+				-- 	-- empty window stays on the left
+				-- 	local entry = view:cursor_node_entry()
+				-- 	if not entry or not entry.path then
+				-- 		-- "../" row or header: same as plain select
+				-- 		view:action_call("n_select")
+				-- 		return
+				-- 	end
+				-- 	if vim.fn.isdirectory(entry.path) == 1 then
+				-- 		-- keep fyler's expand/collapse for directories
+				-- 		view:action_call("n_select")
+				-- 		return
+				-- 	end
+				-- 	-- target = window fyler was opened from, else first usable
+				-- 	-- non-fyler window (mirrors the plugin, minus winpick)
+				-- 	local fyler_win = vim.api.nvim_get_current_win()
+				-- 	local target = nil
+				-- 	local origin = view.win and view.win.origin_win or nil
+				-- 	if origin and is_usable_win(origin, fyler_win) then
+				-- 		target = origin
+				-- 	else
+				-- 		for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+				-- 			if is_usable_win(winid, fyler_win) then
+				-- 				target = winid
+				-- 				break
+				-- 			end
+				-- 		end
+				-- 	end
+				-- 	local path = vim.fn.fnameescape(entry.path)
+				-- 	if target then
+				-- 		edit_or_split(target, path, "vsplit")
+				-- 	else
+				-- 		vim.cmd.vsplit({ args = { path }, mods = { keepalt = false } })
+				-- 	end
+				-- end,
+				["<C-s>"] = function(view)
+					-- same empty-buffer reuse as <C-v>, horizontal split
+					local entry = view:cursor_node_entry()
+					if not entry or not entry.path then
+						view:action_call("n_select")
+						return
+					end
+					if vim.fn.isdirectory(entry.path) == 1 then
+						view:action_call("n_select")
+						return
+					end
+					local fyler_win = vim.api.nvim_get_current_win()
+					local target = nil
+					local origin = view.win and view.win.origin_win or nil
+					if origin and is_usable_win(origin, fyler_win) then
+						target = origin
+					else
+						for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+							if is_usable_win(winid, fyler_win) then
+								target = winid
+								break
+							end
+						end
+					end
+					local path = vim.fn.fnameescape(entry.path)
+					if target then
+						edit_or_split(target, path, "split")
+					else
+						vim.cmd.split({ args = { path }, mods = { keepalt = false } })
+					end
+				end,
 				["-"] = "GotoParent",
 				["="] = "GotoCwd",
 				["gw"] = "GotoCwdOriginal",
@@ -489,6 +630,8 @@ return {
 	{
 		"jugarpeupv/fyler.nvim",
 		-- branch = "main",
+    dev = true,
+    dir = "~/projects/fyler.nvim/wt-fyler-main/",
 		lazy = false,
 		cmd = { "Fyler" },
 		dependencies = {
@@ -805,6 +948,43 @@ return {
 						vim.g._fyler_async_path = nil
 					end
 					_close_fyler_hint()
+				end,
+			})
+
+			-- keep equalalways=true but exclude fyler from the equalize
+			-- fyler has winfixwidth=true (width=40) so it should stay fixed,
+			-- but to avoid the 50/50 flash when the middle of [fyler][win2][win3]
+			-- is closed, we re-assert fyler's width synchronously (no schedule)
+			-- on WinClosed. This is flicker-free because it runs before redraw.
+			vim.o.equalalways = true
+			vim.o.splitkeep = "screen"
+			vim.api.nvim_create_autocmd("WinClosed", {
+				callback = function()
+					-- no schedule → runs before redraw, no flash
+					local wins = vim.api.nvim_tabpage_list_wins(0)
+					local normal = {}
+					for _, w in ipairs(wins) do
+						if vim.api.nvim_win_is_valid(w) and vim.api.nvim_win_get_config(w).relative == "" then
+							table.insert(normal, w)
+						end
+					end
+					if #normal ~= 2 then
+						return
+					end
+					local fyler_win, other = nil, nil
+					for _, w in ipairs(normal) do
+						local buf = vim.api.nvim_win_get_buf(w)
+						if vim.bo[buf].filetype == "fyler" then
+							fyler_win = w
+						else
+							other = w
+						end
+					end
+					if not fyler_win or not other then
+						return
+					end
+					-- enforce fixed width for fyler; other will fill the rest (80%)
+					vim.api.nvim_win_set_width(fyler_win, 40)
 				end,
 			})
 		end,

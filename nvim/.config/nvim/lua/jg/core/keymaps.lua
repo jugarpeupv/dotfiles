@@ -194,7 +194,7 @@ vim.keymap.set({ "n" }, "<leader>sf", function()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>so", function()
-  require("jg.custom.telescope").oil_fzf_dir(vim.fn.expand("~"))
+  require("jg.custom.telescope").oil_fzf_dir({ vim.fn.expand("~"), "/Volumes" })
 end, opts)
 
 
@@ -1054,6 +1054,7 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
 	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = true }),
 	pattern = ":",
 	callback = function()
+    if vim.fn.getcmdtype()~=":" then return end
 		vim.g._last_cmdline = vim.fn.getcmdline()
 	end,
 })

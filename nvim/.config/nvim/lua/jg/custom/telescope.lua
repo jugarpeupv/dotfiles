@@ -47,7 +47,10 @@ M.find_directory_in_oil_and_focus = function()
 				end,
 			})
 		end
-		local full_path = vim.loop.cwd() .. "/" .. selection.value
+		local full_path = selection.value
+		if not full_path:match("^/") then
+			full_path = vim.loop.cwd() .. "/" .. full_path
+		end
 		trash_path(full_path)
 	end
 
@@ -70,6 +73,7 @@ M.find_directory_in_oil_and_focus = function()
 			"fd",
 			"--type",
 			"directory",
+			"--absolute-path",
 			"--hidden",
 			"--no-ignore",
 			"--exclude",
@@ -81,13 +85,26 @@ M.find_directory_in_oil_and_focus = function()
 		},
 		attach_mappings = open_oil_tree,
 		entry_maker = function(entry)
+			local home = os.getenv("HOME") or ""
+			local display_path = entry
+			if home ~= "" then
+				display_path = entry:gsub("^" .. vim.pesc(home), "~")
+			end
+			local icon, hl = "", "Directory"
+			local ok, devicons = pcall(require, "nvim-web-devicons")
+			if ok then
+				local name = entry:match("([^/]+)/?$") or entry
+				local _icon, _hl = devicons.get_icon(name, nil, { default = false })
+				if _icon and _icon ~= "" then
+					icon, hl = _icon, _hl
+				end
+			end
 			return {
 				value = entry,
 				display = function()
-					local display_string = " " .. entry
-					return display_string, { { { 0, 1 }, "Directory" } }
+					return icon .. "  " .. display_path, { { { 0, vim.fn.strchars(icon) + 2 }, hl } }
 				end,
-				ordinal = entry,
+				ordinal = entry .. " " .. display_path,
 			}
 		end,
 	})
@@ -118,7 +135,10 @@ M.find_directory_in_fyler_and_focus = function()
 				end,
 			})
 		end
-		local full_path = vim.loop.cwd() .. "/" .. selection.value
+		local full_path = selection.value
+		if not full_path:match("^/") then
+			full_path = vim.loop.cwd() .. "/" .. full_path
+		end
 		trash_path(full_path)
 	end
 
@@ -153,6 +173,7 @@ M.find_directory_in_fyler_and_focus = function()
 			"fd",
 			"--type",
 			"directory",
+			"--absolute-path",
 			"--hidden",
 			"--no-ignore",
 			"--exclude",
@@ -164,13 +185,26 @@ M.find_directory_in_fyler_and_focus = function()
 		},
 		attach_mappings = open_fyler_tree,
 		entry_maker = function(entry)
+			local home = os.getenv("HOME") or ""
+			local display_path = entry
+			if home ~= "" then
+				display_path = entry:gsub("^" .. vim.pesc(home), "~")
+			end
+			local icon, hl = "", "Directory"
+			local ok, devicons = pcall(require, "nvim-web-devicons")
+			if ok then
+				local name = entry:match("([^/]+)/?$") or entry
+				local _icon, _hl = devicons.get_icon(name, nil, { default = false })
+				if _icon and _icon ~= "" then
+					icon, hl = _icon, _hl
+				end
+			end
 			return {
 				value = entry,
 				display = function()
-					local display_string = " " .. entry
-					return display_string, { { { 0, 1 }, "Directory" } }
+					return icon .. "  " .. display_path, { { { 0, vim.fn.strchars(icon) + 2 }, hl } }
 				end,
-				ordinal = entry,
+				ordinal = entry .. " " .. display_path,
 			}
 		end,
 	})
@@ -1221,19 +1255,50 @@ M.fyler_telescope_dir = function(path, no_ignore)
 end
 
 
-M.oil_fzf_dir = function(path, no_ignore)
+-- oil_fzf_dir(path_or_roots, no_ignore): path_or_roots is a single search
+-- root or a list of them, e.g. { vim.fn.expand("~"), "/Volumes" }.
+-- fd searches every root; items show as absolute paths with $HOME as ~.
+M.oil_fzf_dir = function(path_or_roots, no_ignore)
 	local pickers = require("telescope.pickers")
 	local finders = require("telescope.finders")
 	local conf = require("telescope.config").values
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
 
-	local find_command = {
-		"fd",
-		".",
-		path,
+	local roots = {}
+	if type(path_or_roots) == "table" then
+		for _, p in ipairs(path_or_roots) do
+			if p and p ~= "" then
+				table.insert(roots, p)
+			end
+		end
+	elseif path_or_roots and path_or_roots ~= "" then
+		roots = { path_or_roots }
+	end
+	if #roots == 0 then
+		vim.notify("oil_fzf_dir: no search path given", vim.log.levels.WARN)
+		return
+	end
+
+	local function with_tilde(p)
+		local home = os.getenv("HOME") or ""
+		if home == "" then
+			return p
+		end
+		-- assign first: gsub returns 2 values (string + count) and callers
+		-- like table.insert would otherwise see the 3-arg form and error
+		local out = p:gsub("^" .. vim.pesc(home), "~")
+		return out
+	end
+
+	local find_command = { "fd", "." }
+	for _, root in ipairs(roots) do
+		table.insert(find_command, root)
+	end
+	vim.list_extend(find_command, {
 		"--type",
 		"d",
+		"--absolute-path",
 		"--exclude",
 		".git",
 		"--exclude",
@@ -1242,33 +1307,42 @@ M.oil_fzf_dir = function(path, no_ignore)
 		"--max-depth",
 		"3",
 		"--hidden",
-	}
+	})
 
 	if no_ignore then
 		table.insert(find_command, "--no-ignore")
 	end
 
-	-- Function to escape special characters in a string for use in a pattern
-	local function escape_pattern(text)
-		return text:gsub("([^%w])", "%%%1")
+	local display_roots = {}
+	for _, root in ipairs(roots) do
+		table.insert(display_roots, with_tilde(root))
 	end
 
-	local escaped_path = escape_pattern(path)
-
-	local commands = function(opts)
+		local commands = function(opts)
 		opts = opts or {}
 		pickers
 			.new(opts, {
-				prompt_title = 'Open a directory from "' .. path:gsub(os.getenv("HOME"), "~") .. '" in Oil',
+				prompt_title = 'Open a directory from "' .. table.concat(display_roots, ", ") .. '" in Oil',
 				finder = finders.new_oneshot_job(find_command, {
 					entry_maker = function(entry)
-						local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
+						local display_path = with_tilde(entry)
+						local icon, hl = "", "Directory"
+						local ok, devicons = pcall(require, "nvim-web-devicons")
+						if ok then
+							local name = entry:match("([^/]+)/?$") or entry
+							-- devicons for dirs: use folder icon fallback; for files would use ext
+							local ext = name:match("%.([^%.]+)$")
+							local _icon, _hl = devicons.get_icon(name, ext, { default = false })
+							if _icon and _icon ~= "" then
+								icon, hl = _icon, _hl
+							end
+						end
 						return {
 							value = entry,
 							display = function()
-								return "  " .. entry_substituted, { { { 0, 1 }, "Directory" } }
+								return icon .. "  " .. display_path, { { { 0, vim.fn.strchars(icon) + 2 }, hl } }
 							end,
-							ordinal = entry,
+							ordinal = entry .. " " .. display_path,
 						}
 					end,
 				}),
@@ -2025,18 +2099,18 @@ M.find_in_node_modules = function()
 			end
 			local handle = io.popen(cmd)
 			if handle then
-				for dir in handle:lines() do
-					dir = dir:gsub("/$", "")
+				for _dir in handle:lines() do
+					local dir_path = _dir:gsub("/$", "")
 					local excluded = false
 					for _, ex in ipairs(exclude_patterns) do
 						local escaped_ex = ex:gsub("%*%*", ".*"):gsub("%*", "[^/]*"):gsub("?", ".")
-						if dir:match(escaped_ex) then
+						if dir_path:match(escaped_ex) then
 							excluded = true
 							break
 						end
 					end
 					if not excluded then
-						add(dir .. "/node_modules")
+						add(dir_path .. "/node_modules")
 					end
 				end
 				handle:close()

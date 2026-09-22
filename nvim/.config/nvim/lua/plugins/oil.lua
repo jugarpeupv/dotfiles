@@ -65,7 +65,7 @@ return {
 			},
 		},
 		keys = {
-			{ ":" },
+			-- { ":" },
       {
         "<leader>eS",
         function()
@@ -238,6 +238,7 @@ return {
 				-- See :help oil-columns
 				columns = {
 					{ "icon", directory = "", default_file = "" },
+          -- { "icon", provider = "real-icons" },
 					"permissions",
 					"size",
 					"mtime",
