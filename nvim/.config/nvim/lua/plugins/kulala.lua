@@ -1,48 +1,48 @@
 return {
 	{
 		"mistweaverco/kulala.nvim",
-		enabled = true,
-    branch = "main",
+		enabled = false,
+		branch = "main",
 		ft = { "http", "rest" },
 		opts = {
-      default_env = "snd",
-      treesitter = {
-        -- enable/disable kulala.nvim own
-        -- handling of tree-sitter parser and queries for HTTP scripts
-        -- like downloading, building, and installing the parser and queries.
-        -- disable to manage the parser and queries yourself.
-        enable = true,
-        -- path to tree-sitter CLI, if not in PATH
-        -- if enable is false, this is not used
-        -- required for building the parser from the included grammar
-        cli_path = "tree-sitter",
-      },
-      lsp = {
-        enable = true,
-        filetypes = { "http", "rest", "json", "yaml", "bruno" },
-        keymaps = false, -- disabled by default, as Kulala relies on default Neovim LSP keymaps
-        formatter = {
-          sort = { -- enable/disable alphabetical sorting
-            metadata = true,
-            variables = true,
-            commands = false,
-            json = true,
-          },
-          quote_json_variables = true, -- add quotes around {{variable}} in JSON bodies
-          indent = 2, -- base indentation for scripts
-        },
-        -- on_attach = function(client, bufnr)
-        --   -- custom on_attach function
-        -- end,
-      },
+			default_env = "snd",
+			treesitter = {
+				-- enable/disable kulala.nvim own
+				-- handling of tree-sitter parser and queries for HTTP scripts
+				-- like downloading, building, and installing the parser and queries.
+				-- disable to manage the parser and queries yourself.
+				enable = true,
+				-- path to tree-sitter CLI, if not in PATH
+				-- if enable is false, this is not used
+				-- required for building the parser from the included grammar
+				-- cli_path = "tree-sitter",
+			},
+			lsp = {
+				enable = true,
+				filetypes = { "http", "rest", "json", "yaml", "bruno" },
+				keymaps = false, -- disabled by default, as Kulala relies on default Neovim LSP keymaps
+				formatter = {
+					sort = { -- enable/disable alphabetical sorting
+						metadata = true,
+						variables = true,
+						commands = false,
+						json = true,
+					},
+					quote_json_variables = true, -- add quotes around {{variable}} in JSON bodies
+					indent = 2, -- base indentation for scripts
+				},
+				-- on_attach = function(client, bufnr)
+				--   -- custom on_attach function
+				-- end,
+			},
 			debug = true,
 			vscode_rest_client_environmentvars = true,
 			winbar = true,
 			ui = {
-        -- max_response_size = 20480,
-        -- max_response_size = 50 * 1024 * 1024, -- 50 MiB
+				-- max_response_size = 20480,
+				-- max_response_size = 50 * 1024 * 1024, -- 50 MiB
 				default_winbar_panes = { "body", "headers", "verbose", "script_output", "report" },
-        win_opts = { bo = {}, wo = { wrap = true } },
+				win_opts = { bo = {}, wo = { wrap = true } },
 				pickers = {
 					snacks = {
 						layout = {

@@ -381,7 +381,7 @@ return {
 						enabled = false, -- Disable entire buffer context by default, only used in quick chat
 					},
 					git_diff = {
-						enabled = true,
+						enabled = false,
 					},
 				},
 				ui = {

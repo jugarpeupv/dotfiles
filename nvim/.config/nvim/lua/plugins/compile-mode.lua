@@ -98,7 +98,8 @@ return {
 	},
 	config = function()
 		vim.g.compile_mode = {
-			baleia_setup = true,
+      ansi_color = { kind = "render" },
+			-- baleia_setup = true,
 			use_diagnostics = false,
       error_locus_highlight = 500,
 			hidden_buffer = false,

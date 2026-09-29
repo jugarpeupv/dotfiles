@@ -1,5 +1,18 @@
 return {
 	{
+		"hamidi-dev/json-kit.nvim",
+		enabled = false,
+		opts = {
+			keys = {
+				pretty_split = "<leader>jp",
+				pretty_inplace = "<leader>jP",
+				sort = "<leader>js",
+				decode_jwt = "<leader>jw",
+				copy_path = "<leader>jy",
+			},
+		},
+	},
+	{
 		"jugarpeupv/chrome-devtools.nvim",
 		lazy = true,
 		enabled = false,
@@ -1035,7 +1048,7 @@ return {
 			{
 				mode = { "n" },
 				"<leader>gn",
-        ":Compile git clean -fxd",
+				":Compile git clean -fxd",
 				-- function()
 				-- 	local cmd = vim.fn.input("Execute command async: ", "git clean -fxd")
 				-- 	if cmd ~= "" then

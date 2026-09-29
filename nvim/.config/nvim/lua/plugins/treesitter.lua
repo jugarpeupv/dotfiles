@@ -31,7 +31,6 @@ return {
 		config = function()
 			local parsers = {
 				"bash",
-        -- "kulala_http",
 				"comment",
 				"css",
         "ini",
@@ -41,6 +40,7 @@ return {
 				"git_config",
 				"gitcommit",
 				"gitignore",
+        "c",
 				"groovy",
 				"go",
 				"heex",
@@ -103,7 +103,6 @@ return {
 					"dosini",
 					-- "editorconfig",
 					"typescript",
-					-- "kulala_http",
 					"javascript",
 					"markdown",
           "git",

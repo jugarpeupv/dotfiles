@@ -351,7 +351,13 @@ return {
 						}
 						for _, f in ipairs(prop_files) do
 							if vim.fn.filereadable(f) == 1 then
-								local v = vim.fn.system("grep -E '^davmail\\.oauth\\.tokenFilePath=' " .. vim.fn.shellescape(f) .. " | cut -d= -f2- | tr -d ' \\r\\n' | xargs"):gsub("%s+", "")
+								local v = vim.fn
+									.system(
+										"grep -E '^davmail\\.oauth\\.tokenFilePath=' "
+											.. vim.fn.shellescape(f)
+											.. " | cut -d= -f2- | tr -d ' \\r\\n' | xargs"
+									)
+									:gsub("%s+", "")
 								if v ~= "" then
 									v = v:gsub("^~", vim.fn.expand("~"))
 									return v
@@ -410,7 +416,13 @@ PY
 					end
 					-- file exists -> quick IMAP probe ( <7s, no heavy sync)
 					vim.notify("Verifying davmail token...", vim.log.levels.INFO)
-					local email = vim.fn.system("grep -v '^#' " .. vim.fn.shellescape(token_path) .. " | cut -d= -f1 | head -1 | tr -d ' \\n\\r'"):gsub("%s+", "")
+					local email = vim.fn
+						.system(
+							"grep -v '^#' "
+								.. vim.fn.shellescape(token_path)
+								.. " | cut -d= -f1 | head -1 | tr -d ' \\n\\r'"
+						)
+						:gsub("%s+", "")
 					probe_token(email, function(ok)
 						vim.schedule(function()
 							if ok then
@@ -494,10 +506,16 @@ PY
 								once = true,
 								pattern = ":",
 								callback = function()
-									if vim.g._snacks_async_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win) then
+									if
+										vim.g._snacks_async_hint_win
+										and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win)
+									then
 										pcall(vim.api.nvim_win_close, vim.g._snacks_async_hint_win, true)
 									end
-									if vim.g._snacks_async_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf) then
+									if
+										vim.g._snacks_async_hint_buf
+										and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf)
+									then
 										pcall(vim.api.nvim_buf_delete, vim.g._snacks_async_hint_buf, { force = true })
 									end
 									vim.g._snacks_async_hint_win = nil
@@ -509,10 +527,14 @@ PY
 					end
 					if compile_active then
 						vim.g._compile_cmdline_active = true
-						if vim.g._snacks_compile_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win) then
+						if
+							vim.g._snacks_compile_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win)
+						then
 							pcall(vim.api.nvim_win_close, vim.g._snacks_compile_hint_win, true)
 						end
-						if vim.g._snacks_compile_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf) then
+						if
+							vim.g._snacks_compile_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf)
+						then
 							pcall(vim.api.nvim_buf_delete, vim.g._snacks_compile_hint_buf, { force = true })
 						end
 						local new_cmd = head .. content .. tail
@@ -530,7 +552,13 @@ PY
 						end
 						vim.schedule(function()
 							local buf = vim.api.nvim_create_buf(false, true)
-							vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "⏵ <CR> runs via :Compile    <Esc> cancels" })
+							vim.api.nvim_buf_set_lines(
+								buf,
+								0,
+								-1,
+								false,
+								{ "⏵ <CR> runs via :Compile    <Esc> cancels" }
+							)
 							local win = vim.api.nvim_open_win(buf, false, {
 								relative = "editor",
 								width = 44,
@@ -550,10 +578,16 @@ PY
 								once = true,
 								pattern = ":",
 								callback = function()
-									if vim.g._snacks_compile_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win) then
+									if
+										vim.g._snacks_compile_hint_win
+										and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win)
+									then
 										pcall(vim.api.nvim_win_close, vim.g._snacks_compile_hint_win, true)
 									end
-									if vim.g._snacks_compile_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf) then
+									if
+										vim.g._snacks_compile_hint_buf
+										and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf)
+									then
 										pcall(vim.api.nvim_buf_delete, vim.g._snacks_compile_hint_buf, { force = true })
 									end
 									vim.g._snacks_compile_hint_win = nil
@@ -685,10 +719,16 @@ PY
 								once = true,
 								pattern = ":",
 								callback = function()
-									if vim.g._snacks_async_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win) then
+									if
+										vim.g._snacks_async_hint_win
+										and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win)
+									then
 										pcall(vim.api.nvim_win_close, vim.g._snacks_async_hint_win, true)
 									end
-									if vim.g._snacks_async_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf) then
+									if
+										vim.g._snacks_async_hint_buf
+										and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf)
+									then
 										pcall(vim.api.nvim_buf_delete, vim.g._snacks_async_hint_buf, { force = true })
 									end
 									vim.g._snacks_async_hint_win = nil
@@ -700,10 +740,14 @@ PY
 					end
 					if compile_active then
 						vim.g._compile_cmdline_active = true
-						if vim.g._snacks_compile_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win) then
+						if
+							vim.g._snacks_compile_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win)
+						then
 							pcall(vim.api.nvim_win_close, vim.g._snacks_compile_hint_win, true)
 						end
-						if vim.g._snacks_compile_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf) then
+						if
+							vim.g._snacks_compile_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf)
+						then
 							pcall(vim.api.nvim_buf_delete, vim.g._snacks_compile_hint_buf, { force = true })
 						end
 						local new_cmd = head .. content .. tail
@@ -721,7 +765,13 @@ PY
 						end
 						vim.schedule(function()
 							local buf = vim.api.nvim_create_buf(false, true)
-							vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "⏵ <CR> runs via :Compile    <Esc> cancels" })
+							vim.api.nvim_buf_set_lines(
+								buf,
+								0,
+								-1,
+								false,
+								{ "⏵ <CR> runs via :Compile    <Esc> cancels" }
+							)
 							local win = vim.api.nvim_open_win(buf, false, {
 								relative = "editor",
 								width = 44,
@@ -741,10 +791,16 @@ PY
 								once = true,
 								pattern = ":",
 								callback = function()
-									if vim.g._snacks_compile_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win) then
+									if
+										vim.g._snacks_compile_hint_win
+										and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win)
+									then
 										pcall(vim.api.nvim_win_close, vim.g._snacks_compile_hint_win, true)
 									end
-									if vim.g._snacks_compile_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf) then
+									if
+										vim.g._snacks_compile_hint_buf
+										and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf)
+									then
 										pcall(vim.api.nvim_buf_delete, vim.g._snacks_compile_hint_buf, { force = true })
 									end
 									vim.g._snacks_compile_hint_win = nil
@@ -929,7 +985,7 @@ PY
 					})
 				else
 					Snacks.picker.man()
-          -- Snacks.picker.man({ section = { "1" } })
+					-- Snacks.picker.man({ section = { "1" } })
 				end
 			end,
 			{ silent = true },
@@ -1024,10 +1080,16 @@ PY
 								once = true,
 								pattern = ":",
 								callback = function()
-									if vim.g._snacks_async_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win) then
+									if
+										vim.g._snacks_async_hint_win
+										and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win)
+									then
 										pcall(vim.api.nvim_win_close, vim.g._snacks_async_hint_win, true)
 									end
-									if vim.g._snacks_async_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf) then
+									if
+										vim.g._snacks_async_hint_buf
+										and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf)
+									then
 										pcall(vim.api.nvim_buf_delete, vim.g._snacks_async_hint_buf, { force = true })
 									end
 									vim.g._snacks_async_hint_win = nil
@@ -1066,17 +1128,27 @@ PY
 				if compile_active then
 					local function reenter_compile(picked_cmd)
 						vim.g._compile_cmdline_active = true
-						if vim.g._snacks_compile_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win) then
+						if
+							vim.g._snacks_compile_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win)
+						then
 							pcall(vim.api.nvim_win_close, vim.g._snacks_compile_hint_win, true)
 						end
-						if vim.g._snacks_compile_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf) then
+						if
+							vim.g._snacks_compile_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf)
+						then
 							pcall(vim.api.nvim_buf_delete, vim.g._snacks_compile_hint_buf, { force = true })
 						end
 						local feed = ":" .. (picked_cmd or "")
 						vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(feed, true, false, true), "n", true)
 						vim.schedule(function()
 							local buf = vim.api.nvim_create_buf(false, true)
-							vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "⏵ <CR> runs via :Compile    <Esc> cancels" })
+							vim.api.nvim_buf_set_lines(
+								buf,
+								0,
+								-1,
+								false,
+								{ "⏵ <CR> runs via :Compile    <Esc> cancels" }
+							)
 							local win = vim.api.nvim_open_win(buf, false, {
 								relative = "editor",
 								width = 44,
@@ -1096,10 +1168,16 @@ PY
 								once = true,
 								pattern = ":",
 								callback = function()
-									if vim.g._snacks_compile_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win) then
+									if
+										vim.g._snacks_compile_hint_win
+										and vim.api.nvim_win_is_valid(vim.g._snacks_compile_hint_win)
+									then
 										pcall(vim.api.nvim_win_close, vim.g._snacks_compile_hint_win, true)
 									end
-									if vim.g._snacks_compile_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf) then
+									if
+										vim.g._snacks_compile_hint_buf
+										and vim.api.nvim_buf_is_valid(vim.g._snacks_compile_hint_buf)
+									then
 										pcall(vim.api.nvim_buf_delete, vim.g._snacks_compile_hint_buf, { force = true })
 									end
 									vim.g._snacks_compile_hint_win = nil
@@ -1355,6 +1433,18 @@ PY
 	config = function(_, opts)
 		require("snacks").setup(opts)
 		Snacks.util.icon = function(name, cat, opts)
+
+    --  Workaround https://github.com/folke/snacks.nvim/issues/2896
+    local placement = require("snacks.image.placement")
+    local update = placement.update
+
+    placement.update = function(self, ...)
+      if self.hidden and self.wins and #self:wins() > 0 then
+        self.hidden = false
+        self._state = nil
+      end
+      return update(self)
+    end
 			--    -- WORKING
 			-- -- Copy and modify from https://github.com/folke/snacks.nvim/blob/main/lua/snacks/util/init.lua#L120-L154
 			-- -- Example with `mini.icons`:

@@ -41,11 +41,12 @@ M.old_api_opts = {
 			confirm_simple = true,
 			default_explorer = false,
 			delete_to_trash = true,
-			columns_order = { "git", "link", "permission", "creation_time" },
+			-- columns_order = { "git", "link", "permission", "size" },
+      columns_order = { "git", "link", "permission", "size" },
 			columns = {
 				creation_time = { enabled = false },
-				permission = { enabled = false },
-				size = { enabled = false },
+				permission = { enabled = true },
+				size = { enabled = true },
 				git = {
 					enabled = true,
 					symbols = {
@@ -100,7 +101,8 @@ M.old_api_opts = {
 					vim.notify("Copied path: " .. path)
 					vim.fn.setreg("+", path)
 				end,
-				["<leader>fp"] = "TogglePermissions",
+				-- ["<leader>fp"] = "TogglePermissions",
+        ["<leader>fp"] = "ToggleDetails",
 				["."] = function(view)
 					local entry = view:cursor_node_entry()
 					local path = entry.path
@@ -119,6 +121,10 @@ M.old_api_opts = {
 				end,
 				["K"] = function(view)
 					local entry = view:cursor_node_entry()
+					if not entry or not entry.path then
+						vim.notify("No file under cursor", vim.log.levels.WARN)
+						return
+					end
 					local path = entry.path
 
 					local current_win = vim.api.nvim_get_current_win()
@@ -157,10 +163,29 @@ M.old_api_opts = {
 
 					local file_permissions = vim.fn.getfperm(path)
 
+					local is_dir = stats.type == "directory" or vim.fn.isdirectory(path) == 1
+
+					local function format_bytes(bytes)
+						if bytes == nil then
+							return "unknown"
+						end
+						if bytes < 1024 then
+							return string.format("%dB", bytes)
+						end
+						local units = { "K", "M", "G", "T" }
+						local size = bytes / 1024
+						local unit = 1
+						while size >= 1024 and unit < #units do
+							size = size / 1024
+							unit = unit + 1
+						end
+						return string.format("%.1f%s (%d bytes)", size, units[unit], bytes)
+					end
+
 					local lines = {
 						" fullpath: " .. path,
 						" permis:   " .. file_permissions,
-						" size:     calculating...",
+						" size:     " .. (is_dir and "calculating..." or format_bytes(stats.size)),
 						" accessed: " .. os.date("%x %X", stats.atime.sec),
 						" modified: " .. os.date("%x %X", stats.mtime.sec),
 						" created:  " .. os.date("%x %X", stats.birthtime.sec),
@@ -229,6 +254,11 @@ M.old_api_opts = {
 							end
 						end,
 					})
+
+					-- Files already show exact size from stats; only du folders.
+					if not is_dir then
+						return
+					end
 
 					vim.system({ "du", "-sh", path }, {}, function(result)
 						vim.schedule(function()
@@ -495,7 +525,7 @@ M.old_api_opts = {
 						vim.notify("Could not open file: " .. tostring(err), vim.log.levels.ERROR)
 					end
 				end,
-				["L"] = "Select",
+				["L"] = "SelectIfDirectory",
 				["<C-t>"] = "SelectTab",
         ["<C-v>"] = "SelectVSplit",
 				-- ["<C-v>"] = function(view)
@@ -630,8 +660,8 @@ return {
 	{
 		"jugarpeupv/fyler.nvim",
 		-- branch = "main",
-    dev = true,
-    dir = "~/projects/fyler.nvim/wt-fyler-main/",
+    -- dev = true,
+    -- dir = "~/projects/fyler.nvim/wt-fyler-main/",
 		lazy = false,
 		cmd = { "Fyler" },
 		dependencies = {

@@ -87,6 +87,7 @@ return {
     opts = {
       ensure_installed = {
         -- LSP servers
+        "clangd",
         "angular-language-server",
         "bash-language-server",
         "eslint-lsp",
@@ -97,6 +98,7 @@ return {
         "nxls",
         "ruby-lsp",
         "vtsls",
+        "clang-format",
         -- Non-LSP / java tooling
         "actionlint",
         "java-debug-adapter",

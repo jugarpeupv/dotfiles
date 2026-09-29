@@ -298,13 +298,18 @@ return {
 					color = "#89B4FA",
 				},
 				h = {
-					icon = "",
-					-- icon = "H",
+					-- icon = "",
+					icon = "H",
 					name = "h",
 					color = "#9CDCFE",
 				},
 				c = {
-					icon = "󰙱",
+					-- icon = "󰙱",
+          -- icon = "󰯲",
+          -- icon = "󰯱",
+          -- icon = "C"
+          -- icon = "",
+          icon = "C",
           -- icon = "",
 					-- icon = "",
 					name = "c",

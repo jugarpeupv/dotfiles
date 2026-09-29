@@ -114,6 +114,16 @@ M.find_directory_in_fyler_and_focus = function()
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
 
+	local cwd = vim.fs.normalize(vim.fn.getcwd())
+	local function with_tilde(p)
+		local home = os.getenv("HOME") or ""
+		if home ~= "" then
+			local out = p:gsub("^" .. vim.pesc(home), "~")
+			return out
+		end
+		return p
+	end
+
 	local remove_dir = function(prompt_bufnr)
 		local selection = action_state.get_selected_entry()
 		actions.close(prompt_bufnr)
@@ -168,12 +178,12 @@ M.find_directory_in_fyler_and_focus = function()
 	end
 
 	require("telescope.builtin").find_files({
-		prompt_title = "Open directory in Fyler",
+		cwd = cwd,
+		prompt_title = 'Open directory in Fyler from "' .. with_tilde(cwd) .. '"',
 		find_command = {
 			"fd",
 			"--type",
 			"directory",
-			"--absolute-path",
 			"--hidden",
 			"--no-ignore",
 			"--exclude",
@@ -185,26 +195,23 @@ M.find_directory_in_fyler_and_focus = function()
 		},
 		attach_mappings = open_fyler_tree,
 		entry_maker = function(entry)
-			local home = os.getenv("HOME") or ""
-			local display_path = entry
-			if home ~= "" then
-				display_path = entry:gsub("^" .. vim.pesc(home), "~")
-			end
+			local rel = entry:gsub("^%./", "")
+			local abs = vim.fs.normalize(cwd .. "/" .. rel)
 			local icon, hl = "", "Directory"
 			local ok, devicons = pcall(require, "nvim-web-devicons")
 			if ok then
-				local name = entry:match("([^/]+)/?$") or entry
+				local name = rel:match("([^/]+)/?$") or rel
 				local _icon, _hl = devicons.get_icon(name, nil, { default = false })
 				if _icon and _icon ~= "" then
 					icon, hl = _icon, _hl
 				end
 			end
 			return {
-				value = entry,
+				value = abs,
 				display = function()
-					return icon .. "  " .. display_path, { { { 0, vim.fn.strchars(icon) + 2 }, hl } }
+					return icon .. "  " .. rel, { { { 0, vim.fn.strchars(icon) + 2 }, hl } }
 				end,
-				ordinal = entry .. " " .. display_path,
+				ordinal = rel,
 			}
 		end,
 	})
@@ -845,37 +852,67 @@ M.oil_fzf_files_builtin = function(path)
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
 
+	path = vim.fs.normalize(vim.fn.expand(path))
+	-- Use cwd/search_dirs so fd receives the spaced path as one argv,
+	-- not as shell-split "pCloud" + "Drive/". Manual shell needs quotes:
+	-- fd . "/Users/jgp/pCloud Drive/" --exclude ...
 	local find_command = {
 		"fd",
-		".",
-		path,
+		"--type",
+		"f",
+		"--hidden",
+		"--absolute-path",
 		"--exclude",
 		".git",
 		"--exclude",
 		"node_modules",
 		"--max-depth",
 		"4",
-		"--hidden",
 	}
 
 	require("telescope.builtin").find_files({
-		find_command,
+		cwd = path,
+		find_command = find_command,
 		prompt_title = 'Open the directory of the selected file in Oil from "'
-			.. path:gsub(os.getenv("HOME"), "~")
+			.. path:gsub("^" .. vim.pesc(os.getenv("HOME") or ""), "~")
 			.. '"',
 		sorter = conf.generic_sorter(),
-		attach_mappings = function(prompt_bufnr)
+		attach_mappings = function(prompt_bufnr, map)
 			actions.select_default:replace(function()
 				actions.close(prompt_bufnr)
 				local selection = action_state.get_selected_entry()
 				if vim.fn.isdirectory(selection.value) == 1 then
 					require("oil").open(selection.value)
 				else
-					-- remove the last part of the path from selection.value
-					local dir_path = selection.value:match("(.*/)")
-					require("oil").open(dir_path)
+					-- -- remove the last part of the path from selection.value
+					-- local dir_path = selection.value:match("(.*/)")
+					-- require("oil").open(dir_path)
+					vim.cmd("edit " .. vim.fn.fnameescape(selection.value))
 				end
 			end)
+			actions.select_vertical:replace(function()
+				actions.close(prompt_bufnr)
+				local selection = action_state.get_selected_entry()
+				if vim.fn.isdirectory(selection.value) == 1 then
+					vim.cmd("vsplit")
+					require("oil").open(selection.value)
+				else
+					vim.cmd("vsplit " .. vim.fn.fnameescape(selection.value))
+				end
+			end)
+			actions.select_horizontal:replace(function()
+				actions.close(prompt_bufnr)
+				local selection = action_state.get_selected_entry()
+				if vim.fn.isdirectory(selection.value) == 1 then
+					vim.cmd("split")
+					require("oil").open(selection.value)
+				else
+					vim.cmd("split " .. vim.fn.fnameescape(selection.value))
+				end
+			end)
+			-- <C-s> is common for horizontal split, map it too
+			map("i", "<C-s>", actions.select_horizontal)
+			map("n", "<C-s>", actions.select_horizontal)
 			return true
 		end,
 	})
@@ -924,18 +961,41 @@ M.oil_fzf_files = function(path)
 					end,
 				}),
 				sorter = conf.generic_sorter(opts),
-				attach_mappings = function(prompt_bufnr)
+				attach_mappings = function(prompt_bufnr, map)
 					actions.select_default:replace(function()
 						actions.close(prompt_bufnr)
 						local selection = action_state.get_selected_entry()
 						if vim.fn.isdirectory(selection.value) == 1 then
 							require("oil").open(selection.value)
 						else
-							-- remove the last part of the path from selection.value
-							local dir_path = selection.value:match("(.*/)")
-							require("oil").open(dir_path)
+							-- -- remove the last part of the path from selection.value
+							-- local dir_path = selection.value:match("(.*/)")
+							-- require("oil").open(dir_path)
+							vim.cmd("edit " .. vim.fn.fnameescape(selection.value))
 						end
 					end)
+					actions.select_vertical:replace(function()
+						actions.close(prompt_bufnr)
+						local selection = action_state.get_selected_entry()
+						if vim.fn.isdirectory(selection.value) == 1 then
+							vim.cmd("vsplit")
+							require("oil").open(selection.value)
+						else
+							vim.cmd("vsplit " .. vim.fn.fnameescape(selection.value))
+						end
+					end)
+					actions.select_horizontal:replace(function()
+						actions.close(prompt_bufnr)
+						local selection = action_state.get_selected_entry()
+						if vim.fn.isdirectory(selection.value) == 1 then
+							vim.cmd("split")
+							require("oil").open(selection.value)
+						else
+							vim.cmd("split " .. vim.fn.fnameescape(selection.value))
+						end
+					end)
+					map("i", "<C-s>", actions.select_horizontal)
+					map("n", "<C-s>", actions.select_horizontal)
 					return true
 				end,
 			})
