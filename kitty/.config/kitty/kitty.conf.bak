@@ -659,6 +659,7 @@ symbol_map U+D000-U+D21A termicons
 allow_width_overrides yes
 # narrow_symbols
 # narrow_symbols U+F111,U+F114,U+F115 1
+narrow_symbols U+f489 1
 narrow_symbols U+d157 1
 narrow_symbols U+f0da 1
 # folds
@@ -668,8 +669,8 @@ narrow_symbols U+f48c,U+f4da,U+f42d 1
 # narrow_symbols U+eead 1
 
 #  
-narrow_symmbols U+f007 1
-narrow_symmbols U+f0c0,U+edca,U+000f0b58 1
+# narrow_symbols U+f007 1
+# narrow_symbols U+f0c0,U+edca,U+000f0b58 1
 
 # narrow_symbols U+f0820,U+f05a,U+f071,U+f057 1
 # narrow_symbols U+F0820 1
@@ -680,6 +681,7 @@ narrow_symbols U+d1a1 1
 narrow_symbols U+D040 1
 # 
 narrow_symbols U+F474 1
+
 # narrow_symbols U+D157 1
 # narrow_symbols U+E0A0-U+E0A3,U+E0C0-U+E0C7,U+F111,U+F114 1
 
@@ -3329,7 +3331,7 @@ window_padding_width 4 0 0 10
 # # END_KITTY_FONTS
 
 
-adjust_line_height  2
+adjust_line_height  0
 adjust_column_width 0
 # font_family      family="Iosevka Term"
 # bold_font        family='Iosevka Term' style=Bold
@@ -3338,3 +3340,21 @@ adjust_column_width 0
 
 
 font_size 24
+
+
+
+
+# # BEGIN_KITTY_FONTS
+# font_family      family=Iosevka-Menlo style=Semi-Extended
+# bold_font        family=Iosevka-Menlo style='Bold Semi-Extended'
+# italic_font      family=Iosevka-Menlo style='Semi-Extended Oblique'
+# bold_italic_font family=Iosevka-Menlo style='Bold Semi-Extended Oblique'
+# # END_KITTY_FONTS
+
+
+# BEGIN_KITTY_FONTS
+# font_family      family='Iosevka Custom' style='Semi-Extended'
+# bold_font        family='Iosevka Custom' style='Bold Semi-Extended'
+# italic_font      family='Iosevka Custom' style='Semi-Extended Oblique'
+# bold_italic_font family='Iosevka Custom' style='Semi-Extended Oblique'
+# # END_KITTY_FONTS

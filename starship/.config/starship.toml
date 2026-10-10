@@ -212,8 +212,12 @@ disabled = true
 
 [java]
 format ="via [${symbol}(${version}) ]($style)"
-style = "bold blue"
+style = "blue"
 symbol = "󰬷 "
+
+[golang]
+symbol = " "
+style = "cyan"
 
 [gradle]
 symbol = " "

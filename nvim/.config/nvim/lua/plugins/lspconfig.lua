@@ -113,7 +113,6 @@ return {
 					"javascriptreact",
 					"go",
 					"ruby",
-					"rust",
 					"java",
 				},
 				docker_compose_language_service = { "yaml", "yml", "dockercompose" },
@@ -141,7 +140,7 @@ return {
         -- markdown_oxide = { "markdown" },  -- or whatever you name it
 				pyright = { "python" },
 				ruby_lsp = { "ruby" },
-				rust_analyzer = { "rust" },
+				-- rust_analyzer = { "rust" },
 				somesass_ls = { "sass", "scss" },
 				tailwindcss = { "html", "javascript", "typescript", "vue", "svelte", "php", "heex", "tsx", "jsx" },
 				vtsls = {

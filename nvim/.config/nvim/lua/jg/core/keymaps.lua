@@ -194,15 +194,13 @@ vim.keymap.set({ "n" }, "<leader>sf", function()
 end, opts)
 
 vim.keymap.set({ "n" }, "<leader>so", function()
-  require("jg.custom.telescope").oil_fzf_dir({ vim.fn.expand("~"), "/Volumes" })
+	require("jg.custom.telescope").oil_fzf_dir({ vim.fn.expand("~"), "/Volumes" })
 end, opts)
-
 
 vim.keymap.set("n", "<leader>sN", function()
-  local jg_telescope = require("jg.custom.telescope")
-  jg_telescope.nvimtree_fzf_dir(vim.fn.expand("~"))
+	local jg_telescope = require("jg.custom.telescope")
+	jg_telescope.nvimtree_fzf_dir(vim.fn.expand("~"))
 end, opts)
-
 
 vim.keymap.set({ "n" }, "<leader>sH", function()
 	local find_command = {
@@ -369,7 +367,7 @@ keymap("n", "<leader>CE", function()
 end, opts)
 
 keymap("n", "<leader>of", function()
-	require("telescope.builtin").oldfiles({ only_cwd = true })
+	require("telescope.builtin").oldfiles({ only_cwd = true, include_current_session = false })
 end, opts)
 vim.keymap.set({ "n" }, "<leader>OF", function()
 	require("telescope").extensions.frecency.frecency({
@@ -728,7 +726,8 @@ keymap("n", "<leader>np", "<cmd>:e ~/.npmrc<cr>", opts)
 keymap("n", "<leader>aw", "<cmd>:e ~/.aws/config<cr>", opts)
 keymap("n", "<leader>zh", "<cmd>:e ~/.zshrc<cr>", opts)
 keymap("n", "<leader>gc", function()
-	require("telescope.builtin").git_commits()
+	-- require("telescope.builtin").git_commits()
+  Snacks.picker.git_log()
 end, opts)
 
 -- Hop
@@ -989,15 +988,40 @@ vim.g._compile_cmdline_active = false
 local _compile_hint_win, _compile_hint_buf ---@type integer|nil, integer|nil
 
 local function _close_compile_hint()
-	if _compile_hint_win and vim.api.nvim_win_is_valid(_compile_hint_win) then
-		vim.api.nvim_win_close(_compile_hint_win, true)
+	local win, buf = _compile_hint_win, _compile_hint_buf
+	_compile_hint_win, _compile_hint_buf = nil, nil
+	-- CmdwinEnter (E11) / cmdline expr (E565) forbid sync win/buf ops -> defer.
+	local function _defer_on_restricted(err)
+		return err and (tostring(err):match("E11") or tostring(err):match("E565"))
 	end
-	_compile_hint_win = nil
-	if _compile_hint_buf and vim.api.nvim_buf_is_valid(_compile_hint_buf) then
-		vim.api.nvim_buf_delete(_compile_hint_buf, { force = true })
+	if win and vim.api.nvim_win_is_valid(win) then
+		local ok, err = pcall(vim.api.nvim_win_close, win, true)
+		if not ok and _defer_on_restricted(err) then
+			vim.schedule(function()
+				if vim.api.nvim_win_is_valid(win) then
+					pcall(vim.api.nvim_win_close, win, true)
+				end
+			end)
+		end
 	end
-	_compile_hint_buf = nil
+	if buf and vim.api.nvim_buf_is_valid(buf) then
+		local ok, err = pcall(vim.api.nvim_buf_delete, buf, { force = true })
+		if not ok and _defer_on_restricted(err) then
+			vim.schedule(function()
+				if vim.api.nvim_buf_is_valid(buf) then
+					pcall(vim.api.nvim_buf_delete, buf, { force = true })
+				end
+			end)
+		end
+	end
 end
+
+-- Bridges CmdlineLeave -> CmdwinEnter when leaving <M-b> cmdline via
+-- cedit (<C-f>/<C-o>): remembers bare args + timestamp so CmdwinEnter can
+-- prefix the cmdwin line with "Compile ". Timestamp avoids stale use after <Esc>.
+local _compile_pending_for_cmdwin = { text = nil, time = 0 }
+-- Guards double-<CR> in cmdwin: two schedules would close+feed twice -> "A:A".
+local _compile_cmdwin_busy = false
 
 -- Small float above the cmdline so it's obvious <CR> runs via :Compile.
 -- focusable=false: never steals focus from the cmdline or blink's menu.
@@ -1029,6 +1053,7 @@ vim.keymap.set("c", "<CR>", function()
 	if vim.g._compile_cmdline_active then
 		local cmd = vim.fn.getcmdline()
 		vim.g._compile_cmdline_active = false
+		_compile_pending_for_cmdwin.text, _compile_pending_for_cmdwin.time = nil, 0
 		if cmd == nil or cmd:match("^%s*$") then
 			return vim.api.nvim_replace_termcodes("<C-c>", true, false, true)
 		end
@@ -1054,7 +1079,9 @@ vim.api.nvim_create_autocmd("CmdlineChanged", {
 	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = true }),
 	pattern = ":",
 	callback = function()
-    if vim.fn.getcmdtype()~=":" then return end
+		if vim.fn.getcmdtype() ~= ":" then
+			return
+		end
 		vim.g._last_cmdline = vim.fn.getcmdline()
 	end,
 })
@@ -1065,6 +1092,23 @@ vim.api.nvim_create_autocmd("CmdwinLeave", {
 	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = false }),
 	pattern = ":",
 	callback = function()
+		-- CTRL-C return-to-cmdline does no redraw (:h cmdwin); force it
+		-- synchronously while transitioning so no extra key is needed.
+		if vim.g._compile_returning_to_cmdline then
+			pcall(vim.cmd, "redraw")
+		end
+		-- Insert-mode <CR> in a Compile cmdwin stashes args and quits with
+		-- native keys (Lua window commands don't leave cmdwin from insert);
+		-- run :Compile deferred from Normal mode here.
+		local stashed = vim.g._compile_cmdwin_args
+		if stashed ~= nil and stashed ~= "" then
+			vim.g._compile_cmdwin_args = nil
+			vim.g._cmdwin_executed = false
+			vim.schedule(function()
+				vim.cmd("Compile " .. stashed)
+			end)
+			return
+		end
 		-- Get the line under cursor in the cmdwin buffer before it closes
 		local cmd = vim.fn.getline(".")
 		local args = _compile_args_from_cmd(cmd)
@@ -1076,14 +1120,34 @@ vim.api.nvim_create_autocmd("CmdwinLeave", {
 	end,
 })
 
+-- Returning from cmdwin via CTRL-C re-enters cmdline; redraw again here
+-- (CmdwinLeave alone can run before the cmdline is ready).
+-- NOTE: do NOT show/create hint floats here: creating windows while
+-- entering cmdline can fail after closing the <M-b> hint, leaving no hint.
+vim.api.nvim_create_autocmd("CmdlineEnter", {
+	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = false }),
+	pattern = ":",
+	callback = function()
+		if vim.g._compile_returning_to_cmdline or vim.g._compile_cmdline_active then
+			vim.g._compile_returning_to_cmdline = false
+			pcall(vim.cmd, "redraw")
+		end
+	end,
+})
+
 -- Save Compile commands when they're executed from normal command line
 -- Only save if it wasn't already saved from cmdwin
 vim.api.nvim_create_autocmd("CmdlineLeave", {
 	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = false }),
 	pattern = ":",
 	callback = function()
-		-- End of an <M-b> flow that didn't go through the <CR> intercept
-		-- (e.g. aborted with <Esc>/<C-c>): disarm it.
+		-- End of an <M-b> flow that didn't go through the <CR> intercept.
+		-- If leaving via cedit (<C-f>/<C-o>) CmdwinEnter follows immediately,
+		-- so stash the bare args for it; <Esc> leaves stale state that expires.
+		if vim.g._compile_cmdline_active then
+			_compile_pending_for_cmdwin.text = vim.g._last_cmdline
+			_compile_pending_for_cmdwin.time = vim.loop.now()
+		end
 		vim.g._compile_cmdline_active = false
 		_close_compile_hint()
 		-- If we just executed from cmdwin, skip this to avoid overwriting
@@ -1099,18 +1163,77 @@ vim.api.nvim_create_autocmd("CmdlineLeave", {
 	end,
 })
 
--- Leaving for the cmdline window (C-f) mid-flow: disarm, the cmdwin
--- <CR> executes raw Ex commands and can't be intercepted the same way.
+-- Entering cmdwin (C-f/<C-o>) mid-flow: route <CR> via :Compile instead of
+-- raw Ex (bare "cc ..." would hit :cc/E42, bare "echo x" E121).
 vim.api.nvim_create_autocmd("CmdwinEnter", {
 	group = vim.api.nvim_create_augroup("CompileCommandMemory", { clear = false }),
 	pattern = ":",
 	callback = function()
+		-- NOTE: CmdwinEnter fires BEFORE CmdlineLeave for cedit, so the
+		-- <M-b> flag is still set here; pending (set in CmdlineLeave) is the
+		-- fallback for the opposite order.
+		local was_active = vim.g._compile_cmdline_active
+		local pending = _compile_pending_for_cmdwin.text
+		local age = vim.loop.now() - (_compile_pending_for_cmdwin.time or 0)
+		_compile_pending_for_cmdwin.text, _compile_pending_for_cmdwin.time = nil, 0
 		vim.g._compile_cmdline_active = false
 		_close_compile_hint()
+		if not was_active and (pending == nil or age > 2000) then
+			return
+		end
+		-- Normal cmdwin behavior, but hijack <CR>: run the line via
+		-- :Compile instead of raw Ex (bare "cc ..." would hit :cc/E42,
+		-- bare "echo x" E121). The cmdwin text stays bare; the prefix is
+		-- only added at execution time.
+		local function _compile_cmdwin_accept()
+			local edited = vim.fn.getline(".")
+			local args = _compile_args_from_cmd(edited) or edited or ""
+			if args:match("^%s*$") then
+				return
+			end
+			_save_compile_args(args)
+			-- :Compile opens windows (E11 inside cmdwin), so quit first
+			-- (documented cmdwin leave) and run deferred from Normal mode.
+			vim.cmd("quit!")
+			vim.g._cmdwin_executed = false
+			vim.schedule(function()
+				vim.cmd("Compile " .. args)
+			end)
+		end
+		vim.keymap.set("n", "<CR>", _compile_cmdwin_accept, {
+			buffer = true,
+			noremap = true,
+			silent = true,
+			desc = "Compile cmdwin: run via :Compile",
+		})
+		-- Insert mode: window commands issued from an insert callback don't
+		-- leave cmdwin in time, so stash the args and quit with native keys;
+		-- CmdwinLeave below picks the flag up and runs :Compile from Normal.
+		vim.keymap.set("i", "<CR>", function()
+			local edited = vim.fn.getline(".")
+			local args = _compile_args_from_cmd(edited) or edited or ""
+			if args:match("^%s*$") then
+				return ""
+			end
+			_save_compile_args(args)
+			vim.g._compile_cmdwin_args = args
+			return vim.api.nvim_replace_termcodes("<Esc>:quit!<CR>", true, false, true)
+		end, {
+			buffer = true,
+			noremap = true,
+			expr = true,
+			silent = true,
+			desc = "Compile cmdwin insert: run via :Compile",
+		})
 	end,
 })
 
 vim.keymap.set({ "n" }, "<M-b>", function()
+	_compile_pending_for_cmdwin.text, _compile_pending_for_cmdwin.time = nil, 0
+	_compile_cmdwin_busy = false
+	vim.g._cmdwin_executed = false
+	vim.g._compile_returning_to_cmdline = false
+	vim.g._compile_cmdwin_args = nil
 	vim.g._compile_cmdline_active = true
 	-- prefill last args (no "Compile " prefix); <CR> routes it to :Compile
 	local cmd_to_feed = ":" .. (vim.g._saved_compile_args or "")
@@ -1299,7 +1422,7 @@ vim.cmd([[cnoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"]])
 
 -- nx keymaps
 
-vim.keymap.set({ "n" }, "<leader>Rs", function()
+vim.keymap.set({ "n" }, "<leader>cs", function()
 	require("jg.custom.telescope").run_npm_scripts_improved()
 end, opts)
 
@@ -2128,7 +2251,6 @@ vim.keymap.set("i", "<C-k>", "<c-o>D<esc>", { desc = "Kill to end of line" })
 
 -- vim.o.wildcharm = vim.fn.char2nr("<C-v>")  -- or: vim.o.wildcharm = 26
 
-
 vim.cmd([[set wildcharm=<C-v>]])
 -- vim.cmd([[cnoremap <C-l> <Space><BS><C-v>]])
 vim.cmd([[inoremap <C-l> <C-y>]])
@@ -2227,3 +2349,7 @@ end)
 -- end)
 
 vim.api.nvim_create_user_command("LspInfo", "checkhealth vim.lsp", { desc = "Show LSP Info" })
+
+vim.keymap.set("n", "<leader>tp", function()
+	vim.cmd("e ~/work/obsvault-okode/wt-main/RAM/tareas_pendientes.md")
+end)

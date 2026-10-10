@@ -99,6 +99,8 @@ return {
         "ruby-lsp",
         "vtsls",
         "clang-format",
+        "rust-analyzer",
+        "gopls",
         -- Non-LSP / java tooling
         "actionlint",
         "java-debug-adapter",

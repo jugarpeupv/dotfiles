@@ -1268,12 +1268,13 @@ M.fyler_telescope_dir = function(path, no_ignore)
         finder = finders.new_oneshot_job(find_command, {
           entry_maker = function(entry)
             local entry_substituted = entry:gsub(escaped_path, ""):gsub("^/", "")
+            local display_path = "~/" .. entry_substituted
             return {
               value = entry,
               display = function()
-                return "  " .. entry_substituted, { { { 0, 1 }, "Directory" } }
+                return "  " .. display_path, { { { 0, 1 }, "Directory" } }
               end,
-              ordinal = entry,
+              ordinal = display_path .. " " .. entry,
             }
           end,
         }),
@@ -1784,7 +1785,8 @@ M.notmuch_picker = function(opts)
 		else
 			vim.fn.mkdir(vim.fs.dirname(cache_path), "p")
 			local handle =
-				io.popen("notmuch address --format=json --deduplicate=address -- 'tag:izertis' | jq -r '.[] | .[\"name-addr\"]'")
+				-- io.popen("notmuch address --format=json --deduplicate=address -- 'tag:izertis' | jq -r '.[] | .[\"name-addr\"]'")
+        io.popen("notmuch address --format=json --deduplicate=address -- 'tag:izertis or tag:gmail-personal' | jq -r '.[] | .[\"name-addr\"]'")
 			if not handle then
 				return addresses
 			end

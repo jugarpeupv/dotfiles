@@ -4,6 +4,8 @@ tap "anomalyco/tap", trusted: true
 tap "arl/arl", trusted: true
 # yabai
 tap "asmvik/formulae", "https://github.com/asmvik/homebrew-formulae.git", trusted: true
+# isync with XOAUTH2 SASL plugin
+tap "benswift/tap", trusted: true
 # engram, gga, gentle-ai
 tap "gentleman-programming/tap", "https://github.com/Gentleman-Programming/homebrew-tap", trusted: true
 
@@ -83,8 +85,6 @@ brew "chafa"
 brew "cliclick"
 # Cross-platform make
 brew "cmake"
-# Dependency manager for Cocoa projects
-brew "cocoapods"
 # Generic library support script
 brew "libtool"
 # Libraries to talk to Microsoft SQL Server and Sybase databases
@@ -93,6 +93,8 @@ brew "freetds"
 brew "coreutils"
 # Simple Authentication and Security Layer
 brew "cyrus-sasl"
+# Cyrus SASL with XOAUTH2 plugin for mbsync/isync
+brew "benswift/tap/cyrus-sasl-xoauth2"
 # POP/IMAP/SMTP/Caldav/Carddav/LDAP exchange gateway
 brew "davmail"
 # Load/unload environment variables based on $PWD
@@ -347,10 +349,6 @@ brew "gentleman-programming/tap/engram", trusted: true
 brew "gentleman-programming/tap/gentle-ai", trusted: true
 # Gentleman Guardian Angel - Provider-agnostic code review using AI (Claude, Gemini, Codex, OpenCode, Ollama)
 brew "gentleman-programming/tap/gga"
-# Password manager that keeps all passwords secure behind one password
-cask "1password"
-# Command-line interface for 1Password
-cask "1password-cli"
 # Tools for building Android applications
 cask "android-studio"
 # Digital signature editor and validator
@@ -359,8 +357,6 @@ cask "autofirma"
 cask "bitwarden"
 # UI for creating Windows installer ISO from UUPDump
 cask "crystalfetch"
-# Use any mail/calendar client with an Exchange server
-cask "davmail-app"
 # App to build and share containerised applications and microservices
 cask "docker-desktop"
 # Online diagram software

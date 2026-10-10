@@ -249,6 +249,11 @@ return {
 					cterm_color = "124",
 					name = "Out",
 				},
+        go = {
+          icon = "",
+          color = "#9CDCFE",
+          name = "go",
+        },
 				zsh = {
 					icon = "",
 					color = "#9CDCFE",

@@ -141,6 +141,40 @@ return {
 			{ "<leader>ps", "<cmd>PS<cr>" },
 			{ "<leader>ls", "<cmd>Lsof<cr>" },
 		},
+    opts = {
+      -- 1. PS Buffer Keymaps
+      ps_buffer_keymaps = {
+        refresh = "R",             -- Refresh process list
+        kill = "X",                -- Kill process (normal and visual mode)
+        inspect = "K",             -- Inspect process details
+        open_proc = "p",           -- Open /proc/<pid> (Linux)
+        quit = "q",                -- Close buffer
+        filter = "F",              -- Filter processes by text
+        pin = "P",                 -- Pin/filter by PID
+        port = "O",                -- Filter by port number
+        sort_cpu = "gC",           -- Sort by CPU usage
+        sort_mem = "gm",           -- Sort by memory usage
+        auto_reload = "gl",        -- Toggle auto-reload
+        help = "g?",               -- Show keybinding help
+      },
+
+      -- 2. LSOF Buffer Keymaps
+      lsof_keymaps = {
+        refresh = "R",             -- Refresh lsof list
+        kill = "X",                -- Kill process (normal and visual mode)
+        inspect = "K",             -- Inspect process
+        filter = "f",              -- Filter lsof output
+        quit = "q",                -- Close lsof buffer
+      },
+
+      -- 3. Process Inspector Buffer Keymaps
+      inspector_keymaps = {
+        refresh = "R",             -- Refresh inspector
+        kill = "X",                -- Kill inspected process
+        quit = "q",                -- Close inspector window
+        open_url = "gx",           -- Open port in browser
+      },
+    }
 	},
 	{
 		"jugarpeupv/visual-match-paren.nvim",

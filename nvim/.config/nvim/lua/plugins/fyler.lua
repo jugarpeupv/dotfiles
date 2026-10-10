@@ -1,31 +1,5 @@
 local M = {}
 
--- Reuse an empty [No Name] buffer in place instead of splitting beside
--- it, so no leftover empty window stays next to the new buffer.
-local function is_empty_buffer(buf)
-	return vim.api.nvim_buf_get_name(buf) == ""
-		and vim.bo[buf].buftype == ""
-		and not vim.bo[buf].modified
-		and vim.api.nvim_buf_line_count(buf) == 1
-		and vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] == ""
-end
-
-local function edit_or_split(target, path, split_cmd)
-	vim.api.nvim_set_current_win(target)
-	if is_empty_buffer(vim.api.nvim_win_get_buf(target)) then
-		vim.cmd.edit({ args = { path }, mods = { keepalt = false } })
-	else
-		vim.cmd[split_cmd]({ args = { path }, mods = { keepalt = false } })
-	end
-end
-
-local function is_usable_win(winid, fyler_win)
-	return vim.api.nvim_win_is_valid(winid)
-		and winid ~= fyler_win
-		and vim.api.nvim_win_get_config(winid).relative == ""
-		and not vim.wo[winid].winfixbuf
-end
-
 M.old_api_opts = {
 	hooks = {
 		on_delete = nil,
@@ -33,7 +7,7 @@ M.old_api_opts = {
 	},
 	integrations = {
 		icon = "nvim_web_devicons",
-    -- icon = "real_icons",
+		-- icon = "real_icons",
 	},
 	views = {
 		finder = {
@@ -42,11 +16,12 @@ M.old_api_opts = {
 			default_explorer = false,
 			delete_to_trash = true,
 			-- columns_order = { "git", "link", "permission", "size" },
-      columns_order = { "git", "link", "permission", "size" },
+			-- columns_order = { "git", "link", "permission", "size" },
+			columns_order = { "git", "link", "size", "creation_time" },
 			columns = {
-				creation_time = { enabled = false },
-				permission = { enabled = true },
+				creation_time = { enabled = true },
 				size = { enabled = true },
+				permission = { enabled = true },
 				git = {
 					enabled = true,
 					symbols = {
@@ -57,7 +32,7 @@ M.old_api_opts = {
 						Renamed = "󰕛 ",
 						Copied = "~",
 						Conflict = "",
-						Ignored = " ",
+						Ignored = "",
 					},
 				},
 				diagnostic = {
@@ -101,8 +76,11 @@ M.old_api_opts = {
 					vim.notify("Copied path: " .. path)
 					vim.fn.setreg("+", path)
 				end,
-				-- ["<leader>fp"] = "TogglePermissions",
-        ["<leader>fp"] = "ToggleDetails",
+				["<leader>fI"] = "TogglePermissions",
+				["<leader>fT"] = "ToggleCreationTime",
+				["<leader>fS"] = "ToggleSize",
+				["<leader>fP"] = "ToggleDetails",
+				["gs"] = "SortByCreationTime",
 				["."] = function(view)
 					local entry = view:cursor_node_entry()
 					local path = entry.path
@@ -399,6 +377,11 @@ M.old_api_opts = {
 					})
 				end,
 				["go"] = function(view)
+					-- Oil is lazy-loaded: force-load the plugin (which runs
+					-- its setup) before touching its API. Reaching this
+					-- keymap first would otherwise call oil.open() with oil
+					-- never configured (E5108 on adapter_to_scheme).
+					require("lazy").load({ plugins = { "oil.nvim" } })
 					local entry = view:cursor_node_entry()
 					if not entry then
 						local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
@@ -496,6 +479,12 @@ M.old_api_opts = {
 					local right_edge = fpos[2] + vim.api.nvim_win_get_width(fyler_win)
 					local target = nil
 					local best_col = nil
+					local function is_usable_win(winid, fyler_win)
+						return vim.api.nvim_win_is_valid(winid)
+							and winid ~= fyler_win
+							and vim.api.nvim_win_get_config(winid).relative == ""
+							and not vim.wo[winid].winfixbuf
+					end
 					for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
 						if is_usable_win(winid, fyler_win) then
 							local wpos = vim.api.nvim_win_get_position(winid)
@@ -527,7 +516,7 @@ M.old_api_opts = {
 				end,
 				["L"] = "SelectIfDirectory",
 				["<C-t>"] = "SelectTab",
-        ["<C-v>"] = "SelectVSplit",
+				["<C-v>"] = "SelectVSplit",
 				-- ["<C-v>"] = function(view)
 				-- 	-- vsplit that reuses an empty [No Name] buffer in the target
 				-- 	-- window instead of splitting beside it, so no leftover
@@ -579,6 +568,12 @@ M.old_api_opts = {
 					local fyler_win = vim.api.nvim_get_current_win()
 					local target = nil
 					local origin = view.win and view.win.origin_win or nil
+					local function is_usable_win(winid, fyler_win)
+						return vim.api.nvim_win_is_valid(winid)
+							and winid ~= fyler_win
+							and vim.api.nvim_win_get_config(winid).relative == ""
+							and not vim.wo[winid].winfixbuf
+					end
 					if origin and is_usable_win(origin, fyler_win) then
 						target = origin
 					else
@@ -591,6 +586,23 @@ M.old_api_opts = {
 					end
 					local path = vim.fn.fnameescape(entry.path)
 					if target then
+						local function edit_or_split(target, path, split_cmd)
+							-- Reuse an empty [No Name] buffer in place instead of splitting beside
+							-- it, so no leftover empty window stays next to the new buffer.
+							local function is_empty_buffer(buf)
+								return vim.api.nvim_buf_get_name(buf) == ""
+									and vim.bo[buf].buftype == ""
+									and not vim.bo[buf].modified
+									and vim.api.nvim_buf_line_count(buf) == 1
+									and vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] == ""
+							end
+							vim.api.nvim_set_current_win(target)
+							if is_empty_buffer(vim.api.nvim_win_get_buf(target)) then
+								vim.cmd.edit({ args = { path }, mods = { keepalt = false } })
+							else
+								vim.cmd[split_cmd]({ args = { path }, mods = { keepalt = false } })
+							end
+						end
 						edit_or_split(target, path, "split")
 					else
 						vim.cmd.split({ args = { path }, mods = { keepalt = false } })
@@ -645,23 +657,11 @@ M.old_api_opts = {
 }
 
 return {
-	-- {
-	-- 	"FylerOrg/fyler.nvim",
-	-- 	opts = {
-	-- 		extensions = { "git", "watcher", "trash" },
-	-- 		integrations = {
-	-- 			-- Use nvim-web-devicons as the icon provider
-	-- 			icon = "nvim_web_devicons",
-	-- 		},
-	-- 	},
-	-- 	lazy = false,
-	-- 	cmd = { "Fyler" },
-	-- },
 	{
 		"jugarpeupv/fyler.nvim",
 		-- branch = "main",
-    -- dev = true,
-    -- dir = "~/projects/fyler.nvim/wt-fyler-main/",
+		-- dev = true,
+		-- dir = "~/projects/fyler.nvim/wt-fyler-main/",
 		lazy = false,
 		cmd = { "Fyler" },
 		dependencies = {
@@ -801,13 +801,45 @@ return {
 				vim.api.nvim_buf_add_highlight(_fyler_hint_buf, -1, "Title", 0, 0, -1)
 			end
 
+			local _async_seq = 0
+
 			local function _run_fyler_async(user_cmd, path)
 				if not user_cmd or user_cmd:match("^%s*$") then
 					return
 				end
 				local full_cmd = user_cmd .. " " .. vim.fn.shellescape(path)
+				-- Create the result buffer instantly with a placeholder; the
+				-- async completion below replaces its contents in place.
+				vim.cmd("botright split")
+				local buf = vim.api.nvim_create_buf(true, false)
+				vim.api.nvim_win_set_buf(0, buf)
+				vim.api.nvim_buf_set_lines(buf, 0, -1, false, {
+					"```bash",
+					full_cmd,
+					"```",
+					"",
+					"calculating...",
+				})
+				vim.bo[buf].buflisted = true
+				vim.bo[buf].bufhidden = ""
+				vim.bo[buf].buftype = ""
+				vim.bo[buf].filetype = "markdown"
+				vim.bo[buf].modifiable = false
+				vim.bo[buf].modified = false
+				-- Unique name: re-running the same command must not E95.
+				_async_seq = _async_seq + 1
+				local name = "async:" .. full_cmd
+				while vim.fn.bufexists(name) == 1 do
+					_async_seq = _async_seq + 1
+					name = "async:" .. full_cmd .. " #" .. _async_seq
+				end
+				pcall(vim.api.nvim_buf_set_name, buf, name)
 				vim.system({ "sh", "-c", full_cmd }, { text = true }, function(obj)
 					vim.schedule(function()
+						-- User may have wiped the buffer while it ran.
+						if not vim.api.nvim_buf_is_valid(buf) then
+							return
+						end
 						local stdout = obj.stdout or ""
 						local stderr = obj.stderr or ""
 						local code = obj.code or 0
@@ -839,17 +871,10 @@ return {
 						if stdout == "" and stderr == "" then
 							table.insert(lines, "(no output)")
 						end
-						vim.cmd("botright split")
-						local buf = vim.api.nvim_create_buf(true, false)
-						vim.api.nvim_win_set_buf(0, buf)
+						vim.bo[buf].modifiable = true
 						vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-						vim.bo[buf].buflisted = true
-						vim.bo[buf].bufhidden = ""
-						vim.bo[buf].buftype = ""
-						vim.bo[buf].filetype = "markdown"
 						vim.bo[buf].modifiable = false
 						vim.bo[buf].modified = false
-						vim.api.nvim_buf_set_name(buf, "async:" .. full_cmd)
 					end)
 				end)
 			end
@@ -870,17 +895,44 @@ return {
 				end
 			end
 
+			-- Shared entry point: stash the path, open cmdline, show the hint.
+			-- The global <CR> intercept + _run_fyler_async do the rest.
+			local function _begin_async_cmdline(path)
+				path = vim.fn.fnamemodify(path, ":p"):gsub("/$", "")
+				vim.g._fyler_async_path = path
+				vim.g._fyler_async_cmdline_active = true
+				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":", true, false, true), "n", true)
+				_show_fyler_hint(path)
+			end
+
 			-- inject <M-y> into fyler's view mappings BEFORE setup so view:cursor_node_entry() works
 			if opts.views and opts.views.finder and opts.views.finder.mappings then
 				opts.views.finder.mappings["<M-y>"] = function(view)
-					local path = fyler_get_path(view)
-					path = vim.fn.fnamemodify(path, ":p"):gsub("/$", "")
-					vim.g._fyler_async_path = path
-					vim.g._fyler_async_cmdline_active = true
-					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":", true, false, true), "n", true)
-					_show_fyler_hint(path)
+					_begin_async_cmdline(fyler_get_path(view))
 				end
 			end
+
+			-- mirror <M-y> for oil buffers (same async flow, path from oil API)
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "oil",
+				callback = function(args)
+					vim.keymap.set("n", "<M-y>", function()
+						local ok, oil = pcall(require, "oil")
+						if not ok or not oil.get_current_dir then
+							return
+						end
+						local dir = oil.get_current_dir()
+						if not dir or dir == "" then
+							return
+						end
+						local ok_entry, entry = pcall(oil.get_cursor_entry)
+						if ok_entry and entry and entry.name and entry.name ~= ".." then
+							dir = dir:gsub("/$", "") .. "/" .. entry.name
+						end
+						_begin_async_cmdline(dir)
+					end, { buffer = args.buf, noremap = true, silent = true, desc = "Async command on oil path" })
+				end,
+			})
 
 			require("fyler").setup(opts)
 
@@ -986,37 +1038,37 @@ return {
 			-- but to avoid the 50/50 flash when the middle of [fyler][win2][win3]
 			-- is closed, we re-assert fyler's width synchronously (no schedule)
 			-- on WinClosed. This is flicker-free because it runs before redraw.
-			vim.o.equalalways = true
-			vim.o.splitkeep = "screen"
-			vim.api.nvim_create_autocmd("WinClosed", {
-				callback = function()
-					-- no schedule → runs before redraw, no flash
-					local wins = vim.api.nvim_tabpage_list_wins(0)
-					local normal = {}
-					for _, w in ipairs(wins) do
-						if vim.api.nvim_win_is_valid(w) and vim.api.nvim_win_get_config(w).relative == "" then
-							table.insert(normal, w)
-						end
-					end
-					if #normal ~= 2 then
-						return
-					end
-					local fyler_win, other = nil, nil
-					for _, w in ipairs(normal) do
-						local buf = vim.api.nvim_win_get_buf(w)
-						if vim.bo[buf].filetype == "fyler" then
-							fyler_win = w
-						else
-							other = w
-						end
-					end
-					if not fyler_win or not other then
-						return
-					end
-					-- enforce fixed width for fyler; other will fill the rest (80%)
-					vim.api.nvim_win_set_width(fyler_win, 40)
-				end,
-			})
+			-- vim.o.equalalways = true
+			-- vim.o.splitkeep = "screen"
+			-- vim.api.nvim_create_autocmd("WinClosed", {
+			-- 	callback = function()
+			-- 		-- no schedule → runs before redraw, no flash
+			-- 		local wins = vim.api.nvim_tabpage_list_wins(0)
+			-- 		local normal = {}
+			-- 		for _, w in ipairs(wins) do
+			-- 			if vim.api.nvim_win_is_valid(w) and vim.api.nvim_win_get_config(w).relative == "" then
+			-- 				table.insert(normal, w)
+			-- 			end
+			-- 		end
+			-- 		if #normal ~= 2 then
+			-- 			return
+			-- 		end
+			-- 		local fyler_win, other = nil, nil
+			-- 		for _, w in ipairs(normal) do
+			-- 			local buf = vim.api.nvim_win_get_buf(w)
+			-- 			if vim.bo[buf].filetype == "fyler" then
+			-- 				fyler_win = w
+			-- 			else
+			-- 				other = w
+			-- 			end
+			-- 		end
+			-- 		if not fyler_win or not other then
+			-- 			return
+			-- 		end
+			-- 		-- enforce fixed width for fyler; other will fill the rest (80%)
+			-- 		vim.api.nvim_win_set_width(fyler_win, 40)
+			-- 	end,
+			-- })
 		end,
 	},
 }

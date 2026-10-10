@@ -527,7 +527,16 @@ vim.api.nvim_create_autocmd("TermOpen", {
 	end,
 })
 
-vim.api.nvim_create_autocmd({ "FileType" }, {
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "json", "jsonc" },
+	group = augroups.general,
+	desc = "Never conceal quotes in JSON",
+	callback = function()
+		vim.wo.conceallevel = 0
+	end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
 	pattern = "dap-repl",
 	callback = function()
 		vim.g.baleia.automatically(vim.api.nvim_get_current_buf())

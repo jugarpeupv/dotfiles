@@ -122,6 +122,13 @@ M.attach_lsp_config = function(client, bufnr)
 				end
 			end
 		end
+		-- Fallback: none of the preferred clients is attached, but another
+		-- client supports rename — use it anyway instead of doing nothing.
+		if client_names[1] ~= nil then
+			lsp_buf_rename_with_client(client_names[1])
+			return true
+		end
+		return false
 	end
 
 	vim.keymap.set("n", "<leader>re", lsp_buf_rename_use_priority, opts)
@@ -193,6 +200,16 @@ M.attach_lsp_config = function(client, bufnr)
 	-- keymap.set({ "n" }, "gh", function()
 	--   require("lsp_signature").toggle_float_win()
 	-- end, opts)
+
+  if client.name == "gopls" then
+    vim.keymap.set("n", "<leader>oi", function()
+      require("go.format").goimports()
+    end, { desc = "Organize Imports" })
+
+    vim.keymap.set("n", "<leader>ia", function()
+      require("go.format").goimports()
+    end, { desc = "Organize Imports" })
+  end
 
 	if client.name == "jdtls" then
 		vim.keymap.set("n", "<leader>oi", function()

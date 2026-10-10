@@ -7,12 +7,12 @@ return {
 		enabled = true,
 		-- dev = true,
 		-- dir = "~/projects/oil.nvim/wt-local-canola-main",
-		-- event = { "CmdlineEnter" },
+		event = { "CmdlineEnter" },
 		cmd = { "Oil" },
 		dependencies = {
 			{
 				"malewicz1337/oil-git.nvim",
-				enabled = false,
+				enabled = true,
 				-- dependencies = { "stevearc/oil.nvim" },
 				-- event = { "VeryLazy" },
 				-- cmd = { "Oil" },
@@ -72,12 +72,12 @@ return {
           vim.cmd("e ~/.local/share/nvim/")
         end,
       },
-			{
-				"<leader>tp",
-				function()
-					vim.cmd("e ~/work/obsvault-okode/wt-main/RAM/tareas_pendientes.md")
-				end,
-			},
+			-- {
+			-- 	"<leader>tp",
+			-- 	function()
+			-- 		vim.cmd("e ~/work/obsvault-okode/wt-main/RAM/tareas_pendientes.md")
+			-- 	end,
+			-- },
 			{
 				"<C-V>",
 				mode = "c",
@@ -249,20 +249,20 @@ return {
 					bufhidden = "hide",
 				},
 				-- Window-local options to use for oil buffers
-				win_options = {
-					-- winbar = "%#NvimTreeRootFolder#%{v:lua.oil_winbar_label()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
-					-- winbar = "%#NvimTreeRootFolder#%{%&modified ? '⏺' : ''%}",
-					-- winbar = "%#@attribute.builtin#%{v:lua.get_winbar()} %#ModeMsg#%{%&modified ? '⏺' : ''%}",
-					-- wrap = false,
-					-- signcolumn = "yes:1",
-					-- signcolumn = "yes:2",
-					-- cursorcolumn = false,
-					-- foldcolumn = "0",
-					-- spell = false,
-					-- list = false,
-					-- conceallevel = 0,
-					-- concealcursor = "nvic",
-				},
+				-- win_options = {
+				-- 	-- winbar = "%#NvimTreeRootFolder#%{v:lua.oil_winbar_label()}  %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+				-- 	-- winbar = "%#NvimTreeRootFolder#%{%&modified ? '⏺' : ''%}",
+				-- 	-- winbar = "%#@attribute.builtin#%{v:lua.get_winbar()} %#ModeMsg#%{%&modified ? '⏺' : ''%}",
+				-- 	-- wrap = false,
+				-- 	-- signcolumn = "yes:1",
+				-- 	-- signcolumn = "yes:2",
+				-- 	-- cursorcolumn = false,
+				-- 	-- foldcolumn = "0",
+				-- 	-- spell = false,
+				-- 	-- list = false,
+				-- 	-- conceallevel = 0,
+				-- 	-- concealcursor = "nvic",
+				-- },
 				-- Send deleted files to the trash instead of permanently deleting them (:help oil-trash)
 				delete_to_trash = false,
 				-- Skip the confirmation popup for simple operations (:help oil.skip_confirm_for_simple_edits)

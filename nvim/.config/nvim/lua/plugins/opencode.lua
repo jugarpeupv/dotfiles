@@ -1,13 +1,12 @@
-
 return {
 	{
 		-- "sudo-tee/opencode.nvim",
 		-- enabled = true,
 		-- commit = "92ad9bf550f10ac24c0076dd564fa5b424ce4fab",
 		"jugarpeupv/opencode.nvim",
-		branch = "feature/upstream-main",
+		branch = "main",
 		-- dev = true,
-		-- dir = "~/projects/opencode.nvim/wt-feature-upstream-main/",
+		-- dir = "~/projects/opencode.nvim/wt-main/",
 		-- lazy = true,
 		keys = {
 			-- {
@@ -89,7 +88,7 @@ return {
 			},
 		},
 		config = function()
-      local nvim_icon = vim.fn.expand("~/.config/nvim/assets/nvim.png")
+			local nvim_icon = vim.fn.expand("~/.config/nvim/assets/nvim.png")
 			-- Default configuration with all available options
 			require("opencode").setup({
 				preferred_picker = "telescope",
@@ -103,20 +102,23 @@ return {
 						local parts = vim.split(cwd, "/")
 						local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
 						local time = os.date("%H:%M")
+						local msg = time .. " Opencode needs permission "
+						if repo ~= "" then
+							msg = msg .. " in:\n" .. repo
+						end
 						-- opcional: detalle del permiso
 						vim.fn.jobstart({
 							"terminal-notifier",
 							"-title",
 							"Neovim",
 							"-message",
-							time .. " Opencode needs permission" .. " in:\n" .. repo,
+							msg,
 							"-contentImage",
-              nvim_icon
+							nvim_icon,
 							-- "-sound",
 							-- "Ping",
 						}, { detach = true })
 					end,
-
 					on_done_thinking = function(session)
 						local cwd = session and session.workspace or vim.fn.getcwd()
 						local parts = vim.split(cwd, "/")
@@ -133,7 +135,7 @@ return {
 							"-message",
 							msg,
 							"-contentImage",
-              nvim_icon
+							nvim_icon,
 							-- vim.fn.expand("~/nvim.png"),
 						}, { detach = true })
 					end,
@@ -161,8 +163,8 @@ return {
 					editor = {
 						-- ["<C-.>"] = { "toggle" }, -- Open opencode. Close if opened
 						-- ["<C-.>"] = false,
-            ['<C-p>'] = { 'navigate_session_tree', 'backward', mode = { 'n', 'i' } },
-            ['<C-n>'] = { 'navigate_session_tree', 'forward', mode = { 'n', 'i' } },
+						["<C-p>"] = { "navigate_session_tree", "backward", mode = { "n", "i" } },
+						["<C-n>"] = { "navigate_session_tree", "forward", mode = { "n", "i" } },
 						["<M-m>"] = { "toggle" }, -- Open opencode. Close if opened
 						["<D-m>"] = { "toggle" }, -- Open opencode. Close if opened
 						["<leader>og"] = false,
@@ -183,12 +185,18 @@ return {
 							desc = "Insert visual selection inline into input",
 						},
 						-- ['<leader>oa'] = { 'add_visual_selection_inline', { open_input = false }, mode = {'v'} },
-						["<leader>oz"] = { "toggle_zoom" }, -- Zoom in/out on the Opencode windows
+						-- ["<leader>oz"] = { "toggle_zoom" }, -- Zoom in/out on the Opencode windows
+						["<leader><leader>"] = { "toggle_zoom" }, -- Zoom in/out on the Opencode windows
 						["<leader>ov"] = { "paste_image" }, -- Paste image from clipboard into current session
 						["<leader>oD"] = { "diff_open" }, -- Opens a diff tab of a modified file since the last opencode prompt
 						["<leader>o]"] = { "diff_next" }, -- Navigate to next file diff
 						["<leader>o["] = { "diff_prev" }, -- Navigate to previous file diff
 						["<leader>oC"] = { "diff_close" }, -- Close diff view tab and return to normal editing
+						["<leader>CS"] = {
+							function()
+								require("opencode.state").jobs.clear_server()
+							end,
+						},
 						["<leader>ora"] = false,
 						["<leader>ort"] = false,
 						["<leader>orA"] = false,
@@ -282,8 +290,8 @@ return {
 						-- ['<leader>o/'] = { 'quick_chat', mode = { 'n', 'x' } }, -- Open quick chat input with selection context in visual mode or current line context in normal mode
 					},
 					input_window = {
-            ['<C-p>'] = { 'navigate_session_tree', 'backward', mode = { 'n', 'i' } },
-            ['<C-n>'] = { 'navigate_session_tree', 'forward', mode = { 'n', 'i' } },
+						["<C-p>"] = { "navigate_session_tree", "backward", mode = { "n", "i" } },
+						["<C-n>"] = { "navigate_session_tree", "forward", mode = { "n", "i" } },
 						["<leader>oD"] = { "diff_open" }, -- Opens a diff tab of a modified file since the last opencode prompt
 						["<esc>"] = false, -- Close UI windows
 						["<cr>"] = { "submit_input_prompt", mode = { "n" } }, -- Submit prompt (normal mode and insert mode)
@@ -302,7 +310,7 @@ return {
 						["<down>"] = { "next_prompt_history", mode = { "n", "i" } }, -- Navigate to next prompt in history
 						["<M-m>"] = false,
 						["<M-r>"] = { "cycle_variant", mode = { "n", "i" } }, -- Cycle through available model variants
-            ["<leader>oS"] = { "select_session" }, -- Rename current session
+						["<leader>oS"] = { "select_session" }, -- Rename current session
 						["<leader>oR"] = { "rename_session" }, -- Rename current session
 						["<leader>oP"] = { "configure_provider" }, -- Quick provider and model switch from predefined list
 						["<leader>oV"] = { "configure_variant" }, -- Switch model variant for the current model
@@ -322,8 +330,8 @@ return {
 						-- ['<M-r>'] = { 'cycle_variant', mode = { 'n', 'i' } }, -- Cycle through available model variants
 					},
 					output_window = {
-            ['<C-p>'] = { 'navigate_session_tree', 'backward', mode = { 'n', 'i' } },
-            ['<C-n>'] = { 'navigate_session_tree', 'forward', mode = { 'n', 'i' } },
+						["<C-p>"] = { "navigate_session_tree", "backward", mode = { "n", "i" } },
+						["<C-n>"] = { "navigate_session_tree", "forward", mode = { "n", "i" } },
 						["<leader>oD"] = { "diff_open" }, -- Opens a diff tab of a modified file since the last opencode prompt
 						["<esc>"] = false, -- Close UI windows
 						["<C-c>"] = { "cancel" }, -- Cancel opencode request while it is running
@@ -344,8 +352,8 @@ return {
 						-- ['i'] = { 'focus_input', 'n' }, -- Focus on input window and enter insert mode at the end of the input from the output window
 						-- ['<M-r>'] = { 'cycle_variant', mode = { 'n' } }, -- Cycle through available model variants
 						-- ['<leader>oS'] = { 'select_child_session' }, -- Select and load a child session
-						['<leader>oE'] = { 'debug_message' }, -- Open raw message in new buffer for debugging
-						['<leader>oO'] = { 'debug_output' }, -- Open raw output in new buffer for debugging
+						["<leader>oE"] = { "debug_message" }, -- Open raw message in new buffer for debugging
+						["<leader>oO"] = { "debug_output" }, -- Open raw output in new buffer for debugging
 						-- ['<leader>ods'] = { 'debug_session' }, -- Open raw session in new buffer for debugging
 					},
 					permission = {
@@ -461,7 +469,7 @@ return {
 						"-message",
 						time .. " OpenCode needs input in " .. repo .. ":" .. questions_text,
 						"-contentImage",
-            nvim_icon
+						nvim_icon,
 					}, { detach = true })
 				end,
 			})

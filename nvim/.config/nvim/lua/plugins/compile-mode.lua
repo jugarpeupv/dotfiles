@@ -57,7 +57,7 @@ return {
 		},
 		{
 			mode = { "n" },
-			"<leader>cs",
+			"<leader>cS",
 			function()
 				require("jg.custom.telescope").compile_mode_on_npm_scripts()
 			end,

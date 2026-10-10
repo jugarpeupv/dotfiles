@@ -10,6 +10,9 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dic
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dict><key>enabled</key><false/></dict>"
 
 
+# Do not createDesktop
+defaults write com.apple.finder CreateDesktop false; killall Finder
+
 # Do not store gpg info in keychain
 defaults write org.gpgtools.common DisableKeychain -bool yes
 

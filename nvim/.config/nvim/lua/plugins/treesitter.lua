@@ -73,6 +73,7 @@ return {
 				"vim",
 				"vimdoc",
 				"yaml",
+        "go",
 			}
 
 			for _, parser in ipairs(parsers) do
@@ -86,6 +87,8 @@ return {
 				pattern = {
 					"c",
 					"opencode_output",
+          "godoc",
+          "go",
 					"opencode",
 					"kitty",
 					"http",

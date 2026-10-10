@@ -1011,13 +1011,13 @@ PY
 				-- require("telescope.builtin").oldfiles({ only_cwd = true })
 			end,
 		},
-		{
-			"<leader>of",
-			function()
-				Snacks.picker.recent({ filter = { cwd = true } })
-				-- require("telescope.builtin").oldfiles({ only_cwd = true })
-			end,
-		},
+		-- {
+		-- 	"<leader>of",
+		-- 	function()
+		-- 		Snacks.picker.recent({ filter = { cwd = true } })
+		-- 		-- require("telescope.builtin").oldfiles({ only_cwd = true })
+		-- 	end,
+		-- },
 		{
 			"<leader>ip",
 			function()

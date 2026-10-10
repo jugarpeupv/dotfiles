@@ -128,15 +128,17 @@ local function restore_last_worktree()
 		pcall(fyler.open, { dir = last_active_wt, kind = "replace" })
 	end
 
-	-- local current_cwd = vim.loop.cwd()
-	-- if current_cwd then
-	-- 	cwd_buffer_nr = find_buffer_by_path(vim.fn.fnamemodify(current_cwd:gsub("/$", ""), ":h"))
-	-- 	if cwd_buffer_nr then
-	-- 		win = vim.fn.bufwinid(cwd_buffer_nr)
-	--      pcall(vim.api.nvim_win_close, win, true)
-	-- 		pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
-	-- 	end
-	-- end
+  local cwd_buffer_nr
+  local win
+	local current_cwd = vim.loop.cwd()
+	if current_cwd then
+		cwd_buffer_nr = find_buffer_by_path(vim.fn.fnamemodify(current_cwd:gsub("/$", ""), ":h"))
+		if cwd_buffer_nr then
+			win = vim.fn.bufwinid(cwd_buffer_nr)
+	     pcall(vim.api.nvim_win_close, win, true)
+			pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
+		end
+	end
 end
 
 -- if should_restore_worktree() then
@@ -170,17 +172,17 @@ else
 			if has_fyler then
 				pcall(fyler.open, { dir = path, kind = "replace" })
 			end
-			-- local cwd_val = vim.loop.cwd()
-			-- if cwd_val then
-			-- 	local cwd_buffer_nr = find_buffer_by_path(cwd_val:gsub("/$", ""))
-			-- 	if cwd_buffer_nr then
-			-- 		local win = vim.fn.bufwinid(cwd_buffer_nr)
-			-- 		if win ~= -1 then
-			-- 			pcall(vim.api.nvim_win_close, win, true)
-			-- 		end
-			-- 		pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
-			-- 	end
-			-- end
+			local cwd_val = vim.loop.cwd()
+			if cwd_val then
+				local cwd_buffer_nr = find_buffer_by_path(cwd_val:gsub("/$", ""))
+				if cwd_buffer_nr then
+					local win = vim.fn.bufwinid(cwd_buffer_nr)
+					if win ~= -1 then
+						pcall(vim.api.nvim_win_close, win, true)
+					end
+					pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
+				end
+			end
 		else
 			return
 		end

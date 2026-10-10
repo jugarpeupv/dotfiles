@@ -1,10 +1,16 @@
 return {
 	{
-		"mistweaverco/kulala.nvim",
+		-- "dont-be-evil-company/kulala.nvim",
+    "jugarpeupv/kulala.nvim",
+    -- dev = true,
+    -- dir = "~/projects/kulala.nvim/wt-main/",
 		enabled = false,
 		branch = "main",
 		ft = { "http", "rest" },
 		opts = {
+			kulala_core = {
+			  path = vim.fn.expand("~/projects/kulala-core/wt-main/packages/core/dist/kulala-core-darwin-arm64"),
+			},
 			default_env = "snd",
 			treesitter = {
 				-- enable/disable kulala.nvim own
@@ -342,6 +348,55 @@ return {
 			-- default_view = "headers_body",
 		},
 	},
+  {
+    "oysandvik94/curl.nvim",
+    cmd = { "CurlOpen" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    opts = {
+      -- Table of strings to specify default headers to be included in each request, i.e. "-i"
+      default_flags = {},
+      -- Specify an alternative curl binary that will be used to run curl commands
+      -- String of either full path, or binary in path
+      curl_binary = nil,
+      -- Print elapsed time in seconds if request duration exceeds this limit or don't if nil
+      show_request_duration_limit = nil,
+      -- Specify how to open curl
+      -- use "tab" to open in separate tab
+      -- use "split" to open in horizontal split
+      -- use "vsplit" to open in vertical split
+      -- use "buffer" to open in new buffer
+      open_with = "vsplit",
+      -- Specify how to split the output buffer (when open_with is not "tab")
+      -- use "vertical" for vertical split (default)
+      -- use "horizontal" for horizontal split
+      output_split_direction = "vertical",
+      mappings = {
+        execute_curl = "<CR>",
+      },
+    },
+  },
+  {
+    "rest-nvim/rest.nvim",
+    ft = "http",
+    enabled = false,
+    build = false,
+    dependencies = {
+      "j-hui/fidget.nvim",
+      "nvim-neotest/nvim-nio",
+      "nvim-treesitter/nvim-treesitter",
+      {
+        -- Lazy.nvim does not recognize this library's rocksfile, so add it
+        -- to package path manually.
+        "manoelcampos/xml2lua",
+        config = function(plugin)
+          package.path = package.path .. ";" .. plugin.dir .. "/?.lua"
+        end,
+      },
+      "lunarmodules/lua-mimetypes",
+    },
+  },
 	{
 		"jellydn/hurl.nvim",
 		dependencies = {
