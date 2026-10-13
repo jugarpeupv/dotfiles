@@ -167,7 +167,8 @@ M.find_directory_in_fyler_and_focus = function(root, target_view)
 				then
 					vim.api.nvim_set_current_win(target_view.win.winid)
 				end
-				target_view:change_root(selection.value):dispatch_refresh({ force_update = true })
+        -- target_view:change_root(selection.value):dispatch_refresh({ force_update = true })
+				target_view:reveal(selection.value)
 				return
 			end
 			local fyler = require("fyler")
