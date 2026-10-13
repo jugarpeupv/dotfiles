@@ -943,8 +943,6 @@ vim.keymap.set("n", "<leader>fl", require("jg.custom.telescope").find_directory_
 
 -- vim.keymap.set("n", "<leader>fd", require("jg.custom.telescope").find_directory_in_nvim_tree_and_focus, opts)
 
--- vim.keymap.set("n", "<leader>fy", require("jg.custom.telescope").find_directory_in_fyler_and_focus, opts)
-vim.keymap.set("n", "<leader>fd", require("jg.custom.telescope").find_directory_in_fyler_and_focus, opts)
 
 vim.keymap.set("n", "<leader>fn", require("jg.custom.telescope").find_in_node_modules, opts)
 

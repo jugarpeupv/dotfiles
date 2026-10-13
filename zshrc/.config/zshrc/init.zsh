@@ -15,6 +15,10 @@ source $HOME/.config/zshrc/ls-colors.zsh
 # snapshot the completion widget before those wrap it.
 source $HOME/.config/zshrc/oh-my-zsh/antidote.zsh
 
+
+# zsh completions (must stay before compinit in init.zsh)
+fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+
 # Completion. omz used to run compinit after the plugins; fzf-tab's
 # enable-fzf-tab explicitly handles being initialized before compinit,
 # so keep the same relative order.

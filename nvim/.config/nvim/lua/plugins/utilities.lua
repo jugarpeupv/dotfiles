@@ -97,8 +97,10 @@ return {
 	},
 	{
 		"jugarpeupv/rust-docs.nvim",
-		enabled = false,
+		enabled = true,
 		lazy = true,
+    -- dev = true,
+    -- dir = "~/projects/rust-docs.nvim/wt-main/",
 		keys = {
 			{ mode = { "n" }, "<leader>rd", ":RustDocs<cr>" },
 		},

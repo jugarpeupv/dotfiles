@@ -19,7 +19,7 @@ M.old_api_opts = {
 			-- columns_order = { "git", "link", "permission", "size" },
 			columns_order = { "git", "link", "size", "creation_time" },
 			columns = {
-				creation_time = { enabled = true },
+				creation_time = { enabled = false },
 				size = { enabled = true },
 				permission = { enabled = true },
 				git = {
@@ -80,6 +80,14 @@ M.old_api_opts = {
 				["<leader>fT"] = "ToggleCreationTime",
 				["<leader>fS"] = "ToggleSize",
 				["<leader>fP"] = "ToggleDetails",
+				["<leader>fd"] = function(view)
+					-- Picker rooted at THIS instance's cwd; selection
+					-- opens in THIS instance (not the global one).
+					require("jg.custom.telescope").find_directory_in_fyler_and_focus(
+						view:getcwd(),
+						view
+					)
+				end,
 				["gs"] = "SortByCreationTime",
 				["."] = function(view)
 					local entry = view:cursor_node_entry()
@@ -323,8 +331,13 @@ M.old_api_opts = {
 					vim.api.nvim_feedkeys(hops, "n", true)
 				end,
 				["S"] = function(view)
-					local entry = view:cursor_node_entry()
-					local path = entry.path
+          local path
+          local entry = view:cursor_node_entry()
+          if entry and entry.path then
+            path = entry.path
+          else
+            path = view:getcwd()
+          end
 					if vim.fn.isdirectory(path) == 0 then
 						path = vim.fn.fnamemodify(path, ":h")
 					end
@@ -355,9 +368,36 @@ M.old_api_opts = {
 						},
 					})
 				end,
+        ["<M-p>"] = function(view)
+          local path = view:getcwd()
+          if vim.fn.isdirectory(path) == 0 then
+            path = vim.fn.fnamemodify(path, ":h")
+          end
+          require("telescope.builtin").find_files({
+            prompt_title = "Find files in: " .. path,
+            cwd = path,
+            hidden = true,
+            find_command = {
+              "rg",
+              "--files",
+              "--color",
+              "never",
+              "--glob=!.git",
+              "--glob=!*__template__",
+              "--glob=!*DS_Store",
+            },
+          })
+        end,
 				["F"] = function(view)
+					local actions = require("telescope.actions")
+					local action_state = require("telescope.actions.state")
+					local path
 					local entry = view:cursor_node_entry()
-					local path = entry.path
+					if entry and entry.path then
+						path = entry.path
+					else
+						path = view:getcwd()
+					end
 					if vim.fn.isdirectory(path) == 0 then
 						path = vim.fn.fnamemodify(path, ":h")
 					end
@@ -374,6 +414,36 @@ M.old_api_opts = {
 							"--glob=!*__template__",
 							"--glob=!*DS_Store",
 						},
+						attach_mappings = function(prompt_bufnr)
+							actions.select_default:replace(function()
+								actions.close(prompt_bufnr)
+								local selection = action_state.get_selected_entry()
+								if not selection then
+									return
+								end
+								-- rg emits paths relative to cwd: absolutize.
+								local file = selection.value
+								if not file:match("^/") then
+									file = path .. "/" .. file
+								end
+								file = vim.fs.normalize(file)
+								-- Reveal in THIS instance (cursor on the file),
+								-- not the global ORIG one module navigate()
+								-- targets. Root untouched.
+								if
+									not (
+										view.win
+										and view.win.winid
+										and vim.api.nvim_win_is_valid(view.win.winid)
+									)
+								then
+									vim.notify("Fyler instance closed", vim.log.levels.WARN)
+									return
+								end
+								view:reveal(file)
+							end)
+							return true
+						end,
 					})
 				end,
 				["go"] = function(view)
@@ -403,8 +473,13 @@ M.old_api_opts = {
 					require("oil").open(path)
 				end,
 				["gl"] = function(view)
+					local path
 					local entry = view:cursor_node_entry()
-					local path = entry.path
+					if entry and entry.path then
+						path = entry.path
+					else
+						path = view:getcwd()
+					end
 
 					local function check_and_modify_path(path_to)
 						if vim.fn.isdirectory(path_to) == 1 then
@@ -514,7 +589,8 @@ M.old_api_opts = {
 						vim.notify("Could not open file: " .. tostring(err), vim.log.levels.ERROR)
 					end
 				end,
-				["L"] = "SelectIfDirectory",
+				-- ["L"] = "SelectIfDirectory",
+        ["L"] = "Select",
 				["<C-t>"] = "SelectTab",
 				["<C-v>"] = "SelectVSplit",
 				-- ["<C-v>"] = function(view)

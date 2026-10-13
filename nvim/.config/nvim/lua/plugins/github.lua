@@ -25,7 +25,7 @@ return {
 		keys = {
 			{ mode = "n", "<leader>gw", "<cmd>GithubActionsWatch<cr>" },
 			{ mode = "n", "<leader>gi", "<cmd>GithubActionsHistory<cr>" },
-			{ mode = "n", "<leader>gD", "<cmd>GithubActionsDispatch<cr>" },
+			{ mode = "n", "<leader>gA", "<cmd>GithubActionsDispatch<cr>" },
 		},
 		-- cmd = { "GithubActionsDispatch", "GithubActionsHistory", "GithubActionsHistoryByPR", "GithubActionsWatch" },
 		config = function()

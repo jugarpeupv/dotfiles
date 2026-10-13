@@ -74,6 +74,7 @@ return {
 				"vimdoc",
 				"yaml",
         "go",
+        "swift",
 			}
 
 			for _, parser in ipairs(parsers) do
@@ -129,6 +130,7 @@ return {
 					"rust-docs",
 					"devtools-storage",
 					"devtools-detail",
+          "swift"
 				},
 				callback = function()
 					-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"

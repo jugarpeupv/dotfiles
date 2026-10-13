@@ -228,3 +228,6 @@ symbol = " "
 
 [gcloud]
 detect_env_vars = [ "GOOGLE_CLOUD_PROJECT", "GCLOUD_PROJECT" ]
+
+[crystal]
+disabled = true

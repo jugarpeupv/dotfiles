@@ -110,11 +110,11 @@ M.find_directory_in_oil_and_focus = function()
 	})
 end
 
-M.find_directory_in_fyler_and_focus = function()
+M.find_directory_in_fyler_and_focus = function(root, target_view)
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
 
-	local cwd = vim.fs.normalize(vim.fn.getcwd())
+	local cwd = vim.fs.normalize(root and vim.fn.expand(root) or vim.fn.getcwd())
 	local function with_tilde(p)
 		local home = os.getenv("HOME") or ""
 		if home ~= "" then
@@ -147,7 +147,7 @@ M.find_directory_in_fyler_and_focus = function()
 		end
 		local full_path = selection.value
 		if not full_path:match("^/") then
-			full_path = vim.loop.cwd() .. "/" .. full_path
+			full_path = cwd .. "/" .. full_path
 		end
 		trash_path(full_path)
 	end
@@ -156,6 +156,20 @@ M.find_directory_in_fyler_and_focus = function()
 		actions.select_default:replace(function()
 			actions.close(prompt_bufnr)
 			local selection = action_state.get_selected_entry()
+			if not selection then
+				return
+			end
+			-- Concrete instance given (fyler <leader>fd): open the
+			-- directory in THAT view instead of the global one.
+			if target_view and target_view.change_root then
+				if target_view.win and target_view.win.winid
+					and vim.api.nvim_win_is_valid(target_view.win.winid)
+				then
+					vim.api.nvim_set_current_win(target_view.win.winid)
+				end
+				target_view:change_root(selection.value):dispatch_refresh({ force_update = true })
+				return
+			end
 			local fyler = require("fyler")
 			local found = false
 			for _, win in ipairs(vim.api.nvim_list_wins()) do

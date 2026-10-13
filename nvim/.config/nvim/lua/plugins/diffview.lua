@@ -2,7 +2,7 @@ return {
 	{
 		"dlyongemallo/diffview-plus.nvim",
 		branch = "main",
-		cmd = { "DiffviewOpen" },
+		cmd = { "DiffviewOpen", "DiffviewWorktreeOverview" },
 		enabled = true,
 		dependencies = {
 			"junegunn/fzf",
@@ -13,7 +13,7 @@ return {
 			{ "<leader>gd", mode = "n", "<cmd>DiffviewOpen<cr>" },
 			-- { "<leader>gd", mode = "n", "<cmd>DiffviewOpen -- :!package-lock.json<cr>" },
 			-- { "<leader>cc", mode = "n", "<cmd>DiffviewClose<cr>" },
-			{ "<leader>gv", mode = { "v" }, ":<C-u>'<,'>DiffviewFileHistory<CR>" },
+			{ "<leader>gv", mode = { "v" }, ":<C-u>'<,'>DiffviewFileHistory --follow<CR>" },
 			{ "<leader>gv", mode = { "n" }, "<cmd>DiffviewFileHistory %<cr>" },
 			{ "<leader>ll", mode = "n", "<CMD>DiffviewFileHistory --range=HEAD<CR>" },
 			{ "<leader>l5", mode = "n", "<CMD>DiffviewFileHistory --range=HEAD~50..HEAD<CR>" },
@@ -32,8 +32,13 @@ return {
 			vim.api.nvim_set_hl(0, "DiffviewDiffDeleteInline", { bg = "#7b3038", strikethrough = true })
 
 			require("diffview").setup({
+				worktree_overview = {
+					include_bare = false,
+				},
+        persist_selections = { enabled = true },
 				diff_binaries = true, -- Show diffs for binaries
 				enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
+				-- diffopt = { algorithm = "histogram" },
 				clean_up_buffers = true, -- Delete file buffers created by diffview on close.
 				git_cmd = { "git" }, -- The git executable followed by default args.
 				use_icons = true, -- Requires nvim-web-devicons
@@ -93,6 +98,9 @@ return {
 					},
 				},
 				file_history_panel = {
+					-- stat_style = "both",
+					-- date_format = "relative",
+					-- commit_format = { "hash", "subject", "author", "date", "ref", "reflog", "status", "files", "stats" },
 					win_config = { -- See ':h diffview-config-win_config'
 						position = "bottom",
 						height = 16,
@@ -147,6 +155,15 @@ return {
 				}, -- See ':h diffview-config-hooks'
 				keymaps = {
 					disable_defaults = true, -- Disable the default keymaps
+					worktree_overview = {
+						{ "n", "R", actions.refresh_files, { desc = "Re-scan worktrees and stats" } },
+						{
+							"n",
+							"<CR>",
+							actions.worktree_overview_enter,
+							{ desc = "Open DiffView for the selected worktree" },
+						},
+					},
 					view = {
 						-- The `view` bindings are active in the diff buffers, only when the current
 						-- tabpage is a Diffview.
@@ -225,6 +242,7 @@ return {
 						["<cr>"] = actions.select_entry, -- Open the diff for the selected entry.
 						["o"] = actions.select_entry,
 						["<2-LeftMouse>"] = actions.select_entry,
+						["<space><space>"] = actions.toggle_select_entry, -- Mark/unmark the entry under the cursor.
 						["-"] = actions.toggle_stage_entry, -- Stage / unstage the selected entry.
 						["T"] = actions.toggle_stage_entry, -- Stage / unstage the selected entry.
 						["S"] = actions.stage_all, -- Stage all entries.

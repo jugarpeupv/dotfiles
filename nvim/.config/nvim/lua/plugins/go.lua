@@ -7,7 +7,7 @@ return {
       "folke/snacks.nvim"
     },
 		keys = {
-			{ "<leader>gg", "<cmd>GoDoc<cr>" },
+			{ "<leader>gD", "<cmd>GoDoc<cr>" },
 		},
 		ft = { "go", "gomod" },
 		-- dependencies = {
