@@ -656,7 +656,6 @@ symbol_map U+D000-U+D21A termicons
 
 #:     symbol_map codepoints Font Family Name
 
-allow_width_overrides yes
 # narrow_symbols
 # narrow_symbols U+F111,U+F114,U+F115 1
 narrow_symbols U+f489 1
@@ -1126,7 +1125,7 @@ mouse_hide_wait 0.1
 # Disable secure keyboard entry shortcut (interferes with skhd)
 map opt+cmd+s no_op
 
-secure_input no
+## secure_input no
 
 # clear_all_mouse_actions no
 
@@ -1415,6 +1414,7 @@ window_margin_width 0
 #: Fade the text in inactive windows by the specified amount (a number
 #: between zero and one, with zero being fully faded).
 
+# hide_window_decorations yes
 hide_window_decorations titlebar-only
 
 #: Hide the window decorations (title-bar and window borders) with
@@ -2085,6 +2085,8 @@ macos_option_as_alt no
 #: but less pretty.
 
 # macos_show_window_title_in all
+macos_show_window_title_in none
+macos_menubar_title_max_length 0
 
 #: Control where the window title is displayed on macOS. A value of
 #: window will show the title of the currently active window at the
@@ -3297,7 +3299,7 @@ map ctrl+. send_text all \x1b[46;5u
 
 window_margin_width 0
 single_window_margin_width 0
-window_padding_width 4 0 0 10
+window_padding_width 8 0 0 10
 
 # tab_bar_filter session:~ or session:^$
 # tab_title_template "{session_name} {title}"
@@ -3352,9 +3354,36 @@ font_size 24
 # # END_KITTY_FONTS
 
 
-# BEGIN_KITTY_FONTS
+# # # BEGIN_KITTY_FONTS
 # font_family      family='Iosevka Custom' style='Semi-Extended'
 # bold_font        family='Iosevka Custom' style='Bold Semi-Extended'
-# italic_font      family='Iosevka Custom' style='Semi-Extended Oblique'
-# bold_italic_font family='Iosevka Custom' style='Semi-Extended Oblique'
+# # italic_font      family='Iosevka Custom' style='Semi-Extended Oblique'
+# italic_font      family='Iosevka Custom' style='Semi-Extended'
+# bold_italic_font family='Iosevka Custom' style='Semi-Extended'
+# # # END_KITTY_FONTS
+
+
+# # BEGIN_KITTY_FONTS
+# font_family      family='SF Mono' style=Regular
+# bold_font        family='SF Mono' style=Semibold
+# italic_font      family='SF Mono' style='Regular Italic'
+# bold_italic_font auto
 # # END_KITTY_FONTS
+
+
+
+# BEGIN_KITTY_FONTS
+font_family      family="Iosevka Fixed"
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+# END_KITTY_FONTS
+
+
+# # BEGIN_KITTY_FONTS
+# font_family      family="MonoLisa default"
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+# # END_KITTY_FONTS
+
