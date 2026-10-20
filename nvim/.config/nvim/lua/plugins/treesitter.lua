@@ -190,6 +190,25 @@ return {
 				group = vim.api.nvim_create_augroup("TSUpdateTreesitter", { clear = true }),
 				pattern = "TSUpdate",
 				callback = function()
+          local godoc_parser = {
+            install_info = {
+              url = "https://github.com/fredrikaverpil/tree-sitter-godoc",
+              files = { "src/parser.c" },
+              version = "*",
+            },
+            filetype = "godoc",
+          }
+
+          require("nvim-treesitter.parsers").godoc = godoc_parser
+
+          -- Re-register after :TSUpdate so the parser survives parser-list reloads
+          vim.api.nvim_create_autocmd("User", {
+            pattern = "TSUpdate",
+            callback = function()
+              require("nvim-treesitter.parsers").godoc = godoc_parser
+            end,
+          })
+
 					require("nvim-treesitter.parsers").ghactions = {
 						install_info = {
 							url = "https://github.com/rmuir/tree-sitter-ghactions",

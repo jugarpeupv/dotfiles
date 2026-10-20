@@ -9,6 +9,12 @@ tap "benswift/tap", trusted: true
 # engram, gga, gentle-ai
 tap "gentleman-programming/tap", "https://github.com/Gentleman-Programming/homebrew-tap", trusted: true
 
+# Build server protocol implementation for integrating Xcode with sourcekit-lsp
+brew "xcode-build-server"
+# ios development https://github.com/cpisciotta/xcbeautify
+brew "xcbeautify"
+# ios development https://github.com/wojciech-kulik/XcodeProjectCLI
+brew "xcp"
 # gpg passphrase dialog for mac
 brew "pinentry-mac"
 # uv python env manager etc
@@ -317,8 +323,6 @@ brew "wimlib"
 brew "xcbeautify"
 # Access X11 clipboards from the command-line
 brew "xclip"
-# Build server protocol implementation for integrating Xcode with sourcekit-lsp
-brew "xcode-build-server"
 # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
 # Tracks most-used directories to make cd smarter

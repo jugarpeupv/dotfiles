@@ -101,6 +101,7 @@ return {
         "clang-format",
         "rust-analyzer",
         "gopls",
+        "marksman",
         -- Non-LSP / java tooling
         "actionlint",
         "java-debug-adapter",

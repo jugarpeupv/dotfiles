@@ -17,7 +17,7 @@ return {
 				-- handling of tree-sitter parser and queries for HTTP scripts
 				-- like downloading, building, and installing the parser and queries.
 				-- disable to manage the parser and queries yourself.
-				enable = true,
+				enable = false,
 				-- path to tree-sitter CLI, if not in PATH
 				-- if enable is false, this is not used
 				-- required for building the parser from the included grammar

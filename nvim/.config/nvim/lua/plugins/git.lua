@@ -71,7 +71,8 @@ return {
 		config = function()
 			vim.cmd([[let g:nremap = {'[m': '<s-tab>', ']m': '<tab>'}]])
 			-- vim.cmd("command! -nargs=* G rightbelow vertical Git <args>")
-			vim.cmd("command! -nargs=* G 0Git <args>")
+      vim.cmd("command! -nargs=* G rightbelow Git <args>")
+			-- vim.cmd("command! -nargs=* G 0Git <args>")
 		end,
 	},
 	{

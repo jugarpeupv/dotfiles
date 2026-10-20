@@ -20,6 +20,7 @@ return {
 				config = function()
 					require("lint").linters_by_ft = {
 						["yaml.github"] = { "actionlint" },
+            swift = { "swiftlint" },
 					}
 
           local lint_group = vim.api.nvim_create_augroup("YamlGithubLint", { clear = true })
@@ -32,6 +33,17 @@ return {
 							end
 						end,
 					})
+
+          local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+
+          vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+            group = lint_augroup,
+            callback = function()
+							if vim.bo.filetype == "swift" then
+								require("lint").try_lint()
+							end
+            end,
+          })
 				end,
 			},
 		},
@@ -45,6 +57,7 @@ return {
 				},
 			},
 			formatters_by_ft = {
+        swift = { "swiftformat" },
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				typescript = { "prettierd", "prettier", stop_after_first = true },
 				lua = { "stylua" },

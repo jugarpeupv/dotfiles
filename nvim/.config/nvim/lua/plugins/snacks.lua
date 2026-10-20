@@ -35,9 +35,9 @@ return {
 		-- },
 		bigfile = {
 			enabled = true,
-			notify = false, -- show notification when big file detected
-			size = 0.7 * 1024 * 1024, -- 1.5MB
-			line_length = 1000, -- average line length (useful for minified files)
+			notify = true, -- show notification when big file detected
+			size = 1 * 1024 * 1024, -- 1.5MB
+			line_length = 2000, -- average line length (useful for minified files)
 			-- Enable or disable features when big file detected
 			---@param ctx {buf: number, ft:string}
 			setup = function(ctx)
@@ -302,14 +302,14 @@ return {
 						on_exit = function(_, code)
 							if code == 0 then
 								vim.schedule(function()
-									vim.notify("Email synced properly", vim.log.levels.INFO)
+									vim.notify("Email " .. channel .. " synced properly", vim.log.levels.INFO)
 									local time = os.date("%H:%M")
 									vim.fn.jobstart({
 										"terminal-notifier",
 										"-title",
 										"Mail",
 										"-message",
-										time .. " Email synced properly",
+										time .. " Email " .. channel .. " synced properly",
 									}, { detach = true })
 								end)
 							else
@@ -1433,18 +1433,17 @@ PY
 	config = function(_, opts)
 		require("snacks").setup(opts)
 		Snacks.util.icon = function(name, cat, opts)
+			--  Workaround https://github.com/folke/snacks.nvim/issues/2896
+			local placement = require("snacks.image.placement")
+			local update = placement.update
 
-    --  Workaround https://github.com/folke/snacks.nvim/issues/2896
-    local placement = require("snacks.image.placement")
-    local update = placement.update
-
-    placement.update = function(self, ...)
-      if self.hidden and self.wins and #self:wins() > 0 then
-        self.hidden = false
-        self._state = nil
-      end
-      return update(self)
-    end
+			placement.update = function(self, ...)
+				if self.hidden and self.wins and #self:wins() > 0 then
+					self.hidden = false
+					self._state = nil
+				end
+				return update(self)
+			end
 			--    -- WORKING
 			-- -- Copy and modify from https://github.com/folke/snacks.nvim/blob/main/lua/snacks/util/init.lua#L120-L154
 			-- -- Example with `mini.icons`:

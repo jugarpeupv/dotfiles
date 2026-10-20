@@ -97,6 +97,28 @@ return {
 				default_mode = "build",
 				-- server = false,
 				hooks = {
+          on_question_asked = function(session)
+            local cwd = session and session.workspace or vim.fn.getcwd()
+            local parts = vim.split(cwd, "/")
+            local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
+            local time = os.date("%H:%M")
+            local msg = time .. " Opencode needs input "
+            if repo ~= "" then
+              msg = msg .. " in:\n" .. repo
+            end
+            -- opcional: detalle del permiso
+            vim.fn.jobstart({
+              "terminal-notifier",
+              "-title",
+              "Neovim",
+              "-message",
+              msg,
+              "-contentImage",
+              nvim_icon,
+              -- "-sound",
+              -- "Ping",
+            }, { detach = true })
+          end,
 					on_permission_requested = function(session)
 						local cwd = session and session.workspace or vim.fn.getcwd()
 						local parts = vim.split(cwd, "/")

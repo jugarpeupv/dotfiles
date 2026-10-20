@@ -59,7 +59,7 @@ return {
 					for _, buf in ipairs(vim.api.nvim_list_bufs()) do
 						if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) then
 							local ft = vim.bo[buf].filetype
-							local bt = vim.bo[buf].buftype
+							-- local bt = vim.bo[buf].buftype
 							if vim.tbl_contains(excluded_ft, ft) then
 								pcall(vim.api.nvim_buf_delete, buf, { force = true })
 							end
@@ -94,30 +94,6 @@ return {
 				end,
 			})
 		end,
-	},
-	{
-		"jugarpeupv/rust-docs.nvim",
-		enabled = true,
-		lazy = true,
-    -- dev = true,
-    -- dir = "~/projects/rust-docs.nvim/wt-main/",
-		keys = {
-			{ mode = { "n" }, "<leader>rd", ":RustDocs<cr>" },
-		},
-		dependencies = {
-			-- Pick one:
-			"nvim-telescope/telescope.nvim",
-			-- or "folke/snacks.nvim",
-		},
-		opts = {
-			open_mode = "split",
-			keymaps = {
-				open = "<leader>rd", -- global keymap to open picker
-				section_next = ")", -- buffer-local: next section
-				section_prev = "(", -- buffer-local: prev section
-				open_browser = "gx", -- buffer-local: open in browser
-			},
-		}, -- uses defaults; see Configuration below
 	},
 	{
 		"jugarpeupv/jsregex.nvim",

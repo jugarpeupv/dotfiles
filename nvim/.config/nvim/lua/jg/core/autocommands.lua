@@ -543,17 +543,17 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "text.kulala_ui",
-	group = augroups.filetypedetect,
-	callback = function(event)
-		local ok, parser = pcall(vim.treesitter.get_parser, event.buf, "json")
-		if ok and parser then
-			parser:destroy() -- detaches only the JSON parser
-			-- vim.treesitter.get_parser_cache(event.buf, "json").tree = nil
-		end
-	end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	pattern = "text.kulala_ui",
+-- 	group = augroups.filetypedetect,
+-- 	callback = function(event)
+-- 		local ok, parser = pcall(vim.treesitter.get_parser, event.buf, "json")
+-- 		if ok and parser then
+-- 			parser:destroy() -- detaches only the JSON parser
+-- 			-- vim.treesitter.get_parser_cache(event.buf, "json").tree = nil
+-- 		end
+-- 	end,
+-- })
 
 vim.api.nvim_create_autocmd('LspProgress', {
   group = augroups.general,
@@ -569,3 +569,36 @@ vim.api.nvim_create_autocmd('LspProgress', {
     })
   end,
 })
+
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  group = augroups.filetype_misc,
+  pattern = "*.swiftinterface",
+  callback = function(args)
+    vim.bo[args.buf].readonly = true
+    vim.bo[args.buf].modifiable = false
+    vim.bo[args.buf].swapfile = false
+    vim.b.matchparen_enabled = false
+    -- vim.treesitter.stop(args.buf)
+    vim.b.matchup_matchparen_enabled = 0
+    vim.b.matchup_matchparen_fallback = 0
+    Snacks.util.wo(0, {
+      foldmethod = "manual",
+      statuscolumn = "",
+      conceallevel = 0,
+      relativenumber = false,
+      number = true,
+    })
+    vim.b.minianimate_disable = true
+    vim.b.minihipatterns_disable = true
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  group = augroups.filetype_misc,
+  pattern = "*Package.resolved",
+  callback = function(args)
+    vim.bo[args.buf].filetype = "json"
+  end,
+})
+

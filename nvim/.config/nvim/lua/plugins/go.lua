@@ -141,17 +141,6 @@ return {
 				end
 			end
 
-			local godoc_parser = {
-				install_info = {
-					url = "https://github.com/fredrikaverpil/tree-sitter-godoc",
-					files = { "src/parser.c" },
-					version = "*",
-				},
-				filetype = "godoc",
-			}
-
-			require("nvim-treesitter.parsers").godoc = godoc_parser
-
 			-- Map godoc filetype to the godoc parser
 			vim.treesitter.language.register("godoc", "godoc")
 

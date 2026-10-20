@@ -92,6 +92,9 @@ return {
 			end
 
 			local server_filetypes = {
+        sourcekit = {
+          "swift"
+        },
 				angularls = {
 					"typescript",
 					"typescriptreact",
@@ -133,7 +136,7 @@ return {
 				-- jdtls is managed by nvim-jdtls in ftplugin/java.lua, not here
 				-- jdtls = { "java" },
 				jsonls = { "json", "jsonc" },
-				kulala_ls = { "http" },
+				-- kulala_ls = { "http" },
 				lua_ls = { "lua" },
 				marksman = { "markdown" },
         -- vscode_markdown = { "markdown" },  -- or whatever you name it
