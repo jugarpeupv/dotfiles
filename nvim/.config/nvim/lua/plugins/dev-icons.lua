@@ -469,7 +469,7 @@ return {
 				["webpack.config.prod.ts"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfigProdTS" },
 				["webpack.config.ts"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfigTS" },
 				["webpack.prod.config.ts"] = { icon = "󰜫", color = "#9CDCFE", name = "WebpackConfigProdTS" },
-
+        [".browserslistrc"] = { icon = "", color = "#f38bad", name = "browserslistrc" },
 				[".bash_profile"] = { icon = "", color = "#73daca", name = "bash_profile" },
 				[".bashrc"] = { icon = "", color = "#73daca", name = "bashrc" },
 				[".zprofile"] = { icon = "", color = "#73daca", name = "zprofile" },

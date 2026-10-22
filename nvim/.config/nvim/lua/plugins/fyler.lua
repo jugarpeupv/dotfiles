@@ -83,10 +83,7 @@ M.old_api_opts = {
 				["<leader>fd"] = function(view)
 					-- Picker rooted at THIS instance's cwd; selection
 					-- opens in THIS instance (not the global one).
-					require("jg.custom.telescope").find_directory_in_fyler_and_focus(
-						view:getcwd(),
-						view
-					)
+					require("jg.custom.telescope").find_directory_in_fyler_and_focus(view:getcwd(), view)
 				end,
 				["gs"] = "SortByCreationTime",
 				["."] = function(view)
@@ -331,13 +328,13 @@ M.old_api_opts = {
 					vim.api.nvim_feedkeys(hops, "n", true)
 				end,
 				["S"] = function(view)
-          local path
-          local entry = view:cursor_node_entry()
-          if entry and entry.path then
-            path = entry.path
-          else
-            path = view:getcwd()
-          end
+					local path
+					local entry = view:cursor_node_entry()
+					if entry and entry.path then
+						path = entry.path
+					else
+						path = view:getcwd()
+					end
 					if vim.fn.isdirectory(path) == 0 then
 						path = vim.fn.fnamemodify(path, ":h")
 					end
@@ -368,26 +365,37 @@ M.old_api_opts = {
 						},
 					})
 				end,
-        ["<M-p>"] = function(view)
-          local path = view:getcwd()
-          if vim.fn.isdirectory(path) == 0 then
-            path = vim.fn.fnamemodify(path, ":h")
-          end
-          require("telescope.builtin").find_files({
-            prompt_title = "Find files in: " .. path,
-            cwd = path,
-            hidden = true,
-            find_command = {
-              "rg",
-              "--files",
-              "--color",
-              "never",
-              "--glob=!.git",
-              "--glob=!*__template__",
-              "--glob=!*DS_Store",
-            },
-          })
-        end,
+				["<M-p>"] = function(view)
+					local path = view:getcwd()
+					if vim.fn.isdirectory(path) == 0 then
+						path = vim.fn.fnamemodify(path, ":h")
+					end
+					-- require("telescope.builtin").find_files({
+					--   prompt_title = "Find files in: " .. path,
+					--   cwd = path,
+					--   hidden = true,
+					--   find_command = {
+					--     "rg",
+					--     "--files",
+					--     "--color",
+					--     "never",
+					--     "--glob=!.git",
+					--     "--glob=!*__template__",
+					--     "--glob=!*DS_Store",
+					--   },
+					-- })
+					Snacks.picker.files({
+						-- cmd = "rg",
+            title = "Find files in: " .. path,
+						cwd = path,
+						hidden = true,
+						exclude = {
+							".git",
+							-- "*__template__*",
+							"*DS_Store*",
+						},
+					})
+				end,
 				["F"] = function(view)
 					local actions = require("telescope.actions")
 					local action_state = require("telescope.actions.state")
@@ -430,13 +438,7 @@ M.old_api_opts = {
 								-- Reveal in THIS instance (cursor on the file),
 								-- not the global ORIG one module navigate()
 								-- targets. Root untouched.
-								if
-									not (
-										view.win
-										and view.win.winid
-										and vim.api.nvim_win_is_valid(view.win.winid)
-									)
-								then
+								if not (view.win and view.win.winid and vim.api.nvim_win_is_valid(view.win.winid)) then
 									vim.notify("Fyler instance closed", vim.log.levels.WARN)
 									return
 								end
@@ -590,7 +592,7 @@ M.old_api_opts = {
 					end
 				end,
 				-- ["L"] = "SelectIfDirectory",
-        ["L"] = "Select",
+				["L"] = "Select",
 				["<C-t>"] = "SelectTab",
 				["<C-v>"] = "SelectVSplit",
 				-- ["<C-v>"] = function(view)
@@ -742,6 +744,7 @@ return {
 		cmd = { "Fyler" },
 		dependencies = {
 			{ "nvim-tree/nvim-web-devicons" },
+			{ "folke/snacks.nvim" },
 		},
 		keys = {
 			{

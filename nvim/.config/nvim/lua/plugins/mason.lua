@@ -40,36 +40,7 @@ return {
         },
       })
 
-      -- enable mason
       mason.setup(conf)
-
-      -- mason_lspconfig.setup({
-      --   -- list of servers for mason to install
-      --   ensure_installed = {
-      --     "vtsls",
-      --     -- "tsserver",
-      --     "html",
-      --     "cssls",
-      --     "tailwindcss",
-      --     "lua_ls",
-      --     "angularls",
-      --     "cssmodules_ls",
-      --     "eslint",
-      --   },
-      --   -- auto-install configured servers (with lspconfig)
-      --   automatic_installation = false, -- not the same as ensure_installed
-      -- })
-
-      -- mason_null_ls.setup({
-      --   -- list of formatters & linters for mason to install
-      --   ensure_installed = {
-      --     "prettier", -- ts/js formatter
-      --     "stylua", -- lua formatter
-      --     "eslint_d", -- ts/js linter
-      --   },
-      --   -- auto-install configured formatters & linters (with null-ls)
-      --   automatic_installation = false,
-      -- })
     end,
   },
   {
@@ -94,6 +65,7 @@ return {
         "gh-actions-language-server",
         "jdtls",
         "json-lsp",
+        "prisma-language-server",
         "lua-language-server",
         "nxls",
         "ruby-lsp",
@@ -102,6 +74,10 @@ return {
         "rust-analyzer",
         "gopls",
         "marksman",
+        "postgres-language-server",
+        "sql-formatter",
+        "sqlls",
+        "pgformatter",
         -- Non-LSP / java tooling
         "actionlint",
         "java-debug-adapter",

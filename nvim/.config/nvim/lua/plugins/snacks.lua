@@ -9,6 +9,11 @@ return {
 	-- event = { "BufReadPost", "BufNewFile" },
 	opts = {
 		image = {
+      formats = {
+        "png", "jpg", "jpeg", "gif", "bmp", "webp", "tiff", "heic",
+        "avif", "mp4", "mov", "avi", "mkv", "webm", "pdf", "icns",
+        "svg", "svgz",
+      },
 			doc = {
 				enabled = false,
 			},
@@ -1432,6 +1437,15 @@ PY
 
 	config = function(_, opts)
 		require("snacks").setup(opts)
+
+    -- Don't let snacks.bigfile's `.*` catch-all pattern claim svg files.
+    -- Priority 100 beats the catch-all's default priority 0.
+    vim.filetype.add({
+      pattern = {
+        [".*%.svg"] = { "svg", { priority = 100 } },
+      },
+    })
+
 		Snacks.util.icon = function(name, cat, opts)
 			--  Workaround https://github.com/folke/snacks.nvim/issues/2896
 			local placement = require("snacks.image.placement")

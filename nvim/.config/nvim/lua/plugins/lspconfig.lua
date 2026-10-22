@@ -92,6 +92,12 @@ return {
 			end
 
 			local server_filetypes = {
+        sqlls = {
+          "sql"
+        },
+        prismals = {
+          "prisma"
+        },
         sourcekit = {
           "swift"
         },

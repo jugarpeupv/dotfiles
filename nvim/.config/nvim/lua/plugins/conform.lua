@@ -57,6 +57,7 @@ return {
 				},
 			},
 			formatters_by_ft = {
+        sql = { "sql_formatter" },
         swift = { "swiftformat" },
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				typescript = { "prettierd", "prettier", stop_after_first = true },

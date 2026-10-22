@@ -30,6 +30,7 @@ return {
 		build = ":TSUpdate",
 		config = function()
 			local parsers = {
+        "prisma",
 				"bash",
 				"comment",
 				"css",
@@ -86,6 +87,7 @@ return {
 			vim.api.nvim_create_autocmd("FileType", {
 				group = vim.api.nvim_create_augroup("treesitter-enabled-filetype", { clear = true }),
 				pattern = {
+          "prisma",
 					"c",
 					"opencode_output",
           "godoc",

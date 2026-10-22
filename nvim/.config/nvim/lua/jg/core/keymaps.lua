@@ -2084,6 +2084,39 @@ vim.keymap.set({ "n" }, "<leader>tt", function()
 	require("barbecue.ui").toggle()
 end, opts)
 
+-- Toggle snacks image rendering <-> raw file view.
+-- Works for every format snacks renders (svg, png, jpeg, gif, pdf, mp4, ...):
+-- svg shows its XML, binary formats show Neovim's raw/binary view.
+vim.keymap.set({ "n" }, "<leader>ti", function()
+	local buf = vim.api.nvim_get_current_buf()
+	local path = vim.api.nvim_buf_get_name(buf)
+	if path == "" then
+		return
+	end
+
+	if vim.bo[buf].filetype == "image" then
+		-- image -> raw: clear the kitty placement, then let Neovim read the
+		-- file itself. `:noautocmd` bypasses snacks' BufReadCmd.
+		require("snacks.image.placement").clean(buf)
+		vim.bo[buf].modifiable = true
+		vim.cmd("noautocmd edit!")
+		vim.bo[buf].modified = false
+		vim.bo[buf].filetype = vim.filetype.match({ filename = path, buf = buf }) or ""
+	else
+		-- raw -> image: re-trigger snacks' BufReadCmd.
+		local ok, img = pcall(require, "snacks.image")
+		if not ok or not img.supports_file(path) then
+			vim.notify("Not an image format rendered by snacks", vim.log.levels.WARN)
+			return
+		end
+		if vim.bo[buf].modified then
+			vim.notify("Unsaved changes: save first or use :edit! to discard", vim.log.levels.WARN)
+			return
+		end
+		vim.cmd("edit")
+	end
+end, { desc = "Toggle snacks image / raw file view" })
+
 -- quickfix list previous
 vim.keymap.set({ "n" }, "<C-S-H>", function()
 	local cur = vim.fn.getqflist({ nr = 0 }).nr
