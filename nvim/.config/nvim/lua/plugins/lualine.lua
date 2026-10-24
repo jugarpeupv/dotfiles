@@ -270,34 +270,23 @@ return {
 				color = { bg = colors.black },
 			}
 
-			local lualine_component = require("lualine.components.branch.git_branch")
-
 			local branch = {
-				"branch",
-				-- color = function(section)
-				--   local active_buf_full_path = vim.api.nvim_buf_get_name(0)
-				--
-				--   local wt_utils = require("jg.custom.worktree-utils")
-				--   local wt_info = wt_utils.get_wt_info(vim.fn.getcwd())
-				--
-				--   if next(wt_info) == nil then
-				--     return { fg = colors.alternate_black }
-				--   end
-				--
-				--   local escaped_wt_dir = wt_info["wt_dir"]:gsub("([^%w])", "%%%1")
-				--
-				--   -- if dir_name ~= branch and vim.bo.filetype ~= "TelescopePrompt" and exists_bare_dir == 1 then
-				--
-				--  if (vim.bo.filetype == "TelescopePrompt" or vim.bo.filetype == "toggleterm" or vim.bo.filetype == "BufTerm" or vim.bo.filetype == "") then
-				--     return { fg = colors.alternate_black }
-				--  end
-				--
-				--   if string.find(active_buf_full_path, escaped_wt_dir) then
-				--     return { fg = colors.alternate_black }
-				--   else
-				--     return { fg = "#F38BA8" }
-				--   end
+        "branch",
+				-- function()
+				-- 	local name
+				-- 	if vim.bo.filetype == "fyler" then
+				-- 		name = fyler_branch()
+				-- 	else
+				-- 		name = require("lualine.components.branch.git_branch").get_branch()
+				-- 	end
+				-- 	if not name or name == "" then
+				-- 		return ""
+				-- 	end
+				-- 	return " " .. name
 				-- end,
+				color = function()
+					return { fg = "#b4beff" }
+				end,
 			}
 
 			local diff_mode = {
@@ -357,22 +346,6 @@ return {
 			-- 	cond = function()
 			-- 		return vim.bo.filetype == "codecompanion"
 			-- 	end,
-			-- }
-
-			-- local diff = {
-			-- 	"diff",
-			-- 	colored = true, -- Displays a colored diff status if set to true
-			-- 	diff_color = {
-			-- 		-- Same color values as the general color option can be used here.
-			-- 		added = "DiffAdd", -- Changes the diff's added color
-			-- 		modified = "DiffChange", -- Changes the diff's modified color
-			-- 		removed = "DiffDelete", -- Changes the diff's removed color you
-			-- 	},
-			-- 	symbols = { added = "+", modified = "~", removed = "-" }, -- Changes the symbols used by the diff.
-			-- 	source = nil, -- A function that works as a data source for diff.
-			-- 	-- It must return a table as such:
-			-- 	--   { added = add_count, modified = modified_count, removed = removed_count }
-			-- 	-- or nil on failure. count <= 0 won't be displayed.
 			-- }
 
 			-- local function get_schema()
@@ -454,7 +427,7 @@ return {
 						-- { "mode", separator = { left = "", right = "" } },
 					},
 					-- lualine_b = { branch, ahead_behind_indicator },
-					lualine_b = {},
+					lualine_b = {  },
 					lualine_c = { diff_mode },
 					-- lualine_x = { dirname, "filetype", get_schema },
 					lualine_x = {
@@ -466,6 +439,7 @@ return {
 						-- },
 						-- codecompanion_adapter,
 						-- require("jg.custom.codecompanion_lualine_spinner"),
+            "encoding",
 						"filetype",
 					},
 					-- lualine_x = {},

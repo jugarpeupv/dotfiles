@@ -215,7 +215,6 @@ return {
 					},
 					{
 						mode = { "n" },
-						-- "<leader>mp",
 						"mp",
 						"<cmd>lua require('recall').goto_prev()<CR>",
 						{ noremap = true, silent = true },

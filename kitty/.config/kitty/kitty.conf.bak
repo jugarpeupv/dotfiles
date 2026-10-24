@@ -3319,8 +3319,8 @@ window_padding_width 8 0 0 10
 
 
 adjust_line_height  0
-adjust_column_width 2
-font_size 28
+adjust_column_width 0
+font_size 26
 
 
 # # BEGIN_KITTY_FONTS
@@ -3332,12 +3332,12 @@ font_size 28
 
 
 
-# # BEGIN_KITTY_FONTS
-# font_family      family=Iosevka style='Extended'
-# bold_font        family=Iosevka postscript_name=Iosevka-Semibold-Extended
-# bold_italic_font family=Iosevka postscript_name=Iosevka-Semibold-Extended-Oblique
-# italic_font      family=Iosevka postscript_name=Iosevka-Extended-Oblique
-# # END_KITTY_FONTS
+# BEGIN_KITTY_FONTS
+font_family      family=Iosevka style='Extended'
+bold_font        family=Iosevka postscript_name=Iosevka-Semibold-Extended
+bold_italic_font family=Iosevka postscript_name=Iosevka-Semibold-Extended-Oblique
+italic_font      family=Iosevka postscript_name=Iosevka-Extended-Oblique
+# END_KITTY_FONTS
 
 
 # # BEGIN_KITTY_FONTS
@@ -3365,9 +3365,18 @@ font_size 28
 # # END_KITTY_FONTS
 
 
+
+# # BEGIN_KITTY_FONTS
+# font_family      family='Zed Mono' postscript_name=Zed-Mono-Extended features='-calt +ss18'
+# bold_font        family='Zed Mono' postscript_name=Zed-Mono-Semibold-Extended features='-calt +ss18'
+# italic_font      family='Zed Mono' postscript_name=Zed-Mono-Oblique features='-calt +ss18'
+# bold_italic_font family='Zed Mono' postscript_name=Zed-Mono-Semibold-Extended-Oblique features='-calt +ss18'
+# # END_KITTY_FONTS
+
+
 # BEGIN_KITTY_FONTS
-font_family      family="D2Coding"
-bold_font        auto
-italic_font      auto
-bold_italic_font auto
+font_family      family='Zed Mono' postscript_name=Zed-Mono-Extended features='-calt +ss18'
+bold_font        family='Zed Mono' postscript_name=Zed-Mono-Semibold-Extended features='-calt +ss18'
+italic_font      family='Zed Mono' postscript_name=Zed-Mono-Oblique features='-calt +ss18'
+bold_italic_font family='Zed Mono' postscript_name=Zed-Mono-Semibold-Extended-Oblique features='-calt +ss18'
 # END_KITTY_FONTS

@@ -796,6 +796,11 @@ end, opts)
 
 vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true }) -- paste from 0 register
 vim.keymap.set({ "n" }, "<leader>bM", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
+
+vim.keymap.set("n", "<leader>bc", function()
+  vim.cmd("split | b " .. require("vim._core.ui2").bufs.cmd)
+end)
+
 vim.keymap.set("n", "<leader>bm", function()
 	local ui2 = require("vim._core.ui2")
 	local win = vim.api.nvim_get_current_win() -- save before :messages steals focus

@@ -98,6 +98,31 @@ return {
 						end
 					end,
 				},
+				man = {
+					finder = function(opts, ctx)
+						local out = vim.fn.system({ "man", "-k", "." })
+						if vim.v.shell_error ~= 0 or out == "" then
+							return {}
+						end
+
+						local items = {}
+						for line in out:gmatch("[^\r\n]+") do
+							local names, desc = line:match("^(.-)%s+-%s+(.+)$")
+							if names and desc then
+								for name, section in names:gmatch("([^%s,()]+)%(([^)]+)%)") do
+									items[#items + 1] = {
+										text = name .. "(" .. section .. ")",
+										page = name,
+										section = section,
+										desc = desc,
+										ref = name .. "(" .. section .. ")",
+									}
+								end
+							end
+						end
+						return items
+					end,
+				},
 			},
 			win = {
 				-- input window
@@ -989,7 +1014,31 @@ PY
 						end,
 					})
 				else
+					-- Open the Snacks man picker immediately (it runs `man -k .`
+					-- itself), and populate the cache file asynchronously so we
+					-- don't block the UI.
 					Snacks.picker.man()
+					vim.system({ "man", "-k", "." }, {}, function(result)
+						if result.code ~= 0 or not result.stdout or result.stdout == "" then
+							return
+						end
+						vim.schedule(function()
+							vim.fn.mkdir(vim.fn.fnamemodify(cache, ":h"), "p")
+							local wf = io.open(cache, "w")
+							if not wf then
+								return
+							end
+							for line in result.stdout:gmatch("[^\r\n]+") do
+								local names, desc = line:match("^(.-)%s+-%s+(.+)$")
+								if names and desc then
+									for name, section in names:gmatch("([^%s,()]+)%(([^)]+)%)") do
+										wf:write(name .. "(" .. section .. ") - " .. desc .. "\n")
+									end
+								end
+							end
+							wf:close()
+						end)
+					end)
 					-- Snacks.picker.man({ section = { "1" } })
 				end
 			end,

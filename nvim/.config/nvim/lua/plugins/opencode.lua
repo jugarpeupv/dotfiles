@@ -1,10 +1,9 @@
 return {
 	{
-		-- "sudo-tee/opencode.nvim",
+		"sudo-tee/opencode.nvim",
 		-- enabled = true,
 		-- commit = "92ad9bf550f10ac24c0076dd564fa5b424ce4fab",
-		"jugarpeupv/opencode.nvim",
-		branch = "main",
+		-- "jugarpeupv/opencode.nvim",
 		-- dev = true,
 		-- dir = "~/projects/opencode.nvim/wt-main/",
 		-- lazy = true,
@@ -43,35 +42,53 @@ return {
 						.. "feat(scope): short title\n\n"
 						.. "Body wrapped at 72 characters.\n"
 						.. "```"
+					-- ensure opencode is visible before running; open it if hidden/closed
+					local window_state = require("opencode.api").get_window_state()
+					if window_state.status ~= "visible" then
+						require("opencode.api").toggle()
+					end
 					-- git_diff only: clear stale mentions and disable every other
 					-- context key (files/selection leak via chat_context.lua:544 otherwise)
 					require("opencode.context").clear_files()
 					require("opencode.context").clear_selections()
 					require("opencode.api").run(prompt, {
 						context = {
-							current_file = { enabled = false },
-							selection = { enabled = false },
-							diagnostics = { enabled = false },
-							cursor_data = { enabled = false },
-							buffer = { enabled = false },
-							git_diff = { enabled = true },
+							-- current_file = { enabled = false },
+							-- selection = { enabled = false },
+							-- diagnostics = { enabled = false },
+							-- cursor_data = { enabled = false },
+							-- buffer = { enabled = false },
+							-- git_diff = { enabled = true },
 						},
 					})
 				end,
 				desc = "Opencode - Generate commit message from staged changes",
 			},
-			{
-				mode = { "v" },
-				"<leader>oa",
-				function()
-					local start_pos = vim.fn.getpos("'<")
-					local end_pos = vim.fn.getpos("'>")
-					require("opencode.api").add_visual_selection_inline({ open_input = true }, {
-						start = start_pos[2],
-						stop = end_pos[2],
-					})
-				end,
-			},
+			-- {
+			-- 	mode = { "v" },
+			-- 	"<leader>oa",
+			-- 	function()
+			-- 		-- local start_pos = vim.fn.getpos("'<")
+			-- 		-- local end_pos = vim.fn.getpos("'>")
+			-- 		-- require("opencode.api").add_visual_selection_inline({ open_input = true }, {
+			-- 		-- 	start = start_pos[2],
+			-- 		-- 	stop = end_pos[2],
+			-- 		-- })
+			--        require("opencode.api").add_visual_selection_inline({ open_input = true })
+			--
+			--        -- -- Ensure marks are updated by forcing a momentary exit or using visual mode endpoints
+			--        -- local start_line = vim.fn.line("v")
+			--        -- local end_line = vim.fn.line(".")
+			--        -- if start_line > end_line then
+			--        --   start_line, end_line = end_line, start_line
+			--        -- end
+			--        --
+			--        -- require("opencode.api").add_visual_selection_inline({ open_input = true }, {
+			--        --   start = start_line,
+			--        --   stop = end_line,
+			--        -- })
+			-- 	end,
+			-- },
 			{
 				mode = { "n", "v", "t" },
 				"<M-m>",
@@ -92,33 +109,45 @@ return {
 			-- Default configuration with all available options
 			require("opencode").setup({
 				preferred_picker = "telescope",
+				-- program_status = { enabled = true, tmux = true },
 				preferred_completion = "blink",
 				default_global_keymaps = false,
 				default_mode = "build",
+				debug = {
+					enabled = true,
+					capture_streamed_events = false,
+					show_ids = true,
+					highlight_changed_lines = false,
+					highlight_changed_lines_timeout_ms = 120,
+					quick_chat = {
+						keep_session = false,
+						set_active_session = false,
+					},
+				},
 				-- server = false,
 				hooks = {
-          on_question_asked = function(session)
-            local cwd = session and session.workspace or vim.fn.getcwd()
-            local parts = vim.split(cwd, "/")
-            local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
-            local time = os.date("%H:%M")
-            local msg = time .. " Opencode needs input "
-            if repo ~= "" then
-              msg = msg .. " in:\n" .. repo
-            end
-            -- opcional: detalle del permiso
-            vim.fn.jobstart({
-              "terminal-notifier",
-              "-title",
-              "Neovim",
-              "-message",
-              msg,
-              "-contentImage",
-              nvim_icon,
-              -- "-sound",
-              -- "Ping",
-            }, { detach = true })
-          end,
+					on_question_asked = function(session)
+						local cwd = session and session.workspace or vim.fn.getcwd()
+						local parts = vim.split(cwd, "/")
+						local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
+						local time = os.date("%H:%M")
+						local msg = time .. " Opencode needs input "
+						if repo ~= "" then
+							msg = msg .. " in:\n" .. repo
+						end
+						-- opcional: detalle del permiso
+						vim.fn.jobstart({
+							"terminal-notifier",
+							"-title",
+							"Neovim",
+							"-message",
+							msg,
+							"-contentImage",
+							nvim_icon,
+							-- "-sound",
+							-- "Ping",
+						}, { detach = true })
+					end,
 					on_permission_requested = function(session)
 						local cwd = session and session.workspace or vim.fn.getcwd()
 						local parts = vim.split(cwd, "/")
@@ -163,9 +192,222 @@ return {
 					end,
 				},
 				keymap = {
+          editor = {
+            ['<M-m>']  = { 'toggle',                                            desc = 'Toggle Opencode window' },
+            ['<D-m>']  = { 'toggle',                                            desc = 'Toggle Opencode window' },
+            ['<leader>oI']  = { 'open_input_new_session',                            desc = 'Open input (new session)' },
+            ['<leader>oN']  = { 'open_session_tab',                                  desc = 'Open new Opencode session tab' },
+            ['<leader>o<']  = { 'prev_session_tab',                                  desc = 'Previous Opencode session tab' },
+            ['<leader>o>']  = { 'next_session_tab',                                  desc = 'Next Opencode session tab' },
+            ['<leader>o?']  = { 'select_session_tab',                                desc = 'Select Opencode session tab' },
+            ['<leader>o1']  = { 'select_session_tab', { 1 },                          desc = 'Select Opencode session tab 1' },
+            ['<leader>o2']  = { 'select_session_tab', { 2 },                          desc = 'Select Opencode session tab 2' },
+            ['<leader>o3']  = { 'select_session_tab', { 3 },                          desc = 'Select Opencode session tab 3' },
+            ['<leader>o4']  = { 'select_session_tab', { 4 },                          desc = 'Select Opencode session tab 4' },
+            ['<leader>o5']  = { 'select_session_tab', { 5 },                          desc = 'Select Opencode session tab 5' },
+            ['<leader>o6']  = { 'select_session_tab', { 6 },                          desc = 'Select Opencode session tab 6' },
+            ['<leader>o7']  = { 'select_session_tab', { 7 },                          desc = 'Select Opencode session tab 7' },
+            ['<leader>o8']  = { 'select_session_tab', { 8 },                          desc = 'Select Opencode session tab 8' },
+            ['<leader>o9']  = { 'select_session_tab', { 9 },                          desc = 'Select Opencode session tab 9' },
+            ['<leader>oP']  = { 'configure_provider',                                desc = 'Configure provider' },
+            ['<leader>oS']  = { 'select_session',                                    desc = 'Select session' },
+            ['<leader>oH']  = { 'select_history',                                    desc = 'Select from history' },
+            ['<leader>oT']  = { 'timeline',                                          desc = 'Session timeline' },
+            ['<leader>oQ']  = { 'close_session_tab',                                 desc = 'Close current Opencode session tab' },
+            ['<leader>oa']  = { 'add_visual_selection',         mode = { 'v' },      desc = 'Add visual selection to context' },
+            ['<leader>o/']  = { 'quick_chat',                   mode = { 'n', 'x' }, desc = 'Quick chat with current context' },
+            ["<leader>oC"] = {
+              function()
+                require("opencode.state").jobs.clear_server()
+              end,
+            },
+
+            -- ['<leader>og']  = { 'toggle',                                            desc = 'Toggle Opencode window' },
+            -- ['<leader>oi']  = { 'open_input',                                        desc = 'Open input window' },
+            -- ['<leader>oI']  = { 'open_input_new_session',                            desc = 'Open input (new session)' },
+            -- ['<leader>oN']  = { 'open_session_tab',                                  desc = 'Open new Opencode session tab' },
+            -- ['<leader>o<']  = { 'prev_session_tab',                                  desc = 'Previous Opencode session tab' },
+            -- ['<leader>o>']  = { 'next_session_tab',                                  desc = 'Next Opencode session tab' },
+            -- ['<leader>o?']  = { 'select_session_tab',                                desc = 'Select Opencode session tab' },
+            -- ['<leader>o1']  = { 'select_session_tab', { 1 },                          desc = 'Select Opencode session tab 1' },
+            -- ['<leader>o2']  = { 'select_session_tab', { 2 },                          desc = 'Select Opencode session tab 2' },
+            -- ['<leader>o3']  = { 'select_session_tab', { 3 },                          desc = 'Select Opencode session tab 3' },
+            -- ['<leader>o4']  = { 'select_session_tab', { 4 },                          desc = 'Select Opencode session tab 4' },
+            -- ['<leader>o5']  = { 'select_session_tab', { 5 },                          desc = 'Select Opencode session tab 5' },
+            -- ['<leader>o6']  = { 'select_session_tab', { 6 },                          desc = 'Select Opencode session tab 6' },
+            -- ['<leader>o7']  = { 'select_session_tab', { 7 },                          desc = 'Select Opencode session tab 7' },
+            -- ['<leader>o8']  = { 'select_session_tab', { 8 },                          desc = 'Select Opencode session tab 8' },
+            -- ['<leader>o9']  = { 'select_session_tab', { 9 },                          desc = 'Select Opencode session tab 9' },
+            -- ['<leader>oh']  = { 'select_history',                                    desc = 'Select from history' },
+            -- ['<leader>oo']  = { 'open_output',                                       desc = 'Open output window' },
+            -- ['<leader>ot']  = { 'toggle_focus',                                      desc = 'Toggle focus' },
+            -- ['<leader>oT']  = { 'timeline',                                          desc = 'Session timeline' },
+            -- ['<leader>oq']  = { 'close',                                             desc = 'Close Opencode window' },
+            -- ['<leader>oQ']  = { 'close_session_tab',                                 desc = 'Close current Opencode session tab' },
+            -- ['<leader>os']  = { 'select_session',                                    desc = 'Select session' },
+            -- ['<leader>oS']  = { 'navigate_session_tree', { 'child', 'picker' },     desc = 'Select child session' },
+            -- ['<leader>oP']  = { 'navigate_session_tree', { 'parent' },              desc = 'Go to parent session' },
+            -- ['<leader>oB']  = { 'navigate_session_tree', { 'sibling', 'picker' },   desc = 'Select sibling session' },
+            -- ['<leader>oR']  = { 'rename_session',                                    desc = 'Rename session' },
+            -- ['<leader>op']  = { 'configure_provider',                                desc = 'Configure provider' },
+            -- ['<leader>oV']  = { 'configure_variant',                                 desc = 'Configure model variant' },
+            -- ['<leader>oy']  = { 'add_visual_selection',         mode = { 'v' },      desc = 'Add visual selection to context' },
+            -- ['<leader>oY']  = { 'add_visual_selection_inline',  mode = { 'v' },      desc = 'Insert visual selection inline into input' },
+            -- ['<leader>oz']  = { 'toggle_zoom',                                       desc = 'Toggle zoom' },
+            -- ['<leader>ov']  = { 'paste_image',                                       desc = 'Paste image from clipboard' },
+            -- ['<leader>od']  = { 'diff_open',                                         desc = 'Open diff view' },
+            -- ['<leader>o]']  = { 'diff_next',                                         desc = 'Next diff' },
+            -- ['<leader>o[']  = { 'diff_prev',                                         desc = 'Previous diff' },
+            -- ['<leader>oc']  = { 'diff_close',                                        desc = 'Close diff view' },
+            -- ['<leader>ora'] = { 'diff_revert_all_last_prompt',                       desc = 'Revert all (last prompt)' },
+            -- ['<leader>ort'] = { 'diff_revert_this_last_prompt',                      desc = 'Revert this (last prompt)' },
+            -- ['<leader>orA'] = { 'diff_revert_all',                                   desc = 'Revert all changes' },
+            -- ['<leader>orT'] = { 'diff_revert_this',                                  desc = 'Revert this change' },
+            -- ['<leader>orr'] = { 'diff_restore_snapshot_file',                        desc = 'Restore file snapshot' },
+            -- ['<leader>orR'] = { 'diff_restore_snapshot_all',                         desc = 'Restore all snapshots' },
+            -- ['<leader>ox']  = { 'swap_position',                                     desc = 'Swap window position' },
+            -- ['<leader>otr'] = { 'toggle_reasoning_output',                           desc = 'Toggle reasoning output' },
+            -- ['<leader>ott'] = { 'toggle_tool_output',                                desc = 'Toggle tool output' },
+            -- ['<leader>otm'] = { 'toggle_max_messages',                               desc = 'Toggle max messages' },
+            -- ['<leader>o/']  = { 'quick_chat',                   mode = { 'n', 'x' }, desc = 'Quick chat with current context' },
+            -- ['<leader>oDu'] = { 'copy_server_url',                                   desc = 'Copy server url' },
+          },
+          output_window = {
+            ['gg']          = { 'first_message',                                     desc = 'Load history and go to the first message' },
+            ['<esc>']       = { 'close',                                             desc = 'Close Opencode windows' },
+            ['<C-c>']       = { 'cancel',                                            desc = 'Cancel running request' },
+            ['<tab>']       = { 'next_message',                                      desc = 'Go to next message' },
+            ['<s-tab>']     = { 'prev_message',                                      desc = 'Go to previous message' },
+            [')']           = { 'next_user_message',                                 desc = 'Go to next user message' },
+            ['(']           = { 'prev_user_message',                                 desc = 'Go to previous user message' },
+            ['[[']          = { 'toggle_pane',                  mode = { 'n' },      desc = 'Toggle input/output panes' },
+            ['i']           = { 'focus_input',                                       desc = 'Focus input window' },
+            ['gr']          = { 'references',                                        desc = 'Browse code references' },
+            ['gf']          = { 'jump_to_file',                                       desc = 'Jump to file at cursor' },
+            -- ['<CR>']        = { 'jump_to_target_at_cursor',                          desc = 'Jump to target at cursor' },
+            ['<CR>']        = false,
+            ['gd']          = { 'jump_to_target_at_cursor',                          desc = 'Jump to target at cursor' },
+            ['<M-i>']       = { 'toggle_input',                 mode = { 'n' },      desc = 'Toggle input window' },
+            ['<M-r>']       = { 'cycle_variant',                mode = { 'n' },      desc = 'Cycle model variants' },
+            ['<C-p>']       = { 'navigate_session_tree', { 'child', 'picker' },     desc = 'Select child session' },
+            ['<C-n>']       = { 'navigate_session_tree', { 'parent' },              desc = 'Go to parent session' },
+            -- ['<leader>oB']  = { 'navigate_session_tree', { 'sibling', 'picker' },   desc = 'Select sibling session' },
+            ['<leader>oB']  = false,
+            ['<leader>oD']  = { 'debug_message',                                     desc = 'Open raw message debug view'                              },
+            ['<leader>oO']  = { 'debug_output',                                      desc = 'Open raw output debug view'                               },
+            ['<leader>oDs'] = { 'debug_session',                                     desc = 'Open raw session debug view'                              },
+
+            ['<leader>oS']  = false,
+            ['<leader>oP']  = false,
+
+            ['<leader>oz']  = { 'toggle_zoom',                                       desc = 'Toggle zoom' },
+            ['<leader>ov']  = { 'paste_image',                                       desc = 'Paste image from clipboard' },
+            ['<leader>od']  = { 'diff_open',                                         desc = 'Open diff view' },
+            ['<leader>o]']  = { 'diff_next',                                         desc = 'Next diff' },
+            ['<leader>o[']  = { 'diff_prev',                                         desc = 'Previous diff' },
+            ['<leader>oc']  = { 'diff_close',                                        desc = 'Close diff view' },
+            ['<leader>ora'] = { 'diff_revert_all_last_prompt',                       desc = 'Revert all (last prompt)' },
+            ['<leader>ort'] = { 'diff_revert_this_last_prompt',                      desc = 'Revert this (last prompt)' },
+            ['<leader>orA'] = { 'diff_revert_all',                                   desc = 'Revert all changes' },
+            ['<leader>orT'] = { 'diff_revert_this',                                  desc = 'Revert this change' },
+            ['<leader>orr'] = { 'diff_restore_snapshot_file',                        desc = 'Restore file snapshot' },
+            ['<leader>orR'] = { 'diff_restore_snapshot_all',                         desc = 'Restore all snapshots' },
+            ['<leader>ox']  = { 'swap_position',                                     desc = 'Swap window position' },
+            ['<leader>otr'] = { 'toggle_reasoning_output',                           desc = 'Toggle reasoning output' },
+            ['<leader>ott'] = { 'toggle_tool_output',                                desc = 'Toggle tool output' },
+            ['<leader>otm'] = { 'toggle_max_messages',                               desc = 'Toggle max messages' },
+            ['<leader>oDu'] = { 'copy_server_url',                                   desc = 'Copy server url' },
+            ["<C-b>"] = {
+              function()
+                local buf = vim.api.nvim_get_current_buf()
+                local cursor = vim.api.nvim_win_get_cursor(0)
+                local row = cursor[1] - 1
+                local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+
+                local in_block = false
+                local block_start = nil
+                local is_gitcommit = false
+
+                for i, line in ipairs(lines) do
+                  local line_idx = i - 1
+                  if line:match("^```") then
+                    if not in_block then
+                      in_block = true
+                      block_start = line_idx
+                      is_gitcommit = line:match("^```gitcommit") ~= nil
+                    else
+                      in_block = false
+                      if row > block_start and row < line_idx and is_gitcommit then
+                        local content = {}
+                        for j = block_start + 1, line_idx - 1 do
+                          table.insert(content, lines[j + 1])
+                        end
+                        local text = table.concat(content, "\n")
+
+                        local current_win = vim.api.nvim_get_current_win()
+                        local wins = vim.api.nvim_list_wins()
+                        local prev_win = nil
+                        for idx, win in ipairs(wins) do
+                          if win == current_win and idx > 1 then
+                            prev_win = wins[idx - 1]
+                            break
+                          end
+                        end
+
+                        if prev_win then
+                          vim.api.nvim_set_current_win(prev_win)
+                          vim.api.nvim_paste(text, true, -1)
+                        else
+                          vim.notify("No previous window found", vim.log.levels.WARN)
+                        end
+                        return
+                      end
+                    end
+                  end
+                end
+
+                -- Fallback: call context_items if not in a gitcommit block
+                -- require("opencode.api").context_items()
+              end,
+              mode = { "n", "i" },
+            },
+          },
+          input_window = {
+            ['<cr>']        = { 'submit_input_prompt',          mode = { 'n' },      desc = 'Submit prompt'                                            },
+            ['<C-s>']       = { 'submit_input_prompt',          mode = { 'i' },      desc = 'Submit prompt'                                            },
+            ['<S-cr>']      = { 'submit_input_prompt',          mode = { 'n', 'i' }, desc = 'Submit prompt'                                            },
+            -- ['<esc>']       = { 'close',                                             desc = 'Close Opencode windows',       defer_to_completion = true },
+            ['<esc>']       = false,
+            ['<C-c>']       = { 'cancel',                                            desc = 'Cancel running request' ,      defer_to_completion = true },
+            ['~']           = { 'mention_file',                 mode = 'i',          desc = 'Mention file in context'                                  },
+            ['@']           = { 'mention',                      mode = 'i',          desc = 'Open mention picker'                                      },
+            ['/']           = { 'slash_commands',               mode = 'i',          desc = 'Open slash commands picker'                               },
+            ['#']           = { 'context_items',                mode = 'i',          desc = 'Open context items picker'                                },
+            ['<M-v>']       = { 'paste_image',                  mode = {'i', 'n'},          desc = 'Paste image from clipboard'                               },
+            ['<leader>ov']       = { 'paste_image',                  mode = {'n'},          desc = 'Paste image from clipboard'                               },
+            ['<tab>']       = { 'switch_mode',                  mode = { 'n' },      desc = 'Toggle input/output panes',    defer_to_completion = true },
+            ['[[']       = { 'toggle_pane',                  mode = { 'n' },      desc = 'Toggle input/output panes',    defer_to_completion = true },
+            -- ['<M-y>']       = { 'switch_mode',                  mode = { 'n', 'i' }, desc = 'Switch agent mode'                                        },
+            ['<up>']        = { 'prev_prompt_history',          mode = { 'n', 'i' }, desc = 'Previous prompt history item', defer_to_completion = true },
+            ['<down>']      = { 'next_prompt_history',          mode = { 'n', 'i' }, desc = 'Next prompt history item' ,    defer_to_completion = true },
+            -- ['<M-m>']       = { 'switch_mode',                  mode = { 'n', 'i' }, desc = 'Switch agent mode'                                        },
+            ['<M-m>']       = { 'toggle',                  mode = { 'n', 'i' }, desc = 'Toggle'                                        },
+            ['<M-r>']       = { 'cycle_variant',                mode = { 'n', 'i' }, desc = 'Cycle model variants'                                     },
+            ['<M-i>']       = { 'toggle_input',                 mode = { 'n', 'i' }, desc = 'Toggle input window'                                      },
+            -- ['gr']          = { 'references',                                        desc = 'Browse code references'                                   },
+            ['gr']          = false,
+            ['<C-n>']       = { 'navigate_session_tree', { 'child', 'picker' },     desc = 'Select child session' },
+            ['<C-p>']       = { 'navigate_session_tree', { 'parent', 'picker' },              desc = 'Go to parent session' },
+            ['<leader>oS']  = false,
+            ['<leader>oP']  = false,
+            ['<leader>oB']  = false,
+            ['<leader>oD']  = { 'debug_message',                                     desc = 'Open raw message debug view'                              },
+            ['<leader>oO']  = { 'debug_output',                                      desc = 'Open raw output debug view'                               },
+            ['<leader>oDs'] = { 'debug_session',                                     desc = 'Open raw session debug view'                              },
+          },
 					session_picker = {
-						rename_session = { "<C-q>" }, -- Rename selected session in the session picker
-						delete_session = { "<C-d>" }, -- Delete selected session in the session picker
+						rename_session = { "<C-r>" }, -- Rename selected session in the session picker
+						delete_session = { "<C-x>" }, -- Delete selected session in the session picker
 						new_session = { "<C-s>" }, -- Create and switch to a new session in the session picker
 					},
 					timeline_picker = {
@@ -174,209 +416,13 @@ return {
 					},
 					history_picker = {
 						delete_entry = { "<C-d>", mode = { "i", "n" } }, -- Delete selected entry in the history picker
-						clear_all = { "<C-X>", mode = { "i", "n" } }, -- Clear all entries in the history picker
+						clear_all = { "<C-x>", mode = { "i", "n" } }, -- Clear all entries in the history picker
 					},
 					model_picker = {
 						toggle_favorite = { "<C-f>", mode = { "i", "n" } },
 					},
 					mcp_picker = {
 						toggle_connection = { "<C-t>", mode = { "i", "n" } }, -- Toggle MCP server connection in the MCP picker
-					},
-					editor = {
-						-- ["<C-.>"] = { "toggle" }, -- Open opencode. Close if opened
-						-- ["<C-.>"] = false,
-						["<C-p>"] = { "navigate_session_tree", "backward", mode = { "n", "i" } },
-						["<C-n>"] = { "navigate_session_tree", "forward", mode = { "n", "i" } },
-						["<M-m>"] = { "toggle" }, -- Open opencode. Close if opened
-						["<D-m>"] = { "toggle" }, -- Open opencode. Close if opened
-						["<leader>og"] = false,
-						["<leader>oi"] = false,
-						["<leader>oI"] = { "open_input_new_session" }, -- Opens and focuses on input window on insert mode. Creates a new session
-						["<leader>oo"] = false,
-						["<leader>ot"] = false,
-						["<leader>oT"] = { "timeline" }, -- Display timeline picker to navigate/undo/redo/fork messages
-						["<leader>oq"] = false,
-						["<leader>oS"] = { "select_session" }, -- Select and load a opencode session
-						["<leader>oR"] = { "rename_session" }, -- Rename current session
-						["<leader>oP"] = { "configure_provider" }, -- Quick provider and model switch from predefined list
-						["<leader>oV"] = { "configure_variant" }, -- Switch model variant for the current model
-						-- ['ga'] = { 'add_visual_selection', mode = {'v'} },
-						["<leader>oa"] = {
-							"add_visual_selection_inline",
-							mode = { "v" },
-							desc = "Insert visual selection inline into input",
-						},
-						-- ['<leader>oa'] = { 'add_visual_selection_inline', { open_input = false }, mode = {'v'} },
-						-- ["<leader>oz"] = { "toggle_zoom" }, -- Zoom in/out on the Opencode windows
-						["<leader><leader>"] = { "toggle_zoom" }, -- Zoom in/out on the Opencode windows
-						["<leader>ov"] = { "paste_image" }, -- Paste image from clipboard into current session
-						["<leader>oD"] = { "diff_open" }, -- Opens a diff tab of a modified file since the last opencode prompt
-						["<leader>o]"] = { "diff_next" }, -- Navigate to next file diff
-						["<leader>o["] = { "diff_prev" }, -- Navigate to previous file diff
-						["<leader>oC"] = { "diff_close" }, -- Close diff view tab and return to normal editing
-						["<leader>CS"] = {
-							function()
-								require("opencode.state").jobs.clear_server()
-							end,
-						},
-						["<leader>ora"] = false,
-						["<leader>ort"] = false,
-						["<leader>orA"] = false,
-						["<leader>orT"] = false,
-						["<leader>orr"] = false,
-						["<leader>orR"] = false,
-						["<leader>ox"] = false,
-						["<leader>ott"] = false,
-						["<leader>o/"] = false,
-						-- ['<leader>og'] = { 'toggle' }, -- Open opencode. Close if opened
-						-- ['<leader>oi'] = { 'open_input' }, -- Opens and focuses on input window on insert mode
-						-- ['<leader>oI'] = { 'open_input_new_session' }, -- Opens and focuses on input window on insert mode. Creates a new session
-						-- ['<leader>oo'] = { 'open_output' }, -- Opens and focuses on output window
-						-- ['<leader>ot'] = { 'toggle_focus' }, -- Toggle focus between opencode and last window
-						-- ['<leader>oT'] = { 'timeline' }, -- Display timeline picker to navigate/undo/redo/fork messages
-						-- ['<leader>oq'] = { 'close' }, -- Close UI windows
-						-- ['<leader>os'] = { 'select_session' }, -- Select and load a opencode session
-						-- ['<leader>oR'] = { 'rename_session' }, -- Rename current session
-						-- ['<leader>op'] = { 'configure_provider' }, -- Quick provider and model switch from predefined list
-						-- ['<leader>oV'] = { 'configure_variant' }, -- Switch model variant for the current model
-						-- ['<leader>oy'] = { 'add_visual_selection', mode = {'v'} },
-						-- ['<leader>oz'] = { 'toggle_zoom' }, -- Zoom in/out on the Opencode windows
-						-- ['<leader>ov'] = { 'paste_image'}, -- Paste image from clipboard into current session
-						-- ['<leader>od'] = { 'diff_open' }, -- Opens a diff tab of a modified file since the last opencode prompt
-						-- ['<leader>o]'] = { 'diff_next' }, -- Navigate to next file diff
-						-- ['<leader>o['] = { 'diff_prev' }, -- Navigate to previous file diff
-						-- ['<leader>oc'] = { 'diff_close' }, -- Close diff view tab and return to normal editing
-						-- ['<leader>ora'] = { 'diff_revert_all_last_prompt' }, -- Revert all file changes since the last opencode prompt
-						-- ['<leader>ort'] = { 'diff_revert_this_last_prompt' }, -- Revert current file changes since the last opencode prompt
-						-- ['<leader>orA'] = { 'diff_revert_all' }, -- Revert all file changes since the last opencode session
-						-- ['<leader>orT'] = { 'diff_revert_this' }, -- Revert current file changes since the last opencode session
-						-- ['<leader>orr'] = { 'diff_restore_snapshot_file' }, -- Restore a file to a restore point
-						-- ['<leader>orR'] = { 'diff_restore_snapshot_all' }, -- Restore all files to a restore point
-						-- ['<leader>ox'] = { 'swap_position' }, -- Swap Opencode pane left/right
-						-- ['<leader>ott'] = { 'toggle_tool_output' }, -- Toggle tools output (diffs, cmd output, etc.)
-						["<leader>oE"] = { "toggle_reasoning_output" }, -- Toggle reasoning output (thinking steps)
-						["<C-b>"] = {
-							function()
-								local buf = vim.api.nvim_get_current_buf()
-								local cursor = vim.api.nvim_win_get_cursor(0)
-								local row = cursor[1] - 1
-								local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-
-								local in_block = false
-								local block_start = nil
-								local is_gitcommit = false
-
-								for i, line in ipairs(lines) do
-									local line_idx = i - 1
-									if line:match("^```") then
-										if not in_block then
-											in_block = true
-											block_start = line_idx
-											is_gitcommit = line:match("^```gitcommit") ~= nil
-										else
-											in_block = false
-											if row > block_start and row < line_idx and is_gitcommit then
-												local content = {}
-												for j = block_start + 1, line_idx - 1 do
-													table.insert(content, lines[j + 1])
-												end
-												local text = table.concat(content, "\n")
-
-												local current_win = vim.api.nvim_get_current_win()
-												local wins = vim.api.nvim_list_wins()
-												local prev_win = nil
-												for idx, win in ipairs(wins) do
-													if win == current_win and idx > 1 then
-														prev_win = wins[idx - 1]
-														break
-													end
-												end
-
-												if prev_win then
-													vim.api.nvim_set_current_win(prev_win)
-													vim.api.nvim_paste(text, true, -1)
-												else
-													vim.notify("No previous window found", vim.log.levels.WARN)
-												end
-												return
-											end
-										end
-									end
-								end
-
-								-- Fallback: call context_items if not in a gitcommit block
-								-- require("opencode.api").context_items()
-							end,
-							mode = { "n", "i" },
-						},
-						-- ['<leader>o/'] = { 'quick_chat', mode = { 'n', 'x' } }, -- Open quick chat input with selection context in visual mode or current line context in normal mode
-					},
-					input_window = {
-						["<C-p>"] = { "navigate_session_tree", "backward", mode = { "n", "i" } },
-						["<C-n>"] = { "navigate_session_tree", "forward", mode = { "n", "i" } },
-						["<leader>oD"] = { "diff_open" }, -- Opens a diff tab of a modified file since the last opencode prompt
-						["<esc>"] = false, -- Close UI windows
-						["<cr>"] = { "submit_input_prompt", mode = { "n" } }, -- Submit prompt (normal mode and insert mode)
-						["<c-s>"] = { "submit_input_prompt", mode = { "i" } }, -- Submit prompt (normal mode and insert mode)
-						["<S-cr>"] = false,
-						["<C-c>"] = { "cancel" }, -- Cancel opencode request while it is running
-						-- ["~"] = { "mention_file", mode = "i" }, -- Pick a file and add to context. See File Mentions section
-						-- ["@"] = { "mention", mode = "i" }, -- Insert mention (file/agent)
-						["~"] = false, -- Pick a file and add to context. See File Mentions section
-						["@"] = false, -- Insert mention (file/agent)
-						["/"] = { "slash_commands", mode = "i" }, -- Pick a command to run in the input window
-						["#"] = { "context_items", mode = "i" }, -- Manage context items (current file, selection, diagnostics, mentioned files)
-						["<M-v>"] = { "paste_image", mode = "i" }, -- Paste image from clipboard as attachment
-						["<tab>"] = { "switch_mode" },
-						["<up>"] = { "prev_prompt_history", mode = { "n", "i" } }, -- Navigate to previous prompt in history
-						["<down>"] = { "next_prompt_history", mode = { "n", "i" } }, -- Navigate to next prompt in history
-						["<M-m>"] = false,
-						["<M-r>"] = { "cycle_variant", mode = { "n", "i" } }, -- Cycle through available model variants
-						["<leader>oS"] = { "select_session" }, -- Rename current session
-						["<leader>oR"] = { "rename_session" }, -- Rename current session
-						["<leader>oP"] = { "configure_provider" }, -- Quick provider and model switch from predefined list
-						["<leader>oV"] = { "configure_variant" }, -- Switch model variant for the current model
-
-						-- ['<S-cr>'] = { 'submit_input_prompt', mode = { 'n', 'i' } }, -- Submit prompt (normal mode and insert mode)
-						-- ['<esc>'] = { 'close' }, -- Close UI windows
-						-- ['<C-c>'] = { 'cancel' }, -- Cancel opencode request while it is running
-						-- ['~'] = { 'mention_file', mode = 'i' }, -- Pick a file and add to context. See File Mentions section
-						-- ['@'] = { 'mention', mode = 'i' }, -- Insert mention (file/agent)
-						-- ['/'] = { 'slash_commands', mode = 'i' }, -- Pick a command to run in the input window
-						-- ['#'] = { 'context_items', mode = 'i' }, -- Manage context items (current file, selection, diagnostics, mentioned files)
-						-- ['<M-v>'] = { 'paste_image', mode = 'i' }, -- Paste image from clipboard as attachment
-						-- ['<tab>'] = { 'toggle_pane', mode = { 'n', 'i' } }, -- Toggle between input and output panes
-						-- ['<up>'] = { 'prev_prompt_history', mode = { 'n', 'i' } }, -- Navigate to previous prompt in history
-						-- ['<down>'] = { 'next_prompt_history', mode = { 'n', 'i' } }, -- Navigate to next prompt in history
-						-- ['<M-m>'] = { 'switch_mode' }, -- Switch between modes (build/plan)
-						-- ['<M-r>'] = { 'cycle_variant', mode = { 'n', 'i' } }, -- Cycle through available model variants
-					},
-					output_window = {
-						["<C-p>"] = { "navigate_session_tree", "backward", mode = { "n", "i" } },
-						["<C-n>"] = { "navigate_session_tree", "forward", mode = { "n", "i" } },
-						["<leader>oD"] = { "diff_open" }, -- Opens a diff tab of a modified file since the last opencode prompt
-						["<esc>"] = false, -- Close UI windows
-						["<C-c>"] = { "cancel" }, -- Cancel opencode request while it is running
-						["]]"] = { "next_message" }, -- Navigate to next message in the conversation
-						["[["] = { "prev_message" }, -- Navigate to previous message in the conversation
-						["<tab>"] = false,
-						["i"] = false,
-						["<M-r>"] = false,
-						-- ["<leader>oO"] = false, -- Open raw output in new buffer for debugging
-						-- ["<leader>ods"] = false, -- Open raw session in new buffer for debugging
-						-- ['<leader>oS'] = { 'select_child_session' }, -- Select and load a child session
-
-						-- ['<esc>'] = { 'close' }, -- Close UI windows
-						-- ['<C-c>'] = { 'cancel' }, -- Cancel opencode request while it is running
-						-- [']]'] = { 'next_message' }, -- Navigate to next message in the conversation
-						-- ['[['] = { 'prev_message' }, -- Navigate to previous message in the conversation
-						-- ['<tab>'] = { 'toggle_pane', mode = { 'n', 'i' } }, -- Toggle between input and output panes
-						-- ['i'] = { 'focus_input', 'n' }, -- Focus on input window and enter insert mode at the end of the input from the output window
-						-- ['<M-r>'] = { 'cycle_variant', mode = { 'n' } }, -- Cycle through available model variants
-						-- ['<leader>oS'] = { 'select_child_session' }, -- Select and load a child session
-						["<leader>oE"] = { "debug_message" }, -- Open raw message in new buffer for debugging
-						["<leader>oO"] = { "debug_output" }, -- Open raw output in new buffer for debugging
-						-- ['<leader>ods'] = { 'debug_session' }, -- Open raw session in new buffer for debugging
 					},
 					permission = {
 						accept = "a",
@@ -417,6 +463,18 @@ return {
 				ui = {
 					enable_treesitter_markdown = true, -- Use Treesitter for markdown rendering in the output window (default: true)
 					position = "right", -- 'right' (default), 'left' or 'current'. Position of the UI split. 'current' uses the current window for the output.
+					float = {
+						width = 0.45,
+						height = 1,
+						row = nil,
+						col = 100,
+						border = "rounded",
+						gap = 4,
+						zindex = 40,
+						opts = {
+							winblend = 0,
+						},
+					},
 					input_position = "bottom", -- 'bottom' (default) or 'top'. Position of the input window
 					window_width = 0.45, -- Width as percentage of editor width
 					zoom_width = 0.9, -- Zoom width as percentage of editor width
@@ -425,7 +483,6 @@ return {
 					display_cost = true, -- Display cost in the footer
 					-- window_highlight = 'Normal:OpencodeBackground,FloatBorder:OpencodeBorder', -- Highlight group for the opencode window
 					persist_state = true, -- Keep buffers when toggling/closing UI so window state restores quickly
-					buflisted = true, -- OpenCode buffers won't be closed by :only
 					output = {
 						win_options = {
 							cursorline = true,
@@ -440,8 +497,8 @@ return {
 						-- },
 						tools = {
 							show_output = true,
-							use_folds = false,
 							show_reasoning_output = false,
+							use_folds = false,
 						},
 						always_scroll_to_bottom = false,
 					},
@@ -465,35 +522,6 @@ return {
 						auto_hide = false,
 					},
 				},
-			})
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "OpencodeEvent:question.asked",
-				callback = function(args)
-					-- args.data.event.properties.questions
-					local questions = args.data.event.properties.questions
-					local session = args.data.event.properties.session
-					local workspace = (session and session.workspace) or vim.fn.getcwd()
-					local parts = vim.split(workspace, "/")
-					local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
-					local questions_text = ""
-					local time = os.date("%H:%M")
-					if questions then
-						local lines = {}
-						for _, q in ipairs(questions) do
-							table.insert(lines, q.question)
-						end
-						questions_text = "\n" .. table.concat(lines, "\n")
-					end
-					vim.fn.jobstart({
-						"terminal-notifier",
-						"-title",
-						"Neovim",
-						"-message",
-						time .. " OpenCode needs input in " .. repo .. ":" .. questions_text,
-						"-contentImage",
-						nvim_icon,
-					}, { detach = true })
-				end,
 			})
 		end,
 		dependencies = {

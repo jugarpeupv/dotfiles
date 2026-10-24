@@ -6,8 +6,17 @@
   },
   "mcp": {
     "servers": {
+      "context7": {
+        "type": "remote",
+        "url": "https://mcp.context7.com/mcp",
+        "disabled": true,
+        "headers": {
+          "Authorization": "Bearer {env:CONTEXT7_API_KEY}"
+        }
+      },
       "chrome-devtools": {
         "type": "local",
+        "disabled": true,
         "command": ["npx", "-y", "chrome-devtools-mcp@latest"]
       },
       "codegraph": {
@@ -18,11 +27,6 @@
           "serve",
           "--mcp"
         ]
-      },
-      "context7": {
-        "type": "remote",
-        "url": "https://mcp.context7.com/mcp",
-        "disabled": true
       },
       "engram": {
         "type": "local",
@@ -36,6 +40,7 @@
       "github-server": {
         "type": "remote",
         "url": "https://api.githubcopilot.com/mcp/",
+        "disabled": true,
         "headers": {
           "Authorization": "Bearer {env:GH_ACTIONS_PAT}"
         }
@@ -49,7 +54,7 @@
         "environment": {
           "npm_config_registry": "https://registry.npmjs.org"
         },
-        "disabled": true
+        "disabled": true,
       },
       "tavily": {
         "type": "local",
@@ -64,7 +69,7 @@
           "npm_config_registry": "https://registry.npmjs.org"
         }
       }
-    }
+    },
   },
   "model": "opencode/deepseek-v4.1-flash-free",
   "permissions": [
