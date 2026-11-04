@@ -824,7 +824,8 @@ font_features RecMonoLinear-Regular -ss02 +ss12 +ss03 +ss01
 
 #: Cursor customization {{{
 
-cursor #cccccc
+# cursor #cccccc
+cursor #FAAFAF
 # cursor none
 
 #: Default cursor color. If set to the special value none the cursor
@@ -835,8 +836,8 @@ cursor #cccccc
 #: precedence. Also, the cursor colors are modified if the cell
 #: background and foreground colors have very low contrast.
 
-# cursor_text_color #111111
-cursor_text_color background
+cursor_text_color #111111
+# cursor_text_color background
 
 #: The color of text under the cursor. If you want it rendered with
 #: the background color of the cell underneath instead, use the
@@ -3332,12 +3333,12 @@ font_size 26
 
 
 
-# BEGIN_KITTY_FONTS
-font_family      family=Iosevka style='Extended'
-bold_font        family=Iosevka postscript_name=Iosevka-Semibold-Extended
-bold_italic_font family=Iosevka postscript_name=Iosevka-Semibold-Extended-Oblique
-italic_font      family=Iosevka postscript_name=Iosevka-Extended-Oblique
-# END_KITTY_FONTS
+# # BEGIN_KITTY_FONTS
+# font_family      family=Iosevka postscript_name=Iosevka-Extended
+# bold_font        family=Iosevka style='Semibold Extended'
+# italic_font      family=Iosevka style='Extended Oblique'
+# bold_italic_font family=Iosevka style='Extended Oblique'
+# # END_KITTY_FONTS
 
 
 # # BEGIN_KITTY_FONTS
@@ -3374,9 +3375,11 @@ italic_font      family=Iosevka postscript_name=Iosevka-Extended-Oblique
 # # END_KITTY_FONTS
 
 
+
 # BEGIN_KITTY_FONTS
-font_family      family='Zed Mono' postscript_name=Zed-Mono-Extended features='-calt +ss18'
-bold_font        family='Zed Mono' postscript_name=Zed-Mono-Semibold-Extended features='-calt +ss18'
-italic_font      family='Zed Mono' postscript_name=Zed-Mono-Oblique features='-calt +ss18'
-bold_italic_font family='Zed Mono' postscript_name=Zed-Mono-Semibold-Extended-Oblique features='-calt +ss18'
+font_family      family="Hack"
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
 # END_KITTY_FONTS
+

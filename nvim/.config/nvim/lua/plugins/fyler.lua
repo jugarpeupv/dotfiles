@@ -7,6 +7,7 @@ M.old_api_opts = {
 	},
 	integrations = {
 		icon = "nvim_web_devicons",
+    -- icon = "none",
 		-- icon = "real_icons",
 	},
 	views = {

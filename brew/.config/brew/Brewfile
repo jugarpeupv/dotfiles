@@ -9,6 +9,8 @@ tap "benswift/tap", trusted: true
 # engram, gga, gentle-ai
 tap "gentleman-programming/tap", "https://github.com/Gentleman-Programming/homebrew-tap", trusted: true
 
+# Bruno cli
+brew "bruno-cli"
 # Build server protocol implementation for integrating Xcode with sourcekit-lsp
 brew "xcode-build-server"
 # ios development https://github.com/cpisciotta/xcbeautify
@@ -65,8 +67,6 @@ brew "ncurses"
 brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
-# Secure and free password manager for all of your devices
-brew "bitwarden-cli"
 # Resource monitor. C++ version and continuation of bashtop and bpytop
 brew "btop"
 # Insanely fast image printing in your terminal
@@ -353,12 +353,14 @@ brew "gentleman-programming/tap/engram", trusted: true
 brew "gentleman-programming/tap/gentle-ai", trusted: true
 # Gentleman Guardian Angel - Provider-agnostic code review using AI (Claude, Gemini, Codex, OpenCode, Ollama)
 brew "gentleman-programming/tap/gga"
+# Maple mono
+cask "font-maple-mono"
+# Android cmdline tools
+cask "android-commandlinetools"
 # Tools for building Android applications
 cask "android-studio"
 # Digital signature editor and validator
 cask "autofirma"
-# Desktop password and login vault
-cask "bitwarden"
 # UI for creating Windows installer ISO from UUPDump
 cask "crystalfetch"
 # App to build and share containerised applications and microservices

@@ -444,6 +444,7 @@ return {
 					"lsp",
 					"path",
 					"buffer",
+          "i18n",
 					-- "omni",
 					"snippets",
 					-- "lazydev",
@@ -476,6 +477,13 @@ return {
 					["AvanteInput"] = { "avante", "lsp", "buffer" },
 				},
 				providers = {
+          i18n = {
+            name = 'i18n',
+            module = 'jg.custom.i18n_blink',
+            opts = {
+              -- future options can be placed here
+            },
+          },
 					git = {
 						module = "blink-cmp-git",
 						name = "Git",

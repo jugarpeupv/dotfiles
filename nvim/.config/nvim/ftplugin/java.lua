@@ -1,7 +1,6 @@
 local home = os.getenv("HOME")
 
 -- Resolve java binary: prefer JAVA_HOME (set by worktree-repo-init from .sdkmanrc),
--- then SDKMAN current, then fall back to whatever is on PATH.
 local function resolve_java_bin()
 	local java_home = vim.env.JAVA_HOME
 	if java_home and java_home ~= "" then
@@ -10,11 +9,11 @@ local function resolve_java_bin()
 			return bin
 		end
 	end
-	local sdkman_dir = vim.env.SDKMAN_DIR or (home .. "/.sdkman")
-	local current = sdkman_dir .. "/candidates/java/current/bin/java"
-	if vim.fn.executable(current) == 1 then
-		return current
-	end
+	-- local sdkman_dir = vim.env.SDKMAN_DIR or (home .. "/.sdkman")
+	-- local current = sdkman_dir .. "/candidates/java/current/bin/java"
+	-- if vim.fn.executable(current) == 1 then
+	-- 	return current
+	-- end
 	return "java"
 end
 

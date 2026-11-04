@@ -30,18 +30,18 @@ return {
 		build = ":TSUpdate",
 		config = function()
 			local parsers = {
-        "prisma",
+				"prisma",
 				"bash",
 				"comment",
 				"css",
-        "ini",
+				"ini",
 				"diff",
 				"dockerfile",
 				"elixir",
 				"git_config",
 				"gitcommit",
 				"gitignore",
-        "c",
+				"c",
 				"groovy",
 				"go",
 				"heex",
@@ -66,7 +66,7 @@ return {
 				"sql",
 				"terraform",
 				"typst",
-        "fennel",
+				"fennel",
 				"toml",
 				"tsx",
 				"typescript",
@@ -74,8 +74,9 @@ return {
 				"vim",
 				"vimdoc",
 				"yaml",
-        "go",
-        "swift",
+				"go",
+				"swift",
+				"hurl"
 			}
 
 			for _, parser in ipairs(parsers) do
@@ -87,11 +88,11 @@ return {
 			vim.api.nvim_create_autocmd("FileType", {
 				group = vim.api.nvim_create_augroup("treesitter-enabled-filetype", { clear = true }),
 				pattern = {
-          "prisma",
+					"prisma",
 					"c",
 					"opencode_output",
-          "godoc",
-          "go",
+					"godoc",
+					"go",
 					"opencode",
 					"kitty",
 					"http",
@@ -105,13 +106,13 @@ return {
 					"jsonc",
 					"sh",
 					"ini",
-          "msmtp",
+					"msmtp",
 					"dosini",
 					-- "editorconfig",
 					"typescript",
 					"javascript",
 					"markdown",
-          "git",
+					"git",
 					"gitcommit",
 					"hurl",
 					"jproperties",
@@ -127,12 +128,14 @@ return {
 					"dockerfile",
 					"regex",
 					"lua",
-          "python",
+					"python",
 					"rust",
 					"rust-docs",
 					"devtools-storage",
 					"devtools-detail",
-          "swift"
+					"swift",
+					"hurl",
+					"bruno"
 				},
 				callback = function()
 					-- vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
@@ -192,24 +195,24 @@ return {
 				group = vim.api.nvim_create_augroup("TSUpdateTreesitter", { clear = true }),
 				pattern = "TSUpdate",
 				callback = function()
-          local godoc_parser = {
-            install_info = {
-              url = "https://github.com/fredrikaverpil/tree-sitter-godoc",
-              files = { "src/parser.c" },
-              version = "*",
-            },
-            filetype = "godoc",
-          }
+					local godoc_parser = {
+						install_info = {
+							url = "https://github.com/fredrikaverpil/tree-sitter-godoc",
+							files = { "src/parser.c" },
+							version = "*",
+						},
+						filetype = "godoc",
+					}
 
-          require("nvim-treesitter.parsers").godoc = godoc_parser
+					require("nvim-treesitter.parsers").godoc = godoc_parser
 
-          -- Re-register after :TSUpdate so the parser survives parser-list reloads
-          vim.api.nvim_create_autocmd("User", {
-            pattern = "TSUpdate",
-            callback = function()
-              require("nvim-treesitter.parsers").godoc = godoc_parser
-            end,
-          })
+					-- Re-register after :TSUpdate so the parser survives parser-list reloads
+					vim.api.nvim_create_autocmd("User", {
+						pattern = "TSUpdate",
+						callback = function()
+							require("nvim-treesitter.parsers").godoc = godoc_parser
+						end,
+					})
 
 					require("nvim-treesitter.parsers").ghactions = {
 						install_info = {
@@ -321,12 +324,12 @@ return {
 		opts = {
 			keymaps = {
 				useDefaults = true,
-				disabledDefaults = { "L", "in", "an" },
+				disabledDefaults = { "L", "in", "an", "Q" },
 			},
 		},
 	},
 	{
-    "nvim-treesitter/nvim-treesitter-context",
+		"nvim-treesitter/nvim-treesitter-context",
 		enabled = true,
 		lazy = true,
 		event = { "LspAttach" },
@@ -352,16 +355,16 @@ return {
 			require("treesitter-context").setup({
 				on_attach = function(buf)
 					local filetype = vim.fn.getbufvar(buf, "&ft")
-          local ignored_filetypes = {
-            "opencode_output",
-            "opencode",
-            "opencode_footer"
-          }
-          for _,ft in ipairs(ignored_filetypes) do
-            if filetype == ft then
-              return false
-            end
-          end
+					local ignored_filetypes = {
+						"opencode_output",
+						"opencode",
+						"opencode_footer",
+					}
+					for _, ft in ipairs(ignored_filetypes) do
+						if filetype == ft then
+							return false
+						end
+					end
 					return true
 				end, -- (fun(buf: integer): boolean) return false to disable attaching
 				enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)

@@ -71,7 +71,7 @@
       }
     },
   },
-  "model": "opencode/deepseek-v4.1-flash-free",
+  "model": "opencode-go/deepseek-v4.1-flash",
   "permissions": [
     {
       "action": "external_directory",

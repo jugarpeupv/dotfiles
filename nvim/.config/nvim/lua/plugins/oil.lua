@@ -78,6 +78,24 @@ return {
 			-- 		vim.cmd("e ~/work/obsvault-okode/wt-main/RAM/tareas_pendientes.md")
 			-- 	end,
 			-- },
+      {
+        "<C-s>",
+        mode = "c",
+        function()
+          local cmd = vim.fn.getcmdline()
+          local path = cmd:match("^e!?%s+(.+)$") or cmd:match("^edit!?%s+(.+)$")
+          if not path or path == "" then
+            -- fall back to wildcharm behavior (your wildcharm is <C-v>)
+            return vim.api.nvim_replace_termcodes("<C-s>", true, false, true)
+          end
+          -- cancel the current cmdline, then open in a right-side vertical split
+          vim.schedule(function()
+            vim.cmd("split | edit " .. vim.fn.fnameescape(vim.fn.expand(path)))
+            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", false)
+          end)
+          return vim.api.nvim_replace_termcodes("<esc>", true, false, true)
+        end,
+      },
 			{
 				"<C-V>",
 				mode = "c",

@@ -1,7 +1,7 @@
 return {
 	{
-		-- "dont-be-evil-company/kulala.nvim",
-    "jugarpeupv/kulala.nvim",
+		"dont-be-evil-company/kulala.nvim",
+    -- "jugarpeupv/kulala.nvim",
     -- dev = true,
     -- dir = "~/projects/kulala.nvim/wt-main/",
 		enabled = false,

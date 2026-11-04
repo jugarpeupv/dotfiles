@@ -7,7 +7,16 @@ opt.number = true -- shows absolute line number on cursor line (when relative nu
 
 -- opt.guicursor="n-v-c-sm:block-Cursor,i-ci-ve:ver25,r-cr-o:hor20,t:block-blinkon500-blinkoff500-TermCursor"
 
-opt.guicursor = "n-v-sm:block,i-ci-ve:ver25,r-cr-o:hor20,c:ver25,t:block-blinkon500-blinkoff500-TermCursor"
+-- opt.guicursor = "n-v-c:block-blinkwait0-blinkon900-blinkoff100-CursorNormal,i-ci-ve:ver25,r-cr-o:hor20,c:ver25,t:block-blinkon500-blinkoff500-TermCursor"
+
+
+vim.opt.guicursor = {
+  "n-v-c:block-CursorNormal-blinkwait70-blinkon100-blinkoff900",
+  "i-ci-ve:ver25",
+  "r-cr-o:hor20",
+  "c:ver25",
+  "t:block-blinkon500-blinkoff500-TermCursor"
+}
 
 -- tabs & indentation
 opt.tabstop = 2 -- 2 spaces for tabs (prettier default)
@@ -49,7 +58,7 @@ opt.backup = false
 opt.hidden = true
 opt.digraph = false
 
-opt.formatoptions = opt.formatoptions - "c" - "r" - "o"
+opt.formatoptions = opt.formatoptions - { "c", "r", "o" }
 
 -- opt.diffopt = { "iwhiteall", "internal", "filler", "closeoff", "hiddenoff", "algorithm:minimal", "followwrap" }
 -- opt.diffopt="iwhiteall,internal,filler,closeoff,indent-heuristic,linematch:60,algorithm:histogram"
@@ -148,7 +157,7 @@ opt.list = true
 
 local space = "·"
 opt.listchars:append({
-	-- tab = "» ",
+	-- tab = "»»",
 	tab = "  ",
 	-- multispace = "␣",
 	-- multispace = space,
@@ -172,7 +181,7 @@ opt.listchars:append({
 vim.o.foldcolumn = "auto"
 -- vim.o.foldcolumn = "0"
 -- vim.o.foldcolumn = "2"
-vim.foldlevel = 99
+vim.wo.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = false
 vim.opt.foldmethod = "expr"
@@ -234,7 +243,6 @@ vim.g.suda_smart_edit = 1
 --   end,
 -- })
 
-vim.g.zoomwintab_remap = false
 vim.g.zoomwintab_remap = 0
 
 -- macOS: /usr/include is not a real directory (headers live inside the SDK)

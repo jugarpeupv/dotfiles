@@ -30,6 +30,8 @@ M.attach_lsp_config = function(client, bufnr)
 		-- 		vim.cmd("normal! zz")
 		-- 	end
 		-- end)
+    if require('i18n').i18n_definition() then return end
+    if require('i18n').i18n_definition_next_locale() then return end
 		Snacks.picker.lsp_definitions()
     -- vim.lsp.buf.definition()
 	end, opts)

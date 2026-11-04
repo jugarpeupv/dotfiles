@@ -390,7 +390,7 @@ end, opts)
 keymap("n", "<leader>cm", function()
 	require("telescope.builtin").commands()
 end, opts)
-keymap("n", "<leader>mm", function()
+keymap("n", "<leader>ma", function()
 	require("telescope.builtin").marks()
 end, opts)
 keymap("n", "<leader>td", function()
@@ -727,7 +727,7 @@ keymap("n", "<leader>aw", "<cmd>:e ~/.aws/config<cr>", opts)
 keymap("n", "<leader>zh", "<cmd>:e ~/.zshrc<cr>", opts)
 keymap("n", "<leader>gc", function()
 	-- require("telescope.builtin").git_commits()
-  Snacks.picker.git_log()
+	Snacks.picker.git_log()
 end, opts)
 
 -- Hop
@@ -798,7 +798,7 @@ vim.keymap.set({ "n" }, "<leader>bh", ":Bufferize hi<cr>", { silent = true }) --
 vim.keymap.set({ "n" }, "<leader>bM", ":Bufferize messages<cr>", { silent = true }) -- paste from 0 register
 
 vim.keymap.set("n", "<leader>bc", function()
-  vim.cmd("split | b " .. require("vim._core.ui2").bufs.cmd)
+	vim.cmd("split | b " .. require("vim._core.ui2").bufs.cmd)
 end)
 
 vim.keymap.set("n", "<leader>bm", function()
@@ -861,31 +861,33 @@ local function show_documentation()
 		vim.cmd("Man " .. cword)
 	elseif vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
 		require("crates").show_popup()
+	elseif filetype == "htmlangular" and require("i18n").is_activated() then
+		require("i18n").show_popup()
 	else
-		local params = vim.lsp.util.make_position_params(0, "utf-8")
+			local params = vim.lsp.util.make_position_params(0, "utf-8")
 
-		local response = vim.lsp.buf_request_sync(0, "textDocument/hover", params)
-		local has_lsp_info = false
+			local response = vim.lsp.buf_request_sync(0, "textDocument/hover", params)
+			local has_lsp_info = false
 
-		if response then
-			for _, value in pairs(response) do
-				if value and value.result and value.result.contents then
-					has_lsp_info = true
+			if response then
+				for _, value in pairs(response) do
+					if value and value.result and value.result.contents then
+						has_lsp_info = true
+					end
 				end
 			end
-		end
 
-		if has_lsp_info then
-			vim.lsp.buf.hover()
-		else
-			-- local _, err = pcall(vim.cmd, "h " .. cword)
-			local _, err = pcall(function()
-				vim.cmd("h " .. cword)
-			end)
-			if err ~= nil then
-				return
+			if has_lsp_info then
+				vim.lsp.buf.hover()
+			else
+				-- local _, err = pcall(vim.cmd, "h " .. cword)
+				local _, err = pcall(function()
+					vim.cmd("h " .. cword)
+				end)
+				if err ~= nil then
+					return
+				end
 			end
-		end
 	end
 end
 
@@ -947,7 +949,6 @@ end, opts)
 vim.keymap.set("n", "<leader>fl", require("jg.custom.telescope").find_directory_in_oil_and_focus, opts)
 
 -- vim.keymap.set("n", "<leader>fd", require("jg.custom.telescope").find_directory_in_nvim_tree_and_focus, opts)
-
 
 vim.keymap.set("n", "<leader>fn", require("jg.custom.telescope").find_in_node_modules, opts)
 
@@ -2389,3 +2390,11 @@ vim.api.nvim_create_user_command("LspInfo", "checkhealth vim.lsp", { desc = "Sho
 vim.keymap.set("n", "<leader>tp", function()
 	vim.cmd("e ~/work/obsvault-okode/wt-main/RAM/tareas_pendientes.md")
 end)
+
+-- Esc+ (clears hlsearch & multicursors)
+local mc_ns = vim.api.nvim_create_namespace("nvim.multicursor") -- find ID of nvim.multicursor namespace
+vim.keymap.set("n", "ql", function() -- bind <Esc> in Normal mode to the following function
+	vim.cmd("noh") -- preserve default behavior, run `:nohlsearch` turning off highlighted search results
+	vim.api.nvim_buf_clear_namespace(0, mc_ns, 0, -1) -- remove every extmark (cursor) in the ns from buffer 0 (current), lines 0 through -1 (start to end)
+	return "<Esc>" -- with `expr = true` the string the function returns is what Neovim actually "types"
+end, { expr = true, desc = "Esc+: clear hlsearch and multicursors" })

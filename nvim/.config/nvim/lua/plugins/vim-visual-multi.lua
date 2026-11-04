@@ -2,6 +2,9 @@ return {
 	{
 		"jake-stewart/multicursor.nvim",
 		branch = "1.0",
+    -- Working commit before native multicursors
+    -- commit = "c574bfc1f7e63dfea3e64b8453c9f7c660127238",
+    enabled = true,
 		keys = {
 			{
 				mode = { "n", "x" },

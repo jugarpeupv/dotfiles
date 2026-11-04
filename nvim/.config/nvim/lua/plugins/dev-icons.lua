@@ -23,6 +23,11 @@ return {
 		lazy = true,
 		opts = {
 			override = {
+        bru = {
+          icon = "󰩃",
+          name = "bruno",
+          color = "#FAB387",
+        },
 				isyncrc = {
 					icon = "󱋈",
 					name = "isyncrc",
@@ -286,6 +291,11 @@ return {
 					color = "#F5C2E7",
 					name = "Markdown2",
 				},
+        jsonc = {
+          icon = "󰘦",
+          name = "jsonc",
+          color = "#9CDCFE",
+        },
 				json = {
 					icon = "󰘦",
 					name = "json",

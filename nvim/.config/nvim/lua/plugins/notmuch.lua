@@ -2,8 +2,7 @@ return {
 	{
 		-- "yousefakbar/notmuch.nvim",
     "jugarpeupv/notmuch.nvim",
-    dev = true,
-    dir = "~/projects/notmuch.nvim/wt-notmuch-main/",
+    -- dir = "~/projects/notmuch.nvim/wt-notmuch-main/",
 		enabled = true,
 		opts = {
       signature_file = "~/dotfiles/msmtp/.config/msmtp/signatures/izertis-signature.html",

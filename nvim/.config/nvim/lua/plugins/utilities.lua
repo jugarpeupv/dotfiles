@@ -105,7 +105,7 @@ return {
 	{
 		"junegunn/vim-easy-align",
 		keys = {
-			{ "go", "<Plug>(EasyAlign)", mode = { "x", "n" } },
+			{ "ga", "<Plug>(EasyAlign)", mode = { "x" } },
 		},
 		config = function()
 			vim.cmd([[let g:easy_align_delimiters = {
@@ -115,6 +115,7 @@ return {
 	},
 	{
 		"jugarpeupv/processmonitor.nvim",
+    -- dir = "~/projects/processmonitor.nvim/wt-main/",
 		keys = {
 			{ "<leader>ps", "<cmd>PS<cr>" },
 			{ "<leader>ls", "<cmd>Lsof<cr>" },
@@ -760,19 +761,19 @@ return {
 		},
 		keys = {
 			{
-				"<leader>ho",
+				"<leader>hO",
 				mode = "n",
 				"<cmd>DevDocs get<cr>",
 				desc = "Get Devdocs",
 			},
 			{
-				"<leader>hi",
+				"<leader>hI",
 				mode = "n",
 				"<cmd>DevDocs install<cr>",
 				desc = "Install Devdocs",
 			},
 			{
-				"<leader>hv",
+				"<leader>hV",
 				mode = "n",
 				function()
 					local devdocs = require("devdocs")
@@ -967,11 +968,14 @@ return {
 	},
 	{
 		"chrisgrieser/nvim-spider",
+    enabled = true,
 		keys = {
 			{
 				"w",
 				"<cmd>lua require('spider').motion('w')<CR>",
-				mode = { "n", "o", "x" },
+				-- mode = { "n", "o", "x" },
+        -- neovim 0.13 multicursor
+        mode = { "n", "o", "x" },
 			},
 
 			{

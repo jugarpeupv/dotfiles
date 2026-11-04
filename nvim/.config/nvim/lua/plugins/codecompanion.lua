@@ -3,7 +3,7 @@ return {
 		"olimorris/codecompanion.nvim",
 		-- "aweis89/codecompanion.nvim",
 		-- branch = "fix/acp-async-connection",
-		enabled = false,
+		enabled = true,
 		-- enabled = function()
 		-- 	local is_headless = #vim.api.nvim_list_uis() == 0
 		-- 	if is_headless then
@@ -36,6 +36,7 @@ return {
 			require("codecompanion").setup({
 				display = {
 					chat = {
+            input = { layout = "split", height = 7 },
 						-- auto_scroll = false,
 						icons = {
 							chat_fold = " ",
@@ -184,21 +185,28 @@ Output only the commit message without any explanations and follow-up suggestion
 					},
 				},
 				adapters = {
+					-- http = {
+					-- 	-- OpenCode's stateless generate endpoint, exposed as an HTTP
+					-- 	-- adapter for features that reject ACP (e.g. chat titles).
+					-- 	opencode_http = function()
+					-- 		return require("jg.custom.opencode_http").new()
+					-- 	end,
+					-- },
 					acp = {
-						copilot_cli_acp = function()
-							return require("codecompanion.adapters").extend("opencode", {
-								formatted_name = "copilot_cli_acp",
-								name = "copilot_cli_acp",
-								commands = {
-									-- The default uses the opencode/config.json value
-									default = {
-										"copilot",
-										"--acp",
-										"--allow-all",
-									},
-								},
-							})
-						end,
+						-- copilot_cli_acp = function()
+						-- 	return require("codecompanion.adapters").extend("opencode", {
+						-- 		formatted_name = "copilot_cli_acp",
+						-- 		name = "copilot_cli_acp",
+						-- 		commands = {
+						-- 			-- The default uses the opencode/config.json value
+						-- 			default = {
+						-- 				"copilot",
+						-- 				"--acp",
+						-- 				"--allow-all",
+						-- 			},
+						-- 		},
+						-- 	})
+						-- end,
 						opencode = function()
 							return require("codecompanion.adapters").extend("opencode", {
 								commands = {
@@ -207,24 +215,24 @@ Output only the commit message without any explanations and follow-up suggestion
 										"opencode",
 										"acp",
 									},
-									github_copilot_gpt_5_1_codex = {
-										"opencode",
-										"acp",
-										"-m",
-										"github-copilot/gpt-5.1-codex",
-									},
-									copilot_sonnet_4_5 = {
-										"opencode",
-										"acp",
-										"-m",
-										"github-copilot/claude-sonnet-4.5",
-									},
-									copilot_opus_4_5 = {
-										"opencode",
-										"acp",
-										"-m",
-										"github-copilot/claude-opus-4.5",
-									},
+									-- github_copilot_gpt_5_1_codex = {
+									-- 	"opencode",
+									-- 	"acp",
+									-- 	"-m",
+									-- 	"github-copilot/gpt-5.1-codex",
+									-- },
+									-- copilot_sonnet_4_5 = {
+									-- 	"opencode",
+									-- 	"acp",
+									-- 	"-m",
+									-- 	"github-copilot/claude-sonnet-4.5",
+									-- },
+									-- copilot_opus_4_5 = {
+									-- 	"opencode",
+									-- 	"acp",
+									-- 	"-m",
+									-- 	"github-copilot/claude-opus-4.5",
+									-- },
 								},
 							})
 						end,
@@ -324,13 +332,12 @@ Output only the commit message without any explanations and follow-up suggestion
 							-- Picker interface ("telescope" or "snacks" or "fzf-lua" or "default")
 							picker = "snacks",
 							-- Automatically generate titles for new chats
-							auto_generate_title = true,
+							auto_generate_title = false,
 							title_generation_opts = {
 								---Adapter for generating titles (defaults to current chat adapter)
-								adapter = "copilot", -- "copilot"
+								adapter = "opencode_http",
 								---Model for generating titles (defaults to current chat model)
-								model = "gpt-4o", -- "gpt-4o"
-								-- model = "claude-sonnet-4.5"
+								model = "default", -- OpenCode picks the model itself
 							},
 							---On exiting and entering neovim, loads the last chat on opening chat
 							continue_last_chat = false,
@@ -352,6 +359,7 @@ Output only the commit message without any explanations and follow-up suggestion
 				-- },
 
 				interactions = {
+          -- cmd = { adapter = "opencode_http" },
 					background = {
             -- adapter = {
             --   name = "copilot",
@@ -582,7 +590,7 @@ Output only the commit message without any explanations and follow-up suggestion
 			-- { mode = { "v" }, "ga", "<cmd>CodeCompanionChat Add<CR>" },
 			{
 				mode = { "v" },
-				"ga",
+				"gA",
 				function()
 					-- vim.cmd("CodeCompanionChat Add")
 					local command = ":CodeCompanionChat Add<cr>"

@@ -78,6 +78,7 @@ return {
         "sql-formatter",
         "sqlls",
         "pgformatter",
+        "groovy-language-server",
         -- Non-LSP / java tooling
         "actionlint",
         "java-debug-adapter",

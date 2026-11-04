@@ -2,7 +2,6 @@ return {
 	{
 		"jugarpeupv/microsoft-teams.nvim",
 		-- dir = "~/projects/ms-teams.nvim",
-		-- dev = true,
 		cmd = { "MSTeamsChats", "MSTeamsLogin", "MSTeamsFind", "MSTeamsTeams" },
 		keys = {
 			{ "<leader>ee", "<cmd>MSTeamsChats<cr>" },

@@ -11,6 +11,11 @@ function _evalcache_lazy_precmd() {
   _evalcache starship init zsh
   _evalcache rbenv init -
   _evalcache atuin init zsh
+
+  # mise: per-project tool versions (see .mise.toml in each project)
+  if command -v mise >/dev/null 2>&1; then
+    _evalcache mise activate zsh
+  fi
   # _evalcache fnm env --corepack-enabled --version-file-strategy=recursive --shell zsh
   # _evalcache mise activate zsh
   # _evalcache fnm env --use-on-cd --shell zsh

@@ -32,6 +32,9 @@ luac.out
 *.so.*
 *.dylib
 
+# Bruno tree-sitter parser (patched for collection.bru), tracked on purpose
+!parsers/bruno.so
+
 # Executables
 *.exe
 *.out

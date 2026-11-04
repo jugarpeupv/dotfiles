@@ -144,11 +144,11 @@ return {
             return bin
           end
         end
-        local sdkman_dir = vim.env.SDKMAN_DIR or (os.getenv("HOME") .. "/.sdkman")
-        local current = sdkman_dir .. "/candidates/java/current/bin/java"
-        if vim.fn.executable(current) == 1 then
-          return current
-        end
+        -- local sdkman_dir = vim.env.SDKMAN_DIR or (os.getenv("HOME") .. "/.sdkman")
+        -- local current = sdkman_dir .. "/candidates/java/current/bin/java"
+        -- if vim.fn.executable(current) == 1 then
+        --   return current
+        -- end
         return "java"
       end)()
       -- opts.exploded_ls_jar_data = true
