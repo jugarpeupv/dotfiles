@@ -1,5 +1,11 @@
 return {
-
+	{
+		"https://github.com/justinmk/guh.nvim",
+		cmd = { "Guh" },
+    dependencies = {
+      "https://github.com/barrettruth/diffs.nvim",
+    }
+	},
 	{
 		"jugarpeupv/search-github-repos.nvim",
 		config = function()

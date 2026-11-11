@@ -76,7 +76,7 @@ return {
         "marksman",
         "postgres-language-server",
         "sql-formatter",
-        "sqlls",
+        "sqls",
         "pgformatter",
         "groovy-language-server",
         -- Non-LSP / java tooling

@@ -861,8 +861,10 @@ local function show_documentation()
 		vim.cmd("Man " .. cword)
 	elseif vim.fn.expand("%:t") == "Cargo.toml" and require("crates").popup_available() then
 		require("crates").show_popup()
-	elseif filetype == "htmlangular" and require("i18n").is_activated() then
-		require("i18n").show_popup()
+	elseif filetype == "htmlangular" then
+    if (require('i18n').is_activated()) then
+      require("i18n").show_popup()
+    end
 	else
 			local params = vim.lsp.util.make_position_params(0, "utf-8")
 

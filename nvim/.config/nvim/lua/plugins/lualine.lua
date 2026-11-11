@@ -178,7 +178,7 @@ return {
 			}
 
 			local branch = {
-        "branch",
+				"branch",
 				-- function()
 				-- 	local name
 				-- 	if vim.bo.filetype == "fyler" then
@@ -334,8 +334,10 @@ return {
 						-- { "mode", separator = { left = "", right = "" } },
 					},
 					-- lualine_b = { branch, ahead_behind_indicator },
-					lualine_b = {  },
-					lualine_c = { diff_mode },
+					lualine_b = {},
+					lualine_c = {
+						diff_mode,
+					},
 					-- lualine_x = { dirname, "filetype", get_schema },
 					lualine_x = {
 						-- {
@@ -346,7 +348,11 @@ return {
 						-- },
 						-- codecompanion_adapter,
 						-- require("jg.custom.codecompanion_lualine_spinner"),
-            "encoding",
+            function()
+              return require("direnv").statusline()
+            end,
+            dirname,
+						"encoding",
 						"filetype",
 					},
 					-- lualine_x = {},

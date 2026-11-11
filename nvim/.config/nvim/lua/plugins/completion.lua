@@ -456,6 +456,7 @@ return {
 					["opencode"] = { "buffer", "path", "lsp" },
           ["opencode_output"] = { "buffer", "path", "lsp" },
 					["codecompanion"] = { "buffer", "path" },
+          sql = { 'snippets', 'dadbod', 'buffer' },
 					["octo"] = {
 						"git",
 						-- "lsp",
@@ -477,6 +478,7 @@ return {
 					["AvanteInput"] = { "avante", "lsp", "buffer" },
 				},
 				providers = {
+          dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
           i18n = {
             name = 'i18n',
             module = 'jg.custom.i18n_blink',

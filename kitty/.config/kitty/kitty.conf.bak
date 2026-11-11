@@ -3043,6 +3043,7 @@ map ctrl+shift+u send_text all \x1b[85;6u
 # background #192632
 # background #1c2835
 background #03142a
+# background #181818
 # background #00122e
 # background #000E23
 # background #000d23
@@ -3377,7 +3378,7 @@ font_size 26
 
 
 # BEGIN_KITTY_FONTS
-font_family      family="Hack"
+font_family      family='Maple Mono NR' style=Light features=-calt
 bold_font        auto
 italic_font      auto
 bold_italic_font auto

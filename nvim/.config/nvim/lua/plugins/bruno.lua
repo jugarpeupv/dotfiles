@@ -1,9 +1,27 @@
 -- lazy.nvim
 return {
 	{
+    "jugarpeupv/bruno.nvim",
+		-- dir = vim.fn.expand("~/projects/bruno.nvim"),
+		name = "bruno",
+		ft = { "bruno", "yaml" },
+    keys = {
+      { "<leader>ho", "<cmd>BrunoToggle<cr>", desc = "Bruno toggle" },
+      { "<leader>hr", "<cmd>BrunoRun<cr>", desc = "Bruno: Run request" },
+      { "<leader>hR", "<cmd>BrunoReplay<cr>", desc = "Bruno: Replay last request" },
+      { "<leader>he", "<cmd>BrunoEnv<cr>", desc = "Bruno: Switch environment" },
+      { "<leader>hs", "<cmd>BrunoSearch<cr>", desc = "Bruno: Search requests" },
+      { "<leader>hc", "<cmd>BrunoCopy<cr>", desc = "Bruno: Copy as cURL" },
+      { "<leader>hi", "<cmd>BrunoInspect<cr>", desc = "Bruno: Inspect last request" },
+    },
+		opts = {
+      default_env = "dev"
+		},
+	},
+	{
 		"SugarHashira/bruno.nvim",
 		name = "bruno-api",
-		enabled = true,
+		enabled = false,
 		init = function()
 			vim.filetype.add({
 				extension = {
@@ -11,7 +29,7 @@ return {
 				},
 			})
 		end,
-    ft = { "bruno" },
+		ft = { "bruno" },
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-telescope/telescope.nvim",

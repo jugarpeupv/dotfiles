@@ -181,17 +181,19 @@ return {
 				-- server = false,
 				hooks = {
 					on_question_asked = function(session)
-            -- The OpenCode server broadcasts session events to every
-            -- connected client, so without this guard a session that
-            -- finished in another Neovim instance notifies here too.
-            -- Only notify for sessions this instance owns (open in a
-            -- tab), which also covers their child/subagent sessions.
-            local tabs = require("opencode.state").session_tabs
-            if not (session and session.id and tabs.find_by_session_id(session.id)) then
-              return
-            end
+						-- The OpenCode server broadcasts session events to every
+						-- connected client, so without this guard a session that
+						-- finished in another Neovim instance notifies here too.
+						-- Only notify for sessions this instance owns (open in a
+						-- tab), which also covers their child/subagent sessions.
+						local tabs = require("opencode.state").session_tabs
+						if not (session and session.id and tabs.find_by_session_id(session.id)) then
+							return
+						end
 
-						local cwd = (session.location and session.location.directory) or session.directory or vim.fn.getcwd()
+						local cwd = (session.location and session.location.directory)
+							or session.directory
+							or vim.fn.getcwd()
 						local parts = vim.split(cwd, "/")
 						local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
 						local time = os.date("%H:%M")
@@ -213,17 +215,19 @@ return {
 						}, { detach = true })
 					end,
 					on_permission_requested = function(session)
-            -- The OpenCode server broadcasts session events to every
-            -- connected client, so without this guard a session that
-            -- finished in another Neovim instance notifies here too.
-            -- Only notify for sessions this instance owns (open in a
-            -- tab), which also covers their child/subagent sessions.
-            local tabs = require("opencode.state").session_tabs
-            if not (session and session.id and tabs.find_by_session_id(session.id)) then
-              return
-            end
+						-- The OpenCode server broadcasts session events to every
+						-- connected client, so without this guard a session that
+						-- finished in another Neovim instance notifies here too.
+						-- Only notify for sessions this instance owns (open in a
+						-- tab), which also covers their child/subagent sessions.
+						local tabs = require("opencode.state").session_tabs
+						if not (session and session.id and tabs.find_by_session_id(session.id)) then
+							return
+						end
 
-						local cwd = (session.location and session.location.directory) or session.directory or vim.fn.getcwd()
+						local cwd = (session.location and session.location.directory)
+							or session.directory
+							or vim.fn.getcwd()
 						local parts = vim.split(cwd, "/")
 						local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
 						local time = os.date("%H:%M")
@@ -255,7 +259,9 @@ return {
 							return
 						end
 
-						local cwd = (session.location and session.location.directory) or session.directory or vim.fn.getcwd()
+						local cwd = (session.location and session.location.directory)
+							or session.directory
+							or vim.fn.getcwd()
 						local parts = vim.split(cwd, "/")
 						local repo = table.concat({ parts[#parts - 1], parts[#parts] }, "/")
 						local time = os.date("%H:%M")
@@ -625,9 +631,6 @@ return {
 										end
 									end
 								end
-
-								-- Fallback: call context_items if not in a gitcommit block
-								-- require("opencode.api").context_items()
 							end,
 							mode = { "n", "i" },
 						},
@@ -648,7 +651,7 @@ return {
 						-- 	mode = { "n", "i" },
 						-- 	desc = "Submit prompt",
 						-- },
-            ["<S-cr>"] = false,
+						["<S-cr>"] = false,
 						-- ['<esc>']       = { 'close',                                             desc = 'Close Opencode windows',       defer_to_completion = true },
 						["<esc>"] = false,
 						["<C-c>"] = {
@@ -670,6 +673,15 @@ return {
 							"slash_commands",
 							mode = "i",
 							desc = "Open slash commands picker",
+						},
+						["gf"] = {
+							"jump_to_file",
+							desc = "Jump to file at cursor",
+						},
+						["<C-e>"] = {
+							"context_items",
+							mode = "n",
+							desc = "Open context items picker",
 						},
 						["#"] = {
 							"context_items",
@@ -781,27 +793,34 @@ return {
 					},
 				},
 				context = {
-					enabled = true, -- Enable automatic context capturing
+					enabled = true,
 					cursor_data = {
-						enabled = false, -- Include cursor position and line content in the context
+						enabled = false,
 						context_lines = 5, -- Number of lines before and after cursor to include in context
 					},
 					diagnostics = {
-						info = false, -- Include diagnostics info in the context (default to false
-						warning = false, -- Include diagnostics warnings in the context
-						error = false, -- Include diagnostics errors in the context
-						only_closest = false, -- If true, only diagnostics for cursor/selection
+						enabled = false,
+						info = false,
+						warning = true,
+						error = true,
+						only_closest = true, -- Only diagnostics for cursor/selection; disable to include the whole buffer
 					},
 					current_file = {
-						enabled = false, -- Include current file path and content in the context
-						show_full_path = false,
+						enabled = false,
+						show_full_path = true,
 					},
 					files = {
-						enabled = true,
+						enabled = false,
 						show_full_path = true,
 					},
 					selection = {
-						enabled = true, -- Include selected text in the context
+						enabled = false,
+					},
+					review_comments = {
+						enabled = false,
+					},
+					agents = {
+						enabled = true,
 					},
 					buffer = {
 						enabled = false, -- Disable entire buffer context by default, only used in quick chat

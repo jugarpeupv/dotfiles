@@ -92,7 +92,7 @@ return {
 			end
 
 			local server_filetypes = {
-        sqlls = {
+        sqls = {
           "sql"
         },
         prismals = {

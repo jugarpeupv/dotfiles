@@ -1,44 +1,4 @@
 return {
-	-- {
-	-- 	-- "aweis89/ai-commit-msg.nvim",
-	-- 	ft = "gitcommit",
-	-- 	enabled = false,
-	-- 	config = true,
-	-- 	opts = {
-	-- 		-- your configuration options here
-	-- 		-- Enable/disable the plugin
-	-- 		enabled = true,
-	--
-	-- 		-- AI provider to use ("gemini", "openai", "anthropic", or "copilot")
-	-- 		provider = "gemini",
-	--
-	-- 		-- Whether to prompt for push after commit
-	-- 		auto_push_prompt = false,
-	-- 		-- Pull-before-push behavior (helps avoid rejected pushes)
-	-- 		pull_before_push = {
-	-- 			enabled = false, -- run a pull before pushing
-	-- 			args = { "--rebase", "--autostash" }, -- arguments passed to `git pull`
-	-- 		},
-	--
-	-- 		-- Show spinner while generating
-	-- 		spinner = true,
-	--
-	-- 		-- Show notifications
-	-- 		notifications = false,
-	--
-	-- 		-- Number of surrounding lines to include in git diff (default: 5)
-	-- 		context_lines = 0,
-	--
-	-- 		-- Cost display format ("compact", "verbose", or false to disable)
-	-- 		cost_display = "compact",
-	--
-	-- 		-- Keymaps for commit buffer
-	-- 		keymaps = {
-	-- 			quit = "q", -- Set to false to disable
-	-- 		},
-	-- 	},
-	-- },
-
 	{
 		-- "akinsho/git-conflict.nvim",
 		"jugarpeupv/git-conflict.nvim",
@@ -65,13 +25,41 @@ return {
 	{
 		"tpope/vim-fugitive",
 		cmd = { "Git", "G", "Gitdiff", "Gedit" },
+		dependencies = {
+			{
+				"https://github.com/barrettruth/diffs.nvim",
+				enabled = true,
+				init = function()
+					vim.g.diffs = {
+						integrations = { "fugitive", "neogit", "neojj", "gitsigns" },
+						conflict = false,
+						highlights = {
+							background = false,
+							blend_alpha = 0.8,
+							warn_max_lines = true,
+							vim = true,
+						},
+					}
+				end,
+				config = function()
+					local diff_windows = require("diffs.runtime.diff_windows")
+					local attach = diff_windows.attach
+					diff_windows.attach = function(diff_wins)
+						if vim.t[vim.api.nvim_get_current_tabpage()].diffview_view_initialized then
+							return
+						end
+						return attach(diff_wins)
+					end
+				end,
+			},
+		},
 		keys = {
 			{ mode = { "n" }, "<leader>ge", "<cmd>Gedit stash<cr>" },
 		},
 		config = function()
 			vim.cmd([[let g:nremap = {'[m': '<s-tab>', ']m': '<tab>'}]])
 			-- vim.cmd("command! -nargs=* G rightbelow vertical Git <args>")
-      vim.cmd("command! -nargs=* G rightbelow Git <args>")
+			vim.cmd("command! -nargs=* G rightbelow Git <args>")
 			-- vim.cmd("command! -nargs=* G 0Git <args>")
 		end,
 	},

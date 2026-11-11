@@ -1107,7 +1107,8 @@ return {
 				mode = { "n" },
 				"<leader>gL",
 				function()
-					local cmd_run = ":vertical Git log develop -20"
+					-- local cmd_run = ":vertical Git log --oneline HEAD...develop -20"
+          local cmd_run = ":Git log --oneline HEAD...develop -20"
 					local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
 					vim.api.nvim_feedkeys(keys, "c", true)
 

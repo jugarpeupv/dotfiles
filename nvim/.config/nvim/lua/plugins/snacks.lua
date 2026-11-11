@@ -302,8 +302,11 @@ return {
 		{
 			"<leader>ms",
 			function()
-				local function run_email_sync(channel)
-					vim.notify("Syncing email (" .. channel .. ")...", vim.log.levels.INFO)
+				local izertis_channel = "izertis-channel"
+				local all_label = "All"
+
+				local function run_email_sync(label, command)
+					vim.notify("Syncing email (" .. label .. ")...", vim.log.levels.INFO)
 					local stderr_lines = {}
 
 					local function print_line(line)
@@ -313,7 +316,7 @@ return {
 						vim.api.nvim_echo({ { line, "Comment" } }, true, {})
 					end
 
-					vim.fn.jobstart({ "sh", "-c", "mbsync " .. channel .. " && notmuch new" }, {
+					vim.fn.jobstart({ "sh", "-c", command }, {
 						pty = true, -- force line-buffered output from mbsync
 						on_stdout = function(_, data)
 							vim.schedule(function()
@@ -332,14 +335,14 @@ return {
 						on_exit = function(_, code)
 							if code == 0 then
 								vim.schedule(function()
-									vim.notify("Email " .. channel .. " synced properly", vim.log.levels.INFO)
+									vim.notify("Email " .. label .. " synced properly", vim.log.levels.INFO)
 									local time = os.date("%H:%M")
 									vim.fn.jobstart({
 										"terminal-notifier",
 										"-title",
 										"Mail",
 										"-message",
-										time .. " Email " .. channel .. " synced properly",
+										time .. " Email " .. label .. " synced properly",
 									}, { detach = true })
 								end)
 							else
@@ -356,10 +359,13 @@ return {
 					})
 				end
 
-				local channels = { "izertis-channel", "gmail-personal-channel" }
+				local channels = { all_label, izertis_channel, "gmail-personal-channel" }
 				vim.ui.select(channels, {
 					prompt = "Sync email channel:",
 					format_item = function(item)
+						if item == all_label then
+							return "All (every channel, mbsync -a)"
+						end
 						return item
 					end,
 				}, function(choice)
@@ -367,8 +373,11 @@ return {
 						vim.notify("Email sync cancelled", vim.log.levels.WARN)
 						return
 					end
-					if choice ~= "izertis-channel" then
-						run_email_sync(choice)
+					local label = choice == all_label and "all channels" or choice
+					local command = choice == all_label and "mbsync -a && notmuch new"
+						or ("mbsync " .. choice .. " && notmuch new")
+					if choice ~= izertis_channel and choice ~= all_label then
+						run_email_sync(label, command)
 						return
 					end
 					-- izertis-channel: verify davmail oauth token before sync
@@ -394,7 +403,7 @@ return {
 								end
 							end
 						end
-						-- return vim.fn.expand("~/.config/davmail/oauth_tokens.env")
+						return vim.fn.expand("~/.config/davmail/oauth_tokens.env")
 					end
 					local token_path = get_davmail_token_path()
 					vim.notify("Davmail token_path resolved: " .. token_path, vim.log.levels.INFO)
@@ -440,7 +449,7 @@ PY
 					-- if file missing/empty -> need token immediately
 					if vim.fn.filereadable(token_path) ~= 1 or vim.fn.getfsize(token_path) < 10 then
 						run_davmail_token(function()
-							run_email_sync(choice)
+							run_email_sync(label, command)
 						end)
 						return
 					end
@@ -456,11 +465,11 @@ PY
 					probe_token(email, function(ok)
 						vim.schedule(function()
 							if ok then
-								run_email_sync(choice)
+								run_email_sync(label, command)
 							else
 								vim.notify("Davmail token invalid/expired, refreshing...", vim.log.levels.WARN)
 								run_davmail_token(function()
-									run_email_sync(choice)
+									run_email_sync(label, command)
 								end)
 							end
 						end)
@@ -1082,7 +1091,7 @@ PY
 		{
 			mode = { "c" },
 			-- "<C-r><C-r>",
-			"<C-c>",
+			"<C-q>",
 			function()
 				local cmd = vim.fn.getcmdline()
 				-- <M-y> async flow: preserve path and re-enter async cmdline after history pick

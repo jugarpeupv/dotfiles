@@ -8,9 +8,9 @@ return {
 		branch = "main",
 		ft = { "http", "rest" },
 		opts = {
-			kulala_core = {
-			  path = vim.fn.expand("~/projects/kulala-core/wt-main/packages/core/dist/kulala-core-darwin-arm64"),
-			},
+			-- kulala_core = {
+			--   path = vim.fn.expand("~/projects/kulala-core/wt-main/packages/core/dist/kulala-core-darwin-arm64"),
+			-- },
 			default_env = "snd",
 			treesitter = {
 				-- enable/disable kulala.nvim own
