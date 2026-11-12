@@ -2,6 +2,7 @@ return {
 	{
 		"letieu/jira.nvim",
 		cmd = { "Jira" },
+    enabled = false,
 		opts = {
 			-- Your setup options...
 			jira = {
@@ -12,17 +13,32 @@ return {
 	{
 		"emrearmagan/atlas.nvim",
 		cmd = { "Atlas", "AtlasIssues", "AtlasPulls", "AtlasLogs", "AtlasJqlSearch" },
+		init = function()
+			require("jg.custom.jira-proxy").setup()
+		end,
 		config = function()
+			require("jg.custom.jira-proxy").ensure()
 			require("atlas").setup({
+        ui = {
+          -- "auto", "default", "snacks", or "fzf-lua".
+          picker = "default",
+          -- Make the main Atlas dashboard a listed buffer.
+          listed_buffer = true,
+        },
 				providers = {
           github = {
             cache_ttl = 300
           },
 					jira = {
-						base_url = "https://mapfrealm.atlassian.net",
-						email = os.getenv("JIRA_NVIM_USER") or "",
-						--- See: https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/
-						token = os.getenv("JIRA_NVIM_TOKEN_SCOPES") or "",
+						-- base_url = "https://mapfrealm.atlassian.net",
+						--       base_url = "https://mapfrealm.atlassian.net",
+						-- email = os.getenv("JIRA_NVIM_USER") or "",
+						-- --- See: https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/
+						-- token = os.getenv("JIRA_NVIM_TOKEN_SCOPES") or "",
+            base_url = "http://127.0.0.1:8787",
+            auth_method = "bearer",
+            api_type = "cloud",
+            token = os.getenv("JIRA_PROXY_TOKEN") or "local",
 						cache_ttl = 300,
 
 						project_config = {
@@ -46,6 +62,12 @@ return {
 					},
 				},
 				issues = {
+          jira = {
+            views = {
+              { name = "Me", key = "1", search = "assignee = currentUser() AND statusCategory != Done ORDER BY updated DESC" },
+              { name = "Project", key = "2", search = "project = PTIZ AND statusCategory != Done ORDER BY updated DESC" },
+            },
+          },
 					---@type AtlasGitHubIssuesConfig
 					github = {
 						---@type AtlasGitHubIssuesViewConfig[]

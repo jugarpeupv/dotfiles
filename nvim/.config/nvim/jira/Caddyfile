@@ -1,0 +1,6 @@
+http://127.0.0.1:8787 {
+	reverse_proxy https://mapfrealm.atlassian.net {
+		header_up Cookie "tenant.session.token={env.JIRA_SESSION}; atlassian.xsrf.token={env.JIRA_XSRF}"
+		header_up X-Atlassian-Token "no-check"
+	}
+}

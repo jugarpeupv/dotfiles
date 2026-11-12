@@ -210,6 +210,11 @@
     },
     {
       "action": "read",
+      "resource": "**/session.db",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
       "resource": "**/.env",
       "effect": "deny"
     },

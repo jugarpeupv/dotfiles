@@ -254,6 +254,16 @@ return {
 					cterm_color = "124",
 					name = "Out",
 				},
+        sum = {
+          icon = "",
+          color = "#9CDCFE",
+          name = "gosum",
+        },
+        mod = {
+          icon = "",
+          color = "#9CDCFE",
+          name = "gomod",
+        },
         go = {
           icon = "",
           color = "#9CDCFE",

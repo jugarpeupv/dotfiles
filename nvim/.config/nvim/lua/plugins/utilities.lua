@@ -720,8 +720,8 @@ return {
 		lazy = false,
 		keys = {
 			-- Will use Telescope if installed or a vim.ui.select picker otherwise
-			{ "<leader>ws", "<cmd>AutoSession search<CR>", desc = "Session search" },
-			{ "<leader>wa", "<cmd>AutoSession save<CR>", desc = "Save session" },
+			{ "<leader>Ws", "<cmd>AutoSession search<CR>", desc = "Session search" },
+			{ "<leader>Wa", "<cmd>AutoSession save<CR>", desc = "Save session" },
 		},
 		---enables autocomplete for opts
 		---@module "auto-session"
@@ -1108,7 +1108,7 @@ return {
 				"<leader>gL",
 				function()
 					-- local cmd_run = ":vertical Git log --oneline HEAD...develop -20"
-          local cmd_run = ":Git log --oneline HEAD...develop -20"
+          local cmd_run = ":Git log --oneline --left-right HEAD...develop -20"
 					local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
 					vim.api.nvim_feedkeys(keys, "c", true)
 
