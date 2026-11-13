@@ -1,44 +1,21 @@
 return {
 	{
 		"nvim-lualine/lualine.nvim",
-		-- enabled = true,
-		-- event = "VeryLazy",
-		-- event = "LspAttach",
 		event = { "VeryLazy" },
 		ft = { "DiffviewFiles" },
 		lazy = true,
-		-- dependencies = { "catppuccin/nvim" },
-		-- priority = 10,
-		-- event = { "TermOpen" ,"BufReadPre", "BufNewFile" },
-		-- event = { "TermOpen", "BufReadPost" },
 		config = function()
-			-- local dmode_enabled = false
-			-- vim.api.nvim_create_autocmd("User", {
-			-- 	pattern = "DebugModeChanged",
-			-- 	callback = function(args)
-			-- 		dmode_enabled = args.data.enabled
-			-- 	end,
-			-- })
-
 			local colors = {
 				green = "#94E2D5",
 				blue = "#9CDCFE",
-				-- blue = "#bb9af7",
-				-- cyan = "#4EC9B0",
-				-- cyan = "#94e2d5",
-				-- cyan = "#bb9af7",
-				-- cyan = "#9d7cd8",
 				cyan = "#CBA6F7",
-				-- cyan            = '#0db9d7',
 				black = "#292e42",
-				-- black           = '#1f2335',
 				alternate_black = "#737aa2",
 				white = "#737aa2",
 				red = "#C586C0",
 				blue_visual = "#264F78",
 				violet = "#C586C0",
 				grey = "#3B4252",
-				-- red = "#ff5189",
 				orange = "#CE9178",
 			}
 
@@ -47,9 +24,6 @@ return {
 					a = { fg = colors.alternate_black, bg = colors.black },
 					b = { fg = colors.alternate_black, bg = colors.black },
 					c = { fg = colors.alternate_black, bg = colors.black },
-					-- a = { fg = colors.alternate_black, bg = 'none'},
-					-- b = { fg = colors.white, bg = 'none' },
-					-- c = { fg = colors.white, bg = 'none' },
 				},
 				insert = { a = { fg = colors.alternate_black, bg = colors.black } },
 				command = { a = { fg = colors.alternate_black, bg = colors.black } },
@@ -60,11 +34,6 @@ return {
 					b = { fg = colors.alternate_black, bg = colors.black },
 					c = { fg = colors.alternate_black, bg = colors.black },
 				},
-				-- inactive = {
-				--   a = { fg = colors.blue, bg = 'none' },
-				--   b = { fg = colors.blue, bg = 'none' },
-				--   c = { fg = colors.blue, bg = 'none' },
-				-- },
 			}
 
 			local dirnameFormatFn = function()
@@ -88,26 +57,6 @@ return {
 				fmt = dirnameFormatFn,
 			}
 
-			local function json_schema()
-				local clients = vim.lsp.get_clients({ bufnr = 0, name = "jsonls" })
-				if #clients == 0 then
-					return ""
-				end
-				local client = clients[1]
-
-				-- Use the internal matching that jsonls does
-				local params = { uri = vim.uri_from_bufnr(0) }
-				local response = client.request_sync("json/matchingSchemas", params, 1000, 0)
-
-				if response and response.result and #response.result > 0 then
-					local schema = response.result[1].schema
-					local name = schema.title or schema.description or "unknown"
-					return " " .. name
-				end
-
-				return ""
-			end
-
 			local filename = {
 				"filename",
 				file_status = true, -- Displays file status (readonly status, modified status)
@@ -122,8 +71,11 @@ return {
 					-- modified = "[!]", -- Text to show when the file is modified.
 					modified = "⏺",
 					-- readonly = "󰔉",    -- Text to show when the file is non-modifiable or readonly.
-					readonly = "󰦝",
-					unnamed = "󰔉", -- Text to show for unnamed buffers.
+					-- readonly = "󰦝",
+          readonly = "󱀰",
+					-- unnamed = "󰔉", -- Text to show for unnamed buffers.
+          -- unnamed = " "
+          unnamed = "[No Name]"
 				},
 				-- color = { fg = "#4EC9B0" ,bg = "none" },
 				-- color = function(section)
@@ -146,53 +98,20 @@ return {
 				-- end,
 			}
 
-			local diagnostics = {
-				"diagnostics",
-				sources = { "nvim_lsp" },
-				sections = { "error", "warn", "info", "hint" },
-				diagnostics_color = {
-					error = "DiagnosticVirtualTextErrorLine",
-					warn = "DiagnosticVirtualTextWarnLine",
-					info = "DiagnosticVirtualTextInfoLine",
-					hint = "DiagnosticVirtualTextHintLine",
-				},
-				colored = false,
-				update_in_insert = true,
-				alwars_visible = false,
+			-- Async tag shown when HEAD is detached (e.g. after
+			-- `git checkout v1.2.3`), mirroring the tmux status-left snippet.
+			local git_tag = {
+				function()
+					return require("jg.custom.git-tag").get()
+				end,
+				color = { fg = colors.cyan },
 			}
 
-			local diagnostics_inactive = {
-				"diagnostics",
-				sources = { "nvim_lsp" },
-				sections = { "error", "warn", "info", "hint" },
-				diagnostics_color = {
-					error = "DiagnosticError",
-					warn = "DiagnosticWarn",
-					info = "DiagnosticInfo",
-					hint = "DiagnosticHint",
-				},
-				colored = true,
-				update_in_insert = true,
-				alwars_visible = false,
-				color = { bg = colors.black },
-			}
-
-			local branch = {
-				"branch",
-				-- function()
-				-- 	local name
-				-- 	if vim.bo.filetype == "fyler" then
-				-- 		name = fyler_branch()
-				-- 	else
-				-- 		name = require("lualine.components.branch.git_branch").get_branch()
-				-- 	end
-				-- 	if not name or name == "" then
-				-- 		return ""
-				-- 	end
-				-- 	return " " .. name
-				-- end,
-				color = function()
-					return { fg = "#b4beff" }
+			-- Async git status rendered by gitmux with the same symbols, layout
+			-- and colours as the tmux status bar (see ~/.config/tmux/gitmux.conf).
+			local git_status = {
+				function()
+					return require("jg.custom.gitmux").get()
 				end,
 			}
 
@@ -207,86 +126,30 @@ return {
 				color = { fg = colors.green }, -- Customize the colors as needed
 			}
 
-			local ahead_behind_indicator = {
-				function()
-					-- Cache the result to avoid executing the logic repeatedly
-					if vim.g.ahead_behind_status then
-						return vim.g.ahead_behind_status
-					end
+			require("jg.custom.gitmux").setup({
+        ttl = 650,
+				-- Keep gitmux's named colours in line with the lualine palette.
+				-- Hex colours from gitmux.conf (e.g. #8ee2cf) are used as-is.
+				-- colors = {
+				-- 	red = "#F38BA8",
+				-- 	green = colors.green,
+				-- 	yellow = "#E0AF68",
+				-- 	blue = "#b4beff",
+				-- 	magenta = colors.violet,
+				-- 	cyan = colors.cyan,
+				-- 	white = colors.alternate_black,
+				-- },
+			})
 
-					-- Check if the current directory is a Git repository
-					local is_git_repo = vim.fn.system("git rev-parse --is-inside-work-tree 2>/dev/null"):gsub("%s+", "")
-					if is_git_repo ~= "true" then
-						vim.g.ahead_behind_status = "" -- Set empty status if not a Git repo
-						return ""
-					end
-
-					-- Get the main branch name
-					local main_branch = vim.fn
-						.system("git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@'")
-						:gsub("%s+", "")
-					if main_branch == "" then
-						vim.g.ahead_behind_status = "" -- Set empty status if main branch is not found
-						return ""
-					end
-
-					-- Get ahead/behind counts
-					local result =
-						vim.fn.system("git rev-list --left-right --count HEAD..." .. main_branch .. " 2>/dev/null")
-					local ahead, behind = result:match("(%d+)%s+(%d+)")
-					if not ahead or not behind then
-						vim.g.ahead_behind_status = "" -- Set empty status if parsing fails
-						return ""
-					end
-
-					-- Format the status and cache it
-					vim.g.ahead_behind_status = " " .. ahead .. "  " .. behind
-					return vim.g.ahead_behind_status
-				end,
-				-- color = { fg = colors.green }, -- Customize the colors as needed
-			}
-
-			-- CodeCompanion adapter component
-			-- local codecompanion_adapter = {
-			-- 	require("jg.custom.codecompanion_lualine"),
-			-- 	color = { fg = colors.blue },
-			-- 	cond = function()
-			-- 		return vim.bo.filetype == "codecompanion"
-			-- 	end,
-			-- }
-
-			-- local function get_schema()
-			-- 	local schema = require("yaml-companion").get_buf_schema(0)
-			-- 	if schema.result[1].name == "none" then
-			-- 		return ""
-			-- 	end
-			-- 	return "[󱣃 " .. schema.result[1].name .."]"
-			-- end
+			require("jg.custom.git-tag").setup({ ttl = 650 })
 
 			require("lualine").setup({
 				options = {
 					theme = bubbles_theme,
-					-- theme = 'tokyonight',
-					-- theme = 'catppuccin',
-					-- theme = 'dracula',
-					-- theme = 'vscode',
-					-- theme = 'nord',
-					-- theme = 'palenight',
-					-- theme = 'seoul256',
-					-- theme = 'onedark',
-					-- theme = 'nightfly',
-					-- theme = 'modus-vivendi',
-					-- component_separators = '|',
-					-- section_separators = { left = "", right = "" },
+          refresh = { statusline = 700 },
 					section_separators = { left = "", right = "" },
-					-- section_separators = { left = '', right = ''},
-					-- section_separators = { left = '', right = '' },
-					-- section_separators = { left = '', right = ''},
-					-- component_separators = { left = '', right = ''},
 					component_separators = { left = " ", right = " " },
 					disabled_filetypes = {
-						-- statusline = { "alpha", "dashboard", "NvimTree", "Outline", "Diffview", "diffview" },
-						-- 'NvimTree',
 						statusline = { "Diffview", "diffview" },
 						winbar = {
 							"oil",
@@ -309,45 +172,15 @@ return {
 				sections = {
 					lualine_a = {
 						{ "mode", separator = { left = "", right = "" } },
-						-- {
-						-- 	"mode",
-						-- 	fmt = function(str)
-						-- 		return dmode_enabled and "DEBUG" or str
-						-- 	end,
-						-- 	color = function(tb)
-						--          if dmode_enabled then
-						--            return { fg = colors.black, bg = "#89ddff" }
-						--          else
-						--            return tb
-						--          end
-						--
-						-- 	end,
-						-- },
-
-						filename,
-						-- diagnostics
-						-- { 'mode', separator = { left = '' }, right_padding = 2 },
-						-- { 'mode', separator = { left = '', right = '' } },
-						-- { 'mode', separator = { left = '', right = '' } },
-						-- { 'mode', separator = { left = '', right = '' } },
-						-- { 'mode', separator = { left = '', right = '' } },
-						-- { "mode", separator = { left = "", right = "" } },
 					},
-					-- lualine_b = { branch, ahead_behind_indicator },
 					lualine_b = {},
 					lualine_c = {
+            filename,
 						diff_mode,
 					},
-					-- lualine_x = { dirname, "filetype", get_schema },
 					lualine_x = {
-						-- {
-						-- 	json_schema,
-						-- 	cond = function()
-						-- 		return vim.tbl_contains({ "json", "jsonc" }, vim.bo.filetype)
-						-- 	end,
-						-- },
-						-- codecompanion_adapter,
-						-- require("jg.custom.codecompanion_lualine_spinner"),
+            git_tag,
+            git_status,
             function()
               return require("direnv").statusline()
             end,
@@ -355,56 +188,12 @@ return {
 						"encoding",
 						"filetype",
 					},
-					-- lualine_x = {},
-					-- lualine_y = {},
 					lualine_y = { "progress" },
 					lualine_z = {
-						-- { "location", separator = { left = "", right = "" } },
-						-- { 'location', separator = { left = '', right = '' }, left_padding = 2 },
-						-- { 'location', separator = { left = '', right = '' }, left_padding = 2 },
-						-- { 'location', separator = { left = '', right = '' }, left_padding = 2 },
-						-- { 'location', left_padding = 2 },
-						-- { 'progress', 'location' }
 						"location",
 					},
 				},
-				inactive_sections = {
-					lualine_a = {},
-					lualine_b = {
-						-- { 'filename', right_padding = 2 },
-						-- { filename },
-						-- { "filename" },
-						-- { 'filename', separator = { left = '' }, left_padding = 2 },
-					},
-					lualine_c = { filename },
-					-- lualine_c = { dirname },
-					-- lualine_x = { "filetype" },
-					-- lualine_y = {
-					--   "location",
-					--   -- { 'location', separator = { left = '', right = '' }, left_padding = 2 },
-					-- },
-					-- lualine_x = { diff },
-					lualine_x = { dirname },
-					lualine_y = {},
-					lualine_z = {},
-				},
 				tabline = {},
-				-- winbar = {
-				--   lualine_a = { branch },
-				--   lualine_b = {},
-				--   lualine_c = { filename },
-				--   lualine_x = {},
-				--   lualine_y = {},
-				--   lualine_z = {}
-				-- },
-				-- inactive_winbar = {
-				--   lualine_a = {},
-				--   lualine_b = {},
-				--   lualine_c = { 'filename' },
-				--   lualine_x = {},
-				--   lualine_y = {},
-				--   lualine_z = {}
-				-- },
 				extensions = {},
 			})
 		end,

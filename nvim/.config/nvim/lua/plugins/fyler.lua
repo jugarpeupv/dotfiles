@@ -483,6 +483,21 @@ return {
 									},
 								})
 							end,
+							["<D-p>"] = function(view)
+								local path = view:getcwd()
+								if vim.fn.isdirectory(path) == 0 then
+									path = vim.fn.fnamemodify(path, ":h")
+								end
+								Snacks.picker.files({
+									title = "Find files in: " .. path,
+									cwd = path,
+									hidden = true,
+									exclude = {
+										".git",
+										"*DS_Store*",
+									},
+								})
+							end,
 							["F"] = function(view)
 								local actions = require("telescope.actions")
 								local action_state = require("telescope.actions.state")
@@ -995,27 +1010,33 @@ return {
 				opts.views.finder.mappings["<M-y>"] = function(view)
 					_begin_async_cmdline(fyler_get_path(view))
 				end
+				opts.views.finder.mappings["<D-y>"] = function(view)
+					_begin_async_cmdline(fyler_get_path(view))
+				end
 			end
 
 			-- mirror <M-y> for oil buffers (same async flow, path from oil API)
+			local function oil_async_cmdline()
+				local ok, oil = pcall(require, "oil")
+				if not ok or not oil.get_current_dir then
+					return
+				end
+				local dir = oil.get_current_dir()
+				if not dir or dir == "" then
+					return
+				end
+				local ok_entry, entry = pcall(oil.get_cursor_entry)
+				if ok_entry and entry and entry.name and entry.name ~= ".." then
+					dir = dir:gsub("/$", "") .. "/" .. entry.name
+				end
+				_begin_async_cmdline(dir)
+			end
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = "oil",
 				callback = function(args)
-					vim.keymap.set("n", "<M-y>", function()
-						local ok, oil = pcall(require, "oil")
-						if not ok or not oil.get_current_dir then
-							return
-						end
-						local dir = oil.get_current_dir()
-						if not dir or dir == "" then
-							return
-						end
-						local ok_entry, entry = pcall(oil.get_cursor_entry)
-						if ok_entry and entry and entry.name and entry.name ~= ".." then
-							dir = dir:gsub("/$", "") .. "/" .. entry.name
-						end
-						_begin_async_cmdline(dir)
-					end, { buffer = args.buf, noremap = true, silent = true, desc = "Async command on oil path" })
+					local map_opts = { buffer = args.buf, noremap = true, silent = true, desc = "Async command on oil path" }
+					vim.keymap.set("n", "<M-y>", oil_async_cmdline, map_opts)
+					vim.keymap.set("n", "<D-y>", oil_async_cmdline, map_opts)
 				end,
 			})
 

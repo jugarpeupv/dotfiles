@@ -62,6 +62,14 @@ return {
 				mode = { "i", "x", "n", "c" },
 				desc = "Open Yank History",
 			},
+			{
+				"<D-`>",
+				function()
+					require("telescope").extensions.yank_history.yank_history()
+				end,
+				mode = { "i", "x", "n", "c" },
+				desc = "Open Yank History",
+			},
       {
         "<leader>cL", -- dump vs <leader>cl (picker) - markdown with injections
         function()

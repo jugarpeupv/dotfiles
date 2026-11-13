@@ -370,34 +370,17 @@ return {
 			{ "<D-o>" },
 		},
 		config = function()
-			local function is_inside_tmux()
-				return os.getenv("TMUX") ~= nil
-			end
-
-			local function get_mi_key()
-				if is_inside_tmux() then
-					return "<M-i>"
-				else
-					return "<D-i>"
-				end
-			end
-
-			local function get_mo_key()
-				if is_inside_tmux() then
-					return "<M-o>"
-				else
-					return "<D-o>"
-				end
-			end
-
 			require("bufjump").setup({
-				forward_key = get_mi_key(),
-				backward_key = get_mo_key(),
+				forward_key = "<D-i>",
+				backward_key = "<D-o>",
 				-- on_success = nil
 				on_success = function()
 					vim.cmd([[execute "normal! g`\"zz"]])
 				end,
 			})
+			-- same actions with alt, so both <D-i>/<D-o> and <M-i>/<M-o> work
+			vim.keymap.set("n", "<M-i>", "<D-i>", { remap = true })
+			vim.keymap.set("n", "<M-o>", "<D-o>", { remap = true })
 		end,
 	},
 	{
@@ -713,34 +696,6 @@ return {
 	},
 	-- Lua
 	-- { "HawkinsT/pathfinder.nvim" },
-	{
-		"rmagatti/auto-session",
-		enabled = false,
-		-- event = "BufReadPost",
-		lazy = false,
-		keys = {
-			-- Will use Telescope if installed or a vim.ui.select picker otherwise
-			{ "<leader>Ws", "<cmd>AutoSession search<CR>", desc = "Session search" },
-			{ "<leader>Wa", "<cmd>AutoSession save<CR>", desc = "Save session" },
-		},
-		---enables autocomplete for opts
-		---@module "auto-session"
-		---@diagnostic disable-next-line: undefined-doc-name
-		---@type AutoSession.Config
-		opts = {
-			auto_save_enabled = true,
-			auto_restore_enabled = true,
-			auto_session_use_git_branch = true,
-			pre_save_cmds = {
-				"NvimTreeClose",
-			},
-			cwd_change_handling = {
-				post_cwd_changed_hook = function()
-					require("lualine").refresh()
-				end,
-			},
-		},
-	},
 	{
 		"farmergreg/vim-lastplace",
 		-- event = { "BufNewFile", "BufReadPost" },

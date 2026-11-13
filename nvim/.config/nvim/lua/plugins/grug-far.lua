@@ -19,6 +19,16 @@ return {
 				})
 			end,
 		},
+		{
+			"<D-f>",
+			mode = { "n", "i", "v" },
+			function()
+				require("grug-far").toggle_instance({
+					instanceName = "far",
+					staticTitle = "Find and Replace",
+				})
+			end,
+		},
 	},
 	cmd = { "GrugFar" },
 	"MagicDuck/grug-far.nvim",

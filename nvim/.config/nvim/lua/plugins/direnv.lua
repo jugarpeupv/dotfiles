@@ -1,6 +1,6 @@
 return {
 	{
-		"https://plugins.ejri.dev/mise.nvim",
+		"https://codeberg.org/ejri/mise.nvim",
 		cmd = { "Mise" },
 		init = function()
 		  local group = vim.api.nvim_create_augroup("mise_nvim_cwd", { clear = true })

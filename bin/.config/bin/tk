@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# tk - kill all kitty sessions and leave a fresh shell in $HOME
+# (the kitty equivalent of `tmux kill-server`).
+#
+# It closes every window/tab that belongs to a kitty session, kills the
+# detached nvim servers started by `nvim-session`, deletes the .kitty-session
+# definition files, and leaves you in a new plain (non-session) shell tab in
+# $HOME.
+set -u
+
+SELF=$(cd "$(dirname "$0")" && pwd)/$(basename "$0")
+SESSION_DIR="${KITTY_SESSION_DIR:-$HOME/.config/kitty/sessions}"
+
+kill_nvim_servers() {
+	local tmp=${TMPDIR:-/tmp} sock pids
+	for sock in "${tmp%/}"/nvim-*.sock; do
+		[[ -e $sock ]] || continue
+		pids=$(pgrep -f "nvim --headless --listen $sock" 2>/dev/null || true)
+		[[ -n $pids ]] && kill $pids 2>/dev/null
+		rm -f "$sock"
+	done
+}
+
+cleanup() {
+	local names name
+	names=$(kitten @ ls 2>/dev/null | jq -r '
+		[ .[] | .tabs[] | .windows[] | .session_name | select(. != "") ]
+		| unique | .[]' 2>/dev/null)
+
+	while IFS= read -r name; do
+		[[ -n $name ]] || continue
+		kitten @ action close_session "$name" >/dev/null 2>&1
+	done <<<"$names"
+
+	rm -f "$SESSION_DIR"/*.kitty-session
+	kill_nvim_servers
+}
+
+case ${1:-} in
+--cleanup)
+	cleanup
+	;;
+*)
+	[[ -n ${KITTY_WINDOW_ID:-} ]] || {
+		echo "tk: run this inside kitty" >&2
+		exit 1
+	}
+
+	# Do the killing from a fresh tab in $HOME, not from the current window:
+	# closing the sessions would otherwise kill this script halfway through.
+	kitten @ launch --type=tab --cwd="$HOME" --add-to-session=! --tab-title home \
+		--allow-remote-control sh -c "$SELF --cleanup; exec zsh" >/dev/null 2>&1 || {
+		echo "tk: could not launch the cleanup tab (is remote control enabled?)" >&2
+		exit 1
+	}
+	;;
+esac

@@ -40,7 +40,7 @@ return {
 		-- },
 		bigfile = {
 			enabled = true,
-			notify = true, -- show notification when big file detected
+			notify = false, -- show notification when big file detected
 			size = 1 * 1024 * 1024, -- 1.5MB
 			line_length = 2000, -- average line length (useful for minified files)
 			-- Enable or disable features when big file detected
@@ -1373,7 +1373,22 @@ PY
 			end,
 			{ silent = true, noremap = true },
 		},
+		{
+			mode = { "n", "t" },
+			"<D-p>",
+			function()
+				Snacks.picker.files({
+					hidden = true,
+					exclude = {
+						".git",
+						"*DS_Store*",
+					},
+				})
+			end,
+			{ silent = true, noremap = true },
+		},
 		{ mode = { "n", "v" }, "<M-.>", "<cmd>lua vim.lsp.buf.code_action()<cr>", { silent = true } },
+		{ mode = { "n", "v" }, "<D-.>", "<cmd>lua vim.lsp.buf.code_action()<cr>", { silent = true } },
 		{
 			mode = { "n", "v" },
 			"<leader>ht",
@@ -1410,6 +1425,13 @@ PY
 					-- 	preset = "ivy_split",
 					-- },
 				})
+			end,
+			desc = "Smart Find Files",
+		},
+		{
+			"<D-P>",
+			function()
+				Snacks.picker.smart({})
 			end,
 			desc = "Smart Find Files",
 		},

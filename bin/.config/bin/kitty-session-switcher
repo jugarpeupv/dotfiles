@@ -1,0 +1,422 @@
+#!/usr/bin/env bash
+# Switch between kitty sessions (works like tmux-session-switcher, but for
+# kitty's built-in sessions).
+#
+# Usage:
+#   kitty-session-switcher                 # pick a session with fzf
+#   kitty-session-switcher <directory>     # create/switch to that project's session
+#   kitty-session-switcher <file>          # switch to the session defined by <file>
+#   kitty-session-switcher --cycle-close   # kill the current session, go to the next
+#
+# New sessions run "nvim ." directly via zsh (non-interactive, so the profile
+# is not loaded) and drop to an interactive shell when nvim exits.
+#
+# fzf keys:
+#   enter    switch to the session (creates it if it is not running)
+#   ctrl-n   new session from a project directory
+#   ctrl-v   open the selected session's directory in a vertical split of the
+#            current tab (added to the current session)
+#   ctrl-d   close the session, keeping its definition file
+#   ctrl-x   close the session and delete its definition file
+#
+# kitty.conf:
+#   listen_on unix:/tmp/kitty
+#   map ctrl+, launch --type=tab --tab-title ' ' --allow-remote-control kitty-session-switcher
+#
+# `launch --type=tab` (not overlay) so the picker uses the full width of the OS
+# window instead of being confined to the currently focused split. The tab
+# closes by itself when the script exits.
+# `listen_on` is required for the live preview: fzf's preview subprocess needs
+# a socket to talk to kitty. Without it kitten @ falls back to the controlling
+# tty, which fzf is using, so get-text hangs and the preview stays empty.
+# It goes in kitty.conf and needs a kitty restart (it cannot be reloaded).
+#
+# Preview: live screen with colors. KITTY_SESSION_PREVIEW_ANSI=0 disables
+# colors, KITTY_SESSION_PREVIEW_WIDTH=60% changes the width.
+
+set -uo pipefail
+shopt -s nullglob
+
+SELF=$(cd "$(dirname "$0")" && pwd)/$(basename "$0")
+printf -v SELF_Q '%q' "$SELF"
+
+SESSION_DIR="${KITTY_SESSION_DIR:-$HOME/.config/kitty/sessions}"
+PREVIEW_WIDTH="${KITTY_SESSION_PREVIEW_WIDTH:-65%}"
+PROJECT_DIRS=(
+  "$HOME/work" "$HOME/work/tmp"
+  "$HOME/dotfiles" "$HOME/.local/share/nvim/lazy" "$HOME/projects"
+  "$HOME/Downloads" "$HOME/Documents" "$HOME"
+)
+
+# `launch` does not load .zshrc, so when the overlay starts this script
+# FZF_DEFAULT_OPTS is missing. Pull in only the fzf part instead of starting
+# an interactive zsh (which costs ~140ms).
+if [[ -z ${FZF_DEFAULT_OPTS:-} && -r $HOME/.config/zshrc/fzf.zsh ]]; then
+  source "$HOME/.config/zshrc/fzf.zsh"
+fi
+
+fatal() { printf 'kitty-session-switcher: %s\n' "$*" >&2; exit 1; }
+
+[[ -n ${KITTY_WINDOW_ID:-} ]] || fatal 'run this inside kitty (launch --type=tab --allow-remote-control)'
+command -v jq >/dev/null || fatal 'jq is required'
+command -v fzf >/dev/null || fatal 'fzf is required'
+
+kitty_ls() { kitten @ ls 2>/dev/null; }
+
+# Sessions that currently have windows, most recently focused first.
+live_sessions() {
+  kitty_ls | jq -r '
+    [ .[] | .tabs[] | .windows[] | select(.session_name != "") ]
+    | group_by(.session_name)
+    | map({ name: .[0].session_name, ts: (map(.last_focused_at // 0) | max) })
+    | sort_by(-.ts) | .[] | [.name, .ts] | @tsv' 2>/dev/null
+}
+
+# Current working directory of a live session (most recently focused window).
+cwd_for_session() {
+  kitty_ls | jq -r --arg n "$1" '
+    [ .[] | .tabs[] | .windows[] | select(.session_name == $n) ]
+    | sort_by(.last_focused_at // 0) | reverse
+    | (.[0].cwd // empty)' 2>/dev/null
+}
+
+# First "cd ..." line of a session file, resolved against its directory.
+session_dir_from_file() {
+  local path=$1 line dir
+  [[ -f $path ]] || return 1
+  while IFS= read -r line; do
+    line=${line#"${line%%[![:space:]]*}"}
+    [[ -z $line || $line == \#* ]] && continue
+    if [[ $line == cd\ * ]]; then
+      dir=${line#cd }
+      dir=${dir%\"}
+      dir=${dir#\"}
+      case $dir in
+        "~") dir=$HOME ;;
+        "~/"*) dir=$HOME/${dir#\~/} ;;
+        '$HOME' | '${HOME}') dir=$HOME ;;
+        '$HOME/'*) dir=$HOME/${dir#\$HOME/} ;;
+        '${HOME}/'*) dir=$HOME/${dir#\$\{HOME\}/} ;;
+      esac
+      [[ $dir == /* ]] || dir="$(dirname "$path")/$dir"
+      printf '%s\n' "$dir"
+      return 0
+    fi
+  done <"$path"
+  return 1
+}
+
+# tab<TAB>window<TAB>session of the window the user was in before the overlay
+# (overlay windows have no session_name, so they are ignored).
+current_window() {
+  kitty_ls | jq -r '
+    [ .[] | .tabs[] as $t | $t.windows[]
+      | {tab: $t.id, win: .id, session: .session_name, ts: (.last_focused_at // 0)} ]
+    | map(select(.session != ""))
+    | sort_by(-.ts)
+    | if length > 0 then (.[0] | [.tab, .win, .session] | @tsv) else empty end' 2>/dev/null
+}
+
+# Open a vsplit in the current tab/session, cd'd to the selected session's dir.
+vsplit_session() {
+  local name=$1 path=$2 dir info tab win
+  [[ -n ${KITTY_LISTEN_ON:-} ]] || return 0
+
+  dir=$(cwd_for_session "$name")
+  [[ -n $dir ]] || dir=$(session_dir_from_file "$path" || true)
+  [[ -n $dir && -d $dir ]] || dir=$HOME
+
+  info=$(current_window)
+  if [[ -z $info ]]; then
+    kitten @ launch --type=window --location=vsplit --cwd="$dir" \
+      --add-to-session=! >/dev/null 2>&1
+    return
+  fi
+
+  IFS=$'\t' read -r tab win _ <<<"$info"
+  kitten @ launch --type=window --location=vsplit \
+    --match="id:$tab" --next-to="id:$win" --source-window="id:$win" \
+    --cwd="$dir" --add-to-session=. >/dev/null 2>&1
+}
+
+# Window that had focus before this helper tab (excludes the helper itself).
+previous_window() {
+  kitty_ls | jq -r --arg self "${KITTY_WINDOW_ID:-}" '
+    [ .[] | .tabs[] as $t | $t.windows[]
+      | select((.id|tostring) != $self)
+      | {tab: $t.id, win: .id, session: .session_name, ts: (.last_focused_at // 0)} ]
+    | sort_by(-.ts)
+    | if length > 0 then (.[0] | [.tab, .win, .session] | @tsv) else empty end' 2>/dev/null
+}
+
+window_cwd() {
+  kitty_ls | jq -r --arg id "$1" '
+    [ .[] | .tabs[] | .windows[] | select((.id|tostring) == $id) ]
+    | .[0].cwd // empty' 2>/dev/null
+}
+
+# Kill the session the user was in (windows + definition) and jump to the next
+# live session. Returns 0 when it switched (or when the previous window was not
+# a session), 1 when there was no next session (the caller can then leave a shell).
+cycle_close() {
+  local info tab win cur next n i idx=-1 nidx
+  local -a names=()
+
+  info=$(previous_window)
+  [[ -n $info ]] || return 0
+  IFS=$'\t' read -r tab win cur <<<"$info"
+  [[ -n $cur ]] || return 0
+
+  while IFS=$'\t' read -r n _; do
+    [[ -n $n ]] && names+=("$n")
+  done <<<"$(live_sessions)"
+
+  for i in "${!names[@]}"; do
+    if [[ ${names[i]} == "$cur" ]]; then
+      idx=$i
+      break
+    fi
+  done
+
+  if ((${#names[@]} > 1)); then
+    if ((idx >= 0)); then
+      nidx=$(((idx + 1) % ${#names[@]}))
+    else
+      nidx=0
+    fi
+    next=${names[nidx]}
+    [[ $next == "$cur" ]] && next=''
+  fi
+
+  kitten @ action close_session "$cur" >/dev/null 2>&1
+
+  # Delete the session definition and any leftover nvim server for it, so it
+  # does not show up in the picker again.
+  rm -f "$SESSION_DIR/$cur.kitty-session"
+  local tmp=${TMPDIR:-/tmp} srv pids
+  srv="${tmp%/}/nvim-$cur.sock"
+  pids=$(pgrep -f "nvim --headless --listen $srv" 2>/dev/null || true)
+  [[ -n $pids ]] && kill $pids 2>/dev/null
+  rm -f "$srv"
+
+  if [[ -n ${next:-} ]]; then
+    kitten @ action goto_session "$next" >/dev/null 2>&1
+    return 0
+  fi
+  return 1
+}
+
+# name<TAB>path, live sessions first then the rest by mtime.
+list_sessions() {
+  local live name path
+  local -A seen=()
+
+  live=$(live_sessions)
+
+  while IFS=$'\t' read -r name _; do
+    [[ -n $name ]] || continue
+    path="$SESSION_DIR/$name.kitty-session"
+    printf '%s\t%s\n' "$name" "$path"
+    seen[$name]=1
+  done <<<"$live"
+
+  local -a files=("$SESSION_DIR"/*.kitty-session)
+  if ((${#files[@]})); then
+    while IFS= read -r path; do
+      name=$(basename "$path")
+      name=${name%.kitty-session}
+      [[ -n ${seen[$name]:-} ]] && continue
+      printf '%s\t%s\n' "$name" "$path"
+    done < <(ls -t "${files[@]}" 2>/dev/null)
+  fi
+}
+
+regex_escape() { printf '%s' "$1" | sed 's/[][\\.^$*+?(){}|]/\\&/g'; }
+
+# Get rid of the leading/trailing blank lines of a screen dump, otherwise the
+# useful part (the prompt / last output) ends up pages below the preview header.
+# Keeps ANSI colors, and treats lines that only contain color codes/osc
+# sequences as blank.
+trim_screen() {
+  printf '%s\n' "$1" | awk '
+    BEGIN {
+      esc = sprintf("%c", 27); bel = sprintf("%c", 7)
+      ansi = esc "\\[[0-9;:?]*[ -/]*[@-~]"
+      osc  = esc "\\][^" bel esc "]*(" bel "|" esc "\\\\)"
+    }
+    {
+      v = $0
+      gsub(osc, "", v)
+      gsub(ansi, "", v)
+      sub(/[ \t\r]+$/, "", v)
+      line[NR] = $0
+      if (v != "") { if (first == 0) first = NR; last = NR }
+    }
+    END {
+      if (first == 0) exit 1
+      for (i = first; i <= last; i++) print line[i]
+    }'
+}
+
+get_text_preview() {
+  local pat="session:^$(regex_escape "$1")$"
+  if [[ ${KITTY_SESSION_PREVIEW_ANSI:-1} == 0 ]]; then
+    kitten @ get-text --match "$pat" --extent=screen 2>/dev/null
+  else
+    kitten @ get-text --match "$pat" --extent=screen --ansi 2>/dev/null
+  fi
+}
+
+preview_session() {
+  local path=$1 name=$2 text
+  printf '\033[2;3m%s\033[0m\n\n' "$path"
+  # The live preview needs a socket. Without KITTY_LISTEN_ON (listen_on in
+  # kitty.conf, or launch --allow-remote-control) kitten @ falls back to the
+  # controlling tty, which fzf owns while running the preview, so get-text
+  # never gets its reply and the preview stays empty. In that case just show
+  # the session file.
+  if [[ -n ${KITTY_LISTEN_ON:-} ]]; then
+    if text=$(get_text_preview "$name") && text=$(trim_screen "$text"); then
+      [[ -n $text ]] && printf '%s\n' "$text" && return
+    fi
+  fi
+  if [[ -f $path ]]; then
+    cat -- "$path"
+  else
+    printf 'session is not running\n'
+  fi
+}
+
+session_name_for() {
+  local base
+  base=$(basename "$1")
+  base=${base// /}
+  printf '%s' "$base" | tr '[:upper:]' '[:lower:]' | sed 's/[^[:alnum:]_-]/_/g'
+}
+
+# Create the session file for a directory if needed and print its path.
+ensure_session() {
+  local dir=$1 name path
+  [[ -d $dir ]] || fatal "not a directory: $dir"
+  dir=$(cd "$dir" && pwd)
+  name=$(session_name_for "$dir")
+  path="$SESSION_DIR/$name.kitty-session"
+  mkdir -p "$SESSION_DIR" || fatal "cannot create $SESSION_DIR"
+  if [[ ! -f $path ]]; then
+    printf 'layout tall\ncd %s\nlaunch --title "%s" zsh -c "nvim .; exec zsh"\n' "$dir" "$name" >"$path" ||
+      fatal "cannot write $path"
+  fi
+  printf '%s\n' "$path"
+}
+
+find_projects() {
+  local d
+  for d in "${PROJECT_DIRS[@]}"; do
+    [[ -d $d ]] || continue
+    find "$d" -mindepth 1 -maxdepth 1 -type d 2>/dev/null
+  # done | sort -u
+  done
+}
+
+new_session() {
+  local dir=${1:-} path
+  if [[ -z $dir ]]; then
+    dir=$(find_projects | fzf --header 'New session in: ' \
+      --bind='ctrl-k:up,ctrl-j:down' --color 'header:#89ddff')
+    [[ -n $dir ]] || return 0
+  fi
+  path=$(ensure_session "$dir") || return 1
+  switch_session "$path" "$(basename "$path" .kitty-session)"
+}
+
+switch_session() {
+  local path=$1 name=$2 prev='' info tab win sess
+  # When the picker was opened from an empty shell in $HOME (the terminal
+  # left by tk / a no-next cycle-close), close that tab after switching so we
+  # do not end up with a stray HOME tab next to the session.
+  if [[ ${KITTY_SESSION_PICKER:-0} == 1 ]]; then
+    info=$(previous_window)
+    if [[ -n $info ]]; then
+      IFS=$'\t' read -r tab win sess <<<"$info"
+      if [[ -n $win && -z $sess && $(window_cwd "$win") == "$HOME" ]]; then
+        prev=$win
+      fi
+    fi
+  fi
+  kitten @ action goto_session "$path" || fatal "could not switch to session '$name'"
+  [[ -n $prev ]] && kitten @ close-window --match "id:$prev" >/dev/null 2>&1
+}
+
+close_session() {
+  kitten @ action close_session "$1" >/dev/null 2>&1
+}
+
+kill_session() {
+  close_session "$1"
+  [[ -f $2 ]] && rm -f -- "$2"
+}
+
+abs_path() { (cd "$(dirname "$1")" && printf '%s/%s\n' "$(pwd)" "$(basename "$1")"); }
+
+usage() {
+  sed -n '2,20p' "$SELF" | sed 's/^# \{0,1\}//'
+}
+
+main() {
+  local listing out key sel name path
+  listing=$(list_sessions)
+
+  # Nothing defined yet: go straight to the project picker.
+  if [[ -z $listing ]]; then
+    new_session
+    return
+  fi
+
+  out=$(printf '%s\n' "$listing" | fzf \
+    --ansi --delimiter='\t' --with-nth=1 \
+    --height=100% \
+    --expect=ctrl-n \
+    --header 'Jump to session:' \
+    --color 'header:#89ddff' \
+    --preview "$SELF_Q --preview {2} {1}" \
+    --preview-window "right,$PREVIEW_WIDTH" \
+    --bind "ctrl-v:execute-silent($SELF_Q --vsplit {1} {2})+abort" \
+    --bind "ctrl-d:execute-silent($SELF_Q --close {1})+reload($SELF_Q --list)" \
+    --bind "ctrl-x:execute-silent($SELF_Q --kill {1} {2})+reload($SELF_Q --list)") || return 0
+
+  key=$(printf '%s\n' "$out" | sed -n '1p')
+  sel=$(printf '%s\n' "$out" | sed -n '2p')
+
+  if [[ $key == ctrl-n ]]; then
+    new_session
+    return
+  fi
+  [[ -n $sel ]] || return 0
+
+  name=$(printf '%s' "$sel" | cut -f1)
+  path=$(printf '%s' "$sel" | cut -f2)
+  switch_session "$path" "$name"
+}
+
+case ${1:-} in
+  --list) list_sessions ;;
+  --preview) preview_session "${2:-}" "${3:-}" ;;
+  --close) close_session "${2:?missing session name}" ;;
+  --kill) kill_session "${2:?missing session name}" "${3:-}" ;;
+  --vsplit) vsplit_session "${2:?missing session name}" "${3:-}" ;;
+  --cycle-close) cycle_close ;;
+  --new) shift; new_session "${1:-}" ;;
+  -h | --help) usage ;;
+  '')
+    main
+    ;;
+  *)
+    if [[ -d $1 ]]; then
+      new_session "$1"
+    elif [[ -f $1 ]]; then
+      switch_session "$(abs_path "$1")" "$(basename "${1%.kitty-session}")"
+    else
+      fatal "not a session file or directory: $1"
+    fi
+    ;;
+esac

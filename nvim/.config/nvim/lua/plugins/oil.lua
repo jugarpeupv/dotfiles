@@ -212,6 +212,27 @@ return {
 				})
 				vim.api.nvim_buf_add_highlight(_oil_hint_buf, -1, "Title", 0, 0, -1)
 			end
+			local function _oil_async_cmdline()
+				local oil = require("oil")
+				local dir = oil.get_current_dir()
+				if not dir then
+					return
+				end
+				local entry = oil.get_cursor_entry()
+				local path
+				if entry then
+					path = dir .. entry.name
+				else
+					path = dir
+				end
+				path = vim.fn.fnamemodify(path, ":p"):gsub("/$", "")
+				-- reuse fyler's async cmdline globals so the existing
+				-- c:<CR> handler in fyler.lua executes the command
+				vim.g._fyler_async_path = path
+				vim.g._fyler_async_cmdline_active = true
+				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":", true, false, true), "n", true)
+				_show_oil_hint(path)
+			end
 			vim.api.nvim_create_autocmd("CmdlineLeave", {
 				pattern = ":",
 				callback = function()
@@ -784,27 +805,12 @@ return {
 					--   mode = "n"
 					-- },
 					["<M-y>"] = {
-						callback = function()
-							local oil = require("oil")
-							local dir = oil.get_current_dir()
-							if not dir then
-								return
-							end
-							local entry = oil.get_cursor_entry()
-							local path
-							if entry then
-								path = dir .. entry.name
-							else
-								path = dir
-							end
-							path = vim.fn.fnamemodify(path, ":p"):gsub("/$", "")
-							-- reuse fyler's async cmdline globals so the existing
-							-- c:<CR> handler in fyler.lua executes the command
-							vim.g._fyler_async_path = path
-							vim.g._fyler_async_cmdline_active = true
-							vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":", true, false, true), "n", true)
-							_show_oil_hint(path)
-						end,
+						callback = _oil_async_cmdline,
+						mode = "n",
+						desc = "Async command on oil entry",
+					},
+					["<D-y>"] = {
+						callback = _oil_async_cmdline,
 						mode = "n",
 						desc = "Async command on oil entry",
 					},

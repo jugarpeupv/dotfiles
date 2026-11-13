@@ -151,7 +151,7 @@ return {
 				end,
 			},
 			{
-				mode = { "n", "v" },
+				mode = { "n", "v", "t" },
 				"<D-m>",
 				function()
 					require("opencode.api").toggle()
@@ -491,7 +491,17 @@ return {
 							mode = { "n" },
 							desc = "Toggle input window",
 						},
+						["<D-i>"] = {
+							"toggle_input",
+							mode = { "n" },
+							desc = "Toggle input window",
+						},
 						["<M-r>"] = {
+							"cycle_variant",
+							mode = { "n" },
+							desc = "Cycle model variants",
+						},
+						["<D-r>"] = {
 							"cycle_variant",
 							mode = { "n" },
 							desc = "Cycle model variants",
@@ -693,6 +703,11 @@ return {
 							mode = { "i", "n" },
 							desc = "Paste image from clipboard",
 						},
+						["<D-v>"] = {
+							"paste_image",
+							mode = { "i", "n" },
+							desc = "Paste image from clipboard",
+						},
 						["<leader>ov"] = {
 							"paste_image",
 							mode = { "n" },
@@ -729,12 +744,27 @@ return {
 							mode = { "n", "i" },
 							desc = "Toggle",
 						},
+						["<D-m>"] = {
+							"toggle",
+							mode = { "n", "i" },
+							desc = "Toggle",
+						},
 						["<M-r>"] = {
 							"cycle_variant",
 							mode = { "n", "i" },
 							desc = "Cycle model variants",
 						},
+						["<D-r>"] = {
+							"cycle_variant",
+							mode = { "n", "i" },
+							desc = "Cycle model variants",
+						},
 						["<M-i>"] = {
+							"toggle_input",
+							mode = { "n", "i" },
+							desc = "Toggle input window",
+						},
+						["<D-i>"] = {
 							"toggle_input",
 							mode = { "n", "i" },
 							desc = "Toggle input window",

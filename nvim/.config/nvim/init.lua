@@ -120,3 +120,14 @@ vim.api.nvim_create_autocmd("User", {
 		require("jg.core.autocommands")
 	end,
 })
+
+
+-- Do not send information to the kitty progress_bar 
+vim.api.nvim_create_autocmd("VimEnter", {
+  once = true,
+  callback = function()
+    pcall(vim.api.nvim_clear_autocmds, { group = "nvim.progress" })
+  end,
+})
+
+

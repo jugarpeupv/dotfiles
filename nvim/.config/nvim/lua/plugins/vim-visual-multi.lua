@@ -43,7 +43,21 @@ return {
 			},
 			{
 				mode = { "n", "x" },
+				"<D-e>",
+				function()
+					require("multicursor-nvim").matchAddCursor(1)
+				end,
+			},
+			{
+				mode = { "n", "x" },
 				"<M-r>",
+				function()
+					require("multicursor-nvim").matchSkipCursor(1)
+				end,
+			},
+			{
+				mode = { "n", "x" },
+				"<D-r>",
 				function()
 					require("multicursor-nvim").matchSkipCursor(1)
 				end,
@@ -72,6 +86,13 @@ return {
 			{
 				mode = { "n", "x" },
 				"<M-d>",
+				function()
+					require("multicursor-nvim").toggleCursor()
+				end,
+			},
+			{
+				mode = { "n", "x" },
+				"<D-d>",
 				function()
 					require("multicursor-nvim").toggleCursor()
 				end,

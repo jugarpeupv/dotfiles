@@ -61,6 +61,7 @@ keymap("n", "<leader>pu", "<cmd>pu<cr>", opts)
 
 -- Cmd modifiers cooresponds to cmd+shift+7
 vim.cmd([[map <M-g> gcc]])
+vim.cmd([[map <D-g> gcc]])
 
 vim.keymap.set({ "n" }, "<leader>gt", function()
 	local pickers = require("telescope.pickers")
@@ -467,6 +468,8 @@ keymap("n", "<leader>d", "<Nop>", opts)
 
 keymap("n", "<M-8>", "<cmd>cnext<cr>", opts)
 keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
+keymap("n", "<D-8>", "<cmd>cnext<cr>", opts)
+keymap("n", "<D-6>", "<cmd>cprev<cr>", opts)
 
 -- Utilities
 keymap("n", "<BS>", "<C-^>", opts)
@@ -1234,7 +1237,7 @@ vim.api.nvim_create_autocmd("CmdwinEnter", {
 	end,
 })
 
-vim.keymap.set({ "n" }, "<M-b>", function()
+local function open_compile_cmdline()
 	_compile_pending_for_cmdwin.text, _compile_pending_for_cmdwin.time = nil, 0
 	_compile_cmdwin_busy = false
 	vim.g._cmdwin_executed = false
@@ -1245,7 +1248,10 @@ vim.keymap.set({ "n" }, "<M-b>", function()
 	local cmd_to_feed = ":" .. (vim.g._saved_compile_args or "")
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(cmd_to_feed, true, false, true), "n", true)
 	_show_compile_hint()
-end, opts)
+end
+
+vim.keymap.set({ "n" }, "<M-b>", open_compile_cmdline, opts)
+vim.keymap.set({ "n" }, "<D-b>", open_compile_cmdline, opts)
 
 -- Reset the saved compile command
 vim.keymap.set({ "n" }, "<leader>cb", function()
@@ -1258,6 +1264,8 @@ vim.api.nvim_set_keymap("i", "<C-e>", "<C-o>$", { noremap = true, silent = true 
 vim.api.nvim_set_keymap("i", "<C-a>", "<C-o>^", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<M-f>", "<C-Right>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "<M-b>", "<C-Left>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("i", "<D-f>", "<C-Right>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("i", "<D-b>", "<C-Left>", { noremap = true, silent = true })
 -- vim.cmd([[cnoremap <C-a> <C-b>]])
 -- vim.cmd([[cnoremap <M-f> <C-Right>]])
 -- vim.cmd([[cnoremap <M-b> <C-Left>]])
