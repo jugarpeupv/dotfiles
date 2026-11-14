@@ -2,8 +2,6 @@
 tap "anomalyco/tap", trusted: true
 # gitmux
 tap "arl/arl", trusted: true
-# yabai
-tap "asmvik/formulae", "https://github.com/asmvik/homebrew-formulae.git", trusted: true
 # isync with XOAUTH2 SASL plugin
 tap "benswift/tap", trusted: true
 # engram, gga, gentle-ai
@@ -343,8 +341,6 @@ brew "zsh-completions"
 brew "zsh-syntax-highlighting"
 # Better and friendly vi(vim) mode plugin for ZSH
 brew "zsh-vi-mode"
-# Simple hotkey-daemon for macOS.
-brew "asmvik/formulae/skhd", trusted: true
 # pass manager
 brew "pass"
 # Persistent memory for AI coding agents. Agent-agnostic, single binary, zero dependencies.

@@ -404,8 +404,8 @@ return {
 				-- },
 				["d.ts"] = {
 					-- icon = "",
-					-- icon = "󰛦",
-					icon = "텗",
+					icon = "󰛦",
+					-- icon = "텗",
 					-- color = "#F38BA8",
 					-- color = "#CBA6F7",
 					color = "#89B4FA",
@@ -413,7 +413,8 @@ return {
 					name = "TypeScriptDeclaration",
 				},
 				["ts.map"] = {
-					icon = "텗",
+					-- icon = "텗",
+          icon = "󰛦",
 					color = "#89B4FA",
 					-- cterm_color = "172",
 					name = "typescriptmap",

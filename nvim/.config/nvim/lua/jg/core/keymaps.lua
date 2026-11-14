@@ -621,9 +621,6 @@ end, opts)
 -- )
 
 keymap("n", "<leader>sl", "<cmd>BLines<cr>", opts)
-keymap("n", "<leader>pp", function()
-	require("telescope.builtin").projects()
-end, opts)
 
 -- Telescope
 -- keymap("n", "<leader>gs", function() require('telescope.builtin').git_stash() end, opts)
@@ -682,19 +679,6 @@ end, opts)
 
 keymap("n", "<leader>gB", "<cmd>Git branch -vv<cr>", opts)
 
--- vim.keymap.set({ "n" }, "<leader>gB", function()
---   local handle = io.popen("git rev-parse --abbrev-ref HEAD")
---   if not handle then
---     local cmd = "!git branch -vv"
---     vim.cmd(cmd)
---     return
---   end
---   local current_branch = handle:read("*a"):gsub("%s+", "")
---   handle:close()
---   -- Run the Git branch -vv command and filter the output
---   local cmd = "!git branch -vv | grep ' " .. current_branch .. " '"
---   vim.cmd(cmd)
--- end, opts)
 
 -- Sniprun
 keymap("n", "<leader>sR", "<cmd>%SnipRun<cr>", opts)

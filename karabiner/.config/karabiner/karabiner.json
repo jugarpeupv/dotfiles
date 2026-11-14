@@ -303,6 +303,206 @@
                 "type": "basic"
               }
             ]
+          },
+          {
+            "description": "shift+option+p › focus Chrome (open -a)",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "p",
+                  "modifiers": {
+                    "mandatory": [
+                      "shift",
+                      "option"
+                    ],
+                    "optional": [
+                      "caps_lock"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/usr/bin/open -a 'Google Chrome'"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "shift+option+n › focus kitty (open -a)",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "n",
+                  "modifiers": {
+                    "mandatory": [
+                      "shift",
+                      "option"
+                    ],
+                    "optional": [
+                      "caps_lock"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/usr/bin/open -a 'Kitty'"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "shift+option+i › focus Spotify",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "i",
+                  "modifiers": {
+                    "mandatory": [
+                      "shift",
+                      "option"
+                    ],
+                    "optional": [
+                      "caps_lock"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/usr/bin/open -a 'Spotify'"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "shift+option+o › focus Bruno app",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": {
+                    "mandatory": [
+                      "shift",
+                      "option"
+                    ],
+                    "optional": [
+                      "caps_lock"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/usr/bin/open -a 'Bruno'"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "shift+option+0 › focus Ms Teams app",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "0",
+                  "modifiers": {
+                    "mandatory": [
+                      "shift",
+                      "option"
+                    ],
+                    "optional": [
+                      "caps_lock"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/usr/bin/open -a 'Microsoft Teams'"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "shift+option+u › focus Sioyek app",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "u",
+                  "modifiers": {
+                    "mandatory": [
+                      "shift",
+                      "option"
+                    ],
+                    "optional": [
+                      "caps_lock"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/usr/bin/open -a 'Sioyek'"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "shift+option+e › focus Finder app",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "e",
+                  "modifiers": {
+                    "mandatory": [
+                      "shift",
+                      "option"
+                    ],
+                    "optional": [
+                      "caps_lock"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/usr/bin/open -a 'Finder'"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "shift+option+y › focus OBS app",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "y",
+                  "modifiers": {
+                    "mandatory": [
+                      "shift",
+                      "option"
+                    ],
+                    "optional": [
+                      "caps_lock"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/usr/bin/open -a 'OBS'"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
