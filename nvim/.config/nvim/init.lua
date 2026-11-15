@@ -1,4 +1,4 @@
-
+vim.g.loaded_nvim_dir_plugin = 1
 vim.loader.enable()
 
 vim.g.mapleader = " "

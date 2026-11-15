@@ -13,7 +13,7 @@ function M.opencode_snapshot_picker()
     return
   end
 
-  local session = require("opencode.session")
+  local session = require("opencode.ui.renderer.session")
   local seen = {}
   local items = {}
 

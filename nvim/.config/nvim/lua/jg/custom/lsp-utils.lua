@@ -30,8 +30,8 @@ M.attach_lsp_config = function(client, bufnr)
 		-- 		vim.cmd("normal! zz")
 		-- 	end
 		-- end)
-    if require('i18n').i18n_definition() then return end
-    if require('i18n').i18n_definition_next_locale() then return end
+    -- if require('i18n').i18n_definition() then return end
+    -- if require('i18n').i18n_definition_next_locale() then return end
 		Snacks.picker.lsp_definitions()
     -- vim.lsp.buf.definition()
 	end, opts)
@@ -195,7 +195,7 @@ M.attach_lsp_config = function(client, bufnr)
 	-- end, opts)
 
 	-- Ctrl+shift+space
-	keymap.set({ "i" }, "<M-lt>", function()
+	keymap.set({ "i" }, "<C-S-Space>", function()
 		vim.lsp.buf.signature_help()
 	end, opts)
 	keymap.set({ "i" }, "<D-lt>", function()

@@ -60,8 +60,7 @@ keymap("n", "dd", '"9dd', opts)
 keymap("n", "<leader>pu", "<cmd>pu<cr>", opts)
 
 -- Cmd modifiers cooresponds to cmd+shift+7
-vim.cmd([[map <M-g> gcc]])
-vim.cmd([[map <D-g> gcc]])
+vim.cmd([[map <S-D-7> gcc]])
 
 vim.keymap.set({ "n" }, "<leader>gt", function()
 	local pickers = require("telescope.pickers")
@@ -202,6 +201,12 @@ vim.keymap.set("n", "<leader>sN", function()
 	local jg_telescope = require("jg.custom.telescope")
 	jg_telescope.nvimtree_fzf_dir(vim.fn.expand("~"))
 end, opts)
+
+-- Ctrl+Shift+U: pick a directory from curated roots, cd into it and open Fyler
+-- (bare repos resolve to their last active worktree).
+vim.keymap.set("n", "<C-S-U>", function()
+	require("jg.custom.telescope").pick_dir_and_cd()
+end, { noremap = true, silent = true, desc = "cd into directory from curated roots" })
 
 vim.keymap.set({ "n" }, "<leader>sH", function()
 	local find_command = {
@@ -466,10 +471,9 @@ keymap("n", "<leader>d", "<Nop>", opts)
 -- vim.keymap.set({ "n" }, "<M-o>", "<cmd>bp<cr>", opts)
 -- vim.keymap.set({ "n" }, "<M-i>", "<cmd>bn<cr>", opts)
 
-keymap("n", "<M-8>", "<cmd>cnext<cr>", opts)
-keymap("n", "<M-6>", "<cmd>cprev<cr>", opts)
-keymap("n", "<D-8>", "<cmd>cnext<cr>", opts)
-keymap("n", "<D-6>", "<cmd>cprev<cr>", opts)
+-- S-NL is C-S-J. C-J is NL
+keymap("n", "<S-NL>", "<cmd>cnext<cr>", opts)
+keymap("n", "<C-S-K>", "<cmd>cprev<cr>", opts)
 
 -- Utilities
 keymap("n", "<BS>", "<C-^>", opts)

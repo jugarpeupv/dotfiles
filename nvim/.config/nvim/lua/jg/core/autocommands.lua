@@ -27,7 +27,9 @@ if vim.fn.has("nvim-0.11") == 1 then
 		desc = "Hightlight selection on yank",
 		pattern = "*",
 		callback = function()
-			vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
+			-- vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
+      vim.hl.hl_op({ higroup = "Visual", timeout = 200 })
+      -- require("vim.highlight").on_yank({ higroup = "Visual", timeout = 200 })
 			-- vim.hl.on_yank({ higroup = "IncSearch", timeout = 200 })
 		end,
 	})

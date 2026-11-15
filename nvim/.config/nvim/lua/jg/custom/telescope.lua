@@ -2328,4 +2328,196 @@ M.find_in_node_modules = function()
 		:find()
 end
 
+-- Pick a directory among the immediate children of a curated set of roots
+-- (mirrors: find ~/work ~/work/tmp ... -mindepth 1 -maxdepth 1 -type d)
+-- then cd into it and open Fyler there. When the selection is a bare repo,
+-- both happen in its last active worktree instead (recorded by
+-- git-worktree.nvim), falling back to the most recently modified entry from
+-- `git worktree list`.
+M.pick_dir_and_cd = function()
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local conf = require("telescope.config").values
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+
+	local roots = {
+		"~/work",
+		"~/work/tmp",
+		"~/projects",
+		"~/dotfiles",
+		"~/.local/share/nvim/lazy",
+		"~/Downloads",
+		"~",
+	}
+
+	-- Expand, keep only existing dirs and drop duplicates (e.g. ~/work/tmp
+	-- is also a child of ~/work, and ~ is the parent of most of the others).
+	local seen, search_dirs = {}, {}
+	for _, root in ipairs(roots) do
+		local abs = vim.fs.normalize(vim.fn.expand(root))
+		if not seen[abs] and vim.fn.isdirectory(abs) == 1 then
+			seen[abs] = true
+			table.insert(search_dirs, abs)
+		end
+	end
+
+	if #search_dirs == 0 then
+		vim.notify("pick_dir_and_cd: none of the search roots exist", vim.log.levels.WARN)
+		return
+	end
+
+	local function with_tilde(p)
+		local home = os.getenv("HOME") or ""
+		if home == "" then
+			return p
+		end
+		-- assign first: gsub returns 2 values and callers may see both
+		return (p:gsub("^" .. vim.pesc(home), "~"))
+	end
+
+	-- find <roots...> -mindepth 1 -maxdepth 1 -type d
+	local find_command = { "find" }
+	vim.list_extend(find_command, search_dirs)
+	vim.list_extend(find_command, { "-mindepth", "1", "-maxdepth", "1", "-type", "d" })
+
+	local function is_bare(path)
+		local ok, wt_utils = pcall(require, "jg.custom.worktree-utils")
+		if not ok then
+			return false
+		end
+		local ok_bare, bare = pcall(wt_utils.is_bare, path)
+		return ok_bare and bare or false
+	end
+
+	local function last_active_worktree(bare_path)
+		-- git-worktree.nvim stores it in ~/.local/share/nvim/jg_worktrees/
+		-- keyed by the repo root (with a trailing slash).
+		local ok_utils, file_utils = pcall(require, "jg.custom.file-utils")
+		if ok_utils then
+			local key = vim.fn.fnamemodify(bare_path, ":p")
+			local bps_path = file_utils.get_bps_path(key)
+			local ok_load, data = pcall(file_utils.load_bps, bps_path)
+			if
+				ok_load
+				and data
+				and data.last_active_wt
+				and vim.fn.isdirectory(data.last_active_wt) == 1
+			then
+				return data.last_active_wt
+			end
+		end
+
+		-- Fallback: newest working tree reported by git itself.
+		local ok_git, result = pcall(function()
+			return vim.system({ "git", "-C", bare_path, "worktree", "list", "--porcelain" }):wait()
+		end)
+		if ok_git and result and result.stdout then
+			local newest, newest_mtime = nil, -1
+			for line in result.stdout:gmatch("[^\r\n]+") do
+				local wt = line:match("^worktree%s+(.+)$")
+				if wt and vim.fn.isdirectory(wt) == 1 then
+					local mtime = vim.fn.getftime(wt)
+					if mtime > newest_mtime then
+						newest_mtime = mtime
+						newest = wt
+					end
+				end
+			end
+			if newest then
+				return newest
+			end
+		end
+
+		return nil
+	end
+
+	local function resolve_target(path)
+		if not is_bare(path) then
+			return path
+		end
+		return last_active_worktree(path) or path
+	end
+
+	-- Windows hosting a given fyler slot, across all tab pages.
+	-- Buffer names look like fyler://<path>/__orig__/1 or .../__slot__/N.
+	local function fyler_windows(slot)
+		local wins = {}
+		for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+			for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
+				local buf = vim.api.nvim_win_get_buf(win)
+				if vim.api.nvim_buf_get_name(buf):match("/__" .. slot .. "__/%d+$") then
+					table.insert(wins, win)
+				end
+			end
+		end
+		return wins
+	end
+
+	pickers
+		.new({}, {
+			prompt_title = "cd into directory",
+			finder = finders.new_oneshot_job(find_command, {
+				entry_maker = function(entry)
+					local display_path = with_tilde(entry)
+					local icon, hl = "", "Directory"
+					local ok_devicons, devicons = pcall(require, "nvim-web-devicons")
+					if ok_devicons then
+						local name = entry:match("([^/]+)/?$") or entry
+						local _icon, _hl = devicons.get_icon(name, nil, { default = false })
+						if _icon and _icon ~= "" then
+							icon, hl = _icon, _hl
+						end
+					end
+					return {
+						value = entry,
+						display = function()
+							return icon .. "  " .. display_path, { { { 0, vim.fn.strchars(icon) + 2 }, hl } }
+						end,
+						ordinal = display_path .. " " .. entry,
+					}
+				end,
+			}),
+			sorter = conf.generic_sorter({}),
+			attach_mappings = function(prompt_bufnr)
+				actions.select_default:replace(function()
+					local selection = action_state.get_selected_entry()
+					actions.close(prompt_bufnr)
+					if not selection then
+						return
+					end
+					local target = resolve_target(selection.value)
+					vim.api.nvim_set_current_dir(target)
+					vim.notify("cd " .. with_tilde(target), vim.log.levels.INFO)
+
+					-- Re-root the MAIN fyler instance (__orig__/1) on the new cwd
+					-- instead of calling fyler.open({ dir = ... }), which allocates
+					-- a secondary __slot__/N instance when the main one is already
+					-- open.
+					local ok_fyler, fyler = pcall(require, "fyler")
+					if ok_fyler then
+						-- Drop stale secondary instances opened by earlier
+						-- selections, so we keep a single fyler around.
+						for _, win in ipairs(fyler_windows("slot")) do
+							pcall(vim.api.nvim_win_close, win, true)
+						end
+
+						-- Changes the main instance's root + refreshes it if open.
+						pcall(fyler.set_current_dir, target)
+
+						local orig_wins = fyler_windows("orig")
+						if orig_wins[1] then
+							vim.api.nvim_set_current_win(orig_wins[1])
+						else
+							-- Main instance is closed/never opened: open it now.
+							pcall(fyler.open)
+						end
+					end
+				end)
+				return true
+			end,
+		})
+		:find()
+end
+
 return M

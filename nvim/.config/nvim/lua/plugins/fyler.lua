@@ -1,7 +1,7 @@
 return {
 	{
 		"jugarpeupv/fyler.nvim",
-		-- dir = "~/projects/fyler.nvim/wt-fyler-main/",
+		dir = "~/projects/fyler.nvim/wt-fyler-main/",
 		lazy = false,
 		cmd = { "Fyler" },
 		dependencies = {
@@ -144,8 +144,17 @@ return {
 							["gX"] = "VisualCutEntries",
 							["gY"] = {
 								n = function(view)
-									local entry = view:cursor_node_entry()
-									local path = entry.path
+									local path
+									if vim.api.nvim_win_get_cursor(0)[1] == 1 then
+										-- Line 1 is fyler's editable path header, not an
+										-- entry: copy the directory this instance shows.
+										-- path = view:getcwd()
+                    path = vim.fn.expand('%:p')
+									else
+										local entry = view:cursor_node_entry()
+										if not entry then return end
+										path = entry.path
+									end
 									vim.notify("Copied path: " .. path)
 									vim.fn.setreg("+", path)
 								end,

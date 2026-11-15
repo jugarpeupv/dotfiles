@@ -8,8 +8,8 @@
 #   kitty-session-switcher <file>          # switch to the session defined by <file>
 #   kitty-session-switcher --cycle-close   # kill the current session, go to the next
 #
-# New sessions run "nvim ." directly via zsh (non-interactive, so the profile
-# is not loaded) and drop to an interactive shell when nvim exits.
+# New sessions open a normal interactive shell in the selected directory (kitty's
+# default shell), so zsh loads the full profile: environment, aliases, prompt.
 #
 # fzf keys:
 #   enter    switch to the session (creates it if it is not running)
@@ -30,6 +30,20 @@
 # a socket to talk to kitty. Without it kitten @ falls back to the controlling
 # tty, which fzf is using, so get-text hangs and the preview stays empty.
 # It goes in kitty.conf and needs a kitty restart (it cannot be reloaded).
+#
+# New sessions run `nvim .` at shell startup through kitty's own shell
+# integration:
+#
+#   launch --title "name" --env KITTY_SI_RUN_COMMAND_AT_STARTUP='nvim .'
+#
+# The window starts the default shell (zsh) exactly as usual, so .zprofile and
+# .zshrc load and nvim inherits the full profile environment (PATH, exports,
+# aliases). The integration evals the command once, from the first prompt, so
+# there is no text typed into the terminal and no race with the prompt, and when
+# nvim exits you are back at the same integrated shell prompt (tmux-like). It is
+# part of the session file, so it also happens when kitty restores the session
+# itself (after Cmd+Q, with `kitty --session ...`). `save_as_session` (f5) keeps
+# the --env line.
 #
 # Preview: live screen with colors. KITTY_SESSION_PREVIEW_ANSI=0 disables
 # colors, KITTY_SESSION_PREVIEW_WIDTH=60% changes the width.
@@ -303,7 +317,13 @@ ensure_session() {
   path="$SESSION_DIR/$name.kitty-session"
   mkdir -p "$SESSION_DIR" || fatal "cannot create $SESSION_DIR"
   if [[ ! -f $path ]]; then
-    printf 'layout tall\ncd %s\nlaunch --title "%s" zsh -c "nvim .; exec zsh"\n' "$dir" "$name" >"$path" ||
+    # The window launches the default shell with kitty's normal integration, and
+    # the integration runs this command once at the first prompt. That keeps
+    # .zprofile/.zshrc loading (nvim inherits the profile environment) and,
+    # unlike typing the command, can never land while the prompt is being drawn.
+    # After :q you are back at the shell prompt.
+    printf 'layout tall\ncd %s\nlaunch --title "%s" --env KITTY_SI_RUN_COMMAND_AT_STARTUP=%s\n' \
+      "$dir" "$name" "'nvim .'" >"$path" ||
       fatal "cannot write $path"
   fi
   printf '%s\n' "$path"

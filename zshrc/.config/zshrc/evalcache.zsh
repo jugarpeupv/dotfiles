@@ -22,6 +22,8 @@ function _evalcache_lazy_precmd() {
   # _evalcache pyenv init --path
 
   # eval "$(mise activate zsh)"
+  typeset -U path
+  export PATH
 }
 precmd_functions+=(_evalcache_lazy_precmd)
 

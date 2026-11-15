@@ -29,6 +29,14 @@ defaults write com.apple.finder AppleShowAllFiles -bool true
 # Scroll direction: disable natural scrolling
 defaults write -g com.apple.swipescrolldirection -bool false
 
+
+# Move from one display to another (review the name of the displays)
+# Ctrl+Option+Shift+h Ctrl+Option+Shift+l --> Move to display
+# Ctrl+Option+Shift+j Ctrl+Option+Shift+k
+# Option+Shift+Space --> Center
+# Ctrl+Shift+Option+Delete key (U0008) --> Restore previous size
+# defaults write -g NSUserKeyEquivalents '{ "\033Window\033Move to LEN L28u-30 (1)" = "~^$k"; "\033Window\033Move to LEN L28u-30 (2)" = "~^$j"; "\033Window\033Center" = "~^$ "; "\033Window\033Move & Resize\033Right" = "~^$l"; "\033Window\033Move & Resize\033Left" = "~^$h"; "\033Window\033Move & Resize\033Return to Previous Size" = "~^$\U0008"; }'
+
 # Apply shortcut changes without restarting
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Versions/A/Resources/activateSettings -u 2>/dev/null || \
   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u 2>/dev/null || true

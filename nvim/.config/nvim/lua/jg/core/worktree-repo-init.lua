@@ -154,37 +154,36 @@ end
 -- end
 
 if should_restore_worktree() then
-	restore_last_worktree()
--- vim.api.nvim_create_autocmd("User", {
--- 	pattern = "VeryLazy",
--- 	once = true,
--- 	callback = restore_last_worktree,
--- })
+  restore_last_worktree()
+  pcall(function() require("persistence").load() end)
 else
-	vim.schedule(function()
-		local path = vim.v.argv[3]
-		if not path then
-			return
-		end
+  vim.schedule(function()
+    local path = vim.v.argv[3]
+    if not path then
+      return
+    end
 
-		if vim.fn.isdirectory(path) == 1 then
-			local has_fyler, fyler = pcall(require, "fyler")
-			if has_fyler then
-				pcall(fyler.open, { dir = path, kind = "replace" })
-			end
-			local cwd_val = vim.loop.cwd()
-			if cwd_val then
-				local cwd_buffer_nr = find_buffer_by_path(cwd_val:gsub("/$", ""))
-				if cwd_buffer_nr then
-					local win = vim.fn.bufwinid(cwd_buffer_nr)
-					if win ~= -1 then
-						pcall(vim.api.nvim_win_close, win, true)
-					end
-					pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
-				end
-			end
-		else
-			return
-		end
-	end)
+    if vim.fn.isdirectory(path) == 1 then
+      local has_fyler, fyler = pcall(require, "fyler")
+      if has_fyler then
+        pcall(fyler.open, { dir = path, kind = "replace" })
+      end
+      local cwd_val = vim.loop.cwd()
+      if cwd_val then
+        local cwd_buffer_nr = find_buffer_by_path(cwd_val:gsub("/$", ""))
+        if cwd_buffer_nr then
+          local win = vim.fn.bufwinid(cwd_buffer_nr)
+          if win ~= -1 then
+            pcall(vim.api.nvim_win_close, win, true)
+          end
+          pcall(vim.api.nvim_buf_delete, cwd_buffer_nr, { force = true })
+        end
+      end
+      -- pcall(require, "persistence", "load")
+      pcall(function() require("persistence").load() end)
+    else
+      return
+    end
+  end)
 end
+

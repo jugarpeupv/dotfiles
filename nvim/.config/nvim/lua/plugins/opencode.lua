@@ -3,7 +3,7 @@ return {
 		-- "sudo-tee/opencode.nvim",
 		-- enabled = true,
 		"jugarpeupv/opencode.nvim",
-		-- dir = "~/projects/opencode.nvim/wt-main/",
+		dir = "~/projects/opencode.nvim/wt-main/",
 		-- lazy = true,
 		keys = {
 			-- {

@@ -181,11 +181,11 @@ return {
 					lualine_x = {
             git_tag,
             git_status,
-            function()
-              return require("direnv").statusline()
-            end,
-            dirname,
-						"encoding",
+            -- function()
+            --   return require("direnv").statusline()
+            -- end,
+            -- dirname,
+						-- "encoding",
 						"filetype",
 					},
 					lualine_y = { "progress" },
