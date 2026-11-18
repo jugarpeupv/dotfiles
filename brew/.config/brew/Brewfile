@@ -7,6 +7,11 @@ tap "benswift/tap", trusted: true
 # engram, gga, gentle-ai
 tap "gentleman-programming/tap", "https://github.com/Gentleman-Programming/homebrew-tap", trusted: true
 
+
+# psql
+brew "libpq"
+# Smtp swiss army knife
+brew "swaks"
 # Bruno cli
 brew "bruno-cli"
 # Build server protocol implementation for integrating Xcode with sourcekit-lsp
@@ -359,6 +364,8 @@ cask "android-studio"
 cask "autofirma"
 # UI for creating Windows installer ISO from UUPDump
 cask "crystalfetch"
+# DevPod app + CLI (provides the `devpod` binary used by remote-nvim.nvim)
+cask "devpod"
 # App to build and share containerised applications and microservices
 cask "docker-desktop"
 # Online diagram software
@@ -385,8 +392,6 @@ cask "microsoft-teams"
 cask "obs"
 # Collaboration platform for API development
 cask "postman"
-# Move and resize windows using keyboard shortcuts or snap areas
-cask "rectangle"
 # Plugin for AWS CLI to start and end sessions that connect to managed instances
 cask "session-manager-plugin"
 # Music streaming service

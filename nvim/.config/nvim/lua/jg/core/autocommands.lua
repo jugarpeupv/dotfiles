@@ -21,16 +21,13 @@ local augroups = {
 	filetypedetect = vim.api.nvim_create_augroup("cc_filetypedetect", { clear = true }),
 }
 
-if vim.fn.has("nvim-0.11") == 1 then
+if vim.fn.has("nvim-0.13") == 1 then
 	vim.api.nvim_create_autocmd("TextYankPost", {
 		group = augroups.highlight,
 		desc = "Hightlight selection on yank",
 		pattern = "*",
 		callback = function()
-			-- vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
       vim.hl.hl_op({ higroup = "Visual", timeout = 200 })
-      -- require("vim.highlight").on_yank({ higroup = "Visual", timeout = 200 })
-			-- vim.hl.on_yank({ higroup = "IncSearch", timeout = 200 })
 		end,
 	})
 else
@@ -39,9 +36,7 @@ else
 		desc = "Highlight selection on yank",
 		pattern = "*",
 		callback = function()
-			if vim.fn.has("nvim-0.11") == 0 then
-				require("vim.highlight").on_yank({ higroup = "Visual", timeout = 200 })
-			end
+      vim.hl.on_yank({ higroup = "Visual", timeout = 200 })
 		end,
 	})
 end
@@ -419,6 +414,101 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
+-- In `:G log` / `:Git log` pager buffers: `dv` on a commit prefills the
+-- command line with `DiffviewOpen <full-hash>^!` (without pressing Enter).
+-- The token is resolved to a commit instead of being trusted from the line:
+-- custom `git log --format` can start with graph chars, `<`/`>` (--left-right)
+-- or a date.
+vim.api.nvim_create_autocmd("User", {
+	pattern = "FugitivePager",
+	group = augroups.git,
+	callback = function(args)
+		local cache = {}
+
+		-- Resolve to the full commit id (fails for non-commits/blobs).
+		local function resolve(token)
+			if not token or #token < 7 then return nil end
+			if cache[token] ~= nil then return cache[token] or nil end
+
+			local rev = token .. "^{commit}"
+			local full
+
+			-- Prefer fugitive's API. It may not be available if its autoload
+			-- script is not loaded yet; fall back to plain git.
+			local ok, res = pcall(vim.fn["fugitive#RevParse"], rev)
+			if ok and type(res) == "string" and res:match("^%x%x%x%x%x%x%x%x+$") then
+				full = res
+			else
+				local out = vim.fn.systemlist({ "git", "-C", vim.fn.getcwd(), "rev-parse", "--verify", "--quiet", rev })
+				if vim.v.shell_error == 0 and out[1] and out[1]:match("^%x%x%x%x%x%x%x%x+$") then
+					full = out[1]
+				end
+			end
+
+			cache[token] = full or false
+			return full
+		end
+
+		-- Commit for a line: `commit <hash>`, nearest one above, or any
+		-- commit-like token on the line.
+		local function commit_at(lines, lnum)
+			local hash = resolve((lines[lnum] or ""):match("^commit%s+(%x+)"))
+			if hash then return hash end
+
+			for i = lnum, 1, -1 do
+				local c = (lines[i] or ""):match("^commit%s+(%x+)")
+				if c then
+					hash = resolve(c)
+					if hash then return hash end
+				end
+			end
+
+			for token in (lines[lnum] or ""):gmatch("%x+") do
+				hash = resolve(token)
+				if hash then return hash end
+			end
+		end
+
+		vim.keymap.set("n", "dv", function()
+			local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+			local hash = commit_at(lines, vim.api.nvim_win_get_cursor(0)[1])
+			if not hash then
+				vim.notify("No commit hash under cursor", vim.log.levels.WARN)
+				return
+			end
+			vim.cmd("DiffviewOpen " .. hash .. "^!")
+		end, { buffer = args.buf, desc = "DiffviewOpen: commit under cursor" })
+
+		-- Visual selection: open the file history for the selected range.
+		vim.keymap.set("x", "dv", function()
+			local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+			local a, b = vim.fn.getpos("v")[2], vim.fn.getpos(".")[2]
+			local first, last = math.min(a, b), math.max(a, b)
+
+			local commits, seen = {}, {}
+			for i = first, last do
+				local h = commit_at(lines, i)
+				if h and not seen[h] then
+					seen[h] = true
+					commits[#commits + 1] = h
+				end
+			end
+
+			if #commits == 0 then
+				vim.notify("No commits in the selected range", vim.log.levels.WARN)
+				return
+			end
+
+			-- `git log` is newest-first: first selected line is the newest.
+			local newest, oldest = commits[1], commits[#commits]
+			-- Execute directly: doing `feedkeys(":...")` from visual mode makes
+			-- Vim prefix `'<,'>`, which turns this into a line-trace history
+			-- for the current (pager temp) file and yields 0 commits.
+			vim.cmd("DiffviewFileHistory --range=" .. oldest .. "^.." .. newest)
+		end, { buffer = args.buf, desc = "DiffviewFileHistory: range of selection" })
+	end,
+})
+
 vim.api.nvim_create_autocmd("BufEnter", {
 	pattern = "diffview://*",
 	group = augroups.diff,
@@ -602,5 +692,26 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   callback = function(args)
     vim.bo[args.buf].filetype = "json"
   end,
+})
+
+-- `---` / `+++` are file headers (metadata), not added/removed code: don't
+-- paint them with the diff add/delete palettes. The `@comment.diff` part is
+-- for the treesitter `diff` parser (diffs.nvim appends the language to the
+-- capture name); diffOldFile/diffNewFile are the Vim syntax groups used by
+-- fugitive/diff syntax.
+local function neutral_diff_file_headers()
+  vim.api.nvim_set_hl(0, "diffOldFile", { link = "Comment" })
+  vim.api.nvim_set_hl(0, "diffNewFile", { link = "Comment" })
+  -- The `diff` treesitter query maps old_file/new_file to these groups, and
+  -- they fall back to diffRemoved/diffAdded (with background). Neutralize the
+  -- language-suffixed groups themselves so the extmarks don't paint a bg.
+  vim.api.nvim_set_hl(0, "@diff.minus.diff", { link = "Comment" })
+  vim.api.nvim_set_hl(0, "@diff.plus.diff", { link = "Comment" })
+  vim.api.nvim_set_hl(0, "@comment.diff", { link = "Comment", default = true })
+end
+neutral_diff_file_headers()
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = augroups.highlight,
+  callback = neutral_diff_file_headers,
 })
 

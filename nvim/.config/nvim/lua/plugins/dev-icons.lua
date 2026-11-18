@@ -467,6 +467,8 @@ return {
 
 				["tmux.conf"] = { icon = "", color = "#9CDCFE", name = "tmuxconf1" },
 				[".sdkmanrc"] = { icon = "", color = "#7C7F93", name = "sdkman" },
+        ["compose.yaml"] = { icon = "󰡨", color = "#9CDCFE", name = "composeyaml" },
+        ["compose.yml"] = { icon = "󰡨", color = "#9CDCFE", name = "composeyml" },
 				["docker-compose.yml"] = { icon = "󰡨", color = "#9CDCFE", name = "DockerComposeYml" },
 				["docker-compose.yaml"] = { icon = "󰡨", color = "#9CDCFE", name = "DockerComposeYml2" },
 				[".dockerignore"] = { icon = "", color = "#7C7F93", name = "DockerfileIgnore" },
@@ -670,16 +672,6 @@ return {
 					color = "#73daca",
 					name = "nvmrcfile",
 				},
-        [".env.dev"] = {
-          icon = "",
-          color = "#F2CDCD",
-          name = "Env25",
-        },
-				[".env"] = {
-					icon = "",
-					color = "#F2CDCD",
-					name = "Env23",
-				},
 				["env"] = {
 					icon = "",
 					color = "#F2CDCD",
@@ -749,5 +741,40 @@ return {
 				},
 			},
 		},
+		config = function(_, opts)
+			local devicons = require("nvim-web-devicons")
+			devicons.setup(opts)
+
+			-- nvim-web-devicons has no glob support and its `prefix` matching ignores
+			-- dotfiles, so resolve every `.env*` file to the `env` icon by hand.
+			local env = opts.override_by_extension.env
+			if not env then
+				return
+			end
+
+			local function is_env(name)
+				if type(name) ~= "string" then
+					return false
+				end
+				name = name:lower()
+				return name == ".env" or name:find("^%.env[%.-]") ~= nil
+			end
+
+			local get_icon = devicons.get_icon
+			devicons.get_icon = function(name, ...)
+				if is_env(name) then
+					return env.icon, "DevIcon" .. env.name
+				end
+				return get_icon(name, ...)
+			end
+
+			local get_icon_colors = devicons.get_icon_colors
+			devicons.get_icon_colors = function(name, ...)
+				if is_env(name) then
+					return env.icon, env.color, env.cterm_color
+				end
+				return get_icon_colors(name, ...)
+			end
+		end,
 	},
 }

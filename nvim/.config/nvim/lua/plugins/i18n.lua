@@ -12,6 +12,13 @@ return {
 			{ "<leader>in", "<cmd>I18nNextLocale<cr>", desc = "I18n next locale" },
 			{ "<leader>iu", "<cmd>I18nKeyUsages<cr>", desc = "I18n key usages" },
 			{ "<leader>iA", "<cmd>I18nAddKey<cr>", desc = "I18n add key" },
+      {
+        "<leader>id",
+        function()
+          require("i18n").i18n_definition()
+        end,
+        desc = "I18n keys with telescope",
+      },
 			{
 				"<leader>ik",
 				function()

@@ -2,7 +2,7 @@ return {
 	{
 		"dlyongemallo/diffview-plus.nvim",
 		branch = "main",
-		cmd = { "DiffviewOpen", "DiffviewWorktreeOverview" },
+    cmd = { "DiffviewOpen", "DiffviewFileHistory", "DiffviewWorktreeOverview" },
 		enabled = true,
 		dependencies = {
 			"junegunn/fzf",
@@ -13,7 +13,9 @@ return {
 			{ "<leader>gd", mode = "n", "<cmd>DiffviewOpen<cr>" },
 			-- { "<leader>gd", mode = "n", "<cmd>DiffviewOpen -- :!package-lock.json<cr>" },
 			-- { "<leader>cc", mode = "n", "<cmd>DiffviewClose<cr>" },
-			{ "<leader>gv", mode = { "v" }, ":<C-u>'<,'>DiffviewFileHistory --follow<CR>" },
+			-- { "<leader>gv", mode = { "v" }, ":<C-u>'<,'>DiffviewFileHistory --follow<CR>" },
+      -- Visual mode: history for selection
+      { '<leader>gv', mode = {"v"}, "<Esc><cmd>'<,'>DiffviewFileHistory --follow<CR>", { desc = 'Range history' } },
 			{ "<leader>gv", mode = { "n" }, "<cmd>DiffviewFileHistory %<cr>" },
 			{ "<leader>ll", mode = "n", "<CMD>DiffviewFileHistory --range=HEAD<CR>" },
 			{ "<leader>l5", mode = "n", "<CMD>DiffviewFileHistory --range=HEAD~50..HEAD<CR>" },
@@ -244,7 +246,10 @@ return {
 						["<cr>"] = actions.select_entry, -- Open the diff for the selected entry.
 						["o"] = actions.select_entry,
 						["<2-LeftMouse>"] = actions.select_entry,
-						["<space><space>"] = actions.toggle_select_entry, -- Mark/unmark the entry under the cursor.
+						-- ["<space><space>"] = actions.toggle_select_entry, -- Mark/unmark the entry under the cursor.
+            { { "n", "x" }, "W",    actions.toggle_select_entry,            { desc = "Toggle file selection for multi-file operations" } },
+            { "n", "C",              actions.clear_select_entries,           { desc = "Clear all file selections" } },
+            { "n", "H",              actions.toggle_hide_selected,           { desc = "Toggle hiding reviewed (selected) files" } },
 						["-"] = actions.toggle_stage_entry, -- Stage / unstage the selected entry.
 						["T"] = actions.toggle_stage_entry, -- Stage / unstage the selected entry.
 						["S"] = actions.stage_all, -- Stage all entries.

@@ -3,161 +3,7 @@ return {
 		-- "sudo-tee/opencode.nvim",
 		-- enabled = true,
 		"jugarpeupv/opencode.nvim",
-		dir = "~/projects/opencode.nvim/wt-main/",
-		-- lazy = true,
-		keys = {
-			-- {
-			-- 	mode = { "n", "v" },
-			-- 	"<C-.>",
-			-- 	function()
-			-- 		require("opencode.api").toggle()
-			-- 	end,
-			-- },
-			{
-				"<leader>oF",
-				require("jg.core.utils").opencode_snapshot_picker,
-				desc = "pick and diff against a snapshot",
-			},
-			{
-				mode = { "n" },
-				"<leader>ci",
-				function()
-					-- local diff = vim.fn.system("git diff --cached")
-					-- if diff == "" then
-					-- 	vim.notify("No staged changes found", vim.log.levels.WARN)
-					-- 	return
-					-- end
-					-- local prompt = "Write a commit message for the following staged changes following Conventional Commits convention. Keep the title under 50 characters and wrap body at 72 characters.\n\n```diff\n"
-					-- 	.. diff
-					-- 	.. "\n```\n\nFormat as a gitcommit code block like so ```gitcommit <the-git-commit-message> ```"
-					-- require("opencode.api").run(prompt)
-
-					local prompt = "Write a Conventional Commits message for the current staged "
-						.. "changes: title under 50 chars, body wrapped at 72. Reply with ONLY a "
-						.. "gitcommit block, opening fence alone on its line, message starting "
-						.. "on the next line:\n"
-						.. "```gitcommit\n"
-						.. "feat(scope): short title\n\n"
-						.. "Body wrapped at 72 characters.\n"
-						.. "```"
-					-- ensure opencode is visible before running; open it if hidden/closed
-					local window_state = require("opencode.api").get_window_state()
-					if window_state.status ~= "visible" then
-						require("opencode.api").toggle()
-					end
-					-- git_diff only: clear stale mentions and disable every other
-					-- context key (files/selection leak via chat_context.lua:544 otherwise)
-					require("opencode.context").clear_files()
-					require("opencode.context").clear_selections()
-					require("opencode.api").run(prompt, {
-						context = {
-							-- current_file = { enabled = false },
-							-- selection = { enabled = false },
-							-- diagnostics = { enabled = false },
-							-- cursor_data = { enabled = false },
-							-- buffer = { enabled = false },
-							-- git_diff = { enabled = true },
-						},
-					})
-				end,
-				desc = "Opencode - Generate commit message from staged changes",
-			},
-			-- {
-			-- 	mode = { "v" },
-			-- 	"<leader>oa",
-			-- 	function()
-			-- 		require("opencode.api").add_visual_selection_inline({ open_input = true })
-			-- 	end,
-			-- },
-			{
-				mode = { "v" },
-				"<leader>oa",
-				function()
-					local buf = vim.api.nvim_get_current_buf()
-					local path = vim.fn.expand("%:p")
-					if path == "" then
-						path = vim.api.nvim_buf_get_name(buf)
-					end
-					if path == "" then
-						path = "[No Name]"
-					end
-
-					-- Escape spaces so |gF| can resolve paths that contain
-					-- them: ":h gf" reduces an escaped space "\ " to one space.
-					local ref_path = path:gsub(" ", "\\ ")
-
-					-- Grab the selection while visual mode is still active;
-					-- '< / '> marks are not set yet at this point.
-					local ok, region = pcall(vim.fn.getregion, vim.fn.getpos("v"), vim.fn.getpos("."), {
-						type = vim.fn.mode(),
-					})
-					local code
-					if ok and region then
-						code = table.concat(region, "\n")
-					else
-						local s, e = vim.fn.line("v"), vim.fn.line(".")
-						if s > e then
-							s, e = e, s
-						end
-						code = table.concat(vim.api.nvim_buf_get_lines(buf, s - 1, e, false), "\n")
-					end
-
-					-- First line of the selection, for the file:line:col
-					-- reference that |gF| understands.
-					local sel_line = math.min(vim.fn.getpos("v")[2], vim.fn.getpos(".")[2])
-
-					-- Drop leading blank lines / trailing whitespace so the
-					-- block doesn't gain a stray empty line.
-					code = code:gsub("^%s*\r?\n", ""):gsub("%s+$", "")
-
-					-- Fence longer than any backtick run inside the snippet so
-					-- the markdown block can never close early.
-					local ticks = 3
-					code:gsub("(`+)", function(run)
-						ticks = math.max(ticks, #run + 1)
-					end)
-					local fence = string.rep("`", ticks)
-
-					-- Trailing newline so the cursor lands on a fresh line after
-					-- the closing fence.
-					local text = string.format(
-						"Here is some code from %s:%d:1\n\n%s%s\n%s\n%s\n",
-						ref_path,
-						sel_line,
-						fence,
-						vim.bo[buf].filetype or "",
-						code,
-						fence
-					)
-
-					-- Mount/focus the opencode input, then append the snippet.
-					-- start_insert = false keeps us in normal mode.
-					local Promise = require("opencode.promise")
-					local session_runtime = require("opencode.services.session_runtime")
-					local input_window = require("opencode.ui.input_window")
-
-					Promise.async(function()
-						session_runtime.open({ new_session = false, focus = "input", start_insert = false }):await()
-						input_window._append_to_input(text)
-					end)()
-				end,
-				desc = "Opencode - Add file path + selection as a code block",
-			},
-			{
-				mode = { "n", "v", "t" },
-				"<M-m>",
-				function()
-					require("opencode.api").toggle()
-				end,
-			},
-			{
-				mode = { "n", "v", "t" },
-				"<D-m>",
-				function()
-					require("opencode.api").toggle()
-				end,
-			},
-		},
+		-- dir = "~/projects/opencode.nvim/wt-main/",
 		config = function()
 			local nvim_icon = vim.fn.expand("~/.config/nvim/assets/nvim.png")
 			-- Default configuration with all available options
@@ -282,7 +128,71 @@ return {
 					end,
 				},
 				keymap = {
+					session_diff = {
+						list = {
+							["<CR>"] = { "activate", desc = "Open file or toggle folder" },
+							["gf"] = { "open_file", desc = "Open working-tree file in a new tab" },
+							["<Tab>"] = { "next_file", desc = "Next file" },
+							["<S-Tab>"] = { "prev_file", desc = "Previous file" },
+							["R"] = { "toggle_range", desc = "Choose message range", nowait = true },
+							["r"] = false,
+							["<BS>"] = { "toggle_view", desc = "Toggle diff layout" },
+							["p"] = false,
+							["q"] = { "close", desc = "Close diff", nowait = true },
+							["g?"] = { "toggle_help", desc = "Toggle keymap help" },
+						},
+						messages = {
+							["<CR>"] = { "activate", desc = "Review selected range" },
+							["R"] = { "toggle_range", desc = "Return to files" },
+							["r"] = false,
+							["f"] = { "mark_from", desc = "Mark range start" },
+							["t"] = { "mark_to", desc = "Mark range end" },
+							["K"] = { "show_message_preview", desc = "Preview message" },
+							["<Esc>"] = { "toggle_range", desc = "Return to files" },
+							["q"] = { "toggle_range", desc = "Return to files", nowait = true },
+							["g?"] = { "toggle_help", desc = "Toggle keymap help" },
+						},
+						preview = {
+							["gf"] = { "open_file", desc = "Open working-tree file in a new tab" },
+							["<Tab>"] = { "next_file", desc = "Next file" },
+							["<S-Tab>"] = { "prev_file", desc = "Previous file" },
+							["q"] = { "close", desc = "Close diff", nowait = true },
+							["<BS>"] = { "toggle_view", desc = "Toggle diff layout" },
+							["p"] = false,
+							["g?"] = { "toggle_help", desc = "Toggle keymap help" },
+							["C"] = {
+								"add_comment",
+								mode = { "n", "x" },
+								desc = "Add or edit review comment",
+								nowait = true,
+							},
+							["c"] = false,
+							["dc"] = { "delete_comment", desc = "Delete review comment" },
+							[")"] = { "next_comment", desc = "Next review comment" },
+							["("] = { "prev_comment", desc = "Previous review comment" },
+						},
+						comment = {
+							["<CR>"] = { "submit_comment", mode = "n", desc = "Save review comment" },
+							["<C-s>"] = { "submit_comment", mode = { "n", "i" }, desc = "Save review comment" },
+							["q"] = { "cancel_comment", desc = "Cancel review comment", nowait = true },
+							["<Esc>"] = { "cancel_comment", desc = "Cancel review comment" },
+						},
+						message_preview = {
+							["q"] = { "hide_message_preview", desc = "Close message preview", nowait = true },
+							["<Esc>"] = { "hide_message_preview", desc = "Close message preview" },
+							["g?"] = { "toggle_help", desc = "Toggle keymap help" },
+						},
+						help = {
+							["g?"] = { "toggle_help" },
+							["q"] = { "toggle_help", nowait = true },
+							["<Esc>"] = { "toggle_help" },
+						},
+					},
 					editor = {
+						["<leader>od"] = {
+							"diff_open",
+							desc = "Open diff view",
+						},
 						["<M-m>"] = {
 							"toggle",
 							desc = "Toggle Opencode window",
@@ -669,11 +579,17 @@ return {
 							desc = "Cancel running request",
 							defer_to_completion = true,
 						},
-						["~"] = {
-							"mention_file",
-							mode = "i",
-							desc = "Mention file in context",
+						["<C-y>"] = {
+							"diff_open",
+							mode = { "n" },
+							desc = "Open diff view",
 						},
+						["~"] = false,
+						-- ["~"] = {
+						-- 	"mention_file",
+						-- 	mode = "i",
+						-- 	desc = "Mention file in context",
+						-- },
 						["@"] = {
 							"mention",
 							mode = "i",
@@ -711,6 +627,7 @@ return {
 						["<leader>ov"] = {
 							"paste_image",
 							mode = { "n" },
+              nowait = true,
 							desc = "Paste image from clipboard",
 						},
 						["<tab>"] = {
@@ -847,7 +764,7 @@ return {
 						enabled = false,
 					},
 					review_comments = {
-						enabled = false,
+						enabled = true,
 					},
 					agents = {
 						enabled = true,
@@ -923,13 +840,144 @@ return {
 				},
 			})
 		end,
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			{
-				"MeanderingProgrammer/render-markdown.nvim",
-			},
-			"saghen/blink.cmp",
+    keys = {
+      {
+        "<leader>od",
+        function()
+          require("opencode.api").diff_open()
+        end,
+      },
+      {
+        "<leader>oF",
+        require("jg.core.utils").opencode_snapshot_picker,
+        desc = "pick and diff against a snapshot",
+      },
+      {
+        mode = { "n" },
+        "<leader>ci",
+        function()
+          local prompt = "Write a Conventional Commits message for the current staged "
+          .. "changes: title under 50 chars, body wrapped at 72. Reply with ONLY a "
+          .. "gitcommit block, opening fence alone on its line, message starting "
+          .. "on the next line:\n"
+          .. "```gitcommit\n"
+          .. "feat(scope): short title\n\n"
+          .. "Body wrapped at 72 characters.\n"
+          .. "```"
+          local window_state = require("opencode.api").get_window_state()
+          if window_state.status ~= "visible" then
+            require("opencode.api").toggle()
+          end
+          require("opencode.context").clear_files()
+          require("opencode.context").clear_selections()
+          require("opencode.api").run(prompt, {
+            context = {
+              current_file = { enabled = false },
+              selection = { enabled = false },
+              diagnostics = { enabled = false },
+              cursor_data = { enabled = false },
+              buffer = { enabled = false },
+              git_diff = { enabled = false },
+            },
+          })
+        end,
+        desc = "Opencode - Generate commit message from staged changes",
+      },
+      {
+        mode = { "v" },
+        "<leader>oa",
+        function()
+          local buf = vim.api.nvim_get_current_buf()
+          local path = vim.fn.expand("%:p")
+          if path == "" then
+            path = vim.api.nvim_buf_get_name(buf)
+          end
+          if path == "" then
+            path = "[No Name]"
+          end
 
+          -- Escape spaces so |gF| can resolve paths that contain
+          -- them: ":h gf" reduces an escaped space "\ " to one space.
+          local ref_path = path:gsub(" ", "\\ ")
+
+          -- Grab the selection while visual mode is still active;
+          -- '< / '> marks are not set yet at this point.
+          local ok, region = pcall(vim.fn.getregion, vim.fn.getpos("v"), vim.fn.getpos("."), {
+            type = vim.fn.mode(),
+          })
+          local code
+          if ok and region then
+            code = table.concat(region, "\n")
+          else
+            local s, e = vim.fn.line("v"), vim.fn.line(".")
+            if s > e then
+              s, e = e, s
+            end
+            code = table.concat(vim.api.nvim_buf_get_lines(buf, s - 1, e, false), "\n")
+          end
+
+          -- First line of the selection, for the file:line:col
+          -- reference that |gF| understands.
+          local sel_line = math.min(vim.fn.getpos("v")[2], vim.fn.getpos(".")[2])
+
+          -- Drop leading blank lines / trailing whitespace so the
+          -- block doesn't gain a stray empty line.
+          code = code:gsub("^%s*\r?\n", ""):gsub("%s+$", "")
+
+          -- Fence longer than any backtick run inside the snippet so
+          -- the markdown block can never close early.
+          local ticks = 3
+          code:gsub("(`+)", function(run)
+            ticks = math.max(ticks, #run + 1)
+          end)
+          local fence = string.rep("`", ticks)
+
+          -- Trailing newline so the cursor lands on a fresh line after
+          -- the closing fence.
+          local text = string.format(
+            "Here is some code from %s:%d:1\n\n%s%s\n%s\n%s\n",
+            ref_path,
+            sel_line,
+            fence,
+            vim.bo[buf].filetype or "",
+            code,
+            fence
+          )
+
+          -- Mount/focus the opencode input, then append the snippet.
+          -- start_insert = false keeps us in normal mode.
+          local Promise = require("opencode.promise")
+          local session_runtime = require("opencode.services.session_runtime")
+          local input_window = require("opencode.ui.input_window")
+
+          Promise.async(function()
+            session_runtime.open({ new_session = false, focus = "input", start_insert = false }):await()
+            input_window._append_to_input(text)
+          end)()
+        end,
+        desc = "Opencode - Add file path + selection as a code block",
+      },
+      {
+        mode = { "n", "v", "t" },
+        "<M-m>",
+        function()
+          require("opencode.api").toggle()
+        end,
+      },
+      {
+        mode = { "n", "v", "t" },
+        "<D-m>",
+        function()
+          require("opencode.api").toggle()
+        end,
+      },
+    },
+		dependencies = {
+      "nvim-telescope/telescope.nvim",
+			"https://github.com/barrettruth/diffs.nvim",
+			"nvim-lua/plenary.nvim",
+			"MeanderingProgrammer/render-markdown.nvim",
+			"saghen/blink.cmp",
 			"folke/snacks.nvim",
 		},
 	},

@@ -143,12 +143,12 @@ return {
 						["<S-Tab>"] = { "select_and_prev", mode = { "i", "n" } },
 						["<Tab>"] = { "select_and_next", mode = { "i", "n" } },
 						["<Up>"] = { "list_up", mode = { "i", "n" } },
-						["<a-d>"] = { "inspect", mode = { "n", "i" } },
-						["<a-f>"] = { "toggle_follow", mode = { "i", "n" } },
-						["<a-o>"] = { "toggle_hidden", mode = { "i", "n" } },
-						["<a-i>"] = { "toggle_ignored", mode = { "i", "n" } },
-						["<a-r>"] = { "toggle_regex", mode = { "i", "n" } },
-						["<a-m>"] = { "toggle_maximize", mode = { "i", "n" } },
+						["<D-d>"] = { "inspect", mode = { "n", "i" } },
+						["<D-f>"] = { "toggle_follow", mode = { "i", "n" } },
+						["<D-o>"] = { "toggle_hidden", mode = { "i", "n" } },
+						["<D-i>"] = { "toggle_ignored", mode = { "i", "n" } },
+						["<D-r>"] = { "toggle_regex", mode = { "i", "n" } },
+						["<D-m>"] = { "toggle_maximize", mode = { "i", "n" } },
 						["<C-l>"] = { "toggle_preview", mode = { "i", "n" } },
 						["<a-w>"] = { "cycle_win", mode = { "i", "n" } },
 						["<c-a>"] = { "select_all", mode = { "n", "i" } },
@@ -484,8 +484,9 @@ PY
 				local cmd = vim.fn.getcmdline()
 				local pos = vim.fn.getcmdpos()
 				local ctype = vim.fn.getcmdtype()
-				local async_path = vim.g._fyler_async_path
-				local async_active = vim.g._fyler_async_cmdline_active and async_path and async_path ~= ""
+				local async = require("jg.core.async-cmdline")
+				local async_path = async.get_path()
+				local async_active = async.is_active() and async_path and async_path ~= ""
 				local compile_active = vim.g._compile_cmdline_active
 
 				local function replace_cmdline(content)
@@ -494,17 +495,9 @@ PY
 					-- If we were in <M-y> / <M-b> flow, preserve that context and hint.
 					local head, tail = vim.fn.strpart(cmd, 0, pos - 1), vim.fn.strpart(cmd, pos - 1)
 					if async_active then
-						vim.g._fyler_async_path = async_path
-						vim.g._fyler_async_cmdline_active = true
-						if vim.g._snacks_async_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win) then
-							pcall(vim.api.nvim_win_close, vim.g._snacks_async_hint_win, true)
-						end
-						if vim.g._snacks_async_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf) then
-							pcall(vim.api.nvim_buf_delete, vim.g._snacks_async_hint_buf, { force = true })
-						end
+						async.arm(async_path)
 						local new_cmd = head .. content .. tail
-						local feed = ":" .. new_cmd
-						vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(feed, true, false, true), "n", true)
+						async.feed(new_cmd)
 						if #tail > 0 then
 							vim.api.nvim_feedkeys(
 								string.rep(
@@ -515,53 +508,6 @@ PY
 								true
 							)
 						end
-						vim.schedule(function()
-							local buf = vim.api.nvim_create_buf(false, true)
-							local rel = vim.fn.fnamemodify(async_path, ":~:.")
-							if rel == "" then
-								rel = async_path
-							end
-							local line1 = " Async command "
-							local line2 = " ! on " .. rel .. " "
-							local w = math.max(#line1, #line2) + 2
-							vim.api.nvim_buf_set_lines(buf, 0, -1, false, { line1, line2 })
-							local win = vim.api.nvim_open_win(buf, false, {
-								relative = "editor",
-								width = w,
-								height = 2,
-								row = vim.o.lines - 5,
-								col = 0,
-								style = "minimal",
-								border = "rounded",
-								title = " Async ",
-								title_pos = "left",
-								focusable = false,
-								zindex = 40,
-							})
-							vim.api.nvim_buf_add_highlight(buf, -1, "Title", 0, 0, -1)
-							vim.g._snacks_async_hint_win = win
-							vim.g._snacks_async_hint_buf = buf
-							vim.api.nvim_create_autocmd("CmdlineLeave", {
-								once = true,
-								pattern = ":",
-								callback = function()
-									if
-										vim.g._snacks_async_hint_win
-										and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win)
-									then
-										pcall(vim.api.nvim_win_close, vim.g._snacks_async_hint_win, true)
-									end
-									if
-										vim.g._snacks_async_hint_buf
-										and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf)
-									then
-										pcall(vim.api.nvim_buf_delete, vim.g._snacks_async_hint_buf, { force = true })
-									end
-									vim.g._snacks_async_hint_win = nil
-									vim.g._snacks_async_hint_buf = nil
-								end,
-							})
-						end)
 						return
 					end
 					if compile_active then
@@ -698,8 +644,9 @@ PY
 				local cmd = vim.fn.getcmdline()
 				local pos = vim.fn.getcmdpos()
 				local ctype = vim.fn.getcmdtype()
-				local async_path = vim.g._fyler_async_path
-				local async_active = vim.g._fyler_async_cmdline_active and async_path and async_path ~= ""
+				local async = require("jg.core.async-cmdline")
+				local async_path = async.get_path()
+				local async_active = async.is_active() and async_path and async_path ~= ""
 				local compile_active = vim.g._compile_cmdline_active
 
 				local function replace_cmdline(content)
@@ -707,17 +654,9 @@ PY
 					-- position where the cursor was when <C-S> was pressed.
 					local head, tail = vim.fn.strpart(cmd, 0, pos - 1), vim.fn.strpart(cmd, pos - 1)
 					if async_active then
-						vim.g._fyler_async_path = async_path
-						vim.g._fyler_async_cmdline_active = true
-						if vim.g._snacks_async_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win) then
-							pcall(vim.api.nvim_win_close, vim.g._snacks_async_hint_win, true)
-						end
-						if vim.g._snacks_async_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf) then
-							pcall(vim.api.nvim_buf_delete, vim.g._snacks_async_hint_buf, { force = true })
-						end
+						async.arm(async_path)
 						local new_cmd = head .. content .. tail
-						local feed = ":" .. new_cmd
-						vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(feed, true, false, true), "n", true)
+						async.feed(new_cmd)
 						if #tail > 0 then
 							vim.api.nvim_feedkeys(
 								string.rep(
@@ -728,53 +667,6 @@ PY
 								true
 							)
 						end
-						vim.schedule(function()
-							local buf = vim.api.nvim_create_buf(false, true)
-							local rel = vim.fn.fnamemodify(async_path, ":~:.")
-							if rel == "" then
-								rel = async_path
-							end
-							local line1 = " Async command "
-							local line2 = " ! on " .. rel .. " "
-							local w = math.max(#line1, #line2) + 2
-							vim.api.nvim_buf_set_lines(buf, 0, -1, false, { line1, line2 })
-							local win = vim.api.nvim_open_win(buf, false, {
-								relative = "editor",
-								width = w,
-								height = 2,
-								row = vim.o.lines - 5,
-								col = 0,
-								style = "minimal",
-								border = "rounded",
-								title = " Async ",
-								title_pos = "left",
-								focusable = false,
-								zindex = 40,
-							})
-							vim.api.nvim_buf_add_highlight(buf, -1, "Title", 0, 0, -1)
-							vim.g._snacks_async_hint_win = win
-							vim.g._snacks_async_hint_buf = buf
-							vim.api.nvim_create_autocmd("CmdlineLeave", {
-								once = true,
-								pattern = ":",
-								callback = function()
-									if
-										vim.g._snacks_async_hint_win
-										and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win)
-									then
-										pcall(vim.api.nvim_win_close, vim.g._snacks_async_hint_win, true)
-									end
-									if
-										vim.g._snacks_async_hint_buf
-										and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf)
-									then
-										pcall(vim.api.nvim_buf_delete, vim.g._snacks_async_hint_buf, { force = true })
-									end
-									vim.g._snacks_async_hint_win = nil
-									vim.g._snacks_async_hint_buf = nil
-								end,
-							})
-						end)
 						return
 					end
 					if compile_active then
@@ -1095,85 +987,21 @@ PY
 			function()
 				local cmd = vim.fn.getcmdline()
 				-- <M-y> async flow: preserve path and re-enter async cmdline after history pick
-				local async_path = vim.g._fyler_async_path
-				local async_active = vim.g._fyler_async_cmdline_active and async_path and async_path ~= ""
-				if async_active then
-					-- helper to show hint and re-enter ":" with picked command
+				local async = require("jg.core.async-cmdline")
+				local async_path = async.get_path()
+				if async.is_active() and async_path and async_path ~= "" then
 					local function reenter_async(picked_cmd)
-						vim.g._fyler_async_path = async_path
-						vim.g._fyler_async_cmdline_active = true
-						-- close any stale generic hint first
-						if vim.g._snacks_async_hint_win and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win) then
-							pcall(vim.api.nvim_win_close, vim.g._snacks_async_hint_win, true)
-						end
-						if vim.g._snacks_async_hint_buf and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf) then
-							pcall(vim.api.nvim_buf_delete, vim.g._snacks_async_hint_buf, { force = true })
-						end
-						local feed = ":" .. (picked_cmd or "")
-						vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(feed, true, false, true), "n", true)
-						vim.schedule(function()
-							-- show popup !on "path" (same as fyler/oil M-y)
-							local buf = vim.api.nvim_create_buf(false, true)
-							local rel = vim.fn.fnamemodify(async_path, ":~:.")
-							if rel == "" then
-								rel = async_path
-							end
-							local line1 = " Async command "
-							local line2 = " ! on " .. rel .. " "
-							local w = math.max(#line1, #line2) + 2
-							vim.api.nvim_buf_set_lines(buf, 0, -1, false, { line1, line2 })
-							local win = vim.api.nvim_open_win(buf, false, {
-								relative = "editor",
-								width = w,
-								height = 2,
-								row = vim.o.lines - 5,
-								col = 0,
-								style = "minimal",
-								border = "rounded",
-								title = " Async ",
-								title_pos = "left",
-								focusable = false,
-								zindex = 40,
-							})
-							vim.api.nvim_buf_add_highlight(buf, -1, "Title", 0, 0, -1)
-							vim.g._snacks_async_hint_win = win
-							vim.g._snacks_async_hint_buf = buf
-							-- auto-close on next leave (mirrors fyler/oil)
-							vim.api.nvim_create_autocmd("CmdlineLeave", {
-								once = true,
-								pattern = ":",
-								callback = function()
-									if
-										vim.g._snacks_async_hint_win
-										and vim.api.nvim_win_is_valid(vim.g._snacks_async_hint_win)
-									then
-										pcall(vim.api.nvim_win_close, vim.g._snacks_async_hint_win, true)
-									end
-									if
-										vim.g._snacks_async_hint_buf
-										and vim.api.nvim_buf_is_valid(vim.g._snacks_async_hint_buf)
-									then
-										pcall(vim.api.nvim_buf_delete, vim.g._snacks_async_hint_buf, { force = true })
-									end
-									vim.g._snacks_async_hint_win = nil
-									vim.g._snacks_async_hint_buf = nil
-								end,
-							})
-						end)
+						async.arm(async_path)
+						async.feed(picked_cmd or "")
 					end
 					local function async_confirm(picker, item)
 						picker:close()
 						if item and item.cmd then
-							-- keep it in async context: re-enter cmdline with history item
-							-- (next <CR> will be intercepted as ! on path)
 							vim.schedule(function()
 								reenter_async(item.cmd)
 							end)
 						else
-							-- cancelled: clear async state (CmdlineLeave already cleared flags,
-							-- but ensure hint is gone)
-							vim.g._fyler_async_path = nil
-							vim.g._fyler_async_cmdline_active = false
+							async.cancel()
 						end
 					end
 					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
@@ -1186,6 +1014,7 @@ PY
 					end)
 					return
 				end
+
 				-- <M-b> compile flow: preserve Compile mode across history pick as well
 				local compile_active = vim.g._compile_cmdline_active
 				if compile_active then
@@ -1473,7 +1302,6 @@ PY
 		-- -- git
 		-- { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
 		-- { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
-		-- { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
 		-- { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
 		-- { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
 		-- { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },

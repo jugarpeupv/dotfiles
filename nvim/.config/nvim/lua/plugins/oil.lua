@@ -160,91 +160,21 @@ return {
 			},
 		},
 		config = function()
-			-- ── <M-y> async command on oil path (mirrors fyler's <M-y>) ──
-			local _oil_hint_win, _oil_hint_buf ---@type integer|nil, integer|nil
-			local function _close_oil_hint()
-				local win, buf = _oil_hint_win, _oil_hint_buf
-				_oil_hint_win, _oil_hint_buf = nil, nil
-				if win and vim.api.nvim_win_is_valid(win) then
-					local ok, err = pcall(vim.api.nvim_win_close, win, true)
-					if not ok and err and err:match("E565") then
-						vim.schedule(function()
-							if vim.api.nvim_win_is_valid(win) then
-								pcall(vim.api.nvim_win_close, win, true)
-							end
-						end)
-					end
-				end
-				if buf and vim.api.nvim_buf_is_valid(buf) then
-					local ok, err = pcall(vim.api.nvim_buf_delete, buf, { force = true })
-					if not ok and err and err:match("E565") then
-						vim.schedule(function()
-							if vim.api.nvim_buf_is_valid(buf) then
-								pcall(vim.api.nvim_buf_delete, buf, { force = true })
-							end
-						end)
-					end
-				end
-			end
-			local function _show_oil_hint(path)
-				_close_oil_hint()
-				_oil_hint_buf = vim.api.nvim_create_buf(false, true)
-				local rel = vim.fn.fnamemodify(path, ":~:.")
-				if rel == "" then
-					rel = path
-				end
-				local line1 = " Async command "
-				local line2 = " ! on " .. rel .. " "
-				local w = math.max(#line1, #line2) + 2
-				vim.api.nvim_buf_set_lines(_oil_hint_buf, 0, -1, false, { line1, line2 })
-				_oil_hint_win = vim.api.nvim_open_win(_oil_hint_buf, false, {
-					relative = "editor",
-					width = w,
-					height = 2,
-					row = vim.o.lines - 5,
-					col = 0,
-					style = "minimal",
-					border = "rounded",
-					title = " Oil async ",
-					title_pos = "left",
-					focusable = false,
-					zindex = 40,
-				})
-				vim.api.nvim_buf_add_highlight(_oil_hint_buf, -1, "Title", 0, 0, -1)
-			end
+			-- ── <M-y> async command on the oil cursor entry ──
+			local async = require("jg.core.async-cmdline")
 			local function _oil_async_cmdline()
 				local oil = require("oil")
 				local dir = oil.get_current_dir()
-				if not dir then
+				if not dir or dir == "" then
 					return
 				end
-				local entry = oil.get_cursor_entry()
-				local path
-				if entry then
-					path = dir .. entry.name
-				else
-					path = dir
+				local path = dir
+				local ok, entry = pcall(oil.get_cursor_entry)
+				if ok and entry and entry.name and entry.name ~= ".." then
+					path = dir:gsub("/$", "") .. "/" .. entry.name
 				end
-				path = vim.fn.fnamemodify(path, ":p"):gsub("/$", "")
-				-- reuse fyler's async cmdline globals so the existing
-				-- c:<CR> handler in fyler.lua executes the command
-				vim.g._fyler_async_path = path
-				vim.g._fyler_async_cmdline_active = true
-				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":", true, false, true), "n", true)
-				_show_oil_hint(path)
+				async.begin(path, { label = "Oil" })
 			end
-			vim.api.nvim_create_autocmd("CmdlineLeave", {
-				pattern = ":",
-				callback = function()
-					_close_oil_hint()
-				end,
-			})
-			vim.api.nvim_create_autocmd("CmdwinEnter", {
-				pattern = ":",
-				callback = function()
-					_close_oil_hint()
-				end,
-			})
 
 			_G.oil_winbar_label = function()
 				local oil = require("oil")
@@ -394,6 +324,7 @@ return {
 							})
 						end,
 						mode = "n",
+            desc = "Snacks files picker"
 					},
 					-- ["<M-p>"] = {
 					-- 	callback = function()
@@ -465,7 +396,6 @@ return {
 									end)
 								)
 							end
-
 							vim.system({ "du", "-sh", path }, { text = true }, function(obj)
 								local stdout = obj.stdout or ""
 								local improved_size = stdout:match("^[^\t]+") or "unknown"
@@ -484,6 +414,7 @@ return {
 							end)
 						end,
 						mode = "n",
+            desc = "Show details for current entry"
 					},
 
 					["su"] = {
@@ -502,6 +433,7 @@ return {
 							-- oil.open(path)
 						end,
 						mode = "n",
+            desc = "fzf dirs in home and open in oil"
 					},
 					["sd"] = {
 						callback = function()
@@ -521,6 +453,7 @@ return {
 							require("jg.custom.telescope").oil_fzf_dir(dir)
 						end,
 						mode = "n",
+            desc = "search oil dir with fzf"
 					},
 					["sf"] = {
 						callback = function()
@@ -541,6 +474,7 @@ return {
 							require("jg.custom.telescope").oil_fzf_files_builtin(dir)
 						end,
 						mode = "n",
+            desc = "search files in oil cwd with fzf"
 					},
 					["<leader>cr"] = {
 						callback = function()
@@ -582,6 +516,7 @@ return {
 							-- end)
 						end,
 						mode = "n",
+            desc = "Compile mode",
 					},
 					["."] = {
 						callback = function()
@@ -621,6 +556,7 @@ return {
 							-- end)
 						end,
 						mode = "n",
+            desc = "Bufferize"
 					},
 					-- ["."] = {
 					-- 	callback = function()
@@ -654,10 +590,11 @@ return {
 							local zaread = require("terminal").terminal:new({
 								layout = { open_cmd = "botright new" },
 								cwd = dir,
-								cmd = "zaread " .. path,
+								cmd = "sioyek " .. path,
 							})
 							zaread:open()
 						end,
+            desc = "Open in sioyek"
 					},
 					["gy"] = {
 						callback = function()
@@ -675,6 +612,7 @@ return {
 							vim.fn.setreg('"', path)
 							vim.notify("Copied path: " .. path, vim.log.levels.INFO)
 						end,
+            desc = "Copy relative path"
 					},
 					["S"] = {
 						callback = function()
@@ -722,6 +660,7 @@ return {
 								},
 							})
 						end,
+            desc = "Live grep"
 					},
 					["gl"] = {
 						callback = function()
@@ -736,6 +675,7 @@ return {
 							})
 							myterm:open()
 						end,
+            desc = "Open a terminal in oil cwd buffer"
 					},
 					-- ["gx"] = "actions.open_external",
 					["gx"] = {
@@ -781,6 +721,7 @@ return {
 							end
 						end,
 						mode = "n",
+            desc = "Open with default command"
 					},
 
 					-- ["gz"] = {
@@ -830,6 +771,7 @@ return {
 					["g."] = { "actions.toggle_hidden", mode = "n" },
 					["g\\"] = { "actions.toggle_trash", mode = "n" },
 				},
+
 				-- Set to false to disable all of the above keymaps
 				use_default_keymaps = false,
 				view_options = {

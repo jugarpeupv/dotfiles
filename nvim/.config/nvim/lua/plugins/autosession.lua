@@ -6,7 +6,16 @@ return {
 		lazy = true, -- loaded on demand from jg.core.worktree-repo-init
 		event = { "BufReadPre" },
 		opts = {
-			-- add any custom options here
+			-- Minimum number of named file buffers required before the session
+			-- is written on VimLeavePre. The default (1) means: if you delete
+			-- every buffer and quit, nothing is saved and the PREVIOUS session
+			-- file survives, so the deleted buffers come back next launch.
+			-- 0 = always save, i.e. the session reflects exactly what was open
+			-- at exit.
+			need = 0,
+			-- One session per directory. Set to false if you want sessions
+			-- scoped per git branch (the default in this fork).
+			-- branch = false,
 		},
 		init = function()
 			vim.api.nvim_create_autocmd("User", {
@@ -22,7 +31,7 @@ return {
 							local ft = vim.bo[buf].filetype
 							local lang = ft ~= "" and vim.treesitter.language.get_lang(ft) or nil
 							-- local ok, loaded = lang and pcall(vim.treesitter.language.add, lang)
-              pcall(vim.treesitter.start, buf, lang)
+							pcall(vim.treesitter.start, buf, lang)
 							-- if ok and loaded then
 							-- 	pcall(vim.treesitter.start, buf, lang)
 							-- end
@@ -42,7 +51,7 @@ return {
 				pattern = "PersistenceSavePre",
 				callback = function()
 					local excluded_ft = {
-						-- "fyler",
+						"git",
 						"neo-tree",
 						"NvimTree",
 						"mail",

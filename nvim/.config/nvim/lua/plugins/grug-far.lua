@@ -10,7 +10,7 @@ return {
 		},
 		{
 			"<M-f>",
-			mode = { "n", "i", "v" },
+			mode = { "n", "v" },
 			function()
 				require("grug-far").toggle_instance({
 					instanceName = "far",
@@ -21,7 +21,7 @@ return {
 		},
 		{
 			"<D-f>",
-			mode = { "n", "i", "v" },
+			mode = { "n", "v" },
 			function()
 				require("grug-far").toggle_instance({
 					instanceName = "far",
@@ -70,7 +70,7 @@ return {
 			-- shortcuts for the actions you see at the top of the buffer
 			-- set to '' or false to unset. Mappings with no normal mode value will be removed from the help header
 			-- you can specify either a string which is then used as the mapping for both normal and insert mode
-			-- or you can specify a table of the form { [mode] = <lhs> } (ex: { i = '<C-enter>', n = '<localleader>gr'})
+			-- or you can specify a table of the form { [mode] = <lhs> } (ex: { i = '<C-enter>', n = '<localleader>.'})
 			-- it is recommended to use <localleader> though as that is more vim-ish
 			-- see https://learnvimscriptthehardway.stevelosh.com/chapters/11.html#local-leader
 			keymaps = {

@@ -350,6 +350,7 @@
                   {
                     "shell_command": "/usr/bin/open -a 'Kitty'"
                   }
+                  // { "shell_command": "osascript -e 'tell application \"System Events\" to keystroke \"m\" using command down'; /usr/bin/open -a 'Kitty'" }
                 ]
               }
             ]

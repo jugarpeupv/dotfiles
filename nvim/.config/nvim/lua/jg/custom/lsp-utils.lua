@@ -30,10 +30,18 @@ M.attach_lsp_config = function(client, bufnr)
 		-- 		vim.cmd("normal! zz")
 		-- 	end
 		-- end)
-    -- if require('i18n').i18n_definition() then return end
-    -- if require('i18n').i18n_definition_next_locale() then return end
+		-- Angular templates: prefer jumping to the i18n translation when the
+		-- cursor is on a translation key.
+		if vim.bo[bufnr].filetype == "htmlangular" then
+			local ok, i18n = pcall(require, "i18n")
+			if ok  then
+        i18n.i18n_definition()
+        return
+			end
+		end
+		-- if require('i18n').i18n_definition_next_locale() then return end
 		Snacks.picker.lsp_definitions()
-    -- vim.lsp.buf.definition()
+		-- vim.lsp.buf.definition()
 	end, opts)
 
 	vim.keymap.set({ "n" }, "gv", function()

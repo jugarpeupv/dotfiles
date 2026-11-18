@@ -34,7 +34,7 @@ return {
 			{
 				mode = { "n" },
 				"<leader>ns",
-				":NmSearch subject:",
+				":NmSearch ",
 				{ noremap = true, silent = true },
 			},
 			{ mode = { "n" }, "<leader>no", "<cmd>Notmuch<cr>", { silent = true } },

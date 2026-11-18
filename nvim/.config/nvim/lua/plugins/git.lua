@@ -26,6 +26,7 @@ return {
 		"tpope/vim-fugitive",
 		cmd = { "Git", "G", "Gitdiff", "Gedit" },
 		dependencies = {
+			{ "dlyongemallo/diffview-plus.nvim" },
 			{
 				"https://github.com/barrettruth/diffs.nvim",
 				enabled = true,
@@ -35,7 +36,7 @@ return {
 						conflict = false,
 						highlights = {
 							background = false,
-							blend_alpha = 0.8,
+							blend_alpha = 0.6,
 							warn_max_lines = true,
 							vim = true,
 						},

@@ -1,18 +1,5 @@
 return {
 	{
-		"hamidi-dev/json-kit.nvim",
-		enabled = false,
-		opts = {
-			keys = {
-				pretty_split = "<leader>jp",
-				pretty_inplace = "<leader>jP",
-				sort = "<leader>js",
-				decode_jwt = "<leader>jw",
-				copy_path = "<leader>jy",
-			},
-		},
-	},
-	{
 		"jugarpeupv/chrome-devtools.nvim",
 		lazy = true,
 		enabled = false,
@@ -107,174 +94,6 @@ return {
 				scope_textobject = "I", -- Text object for inner scope (default: "I", set to "" to disable)
 			})
 		end,
-	},
-	{
-		"itchyny/calendar.vim",
-		-- "jugarpeupv/cal.vim",
-		-- dev = true,
-		-- dir = "~/projects/cal.nvim/wt-main",
-		cmd = { "Calendar" },
-		enabled = true,
-		config = function()
-			vim.g.calendar_first_day = "Monday"
-			vim.g.calendar_caldav_calendar = 1
-			vim.g.calendar_caldav_url = "http://localhost:1080/caldav/"
-			vim.g.calendar_caldav_username = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field username --reveal"
-			vim.g.calendar_caldav_password = "op item get u6k3e4k4gzbmxl76zbxphtutyi --field password --reveal"
-		end,
-	},
-	{
-		"https://tangled.org/cuducos.me/yaml.nvim",
-		ft = { "yaml", "yml", "yaml.github" }, -- optional
-		enabled = false,
-		dependencies = {
-			"folke/snacks.nvim", -- optional
-		},
-		config = function()
-			require("yaml_nvim").setup({ ft = { "yaml", "yml", "yaml.github" } })
-		end,
-	},
-	{
-		"yuratomo/w3m.vim",
-		lazy = true,
-		cmd = { "W3m" },
-		enabled = false,
-	},
-	{
-		"Avi-D-coder/whisper.nvim",
-		enabled = false,
-		config = function()
-			require("whisper").setup({
-				model = "base.en",
-				keybind = "<space><Enter>",
-				manual_trigger_key = "<space>",
-				modes = { "n" },
-				-- Whisper parameters
-				threads = 8, -- Number of CPU threads
-				step_ms = 20000, -- Process audio every 20 seconds
-				length_ms = 25000, -- 25 second audio buffer
-				vad_thold = 0.60, -- Voice activity detection threshold (0.0-1.0)
-				language = "en",
-
-				-- Streaming parameters
-				enable_streaming = false,
-				poll_interval_ms = 20000, -- Auto-insert every 20 seconds
-				filter_markers = true, -- Remove [BLANK_AUDIO], [MUSIC], etc.
-
-				-- UI settings
-				show_whisper_output = false,
-				notifications = true,
-
-				-- Debug settings
-				debug = false,
-				debug_file = "/tmp/whisper-debug.log",
-			})
-		end,
-		keys = {
-			{ "<space><enter>", mode = { "n" }, desc = "Toggle speech-to-text" },
-		},
-	},
-	{
-		"necrom4/calcium.nvim",
-		cmd = { "Calcium" },
-		enabled = true,
-		opts = {},
-		keys = {
-			-- example keymap
-			{
-				"<leader>aL",
-				":Calcium<CR>",
-				desc = "Calculate",
-				mode = { "n", "v" },
-				silent = true,
-			},
-		},
-	},
-	{
-		"axkirillov/hbac.nvim",
-		event = "LspAttach",
-		enabled = false,
-		config = function()
-			require("hbac").setup({
-				autoclose = true, -- set autoclose to false if you want to close manually
-				threshold = 6, -- hbac will start closing unedited buffers once that number is reached
-				close_command = function(bufnr)
-					pcall(vim.api.nvim_buf_delete, bufnr, {})
-				end,
-				close_buffers_with_windows = false, -- hbac will close buffers with associated windows if this option is `true`
-				telescope = {
-					-- See #telescope-configuration below
-				},
-			})
-		end,
-	},
-	{
-		"chrisgrieser/nvim-early-retirement",
-		enabled = false,
-		config = true,
-		event = "LspAttach",
-		opts = {
-			-- If a buffer has been inactive for this many minutes, close it.
-			retirementAgeMins = 20,
-
-			-- Filetypes to ignore.
-			ignoredFiletypes = { "octo", "DiffviewFiles" },
-
-			-- Ignore files matching this lua pattern; empty string disables this setting.
-			ignoreFilenamePattern = "",
-
-			-- Will not close the alternate file.
-			ignoreAltFile = true,
-
-			-- Minimum number of open buffers for auto-closing to become active. E.g.,
-			-- by setting this to 4, no auto-closing will take place when you have 3
-			-- or fewer open buffers. Note that this plugin never closes the currently
-			-- active buffer, so a number < 2 will effectively disable this setting.
-			minimumBufferNum = 4,
-
-			-- Ignore buffers with unsaved changes. If false, the buffers will
-			-- automatically be written and then closed.
-			ignoreUnsavedChangesBufs = true,
-
-			-- Ignore non-empty buftypes, for example terminal buffers
-			ignoreSpecialBuftypes = true,
-
-			-- Ignore visible buffers. Buffers that are open in a window or in a tab
-			-- are considered visible by vim. ("a" in `:buffers`)
-			ignoreVisibleBufs = true,
-
-			-- ignore unloaded buffers. Session-management plugin often add buffers
-			-- to the buffer list without loading them.
-			ignoreUnloadedBufs = true,
-
-			-- Show notification on closing. Works with plugins like nvim-notify.
-			notificationOnAutoClose = false,
-
-			-- When a file is deleted, for example via an external program, delete the
-			-- associated buffer as well. Requires Neovim >= 0.10.
-			-- (This feature is independent from the automatic closing)
-			deleteBufferWhenFileDeleted = true,
-
-			-- Function to delete the buffer. The argument provided to the function is
-			-- the buffer number. If nothing is provided the plugin will just call
-			-- nvim_buf_delete.
-			deleteFunction = function(bufnr)
-				-- Check if we're in a diffview tab by looking for diffview windows
-				local current_tab = vim.api.nvim_get_current_tabpage()
-				local windows = vim.api.nvim_tabpage_list_wins(current_tab)
-				for _, win in ipairs(windows) do
-					local buf = vim.api.nvim_win_get_buf(win)
-					local filetype = vim.api.nvim_get_option_value("filetype", { buf = buf })
-					-- Check if any window in the current tab has a diffview filetype
-					if filetype:match("^Diffview") or filetype == "DiffviewFiles" then
-						-- We're in a diffview tab, don't delete the buffer
-						return
-					end
-				end
-				-- Not in a diffview tab, proceed with normal deletion
-				vim.api.nvim_buf_delete(bufnr, { force = false })
-			end,
-		},
 	},
 	{
 		"Wansmer/treesj",
@@ -375,17 +194,7 @@ return {
 			vim.g.jsonpath_register = "*"
 		end,
 	},
-	-- { 'mistweaverco/snap.nvim', opts = {}, cmd = { "Snap" } },
-	-- {
-	-- 	"katonori/ps.vim",
-	-- 	cmd = "PS",
-	-- 	keys = {
-	-- 		{ "<leader>ps", "<cmd>PS<cr>" },
-	-- 		{ "<leader>pr", "<cmd>PsRefresh<cr>" },
-	-- 	},
-	-- },
-	-- { "rhysd/clever-f.vim", event = { "InsertEnter" } },
-	{ "junegunn/gv.vim", enabled = false, dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
+	{ "junegunn/gv.vim", enabled = true, dependencies = { "tpope/vim-fugitive" }, cmd = { "GV" } },
 	{
 		"alex-popov-tech/store.nvim",
 		-- dependencies = { "OXY2DEV/markview.nvim" },
@@ -508,7 +317,6 @@ return {
 			require("tsw").setup(opts)
 		end,
 	},
-
 	{
 		"duqcyxwd/stringbreaker.nvim",
 		enabled = false,
@@ -519,39 +327,11 @@ return {
 			require("string-breaker").setup()
 		end,
 	},
-	-- Lazy
-	{
-		"NMAC427/guess-indent.nvim",
-		enabled = false,
-		event = "BufReadPost",
-		config = true,
-	},
-	-- {
-	-- 	"Joakker/lua-json5",
-	-- 	build = "./install.sh",
-	-- },
-	-- {
-	-- 	"wojciech-kulik/xcodebuild.nvim",
-	-- 	dependencies = {
-	-- 		"nvim-telescope/telescope.nvim",
-	-- 		"MunifTanjim/nui.nvim",
-	-- 		"folke/snacks.nvim", -- (optional) to show previews
-	-- 		"nvim-tree/nvim-tree.lua", -- (optional) to manage project files
-	-- 		"stevearc/oil.nvim", -- (optional) to manage project files
-	-- 		"nvim-treesitter/nvim-treesitter", -- (optional) for Quick tests support (required Swift parser)
-	-- 	},
-	-- 	config = function()
-	-- 		require("xcodebuild").setup({
-	-- 			-- put some options here or leave it empty to use default settings
-	-- 		})
-	-- 	end,
-	-- },
 	{
 		"axkirillov/unified.nvim",
 		enabled = false,
 		cmd = { "Unified" },
 		opts = {
-			-- your configuration comes here
 		},
 	},
 	{
@@ -587,20 +367,6 @@ return {
 			})
 		end,
 	},
-	-- {
-	--   "echasnovski/mini.icons",
-	--   opts = {},
-	--   lazy = true,
-	--   specs = {
-	--     { "nvim-tree/nvim-web-devicons", enabled = false, optional = true },
-	--   },
-	--   init = function()
-	--     package.preload["nvim-web-devicons"] = function()
-	--       require("mini.icons").mock_nvim_web_devicons()
-	--       return package.loaded["nvim-web-devicons"]
-	--     end
-	--   end,
-	-- },
 	{
 		"jfryy/keytrail.nvim",
 		ft = { "json", "jsonc", "yaml" },
@@ -626,11 +392,8 @@ return {
 			})
 		end,
 	},
-	-- Lua
-	-- { "HawkinsT/pathfinder.nvim" },
 	{
 		"farmergreg/vim-lastplace",
-		-- event = { "BufNewFile", "BufReadPost" },
 		event = { "VeryLazy" },
 	},
 	{
@@ -692,21 +455,6 @@ return {
 				-- check `DevDocs install` to view the actual names of the docs
 				"lua~5.1",
 				-- "openjdk~21"
-			},
-		},
-	},
-	{
-		"vzze/calculator.nvim",
-		enabled = false,
-		-- cmd = { "Calculate" },
-		-- event = { "BufReadPost" },
-		keys = {
-			{
-				"<leader>c=",
-				function()
-					require("calculator").calculate()
-				end,
-				desc = "Calculate",
 			},
 		},
 	},
@@ -933,7 +681,7 @@ return {
 			{
 				mode = { "n" },
 				"<leader>gp",
-				"<cmd>Git! fetch --all | Git! pull<cr>",
+				"<cmd>Git! fetch --all | Git! pull --rebase<cr>",
 				{ silent = true, noremap = true },
 			},
 			{
@@ -994,13 +742,14 @@ return {
 				mode = { "n" },
 				"<leader>gL",
 				function()
-					-- local cmd_run = ":vertical Git log --oneline HEAD...develop -20"
-          local cmd_run = ":Git log --oneline --left-right HEAD...develop -20"
+          -- local cmd_run = ":Git log --left-right --date=format:'%d-%m-%Y %H:%M' --format='%m%h %ad %s (%an)' HEAD...upstream/main -20"
+          local cmd_run = ":DiffviewFileHistory --range=HEAD...upstream/main --no-merges"
+          -- local cmd_run = ":GV --left-right HEAD...upstream/main"
 					local keys = vim.api.nvim_replace_termcodes(cmd_run, true, false, true)
 					vim.api.nvim_feedkeys(keys, "c", true)
 
-					local hops = string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), 4)
-					vim.api.nvim_feedkeys(hops, "n", true)
+					-- local hops = string.rep(vim.api.nvim_replace_termcodes("<Left>", true, false, true), 4)
+					-- vim.api.nvim_feedkeys(hops, "n", true)
 				end,
 				{ silent = true, noremap = true },
 			},

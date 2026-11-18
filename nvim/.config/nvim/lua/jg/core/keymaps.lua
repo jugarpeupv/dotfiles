@@ -1046,7 +1046,21 @@ end
 -- either way: blink's fallback looks up the current non-blink mapping at
 -- call time (ours), and our fallback branch replicates accept_and_enter,
 -- so plain ":" behavior is unchanged when the flow is inactive.
+require("jg.core.async-cmdline").setup()
+
 vim.keymap.set("c", "<CR>", function()
+	local async = require("jg.core.async-cmdline")
+	if async.is_active() then
+		local cmd = vim.fn.getcmdline()
+		local path = async.consume()
+		if cmd == nil or cmd:match("^%s*$") then
+			return vim.api.nvim_replace_termcodes("<C-c>", true, false, true)
+		end
+		vim.schedule(function()
+			async.run(cmd, path)
+		end)
+		return vim.api.nvim_replace_termcodes("<C-c>", true, false, true)
+	end
 	if vim.g._compile_cmdline_active then
 		local cmd = vim.fn.getcmdline()
 		vim.g._compile_cmdline_active = false
@@ -1241,6 +1255,25 @@ end
 vim.keymap.set({ "n" }, "<M-b>", open_compile_cmdline, opts)
 vim.keymap.set({ "n" }, "<D-b>", open_compile_cmdline, opts)
 
+-- Async command on the current file path (or cwd for unnamed buffers).
+-- Oil and fyler install their own buffer-local <M-y> that override this.
+local function async_cmdline_for_buffer()
+	local name = vim.api.nvim_buf_get_name(0)
+	local path
+	if name ~= "" and vim.bo.buftype == "" then
+		path = name
+	else
+		path = vim.uv.cwd() or vim.fn.getcwd()
+	end
+	require("jg.core.async-cmdline").begin(path)
+end
+
+vim.keymap.set({ "n" }, "<D-y>", async_cmdline_for_buffer, {
+	noremap = true,
+	silent = true,
+	desc = "Async command on current path",
+})
+
 -- Reset the saved compile command
 vim.keymap.set({ "n" }, "<leader>cb", function()
 	vim.g._saved_compile_args = ""
@@ -1248,12 +1281,12 @@ vim.keymap.set({ "n" }, "<leader>cb", function()
 	print("Compile command memory cleared")
 end, opts)
 
-vim.api.nvim_set_keymap("i", "<C-e>", "<C-o>$", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("i", "<C-a>", "<C-o>^", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("i", "<M-f>", "<C-Right>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("i", "<M-b>", "<C-Left>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("i", "<D-f>", "<C-Right>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("i", "<D-b>", "<C-Left>", { noremap = true, silent = true })
+vim.keymap.set({ "i" }, "<C-e>", "<C-o>$", { noremap = true, silent = true })
+vim.keymap.set({ "i" }, "<C-a>", "<C-o>^", { noremap = true, silent = true })
+vim.keymap.set({ "i", "c" }, "<D-f>", "<C-Right>", { noremap = true, silent = true })
+vim.keymap.set({ "i", "c" }, "<M-f>", "<C-Right>", { noremap = true, silent = true })
+vim.keymap.set({ "i", "c" }, "<M-b>", "<C-Left>", { noremap = true, silent = true })
+vim.keymap.set({ "i", "c" }, "<D-b>", "<C-Left>", { noremap = true, silent = true })
 -- vim.cmd([[cnoremap <C-a> <C-b>]])
 -- vim.cmd([[cnoremap <M-f> <C-Right>]])
 -- vim.cmd([[cnoremap <M-b> <C-Left>]])
@@ -1537,7 +1570,7 @@ vim.keymap.set("n", "<leader>TD", toggle_diffopt, { desc = "Toggle diffopt setti
 -- 	require("telescope").extensions.yaml_schema.yaml_schema({})
 -- end, opts)
 
-vim.keymap.set("n", "<leader>gm", ":Git merge origin/", { noremap = true })
+vim.keymap.set("n", "<leader>gm", ":Git rebase origin/", { noremap = true })
 
 vim.keymap.set("n", "<leader>gM", function()
 	local pickers = require("telescope.pickers")
@@ -1652,11 +1685,6 @@ vim.keymap.set("n", "<C-l>", function()
 	smart_move("l", "-R")
 end, { silent = true })
 
--- vim.keymap.set("n", "<leader>fo", "<cmd>lua vim.lsp.buf.format({ async = true})<cr>", opts)
-vim.keymap.set({ "n" }, "<leader>gR", function()
-	require("nvim-tree.api").tree.reload()
-	require("nvim-tree.api").git.reload()
-end, opts)
 
 vim.keymap.set("n", "<leader>wf", function()
 	local strings = require("plenary.strings")
@@ -2340,16 +2368,27 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.keymap.set("n", "<leader>ra", function()
-	-- close fyler buffers before saving session
+	local ft_to_remove = {
+		"neo-tree",
+		"NvimTree",
+		"mail",
+		"notmuch-hello",
+		"notmuch-threads",
+		"opencode",
+		"opencode_output",
+	}
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-		if vim.bo[buf].filetype == "fyler" then
-			vim.api.nvim_buf_delete(buf, { force = true })
+		-- if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) then
+		if vim.api.nvim_buf_is_valid(buf) then
+			local ft = vim.bo[buf].filetype
+			-- local bt = vim.bo[buf].buftype
+			if vim.tbl_contains(ft_to_remove, ft) then
+				pcall(vim.api.nvim_buf_delete, buf, { force = true })
+			end
 		end
 	end
 
-	local session = vim.fn.stdpath("state") .. "/restart_session.vim"
-	vim.cmd("mksession! " .. vim.fn.fnameescape(session))
-	vim.cmd("restart source " .. vim.fn.fnameescape(session))
+	vim.cmd("restart")
 end, { desc = "Restart Neovim" })
 
 vim.cmd([[inoremap <C-b> <Left>]])
@@ -2382,17 +2421,3 @@ end)
 -- 		vim.api.nvim_set_current_buf(lastbuf)
 -- 	end
 -- end)
-
-vim.api.nvim_create_user_command("LspInfo", "checkhealth vim.lsp", { desc = "Show LSP Info" })
-
-vim.keymap.set("n", "<leader>tp", function()
-	vim.cmd("e ~/work/obsvault-okode/wt-main/RAM/tareas_pendientes.md")
-end)
-
--- Esc+ (clears hlsearch & multicursors)
-local mc_ns = vim.api.nvim_create_namespace("nvim.multicursor") -- find ID of nvim.multicursor namespace
-vim.keymap.set("n", "ql", function() -- bind <Esc> in Normal mode to the following function
-	vim.cmd("noh") -- preserve default behavior, run `:nohlsearch` turning off highlighted search results
-	vim.api.nvim_buf_clear_namespace(0, mc_ns, 0, -1) -- remove every extmark (cursor) in the ns from buffer 0 (current), lines 0 through -1 (start to end)
-	return "<Esc>" -- with `expr = true` the string the function returns is what Neovim actually "types"
-end, { expr = true, desc = "Esc+: clear hlsearch and multicursors" })
